@@ -175,7 +175,7 @@ export default function Controls() {
 
       {/* Lead Routing */}
       <Card className="bg-gradient-to-br from-white via-gray-50 to-gray-100 border-2 border-gray-300 shadow-xl">
-        <CardHeader className="pb-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
+        <CardHeader className="pb-3 bg-gradient-to-r from-[#0d82da] to-gray-800 text-white rounded-t-lg">
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
@@ -188,19 +188,19 @@ export default function Controls() {
         </CardHeader>
         <CardContent className="pt-6">
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border-2 border-blue-200">
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border-2 border-[#c3c3c3]">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#0d82da] to-gray-700 rounded-xl flex items-center justify-center shadow-lg">
                   <Route className="h-6 w-6 text-white animate-pulse" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900 text-lg">Routing Algorithm</h3>
-                  <p className="text-sm font-semibold text-blue-600 tracking-wide">
+                  <h3 className="font-bold text-black text-lg">Routing Algorithm</h3>
+                  <p className="text-sm font-semibold text-[#0d82da] tracking-wide">
                     {bot.routingMode.replace("-", " ").replace(/\b\w/g, l => l.toUpperCase())}
                   </p>
                 </div>
               </div>
-              <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold px-3 py-1 text-sm">
+              <Badge className="bg-gradient-to-r from-[#0d82da] to-gray-700 text-white font-bold px-3 py-1 text-sm">
                 {bot.routingMode.toUpperCase()}
               </Badge>
             </div>
@@ -209,8 +209,8 @@ export default function Controls() {
               onValueChange={handleRoutingChange}
               disabled={isUpdating}
             >
-              <SelectTrigger className="bg-white border-2 border-gray-300 font-semibold text-lg h-12">
-                <SelectValue placeholder="Select routing mode" />
+              <SelectTrigger className="bg-white border-2 border-[#c3c3c3] font-semibold text-lg h-12 text-black">
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="auto-assign">Auto Assign</SelectItem>
@@ -225,7 +225,7 @@ export default function Controls() {
 
       {/* Conversation Tone */}
       <Card className="bg-gradient-to-br from-white via-gray-50 to-gray-100 border-2 border-gray-300 shadow-xl">
-        <CardHeader className="pb-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-t-lg">
+        <CardHeader className="pb-3 bg-gradient-to-r from-[#0d82da] to-gray-800 text-white rounded-t-lg">
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
@@ -238,19 +238,19 @@ export default function Controls() {
         </CardHeader>
         <CardContent className="pt-6">
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-200">
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border-2 border-[#c3c3c3]">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#0d82da] to-gray-700 rounded-xl flex items-center justify-center shadow-lg">
                   <MessageSquare className="h-6 w-6 text-white animate-pulse" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900 text-lg">Bot Personality</h3>
-                  <p className="text-sm font-semibold text-purple-600 tracking-wide">
+                  <h3 className="font-bold text-black text-lg">Bot Personality</h3>
+                  <p className="text-sm font-semibold text-[#0d82da] tracking-wide">
                     {bot.tone.charAt(0).toUpperCase() + bot.tone.slice(1)} Communication
                   </p>
                 </div>
               </div>
-              <Badge className="bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold px-3 py-1 text-sm">
+              <Badge className="bg-gradient-to-r from-[#0d82da] to-gray-700 text-white font-bold px-3 py-1 text-sm">
                 {bot.tone.toUpperCase()}
               </Badge>
             </div>
@@ -259,8 +259,8 @@ export default function Controls() {
               onValueChange={handleToneChange}
               disabled={isUpdating}
             >
-              <SelectTrigger className="bg-white border-2 border-gray-300 font-semibold text-lg h-12">
-                <SelectValue placeholder="Select conversation tone" />
+              <SelectTrigger className="bg-white border-2 border-[#c3c3c3] font-semibold text-lg h-12 text-black">
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="professional">Professional</SelectItem>
