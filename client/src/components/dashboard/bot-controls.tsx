@@ -162,9 +162,16 @@ export default function BotControls() {
             variant="outline" 
             size="sm" 
             disabled={isUpdating}
-            className="bg-white text-black border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 font-semibold px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+            className="bg-white text-black border-2 border-gray-300 hover:border-blue-400 hover:bg-blue-50 font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 relative overflow-hidden group"
           >
-            ⚙️ Configure
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-100/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute top-1 right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <div className="absolute bottom-1 left-1 text-xs text-gray-400 font-mono">SYS</div>
+            <span className="relative z-10 flex items-center space-x-2">
+              <span>⚙️</span>
+              <span>Configure</span>
+              <span className="text-xs text-gray-500 font-mono">[CTRL]</span>
+            </span>
           </Button>
         </div>
 
