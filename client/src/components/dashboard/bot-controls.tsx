@@ -116,6 +116,20 @@ export default function BotControls() {
     }
   };
 
+  const getStatusIcon = (status: string) => {
+    const baseClasses = "h-5 w-5 transition-all duration-300";
+    switch (status) {
+      case "active":
+        return <Activity className={`${baseClasses} ${getStatusColor(status)} animate-pulse`} />;
+      case "paused":
+        return <Activity className={`${baseClasses} ${getStatusColor(status)} animate-bounce`} />;
+      case "offline":
+        return <Activity className={`${baseClasses} ${getStatusColor(status)} animate-ping`} />;
+      default:
+        return <Activity className={`${baseClasses} ${getStatusColor(status)}`} />;
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -129,7 +143,7 @@ export default function BotControls() {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
-              <Activity className={`h-5 w-5 ${getStatusColor(bot.status)}`} />
+              {getStatusIcon(bot.status)}
             </div>
             <div>
               <div className="font-medium text-foreground">Bot Status</div>

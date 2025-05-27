@@ -26,7 +26,7 @@ export default function SearchBar({
         placeholder={placeholder}
         value={query}
         onChange={(e) => handleSearch(e.target.value)}
-        className="pl-10 search-input"
+        className="pl-10 search-input bg-white border-gray-300 text-black"
       />
     </div>
   );

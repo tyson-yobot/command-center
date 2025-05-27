@@ -230,18 +230,78 @@ export default function Controls() {
         <CardHeader>
           <CardTitle>Quick Actions</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <Button variant="outline" className="w-full justify-start">
-            <Power className="h-4 w-4 mr-2" />
-            Restart Bot Service
+        <CardContent className="grid grid-cols-2 gap-3">
+          <Button variant="outline" className="h-20 justify-start bg-white text-black border-2 border-gray-300 hover:border-blue-400 hover:bg-blue-50 font-semibold px-4 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-100/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute top-1 right-1 w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
+            <div className="absolute bottom-1 right-1 text-xs text-gray-400 font-mono">PWR</div>
+            <span className="relative z-10 flex flex-col items-start space-y-1">
+              <div className="flex items-center space-x-2">
+                <Power className="h-5 w-5" />
+                <span className="text-sm font-bold">Restart Bot</span>
+              </div>
+              <span className="text-xs text-gray-500 font-mono">[F5]</span>
+            </span>
           </Button>
-          <Button variant="outline" className="w-full justify-start">
-            <Settings className="h-4 w-4 mr-2" />
-            Reset to Default Settings
+          <Button variant="outline" className="h-20 justify-start bg-white text-black border-2 border-gray-300 hover:border-purple-400 hover:bg-purple-50 font-semibold px-4 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-100/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute top-1 right-1 w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+            <div className="absolute bottom-1 right-1 text-xs text-gray-400 font-mono">CFG</div>
+            <span className="relative z-10 flex flex-col items-start space-y-1">
+              <div className="flex items-center space-x-2">
+                <Settings className="h-5 w-5" />
+                <span className="text-sm font-bold">Reset Settings</span>
+              </div>
+              <span className="text-xs text-gray-500 font-mono">[F6]</span>
+            </span>
           </Button>
-          <Button variant="outline" className="w-full justify-start">
-            <Activity className="h-4 w-4 mr-2" />
-            Run System Diagnostics
+          <Button variant="outline" className="h-20 justify-start bg-white text-black border-2 border-gray-300 hover:border-green-400 hover:bg-green-50 font-semibold px-4 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-green-100/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute top-1 right-1 w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+            <div className="absolute bottom-1 right-1 text-xs text-gray-400 font-mono">SYS</div>
+            <span className="relative z-10 flex flex-col items-start space-y-1">
+              <div className="flex items-center space-x-2">
+                <Activity className="h-5 w-5" />
+                <span className="text-sm font-bold">Diagnostics</span>
+              </div>
+              <span className="text-xs text-gray-500 font-mono">[F7]</span>
+            </span>
+          </Button>
+          <Button variant="outline" className="h-20 justify-start bg-white text-black border-2 border-gray-300 hover:border-yellow-400 hover:bg-yellow-50 font-semibold px-4 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-100/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute top-1 right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <div className="absolute bottom-1 right-1 text-xs text-gray-400 font-mono">RPT</div>
+            <span className="relative z-10 flex flex-col items-start space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="text-lg">📊</span>
+                <span className="text-sm font-bold">Daily Report</span>
+              </div>
+              <span className="text-xs text-gray-500 font-mono">[F8]</span>
+            </span>
+          </Button>
+          <Button variant="outline" className="h-20 justify-start bg-white text-black border-2 border-gray-300 hover:border-indigo-400 hover:bg-indigo-50 font-semibold px-4 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-indigo-100/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute top-1 right-1 w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+            <div className="absolute bottom-1 right-1 text-xs text-gray-400 font-mono">EXP</div>
+            <span className="relative z-10 flex flex-col items-start space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="text-lg">📈</span>
+                <span className="text-sm font-bold">Export Data</span>
+              </div>
+              <span className="text-xs text-gray-500 font-mono">[F9]</span>
+            </span>
+          </Button>
+          <Button variant="outline" className="h-20 justify-start bg-white text-black border-2 border-gray-300 hover:border-pink-400 hover:bg-pink-50 font-semibold px-4 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-pink-100/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute top-1 right-1 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+            <div className="absolute bottom-1 right-1 text-xs text-gray-400 font-mono">ALT</div>
+            <span className="relative z-10 flex flex-col items-start space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="text-lg">🚨</span>
+                <span className="text-sm font-bold">Alerts Setup</span>
+              </div>
+              <span className="text-xs text-gray-500 font-mono">[F10]</span>
+            </span>
           </Button>
         </CardContent>
       </Card>
