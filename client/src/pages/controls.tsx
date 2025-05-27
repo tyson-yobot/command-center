@@ -120,11 +120,11 @@ export default function Controls() {
   return (
     <div className="px-4 space-y-6">
       {/* Bot Status */}
-      <Card className="bg-gradient-to-br from-gray-900 via-gray-800 to-black border-2 border-gray-600 shadow-2xl">
-        <CardHeader className="pb-3">
+      <Card className="bg-white border-2 border-white shadow-2xl">
+        <CardHeader className="pb-3 bg-black">
           <CardTitle className="flex items-center justify-between text-white">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-[#0d82da] rounded-lg flex items-center justify-center">
                 <Power className="h-5 w-5 text-white" />
               </div>
               <span className="text-xl font-bold">SYSTEM STATUS</span>
@@ -133,31 +133,30 @@ export default function Controls() {
               <div className={`w-3 h-3 rounded-full animate-pulse ${
                 bot.status === "active" ? "bg-green-400 shadow-lg shadow-green-400/50" : "bg-red-400 shadow-lg shadow-red-400/50"
               }`} />
-              <span className="text-xs font-mono text-gray-300">LIVE</span>
+              <span className="text-xs font-mono text-white">LIVE</span>
             </div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-800/50 to-gray-700/30 rounded-lg border border-gray-600">
+        <CardContent className="space-y-4 bg-white">
+          <div className="flex items-center justify-between p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
             <div className="flex items-center space-x-4">
               <div className={`w-14 h-14 rounded-xl flex items-center justify-center relative overflow-hidden ${
                 bot.status === "active" 
-                  ? "bg-gradient-to-br from-green-500 to-emerald-600 shadow-lg shadow-green-500/30" 
-                  : "bg-gradient-to-br from-red-500 to-rose-600 shadow-lg shadow-red-500/30"
+                  ? "bg-green-500 shadow-lg shadow-green-500/30" 
+                  : "bg-red-500 shadow-lg shadow-red-500/30"
               }`}>
                 <Activity className={`h-7 w-7 text-white ${
                   bot.status === "active" ? "animate-pulse" : "animate-ping"
                 }`} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
               </div>
               <div>
-                <h3 className="font-bold text-white text-lg">YoBot Assistant</h3>
+                <h3 className="font-bold text-black text-lg">YoBot Assistant</h3>
                 <p className={`text-sm font-bold ${
-                  bot.status === "active" ? "text-green-400" : "text-red-400"
+                  bot.status === "active" ? "text-green-600" : "text-red-600"
                 } tracking-wide`}>
                   {getStatusLabel(bot.status)}
                 </p>
-                <p className="text-xs text-gray-400 font-mono mt-1">ID: {bot.id} | PID: 2847</p>
+                <p className="text-xs text-black font-mono mt-1">ID: {bot.id} | PID: 2847</p>
               </div>
             </div>
             <div className="flex flex-col items-end space-y-2">
@@ -167,40 +166,40 @@ export default function Controls() {
                 disabled={isUpdating}
                 className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500"
               />
-              <span className="text-xs text-gray-400 font-mono">[TOGGLE]</span>
+              <span className="text-xs text-black font-mono">[TOGGLE]</span>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Lead Routing */}
-      <Card className="bg-gradient-to-br from-white via-gray-50 to-gray-100 border-2 border-gray-300 shadow-xl">
-        <CardHeader className="pb-3 bg-gradient-to-r from-[#0d82da] to-gray-800 text-white rounded-t-lg">
-          <CardTitle className="flex items-center justify-between">
+      <Card className="bg-white border-2 border-white shadow-xl">
+        <CardHeader className="pb-3 bg-black">
+          <CardTitle className="flex items-center justify-between text-white">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-[#0d82da] rounded-lg flex items-center justify-center">
                 <Route className="h-5 w-5 text-white" />
               </div>
               <span className="text-xl font-bold">LEAD ROUTING</span>
             </div>
-            <div className="text-xs font-mono bg-white/20 px-2 py-1 rounded">RT-SYS</div>
+            <div className="text-xs font-mono bg-[#0d82da] px-2 py-1 rounded text-white">RT-SYS</div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="pt-6">
+        <CardContent className="pt-6 bg-white">
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border-2 border-[#c3c3c3]">
+            <div className="flex items-center justify-between p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#0d82da] to-gray-700 rounded-xl flex items-center justify-center shadow-lg">
-                  <Route className="h-6 w-6 text-white animate-pulse" />
+                <div className="w-12 h-12 bg-[#0d82da] rounded-xl flex items-center justify-center shadow-lg">
+                  <Route className="h-6 w-6 text-white" />
                 </div>
                 <div>
                   <h3 className="font-bold text-black text-lg">Routing Algorithm</h3>
-                  <p className="text-sm font-semibold text-[#0d82da] tracking-wide">
+                  <p className="text-sm font-semibold text-black tracking-wide">
                     {bot.routingMode.replace("-", " ").replace(/\b\w/g, l => l.toUpperCase())}
                   </p>
                 </div>
               </div>
-              <Badge className="bg-gradient-to-r from-[#0d82da] to-gray-700 text-white font-bold px-3 py-1 text-sm">
+              <Badge className="bg-[#0d82da] text-white font-bold px-3 py-1 text-sm">
                 {bot.routingMode.toUpperCase()}
               </Badge>
             </div>
@@ -209,7 +208,7 @@ export default function Controls() {
               onValueChange={handleRoutingChange}
               disabled={isUpdating}
             >
-              <SelectTrigger className="bg-white border-2 border-[#c3c3c3] font-semibold text-lg h-12 text-black">
+              <SelectTrigger className="bg-white border-2 border-black font-semibold text-lg h-12 text-black">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -224,33 +223,33 @@ export default function Controls() {
       </Card>
 
       {/* Conversation Tone */}
-      <Card className="bg-gradient-to-br from-white via-gray-50 to-gray-100 border-2 border-gray-300 shadow-xl">
-        <CardHeader className="pb-3 bg-gradient-to-r from-[#0d82da] to-gray-800 text-white rounded-t-lg">
-          <CardTitle className="flex items-center justify-between">
+      <Card className="bg-white border-2 border-white shadow-xl">
+        <CardHeader className="pb-3 bg-black">
+          <CardTitle className="flex items-center justify-between text-white">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-[#0d82da] rounded-lg flex items-center justify-center">
                 <MessageSquare className="h-5 w-5 text-white" />
               </div>
               <span className="text-xl font-bold">CONVERSATION TONE</span>
             </div>
-            <div className="text-xs font-mono bg-white/20 px-2 py-1 rounded">AI-TONE</div>
+            <div className="text-xs font-mono bg-[#0d82da] px-2 py-1 rounded text-white">AI-TONE</div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="pt-6">
+        <CardContent className="pt-6 bg-white">
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border-2 border-[#c3c3c3]">
+            <div className="flex items-center justify-between p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#0d82da] to-gray-700 rounded-xl flex items-center justify-center shadow-lg">
-                  <MessageSquare className="h-6 w-6 text-white animate-pulse" />
+                <div className="w-12 h-12 bg-[#0d82da] rounded-xl flex items-center justify-center shadow-lg">
+                  <MessageSquare className="h-6 w-6 text-white" />
                 </div>
                 <div>
                   <h3 className="font-bold text-black text-lg">Bot Personality</h3>
-                  <p className="text-sm font-semibold text-[#0d82da] tracking-wide">
+                  <p className="text-sm font-semibold text-black tracking-wide">
                     {bot.tone.charAt(0).toUpperCase() + bot.tone.slice(1)} Communication
                   </p>
                 </div>
               </div>
-              <Badge className="bg-gradient-to-r from-[#0d82da] to-gray-700 text-white font-bold px-3 py-1 text-sm">
+              <Badge className="bg-[#0d82da] text-white font-bold px-3 py-1 text-sm">
                 {bot.tone.toUpperCase()}
               </Badge>
             </div>
@@ -259,7 +258,7 @@ export default function Controls() {
               onValueChange={handleToneChange}
               disabled={isUpdating}
             >
-              <SelectTrigger className="bg-white border-2 border-[#c3c3c3] font-semibold text-lg h-12 text-black">
+              <SelectTrigger className="bg-white border-2 border-black font-semibold text-lg h-12 text-black">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
