@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUpIcon, ArrowDownIcon } from "lucide-react";
+import { TrendingUp, TrendingDown, Phone, Target, Users, AlertTriangle } from "lucide-react";
 import type { Metrics } from "@shared/schema";
 
 export default function MetricsGrid() {
@@ -45,28 +45,40 @@ export default function MetricsGrid() {
 
   const metricCards = [
     {
+      icon: Phone,
       value: metrics.callsToday || 0,
-      label: "Calls Today",
+      label: "CALLS DOMINATED",
+      subtitle: "Daily Performance",
       change: metrics.callsChange || 0,
       color: "#0D82DA", // YoBot Blue
+      gradient: "from-blue-600 to-blue-800",
     },
     {
+      icon: Target,
       value: metrics.conversions || 0,
-      label: "Conversions",
+      label: "CONVERSIONS SECURED",
+      subtitle: "Closed Deals",
       change: metrics.conversionsChange || 0,
       color: "#28A745", // Success Green
+      gradient: "from-green-600 to-green-800",
     },
     {
+      icon: Users,
       value: metrics.newLeads || 0,
-      label: "New Leads",
+      label: "LEADS CAPTURED",
+      subtitle: "New Prospects",
       change: metrics.leadsChange || 0,
       color: "#6F42C1", // Purple
+      gradient: "from-purple-600 to-purple-800",
     },
     {
+      icon: AlertTriangle,
       value: metrics.failedCalls || 0,
-      label: "Failed Calls",
+      label: "CALLS MISSED",
+      subtitle: "Opportunities Lost",
       change: metrics.failedCallsChange || 0,
       color: "#DC3545", // Danger Red
+      gradient: "from-red-600 to-red-800",
     },
   ];
 
@@ -79,38 +91,56 @@ export default function MetricsGrid() {
           ? (isPositiveChange ? 'text-red-600' : 'text-green-600') // Failed calls: positive is bad
           : (isPositiveChange ? 'text-green-600' : 'text-red-600');
 
+        const Icon = card.icon;
+        
         return (
-          <Card key={card.label} className="metric-card touch-feedback bg-gray-200 border-2 border-gray-300 shadow-lg">
-            <CardContent className="p-4 relative overflow-hidden">
-              <div className="flex items-center justify-between mb-3">
+          <Card key={card.label} className="metric-card touch-feedback bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-gray-400 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+            <CardContent className="p-5 relative overflow-hidden">
+              {/* Icon and Change Indicator */}
+              <div className="flex items-center justify-between mb-4">
                 <div 
-                  className="w-4 h-12 rounded-md"
-                  style={{ backgroundColor: card.color }}
-                ></div>
-                <div className="flex items-center space-x-2">
+                  className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.gradient} shadow-lg flex items-center justify-center transform rotate-3 hover:rotate-0 transition-transform duration-300`}
+                >
+                  <Icon className="h-6 w-6 text-white" />
+                </div>
+                <div className="flex items-center space-x-2 bg-white rounded-full px-3 py-1 shadow-md">
                   {isPositiveChange ? (
-                    <ArrowUpIcon className={`h-5 w-5 ${changeColor}`} />
+                    <TrendingUp className={`h-4 w-4 ${changeColor}`} />
                   ) : (
-                    <ArrowDownIcon className={`h-5 w-5 ${changeColor}`} />
+                    <TrendingDown className={`h-4 w-4 ${changeColor}`} />
                   )}
-                  <span className={`text-sm font-bold ${changeColor}`}>
+                  <span className={`text-xs font-bold ${changeColor}`}>
                     {Math.abs(card.change)}%
                   </span>
                 </div>
               </div>
-              <div className="text-3xl font-bold text-black mb-2">
+              
+              {/* Main Value */}
+              <div className="text-4xl font-black text-black mb-2 tracking-tight">
                 {card.value.toLocaleString()}
               </div>
-              <div className="text-sm font-semibold text-black uppercase tracking-wide">
+              
+              {/* Labels */}
+              <div className="text-xs font-bold text-black uppercase tracking-widest mb-1">
                 {card.label}
               </div>
-              {/* Background bar graph effect */}
+              <div className="text-xs text-gray-600 font-medium">
+                {card.subtitle}
+              </div>
+              
+              {/* Premium bar graph effect */}
               <div 
-                className="absolute bottom-0 left-0 h-2 rounded-b-md opacity-30"
+                className="absolute bottom-0 left-0 h-1 rounded-b-md shadow-inner"
                 style={{ 
-                  backgroundColor: card.color,
+                  background: `linear-gradient(90deg, ${card.color} 0%, ${card.color}dd 100%)`,
                   width: `${Math.min(100, (card.value / 300) * 100)}%`
                 }}
+              ></div>
+              
+              {/* Subtle accent line */}
+              <div 
+                className="absolute top-0 left-0 h-1 rounded-t-md"
+                style={{ backgroundColor: card.color, width: '100%', opacity: 0.3 }}
               ></div>
             </CardContent>
           </Card>
