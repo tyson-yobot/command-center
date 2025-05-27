@@ -6,7 +6,7 @@ export default function Header() {
   const { isConnected } = useWebSocket();
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-white via-blue-50 via-purple-50 to-blue-200 border-b border-blue-300 shadow-xl">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-white via-gray-100 to-gray-400 border-b-4 border-gray-600 shadow-2xl relative overflow-hidden">
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex items-center space-x-4">
           <img 
@@ -16,10 +16,17 @@ export default function Header() {
           />
         </div>
         <div className="absolute left-1/2 transform -translate-x-1/2">
-          <h1 className="text-3xl font-black text-gray-800 tracking-tight">
-            YoBot<span className="text-lg align-super">®</span> Command Center
+          <h1 className="text-4xl font-black text-gray-900 tracking-tight drop-shadow-lg">
+            YoBot<span className="text-xl align-super">®</span> 
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-extrabold"> COMMAND CENTER</span>
           </h1>
         </div>
+        
+        {/* Aggressive accent stripe */}
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800"></div>
+        
+        {/* Power glow effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent opacity-50"></div>
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-1">
             <div 
