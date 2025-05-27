@@ -8,11 +8,11 @@ export default function Header() {
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-white via-blue-50 to-blue-100 border-b border-blue-200 shadow-lg">
       <div className="flex items-center justify-between px-4 py-2">
-        <div className="flex items-center justify-center space-x-4 flex-1">
+        <div className="flex items-center space-x-4">
           <img 
             src={yobotLogoPath} 
             alt="YoBot Logo" 
-            className="h-24 w-auto"
+            className="h-28 w-auto"
           />
           <h1 className="text-3xl font-black text-gray-800 tracking-tight">
             YoBot<span className="text-lg align-super">®</span> Command Center

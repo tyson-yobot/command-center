@@ -162,7 +162,7 @@ export default function BotControls() {
             variant="outline" 
             size="sm" 
             disabled={isUpdating}
-            className="bg-gray-100 text-black border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-200 font-semibold px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+            className="bg-white text-black border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 font-semibold px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
           >
             ⚙️ Configure
           </Button>
