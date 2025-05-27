@@ -4,7 +4,7 @@
 
 :root {
   --background: 206 84% 45%; /* #0D82DA - YoBot Blue Background */
-  --foreground: 0 0% 100%; /* #FFFFFF - White Text */
+  --foreground: 0 0% 0%; /* #000000 - Black Text */
   --muted: 0 0% 76%; /* #C3C3C3 - YoBot Gray for Cards */
   --muted-foreground: 0 0% 0%; /* #000000 - Black Text on Gray */
   --popover: 0 0% 100%; /* #FFFFFF - White */

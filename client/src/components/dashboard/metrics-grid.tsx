@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Phone, TrendingUp, Users, AlertTriangle } from "lucide-react";
+import { ArrowUpIcon, ArrowDownIcon } from "lucide-react";
 import type { Metrics } from "@shared/schema";
 
 export default function MetricsGrid() {
@@ -45,68 +45,73 @@ export default function MetricsGrid() {
 
   const metricCards = [
     {
-      icon: Phone,
       value: metrics.callsToday || 0,
       label: "Calls Today",
       change: metrics.callsChange || 0,
-      bgColor: "bg-blue-100 dark:bg-blue-900/20",
-      iconColor: "text-blue-600",
+      color: "#0D82DA", // YoBot Blue
     },
     {
-      icon: TrendingUp,
       value: metrics.conversions || 0,
       label: "Conversions",
       change: metrics.conversionsChange || 0,
-      bgColor: "bg-green-100 dark:bg-green-900/20",
-      iconColor: "text-green-600",
+      color: "#28A745", // Success Green
     },
     {
-      icon: Users,
       value: metrics.newLeads || 0,
       label: "New Leads",
       change: metrics.leadsChange || 0,
-      bgColor: "bg-purple-100 dark:bg-purple-900/20",
-      iconColor: "text-purple-600",
+      color: "#6F42C1", // Purple
     },
     {
-      icon: AlertTriangle,
       value: metrics.failedCalls || 0,
       label: "Failed Calls",
       change: metrics.failedCallsChange || 0,
-      bgColor: "bg-red-100 dark:bg-red-900/20",
-      iconColor: "text-red-600",
+      color: "#DC3545", // Danger Red
     },
   ];
 
   return (
     <div className="grid grid-cols-2 gap-4">
       {metricCards.map((card, index) => {
-        const Icon = card.icon;
         const isPositiveChange = card.change >= 0;
-        const changeColor = index === 3 
+        const isFailedCalls = index === 3;
+        const changeColor = isFailedCalls 
           ? (isPositiveChange ? 'text-red-600' : 'text-green-600') // Failed calls: positive is bad
           : (isPositiveChange ? 'text-green-600' : 'text-red-600');
 
         return (
-          <Card key={card.label} className="metric-card touch-feedback">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-2">
-                <div className={`w-8 h-8 ${card.bgColor} rounded-lg flex items-center justify-center`}>
-                  <Icon className={`h-4 w-4 ${card.iconColor}`} />
-                </div>
-                <div className="flex items-center space-x-1">
-                  <TrendingUp className={`h-3 w-3 ${changeColor}`} />
-                  <span className={`text-xs font-medium ${changeColor}`}>
-                    {isPositiveChange ? '+' : ''}{card.change}%
+          <Card key={card.label} className="metric-card touch-feedback bg-gray-200 border-2 border-gray-300 shadow-lg">
+            <CardContent className="p-4 relative overflow-hidden">
+              <div className="flex items-center justify-between mb-3">
+                <div 
+                  className="w-4 h-12 rounded-md"
+                  style={{ backgroundColor: card.color }}
+                ></div>
+                <div className="flex items-center space-x-2">
+                  {isPositiveChange ? (
+                    <ArrowUpIcon className={`h-5 w-5 ${changeColor}`} />
+                  ) : (
+                    <ArrowDownIcon className={`h-5 w-5 ${changeColor}`} />
+                  )}
+                  <span className={`text-sm font-bold ${changeColor}`}>
+                    {Math.abs(card.change)}%
                   </span>
                 </div>
               </div>
-              <div className="text-2xl font-bold text-black mb-1">
-                {card.value}
+              <div className="text-3xl font-bold text-black mb-2">
+                {card.value.toLocaleString()}
               </div>
-              <div className="text-sm text-black">
+              <div className="text-sm font-semibold text-black uppercase tracking-wide">
                 {card.label}
               </div>
+              {/* Background bar graph effect */}
+              <div 
+                className="absolute bottom-0 left-0 h-2 rounded-b-md opacity-30"
+                style={{ 
+                  backgroundColor: card.color,
+                  width: `${Math.min(100, (card.value / 300) * 100)}%`
+                }}
+              ></div>
             </CardContent>
           </Card>
         );
