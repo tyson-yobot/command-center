@@ -14,6 +14,8 @@ export default function Header() {
             alt="YoBot Logo" 
             className="h-28 w-auto"
           />
+        </div>
+        <div className="absolute left-1/2 transform -translate-x-1/2">
           <h1 className="text-3xl font-black text-gray-800 tracking-tight">
             YoBot<span className="text-lg align-super">®</span> Command Center
           </h1>
