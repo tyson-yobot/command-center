@@ -4,8 +4,8 @@
   "description": "AI Bot Management Dashboard - Real-time control center for YoBot's AI automation platform",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#F8FAFC",
-  "theme_color": "#1E90FF",
+  "background_color": "#FFFFFF",
+  "theme_color": "#0D82DA",
   "orientation": "portrait-primary",
   "icons": [
     {
