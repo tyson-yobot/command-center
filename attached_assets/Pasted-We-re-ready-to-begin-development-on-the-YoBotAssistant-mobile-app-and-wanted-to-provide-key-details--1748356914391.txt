@@ -1,0 +1,54 @@
+We’re ready to begin development on the YoBotAssistant mobile app and wanted to provide key details to help you get started efficiently.
+
+🚀 About Us
+YoBot® is a fully automated AI business system designed for companies that want to scale without hiring more staff. We provide AI-powered bots (chat + voice) bundled with CRM, quoting, booking, compliance, and full backend automation through Airtable, Make.com, and QuickBooks.
+
+Our clients range from startups to enterprise resellers, and everything is built for speed, automation, and real ROI.
+
+Website: https://yobot.bot
+
+🎯 App Purpose
+We want to build a Progressive Web App (PWA) that serves as a real-time control panel and monitoring tool for users of our bot system.
+
+This app will act as a mobile version of our Command Center Dashboard — giving admins access to bot data, analytics, lead alerts, call logs, CRM syncs, and key settings.
+
+✅ Initial Version (MVP Scope)
+The first version should include:
+
+📊 Real-Time Bot Performance Stats (calls, convos, conversions, lead volume, etc.)
+
+🧠 Conversation Log Viewer
+
+🎯 Live Notifications (triggered events like leads captured or missed calls)
+
+🗂️ Basic Client CRM Info View
+
+🕹️ Control Toggles (e.g. pause bot, reroute leads, change tone settings)
+
+🔍 Search Bar to lookup past conversations or leads
+
+This will be a browser-based mobile-first PWA, using WebSockets or polling for real-time updates.
+
+🔜 Future Phases (to stage for later)
+Please build with these in mind for phase 2+:
+
+🔄 Native mobile app (React Native) with push notifications (Firebase)
+
+🔗 Real API integration to Airtable, HubSpot, and QuickBooks
+
+⚙️ Role-based access for client users and agency partners
+
+🎨 White-label theming and branding
+
+📈 Advanced analytics and forecasting dashboard
+
+📁 Reference Systems (Already Built)
+CRM is in Airtable
+
+Automations via Make.com
+
+QuickBooks sync already live
+
+All bot logs and triggers are written to Airtable tables (we can share schemas)
+
+Let me know if you need mockups, database structure, or API keys to get started. Looking forward to getting this rolling.
