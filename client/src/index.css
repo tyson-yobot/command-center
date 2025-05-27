@@ -5,19 +5,19 @@
 :root {
   --background: 255 255 255; /* #FFFFFF - YoBot White */
   --foreground: 0 0 0; /* #000000 - YoBot Black */
-  --muted: 195 195 195; /* #C3C3C3 - YoBot Medium Gray */
-  --muted-foreground: 0 0 0; /* #000000 - YoBot Black */
+  --muted: 248 249 250; /* #F8F9FA - Light Gray Background */
+  --muted-foreground: 107 114 128; /* #6B7280 - Darker Gray for Text */
   --popover: 255 255 255; /* #FFFFFF - YoBot White */
   --popover-foreground: 0 0 0; /* #000000 - YoBot Black */
   --card: 255 255 255; /* #FFFFFF - YoBot White */
   --card-foreground: 0 0 0; /* #000000 - YoBot Black */
-  --border: 195 195 195; /* #C3C3C3 - YoBot Medium Gray */
-  --input: 195 195 195; /* #C3C3C3 - YoBot Medium Gray */
+  --border: 229 231 235; /* #E5E7EB - Light Border */
+  --input: 229 231 235; /* #E5E7EB - Light Border */
   --primary: 13 130 218; /* #0D82DA - YoBot Main Blue */
   --primary-foreground: 255 255 255; /* #FFFFFF - YoBot White */
-  --secondary: 195 195 195; /* #C3C3C3 - YoBot Medium Gray */
+  --secondary: 248 249 250; /* #F8F9FA - Light Gray */
   --secondary-foreground: 0 0 0; /* #000000 - YoBot Black */
-  --accent: 195 195 195; /* #C3C3C3 - YoBot Medium Gray */
+  --accent: 248 249 250; /* #F8F9FA - Light Gray */
   --accent-foreground: 0 0 0; /* #000000 - YoBot Black */
   --destructive: 239 68 68; /* #EF4444 */
   --destructive-foreground: 255 255 255; /* #FFFFFF */
