@@ -3,34 +3,28 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 100%; /* #FFFFFF - YoBot White */
-  --foreground: 0 0% 0%; /* #000000 - YoBot Black */
-  --muted: 210 40% 98%; /* #F8F9FA - Light Gray Background */
-  --muted-foreground: 215 13% 65%; /* #6B7280 - Darker Gray for Text */
-  --popover: 0 0% 100%; /* #FFFFFF - YoBot White */
-  --popover-foreground: 0 0% 0%; /* #000000 - YoBot Black */
-  --card: 0 0% 100%; /* #FFFFFF - YoBot White */
-  --card-foreground: 0 0% 0%; /* #000000 - YoBot Black */
-  --border: 214 32% 91%; /* #E5E7EB - Light Border */
-  --input: 214 32% 91%; /* #E5E7EB - Light Border */
-  --primary: 206 84% 45%; /* #0D82DA - YoBot Main Blue */
-  --primary-foreground: 0 0% 100%; /* #FFFFFF - YoBot White */
-  --secondary: 210 40% 98%; /* #F8F9FA - Light Gray */
-  --secondary-foreground: 0 0% 0%; /* #000000 - YoBot Black */
-  --accent: 210 40% 98%; /* #F8F9FA - Light Gray */
-  --accent-foreground: 0 0% 0%; /* #000000 - YoBot Black */
+  --background: 206 84% 45%; /* #0D82DA - YoBot Blue Background */
+  --foreground: 0 0% 100%; /* #FFFFFF - White Text */
+  --muted: 0 0% 76%; /* #C3C3C3 - YoBot Gray for Cards */
+  --muted-foreground: 0 0% 0%; /* #000000 - Black Text on Gray */
+  --popover: 0 0% 100%; /* #FFFFFF - White */
+  --popover-foreground: 0 0% 0%; /* #000000 - Black */
+  --card: 0 0% 76%; /* #C3C3C3 - YoBot Gray for Cards */
+  --card-foreground: 0 0% 0%; /* #000000 - Black Text on Cards */
+  --border: 0 0% 100%; /* #FFFFFF - White Borders */
+  --input: 0 0% 100%; /* #FFFFFF - White Inputs */
+  --primary: 0 0% 100%; /* #FFFFFF - White for Primary Actions */
+  --primary-foreground: 206 84% 45%; /* #0D82DA - Blue Text on White */
+  --secondary: 0 0% 76%; /* #C3C3C3 - Gray */
+  --secondary-foreground: 0 0% 0%; /* #000000 - Black */
+  --accent: 0 0% 76%; /* #C3C3C3 - Gray */
+  --accent-foreground: 0 0% 0%; /* #000000 - Black */
   --destructive: 0 84% 60%; /* #EF4444 */
   --destructive-foreground: 0 0% 100%; /* #FFFFFF */
   --success: 142 76% 36%; /* #10B981 */
   --warning: 38 92% 50%; /* #F59E0B */
-  --ring: 206 84% 45%; /* #0D82DA - YoBot Main Blue */
+  --ring: 0 0% 100%; /* #FFFFFF - White Ring */
   --radius: 0.75rem;
-  
-  /* YoBot specific colors */
-  --yobot-blue: 206 84% 45%; /* #0D82DA - YoBot Main Blue */
-  --yobot-black: 0 0% 0%; /* #000000 - YoBot Black */
-  --yobot-white: 0 0% 100%; /* #FFFFFF - YoBot White */
-  --yobot-gray: 0 0% 76%; /* #C3C3C3 - YoBot Medium Gray */
 }
 
 .dark {
