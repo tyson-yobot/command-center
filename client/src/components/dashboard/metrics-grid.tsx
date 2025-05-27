@@ -99,7 +99,7 @@ export default function MetricsGrid() {
               {/* Icon and Change Indicator */}
               <div className="flex items-center justify-between mb-4">
                 <div 
-                  className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.gradient} shadow-lg flex items-center justify-center transform rotate-3 hover:rotate-0 transition-transform duration-300`}
+                  className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.gradient} shadow-lg flex items-center justify-center`}
                 >
                   <Icon className="h-6 w-6 text-white" />
                 </div>
