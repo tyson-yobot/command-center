@@ -101,10 +101,10 @@ export default function MetricsGrid() {
                   </span>
                 </div>
               </div>
-              <div className="text-2xl font-bold text-foreground mb-1">
+              <div className="text-2xl font-bold text-black mb-1">
                 {card.value}
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-sm text-black">
                 {card.label}
               </div>
             </CardContent>
