@@ -106,13 +106,13 @@ export default function BotControls() {
   const getStatusLabel = (status: string) => {
     switch (status) {
       case "active":
-        return "Active & Ready";
+        return "🚀 ACTIVE & DOMINATING";
       case "paused":
-        return "Paused";
+        return "⏸️ PAUSED";
       case "offline":
-        return "Offline";
+        return "🔴 OFFLINE";
       default:
-        return "Unknown";
+        return "❓ UNKNOWN STATUS";
     }
   };
 

@@ -8,12 +8,20 @@ export default function Header() {
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-white via-blue-50 to-blue-100 border-b border-blue-200 shadow-lg">
       <div className="flex items-center justify-between px-4 py-2">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-4">
           <img 
             src={yobotLogoPath} 
             alt="YoBot Logo" 
             className="h-20 w-auto"
           />
+          <div className="hidden sm:block">
+            <h1 className="text-2xl font-black text-gray-800 tracking-tight">
+              YoBot<span className="text-sm align-super">®</span> Command Center
+            </h1>
+            <p className="text-sm font-semibold text-blue-600 uppercase tracking-widest">
+              ENGAGE SMARTER, NOT HARDER
+            </p>
+          </div>
         </div>
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-1">
