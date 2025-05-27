@@ -94,7 +94,7 @@ export default function MetricsGrid() {
         const Icon = card.icon;
         
         return (
-          <Card key={card.label} className="metric-card touch-feedback bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-gray-400 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+          <Card key={card.label} className="metric-card touch-feedback bg-gradient-to-br from-white via-gray-50 to-gray-100 border-2 border-gray-300 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 relative overflow-hidden">
             <CardContent className="p-5 relative overflow-hidden">
               {/* Icon and Change Indicator */}
               <div className="flex items-center justify-between mb-4">
@@ -130,17 +130,28 @@ export default function MetricsGrid() {
               
               {/* Premium bar graph effect */}
               <div 
-                className="absolute bottom-0 left-0 h-1 rounded-b-md shadow-inner"
+                className="absolute bottom-0 left-0 h-2 rounded-b-md shadow-inner"
                 style={{ 
-                  background: `linear-gradient(90deg, ${card.color} 0%, ${card.color}dd 100%)`,
+                  background: `linear-gradient(90deg, ${card.color} 0%, ${card.color}cc 50%, ${card.color}88 100%)`,
                   width: `${Math.min(100, (card.value / 300) * 100)}%`
                 }}
               ></div>
               
-              {/* Subtle accent line */}
+              {/* Animated accent line */}
               <div 
-                className="absolute top-0 left-0 h-1 rounded-t-md"
-                style={{ backgroundColor: card.color, width: '100%', opacity: 0.3 }}
+                className="absolute top-0 left-0 h-1 rounded-t-md animate-pulse"
+                style={{ 
+                  background: `linear-gradient(90deg, ${card.color}88 0%, ${card.color} 50%, ${card.color}88 100%)`,
+                  width: '100%'
+                }}
+              ></div>
+              
+              {/* Subtle glow effect */}
+              <div 
+                className="absolute inset-0 rounded-lg opacity-20 pointer-events-none"
+                style={{ 
+                  background: `radial-gradient(circle at top right, ${card.color}22 0%, transparent 70%)`
+                }}
               ></div>
             </CardContent>
           </Card>

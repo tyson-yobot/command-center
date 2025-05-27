@@ -6,7 +6,7 @@ export default function Header() {
   const { isConnected } = useWebSocket();
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-white via-blue-50 to-blue-100 border-b border-blue-200 shadow-lg">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-white via-blue-50 via-purple-50 to-blue-200 border-b border-blue-300 shadow-xl">
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex items-center space-x-4">
           <img 
