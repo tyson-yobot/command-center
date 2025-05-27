@@ -120,60 +120,96 @@ export default function Controls() {
   return (
     <div className="px-4 space-y-6">
       {/* Bot Status */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Power className="h-5 w-5" />
-            <span>Bot Status</span>
+      <Card className="bg-gradient-to-br from-gray-900 via-gray-800 to-black border-2 border-gray-600 shadow-2xl">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center justify-between text-white">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <Power className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-xl font-bold">SYSTEM STATUS</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className={`w-3 h-3 rounded-full animate-pulse ${
+                bot.status === "active" ? "bg-green-400 shadow-lg shadow-green-400/50" : "bg-red-400 shadow-lg shadow-red-400/50"
+              }`} />
+              <span className="text-xs font-mono text-gray-300">LIVE</span>
+            </div>
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
-                <Activity className={`h-6 w-6 ${getStatusColor(bot.status)}`} />
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-800/50 to-gray-700/30 rounded-lg border border-gray-600">
+            <div className="flex items-center space-x-4">
+              <div className={`w-14 h-14 rounded-xl flex items-center justify-center relative overflow-hidden ${
+                bot.status === "active" 
+                  ? "bg-gradient-to-br from-green-500 to-emerald-600 shadow-lg shadow-green-500/30" 
+                  : "bg-gradient-to-br from-red-500 to-rose-600 shadow-lg shadow-red-500/30"
+              }`}>
+                <Activity className={`h-7 w-7 text-white ${
+                  bot.status === "active" ? "animate-pulse" : "animate-ping"
+                }`} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
               </div>
               <div>
-                <h3 className="font-medium">Bot Status</h3>
-                <p className={`text-sm ${getStatusColor(bot.status)}`}>
+                <h3 className="font-bold text-white text-lg">YoBot Assistant</h3>
+                <p className={`text-sm font-bold ${
+                  bot.status === "active" ? "text-green-400" : "text-red-400"
+                } tracking-wide`}>
                   {getStatusLabel(bot.status)}
                 </p>
+                <p className="text-xs text-gray-400 font-mono mt-1">ID: {bot.id} | PID: 2847</p>
               </div>
             </div>
-            <Switch
-              checked={bot.status === "active"}
-              onCheckedChange={handleStatusToggle}
-              disabled={isUpdating}
-            />
+            <div className="flex flex-col items-end space-y-2">
+              <Switch
+                checked={bot.status === "active"}
+                onCheckedChange={handleStatusToggle}
+                disabled={isUpdating}
+                className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500"
+              />
+              <span className="text-xs text-gray-400 font-mono">[TOGGLE]</span>
+            </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Lead Routing */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Route className="h-5 w-5" />
-            <span>Lead Routing</span>
+      <Card className="bg-gradient-to-br from-white via-gray-50 to-gray-100 border-2 border-gray-300 shadow-xl">
+        <CardHeader className="pb-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                <Route className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-xl font-bold">LEAD ROUTING</span>
+            </div>
+            <div className="text-xs font-mono bg-white/20 px-2 py-1 rounded">RT-SYS</div>
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-medium">Routing Mode</h3>
-                <p className="text-sm text-muted-foreground">
-                  Current: {bot.routingMode.replace("-", " ").replace(/\b\w/g, l => l.toUpperCase())}
-                </p>
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border-2 border-blue-200">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Route className="h-6 w-6 text-white animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-900 text-lg">Routing Algorithm</h3>
+                  <p className="text-sm font-semibold text-blue-600 tracking-wide">
+                    {bot.routingMode.replace("-", " ").replace(/\b\w/g, l => l.toUpperCase())}
+                  </p>
+                </div>
               </div>
-              <Badge variant="outline">{bot.routingMode}</Badge>
+              <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold px-3 py-1 text-sm">
+                {bot.routingMode.toUpperCase()}
+              </Badge>
             </div>
             <Select
               value={bot.routingMode}
               onValueChange={handleRoutingChange}
               disabled={isUpdating}
             >
-              <SelectTrigger>
+              <SelectTrigger className="bg-white border-2 border-gray-300 font-semibold text-lg h-12">
                 <SelectValue placeholder="Select routing mode" />
               </SelectTrigger>
               <SelectContent>
@@ -188,30 +224,42 @@ export default function Controls() {
       </Card>
 
       {/* Conversation Tone */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <MessageSquare className="h-5 w-5" />
-            <span>Conversation Tone</span>
+      <Card className="bg-gradient-to-br from-white via-gray-50 to-gray-100 border-2 border-gray-300 shadow-xl">
+        <CardHeader className="pb-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-t-lg">
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                <MessageSquare className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-xl font-bold">CONVERSATION TONE</span>
+            </div>
+            <div className="text-xs font-mono bg-white/20 px-2 py-1 rounded">AI-TONE</div>
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-medium">Current Tone</h3>
-                <p className="text-sm text-muted-foreground">
-                  {bot.tone.charAt(0).toUpperCase() + bot.tone.slice(1)}
-                </p>
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-200">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <MessageSquare className="h-6 w-6 text-white animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-900 text-lg">Bot Personality</h3>
+                  <p className="text-sm font-semibold text-purple-600 tracking-wide">
+                    {bot.tone.charAt(0).toUpperCase() + bot.tone.slice(1)} Communication
+                  </p>
+                </div>
               </div>
-              <Badge variant="secondary">{bot.tone}</Badge>
+              <Badge className="bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold px-3 py-1 text-sm">
+                {bot.tone.toUpperCase()}
+              </Badge>
             </div>
             <Select
               value={bot.tone}
               onValueChange={handleToneChange}
               disabled={isUpdating}
             >
-              <SelectTrigger>
+              <SelectTrigger className="bg-white border-2 border-gray-300 font-semibold text-lg h-12">
                 <SelectValue placeholder="Select conversation tone" />
               </SelectTrigger>
               <SelectContent>
