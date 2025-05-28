@@ -5,6 +5,9 @@ import { storage } from "./storage";
 import { z } from "zod";
 import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertCrmDataSchema, insertScannedContactSchema } from "@shared/schema";
 import { createWorker } from 'tesseract.js';
+import { sendSlackAlert } from "./alerts";
+import { generatePDFReport } from "./pdfReport";
+import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -341,6 +344,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error('OCR Error:', error);
       res.status(500).json({ error: "Failed to process business card" });
+    }
+  });
+
+  // Emergency SMS/Slack Alert endpoint
+  app.post("/api/alerts/emergency", async (req, res) => {
+    try {
+      const { type, message, severity } = req.body;
+      
+      const alertMessage = `🚨 YoBot Emergency Alert: ${message}`;
+      
+      // Send both Slack and SMS for maximum reliability
+      const promises = [
+        sendSlackAlert(alertMessage),
+        sendEmergencyEscalation(type || 'system', message)
+      ];
+      
+      const results = await Promise.allSettled(promises);
+      
+      res.json({
+        success: true,
+        slack: results[0].status === 'fulfilled',
+        sms: results[1].status === 'fulfilled',
+        message: 'Emergency alerts sent successfully'
+      });
+
+    } catch (error: any) {
+      console.error('Emergency alert failed:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // PDF Report Generation endpoint
+  app.post("/api/reports/pdf", async (req, res) => {
+    try {
+      const { html } = req.body;
+      
+      if (!html) {
+        return res.status(400).json({ error: "HTML content is required" });
+      }
+
+      const pdfBuffer = await generatePDFReport(html);
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="YoBot_Report.pdf"');
+      res.send(pdfBuffer);
+
+    } catch (error: any) {
+      console.error('PDF generation failed:', error);
+      res.status(500).json({ error: error.message });
     }
   });
 

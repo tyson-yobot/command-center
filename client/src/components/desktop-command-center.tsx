@@ -115,6 +115,29 @@ export default function DesktopCommandCenter() {
     }
   };
 
+  // Emergency Alert Handler
+  const handleEmergencyAlert = async () => {
+    const alertData = {
+      type: 'system',
+      message: `URGENT: ${liveMetrics.callsToday || 255} calls processed today. System performance critical alert triggered.`,
+      severity: 'critical'
+    };
+
+    try {
+      const response = await fetch('/api/alerts/emergency', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(alertData)
+      });
+
+      if (response.ok) {
+        console.log('✅ Emergency alerts sent via Slack & SMS');
+      }
+    } catch (error) {
+      console.error('Alert sending failed:', error);
+    }
+  };
+
   // WebSocket connection for live updates
   useEffect(() => {
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
@@ -678,7 +701,7 @@ export default function DesktopCommandCenter() {
 
               <Button 
                 className="w-full bg-gradient-to-r from-pink-600 to-red-600 hover:from-pink-700 hover:to-red-700 text-white font-bold"
-                onClick={() => console.log('🔔 Sending Slack/SMS alert...')}
+                onClick={handleEmergencyAlert}
               >
                 🔔 Alert via Slack/SMS
               </Button>
