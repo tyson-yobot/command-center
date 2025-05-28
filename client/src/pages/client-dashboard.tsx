@@ -87,11 +87,11 @@ export default function ClientDashboard() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white mb-2 flex items-center">
+              <h1 className="text-3xl font-bold text-white mb-2 flex items-baseline">
                 <img 
                   src={yobotLogo} 
                   alt="YoBot Logo" 
-                  className="w-12 h-12 mr-3 inline-block"
+                  className="w-12 h-12 mr-3 inline-block -mt-1"
                 />
                 YoBot® Command Center
               </h1>
