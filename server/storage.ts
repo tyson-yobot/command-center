@@ -25,7 +25,14 @@ import {
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUser(id: number, updates: Partial<User>): Promise<User>;
+  
+  getClientCompany(id: string): Promise<ClientCompany | undefined>;
+  createClientCompany(company: InsertClientCompany): Promise<ClientCompany>;
+  updateClientCompany(id: string, updates: Partial<InsertClientCompany>): Promise<ClientCompany>;
+  getClientsByCompany(clientId: string): Promise<User[]>;
   
   getBot(id: number): Promise<Bot | undefined>;
   updateBot(id: number, updates: Partial<InsertBot>): Promise<Bot>;
@@ -51,6 +58,7 @@ export interface IStorage {
 
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
+  private clientCompanies: Map<string, ClientCompany>;
   private bots: Map<number, Bot>;
   private conversations: Map<number, Conversation>;
   private notifications: Map<number, Notification>;
@@ -61,6 +69,7 @@ export class MemStorage implements IStorage {
 
   constructor() {
     this.users = new Map();
+    this.clientCompanies = new Map();
     this.bots = new Map();
     this.conversations = new Map();
     this.notifications = new Map();

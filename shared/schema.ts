@@ -6,7 +6,14 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
-  role: text("role").notNull().default("user"), // options: admin, dev, sales, client
+  email: text("email").unique().notNull(),
+  role: text("role").notNull().default("agent"), // admin, dev, support, owner, manager, agent, editor
+  clientId: text("client_id"), // null for YoBot internal team, UUID for client companies
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  lastLogin: timestamp("last_login"),
 });
 
 export const bots = pgTable("bots", {
@@ -65,6 +72,17 @@ export const crmData = pgTable("crm_data", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const clientCompanies = pgTable("client_companies", {
+  id: text("id").primaryKey(), // UUID for client identification
+  companyName: text("company_name").notNull(),
+  domain: text("domain").unique(), // company.com for email domain validation
+  industry: text("industry"),
+  billingStatus: text("billing_status").default("active"), // active, suspended, trial
+  planType: text("plan_type").default("standard"), // trial, standard, premium, enterprise
+  createdAt: timestamp("created_at").defaultNow(),
+  isActive: boolean("is_active").default(true),
+});
+
 export const scannedContacts = pgTable("scanned_contacts", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").notNull(),
@@ -84,6 +102,15 @@ export const scannedContacts = pgTable("scanned_contacts", {
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
+  email: true,
+  role: true,
+  clientId: true,
+  firstName: true,
+  lastName: true,
+});
+
+export const insertClientCompanySchema = createInsertSchema(clientCompanies).omit({
+  createdAt: true,
 });
 
 export const insertBotSchema = createInsertSchema(bots).omit({
@@ -123,10 +150,12 @@ export type Conversation = typeof conversations.$inferSelect;
 export type Notification = typeof notifications.$inferSelect;
 export type Metrics = typeof metrics.$inferSelect;
 export type CrmData = typeof crmData.$inferSelect;
+export type ClientCompany = typeof clientCompanies.$inferSelect;
 export type ScannedContact = typeof scannedContacts.$inferSelect;
 export type InsertBot = z.infer<typeof insertBotSchema>;
 export type InsertConversation = z.infer<typeof insertConversationSchema>;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
 export type InsertMetrics = z.infer<typeof insertMetricsSchema>;
 export type InsertCrmData = z.infer<typeof insertCrmDataSchema>;
+export type InsertClientCompany = z.infer<typeof insertClientCompanySchema>;
 export type InsertScannedContact = z.infer<typeof insertScannedContactSchema>;
