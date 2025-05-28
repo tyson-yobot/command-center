@@ -34,21 +34,28 @@ export default function Dashboard() {
       <BotControls />
       <LiveNotifications />
       
-      {/* Test Alert Button */}
-      <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4">
+      {/* Quick Actions Panel for Mobile */}
+      <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-red-400 font-bold text-sm">Critical Alert System</h3>
-            <p className="text-slate-300 text-xs">Test your emergency notifications</p>
+            <h3 className="text-white font-bold text-sm">Quick Actions</h3>
+            <p className="text-slate-300 text-xs">Get help or request training</p>
           </div>
-          <Button 
-            onClick={testAlert}
-            className="bg-red-600 hover:bg-red-700 text-white"
-            size="sm"
-          >
-            <AlertTriangle className="h-4 w-4 mr-2" />
-            Test Alert
-          </Button>
+          <div className="flex space-x-2">
+            <Button 
+              size="sm"
+              className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3"
+            >
+              Request Training
+            </Button>
+            <Button 
+              size="sm"
+              variant="outline"
+              className="bg-white/10 border-white/20 text-white hover:bg-white/20 text-xs px-3"
+            >
+              Submit Ticket
+            </Button>
+          </div>
         </div>
       </div>
       
