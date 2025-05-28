@@ -19,7 +19,7 @@ function Router() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="pt-28 pb-20">
+      <main className="pt-32 pb-20">
         <Switch>
           <Route path="/" component={Dashboard} />
           <Route path="/conversations" component={Conversations} />

@@ -14,7 +14,7 @@ export default function Header() {
           <img 
             src={yobotLogoPath} 
             alt="YoBot Logo" 
-            className="h-12 w-auto"
+            className="h-16 w-auto"
           />
           
           {/* Connection Status - Top Right */}
