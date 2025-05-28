@@ -36,8 +36,8 @@ export default function Header() {
       {/* Command Center Title Bar */}
       <div className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-b from-white via-gray-100 to-gray-400 border-b-4 border-gray-600 shadow-xl">
         <div className="px-4 py-2">
-          <h1 className="text-center text-3xl font-black text-gray-900 tracking-tight drop-shadow-lg">
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-extrabold">COMMAND CENTER</span>
+          <h1 className="text-center text-3xl font-black tracking-tight drop-shadow-lg">
+            <span className="bg-gradient-to-t from-black to-gray-500 bg-clip-text text-transparent font-extrabold">COMMAND CENTER</span>
           </h1>
           {/* Accent stripe */}
           <div className="mt-1 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-full mx-auto w-48"></div>
