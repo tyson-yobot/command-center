@@ -12,15 +12,15 @@ export default function Scanner() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-32 pb-20 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 pt-32 pb-20 px-4">
       <div className="max-w-6xl mx-auto space-y-6">
         
         {/* Page Header */}
-        <div className="text-center space-y-2 mb-8">
-          <h1 className="text-3xl font-black text-gray-900 dark:text-white">
+        <div className="text-center space-y-3 mb-8">
+          <h1 className="text-3xl font-black text-white">
             📷 Business Card Scanner
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-slate-300 max-w-2xl mx-auto text-base leading-relaxed">
             Instantly capture and digitize business cards with AI-powered OCR. 
             Automatically populate your CRM with contact information from networking events.
           </p>
@@ -34,9 +34,9 @@ export default function Scanner() {
           </div>
 
           {/* Recent Scanned Contacts */}
-          <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-lg">
+          <Card className="bg-slate-800 border-slate-600 shadow-xl">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-800 dark:text-gray-200">
+              <CardTitle className="flex items-center gap-2 text-lg font-bold text-white">
                 📋 Recent Scanned Contacts
               </CardTitle>
             </CardHeader>
@@ -45,8 +45,8 @@ export default function Scanner() {
                 <div className="space-y-3">
                   {[...Array(3)].map((_, i) => (
                     <div key={i} className="animate-pulse">
-                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                      <div className="h-4 bg-slate-600 rounded w-3/4 mb-2"></div>
+                      <div className="h-3 bg-slate-600 rounded w-1/2"></div>
                     </div>
                   ))}
                 </div>
@@ -55,15 +55,15 @@ export default function Scanner() {
                   {scannedContacts.slice(0, 10).map((contact) => (
                     <div 
                       key={contact.id} 
-                      className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow"
+                      className="border border-slate-600 bg-slate-700 rounded-lg p-4 hover:shadow-md hover:bg-slate-600 transition-all duration-200"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div>
-                          <h3 className="font-semibold text-gray-900 dark:text-white">
+                          <h3 className="font-semibold text-white">
                             {contact.firstName} {contact.lastName}
                           </h3>
                           {contact.title && (
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                            <p className="text-sm text-slate-300">
                               {contact.title}
                             </p>
                           )}
@@ -71,8 +71,8 @@ export default function Scanner() {
                         <Badge 
                           variant={contact.status === "processed" ? "default" : "secondary"}
                           className={contact.status === "processed" 
-                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" 
-                            : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                            ? "bg-green-600 text-white" 
+                            : "bg-yellow-600 text-white"
                           }
                         >
                           {contact.status === "processed" ? "✅ Processed" : "⏳ Pending"}
@@ -81,35 +81,35 @@ export default function Scanner() {
                       
                       <div className="grid grid-cols-1 gap-2 text-sm">
                         {contact.company && (
-                          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                          <div className="flex items-center gap-2 text-slate-300">
                             <Building2 className="h-3 w-3" />
                             <span>{contact.company}</span>
                           </div>
                         )}
                         {contact.email && (
-                          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                          <div className="flex items-center gap-2 text-slate-300">
                             <Mail className="h-3 w-3" />
-                            <span className="text-blue-600 dark:text-blue-400">{contact.email}</span>
+                            <span className="text-blue-400">{contact.email}</span>
                           </div>
                         )}
                         {contact.phone && (
-                          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                          <div className="flex items-center gap-2 text-slate-300">
                             <Phone className="h-3 w-3" />
                             <span>{contact.phone}</span>
                           </div>
                         )}
                         {contact.website && (
-                          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                          <div className="flex items-center gap-2 text-slate-300">
                             <Globe className="h-3 w-3" />
-                            <span className="text-blue-600 dark:text-blue-400">{contact.website}</span>
+                            <span className="text-blue-400">{contact.website}</span>
                           </div>
                         )}
                       </div>
                       
-                      <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
-                        <Calendar className="h-3 w-3 text-gray-400" />
-                        <span className="text-xs text-gray-400">
-                          Scanned {new Date(contact.createdAt).toLocaleDateString()}
+                      <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-600">
+                        <Calendar className="h-3 w-3 text-slate-400" />
+                        <span className="text-xs text-slate-400">
+                          Scanned {contact.createdAt ? new Date(contact.createdAt).toLocaleDateString() : 'Recently'}
                         </span>
                       </div>
                     </div>
@@ -118,10 +118,10 @@ export default function Scanner() {
               ) : (
                 <div className="text-center py-8">
                   <div className="text-4xl mb-4">📱</div>
-                  <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-400 mb-2">
+                  <h3 className="text-lg font-semibold text-slate-300 mb-2">
                     No Scanned Contacts Yet
                   </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-500">
+                  <p className="text-sm text-slate-400">
                     Use the scanner to start capturing business card contacts
                   </p>
                 </div>
@@ -132,31 +132,31 @@ export default function Scanner() {
 
         {/* Feature Benefits */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-          <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+          <Card className="bg-blue-900/30 border-blue-500/50 shadow-xl">
             <CardContent className="pt-6 text-center">
               <div className="text-3xl mb-3">🎯</div>
-              <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-2">Smart OCR Extraction</h3>
-              <p className="text-sm text-blue-700 dark:text-blue-300">
+              <h3 className="font-semibold text-blue-200 mb-2">Smart OCR Extraction</h3>
+              <p className="text-sm text-blue-300">
                 Advanced AI automatically detects and extracts names, companies, emails, phones, and more
               </p>
             </CardContent>
           </Card>
           
-          <Card className="bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800">
+          <Card className="bg-green-900/30 border-green-500/50 shadow-xl">
             <CardContent className="pt-6 text-center">
               <div className="text-3xl mb-3">🔄</div>
-              <h3 className="font-semibold text-green-900 dark:text-green-200 mb-2">CRM Integration</h3>
-              <p className="text-sm text-green-700 dark:text-green-300">
+              <h3 className="font-semibold text-green-200 mb-2">CRM Integration</h3>
+              <p className="text-sm text-green-300">
                 Contacts automatically sync to your CRM pipeline and Make automation workflows
               </p>
             </CardContent>
           </Card>
           
-          <Card className="bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800">
+          <Card className="bg-purple-900/30 border-purple-500/50 shadow-xl">
             <CardContent className="pt-6 text-center">
               <div className="text-3xl mb-3">✏️</div>
-              <h3 className="font-semibold text-purple-900 dark:text-purple-200 mb-2">Review & Edit</h3>
-              <p className="text-sm text-purple-700 dark:text-purple-300">
+              <h3 className="font-semibold text-purple-200 mb-2">Review & Edit</h3>
+              <p className="text-sm text-purple-300">
                 Review extracted data before saving, with easy editing for accuracy
               </p>
             </CardContent>

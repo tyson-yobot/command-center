@@ -112,9 +112,9 @@ export default function BusinessCardScanner() {
 
   return (
     <>
-      <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-lg">
+      <Card className="bg-slate-800 border-slate-600 shadow-xl">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-800 dark:text-gray-200">
+          <CardTitle className="flex items-center gap-2 text-lg font-bold text-white">
             📷 Business Card Scanner
           </CardTitle>
         </CardHeader>
