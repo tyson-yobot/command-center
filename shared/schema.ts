@@ -64,6 +64,22 @@ export const crmData = pgTable("crm_data", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const scannedContacts = pgTable("scanned_contacts", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  company: text("company"),
+  title: text("title"),
+  email: text("email"),
+  phone: text("phone"),
+  website: text("website"),
+  rawText: text("raw_text"), // Store original OCR text for reference
+  source: text("source").default("card_scan"),
+  status: text("status").default("pending"), // pending, processed, failed
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -94,6 +110,11 @@ export const insertCrmDataSchema = createInsertSchema(crmData).omit({
   updatedAt: true,
 });
 
+export const insertScannedContactSchema = createInsertSchema(scannedContacts).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Bot = typeof bots.$inferSelect;
@@ -101,8 +122,10 @@ export type Conversation = typeof conversations.$inferSelect;
 export type Notification = typeof notifications.$inferSelect;
 export type Metrics = typeof metrics.$inferSelect;
 export type CrmData = typeof crmData.$inferSelect;
+export type ScannedContact = typeof scannedContacts.$inferSelect;
 export type InsertBot = z.infer<typeof insertBotSchema>;
 export type InsertConversation = z.infer<typeof insertConversationSchema>;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
 export type InsertMetrics = z.infer<typeof insertMetricsSchema>;
 export type InsertCrmData = z.infer<typeof insertCrmDataSchema>;
+export type InsertScannedContact = z.infer<typeof insertScannedContactSchema>;

@@ -5,18 +5,21 @@ import {
   notifications, 
   metrics, 
   crmData,
+  scannedContacts,
   type User, 
   type Bot, 
   type Conversation, 
   type Notification, 
   type Metrics, 
   type CrmData,
+  type ScannedContact,
   type InsertUser, 
   type InsertBot, 
   type InsertConversation, 
   type InsertNotification, 
   type InsertMetrics, 
-  type InsertCrmData 
+  type InsertCrmData,
+  type InsertScannedContact
 } from "@shared/schema";
 
 export interface IStorage {
@@ -40,6 +43,10 @@ export interface IStorage {
   
   getCrmData(userId: number): Promise<CrmData | undefined>;
   updateCrmData(userId: number, updates: Partial<InsertCrmData>): Promise<CrmData>;
+  
+  getScannedContacts(userId: number): Promise<ScannedContact[]>;
+  createScannedContact(contact: InsertScannedContact): Promise<ScannedContact>;
+  updateScannedContact(id: number, updates: Partial<InsertScannedContact>): Promise<ScannedContact>;
 }
 
 export class MemStorage implements IStorage {
@@ -49,6 +56,7 @@ export class MemStorage implements IStorage {
   private notifications: Map<number, Notification>;
   private metrics: Map<number, Metrics>;
   private crmData: Map<number, CrmData>;
+  private scannedContacts: Map<number, ScannedContact>;
   private currentId: number;
 
   constructor() {
@@ -58,6 +66,7 @@ export class MemStorage implements IStorage {
     this.notifications = new Map();
     this.metrics = new Map();
     this.crmData = new Map();
+    this.scannedContacts = new Map();
     this.currentId = 1;
     this.initializeData();
   }
