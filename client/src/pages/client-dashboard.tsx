@@ -207,22 +207,22 @@ export default function ClientDashboard() {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">ROI This Month</span>
-                  <span className="text-green-400 font-bold">847%</span>
+                  <span className="text-slate-300">Cost Per Lead</span>
+                  <span className="text-green-400 font-bold">$18.50</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Conversion Rate</span>
-                  <span className="text-green-400 font-bold">24.3%</span>
+                  <span className="text-slate-300">Lead Quality Score</span>
+                  <span className="text-green-400 font-bold">92.1%</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Learning Accuracy</span>
-                  <span className="text-green-400 font-bold">94.7%</span>
+                  <span className="text-slate-300">Close Rate</span>
+                  <span className="text-green-400 font-bold">34.7%</span>
                 </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
-                  <div className="text-slate-300 text-sm mb-1">Performance Score</div>
+                  <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-white font-bold">Excellent</div>
-                    <Badge className="bg-green-600 text-white">A+</Badge>
+                    <div className="text-white font-bold">$1,247</div>
+                    <Badge className="bg-green-600 text-white">+23%</Badge>
                   </div>
                 </div>
               </div>
@@ -240,20 +240,23 @@ export default function ClientDashboard() {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Monthly Savings</span>
-                  <span className="text-green-400 font-bold">$12,450</span>
+                  <span className="text-slate-300">Ad Spend ROI</span>
+                  <span className="text-green-400 font-bold">487%</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Cost Per Lead</span>
-                  <span className="text-green-400 font-bold">$23.50</span>
+                  <span className="text-slate-300">Budget Utilization</span>
+                  <span className="text-green-400 font-bold">94.2%</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Budget Efficiency</span>
-                  <span className="text-green-400 font-bold">92%</span>
+                  <span className="text-slate-300">Cost Per Acquisition</span>
+                  <span className="text-green-400 font-bold">$47.80</span>
                 </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
-                  <div className="text-slate-300 text-sm mb-1">Next Optimization</div>
-                  <div className="text-white font-medium">Ad spend reallocation</div>
+                  <div className="text-slate-300 text-sm mb-1">Monthly Savings</div>
+                  <div className="flex items-center justify-between">
+                    <div className="text-white font-bold">$8,240</div>
+                    <Badge className="bg-green-600 text-white">+15%</Badge>
+                  </div>
                 </div>
               </div>
             </CardContent>
