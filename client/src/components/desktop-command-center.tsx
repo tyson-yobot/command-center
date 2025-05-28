@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
+import CriticalAlertOverlay from "@/components/critical-alert-overlay";
 import { 
   Activity, 
   Brain, 
@@ -29,7 +30,12 @@ import {
   FileText,
   Database,
   Eye,
-  Headphones
+  Headphones,
+  Shield,
+  Cpu,
+  Network,
+  Timer,
+  Bell
 } from "lucide-react";
 import type { Metrics, Bot, Notification, CrmData } from "@shared/schema";
 
@@ -238,8 +244,28 @@ export default function DesktopCommandCenter() {
   const responseTime = "0.3s";
   const uptime = "99.7%";
 
+  const testAlert = async () => {
+    // Trigger critical alert overlay directly
+    const alertEvent = new CustomEvent('message', {
+      detail: {
+        data: {
+          type: 'CRITICAL_NOTIFICATION',
+          notification: {
+            title: '🚨 URGENT CALL ESCALATION',
+            body: 'High-value client Mike Rodriguez needs immediate assistance - $125,000 deal at risk',
+            type: 'call_escalation',
+            timestamp: Date.now(),
+            requiresAttention: true
+          }
+        }
+      }
+    });
+    window.dispatchEvent(alertEvent);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
+      <CriticalAlertOverlay />
       {/* Header Section */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center space-x-4">
@@ -283,6 +309,15 @@ export default function DesktopCommandCenter() {
               disabled={!voiceEnabled}
             >
               {voiceActive ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            </Button>
+            
+            {/* Critical Alert Test */}
+            <Button 
+              onClick={testAlert}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-xl"
+            >
+              <Bell className="w-5 h-5 mr-2" />
+              Test Alert
             </Button>
             
             {/* Automation Toggle */}
