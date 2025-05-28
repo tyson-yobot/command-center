@@ -42,6 +42,38 @@ export default function DesktopCommandCenter() {
   const [ragMode, setRagMode] = useState(true);
   const [liveMetrics, setLiveMetrics] = useState({ callsToday: 0, conversions: 0, newLeads: 0 });
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [voiceCommand, setVoiceCommand] = useState('');
+
+  // Voice Command Handler
+  const sendVoiceCommand = async () => {
+    if (!voiceCommand.trim()) {
+      alert('Please enter a command.');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/voice/trigger', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          command: voiceCommand,
+          user: 'Command Center',
+          context: 'YoBot Dashboard',
+          priority: 'high',
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert('✅ Command sent to VoiceBot');
+        setVoiceCommand('');
+      } else {
+        alert('❌ Error: ' + data.error);
+      }
+    } catch (error) {
+      alert('❌ Failed to send voice command');
+    }
+  };
 
   // PDF Download Handler
   const handleDownloadPDF = async () => {
@@ -538,6 +570,49 @@ export default function DesktopCommandCenter() {
                 <Settings className="w-4 h-4 mr-2" />
                 Override Bot Decision
               </Button>
+            </CardContent>
+          </Card>
+
+          {/* Voice Command Center */}
+          <Card className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center space-x-2">
+                <Mic className="w-5 h-5 text-purple-400" />
+                <span>🎤 VoiceBot Command Center</span>
+                <Badge className="bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                  READY
+                </Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  className="w-full bg-white/10 border border-purple-500/30 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                  placeholder="Enter voice command..."
+                  value={voiceCommand}
+                  onChange={(e) => setVoiceCommand(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && sendVoiceCommand()}
+                />
+                <Button
+                  onClick={sendVoiceCommand}
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold"
+                  disabled={!voiceCommand.trim()}
+                >
+                  <Volume2 className="w-4 h-4 mr-2" />
+                  Send to VoiceBot
+                </Button>
+              </div>
+              
+              <div className="bg-purple-500/10 border border-purple-500/20 rounded-lg p-3">
+                <div className="text-white text-sm font-medium mb-2">Quick Commands</div>
+                <div className="space-y-1 text-xs text-white/70">
+                  <div>• "Generate executive summary"</div>
+                  <div>• "Read today's performance"</div>
+                  <div>• "Alert team about hot leads"</div>
+                  <div>• "Process CRM updates"</div>
+                </div>
+              </div>
             </CardContent>
           </Card>
 
