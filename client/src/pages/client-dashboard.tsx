@@ -118,7 +118,7 @@ export default function ClientDashboard() {
         </div>
 
         {/* Key Performance Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Hours Saved</CardTitle>
@@ -165,7 +165,7 @@ export default function ClientDashboard() {
         </div>
 
         {/* Main Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
           {/* Automation Engine */}
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
@@ -261,7 +261,7 @@ export default function ClientDashboard() {
         </div>
 
         {/* Second Row - Bot Intelligence & System Monitor */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Bot Intelligence */}
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
@@ -335,7 +335,7 @@ export default function ClientDashboard() {
         </div>
 
         {/* Voice & Conversation Analytics */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
@@ -400,7 +400,7 @@ export default function ClientDashboard() {
         </div>
 
         {/* Smart Calendar & Live Activity */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
@@ -469,7 +469,7 @@ export default function ClientDashboard() {
         </div>
 
         {/* Escalation Alerts */}
-        <div className="mb-8">
+        <div className="mb-12">
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
