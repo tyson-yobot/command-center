@@ -21,21 +21,27 @@ import NotFound from "@/pages/not-found";
 function Router() {
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-      <main className="pt-36 pb-20">
-        <Switch>
-          <Route path="/" component={Dashboard} />
-          <Route path="/conversations" component={Conversations} />
-          <Route path="/controls" component={Controls} />
-          <Route path="/crm" component={CRM} />
-          <Route path="/reports" component={Reports} />
-          <Route path="/scanner" component={Scanner} />
-          <Route path="/command-center" component={DesktopCommandCenter} />
-          <Route component={NotFound} />
-        </Switch>
-      </main>
-      <BottomNav />
-      <InstallPrompt />
+      <Switch>
+        <Route path="/command-center">
+          <DesktopCommandCenter />
+        </Route>
+        <Route>
+          <Header />
+          <main className="pt-36 pb-20">
+            <Switch>
+              <Route path="/" component={Dashboard} />
+              <Route path="/conversations" component={Conversations} />
+              <Route path="/controls" component={Controls} />
+              <Route path="/crm" component={CRM} />
+              <Route path="/reports" component={Reports} />
+              <Route path="/scanner" component={Scanner} />
+              <Route component={NotFound} />
+            </Switch>
+          </main>
+          <BottomNav />
+          <InstallPrompt />
+        </Route>
+      </Switch>
     </div>
   );
 }
