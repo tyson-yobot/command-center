@@ -8,7 +8,7 @@ import { ChevronDown } from "lucide-react";
 
 export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-slate-950 text-white px-4 space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white px-4 space-y-6">
       <SearchBar />
       <MetricsGrid />
       <BotControls />
