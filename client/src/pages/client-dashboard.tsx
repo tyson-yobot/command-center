@@ -28,6 +28,7 @@ import {
   Gauge
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i.png';
 
 export default function ClientDashboard() {
   const { data: metrics } = useQuery({ queryKey: ['/api/metrics'] });
@@ -85,18 +86,25 @@ export default function ClientDashboard() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-white mb-2">
-                YoBot® Command Center
-              </h1>
-              <p className="text-slate-300">Your Complete AI Automation Dashboard</p>
+            <div className="flex items-center space-x-3">
+              <img 
+                src={yobotLogo} 
+                alt="YoBot Logo" 
+                className="w-12 h-12"
+              />
+              <div>
+                <h1 className="text-3xl font-bold text-white mb-2">
+                  YoBot® Command Center
+                </h1>
+                <p className="text-slate-300">Your Complete AI Automation Dashboard</p>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <Button
                 onClick={handleVoiceToggle}
-                className={`${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} text-white`}
+                className={`${isListening ? 'bg-red-600 hover:bg-red-700 shadow-lg shadow-red-500/25' : 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/25'} text-white border-2 ${isListening ? 'border-red-300' : 'border-blue-300'}`}
               >
-                {isListening ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
+                {isListening ? <MicOff className="w-5 h-5 mr-2 text-white" /> : <Mic className="w-5 h-5 mr-2 text-white" />}
                 {isListening ? 'Listening...' : 'Voice Command'}
               </Button>
               <div className="flex items-center space-x-3">
