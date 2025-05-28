@@ -57,6 +57,9 @@ export default function ConversationLog() {
           <CardTitle className="flex items-center space-x-2">
             <MessageCircle className="h-5 w-5" />
             <span>💬 Recent Conversations</span>
+            {conversations && conversations.some(c => c.status === "escalated") && (
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse ml-2"></div>
+            )}
           </CardTitle>
           <Link href="/conversations">
             <Button variant="ghost" size="sm">
