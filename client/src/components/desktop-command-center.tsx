@@ -596,6 +596,20 @@ export default function DesktopCommandCenter() {
                 View All Conversations
               </Button>
               
+              <Button 
+                className="w-full bg-gradient-to-r from-indigo-600 to-blue-700 text-white font-bold"
+                onClick={() => console.log('📄 Generating Power Report PDF...')}
+              >
+                📄 Download Power Report
+              </Button>
+
+              <Button 
+                className="w-full bg-gradient-to-r from-pink-600 to-red-600 hover:from-pink-700 hover:to-red-700 text-white font-bold"
+                onClick={() => console.log('🔔 Sending Slack/SMS alert...')}
+              >
+                🔔 Alert via Slack/SMS
+              </Button>
+              
               <Button className="w-full bg-gradient-to-r from-green-600 to-cyan-600 hover:from-green-700 hover:to-cyan-700 text-white font-bold">
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Generate Power Report
