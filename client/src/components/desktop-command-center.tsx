@@ -35,7 +35,8 @@ import {
   Cpu,
   Network,
   Timer,
-  Bell
+  Bell,
+  DollarSign
 } from "lucide-react";
 import type { Metrics, Bot, Notification, CrmData } from "@shared/schema";
 
@@ -522,6 +523,134 @@ export default function DesktopCommandCenter() {
           </CardContent>
         </Card>
       </div>
+
+      {/* SmartSpend™ Analytics Dashboard */}
+      <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center space-x-2">
+            <DollarSign className="w-5 h-5 text-green-400" />
+            <span>SmartSpend™ Analytics</span>
+            <div className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full">PROPRIETARY</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="bg-gradient-to-br from-green-600/20 to-green-800/20 border border-green-500/30 rounded-lg p-4">
+              <div className="text-center">
+                <div className="text-3xl font-black text-green-400 mb-2">$127K</div>
+                <div className="text-green-300 text-sm">Monthly Savings</div>
+                <div className="text-green-200 text-xs mt-1">↑ 23% vs last month</div>
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-500/30 rounded-lg p-4">
+              <div className="text-center">
+                <div className="text-3xl font-black text-blue-400 mb-2">47%</div>
+                <div className="text-blue-300 text-sm">Cost Reduction</div>
+                <div className="text-blue-200 text-xs mt-1">vs Manual Operations</div>
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30 rounded-lg p-4">
+              <div className="text-center">
+                <div className="text-3xl font-black text-purple-400 mb-2">$2.3M</div>
+                <div className="text-purple-300 text-sm">Annual Projection</div>
+                <div className="text-purple-200 text-xs mt-1">Automation ROI</div>
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-br from-orange-600/20 to-orange-800/20 border border-orange-500/30 rounded-lg p-4">
+              <div className="text-center">
+                <div className="text-3xl font-black text-orange-400 mb-2">156</div>
+                <div className="text-orange-300 text-sm">Hours Saved</div>
+                <div className="text-orange-200 text-xs mt-1">This Week</div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Botalytics™ Performance Dashboard */}
+      <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center space-x-2">
+            <TrendingUp className="w-5 h-5 text-cyan-400" />
+            <span>Botalytics™ ROI Dashboard</span>
+            <div className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded-full">PROPRIETARY</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* ROI Metrics */}
+            <div className="space-y-4">
+              <div className="bg-slate-800/50 rounded-lg p-4">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-cyan-400 mb-1">847%</div>
+                  <div className="text-cyan-300 text-sm">Total ROI</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Lead Generation</span>
+                    <span className="text-green-400">+$450K</span>
+                  </div>
+                  <Progress value={78} className="h-1" />
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Cost Savings</span>
+                    <span className="text-blue-400">+$280K</span>
+                  </div>
+                  <Progress value={65} className="h-1" />
+                </div>
+              </div>
+            </div>
+
+            {/* Bot Performance Comparison */}
+            <div className="space-y-4">
+              <div className="bg-slate-800/50 rounded-lg p-4">
+                <div className="text-white text-sm font-medium mb-3">Bot vs Human Performance</div>
+                <div className="space-y-3">
+                  <div>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-slate-400">Response Speed</span>
+                      <span className="text-green-400">Bot: 0.2s | Human: 45s</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="bg-green-500 h-2 rounded"></div>
+                      <div className="bg-red-500/30 h-2 rounded"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-slate-400">Accuracy Rate</span>
+                      <span className="text-cyan-400">Bot: 94% | Human: 87%</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="bg-cyan-500 h-2 rounded"></div>
+                      <div className="bg-yellow-500/50 h-2 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Cost Analysis */}
+            <div className="space-y-4">
+              <div className="bg-slate-800/50 rounded-lg p-4">
+                <div className="text-white text-sm font-medium mb-3">Cost Per Interaction</div>
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-green-400 mb-1">$0.23</div>
+                  <div className="text-green-300 text-xs">vs $47.50 Manual</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-2 text-center">
+                    <div className="text-green-400 text-sm font-medium">99.5% Cost Reduction</div>
+                    <div className="text-green-300 text-xs">Automated Operations</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Main Dashboard Grid */}
       <div className="grid grid-cols-12 gap-6">
