@@ -130,24 +130,14 @@ export default function Scanner() {
           </Card>
         </div>
 
-        {/* Feature Benefits */}
+        {/* Feature Benefits - Proper Workflow Order */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           <Card className="bg-blue-900/30 border-blue-500/50 shadow-xl">
             <CardContent className="pt-6 text-center">
               <div className="text-3xl mb-3">🎯</div>
-              <h3 className="font-semibold text-blue-200 mb-2">Smart OCR Extraction</h3>
+              <h3 className="font-semibold text-blue-200 mb-2">1. Smart OCR Extraction</h3>
               <p className="text-sm text-blue-300">
                 Advanced AI automatically detects and extracts names, companies, emails, phones, and more
-              </p>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-green-900/30 border-green-500/50 shadow-xl">
-            <CardContent className="pt-6 text-center">
-              <div className="text-3xl mb-3">🔄</div>
-              <h3 className="font-semibold text-green-200 mb-2">CRM Integration</h3>
-              <p className="text-sm text-green-300">
-                Contacts automatically sync to your CRM pipeline and Make automation workflows
               </p>
             </CardContent>
           </Card>
@@ -155,9 +145,19 @@ export default function Scanner() {
           <Card className="bg-purple-900/30 border-purple-500/50 shadow-xl">
             <CardContent className="pt-6 text-center">
               <div className="text-3xl mb-3">✏️</div>
-              <h3 className="font-semibold text-purple-200 mb-2">Review & Edit</h3>
+              <h3 className="font-semibold text-purple-200 mb-2">2. Review & Edit</h3>
               <p className="text-sm text-purple-300">
                 Review extracted data before saving, with easy editing for accuracy
+              </p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-green-900/30 border-green-500/50 shadow-xl">
+            <CardContent className="pt-6 text-center">
+              <div className="text-3xl mb-3">🔄</div>
+              <h3 className="font-semibold text-green-200 mb-2">3. CRM Integration</h3>
+              <p className="text-sm text-green-300">
+                Contacts automatically sync to your CRM pipeline and Make automation workflows
               </p>
             </CardContent>
           </Card>
