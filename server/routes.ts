@@ -11,6 +11,8 @@ import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
 import aiChatRouter from "./aiChat";
+import ragUploadRouter from "./ragUpload";
+import ragSearchRouter from "./ragSearch";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -420,6 +422,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // AI Chat integration
   app.use('/api/ai', aiChatRouter);
+
+  // RAG Knowledge Base integration
+  app.use('/api/rag', ragUploadRouter);
+  app.use('/api/rag', ragSearchRouter);
 
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
