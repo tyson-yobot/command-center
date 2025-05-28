@@ -31,7 +31,7 @@ export default function BottomNav() {
   const unreadCount = notifications?.filter(n => !n.isRead).length || 0;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-40">
+    <div className="fixed bottom-0 left-0 right-0 bg-slate-950 border-t border-slate-800 z-40">
       <div className="grid grid-cols-5 gap-1">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -41,10 +41,10 @@ export default function BottomNav() {
           return (
             <Link key={item.path} href={item.path}>
               <button 
-                className={`relative flex flex-col items-center justify-center py-3 px-2 text-xs font-medium transition-all duration-200 transform active:scale-95 active:bg-gray-100 dark:active:bg-gray-800 hover:shadow-md ${
+                className={`relative flex flex-col items-center justify-center py-3 px-2 text-xs font-medium transition-all duration-200 transform active:scale-95 active:bg-slate-800 hover:shadow-md ${
                   isActive 
-                    ? 'text-primary' 
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? 'text-blue-400' 
+                    : 'text-slate-400 hover:text-white'
                 }`}
               >
                 <Icon className="h-5 w-5 mb-1" />
