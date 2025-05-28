@@ -13,6 +13,7 @@ import DesktopCommandCenter from "@/components/desktop-command-center";
 import Header from "@/components/layout/header";
 import BottomNav from "@/components/layout/bottom-nav";
 import InstallPrompt from "@/components/pwa/install-prompt";
+import CriticalAlertOverlay from "@/components/critical-alert-overlay";
 import { PWAProvider } from "@/hooks/use-pwa";
 import { WebSocketProvider } from "@/hooks/use-websocket";
 import { ThemeProvider } from "@/hooks/use-theme";
@@ -56,6 +57,7 @@ function App() {
           <PWAProvider>
             <WebSocketProvider>
               <Toaster />
+              <CriticalAlertOverlay />
               <Router />
             </WebSocketProvider>
           </PWAProvider>
