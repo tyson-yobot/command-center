@@ -40,6 +40,28 @@ export default function DesktopCommandCenter() {
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [conversationMemory, setConversationMemory] = useState([]);
   const [ragMode, setRagMode] = useState(true);
+  const [liveMetrics, setLiveMetrics] = useState({ callsToday: 0, conversions: 0, newLeads: 0 });
+
+  // WebSocket connection for live updates
+  useEffect(() => {
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const wsUrl = `${protocol}//${window.location.host}/ws`;
+    const ws = new WebSocket(wsUrl);
+
+    ws.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
+      if (msg.type === "metrics_update") {
+        setLiveMetrics((prev) => ({ ...prev, ...msg.data }));
+      }
+    };
+
+    ws.onerror = () => {
+      // Fallback to polling if WebSocket fails
+      console.log("WebSocket connection failed, using polling fallback");
+    };
+
+    return () => ws.close();
+  }, []);
 
   // Real-time data queries
   const { data: metrics } = useQuery<Metrics>({
@@ -434,7 +456,11 @@ export default function DesktopCommandCenter() {
               <div className="flex justify-between items-center">
                 <span className="text-white/70">Pipeline Value</span>
                 <span className="text-green-400 font-bold text-xl">
-                  ${crmData?.pipelineValue ? Math.round(Number(crmData.pipelineValue) / 1000) + 'K' : '0K'}
+                  {(() => {
+                    const rawPipeline = crmData?.pipelineValue || "$0";
+                    const numericValue = Number(rawPipeline.replace(/[^0-9.-]+/g, ''));
+                    return numericValue ? `$${Math.round(numericValue / 1000)}K` : '$0K';
+                  })()}
                 </span>
               </div>
             </CardContent>

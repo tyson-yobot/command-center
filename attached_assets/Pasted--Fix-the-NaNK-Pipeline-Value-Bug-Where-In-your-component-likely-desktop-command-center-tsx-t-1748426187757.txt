@@ -1,0 +1,91 @@
+ Fix the $NaNK Pipeline Value Bug
+📍 Where
+In your component (likely desktop-command-center.tsx) — the “Pipeline Value” section in the Quick Stats card.
+
+🔥 Problem
+You’re trying to parse a $-prefixed string as a number:
+
+tsx
+Copy
+Edit
+${crmData?.pipelineValue ? Math.round(Number(crmData.pipelineValue) / 1000) + 'K' : '0K'}
+But Number("$0") returns NaN.
+
+✅ Fix
+Replace the entire value logic with this:
+
+tsx
+Copy
+Edit
+const rawPipeline = crmData?.pipelineValue || "$0";
+const numericValue = Number(rawPipeline.replace(/[^0-9.-]+/g, ''));
+const pipelineText = numericValue ? `$${Math.round(numericValue / 1000)}K` : '$0K';
+Then update your JSX:
+
+tsx
+Copy
+Edit
+<span className="text-green-400 font-bold text-xl">{pipelineText}</span>
+This sanitizes the dollar string and protects against malformed values.
+
+🚀 STEP 2: Add Live WebSocket Support for Metrics (Real-Time Updates)
+📍 Goal
+Make Calls Today, Conversions, and New Leads update live as new data is pushed.
+
+✅ Backend (Node.js w/ Express)
+1. Install WebSocket Support:
+Run in your Replit console:
+
+bash
+Copy
+Edit
+npm install ws
+2. Modify index.ts:
+Add this block at the bottom inside your server function:
+
+ts
+Copy
+Edit
+import { WebSocketServer } from 'ws';
+const wss = new WebSocketServer({ server });
+
+wss.on('connection', (ws) => {
+  console.log('📡 WebSocket Connected');
+
+  // Optionally broadcast a test ping every 10s
+  setInterval(() => {
+    ws.send(JSON.stringify({ type: 'metricUpdate', data: { callsToday: Math.floor(Math.random() * 500) } }));
+  }, 10000);
+});
+You’ll later replace the Math.random() test with real DB fetches from metrics table or cache.
+
+✅ Frontend (React)
+3. Add Hook to Connect to WebSocket:
+In your desktop-command-center.tsx, add at the top:
+
+tsx
+Copy
+Edit
+const [liveMetrics, setLiveMetrics] = useState({ callsToday: 0 });
+
+useEffect(() => {
+  const ws = new WebSocket("ws://localhost:5000");
+
+  ws.onmessage = (event) => {
+    const msg = JSON.parse(event.data);
+    if (msg.type === "metricUpdate") {
+      setLiveMetrics((prev) => ({ ...prev, ...msg.data }));
+    }
+  };
+
+  return () => ws.close();
+}, []);
+4. Replace Static Data:
+Wherever you're displaying callsToday, update with fallback:
+
+tsx
+Copy
+Edit
+<span className="text-blue-400 font-bold text-xl">
+  {liveMetrics.callsToday || crmData?.callsToday || 0}
+</span>

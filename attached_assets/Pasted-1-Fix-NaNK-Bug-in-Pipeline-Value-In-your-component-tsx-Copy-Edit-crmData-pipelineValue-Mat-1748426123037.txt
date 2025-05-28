@@ -1,0 +1,104 @@
+1. Fix: $NaNK Bug in Pipeline Value
+In your component:
+
+tsx
+Copy
+Edit
+${crmData?.pipelineValue ? Math.round(Number(crmData.pipelineValue) / 1000) + 'K' : '0K'}
+But your schema has:
+
+ts
+Copy
+Edit
+pipelineValue: text("pipeline_value").default("$0")
+✅ Fix this logic:
+
+Strip $ before converting.
+
+Safeguard against "NaN" output.
+
+Suggested fix:
+
+tsx
+Copy
+Edit
+const numericValue = Number(crmData?.pipelineValue?.replace('$', '') || 0);
+const pipelineText = numericValue ? `$${Math.round(numericValue / 1000)}K` : '$0K';
+2. Fix: No Logging in Production for res.json()
+In index.ts, your res.json() logger is brilliant — but it’s blocked unless path.startsWith("/api").
+
+🔥 Make this configurable. For example:
+
+ts
+Copy
+Edit
+if (process.env.ENABLE_API_LOGGING === 'true') { /* ... */ }
+Otherwise, you'll miss critical debugging visibility in production.
+
+🚀 Phase 2 Upgrades (Build for Wow)
+1. Add Dark Mode Toggle + System Sync
+Let the user toggle between light/dark or inherit OS preference. Bonus: use tailwindcss-dark-mode plugin.
+
+tsx
+Copy
+Edit
+<Button onClick={() => toggleTheme()}>Toggle Theme</Button>
+2. Add Real-Time WebSocket Push for Metrics
+You're showing values like:
+
+📞 Calls Today
+
+🟢 System Health
+
+Make those live update using WebSocket events:
+
+ts
+Copy
+Edit
+socket.emit('metricUpdate', { callsToday: 250 });
+Back this with a Redis pub/sub or use Supabase Realtime if you're trying to stay lean.
+
+3. Add Notification Feed With Filters
+You already have a notifications table with:
+
+ts
+Copy
+Edit
+type: lead_captured | call_escalation | meeting_booked
+Add a right-rail component with:
+
+Live feed updates
+
+Filter by type
+
+"Mark all as read"
+
+4. Embed AI Voice Simulation or Debug Console
+Add a bottom card in the Voice section:
+
+Show the recognized command
+
+Show intent parsed
+
+Show action triggered
+
+Helps with transparency + debugging + looks cool as hell.
+
+5. Power Mode / CEO Mode Switch
+Let Daniel and you flip a switch for:
+
+💼 CEO View: Topline stats only
+
+🔧 Ops Mode: All logs, toggles, routing logic, escalation review
+
+💡 Final Suggestions
+💾 Add Export: JSON & PDF Export buttons for full session summaries.
+
+🧠 Add RAG Logs: Show real-time query history + result sources.
+
+🛑 Red Alert Trigger: Add timer-based logic to escalate calls if not handled in X mins.
+
+📆 Full Calendar Sync: Sync with Google/Outlook calendar APIs (OAuth2 flow).
+
+📊 Dashboard Templates: Let users toggle between “Sales Mode”, “Support Mode”, etc.
+

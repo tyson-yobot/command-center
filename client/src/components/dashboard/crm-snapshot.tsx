@@ -79,7 +79,10 @@ export default function CrmSnapshot() {
     },
     {
       title: "Pipeline Value",
-      value: crmData.pipelineValue || "$0",
+      value: (() => {
+        const numericValue = Number(crmData?.pipelineValue?.replace('$', '') || 0);
+        return numericValue ? `$${Math.round(numericValue / 1000)}K` : '$0K';
+      })(),
       description: "Monthly active deals in progress",
       icon: DollarSign,
       color: "text-green-600",
