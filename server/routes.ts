@@ -8,6 +8,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
+import { requireRole } from "./roles";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -394,6 +395,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('PDF generation failed:', error);
       res.status(500).json({ error: error.message });
     }
+  });
+
+  // Admin-only route for super metrics
+  app.get('/api/admin-stats', requireRole(['admin', 'dev']), async (req, res) => {
+    res.json({ 
+      secret: "🔥 Super metrics only admins see",
+      totalUsers: 1247,
+      revenue: "$156,789",
+      systemLoad: "23%",
+      uptime: "99.97%"
+    });
+  });
+
+  // Debug route to check current user role
+  app.get('/api/me', (req, res) => {
+    res.json({ user: req.user || null });
+  });
+
+  // Middleware to simulate logged-in admin user for demo
+  app.use((req, res, next) => {
+    if (!req.user) {
+      req.user = { id: 1, role: 'admin', username: 'admin' };
+    }
+    next();
   });
 
   return httpServer;
