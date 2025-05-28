@@ -44,6 +44,10 @@ export default function DesktopCommandCenter() {
   const [automationMode, setAutomationMode] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [voiceActive, setVoiceActive] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [ragQueryTime, setRagQueryTime] = useState<number | null>(null);
+  const [showEmergencyConfirm, setShowEmergencyConfirm] = useState(false);
+  const [voiceQuery, setVoiceQuery] = useState("");
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [conversationMemory, setConversationMemory] = useState([]);
   const [ragMode, setRagMode] = useState(true);
@@ -245,8 +249,40 @@ export default function DesktopCommandCenter() {
   const responseTime = "0.3s";
   const uptime = "99.7%";
 
+  // Enhanced voice processing with listening indicator
+  const handleVoiceToggle = () => {
+    if (!voiceActive) {
+      setVoiceActive(true);
+      setIsListening(true);
+      // Simulate voice processing
+      setTimeout(() => setIsListening(false), 3000);
+    } else {
+      setVoiceActive(false);
+      setIsListening(false);
+    }
+  };
+
+  // RAG query with performance tracking
+  const executeRagQuery = async (query: string) => {
+    const startTime = Date.now();
+    setRagQueryTime(null);
+    
+    // Simulate RAG processing
+    setTimeout(() => {
+      const queryTime = Date.now() - startTime;
+      setRagQueryTime(queryTime);
+    }, 1200);
+  };
+
+  // Emergency control with confirmation
   const testAlert = async () => {
-    // Trigger critical alert overlay directly
+    if (!showEmergencyConfirm) {
+      setShowEmergencyConfirm(true);
+      return;
+    }
+    
+    setShowEmergencyConfirm(false);
+    // Trigger critical alert overlay
     const alertEvent = new CustomEvent('message', {
       detail: {
         data: {
@@ -263,6 +299,15 @@ export default function DesktopCommandCenter() {
     });
     window.dispatchEvent(alertEvent);
   };
+
+  // Voice command suggestions
+  const voiceCommands = [
+    "Show me today's metrics",
+    "Check bot health status", 
+    "Review urgent notifications",
+    "Generate performance report",
+    "Check pipeline status"
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
@@ -303,23 +348,46 @@ export default function DesktopCommandCenter() {
               />
             </div>
             
-            {/* Voice Input Button */}
+            {/* Enhanced Voice Input with Listening Indicator */}
             <Button
-              className={`${voiceActive ? 'bg-red-600 hover:bg-red-700 animate-pulse' : 'bg-blue-600 hover:bg-blue-700'} px-4 py-3 rounded-xl`}
-              onClick={() => setVoiceActive(!voiceActive)}
+              className={`${voiceActive ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} px-4 py-3 rounded-xl relative`}
+              onClick={handleVoiceToggle}
               disabled={!voiceEnabled}
             >
               {voiceActive ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+              {isListening && (
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
+              )}
             </Button>
             
-            {/* Critical Alert Test */}
-            <Button 
-              onClick={testAlert}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-xl"
-            >
-              <Bell className="w-5 h-5 mr-2" />
-              Test Alert
-            </Button>
+            {/* Enhanced Emergency Control with Confirmation */}
+            {showEmergencyConfirm ? (
+              <div className="flex items-center space-x-2 bg-red-900/50 border border-red-500/50 rounded-xl p-2">
+                <Button 
+                  onClick={testAlert}
+                  className="bg-red-600 hover:bg-red-700 text-white animate-pulse"
+                  size="sm"
+                >
+                  Confirm Emergency
+                </Button>
+                <Button 
+                  onClick={() => setShowEmergencyConfirm(false)}
+                  variant="outline"
+                  className="text-slate-400 border-slate-600"
+                  size="sm"
+                >
+                  Cancel
+                </Button>
+              </div>
+            ) : (
+              <Button 
+                onClick={testAlert}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-xl"
+              >
+                <Bell className="w-5 h-5 mr-2" />
+                Test Alert
+              </Button>
+            )}
             
             {/* Automation Toggle */}
             <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3">
