@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MessageCircle, Phone, Clock, ChevronRight } from "lucide-react";
+import { MessageCircle, Phone, Clock, ChevronRight, Eye, MessageSquare } from "lucide-react";
 import { Link } from "wouter";
 import type { Conversation } from "@shared/schema";
 
@@ -111,7 +111,12 @@ export default function ConversationLog() {
                     </div>
                     <div className="flex items-center justify-between mt-2">
                       <div className="flex items-center space-x-2">
-                        <Badge variant={statusBadge.variant} className="text-xs">
+                        <Badge 
+                          variant={statusBadge.variant} 
+                          className={`text-xs cursor-pointer hover:opacity-80 transition-opacity ${
+                            conversation.status === "escalated" ? "animate-pulse bg-red-600 hover:bg-red-700" : ""
+                          }`}
+                        >
                           <span className="mr-1">{statusBadge.icon}</span>
                           {statusBadge.label}
                         </Badge>
@@ -121,8 +126,30 @@ export default function ConversationLog() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <Phone className="h-4 w-4 text-muted-foreground" />
-                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                        <Button 
+                          size="sm" 
+                          variant="ghost" 
+                          className="h-8 w-8 p-0 hover:bg-blue-100 hover:text-blue-600"
+                          title="Tap to Call"
+                        >
+                          <Phone className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="ghost" 
+                          className="h-8 w-8 p-0 hover:bg-green-100 hover:text-green-600"
+                          title="Open Chat"
+                        >
+                          <MessageSquare className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="ghost" 
+                          className="h-8 w-8 p-0 hover:bg-purple-100 hover:text-purple-600"
+                          title="View Details"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
                       </div>
                     </div>
                   </div>
