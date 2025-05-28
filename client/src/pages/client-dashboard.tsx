@@ -86,18 +86,16 @@ export default function ClientDashboard() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <img 
-                src={yobotLogo} 
-                alt="YoBot Logo" 
-                className="w-12 h-12"
-              />
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2">
-                  YoBot® Command Center
-                </h1>
-                <p className="text-slate-300">Your Complete AI Automation Dashboard</p>
-              </div>
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2 flex items-center">
+                <img 
+                  src={yobotLogo} 
+                  alt="YoBot Logo" 
+                  className="w-8 h-8 mr-2 inline-block align-middle"
+                />
+                YoBot® Command Center
+              </h1>
+              <p className="text-slate-300">Your Complete AI Automation Dashboard</p>
             </div>
             <div className="flex items-center space-x-4">
               <Button
