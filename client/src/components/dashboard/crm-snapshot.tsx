@@ -80,9 +80,10 @@ export default function CrmSnapshot() {
     {
       title: "Pipeline Value",
       value: crmData.pipelineValue || "$0",
-      description: "Total potential revenue",
+      description: "Total Potential Revenue",
       icon: DollarSign,
       color: "text-green-600",
+      highlight: true,
     },
   ];
 
@@ -92,7 +93,7 @@ export default function CrmSnapshot() {
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center space-x-2">
             <Users className="h-5 w-5" />
-            <span>CRM Snapshot</span>
+            <span>📊 CRM Snapshot</span>
           </CardTitle>
           <Link href="/crm">
             <Button variant="ghost" size="sm">

@@ -56,7 +56,7 @@ export default function ConversationLog() {
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center space-x-2">
             <MessageCircle className="h-5 w-5" />
-            <span>Recent Conversations</span>
+            <span>💬 Recent Conversations</span>
           </CardTitle>
           <Link href="/conversations">
             <Button variant="ghost" size="sm">

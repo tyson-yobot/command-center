@@ -135,7 +135,7 @@ export default function BotControls() {
       <CardHeader>
         <CardTitle className="flex items-center space-x-2">
           <Power className="h-5 w-5" />
-          <span>Bot Controls</span>
+          <span>🧠 Bot Controls</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">

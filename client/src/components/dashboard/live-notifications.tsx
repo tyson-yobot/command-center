@@ -56,10 +56,10 @@ export default function LiveNotifications() {
         };
       case "call_escalation":
         return {
-          bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
-          borderColor: "border-l-yellow-500",
-          iconBg: "bg-yellow-100 dark:bg-yellow-900/40",
-          iconColor: "text-yellow-600",
+          bgColor: "bg-red-50 dark:bg-red-900/20",
+          borderColor: "border-l-red-500",
+          iconBg: "bg-red-100 dark:bg-red-900/40",
+          iconColor: "text-red-600",
         };
       case "meeting_booked":
         return {
@@ -111,7 +111,7 @@ export default function LiveNotifications() {
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center space-x-2">
             <Bell className="h-5 w-5" />
-            <span>Live Notifications</span>
+            <span>📣 Live Notifications</span>
           </CardTitle>
           <div className="flex items-center space-x-2">
             <div className="w-2 h-2 bg-green-500 rounded-full notification-dot" />
@@ -138,7 +138,9 @@ export default function LiveNotifications() {
             return (
               <div
                 key={notification.id}
-                className={`flex items-start space-x-3 p-3 ${style.bgColor} rounded-lg border-l-4 ${style.borderColor}`}
+                className={`flex items-start space-x-3 p-3 ${style.bgColor} rounded-lg border-l-4 ${style.borderColor} ${
+                  notification.type === "call_escalation" ? "animate-pulse" : ""
+                }`}
               >
                 <div className={`w-8 h-8 ${style.iconBg} rounded-lg flex items-center justify-center flex-shrink-0`}>
                   <Icon className={`h-4 w-4 ${style.iconColor}`} />
@@ -159,8 +161,8 @@ export default function LiveNotifications() {
                 </div>
                 <div className="flex items-start space-x-1">
                   {notification.type === "call_escalation" && (
-                    <Button size="sm" variant="outline" className="text-xs">
-                      Take Call
+                    <Button size="sm" variant="outline" className="text-xs bg-red-600 hover:bg-red-700 text-white border-red-600 hover:border-red-700 font-bold">
+                      🚨 Escalated
                     </Button>
                   )}
                   <Button
