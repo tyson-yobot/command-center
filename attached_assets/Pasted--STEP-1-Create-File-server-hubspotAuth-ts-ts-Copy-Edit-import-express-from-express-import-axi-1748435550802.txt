@@ -1,0 +1,72 @@
+✅ STEP 1: Create File — server/hubspotAuth.ts
+ts
+Copy
+Edit
+import express from 'express';
+import axios from 'axios';
+import querystring from 'querystring';
+
+const router = express.Router();
+
+const CLIENT_ID = process.env.HUBSPOT_CLIENT_ID;
+const CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET;
+const REDIRECT_URI = 'https://tyson44.replit.app/api/hubspot/callback';
+
+router.get('/auth', (_req, res) => {
+  const installURL = `https://app.hubspot.com/oauth/authorize?${querystring.stringify({
+    client_id: CLIENT_ID,
+    redirect_uri: REDIRECT_URI,
+    scope: 'crm.objects.contacts.read crm.objects.contacts.write crm.objects.deals.read crm.objects.deals.write',
+  })}`;
+  res.redirect(installURL);
+});
+
+router.get('/callback', async (req, res) => {
+  const { code } = req.query;
+  if (!code) return res.status(400).send('Missing code');
+
+  try {
+    const tokenRes = await axios.post(
+      'https://api.hubapi.com/oauth/v1/token',
+      querystring.stringify({
+        grant_type: 'authorization_code',
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        redirect_uri: REDIRECT_URI,
+        code,
+      }),
+      {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      }
+    );
+
+    const { access_token, refresh_token } = tokenRes.data;
+    console.log('✅ HubSpot Connected:\n', {
+      access_token,
+      refresh_token,
+    });
+
+    res.send('✅ HubSpot connection successful! You can close this tab.');
+  } catch (err) {
+    console.error('HubSpot Auth Error:', err.response?.data || err.message);
+    res.status(500).send('HubSpot auth failed');
+  }
+});
+
+export default router;
+✅ STEP 2: Mount It in server/index.ts
+Add this line near the other routers:
+
+ts
+Copy
+Edit
+import hubspotAuthRouter from './hubspotAuth';
+app.use('/api/hubspot', hubspotAuthRouter);
+✅ STEP 3: Add Secrets to Replit
+In .env or the Secrets tab:
+
+ini
+Copy
+Edit
+HUBSPOT_CLIENT_ID=5321bf66-a968-4ea9-9bec-0d79fc86feb3
+HUBSPOT_CLIENT_SECRET=4c00efe9-5b51-4e56-b8d8-4336124390d5
