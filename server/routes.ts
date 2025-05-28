@@ -1,6 +1,5 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { z } from "zod";
 import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertCrmDataSchema, insertScannedContactSchema } from "@shared/schema";
@@ -16,48 +15,13 @@ import ragSearchRouter from "./ragSearch";
 import formToVoiceRouter from "./formToVoice";
 import hubspotAuthRouter from "./hubspotAuth";
 import voiceControlRouter from "./voiceControl";
+import { setupWebSocket } from "./websocket";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
 
-  // WebSocket server for real-time updates
-  const wss = new WebSocketServer({ 
-    server: httpServer, 
-    path: '/ws' 
-  });
-
-  // Store connected WebSocket clients
-  const clients = new Set<WebSocket>();
-
-  wss.on('connection', (ws) => {
-    clients.add(ws);
-    console.log('Client connected to WebSocket');
-
-    ws.on('close', () => {
-      clients.delete(ws);
-      console.log('Client disconnected from WebSocket');
-    });
-
-    ws.on('error', (error) => {
-      console.error('WebSocket error:', error);
-      clients.delete(ws);
-    });
-
-    // Send initial connection confirmation
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ type: 'connected', message: 'WebSocket connected' }));
-    }
-  });
-
-  // Broadcast to all connected clients
-  const broadcast = (data: any) => {
-    const message = JSON.stringify(data);
-    clients.forEach(client => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(message);
-      }
-    });
-  };
+  // Enhanced WebSocket server with Socket.IO for real-time updates
+  setupWebSocket(httpServer);
 
   // Bot endpoints
   app.get('/api/bot', async (req, res) => {

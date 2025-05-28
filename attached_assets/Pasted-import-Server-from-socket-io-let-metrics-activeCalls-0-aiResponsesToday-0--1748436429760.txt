@@ -1,0 +1,100 @@
+import { Server } from 'socket.io';
+
+let metrics = {
+  activeCalls: 0,
+  aiResponsesToday: 0,
+  queuedVoiceJobs: 0,
+  uptime: '100%',
+};
+
+export const setupWebSocket = (server) => {
+  const io = new Server(server, {
+    cors: { origin: '*' },
+  });
+
+  io.on('connection', (socket) => {
+    console.log('📡 WebSocket connected');
+
+    socket.emit('metrics', metrics); // Send initial stats
+
+    const interval = setInterval(() => {
+      socket.emit('metrics', metrics);
+    }, 30000); // Every 30s
+
+    socket.on('disconnect', () => {
+      console.log('❌ WebSocket disconnected');
+      clearInterval(interval);
+    });
+  });
+};
+
+// Optional: update metrics from other modules
+export const updateMetric = (key: keyof typeof metrics, value: number | string) => {
+  metrics[key] = value;
+};
+✅ STEP 2: Call setupWebSocket() in index.ts
+In your main server/index.ts, just after app.listen():
+
+ts
+Copy
+Edit
+import { setupWebSocket } from './websocket';
+import http from 'http';
+
+const server = http.createServer(app);
+setupWebSocket(server);
+
+server.listen(PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
+✅ STEP 3: Add Live Stats to Frontend UI
+Add this in your main React component:
+
+JSX Block:
+tsx
+Copy
+Edit
+<div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl mt-6 shadow">
+  <div className="text-center">
+    <p className="text-sm text-gray-500">📞 Active Calls</p>
+    <p className="text-2xl font-bold">{stats.activeCalls}</p>
+  </div>
+  <div className="text-center">
+    <p className="text-sm text-gray-500">🤖 AI Responses Today</p>
+    <p className="text-2xl font-bold">{stats.aiResponsesToday}</p>
+  </div>
+  <div className="text-center">
+    <p className="text-sm text-gray-500">🎤 Queued Voice Jobs</p>
+    <p className="text-2xl font-bold">{stats.queuedVoiceJobs}</p>
+  </div>
+  <div className="text-center">
+    <p className="text-sm text-gray-500">📶 Uptime</p>
+    <p className="text-2xl font-bold">{stats.uptime}</p>
+  </div>
+</div>
+JS Logic (top of component):
+tsx
+Copy
+Edit
+const [stats, setStats] = useState({
+  activeCalls: 0,
+  aiResponsesToday: 0,
+  queuedVoiceJobs: 0,
+  uptime: '100%',
+});
+
+useEffect(() => {
+  const socket = io();
+
+  socket.on('metrics', (data) => {
+    setStats(data);
+  });
+
+  return () => socket.disconnect();
+}, []);
+Don’t forget to import io from socket.io-client:
+
+ts
+Copy
+Edit
+import { io } from 'socket.io-client';
