@@ -13,6 +13,7 @@ import BottomNav from "@/components/layout/bottom-nav";
 import InstallPrompt from "@/components/pwa/install-prompt";
 import { PWAProvider } from "@/hooks/use-pwa";
 import { WebSocketProvider } from "@/hooks/use-websocket";
+import { ThemeProvider } from "@/hooks/use-theme";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -39,12 +40,14 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <PWAProvider>
-          <WebSocketProvider>
-            <Toaster />
-            <Router />
-          </WebSocketProvider>
-        </PWAProvider>
+        <ThemeProvider defaultTheme="light" storageKey="yobot-ui-theme">
+          <PWAProvider>
+            <WebSocketProvider>
+              <Toaster />
+              <Router />
+            </WebSocketProvider>
+          </PWAProvider>
+        </ThemeProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
