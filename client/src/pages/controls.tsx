@@ -5,9 +5,10 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Power, Route, MessageSquare, Settings, Activity } from "lucide-react";
+import { Power, Route, MessageSquare, Settings, Activity, Bell } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import NotificationSettings from "@/components/notification-settings";
 import type { Bot } from "@shared/schema";
 
 export default function Controls() {
@@ -352,6 +353,9 @@ export default function Controls() {
           </Button>
         </CardContent>
       </Card>
+
+      {/* Push Notification Settings */}
+      <NotificationSettings />
     </div>
   );
 }
