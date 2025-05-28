@@ -10,6 +10,7 @@ import CRM from "@/pages/crm";
 import Reports from "@/pages/reports";
 import Scanner from "@/pages/scanner";
 import AdminConsole from "@/pages/admin";
+import ClientDashboard from "@/pages/client-dashboard";
 import DesktopCommandCenter from "@/components/desktop-command-center";
 import Header from "@/components/layout/header";
 import BottomNav from "@/components/layout/bottom-nav";
@@ -31,14 +32,7 @@ function Router() {
           <AdminConsole />
         </Route>
         <Route path="/dashboard">
-          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-            <Header />
-            <main className="pt-36 pb-20">
-              <Dashboard />
-            </main>
-            <BottomNav />
-            <InstallPrompt />
-          </div>
+          <ClientDashboard />
         </Route>
         <Route path="/mobile">
           <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
