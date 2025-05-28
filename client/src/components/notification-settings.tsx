@@ -3,7 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Settings, AlertTriangle, Users, Calendar, DollarSign } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Bell, Settings, AlertTriangle, Users, Calendar, DollarSign, Clock, Moon, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface NotificationSettings {
@@ -13,6 +16,20 @@ interface NotificationSettings {
   highValueDeals: boolean;
   systemAlerts: boolean;
   pushEnabled: boolean;
+  // Enhanced settings
+  highValueThreshold: number;
+  escalationConfidenceThreshold: number;
+  urgencyDelay: number;
+  quietHours: {
+    enabled: boolean;
+    start: string;
+    end: string;
+  };
+  batchMode: boolean;
+  businessHours: {
+    timezone: string;
+    workingDays: string[];
+  };
 }
 
 export default function NotificationSettings() {
@@ -24,6 +41,20 @@ export default function NotificationSettings() {
     highValueDeals: true,
     systemAlerts: false,
     pushEnabled: false,
+    // Enhanced defaults
+    highValueThreshold: 10000,
+    escalationConfidenceThreshold: 70,
+    urgencyDelay: 5,
+    quietHours: {
+      enabled: false,
+      start: "22:00",
+      end: "08:00"
+    },
+    batchMode: false,
+    businessHours: {
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      workingDays: ["monday", "tuesday", "wednesday", "thursday", "friday"]
+    }
   });
 
   const [isRequestingPermission, setIsRequestingPermission] = useState(false);
@@ -100,26 +131,32 @@ export default function NotificationSettings() {
   const notificationTypes = [
     {
       key: 'escalations' as const,
-      title: 'Call Escalations',
-      description: 'Immediate alerts when calls need human intervention',
+      title: 'Urgent Call Escalations',
+      description: `When calls require immediate human intervention (bot confidence < ${settings.escalationConfidenceThreshold}%)`,
+      businessImpact: 'Speed-to-response critical for customer satisfaction',
+      suggestedAction: 'Contact within 2 minutes for optimal resolution',
       icon: AlertTriangle,
       color: 'text-red-600',
-      priority: 'HIGH',
-      priorityColor: 'bg-red-100 text-red-800',
+      priority: 'IMMEDIATE',
+      priorityColor: 'bg-red-500 text-white',
     },
     {
       key: 'newLeads' as const,
-      title: 'New Leads',
-      description: 'Notifications for new prospect inquiries',
+      title: 'New Lead Captured',
+      description: 'Fresh prospects ready for immediate follow-up',
+      businessImpact: 'Speed-to-lead critical for conversion',
+      suggestedAction: 'Contact within 5 minutes for 9x higher conversion',
       icon: Users,
       color: 'text-blue-600',
-      priority: 'MEDIUM',
+      priority: 'HIGH',
       priorityColor: 'bg-blue-100 text-blue-800',
     },
     {
       key: 'meetings' as const,
-      title: 'Meeting Bookings',
-      description: 'Alerts when clients schedule appointments',
+      title: 'Meeting Confirmed',
+      description: 'Appointments successfully scheduled with prospects',
+      businessImpact: 'Meeting confirmation reduces no-show rates',
+      suggestedAction: 'Send calendar invite and prep materials',
       icon: Calendar,
       color: 'text-green-600',
       priority: 'MEDIUM',
@@ -127,17 +164,21 @@ export default function NotificationSettings() {
     },
     {
       key: 'highValueDeals' as const,
-      title: 'High-Value Deals',
-      description: 'Notifications for deals over $10,000',
+      title: 'High-Value Opportunities',
+      description: `Deals over $${settings.highValueThreshold.toLocaleString()} - Priority prospects`,
+      businessImpact: 'High-value leads require executive attention',
+      suggestedAction: 'Assign to senior sales rep immediately',
       icon: DollarSign,
       color: 'text-yellow-600',
       priority: 'HIGH',
-      priorityColor: 'bg-yellow-100 text-yellow-800',
+      priorityColor: 'bg-purple-100 text-purple-800',
     },
     {
       key: 'systemAlerts' as const,
-      title: 'System Alerts',
-      description: 'Bot status changes and technical notifications',
+      title: 'Bot Performance Alerts',
+      description: 'Know when your automation needs attention',
+      businessImpact: 'Proactive monitoring prevents revenue loss',
+      suggestedAction: 'Review bot performance and adjust settings',
       icon: Settings,
       color: 'text-gray-600',
       priority: 'LOW',
@@ -272,6 +313,177 @@ export default function NotificationSettings() {
               🧪 Test Notification
             </Button>
           )}
+        </div>
+
+        {/* Advanced Settings Section */}
+        <Separator className="my-6" />
+        
+        <div className="space-y-6">
+          <div className="flex items-center space-x-2">
+            <Settings className="h-5 w-5 text-gray-600" />
+            <h3 className="text-lg font-medium">Advanced Settings</h3>
+          </div>
+
+          {/* Configurable Thresholds */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="highValueThreshold" className="flex items-center space-x-2">
+                <DollarSign className="h-4 w-4" />
+                <span>High-Value Deal Threshold</span>
+              </Label>
+              <Input
+                id="highValueThreshold"
+                type="number"
+                value={settings.highValueThreshold}
+                onChange={(e) => {
+                  const newSettings = { ...settings, highValueThreshold: parseInt(e.target.value) || 10000 };
+                  setSettings(newSettings);
+                  localStorage.setItem('notificationSettings', JSON.stringify(newSettings));
+                }}
+                className="w-full"
+              />
+              <p className="text-xs text-gray-500">Deals above this amount trigger high-priority alerts</p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="escalationThreshold" className="flex items-center space-x-2">
+                <AlertTriangle className="h-4 w-4" />
+                <span>Escalation Confidence Threshold (%)</span>
+              </Label>
+              <Input
+                id="escalationThreshold"
+                type="number"
+                min="0"
+                max="100"
+                value={settings.escalationConfidenceThreshold}
+                onChange={(e) => {
+                  const newSettings = { ...settings, escalationConfidenceThreshold: parseInt(e.target.value) || 70 };
+                  setSettings(newSettings);
+                  localStorage.setItem('notificationSettings', JSON.stringify(newSettings));
+                }}
+                className="w-full"
+              />
+              <p className="text-xs text-gray-500">Calls escalate when bot confidence drops below this level</p>
+            </div>
+          </div>
+
+          {/* Quiet Hours */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Moon className="h-4 w-4" />
+                <Label htmlFor="quietHours">Quiet Hours (Do Not Disturb)</Label>
+              </div>
+              <Switch
+                id="quietHours"
+                checked={settings.quietHours.enabled}
+                onCheckedChange={(checked) => {
+                  const newSettings = { 
+                    ...settings, 
+                    quietHours: { ...settings.quietHours, enabled: checked }
+                  };
+                  setSettings(newSettings);
+                  localStorage.setItem('notificationSettings', JSON.stringify(newSettings));
+                }}
+              />
+            </div>
+            
+            {settings.quietHours.enabled && (
+              <div className="grid grid-cols-2 gap-4 ml-6">
+                <div className="space-y-2">
+                  <Label htmlFor="quietStart">Start Time</Label>
+                  <Input
+                    id="quietStart"
+                    type="time"
+                    value={settings.quietHours.start}
+                    onChange={(e) => {
+                      const newSettings = { 
+                        ...settings, 
+                        quietHours: { ...settings.quietHours, start: e.target.value }
+                      };
+                      setSettings(newSettings);
+                      localStorage.setItem('notificationSettings', JSON.stringify(newSettings));
+                    }}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="quietEnd">End Time</Label>
+                  <Input
+                    id="quietEnd"
+                    type="time"
+                    value={settings.quietHours.end}
+                    onChange={(e) => {
+                      const newSettings = { 
+                        ...settings, 
+                        quietHours: { ...settings.quietHours, end: e.target.value }
+                      };
+                      setSettings(newSettings);
+                      localStorage.setItem('notificationSettings', JSON.stringify(newSettings));
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Smart Features */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Zap className="h-4 w-4" />
+                <div>
+                  <Label htmlFor="batchMode">Batch Non-Urgent Notifications</Label>
+                  <p className="text-xs text-gray-500">Group non-urgent alerts into summary emails</p>
+                </div>
+              </div>
+              <Switch
+                id="batchMode"
+                checked={settings.batchMode}
+                onCheckedChange={(checked) => {
+                  const newSettings = { ...settings, batchMode: checked };
+                  setSettings(newSettings);
+                  localStorage.setItem('notificationSettings', JSON.stringify(newSettings));
+                }}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="urgencyDelay" className="flex items-center space-x-2">
+                <Clock className="h-4 w-4" />
+                <span>Non-Urgent Notification Delay (minutes)</span>
+              </Label>
+              <Input
+                id="urgencyDelay"
+                type="number"
+                min="0"
+                max="60"
+                value={settings.urgencyDelay}
+                onChange={(e) => {
+                  const newSettings = { ...settings, urgencyDelay: parseInt(e.target.value) || 5 };
+                  setSettings(newSettings);
+                  localStorage.setItem('notificationSettings', JSON.stringify(newSettings));
+                }}
+                className="w-full"
+                disabled={!settings.batchMode}
+              />
+              <p className="text-xs text-gray-500">Wait time before sending non-urgent notifications</p>
+            </div>
+          </div>
+
+          {/* Business Context Display */}
+          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+            <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">💡 Smart Settings Active</h4>
+            <div className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+              <p>• High-value deals: ${settings.highValueThreshold.toLocaleString()}+ get priority routing</p>
+              <p>• Bot escalations: Confidence below {settings.escalationConfidenceThreshold}% triggers immediate alerts</p>
+              {settings.quietHours.enabled && (
+                <p>• Quiet hours: {settings.quietHours.start} - {settings.quietHours.end} (urgent only)</p>
+              )}
+              {settings.batchMode && (
+                <p>• Smart batching: Non-urgent alerts delayed {settings.urgencyDelay} minutes</p>
+              )}
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
