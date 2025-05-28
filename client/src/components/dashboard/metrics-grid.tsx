@@ -94,7 +94,7 @@ export default function MetricsGrid() {
         const Icon = card.icon;
         
         return (
-          <Card key={card.label} className="metric-card touch-feedback bg-gradient-to-br from-white via-gray-50 to-gray-100 border-2 border-gray-300 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden">
+          <Card key={card.label} className="metric-card touch-feedback bg-gradient-to-br from-slate-800 via-slate-700 to-slate-600 border-2 border-slate-600 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden">
             <CardContent className="p-5 relative overflow-hidden">
               {/* Icon and Change Indicator */}
               <div className="flex items-center justify-between mb-4">
@@ -103,7 +103,7 @@ export default function MetricsGrid() {
                 >
                   <Icon className="h-6 w-6 text-white" />
                 </div>
-                <div className="flex items-center space-x-2 bg-white rounded-full px-3 py-1 shadow-md">
+                <div className="flex items-center space-x-2 bg-slate-800 rounded-full px-3 py-1 shadow-md border border-slate-600">
                   {isPositiveChange ? (
                     <TrendingUp className={`h-4 w-4 ${changeColor}`} />
                   ) : (
@@ -116,15 +116,15 @@ export default function MetricsGrid() {
               </div>
               
               {/* Main Value */}
-              <div className="text-4xl font-black text-black mb-2 tracking-tight">
+              <div className="text-4xl font-black text-white mb-2 tracking-tight">
                 {card.value.toLocaleString()}
               </div>
               
               {/* Labels */}
-              <div className="text-xs font-bold text-black uppercase tracking-widest mb-1">
+              <div className="text-xs font-bold text-blue-300 uppercase tracking-widest mb-1">
                 {card.label}
               </div>
-              <div className="text-xs text-gray-600 font-medium">
+              <div className="text-xs text-slate-300 font-medium">
                 {card.subtitle}
               </div>
               

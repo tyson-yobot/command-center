@@ -10,15 +10,17 @@ export default function Header() {
 
   return (
     <>
-      {/* Dark Header with Centered Logo */}
+      {/* Dark Header with White Logo Background */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg">
         <div className="flex items-center justify-center px-4 py-3 relative">
-          {/* Centered Logo */}
-          <img 
-            src={yobotLogoPath} 
-            alt="YoBot Logo" 
-            className="h-16 w-auto"
-          />
+          {/* Centered Logo with White Background for Brand */}
+          <div className="bg-white rounded-lg px-4 py-2 shadow-lg">
+            <img 
+              src={yobotLogoPath} 
+              alt="YoBot Logo" 
+              className="h-12 w-auto"
+            />
+          </div>
           
           {/* Connection Status & Theme Toggle - Top Right */}
           <div className="absolute right-4 flex items-center space-x-3">

@@ -131,9 +131,9 @@ export default function BotControls() {
   };
 
   return (
-    <Card>
+    <Card className="bg-slate-800 border-slate-600">
       <CardHeader>
-        <CardTitle className="flex items-center space-x-2">
+        <CardTitle className="flex items-center space-x-2 text-white">
           <Power className="h-5 w-5" />
           <span>🧠 Bot Controls</span>
         </CardTitle>
@@ -142,11 +142,11 @@ export default function BotControls() {
         {/* Bot Status Toggle */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-green-900/30 rounded-lg flex items-center justify-center">
               {getStatusIcon(bot.status)}
             </div>
             <div>
-              <div className="font-medium text-foreground">Bot Status</div>
+              <div className="font-medium text-white">Bot Status</div>
               <div className={`text-sm ${getStatusColor(bot.status)}`}>
                 {getStatusLabel(bot.status)}
               </div>
@@ -162,12 +162,12 @@ export default function BotControls() {
         {/* Lead Routing */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
-              <Route className="h-5 w-5 text-blue-600" />
+            <div className="w-10 h-10 bg-blue-900/30 rounded-lg flex items-center justify-center">
+              <Route className="h-5 w-5 text-blue-400" />
             </div>
             <div>
-              <div className="font-medium text-foreground">Lead Routing</div>
-              <div className="text-sm text-muted-foreground">
+              <div className="font-medium text-white">Lead Routing</div>
+              <div className="text-sm text-slate-300">
                 {bot.routingMode.replace("-", " ").replace(/\b\w/g, l => l.toUpperCase())}
               </div>
             </div>
@@ -176,15 +176,15 @@ export default function BotControls() {
             variant="outline" 
             size="sm" 
             disabled={isUpdating}
-            className="bg-white text-black border-2 border-gray-300 hover:border-blue-400 hover:bg-blue-50 font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 relative overflow-hidden group"
+            className="bg-blue-600 text-white border-2 border-blue-500 hover:border-blue-400 hover:bg-blue-500 font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 relative overflow-hidden group"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-100/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div className="absolute top-1 right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            <div className="absolute bottom-1 left-1 text-xs text-gray-400 font-mono">SYS</div>
+            <div className="absolute bottom-1 left-1 text-xs text-blue-200 font-mono">SYS</div>
             <span className="relative z-10 flex items-center space-x-2">
               <span>⚙️</span>
               <span>Configure</span>
-              <span className="text-xs text-gray-500 font-mono">[CTRL]</span>
+              <span className="text-xs text-blue-200 font-mono">[CTRL]</span>
             </span>
           </Button>
         </div>
@@ -192,12 +192,12 @@ export default function BotControls() {
         {/* Conversation Tone */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
-              <MessageSquare className="h-5 w-5 text-purple-600" />
+            <div className="w-10 h-10 bg-purple-900/30 rounded-lg flex items-center justify-center">
+              <MessageSquare className="h-5 w-5 text-purple-400" />
             </div>
             <div>
-              <div className="font-medium text-foreground">Conversation Tone</div>
-              <div className="text-sm text-muted-foreground">
+              <div className="font-medium text-white">Conversation Tone</div>
+              <div className="text-sm text-slate-300">
                 {bot.tone.charAt(0).toUpperCase() + bot.tone.slice(1)}
               </div>
             </div>
@@ -207,10 +207,10 @@ export default function BotControls() {
             onValueChange={handleToneChange}
             disabled={isUpdating}
           >
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-32 bg-slate-700 border-slate-600 text-white">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-slate-700 border-slate-600">
               <SelectItem value="professional">Professional</SelectItem>
               <SelectItem value="friendly">Friendly</SelectItem>
               <SelectItem value="casual">Casual</SelectItem>
