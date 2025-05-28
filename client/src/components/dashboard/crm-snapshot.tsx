@@ -108,7 +108,11 @@ export default function CrmSnapshot() {
           return (
             <div
               key={metric.title}
-              className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+              className={`flex items-center justify-between p-3 rounded-lg ${
+                metric.highlight 
+                  ? "bg-gradient-to-r from-green-50 to-green-100 border-2 border-green-200 shadow-lg" 
+                  : "bg-muted/50"
+              }`}
             >
               <div className="flex items-center space-x-3">
                 <Icon className={`h-5 w-5 ${metric.color}`} />
@@ -117,7 +121,11 @@ export default function CrmSnapshot() {
                   <div className="text-sm text-muted-foreground">{metric.description}</div>
                 </div>
               </div>
-              <div className={`text-2xl font-bold ${metric.color}`}>
+              <div className={`${
+                metric.highlight 
+                  ? "text-3xl font-black bg-gradient-to-r from-green-600 to-green-800 bg-clip-text text-transparent" 
+                  : "text-2xl font-bold"
+              } ${metric.color}`}>
                 {metric.value}
               </div>
             </div>
