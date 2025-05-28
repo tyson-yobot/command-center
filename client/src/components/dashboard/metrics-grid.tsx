@@ -47,8 +47,8 @@ export default function MetricsGrid() {
     {
       icon: Phone,
       value: metrics.callsToday || 0,
-      label: "CALLS DOMINATED",
-      subtitle: "Daily Performance",
+      label: "📞 TOTAL CALLS TODAY",
+      subtitle: "Bot Performance Summary",
       change: metrics.callsChange || 0,
       color: "#0D82DA", // YoBot Blue
       gradient: "from-blue-600 to-blue-800",
@@ -56,7 +56,7 @@ export default function MetricsGrid() {
     {
       icon: Target,
       value: metrics.conversions || 0,
-      label: "CONVERSIONS SECURED",
+      label: "💰 DEALS CLOSED",
       subtitle: "Closed Deals",
       change: metrics.conversionsChange || 0,
       color: "#28A745", // Success Green
@@ -65,7 +65,7 @@ export default function MetricsGrid() {
     {
       icon: Users,
       value: metrics.newLeads || 0,
-      label: "LEADS CAPTURED",
+      label: "🧲 NEW LEADS",
       subtitle: "New Prospects",
       change: metrics.leadsChange || 0,
       color: "#6F42C1", // Purple
@@ -74,8 +74,8 @@ export default function MetricsGrid() {
     {
       icon: AlertTriangle,
       value: metrics.failedCalls || 0,
-      label: "CALLS MISSED",
-      subtitle: "Opportunities Lost",
+      label: "⚠️ MISSED OPPORTUNITIES",
+      subtitle: "Unanswered Calls",
       change: metrics.failedCallsChange || 0,
       color: "#DC3545", // Danger Red
       gradient: "from-red-600 to-red-800",
