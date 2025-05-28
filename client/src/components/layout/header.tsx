@@ -12,13 +12,12 @@ export default function Header() {
           <img 
             src={yobotLogoPath} 
             alt="YoBot Logo" 
-            className="h-28 w-auto"
+            className="h-16 w-auto"
           />
         </div>
         <div className="absolute left-1/2 transform -translate-x-1/2">
           <h1 className="text-4xl font-black text-gray-900 tracking-tight drop-shadow-lg">
-            YoBot<span className="text-xl align-super">®</span> 
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-extrabold"> COMMAND CENTER</span>
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-extrabold">COMMAND CENTER</span>
           </h1>
         </div>
         
