@@ -36,7 +36,8 @@ import {
   Network,
   Timer,
   Bell,
-  DollarSign
+  DollarSign,
+  Bot as BotIcon
 } from "lucide-react";
 import type { Metrics, Bot, Notification, CrmData } from "@shared/schema";
 
@@ -403,6 +404,86 @@ export default function DesktopCommandCenter() {
         </div>
       </div>
 
+      {/* 🗂️ Master Data Sync Monitor */}
+      <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center space-x-2">
+            <Database className="w-5 h-5 text-cyan-400" />
+            <span>Master Data Sync Monitor</span>
+            <div className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded-full">CRITICAL</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { name: 'Airtable', status: 'healthy', lastSync: '2m ago', icon: '📊' },
+              { name: 'HubSpot', status: 'healthy', lastSync: '5m ago', icon: '🔗' },
+              { name: 'Stripe', status: 'warning', lastSync: '12m ago', icon: '💳' },
+              { name: 'QuickBooks', status: 'error', lastSync: '47m ago', icon: '📋' }
+            ].map((platform) => (
+              <div key={platform.name} className="bg-slate-800/50 rounded-lg p-4 text-center">
+                <div className="text-2xl mb-2">{platform.icon}</div>
+                <div className="text-white font-medium text-sm mb-1">{platform.name}</div>
+                <div className={`w-3 h-3 rounded-full mx-auto mb-2 ${
+                  platform.status === 'healthy' ? 'bg-green-400' :
+                  platform.status === 'warning' ? 'bg-yellow-400' : 'bg-red-400'
+                }`}></div>
+                <div className="text-xs text-slate-400">Last: {platform.lastSync}</div>
+                {platform.status === 'error' && (
+                  <Button size="sm" className="mt-2 bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 h-6">
+                    Retry Sync
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* 📦 Active Clients / Bot Instances Monitor */}
+      <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center space-x-2">
+            <BotIcon className="w-5 h-5 text-green-400" />
+            <span>Active Bot Instances</span>
+            <Badge className="bg-green-500/20 text-green-300 border border-green-500/30">
+              12 LIVE
+            </Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="text-3xl font-black text-green-400 mb-2">12</div>
+              <div className="text-green-300 text-sm">Total Bots Live</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-black text-blue-400 mb-2">8</div>
+              <div className="text-blue-300 text-sm">Full Automation</div>
+              <div className="text-blue-200 text-xs mt-1">67% activated</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-black text-yellow-400 mb-2">4</div>
+              <div className="text-yellow-300 text-sm">Missing Integrations</div>
+              <div className="text-yellow-200 text-xs mt-1">Voice → CRM pending</div>
+            </div>
+          </div>
+          <div className="mt-4 space-y-2">
+            {['AMT66', 'ClientCorp', 'TechStart', 'GlobalSales'].map((project, index) => (
+              <div key={project} className="flex items-center justify-between p-2 bg-slate-800/30 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <div className={`w-2 h-2 rounded-full ${index < 2 ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
+                  <span className="text-white text-sm">{project}</span>
+                </div>
+                <div className="text-slate-400 text-xs">
+                  {index < 2 ? 'Fully Active' : 'Setup Pending'}
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Phase 1: Automation Health Monitor */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
         {/* Bot Uptime Status */}
@@ -716,6 +797,81 @@ export default function DesktopCommandCenter() {
                 </div>
               </div>
             </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* ⚙️ Quick Access Dev Tools Panel */}
+      <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center space-x-2">
+            <Settings className="w-5 h-5 text-orange-400" />
+            <span>Quick Access Dev Tools</span>
+            <div className="text-xs bg-orange-500/20 text-orange-300 px-2 py-1 rounded-full">ADMIN</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+            {[
+              { name: 'Restart Workflow', action: 'restart', icon: '🔄', color: 'blue' },
+              { name: 'Toggle Voice Fallback', action: 'voice', icon: '🎙️', color: 'purple' },
+              { name: 'Clear Cache', action: 'cache', icon: '🗑️', color: 'red' },
+              { name: 'Export Logs', action: 'logs', icon: '📄', color: 'green' },
+              { name: 'Inject Test Lead', action: 'test', icon: '🧪', color: 'yellow' }
+            ].map((tool) => (
+              <Button
+                key={tool.action}
+                className={`flex flex-col items-center space-y-2 h-20 bg-${tool.color}-600/20 border border-${tool.color}-500/30 hover:bg-${tool.color}-600/30 text-white`}
+                onClick={() => {
+                  // Tool actions would be implemented here
+                  console.log(`Executing ${tool.action}`);
+                }}
+              >
+                <div className="text-xl">{tool.icon}</div>
+                <div className="text-xs text-center leading-tight">{tool.name}</div>
+              </Button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* 📊 System-Wide Audit Log */}
+      <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center space-x-2">
+            <Eye className="w-5 h-5 text-slate-400" />
+            <span>System Audit Log</span>
+            <Badge className="bg-slate-500/20 text-slate-300 border border-slate-500/30">
+              LIVE
+            </Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3 max-h-48 overflow-y-auto">
+            {[
+              { user: 'Mike', action: 'updated VoiceBot config', time: '2m ago', type: 'config' },
+              { user: 'System', action: 'Webhook delay >2s triggered alert', time: '5m ago', type: 'warning' },
+              { user: 'Stripe Sync', action: 'failed – fallback engaged', time: '12m ago', type: 'error' },
+              { user: 'Daniel', action: 'exported performance report', time: '18m ago', type: 'action' },
+              { user: 'Auto-Sync', action: 'Airtable sync completed successfully', time: '22m ago', type: 'success' },
+              { user: 'Voice AI', action: 'switched to fallback voice ID', time: '34m ago', type: 'warning' }
+            ].map((log, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
+                <div className="flex items-center space-x-3">
+                  <div className={`w-2 h-2 rounded-full ${
+                    log.type === 'success' ? 'bg-green-400' :
+                    log.type === 'warning' ? 'bg-yellow-400' :
+                    log.type === 'error' ? 'bg-red-400' : 'bg-blue-400'
+                  }`}></div>
+                  <div>
+                    <div className="text-white text-sm">
+                      <span className="font-medium">{log.user}</span> {log.action}
+                    </div>
+                  </div>
+                </div>
+                <div className="text-slate-500 text-xs">{log.time}</div>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
