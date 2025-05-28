@@ -18,6 +18,7 @@ import voiceControlRouter from "./voiceControl";
 import { setupWebSocket } from "./websocket";
 import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
+import airtableRouter from "./airtable";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -410,6 +411,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // ElevenLabs text-to-speech
   app.use('/api/speak', speakRouter);
+
+  // Airtable integration
+  app.use('/api/airtable', airtableRouter);
 
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
