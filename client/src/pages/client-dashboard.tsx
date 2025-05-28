@@ -267,14 +267,21 @@ export default function ClientDashboard() {
                   <span className="text-green-400 font-bold">94.2%</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Cost Per Acquisition</span>
-                  <span className="text-green-400 font-bold">$47.80</span>
+                  <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-green-400 font-bold">$18.50</span>
+                    <Badge className="bg-green-600 text-white text-xs">-12%</Badge>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300" title="Time until positive return on investment">Time to ROI</span>
+                  <span className="text-green-400 font-bold">14 days</span>
                 </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
-                  <div className="text-slate-300 text-sm mb-1">Monthly Savings</div>
+                  <div className="text-slate-300 text-sm mb-1">Monthly Savings vs Manual</div>
                   <div className="flex items-center justify-between">
                     <div className="text-white font-bold">$8,240</div>
-                    <Badge className="bg-green-600 text-white">+15%</Badge>
+                    <Badge className="bg-green-600 text-white">247 hours saved</Badge>
                   </div>
                 </div>
               </div>
@@ -350,6 +357,34 @@ export default function ClientDashboard() {
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="text-slate-300 text-sm mb-1">Last Maintenance</div>
                   <div className="text-white font-medium">2 days ago</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Customer Success Milestones */}
+        <div className="mb-8">
+          <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 backdrop-blur-sm border border-green-500/30">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div className="space-y-2">
+                  <h3 className="text-xl font-bold text-white">🎉 Congratulations! You've saved 247 hours this month</h3>
+                  <p className="text-green-300">Your conversion rate is 15% above industry average</p>
+                  <p className="text-blue-300">Ready to expand to email automation? Your ROI supports it!</p>
+                </div>
+                <div className="flex space-x-3">
+                  <Button 
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Share Results
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                  >
+                    Expand Services
+                  </Button>
                 </div>
               </div>
             </CardContent>
