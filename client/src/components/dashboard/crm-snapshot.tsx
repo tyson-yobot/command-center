@@ -80,7 +80,7 @@ export default function CrmSnapshot() {
     {
       title: "Pipeline Value",
       value: crmData.pipelineValue || "$0",
-      description: "Active deals in progress",
+      description: "Monthly active deals in progress",
       icon: DollarSign,
       color: "text-green-600",
       highlight: true,

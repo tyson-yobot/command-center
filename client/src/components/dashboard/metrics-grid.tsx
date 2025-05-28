@@ -47,7 +47,7 @@ export default function MetricsGrid() {
     {
       icon: Phone,
       value: metrics.callsToday || 0,
-      label: "📞 TOTAL CALLS TODAY",
+      label: "📞 CALLS HANDLED TODAY",
       subtitle: "Bot Performance Summary",
       change: metrics.callsChange || 0,
       color: "#0D82DA", // YoBot Blue

@@ -193,23 +193,53 @@ export default function LiveNotifications() {
                     {notification.message}
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
-                    {new Date(notification.createdAt!).toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })} • {new Date(notification.createdAt!).toLocaleDateString()}
+                    {(() => {
+                      const now = new Date();
+                      const notificationTime = new Date(notification.createdAt!);
+                      const diffMinutes = Math.floor((now.getTime() - notificationTime.getTime()) / (1000 * 60));
+                      
+                      if (diffMinutes < 1) return "Just now";
+                      if (diffMinutes < 60) return `${diffMinutes} min ago`;
+                      if (diffMinutes < 1440) return `${Math.floor(diffMinutes / 60)}h ago`;
+                      return notificationTime.toLocaleDateString();
+                    })()}
+                    {notification.type === "call_escalation" && (
+                      <span className="ml-2 text-red-600 font-bold animate-pulse">🚨 URGENT</span>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-start space-x-1">
+                <div className="flex flex-col space-y-1">
                   {notification.type === "call_escalation" && (
-                    <Button size="sm" variant="outline" className="text-xs bg-red-600 hover:bg-red-700 text-white border-red-600 hover:border-red-700 font-bold">
-                      🚨 Escalated
+                    <div className="flex space-x-1">
+                      <Button size="sm" className="text-xs bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1 h-8">
+                        📞 Take Call
+                      </Button>
+                      <Button size="sm" variant="outline" className="text-xs bg-orange-50 border-orange-300 text-orange-700 hover:bg-orange-100 px-2 py-1 h-8">
+                        👁️ View
+                      </Button>
+                    </div>
+                  )}
+                  {notification.type === "meeting_booked" && (
+                    <Button size="sm" className="text-xs bg-green-600 hover:bg-green-700 text-white font-bold px-3 py-1 h-8">
+                      📅 View Meeting
                     </Button>
+                  )}
+                  {notification.type === "lead_captured" && (
+                    <div className="flex space-x-1">
+                      <Button size="sm" className="text-xs bg-blue-600 hover:bg-blue-700 text-white font-bold px-2 py-1 h-8">
+                        💰 View Quote
+                      </Button>
+                      <Button size="sm" variant="outline" className="text-xs bg-blue-50 border-blue-300 text-blue-700 hover:bg-blue-100 px-2 py-1 h-8">
+                        📋 Details
+                      </Button>
+                    </div>
                   )}
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => dismissNotificationMutation.mutate(notification.id)}
                     disabled={dismissNotificationMutation.isPending}
+                    className="text-xs h-6 w-6 p-0"
                   >
                     <X className="h-3 w-3" />
                   </Button>
