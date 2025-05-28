@@ -5,13 +5,14 @@ import {
   MessageCircle, 
   Settings, 
   Users, 
-  FileText 
+  FileText,
+  Scan
 } from "lucide-react";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: BarChart3 },
   { path: "/conversations", label: "Chats", icon: MessageCircle, hasNotification: true },
-  { path: "/controls", label: "Controls", icon: Settings },
+  { path: "/scanner", label: "Scan", icon: Scan },
   { path: "/crm", label: "CRM", icon: Users },
   { path: "/reports", label: "Reports", icon: FileText },
 ];

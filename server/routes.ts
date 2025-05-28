@@ -295,8 +295,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         status: "pending"
       });
 
-      // Send to Make webhook if configured
-      const webhookUrl = process.env.MAKE_WEBHOOK_URL;
+      // Send to Make webhook
+      const webhookUrl = "https://hook.us2.make.com/zotpeemkmmftah364aownf3gt94a5v8g";
       if (webhookUrl) {
         try {
           const response = await fetch(webhookUrl, {
