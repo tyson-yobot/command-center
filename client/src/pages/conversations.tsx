@@ -3,23 +3,41 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Phone, MessageCircle, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Search, Phone, MessageCircle, Clock, Filter, ArrowUpDown, Eye, PhoneCall, MessageSquare } from "lucide-react";
 import type { Conversation } from "@shared/schema";
 
 export default function Conversations() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("recent");
 
   const { data: conversations = [], isLoading } = useQuery<Conversation[]>({
     queryKey: ["/api/conversations"],
     refetchInterval: 5000,
   });
 
-  const filteredConversations = conversations.filter(
-    (conv) =>
-      conv.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conv.clientCompany?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conv.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter and sort conversations
+  const filteredConversations = conversations
+    .filter((conv) => {
+      const matchesSearch = conv.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        conv.clientCompany?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        conv.lastMessage.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesStatus = statusFilter === "all" || conv.status === statusFilter;
+      
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      if (sortBy === "recent") {
+        return new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime();
+      } else if (sortBy === "status") {
+        const statusOrder = { escalated: 0, meeting_booked: 1, lead_captured: 2, completed: 3 };
+        return (statusOrder[a.status as keyof typeof statusOrder] || 3) - 
+               (statusOrder[b.status as keyof typeof statusOrder] || 3);
+      }
+      return 0;
+    });
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
@@ -54,15 +72,72 @@ export default function Conversations() {
 
   return (
     <div className="px-4 space-y-6">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          type="text"
-          placeholder="Search conversations..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10 search-input"
-        />
+      {/* Header with stats */}
+      <div className="text-center space-y-2">
+        <h1 className="text-2xl font-black text-gray-900 dark:text-white">
+          💬 Conversations
+        </h1>
+        <div className="flex justify-center space-x-4 text-sm">
+          <span className="text-red-600 font-semibold">
+            {conversations.filter(c => c.status === "escalated").length} Escalated
+          </span>
+          <span className="text-green-600 font-semibold">
+            {conversations.filter(c => c.status === "meeting_booked").length} Meetings
+          </span>
+          <span className="text-blue-600 font-semibold">
+            {conversations.filter(c => c.status === "lead_captured").length} New Leads
+          </span>
+        </div>
+      </div>
+
+      {/* Search and Filters */}
+      <div className="space-y-3">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search conversations..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 search-input"
+          />
+        </div>
+        
+        {/* Filter Pills */}
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant={statusFilter === "all" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setStatusFilter("all")}
+            className="text-xs"
+          >
+            All ({conversations.length})
+          </Button>
+          <Button
+            variant={statusFilter === "escalated" ? "destructive" : "outline"}
+            size="sm"
+            onClick={() => setStatusFilter("escalated")}
+            className="text-xs"
+          >
+            ⚠️ Escalated ({conversations.filter(c => c.status === "escalated").length})
+          </Button>
+          <Button
+            variant={statusFilter === "meeting_booked" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setStatusFilter("meeting_booked")}
+            className="text-xs"
+          >
+            📅 Meetings ({conversations.filter(c => c.status === "meeting_booked").length})
+          </Button>
+          <Button
+            variant={statusFilter === "lead_captured" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setStatusFilter("lead_captured")}
+            className="text-xs"
+          >
+            🎯 Leads ({conversations.filter(c => c.status === "lead_captured").length})
+          </Button>
+        </div>
       </div>
 
       <div className="space-y-3">
@@ -119,7 +194,32 @@ export default function Conversations() {
                             <span>{conversation.duration}</span>
                           </div>
                         </div>
-                        <Phone className="h-4 w-4 text-muted-foreground" />
+                        <div className="flex items-center space-x-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="h-8 px-3 text-xs bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/40 transform transition hover:scale-105"
+                          >
+                            <PhoneCall className="h-3 w-3 mr-1 text-blue-600 dark:text-blue-400" />
+                            Call
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="h-8 px-3 text-xs bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900/40 transform transition hover:scale-105"
+                          >
+                            <MessageSquare className="h-3 w-3 mr-1 text-green-600 dark:text-green-400" />
+                            Chat
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="h-8 px-3 text-xs bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transform transition hover:scale-105"
+                          >
+                            <Eye className="h-3 w-3 mr-1 text-gray-600 dark:text-gray-400" />
+                            View
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
