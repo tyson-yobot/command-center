@@ -9,6 +9,7 @@ import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
 import { requireRole } from "./roles";
+import { calendarRouter } from "./calendar";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -412,6 +413,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/me', (req, res) => {
     res.json({ user: req.user || null });
   });
+
+  // Google Calendar integration
+  app.use('/api/calendar', calendarRouter);
 
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
