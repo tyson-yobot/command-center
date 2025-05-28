@@ -106,6 +106,24 @@ export default function ClientDashboard() {
                 {isListening ? <MicOff className="w-5 h-5 mr-2 text-white" /> : <Mic className="w-5 h-5 mr-2 text-white" />}
                 {isListening ? 'Listening...' : 'Voice Command'}
               </Button>
+              
+              {/* Quick Actions Panel */}
+              <div className="flex items-center space-x-2">
+                <Button 
+                  size="sm"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Request Training
+                </Button>
+                <Button 
+                  size="sm"
+                  variant="outline"
+                  className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                >
+                  Submit Ticket
+                </Button>
+              </div>
+              
               <div className="flex items-center space-x-3">
                 <div className={`w-3 h-3 rounded-full ${bot?.status === 'active' ? 'bg-green-400' : 'bg-red-400'}`}></div>
                 <span className="text-white text-sm">
@@ -170,7 +188,7 @@ export default function ClientDashboard() {
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Zap className="w-5 h-5 mr-2 text-yellow-400" />
-                Automation Engine
+                Workflow Performance
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -206,15 +224,15 @@ export default function ClientDashboard() {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Cost Per Lead</span>
+                  <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
                   <span className="text-green-400 font-bold">$18.50</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Lead Quality Score</span>
+                  <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
                   <span className="text-green-400 font-bold">92.1%</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Close Rate</span>
+                  <span className="text-slate-300" title="Percentage of leads that become paying customers">Close Rate</span>
                   <span className="text-green-400 font-bold">34.7%</span>
                 </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
@@ -269,7 +287,7 @@ export default function ClientDashboard() {
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Brain className="w-5 h-5 mr-2 text-purple-400" />
-                Bot Intelligence
+                AI Assistant Insights
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -283,7 +301,7 @@ export default function ClientDashboard() {
                   <Badge className="bg-blue-600 text-white">Active</Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Handoff Rate</span>
+                  <span className="text-slate-300" title="Percentage of conversations that needed human assistance">Escalation Rate</span>
                   <span className="text-yellow-400 font-bold">5.8%</span>
                 </div>
                 <div className="flex items-center justify-between">
@@ -303,7 +321,7 @@ export default function ClientDashboard() {
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Monitor className="w-5 h-5 mr-2 text-cyan-400" />
-                System Monitor
+                System Status (Read-Only)
               </CardTitle>
             </CardHeader>
             <CardContent>
