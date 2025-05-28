@@ -41,6 +41,7 @@ export default function DesktopCommandCenter() {
   const [conversationMemory, setConversationMemory] = useState([]);
   const [ragMode, setRagMode] = useState(true);
   const [liveMetrics, setLiveMetrics] = useState({ callsToday: 0, conversions: 0, newLeads: 0 });
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   // PDF Download Handler
   const handleDownloadPDF = async () => {
@@ -137,6 +138,14 @@ export default function DesktopCommandCenter() {
       console.error('Alert sending failed:', error);
     }
   };
+
+  // Fetch user role on component mount
+  useEffect(() => {
+    fetch('/api/me')
+      .then(res => res.json())
+      .then(data => setUserRole(data.user?.role || 'user'))
+      .catch(() => setUserRole('user'));
+  }, []);
 
   // WebSocket connection for live updates
   useEffect(() => {
@@ -684,6 +693,11 @@ export default function DesktopCommandCenter() {
               <CardTitle className="text-white flex items-center space-x-2">
                 <Zap className="w-5 h-5 text-yellow-400" />
                 <span>Ultimate Controls</span>
+                {userRole && (
+                  <Badge className="bg-yellow-500/20 text-yellow-300 text-xs">
+                    {userRole.toUpperCase()}
+                  </Badge>
+                )}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -692,6 +706,7 @@ export default function DesktopCommandCenter() {
                 View All Conversations
               </Button>
               
+              {/* PDF Reports - Available to all roles */}
               <Button 
                 className="w-full bg-gradient-to-r from-indigo-600 to-blue-700 text-white font-bold"
                 onClick={handleDownloadPDF}
@@ -699,27 +714,44 @@ export default function DesktopCommandCenter() {
                 📄 Download Power Report
               </Button>
 
-              <Button 
-                className="w-full bg-gradient-to-r from-pink-600 to-red-600 hover:from-pink-700 hover:to-red-700 text-white font-bold"
-                onClick={handleEmergencyAlert}
-              >
-                🔔 Alert via Slack/SMS
-              </Button>
+              {/* Emergency Alerts - Admin/Dev only */}
+              {['admin', 'dev'].includes(userRole || '') && (
+                <Button 
+                  className="w-full bg-gradient-to-r from-pink-600 to-red-600 hover:from-pink-700 hover:to-red-700 text-white font-bold"
+                  onClick={handleEmergencyAlert}
+                >
+                  🔔 Alert via Slack/SMS
+                </Button>
+              )}
               
-              <Button className="w-full bg-gradient-to-r from-green-600 to-cyan-600 hover:from-green-700 hover:to-cyan-700 text-white font-bold">
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Generate Power Report
-              </Button>
-              
-              <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold">
-                <Brain className="w-4 h-4 mr-2" />
-                AI Configuration
-              </Button>
-              
-              <Button className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold">
-                <Database className="w-4 h-4 mr-2" />
-                RAG Knowledge Base
-              </Button>
+              {/* Advanced Controls - Admin only */}
+              {userRole === 'admin' && (
+                <>
+                  <Button className="w-full bg-gradient-to-r from-green-600 to-cyan-600 hover:from-green-700 hover:to-cyan-700 text-white font-bold">
+                    <BarChart3 className="w-4 h-4 mr-2" />
+                    Admin Power Reports
+                  </Button>
+                  
+                  <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold">
+                    <Brain className="w-4 h-4 mr-2" />
+                    AI Configuration
+                  </Button>
+                  
+                  <Button className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold">
+                    <Database className="w-4 h-4 mr-2" />
+                    RAG Knowledge Base
+                  </Button>
+                </>
+              )}
+
+              {/* Role-specific message for restricted users */}
+              {userRole === 'sales' && (
+                <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
+                  <div className="text-blue-300 text-sm">
+                    Sales Dashboard - Contact admin for additional controls
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
