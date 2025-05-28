@@ -134,30 +134,30 @@ export default function LiveNotifications() {
         </div>
         
         {/* Filter Buttons */}
-        <div className="flex items-center justify-center space-x-1 mt-4">
+        <div className="flex flex-col space-y-2 mt-4">
           <Button
             size="sm"
             variant={filter === "all" ? "default" : "outline"}
             onClick={() => setFilter("all")}
-            className={`text-xs px-3 py-1 ${filter === "all" ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
+            className={`text-xs px-4 py-2 w-full ${filter === "all" ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
           >
-            🔔 All
+            🔔 All Notifications
           </Button>
           <Button
             size="sm"
             variant={filter === "escalations" ? "default" : "outline"}
             onClick={() => setFilter("escalations")}
-            className={`text-xs px-3 py-1 ${filter === "escalations" ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
+            className={`text-xs px-4 py-2 w-full ${filter === "escalations" ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
           >
-            📣 Escalations Only
+            📣 Call Escalations
           </Button>
           <Button
             size="sm"
             variant={filter === "meetings" ? "default" : "outline"}
             onClick={() => setFilter("meetings")}
-            className={`text-xs px-3 py-1 ${filter === "meetings" ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
+            className={`text-xs px-4 py-2 w-full ${filter === "meetings" ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
           >
-            📅 Meetings Only
+            📅 Meeting Bookings
           </Button>
         </div>
       </CardHeader>
