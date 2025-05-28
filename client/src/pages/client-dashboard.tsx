@@ -175,7 +175,9 @@ export default function ClientDashboard() {
               <TrendingUp className="h-4 w-4 text-purple-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">${crmData?.pipelineValue?.toLocaleString() || '342,750'}</div>
+              <div className="text-2xl font-bold text-white">
+                ${isNaN(Number(crmData?.pipelineValue)) ? '342,750' : Number(crmData?.pipelineValue || 342750).toLocaleString()}
+              </div>
               <p className="text-xs text-purple-400">6 deals closing this week</p>
             </CardContent>
           </Card>
