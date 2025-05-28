@@ -17,6 +17,7 @@ import hubspotAuthRouter from "./hubspotAuth";
 import voiceControlRouter from "./voiceControl";
 import { setupWebSocket } from "./websocket";
 import pdfQuoteRouter from "./pdfQuote";
+import speakRouter from "./speak";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -406,6 +407,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // PDF Quote generation
   app.use('/api/pdf', pdfQuoteRouter);
+
+  // ElevenLabs text-to-speech
+  app.use('/api/speak', speakRouter);
 
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
