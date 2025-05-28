@@ -22,19 +22,19 @@ function Router() {
   return (
     <div className="min-h-screen bg-background">
       <Switch>
-        <Route path="/command-center">
+        <Route path="/">
           <DesktopCommandCenter />
         </Route>
-        <Route>
+        <Route path="/mobile">
           <Header />
           <main className="pt-36 pb-20">
             <Switch>
-              <Route path="/" component={Dashboard} />
-              <Route path="/conversations" component={Conversations} />
-              <Route path="/controls" component={Controls} />
-              <Route path="/crm" component={CRM} />
-              <Route path="/reports" component={Reports} />
-              <Route path="/scanner" component={Scanner} />
+              <Route path="/mobile" component={Dashboard} />
+              <Route path="/mobile/conversations" component={Conversations} />
+              <Route path="/mobile/controls" component={Controls} />
+              <Route path="/mobile/crm" component={CRM} />
+              <Route path="/mobile/reports" component={Reports} />
+              <Route path="/mobile/scanner" component={Scanner} />
               <Route component={NotFound} />
             </Switch>
           </main>
