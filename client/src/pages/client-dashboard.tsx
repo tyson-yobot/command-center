@@ -13,7 +13,11 @@ import {
   MessageSquare,
   Target,
   BarChart3,
-  Headphones
+  Headphones,
+  Mic,
+  MicOff,
+  AlertTriangle,
+  Bell
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 
@@ -21,10 +25,56 @@ export default function ClientDashboard() {
   const { data: metrics } = useQuery({ queryKey: ['/api/metrics'] });
   const { data: bot } = useQuery({ queryKey: ['/api/bot'] });
   const { data: crmData } = useQuery({ queryKey: ['/api/crm'] });
+  const [isListening, setIsListening] = React.useState(false);
+  const [showEscalation, setShowEscalation] = React.useState(false);
+
+  const handleVoiceToggle = () => {
+    setIsListening(!isListening);
+    // Voice command functionality for customers
+    if (!isListening) {
+      setTimeout(() => setIsListening(false), 3000);
+    }
+  };
+
+  const testEscalation = () => {
+    setShowEscalation(true);
+    setTimeout(() => setShowEscalation(false), 5000);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
       <div className="max-w-7xl mx-auto">
+        {/* Escalation Alert Overlay */}
+        {showEscalation && (
+          <div className="fixed inset-0 bg-red-900/90 backdrop-blur-sm z-50 flex items-center justify-center">
+            <div className="bg-white rounded-lg p-6 max-w-md mx-4 shadow-2xl">
+              <div className="flex items-center space-x-3 mb-4">
+                <AlertTriangle className="w-8 h-8 text-red-600" />
+                <div>
+                  <h3 className="text-lg font-bold text-red-900">🚨 URGENT ESCALATION</h3>
+                  <p className="text-red-700 text-sm">High-value client needs immediate attention</p>
+                </div>
+              </div>
+              <div className="bg-red-50 p-3 rounded mb-4">
+                <p className="text-red-900 font-medium">Mike Rodriguez - $125,000 deal at risk</p>
+                <p className="text-red-700 text-sm">Requires immediate callback within 15 minutes</p>
+              </div>
+              <div className="flex space-x-3">
+                <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white">
+                  Call Now
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => setShowEscalation(false)}
+                >
+                  Dismiss
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Header - Clean Client Branding */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
@@ -34,11 +84,20 @@ export default function ClientDashboard() {
               </h1>
               <p className="text-slate-300">Real-time insights into your AI automation ROI</p>
             </div>
-            <div className="flex items-center space-x-3">
-              <div className={`w-3 h-3 rounded-full ${bot?.status === 'active' ? 'bg-green-400' : 'bg-red-400'}`}></div>
-              <span className="text-white text-sm">
-                Bot Status: {bot?.status === 'active' ? 'Online' : 'Offline'}
-              </span>
+            <div className="flex items-center space-x-4">
+              <Button
+                onClick={handleVoiceToggle}
+                className={`${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} text-white`}
+              >
+                {isListening ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
+                {isListening ? 'Listening...' : 'Voice Command'}
+              </Button>
+              <div className="flex items-center space-x-3">
+                <div className={`w-3 h-3 rounded-full ${bot?.status === 'active' ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                <span className="text-white text-sm">
+                  Bot Status: {bot?.status === 'active' ? 'Online' : 'Offline'}
+                </span>
+              </div>
             </div>
           </div>
         </div>
