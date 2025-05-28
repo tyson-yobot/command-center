@@ -51,10 +51,10 @@ export default function ConversationLog() {
   const recentConversations = conversations.slice(0, 3);
 
   return (
-    <Card>
+    <Card className="bg-slate-800 border-slate-600">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center space-x-2 text-white">
             <MessageCircle className="h-5 w-5" />
             <span>💬 Recent Conversations</span>
             {conversations && conversations.some(c => c.status === "escalated") && (
@@ -62,7 +62,7 @@ export default function ConversationLog() {
             )}
           </CardTitle>
           <Link href="/conversations">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="text-slate-300 hover:text-white hover:bg-slate-700">
               View All
             </Button>
           </Link>
@@ -71,9 +71,9 @@ export default function ConversationLog() {
       <CardContent className="space-y-3">
         {recentConversations.length === 0 ? (
           <div className="text-center py-8">
-            <MessageCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-muted-foreground">No Conversations Yet</h3>
-            <p className="text-sm text-muted-foreground">
+            <MessageCircle className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-slate-300">No Conversations Yet</h3>
+            <p className="text-sm text-slate-400">
               Conversations will appear here once your bot starts engaging with clients.
             </p>
           </div>
@@ -84,20 +84,20 @@ export default function ConversationLog() {
             return (
               <div
                 key={conversation.id}
-                className="conversation-item p-3 rounded-lg border border-border cursor-pointer touch-feedback hover:bg-gray-50 hover:shadow-md transition-all duration-200 active:scale-98 active:bg-gray-100"
+                className="conversation-item p-3 rounded-lg border border-slate-600 cursor-pointer touch-feedback hover:bg-slate-700 hover:shadow-md transition-all duration-200 active:scale-98 active:bg-slate-600"
               >
                 <div className="flex items-start space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white font-semibold text-sm">
                       {conversation.clientAvatar}
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <div className="font-medium text-foreground truncate">
+                      <div className="font-medium text-white truncate">
                         {conversation.clientName}
                       </div>
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-xs text-slate-400">
                         {new Date(conversation.createdAt!).toLocaleTimeString([], {
                           hour: '2-digit',
                           minute: '2-digit'
@@ -105,11 +105,11 @@ export default function ConversationLog() {
                       </div>
                     </div>
                     {conversation.clientCompany && (
-                      <div className="text-sm text-muted-foreground mt-1">
+                      <div className="text-sm text-slate-300 mt-1">
                         {conversation.clientCompany}
                       </div>
                     )}
-                    <div className="text-sm text-muted-foreground mt-1 truncate">
+                    <div className="text-sm text-slate-300 mt-1 truncate">
                       {conversation.lastMessage}
                     </div>
                     <div className="flex items-center justify-between mt-2">
@@ -123,7 +123,7 @@ export default function ConversationLog() {
                           <span className="mr-1">{statusBadge.icon}</span>
                           {statusBadge.label}
                         </Badge>
-                        <div className="flex items-center space-x-1 text-xs text-muted-foreground">
+                        <div className="flex items-center space-x-1 text-xs text-slate-400">
                           <Clock className="h-3 w-3" />
                           <span>{conversation.duration}</span>
                         </div>
@@ -132,7 +132,7 @@ export default function ConversationLog() {
                         <Button 
                           size="sm" 
                           variant="ghost" 
-                          className="h-8 w-8 p-0 hover:bg-blue-100 hover:text-blue-600"
+                          className="h-8 w-8 p-0 hover:bg-blue-600 hover:text-white text-slate-300"
                           title="Tap to Call"
                         >
                           <Phone className="h-4 w-4" />
@@ -140,7 +140,7 @@ export default function ConversationLog() {
                         <Button 
                           size="sm" 
                           variant="ghost" 
-                          className="h-8 w-8 p-0 hover:bg-green-100 hover:text-green-600"
+                          className="h-8 w-8 p-0 hover:bg-green-600 hover:text-white text-slate-300"
                           title="Open Chat"
                         >
                           <MessageSquare className="h-4 w-4" />
@@ -148,7 +148,7 @@ export default function ConversationLog() {
                         <Button 
                           size="sm" 
                           variant="ghost" 
-                          className="h-8 w-8 p-0 hover:bg-purple-100 hover:text-purple-600"
+                          className="h-8 w-8 p-0 hover:bg-purple-600 hover:text-white text-slate-300"
                           title="View Details"
                         >
                           <Eye className="h-4 w-4" />

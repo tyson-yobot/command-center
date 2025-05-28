@@ -118,16 +118,16 @@ export default function LiveNotifications() {
   }
 
   return (
-    <Card>
+    <Card className="bg-slate-800 border-slate-600">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center space-x-2 text-white">
             <Bell className="h-5 w-5" />
             <span>📣 Live Notifications</span>
           </CardTitle>
           <div className="flex items-center space-x-2">
             <div className="w-2 h-2 bg-green-500 rounded-full notification-dot" />
-            <Badge variant="secondary" className="text-xs">
+            <Badge variant="secondary" className="text-xs bg-slate-700 text-slate-200">
               {filteredNotifications.length} new
             </Badge>
           </div>
@@ -139,7 +139,7 @@ export default function LiveNotifications() {
             size="sm"
             variant={filter === "all" ? "default" : "outline"}
             onClick={() => setFilter("all")}
-            className="text-xs px-3 py-1"
+            className={`text-xs px-3 py-1 ${filter === "all" ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
           >
             🔔 All
           </Button>
@@ -147,7 +147,7 @@ export default function LiveNotifications() {
             size="sm"
             variant={filter === "escalations" ? "default" : "outline"}
             onClick={() => setFilter("escalations")}
-            className="text-xs px-3 py-1"
+            className={`text-xs px-3 py-1 ${filter === "escalations" ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
           >
             📣 Escalations Only
           </Button>
@@ -155,7 +155,7 @@ export default function LiveNotifications() {
             size="sm"
             variant={filter === "meetings" ? "default" : "outline"}
             onClick={() => setFilter("meetings")}
-            className="text-xs px-3 py-1"
+            className={`text-xs px-3 py-1 ${filter === "meetings" ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
           >
             📅 Meetings Only
           </Button>
@@ -178,18 +178,18 @@ export default function LiveNotifications() {
             return (
               <div
                 key={notification.id}
-                className={`flex items-start space-x-3 p-3 ${style.bgColor} rounded-lg border-l-4 ${style.borderColor} cursor-pointer hover:shadow-md transition-all duration-200 active:scale-98 ${
-                  notification.type === "call_escalation" ? "animate-pulse hover:bg-red-100" : "hover:bg-gray-50"
+                className={`flex items-start space-x-3 p-3 bg-slate-700 rounded-lg border-l-4 ${style.borderColor} cursor-pointer hover:shadow-md transition-all duration-200 active:scale-98 ${
+                  notification.type === "call_escalation" ? "animate-pulse hover:bg-slate-600" : "hover:bg-slate-600"
                 }`}
               >
                 <div className={`w-8 h-8 ${style.iconBg} rounded-lg flex items-center justify-center flex-shrink-0`}>
                   <Icon className={`h-4 w-4 ${style.iconColor}`} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-foreground">
+                  <div className="text-sm font-medium text-white">
                     {notification.title}
                   </div>
-                  <div className="text-sm text-muted-foreground mt-1">
+                  <div className="text-sm text-slate-300 mt-1">
                     {notification.message}
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
