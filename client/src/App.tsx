@@ -9,6 +9,7 @@ import Controls from "@/pages/controls";
 import CRM from "@/pages/crm";
 import Reports from "@/pages/reports";
 import Scanner from "@/pages/scanner";
+import DesktopCommandCenter from "@/components/desktop-command-center";
 import Header from "@/components/layout/header";
 import BottomNav from "@/components/layout/bottom-nav";
 import InstallPrompt from "@/components/pwa/install-prompt";
@@ -29,6 +30,7 @@ function Router() {
           <Route path="/crm" component={CRM} />
           <Route path="/reports" component={Reports} />
           <Route path="/scanner" component={Scanner} />
+          <Route path="/command-center" component={DesktopCommandCenter} />
           <Route component={NotFound} />
         </Switch>
       </main>

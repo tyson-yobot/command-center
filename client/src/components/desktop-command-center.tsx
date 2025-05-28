@@ -105,15 +105,37 @@ export default function DesktopCommandCenter() {
             <span className="text-green-300 font-medium">LIVE</span>
           </div>
           
-          {/* Automation Toggle */}
-          <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3">
-            <Zap className="w-5 h-5 text-yellow-400" />
-            <span className="text-white font-medium">Auto Mode</span>
-            <Switch 
-              checked={automationMode} 
-              onCheckedChange={setAutomationMode}
-              className="data-[state=checked]:bg-green-500"
-            />
+          {/* Voice Control Panel */}
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3">
+              <Headphones className="w-5 h-5 text-purple-400" />
+              <span className="text-white font-medium">Voice AI</span>
+              <Switch 
+                checked={voiceEnabled} 
+                onCheckedChange={setVoiceEnabled}
+                className="data-[state=checked]:bg-purple-500"
+              />
+            </div>
+            
+            {/* Voice Input Button */}
+            <Button
+              className={`${voiceActive ? 'bg-red-600 hover:bg-red-700 animate-pulse' : 'bg-blue-600 hover:bg-blue-700'} px-4 py-3 rounded-xl`}
+              onClick={() => setVoiceActive(!voiceActive)}
+              disabled={!voiceEnabled}
+            >
+              {voiceActive ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            </Button>
+            
+            {/* Automation Toggle */}
+            <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3">
+              <Zap className="w-5 h-5 text-yellow-400" />
+              <span className="text-white font-medium">Auto Mode</span>
+              <Switch 
+                checked={automationMode} 
+                onCheckedChange={setAutomationMode}
+                className="data-[state=checked]:bg-green-500"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -154,7 +176,7 @@ export default function DesktopCommandCenter() {
                 <div className="flex items-center space-x-2">
                   <TrendingUp className="w-4 h-4 text-green-300" />
                   <span className="text-green-300 text-sm font-medium">
-                    {metrics ? ((metrics.conversions / metrics.callsToday) * 100).toFixed(1) : 0}% rate
+                    {metrics && metrics.conversions && metrics.callsToday ? ((metrics.conversions / metrics.callsToday) * 100).toFixed(1) : 0}% rate
                   </span>
                 </div>
               </CardContent>
@@ -278,34 +300,89 @@ export default function DesktopCommandCenter() {
             </CardContent>
           </Card>
 
-          {/* Recent Activity Feed */}
+          {/* RAG Knowledge Integration */}
           <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
             <CardHeader>
               <CardTitle className="text-white flex items-center space-x-2">
-                <Activity className="w-5 h-5 text-green-400" />
-                <span>Live Activity Feed</span>
+                <Database className="w-5 h-5 text-cyan-400" />
+                <span>RAG Knowledge Engine</span>
+                <Badge className={`${ragMode ? 'bg-cyan-500/20 text-cyan-300' : 'bg-gray-500/20 text-gray-300'} border border-cyan-500/30`}>
+                  {ragMode ? 'ACTIVE' : 'OFFLINE'}
+                </Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {[
-                  { time: "2s ago", action: "AI processed new lead", details: "Sarah Johnson - TechCorp", type: "success" },
-                  { time: "1m ago", action: "Call escalated to human", details: "Mike Rodriguez - Complex negotiation", type: "warning" },
-                  { time: "3m ago", action: "Meeting scheduled", details: "Alex Chen - Discovery call", type: "info" },
-                  { time: "5m ago", action: "Lead qualified", details: "Emma Davis - High value prospect", type: "success" },
-                ].map((activity, index) => (
-                  <div key={index} className="flex items-center space-x-3 p-3 bg-white/5 rounded-lg">
-                    <div className={`w-2 h-2 rounded-full ${
-                      activity.type === 'success' ? 'bg-green-400' :
-                      activity.type === 'warning' ? 'bg-yellow-400' : 'bg-blue-400'
-                    } ${index === 0 ? 'animate-pulse' : ''}`}></div>
-                    <div className="flex-1">
-                      <div className="text-white text-sm font-medium">{activity.action}</div>
-                      <div className="text-white/60 text-xs">{activity.details}</div>
-                    </div>
-                    <div className="text-white/40 text-xs">{activity.time}</div>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-lg p-3">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <FileText className="w-4 h-4 text-cyan-400" />
+                    <span className="text-white text-sm font-medium">Vector Database</span>
                   </div>
-                ))}
+                  <div className="text-cyan-300 text-xs">127K documents indexed</div>
+                  <div className="text-cyan-300 text-xs">Real-time retrieval: 0.1s</div>
+                </div>
+                
+                <div className="bg-purple-500/10 border border-purple-500/20 rounded-lg p-3">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Brain className="w-4 h-4 text-purple-400" />
+                    <span className="text-white text-sm font-medium">LLM Integration</span>
+                  </div>
+                  <div className="text-purple-300 text-xs">Anthropic Claude 3.7 Sonnet</div>
+                  <div className="text-purple-300 text-xs">Context window: 200K tokens</div>
+                </div>
+              </div>
+              
+              <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
+                <div className="text-white text-sm font-medium mb-2">Recent Knowledge Queries</div>
+                <div className="space-y-1 text-xs text-white/70">
+                  <div>• "Product pricing for enterprise clients" - Retrieved 15 docs</div>
+                  <div>• "Integration with Salesforce CRM" - Retrieved 8 docs</div>
+                  <div>• "Support escalation procedures" - Retrieved 12 docs</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Voice & Conversation Analytics */}
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center space-x-2">
+                <Volume2 className="w-5 h-5 text-orange-400" />
+                <span>Voice & Conversation Analytics</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-black text-orange-400 mb-1">94%</div>
+                  <div className="text-white/70 text-xs">Voice Recognition</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-black text-green-400 mb-1">8.7</div>
+                  <div className="text-white/70 text-xs">Avg Satisfaction</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-black text-blue-400 mb-1">2.3m</div>
+                  <div className="text-white/70 text-xs">Avg Call Length</div>
+                </div>
+              </div>
+              
+              <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-3">
+                <div className="text-white text-sm font-medium mb-2">Sentiment Analysis</div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-green-300">Positive: 76%</span>
+                    <Progress value={76} className="w-20 h-1" />
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-yellow-300">Neutral: 18%</span>
+                    <Progress value={18} className="w-20 h-1" />
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-red-300">Negative: 6%</span>
+                    <Progress value={6} className="w-20 h-1" />
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -357,7 +434,7 @@ export default function DesktopCommandCenter() {
               <div className="flex justify-between items-center">
                 <span className="text-white/70">Pipeline Value</span>
                 <span className="text-green-400 font-bold text-xl">
-                  ${crmData?.pipelineValue ? (crmData.pipelineValue / 1000).toFixed(0) + 'K' : '0K'}
+                  ${crmData?.pipelineValue ? Math.round(Number(crmData.pipelineValue) / 1000) + 'K' : '0K'}
                 </span>
               </div>
             </CardContent>
@@ -397,23 +474,115 @@ export default function DesktopCommandCenter() {
             </CardContent>
           </Card>
 
-          {/* Quick Actions */}
+          {/* Calendar Integration */}
           <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
             <CardHeader>
-              <CardTitle className="text-white">Quick Actions</CardTitle>
+              <CardTitle className="text-white flex items-center space-x-2">
+                <Calendar className="w-5 h-5 text-green-400" />
+                <span>Smart Calendar</span>
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Button className="w-full bg-blue-600 hover:bg-blue-700">
+              <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
+                <div className="text-white text-sm font-medium mb-2">Today's Schedule</div>
+                <div className="space-y-1 text-xs text-white/70">
+                  <div>• 2:00 PM - Discovery call with Alex Chen</div>
+                  <div>• 3:30 PM - Demo for Sarah Johnson</div>
+                  <div>• 4:15 PM - Follow-up with Mike Rodriguez</div>
+                </div>
+              </div>
+              
+              <Button className="w-full bg-green-600 hover:bg-green-700">
+                <Calendar className="w-4 h-4 mr-2" />
+                Schedule New Meeting
+              </Button>
+              
+              <div className="grid grid-cols-2 gap-2">
+                <Button variant="outline" className="border-blue-500 text-blue-300 hover:bg-blue-500/10 text-xs">
+                  <Eye className="w-3 h-3 mr-1" />
+                  View All
+                </Button>
+                <Button variant="outline" className="border-yellow-500 text-yellow-300 hover:bg-yellow-500/10 text-xs">
+                  <Settings className="w-3 h-3 mr-1" />
+                  Settings
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Voice Command Center */}
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center space-x-2">
+                <Headphones className="w-5 h-5 text-purple-400" />
+                <span>Voice Command Center</span>
+                {voiceActive && (
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {voiceActive && (
+                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 animate-pulse">
+                  <div className="text-red-300 text-sm font-medium">🎤 Listening...</div>
+                  <div className="text-red-200 text-xs">Say "Hey YoBot" to start</div>
+                </div>
+              )}
+              
+              <div className="bg-purple-500/10 border border-purple-500/20 rounded-lg p-3">
+                <div className="text-white text-sm font-medium mb-2">Voice Commands</div>
+                <div className="space-y-1 text-xs text-white/70">
+                  <div>• "Show me today's leads"</div>
+                  <div>• "Schedule a meeting"</div>
+                  <div>• "What's the pipeline status?"</div>
+                  <div>• "Emergency override"</div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-2">
+                <Button 
+                  variant="outline" 
+                  className="border-purple-500 text-purple-300 hover:bg-purple-500/10 text-xs"
+                  onClick={() => setVoiceEnabled(!voiceEnabled)}
+                >
+                  <Volume2 className="w-3 h-3 mr-1" />
+                  {voiceEnabled ? 'Disable' : 'Enable'}
+                </Button>
+                <Button variant="outline" className="border-cyan-500 text-cyan-300 hover:bg-cyan-500/10 text-xs">
+                  <Settings className="w-3 h-3 mr-1" />
+                  Configure
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Ultimate Command Actions */}
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center space-x-2">
+                <Zap className="w-5 h-5 text-yellow-400" />
+                <span>Ultimate Controls</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold">
                 <MessageCircle className="w-4 h-4 mr-2" />
                 View All Conversations
               </Button>
-              <Button variant="outline" className="w-full border-purple-500 text-purple-300 hover:bg-purple-500/10">
+              
+              <Button className="w-full bg-gradient-to-r from-green-600 to-cyan-600 hover:from-green-700 hover:to-cyan-700 text-white font-bold">
                 <BarChart3 className="w-4 h-4 mr-2" />
-                Generate Report
+                Generate Power Report
               </Button>
-              <Button variant="outline" className="w-full border-green-500 text-green-300 hover:bg-green-500/10">
-                <Settings className="w-4 h-4 mr-2" />
-                Bot Configuration
+              
+              <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold">
+                <Brain className="w-4 h-4 mr-2" />
+                AI Configuration
+              </Button>
+              
+              <Button className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold">
+                <Database className="w-4 h-4 mr-2" />
+                RAG Knowledge Base
               </Button>
             </CardContent>
           </Card>
