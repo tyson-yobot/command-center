@@ -26,19 +26,17 @@ function Router() {
         <Route path="/">
           <DesktopCommandCenter />
         </Route>
-        <Route path="/mobile">
+        <Route path="/mobile" component={Dashboard} />
+        <Route path="/mobile/conversations" component={Conversations} />
+        <Route path="/mobile/controls" component={Controls} />
+        <Route path="/mobile/crm" component={CRM} />
+        <Route path="/mobile/reports" component={Reports} />
+        <Route path="/mobile/scanner" component={Scanner} />
+        <Route path="/mobile/*">
           <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
             <Header />
             <main className="pt-36 pb-20">
-              <Switch>
-                <Route path="/mobile" component={Dashboard} />
-                <Route path="/mobile/conversations" component={Conversations} />
-                <Route path="/mobile/controls" component={Controls} />
-                <Route path="/mobile/crm" component={CRM} />
-                <Route path="/mobile/reports" component={Reports} />
-                <Route path="/mobile/scanner" component={Scanner} />
-                <Route component={NotFound} />
-              </Switch>
+              <NotFound />
             </main>
             <BottomNav />
             <InstallPrompt />
