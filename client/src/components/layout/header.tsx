@@ -1,6 +1,6 @@
 import { Activity } from "lucide-react";
 import { useWebSocket } from "@/hooks/use-websocket";
-import yobotLogoPath from "@assets/Engage Smarter Logo Cursive 7 HR no background.png";
+import yobotLogoPath from "@assets/Engage Smarter Logo Transparent.png";
 
 export default function Header() {
   const { isConnected } = useWebSocket();
