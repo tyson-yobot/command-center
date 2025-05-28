@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { sendSlackAlert } from "./alerts";
 
 const app = express();
 app.use(express.json());
@@ -34,6 +35,16 @@ app.use((req, res, next) => {
   });
 
   next();
+});
+
+// Test Slack alert endpoint
+app.get('/api/test-slack-alert', async (req, res) => {
+  try {
+    await sendSlackAlert("🚨 Test alert from YoBot® Command Center – Slack wiring complete.");
+    res.json({ success: true, message: "Slack alert sent successfully!" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 (async () => {
