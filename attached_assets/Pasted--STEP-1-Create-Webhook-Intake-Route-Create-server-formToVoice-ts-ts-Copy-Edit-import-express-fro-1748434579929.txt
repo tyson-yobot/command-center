@@ -1,0 +1,96 @@
+✅ STEP 1: Create Webhook Intake Route
+Create: server/formToVoice.ts
+
+ts
+Copy
+Edit
+import express from 'express';
+import axios from 'axios';
+
+const router = express.Router();
+
+// Replace with your VoiceBot webhook URL or local Lambda endpoint
+const VOICEBOT_URL = 'https://your-voicebot-url.com/trigger';
+
+router.post('/form-submission', async (req, res) => {
+  try {
+    const { name, phone, message, product } = req.body;
+
+    if (!name || !phone || !message) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Build VoiceBot payload
+    const voicePayload = {
+      contact: { name, phone },
+      prompt: `New form submitted about ${product || 'your services'}.\n\nMessage:\n${message}`,
+      source: 'Webform → VoiceBot',
+    };
+
+    // Send to VoiceBot
+    const voiceRes = await axios.post(VOICEBOT_URL, voicePayload);
+
+    console.log('🎤 VoiceBot triggered:', voiceRes.data);
+    res.json({ status: 'sent to VoiceBot' });
+  } catch (err) {
+    console.error('VoiceBot Trigger Error:', err);
+    res.status(500).json({ error: 'VoiceBot trigger failed' });
+  }
+});
+
+export default router;
+✅ STEP 2: Mount Route in server/index.ts
+ts
+Copy
+Edit
+import formToVoiceRouter from './formToVoice';
+app.use('/api/form', formToVoiceRouter);
+You now have a live form endpoint at:
+
+bash
+Copy
+Edit
+POST https://tyson44.replit.app/api/form/form-submission
+✅ STEP 3: Tally / Webform Integration
+Set Tally Webhook to POST to:
+
+bash
+Copy
+Edit
+https://tyson44.replit.app/api/form/form-submission
+Payload must send:
+
+name
+
+phone
+
+message
+
+product (optional)
+
+✅ Optional Debug Mode
+Add a route to simulate test submission:
+
+ts
+Copy
+Edit
+router.get('/form/test', async (_req, res) => {
+  const mock = {
+    name: 'Tyson',
+    phone: '+15554443333',
+    message: 'Hi YoBot, I need help with full automation for compliance.',
+    product: 'SmartSpend™ + RAG AI',
+  };
+  await axios.post(VOICEBOT_URL, {
+    contact: { name: mock.name, phone: mock.phone },
+    prompt: `New form submitted about ${mock.product}.\n\nMessage:\n${mock.message}`,
+    source: 'Test Trigger',
+  });
+  res.json({ status: 'test sent' });
+});
+Visit:
+
+bash
+Copy
+Edit
+GET https://tyson44.replit.app/api/form/test

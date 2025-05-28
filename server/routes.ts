@@ -13,6 +13,7 @@ import { calendarRouter } from "./calendar";
 import aiChatRouter from "./aiChat";
 import ragUploadRouter from "./ragUpload";
 import ragSearchRouter from "./ragSearch";
+import formToVoiceRouter from "./formToVoice";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -426,6 +427,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // RAG Knowledge Base integration
   app.use('/api/rag', ragUploadRouter);
   app.use('/api/rag', ragSearchRouter);
+
+  // Form-to-Voice automation integration
+  app.use('/api/form', formToVoiceRouter);
 
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
