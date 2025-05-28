@@ -334,6 +334,195 @@ export default function DesktopCommandCenter() {
         </div>
       </div>
 
+      {/* Phase 1: Automation Health Monitor */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        {/* Bot Uptime Status */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-white flex items-center space-x-2 text-sm">
+              <Activity className="w-4 h-4 text-green-400" />
+              <span>Bot Uptime</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center">
+              <div className="text-3xl font-black text-green-400 mb-2">99.7%</div>
+              <div className="w-full bg-slate-700 rounded-full h-2">
+                <div className="bg-green-400 h-2 rounded-full" style={{ width: '99.7%' }}></div>
+              </div>
+              <div className="text-green-300 text-xs mt-2">Excellent</div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Active Workflows */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-white flex items-center space-x-2 text-sm">
+              <Zap className="w-4 h-4 text-blue-400" />
+              <span>Active Workflows</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs">
+                <span className="text-slate-300">Lead Qualification</span>
+                <span className="text-blue-400">7 running</span>
+              </div>
+              <Progress value={85} className="h-1" />
+              <div className="flex justify-between text-xs">
+                <span className="text-slate-300">Follow-up Sequences</span>
+                <span className="text-green-400">12 active</span>
+              </div>
+              <Progress value={65} className="h-1" />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Error Queue */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-white flex items-center space-x-2 text-sm">
+              <AlertTriangle className="w-4 h-4 text-yellow-400" />
+              <span>Error Queue</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center">
+              <div className="text-3xl font-black text-yellow-400 mb-2">2</div>
+              <div className="text-yellow-300 text-xs">Failed automations</div>
+              <Button size="sm" className="mt-2 bg-yellow-600 hover:bg-yellow-700 text-white text-xs px-2 py-1 h-6">
+                Review
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Processing Speed */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-white flex items-center space-x-2 text-sm">
+              <Timer className="w-4 h-4 text-purple-400" />
+              <span>Processing Speed</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center">
+              <div className="text-3xl font-black text-purple-400 mb-2">47</div>
+              <div className="text-purple-300 text-xs">leads/minute</div>
+              <div className="text-green-300 text-xs mt-1">↑ 12% vs yesterday</div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* API Health Dashboard */}
+      <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center space-x-2">
+            <Network className="w-5 h-5 text-cyan-400" />
+            <span>API Health Monitor</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+            {[
+              { name: 'CRM', status: 'healthy', ping: '12ms' },
+              { name: 'Email', status: 'healthy', ping: '8ms' },
+              { name: 'SMS', status: 'warning', ping: '156ms' },
+              { name: 'Calendar', status: 'healthy', ping: '23ms' },
+              { name: 'WebHooks', status: 'healthy', ping: '31ms' }
+            ].map((api) => (
+              <div key={api.name} className="bg-slate-800/50 rounded-lg p-3 text-center">
+                <div className="flex items-center justify-center space-x-2 mb-2">
+                  <div className={`w-2 h-2 rounded-full ${
+                    api.status === 'healthy' ? 'bg-green-400' :
+                    api.status === 'warning' ? 'bg-yellow-400' : 'bg-red-400'
+                  }`}></div>
+                  <span className="text-white text-sm font-medium">{api.name}</span>
+                </div>
+                <div className="text-xs text-slate-400">{api.ping}</div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Phase 2: Enhanced Real-Time Performance */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* Bot Intelligence Panel */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center space-x-2">
+              <Brain className="w-5 h-5 text-purple-400" />
+              <span>Bot Intelligence</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-black text-purple-400 mb-1">87%</div>
+                <div className="text-purple-300 text-xs">Confidence Score</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-black text-blue-400 mb-1">5.2%</div>
+                <div className="text-blue-300 text-xs">Handoff Rate</div>
+              </div>
+            </div>
+            
+            <div className="bg-purple-500/10 border border-purple-500/20 rounded-lg p-3">
+              <div className="flex items-center space-x-2 mb-2">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span className="text-white text-sm font-medium">Learning Status</span>
+              </div>
+              <div className="text-green-300 text-xs">Active training on 47 new conversations</div>
+              <Progress value={73} className="h-1 mt-2" />
+            </div>
+            
+            <div className="text-center">
+              <div className="text-xl font-black text-green-400 mb-1">94.3%</div>
+              <div className="text-green-300 text-xs">Response Accuracy</div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Live Activity Feed */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center space-x-2">
+              <Activity className="w-5 h-5 text-cyan-400" />
+              <span>Live Activity Feed</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3 max-h-64 overflow-y-auto">
+              {[
+                { action: 'Lead captured', client: 'Mike Chen', value: '$23K', status: 'success', time: '2s ago' },
+                { action: 'Meeting booked', client: 'Sarah Wilson', value: '$45K', status: 'success', time: '15s ago' },
+                { action: 'Email sent', client: 'David Rodriguez', value: '$12K', status: 'pending', time: '1m ago' },
+                { action: 'Call escalation', client: 'Jennifer Brown', value: '$89K', status: 'urgent', time: '2m ago' },
+                { action: 'Follow-up scheduled', client: 'Tom Anderson', value: '$31K', status: 'success', time: '3m ago' }
+              ].map((activity, index) => (
+                <div key={index} className="flex items-center justify-between p-2 bg-slate-800/30 rounded-lg hover:bg-slate-700/50 transition-colors cursor-pointer">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-2 h-2 rounded-full ${
+                      activity.status === 'success' ? 'bg-green-400' :
+                      activity.status === 'pending' ? 'bg-yellow-400' :
+                      activity.status === 'urgent' ? 'bg-red-400 animate-pulse' : 'bg-blue-400'
+                    }`}></div>
+                    <div>
+                      <div className="text-white text-sm font-medium">{activity.action}</div>
+                      <div className="text-slate-400 text-xs">{activity.client} • {activity.value}</div>
+                    </div>
+                  </div>
+                  <div className="text-slate-500 text-xs">{activity.time}</div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Main Dashboard Grid */}
       <div className="grid grid-cols-12 gap-6">
         
