@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { sendSlackAlert } from "./alerts";
+import { generatePDFReport } from "./pdfReport";
 
 const app = express();
 app.use(express.json());
@@ -46,6 +47,23 @@ app.get('/api/test-slack-alert', async (req, res) => {
   } catch (error) {
     console.error("Slack alert failed:", error);
     res.status(500).json({ error: "Slack alert failed" });
+  }
+});
+
+// PDF Report generation endpoint
+app.post('/api/reports/pdf', async (req, res) => {
+  const { html } = req.body;
+
+  if (!html) return res.status(400).json({ error: "Missing HTML content" });
+
+  try {
+    const pdf = await generatePDFReport(html);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="YoBot_Report.pdf"');
+    res.send(pdf);
+  } catch (error) {
+    console.error("PDF generation failed:", error);
+    res.status(500).json({ error: "PDF generation failed" });
   }
 });
 
