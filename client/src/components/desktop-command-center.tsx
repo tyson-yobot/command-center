@@ -1151,12 +1151,12 @@ export default function DesktopCommandCenter() {
           </Card>
 
           {/* Voice Command Center */}
-          <Card className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20">
+          <Card className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-600/30">
             <CardHeader>
               <CardTitle className="text-white flex items-center space-x-2">
-                <Mic className="w-5 h-5 text-purple-400" />
+                <Mic className="w-5 h-5 text-slate-400" />
                 <span>🎤 VoiceBot Command Center</span>
-                <Badge className="bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                <Badge className="bg-slate-700/50 text-slate-300 border border-slate-600/50">
                   READY
                 </Badge>
               </CardTitle>
@@ -1165,7 +1165,7 @@ export default function DesktopCommandCenter() {
               <div className="space-y-3">
                 <input
                   type="text"
-                  className="w-full bg-white/10 border border-purple-500/30 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                  className="w-full bg-slate-800/60 border border-slate-600/40 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-500/50"
                   placeholder="Enter voice command..."
                   value={voiceCommand}
                   onChange={(e) => setVoiceCommand(e.target.value)}
@@ -1173,7 +1173,7 @@ export default function DesktopCommandCenter() {
                 />
                 <Button
                   onClick={sendVoiceCommand}
-                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold"
+                  className="w-full bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white font-bold border border-slate-600/50"
                   disabled={!voiceCommand.trim()}
                 >
                   <Volume2 className="w-4 h-4 mr-2" />
@@ -1181,9 +1181,9 @@ export default function DesktopCommandCenter() {
                 </Button>
               </div>
               
-              <div className="bg-purple-500/10 border border-purple-500/20 rounded-lg p-3">
+              <div className="bg-slate-800/40 border border-slate-600/30 rounded-lg p-3">
                 <div className="text-white text-sm font-medium mb-2">Quick Commands</div>
-                <div className="space-y-1 text-xs text-white/70">
+                <div className="space-y-1 text-xs text-slate-300">
                   <div>• "Generate executive summary"</div>
                   <div>• "Read today's performance"</div>
                   <div>• "Alert team about hot leads"</div>
