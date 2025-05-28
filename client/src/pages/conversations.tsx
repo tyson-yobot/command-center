@@ -4,13 +4,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Search, Phone, MessageCircle, Clock, Filter, ArrowUpDown, Eye, PhoneCall, MessageSquare } from "lucide-react";
+import { Search, Phone, MessageCircle, Clock, Filter, ArrowUpDown, Eye, PhoneCall, MessageSquare, Send, Mic, Paperclip, MoreVertical } from "lucide-react";
 import type { Conversation } from "@shared/schema";
 
 export default function Conversations() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortBy, setSortBy] = useState("recent");
+  const [selectedChat, setSelectedChat] = useState<Conversation | null>(null);
+  const [newMessage, setNewMessage] = useState("");
 
   const { data: conversations = [], isLoading } = useQuery<Conversation[]>({
     queryKey: ["/api/conversations"],
