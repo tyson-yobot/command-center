@@ -265,9 +265,9 @@ export default function AdminConsole() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {[
-                    { name: 'Voice-to-CRM Pipeline', status: 'healthy', last: '2m ago' },
-                    { name: 'Airtable Sync', status: 'warning', last: '12m ago' },
-                    { name: 'Stripe Webhook', status: 'error', last: '47m ago' }
+                    { name: 'Voice-to-CRM Pipeline', status: 'green', last: '2m ago' },
+                    { name: 'Airtable Sync', status: 'yellow', last: '12m ago' },
+                    { name: 'Stripe Webhook', status: 'red', last: '47m ago' }
                   ].map((scenario) => (
                     <div key={scenario.name} className="flex items-center justify-between p-2 bg-slate-800/30 rounded">
                       <div>
@@ -275,8 +275,8 @@ export default function AdminConsole() {
                         <div className="text-slate-400 text-xs">Last: {scenario.last}</div>
                       </div>
                       <div className={`w-3 h-3 rounded-full ${
-                        scenario.status === 'healthy' ? 'bg-green-400' :
-                        scenario.status === 'warning' ? 'bg-yellow-400' : 'bg-red-400'
+                        scenario.status === 'green' ? 'bg-green-400' :
+                        scenario.status === 'yellow' ? 'bg-yellow-400' : 'bg-red-400'
                       }`}></div>
                     </div>
                   ))}

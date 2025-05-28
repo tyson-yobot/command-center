@@ -416,20 +416,20 @@ export default function DesktopCommandCenter() {
         <CardContent>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { name: 'Airtable', status: 'healthy', lastSync: '2m ago', icon: '📊' },
-              { name: 'HubSpot', status: 'healthy', lastSync: '5m ago', icon: '🔗' },
-              { name: 'Stripe', status: 'warning', lastSync: '12m ago', icon: '💳' },
-              { name: 'QuickBooks', status: 'error', lastSync: '47m ago', icon: '📋' }
+              { name: 'Airtable', status: 'green', lastSync: '2m ago', icon: '📊' },
+              { name: 'HubSpot', status: 'green', lastSync: '5m ago', icon: '🔗' },
+              { name: 'Stripe', status: 'yellow', lastSync: '12m ago', icon: '💳' },
+              { name: 'QuickBooks', status: 'red', lastSync: '47m ago', icon: '📋' }
             ].map((platform) => (
               <div key={platform.name} className="bg-slate-800/50 rounded-lg p-4 text-center">
                 <div className="text-2xl mb-2">{platform.icon}</div>
                 <div className="text-white font-medium text-sm mb-1">{platform.name}</div>
                 <div className={`w-3 h-3 rounded-full mx-auto mb-2 ${
-                  platform.status === 'healthy' ? 'bg-green-400' :
-                  platform.status === 'warning' ? 'bg-yellow-400' : 'bg-red-400'
+                  platform.status === 'green' ? 'bg-green-400' :
+                  platform.status === 'yellow' ? 'bg-yellow-400' : 'bg-red-400'
                 }`}></div>
                 <div className="text-xs text-slate-400">Last: {platform.lastSync}</div>
-                {platform.status === 'error' && (
+                {platform.status === 'red' && (
                   <Button size="sm" className="mt-2 bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 h-6">
                     Retry Sync
                   </Button>
@@ -763,18 +763,18 @@ export default function DesktopCommandCenter() {
                       <span className="text-green-400">Bot: 0.2s | Human: 45s</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-green-500 h-2 rounded"></div>
-                      <div className="bg-red-500/30 h-2 rounded"></div>
+                      <div className="bg-green-400 h-2 rounded"></div>
+                      <div className="bg-red-400/30 h-2 rounded"></div>
                     </div>
                   </div>
                   <div>
                     <div className="flex justify-between text-xs mb-1">
                       <span className="text-slate-400">Accuracy Rate</span>
-                      <span className="text-cyan-400">Bot: 94% | Human: 87%</span>
+                      <span className="text-green-400">Bot: 94% | Human: 87%</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-cyan-500 h-2 rounded"></div>
-                      <div className="bg-yellow-500/50 h-2 rounded"></div>
+                      <div className="bg-green-400 h-2 rounded"></div>
+                      <div className="bg-yellow-400/50 h-2 rounded"></div>
                     </div>
                   </div>
                 </div>
