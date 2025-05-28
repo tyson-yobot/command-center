@@ -39,11 +39,13 @@ app.use((req, res, next) => {
 
 // Test Slack alert endpoint
 app.get('/api/test-slack-alert', async (req, res) => {
+  console.log("Hitting /api/test-slack-alert route");
   try {
     await sendSlackAlert("🚨 Test alert from YoBot® Command Center – Slack wiring complete.");
-    res.json({ success: true, message: "Slack alert sent successfully!" });
+    res.json({ success: true });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.error("Slack alert failed:", error);
+    res.status(500).json({ error: "Slack alert failed" });
   }
 });
 
