@@ -91,15 +91,15 @@ export default function CrmSnapshot() {
   ];
 
   return (
-    <Card>
+    <Card className="bg-slate-800 border-slate-600">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center space-x-2 text-white">
             <Users className="h-5 w-5" />
             <span>📊 CRM Snapshot</span>
           </CardTitle>
           <Link href="/crm">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="text-slate-300 hover:text-white hover:bg-slate-700">
               Open CRM
             </Button>
           </Link>
@@ -113,15 +113,15 @@ export default function CrmSnapshot() {
               key={metric.title}
               className={`flex items-center justify-between p-3 rounded-lg ${
                 metric.highlight 
-                  ? "bg-gradient-to-r from-green-50 to-green-100 border-2 border-green-200 shadow-lg" 
-                  : "bg-muted/50"
+                  ? "bg-gradient-to-r from-green-900/40 to-green-800/40 border-2 border-green-500/50 shadow-lg" 
+                  : "bg-slate-700"
               }`}
             >
               <div className="flex items-center space-x-3">
                 <Icon className={`h-5 w-5 ${metric.color}`} />
                 <div>
-                  <div className="font-medium text-foreground">{metric.title}</div>
-                  <div className="text-sm text-muted-foreground">{metric.description}</div>
+                  <div className="font-medium text-white">{metric.title}</div>
+                  <div className="text-sm text-slate-300">{metric.description}</div>
                 </div>
               </div>
               <div className={`${
