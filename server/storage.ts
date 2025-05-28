@@ -324,6 +324,31 @@ export class MemStorage implements IStorage {
     this.crmData.set(existingCrmData.id, updatedCrmData);
     return updatedCrmData;
   }
+
+  async getScannedContacts(userId: number): Promise<ScannedContact[]> {
+    return Array.from(this.scannedContacts.values()).filter(contact => contact.userId === userId);
+  }
+
+  async createScannedContact(insertScannedContact: InsertScannedContact): Promise<ScannedContact> {
+    const id = this.currentId++;
+    const contact: ScannedContact = { 
+      ...insertScannedContact, 
+      id,
+      createdAt: new Date()
+    };
+    this.scannedContacts.set(id, contact);
+    return contact;
+  }
+
+  async updateScannedContact(id: number, updates: Partial<InsertScannedContact>): Promise<ScannedContact> {
+    const existingContact = this.scannedContacts.get(id);
+    if (!existingContact) {
+      throw new Error(`Scanned contact with id ${id} not found`);
+    }
+    const updatedContact: ScannedContact = { ...existingContact, ...updates };
+    this.scannedContacts.set(id, updatedContact);
+    return updatedContact;
+  }
 }
 
 export const storage = new MemStorage();

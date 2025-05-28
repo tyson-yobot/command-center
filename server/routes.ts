@@ -3,7 +3,8 @@ import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { z } from "zod";
-import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertCrmDataSchema } from "@shared/schema";
+import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertCrmDataSchema, insertScannedContactSchema } from "@shared/schema";
+import { createWorker } from 'tesseract.js';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -188,6 +189,160 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
   }, 30000);
+
+  // Business Card Scanner endpoints
+  app.get("/api/scanned-contacts", async (req, res) => {
+    try {
+      const userId = 1; // Default user for demo
+      const contacts = await storage.getScannedContacts(userId);
+      res.json(contacts);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Extract text from business card image using OCR
+  const extractContactInfo = (text: string) => {
+    const lines = text.split('\n').filter(line => line.trim());
+    const result: any = {
+      firstName: null,
+      lastName: null,
+      company: null,
+      title: null,
+      email: null,
+      phone: null,
+      website: null
+    };
+
+    // Extract email using regex
+    const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+    if (emailMatch) {
+      result.email = emailMatch[0];
+    }
+
+    // Extract phone using regex (various formats)
+    const phoneMatch = text.match(/(\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}|\+\d{1,3}[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/);
+    if (phoneMatch) {
+      result.phone = phoneMatch[0];
+    }
+
+    // Extract website using regex
+    const websiteMatch = text.match(/(www\.|https?:\/\/)?[\w\-_]+(\.[\w\-_]+)+[\/\w\-_.,@?^=%&:/~+#]*/i);
+    if (websiteMatch) {
+      result.website = websiteMatch[0].startsWith('http') ? websiteMatch[0] : `https://${websiteMatch[0]}`;
+    }
+
+    // Extract name (assume first meaningful line with capital letters)
+    const namePattern = /^[A-Z][a-z]+ [A-Z][a-z]+/;
+    for (const line of lines) {
+      if (namePattern.test(line.trim())) {
+        const nameParts = line.trim().split(' ');
+        result.firstName = nameParts[0];
+        result.lastName = nameParts.slice(1).join(' ');
+        break;
+      }
+    }
+
+    // Extract company (look for common business indicators)
+    const businessWords = ['LLC', 'Inc', 'Corp', 'Company', 'Ltd', 'Group', 'Associates', 'Partners'];
+    for (const line of lines) {
+      if (businessWords.some(word => line.includes(word))) {
+        result.company = line.trim();
+        break;
+      }
+    }
+
+    // Extract title (look for common job titles)
+    const titleWords = ['CEO', 'President', 'Director', 'Manager', 'VP', 'Vice President', 'Executive', 'Senior', 'Lead', 'Head', 'Chief'];
+    for (const line of lines) {
+      if (titleWords.some(word => line.toLowerCase().includes(word.toLowerCase()))) {
+        result.title = line.trim();
+        break;
+      }
+    }
+
+    return result;
+  };
+
+  app.post("/api/scan-business-card", async (req, res) => {
+    try {
+      const { imageData } = req.body;
+      
+      if (!imageData) {
+        return res.status(400).json({ error: "Image data is required" });
+      }
+
+      // Initialize Tesseract worker
+      const worker = await createWorker('eng');
+      
+      // Convert base64 to buffer for OCR processing
+      const base64Data = imageData.replace(/^data:image\/\w+;base64,/, '');
+      const buffer = Buffer.from(base64Data, 'base64');
+      
+      // Perform OCR
+      const { data: { text } } = await worker.recognize(buffer);
+      await worker.terminate();
+
+      // Extract contact information from OCR text
+      const contactInfo = extractContactInfo(text);
+
+      // Save to storage
+      const scannedContact = await storage.createScannedContact({
+        userId: 1, // Default user for demo
+        ...contactInfo,
+        rawText: text,
+        source: "card_scan",
+        status: "pending"
+      });
+
+      // Send to Make webhook if configured
+      const webhookUrl = process.env.MAKE_WEBHOOK_URL;
+      if (webhookUrl) {
+        try {
+          const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              source: "card_scan",
+              first_name: contactInfo.firstName,
+              last_name: contactInfo.lastName,
+              company: contactInfo.company,
+              title: contactInfo.title,
+              email: contactInfo.email,
+              phone: contactInfo.phone,
+              website: contactInfo.website
+            })
+          });
+
+          if (response.ok) {
+            // Update status to processed
+            await storage.updateScannedContact(scannedContact.id, { status: "processed" });
+          }
+        } catch (webhookError) {
+          console.error('Webhook error:', webhookError);
+          // Don't fail the request if webhook fails
+        }
+      }
+
+      // Broadcast new contact to connected clients
+      broadcast({
+        type: 'new_scanned_contact',
+        data: scannedContact
+      });
+
+      res.json({
+        success: true,
+        contact: scannedContact,
+        extractedText: text
+      });
+
+    } catch (error: any) {
+      console.error('OCR Error:', error);
+      res.status(500).json({ error: "Failed to process business card" });
+    }
+  });
 
   return httpServer;
 }
