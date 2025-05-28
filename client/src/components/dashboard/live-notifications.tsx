@@ -178,71 +178,82 @@ export default function LiveNotifications() {
             return (
               <div
                 key={notification.id}
-                className={`flex items-start space-x-3 p-3 bg-slate-700 rounded-lg border-l-4 ${style.borderColor} cursor-pointer hover:shadow-md transition-all duration-200 active:scale-98 ${
+                className={`bg-slate-700 rounded-lg border-l-4 ${style.borderColor} cursor-pointer hover:shadow-md transition-all duration-200 active:scale-98 ${
                   notification.type === "call_escalation" ? "animate-pulse hover:bg-slate-600" : "hover:bg-slate-600"
                 }`}
               >
-                <div className={`w-8 h-8 ${style.iconBg} rounded-lg flex items-center justify-center flex-shrink-0`}>
-                  <Icon className={`h-4 w-4 ${style.iconColor}`} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-white">
-                    {notification.title}
-                  </div>
-                  <div className="text-sm text-slate-300 mt-1">
-                    {notification.message}
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    {(() => {
-                      const now = new Date();
-                      const notificationTime = new Date(notification.createdAt!);
-                      const diffMinutes = Math.floor((now.getTime() - notificationTime.getTime()) / (1000 * 60));
-                      
-                      if (diffMinutes < 1) return "Just now";
-                      if (diffMinutes < 60) return `${diffMinutes} min ago`;
-                      if (diffMinutes < 1440) return `${Math.floor(diffMinutes / 60)}h ago`;
-                      return notificationTime.toLocaleDateString();
-                    })()}
-                    {notification.type === "call_escalation" && (
-                      <span className="ml-2 text-red-600 font-bold animate-pulse">🚨 URGENT</span>
-                    )}
-                  </div>
-                </div>
-                <div className="flex flex-col space-y-1">
-                  {notification.type === "call_escalation" && (
-                    <div className="flex space-x-1">
-                      <Button size="sm" className="text-xs bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1 h-8">
-                        📞 Take Call
-                      </Button>
-                      <Button size="sm" variant="outline" className="text-xs bg-orange-50 border-orange-300 text-orange-700 hover:bg-orange-100 px-2 py-1 h-8">
-                        👁️ View
-                      </Button>
+                {/* Header with icon and title */}
+                <div className="flex items-center justify-between p-4 pb-2">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-10 h-10 ${style.iconBg} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                      <Icon className={`h-5 w-5 ${style.iconColor}`} />
                     </div>
-                  )}
-                  {notification.type === "meeting_booked" && (
-                    <Button size="sm" className="text-xs bg-green-600 hover:bg-green-700 text-white font-bold px-3 py-1 h-8">
-                      📅 View Meeting
-                    </Button>
-                  )}
-                  {notification.type === "lead_captured" && (
-                    <div className="flex space-x-1">
-                      <Button size="sm" className="text-xs bg-blue-600 hover:bg-blue-700 text-white font-bold px-2 py-1 h-8">
-                        💰 View Quote
-                      </Button>
-                      <Button size="sm" variant="outline" className="text-xs bg-blue-50 border-blue-300 text-blue-700 hover:bg-blue-100 px-2 py-1 h-8">
-                        📋 Details
-                      </Button>
+                    <div className="flex-1">
+                      <div className="text-base font-semibold text-white leading-tight">
+                        {notification.title}
+                      </div>
+                      <div className="text-xs text-slate-400 mt-1">
+                        {(() => {
+                          const now = new Date();
+                          const notificationTime = new Date(notification.createdAt!);
+                          const diffMinutes = Math.floor((now.getTime() - notificationTime.getTime()) / (1000 * 60));
+                          
+                          if (diffMinutes < 1) return "Just now";
+                          if (diffMinutes < 60) return `${diffMinutes} min ago`;
+                          if (diffMinutes < 1440) return `${Math.floor(diffMinutes / 60)}h ago`;
+                          return notificationTime.toLocaleDateString();
+                        })()}
+                        {notification.type === "call_escalation" && (
+                          <span className="ml-2 text-red-400 font-bold animate-pulse">🚨 URGENT</span>
+                        )}
+                      </div>
                     </div>
-                  )}
+                  </div>
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => dismissNotificationMutation.mutate(notification.id)}
                     disabled={dismissNotificationMutation.isPending}
-                    className="text-xs h-6 w-6 p-0"
+                    className="text-slate-400 hover:text-white h-8 w-8 p-0"
                   >
-                    <X className="h-3 w-3" />
+                    <X className="h-4 w-4" />
                   </Button>
+                </div>
+
+                {/* Message content */}
+                <div className="px-4 pb-3">
+                  <div className="text-sm text-slate-200 leading-relaxed">
+                    {notification.message}
+                  </div>
+                </div>
+
+                {/* Action buttons */}
+                <div className="px-4 pb-4">
+                  {notification.type === "call_escalation" && (
+                    <div className="flex space-x-2">
+                      <Button size="sm" className="text-sm bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 h-9 flex-1">
+                        📞 Take Call
+                      </Button>
+                      <Button size="sm" variant="outline" className="text-sm bg-slate-600 border-slate-500 text-slate-200 hover:bg-slate-500 px-4 py-2 h-9">
+                        👁️ View
+                      </Button>
+                    </div>
+                  )}
+                  {notification.type === "meeting_booked" && (
+                    <Button size="sm" className="text-sm bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 h-9 w-full">
+                      📅 View Meeting
+                    </Button>
+                  )}
+                  {notification.type === "lead_captured" && (
+                    <div className="flex space-x-2">
+                      <Button size="sm" className="text-sm bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 h-9 flex-1">
+                        💰 View Quote
+                      </Button>
+                      <Button size="sm" variant="outline" className="text-sm bg-slate-600 border-slate-500 text-slate-200 hover:bg-slate-500 px-4 py-2 h-9">
+                        📋 Details
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             );
