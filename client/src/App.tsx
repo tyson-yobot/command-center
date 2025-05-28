@@ -27,10 +27,10 @@ function Router() {
     <div className="min-h-screen bg-background">
       <Switch>
         <Route path="/">
-          <DesktopCommandCenter />
+          <ClientDashboard />
         </Route>
         <Route path="/admin">
-          <AdminConsole />
+          <DesktopCommandCenter />
         </Route>
         <Route path="/dashboard">
           <ClientDashboard />
