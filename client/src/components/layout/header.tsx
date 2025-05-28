@@ -34,7 +34,7 @@ export default function Header() {
       </div>
       
       {/* Command Center Title Bar */}
-      <div className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-b from-white via-gray-100 to-gray-400 border-b-4 border-gray-600 shadow-xl">
+      <div className="fixed top-20 left-0 right-0 z-40 bg-gradient-to-b from-white via-gray-100 to-gray-400 border-b-4 border-gray-600 shadow-xl">
         <div className="px-4 py-2">
           <h1 className="text-center text-3xl font-black tracking-tight drop-shadow-lg">
             <span className="bg-gradient-to-t from-black to-gray-500 bg-clip-text text-transparent font-extrabold">COMMAND CENTER</span>
