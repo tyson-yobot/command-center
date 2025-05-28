@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YoBot Command Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(45deg, #4f46e5, #06b6d4);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .breadcrumb {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .card {
+            background: rgba(30, 30, 60, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(79, 70, 229, 0.5);
+            box-shadow: 0 8px 32px rgba(79, 70, 229, 0.2);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .status-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .status-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .health-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .health-good { background: #10b981; }
+        .health-warning { background: #f59e0b; }
+        .health-error { background: #ef4444; }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4f46e5, #06b6d4);
+            transition: width 0.3s ease;
+        }
+
+        .pipeline-stage {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stage-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .stage-active { background: linear-gradient(45deg, #10b981, #059669); }
+        .stage-warning { background: linear-gradient(45deg, #f59e0b, #d97706); }
+        .stage-error { background: linear-gradient(45deg, #ef4444, #dc2626); }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-left: 3px solid;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .activity-success { border-left-color: #10b981; }
+        .activity-warning { border-left-color: #f59e0b; }
+        .activity-error { border-left-color: #ef4444; }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: #64748b;
+            min-width: 60px;
+        }
+
+        .confidence-meter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .confidence-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
+            transition: width 0.3s ease;
+        }
+
+        .alert-banner {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #4f46e5, #6366f1);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-top">
+            <div class="logo">
+                <div class="logo-icon">🤖</div>
+                <div>
+                    <h1>YoBot Command Center</h1>
+                    <div class="breadcrumb">
+                        <span>Dashboard</span> / <span>Automation Monitor</span>
+                    </div>
+                </div>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>ACTIVE & RESPONSIVE</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Critical Alerts -->
+        <div class="alert-banner">
+            ⚠️ <strong>System Alert:</strong> 3 workflows require immediate attention
+            <button class="btn btn-sm" style="margin-left: auto;">View Details</button>
+        </div>
+
+        <div class="grid">
+            <!-- Bot Health Monitor -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        🔋 Bot Health Monitor
+                    </div>
+                    <button class="btn btn-sm">Test Alert</button>
+                </div>
+                <div class="card-content">
+                    <div class="metric-grid">
+                        <div class="metric">
+                            <div class="metric-value" style="color: #10b981;">99.8%</div>
+                            <div class="metric-label">Uptime</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: #06b6d4;">247ms</div>
+                            <div class="metric-label">Avg Response</div>
+                        </div>
+                    </div>
+                    <div class="status-grid" style="margin-top: 1rem;">
+                        <div class="status-item">
+                            <div class="status-label">
+                                <div class="health-indicator health-good"></div>
+                                <span>Primary Bot</span>
+                            </div>
+                            <span style="color: #10b981;">Online</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-label">
+                                <div class="health-indicator health-warning"></div>
+                                <span>Backup Systems</span>
+                            </div>
+                            <span style="color: #f59e0b;">Standby</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-label">
+                                <div class="health-indicator health-good"></div>
+                                <span>Lambda Functions</span>
+                            </div>
+                            <span style="color: #10b981;">Healthy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Workflows -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        ⚡ Active Workflows
+                    </div>
+                    <span style="color: #06b6d4;">12 Running</span>
+                </div>
+                <div class="card-content">
+                    <div class="pipeline-stage">
+                        <div class="stage-icon stage-active">📋</div>
+                        <div style="flex: 1;">
+                            <div>Lead Qualification</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%;"></div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: #94a3b8;">Processing 47 leads</div>
+                        </div>
+                    </div>
+                    <div class="pipeline-stage">
+                        <div class="stage-icon stage-warning">⚠️</div>
+                        <div style="flex: 1;">
+                            <div>Email Campaigns</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%;"></div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: #f59e0b;">3 failed deliveries</div>
+                        </div>
+                    </div>
+                    <div class="pipeline-stage">
+                        <div class="stage-icon stage-active">📅</div>
+                        <div style="flex: 1;">
+                            <div>Meeting Scheduling</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 92%;"></div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: #94a3b8;">23 bookings today</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Health Status -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        🔌 API Health Status
+                    </div>
+                    <div style="color: #10b981;">All Systems Go</div>
+                </div>
+                <div class="card-content">
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <div class="status-label">
+                                <div class="health-indicator health-good"></div>
+                                <span>CRM Integration</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: #10b981;">Connected</span>
+                                <span style="font-size: 0.8rem; color: #64748b;">98ms</span>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-label">
+                                <div class="health-indicator health-good"></div>
+                                <span>Email Service</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: #10b981;">Connected</span>
+                                <span style="font-size: 0.8rem; color: #64748b;">156ms</span>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-label">
+                                <div class="health-indicator health-warning"></div>
+                                <span>SMS Gateway</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: #f59e0b;">Slow</span>
+                                <span style="font-size: 0.8rem; color: #64748b;">2.3s</span>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-label">
+                                <div class="health-indicator health-good"></div>
+                                <span>Make.com Webhooks</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: #10b981;">Connected</span>
+                                <span style="font-size: 0.8rem; color: #64748b;">89ms</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bot Intelligence Panel -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        🧠 Bot Intelligence
+                    </div>
+                    <div style="color: #06b6d4;">Learning Active</div>
+                </div>
+                <div class="card-content">
+                    <div class="confidence-meter">
+                        <span style="font-size: 0.9rem;">Confidence Score</span>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: 87%;"></div>
+                        </div>
+                        <span style="color: #10b981; font-weight: bold;">87%</span>
+                    </div>
+                    <div class="metric-grid" style="margin-top: 1rem;">
+                        <div class="metric">
+                            <div class="metric-value" style="color: #f59e0b;">12%</div>
+                            <div class="metric-label">Human Handoff</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: #10b981;">94%</div>
+                            <div class="metric-label">Response Accuracy</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(6, 182, 212, 0.1); border-radius: 8px; border: 1px solid rgba(6, 182, 212, 0.2);">
+                        <div style="font-size: 0.85rem; color: #06b6d4;">🎓 Training Status</div>
+                        <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.25rem;">Processing 156 new conversations for model improvement</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Activity Feed -->
+            <div class="card" style="grid-column: span 2;">
+                <div class="card-header">
+                    <div class="card-title">
+                        📊 Live Activity Feed
+                    </div>
+                    <button class="btn btn-sm">View All</button>
+                </div>
+                <div class="card-content">
+                    <div class="activity-item activity-success">
+                        <div class="activity-time">07:53</div>
+                        <div style="flex: 1;">
+                            <div><strong>Lead Captured</strong> - Sarah Johnson from TechCorp</div>
+                            <div style="font-size: 0.8rem; color: #94a3b8;">Submitted quote request for $15,000 website redesign</div>
+                        </div>
+                        <button class="btn btn-sm">View Quote</button>
+                    </div>
+                    <div class="activity-item activity-warning">
+                        <div class="activity-time">07:50</div>
+                        <div style="flex: 1;">
+                            <div><strong>Call Escalation</strong> - Mike Rodriguez</div>
+                            <div style="font-size: 0.8rem; color: #94a3b8;">Bot escalated call - requires human intervention</div>
+                        </div>
+                        <button class="btn btn-sm" style="background: linear-gradient(45deg, #ef4444, #dc2626);">Take Call</button>
+                    </div>
+                    <div class="activity-item activity-success">
+                        <div class="activity-time">07:47</div>
+                        <div style="flex: 1;">
+                            <div><strong>Meeting Booked</strong> - Alex Chen</div>
+                            <div style="font-size: 0.8rem; color: #94a3b8;">Discovery call scheduled for tomorrow at 2:00 PM</div>
+                        </div>
+                        <button class="btn btn-sm">View Calendar</button>
+                    </div>
+                    <div class="activity-item activity-success">
+                        <div class="activity-time">07:45</div>
+                        <div style="flex: 1;">
+                            <div><strong>Email Campaign</strong> - Follow-up sequence initiated</div>
+                            <div style="font-size: 0.8rem; color: #94a3b8;">Sent to 47 qualified leads in pipeline</div>
+                        </div>
+                        <button class="btn btn-sm">View Campaign</button>
+                    </div>
+                    <div class="activity-item activity-success">
+                        <div class="activity-time">07:42</div>
+                        <div style="flex: 1;">
+                            <div><strong>Qualification Complete</strong> - 12 new leads processed</div>
+                            <div style="font-size: 0.8rem; color: #94a3b8;">8 qualified, 4 requires follow-up</div>
+                        </div>
+                        <button class="btn btn-sm">View Pipeline</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Processing Speed & Queue -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        ⚡ Processing Speed
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="metric-grid">
+                        <div class="metric">
+                            <div class="metric-value" style="color: #06b6d4;">47</div>
+                            <div class="metric-label">Leads/Hour</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: #10b981;">23</div>
+                            <div class="metric-label">Meetings Booked</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="font-size: 0.9rem;">Queue Depth</span>
+                            <span style="color: #94a3b8; font-size: 0.8rem;">156 pending</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 68%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Real-time updates simulation
+        function updateMetrics() {
+            // Simulate real-time data updates
+            const confidenceBar = document.querySelector('.confidence-fill');
+            const newWidth = Math.random() * 20 + 75; // 75-95%
+            confidenceBar.style.width = newWidth + '%';
+            
+            // Update processing numbers
+            const leadsPerHour = document.querySelector('.metric-value');
+            const currentValue = parseInt(leadsPerHour.textContent);
+            const variation = Math.floor(Math.random() * 6) - 3; // -3 to +3
+            leadsPerHour.textContent = Math.max(40, currentValue + variation);
+        }
+
+        // Update every 5 seconds
+        setInterval(updateMetrics, 5000);
+
+        // Add click handlers for activity items
+        document.querySelectorAll('.activity-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.background = 'rgba(79, 70, 229, 0.1)';
+                setTimeout(() => {
+                    this.style.background = 'rgba(255, 255, 255, 0.03)';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
