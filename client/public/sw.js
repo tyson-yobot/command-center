@@ -34,6 +34,101 @@ const CACHE_FIRST_PATTERNS = [
   /\/assets\//
 ];
 
+// Push notification event handler
+self.addEventListener('push', (event) => {
+  console.log('[SW] Push notification received:', event);
+  
+  if (!event.data) return;
+  
+  try {
+    const data = event.data.json();
+    const { title, body, type, priority, actionUrl } = data;
+    
+    // Critical escalation notifications
+    const isCritical = type === 'call_escalation' || priority === 'critical';
+    
+    const options = {
+      body,
+      icon: '/icon-192.png',
+      badge: '/icon-192.png',
+      vibrate: isCritical ? [200, 100, 200, 100, 200] : [100, 50, 100],
+      requireInteraction: isCritical, // Keep notification visible until user interacts
+      persistent: isCritical,
+      silent: false,
+      tag: type,
+      data: {
+        url: actionUrl || '/mobile',
+        type,
+        priority
+      },
+      actions: isCritical ? [
+        {
+          action: 'take_call',
+          title: '📞 Take Call',
+          icon: '/icon-192.png'
+        },
+        {
+          action: 'view_details',
+          title: '👁️ View Details',
+          icon: '/icon-192.png'
+        }
+      ] : [
+        {
+          action: 'view',
+          title: 'View',
+          icon: '/icon-192.png'
+        }
+      ]
+    };
+    
+    event.waitUntil(
+      self.registration.showNotification(title, options)
+    );
+  } catch (error) {
+    console.error('[SW] Error handling push notification:', error);
+  }
+});
+
+// Notification click handler
+self.addEventListener('notificationclick', (event) => {
+  console.log('[SW] Notification click:', event);
+  
+  event.notification.close();
+  
+  const { action } = event;
+  const { url, type } = event.notification.data || {};
+  
+  let targetUrl = url || '/mobile';
+  
+  if (action === 'take_call') {
+    targetUrl = '/mobile?action=take_call';
+  } else if (action === 'view_details') {
+    targetUrl = '/mobile?action=view_details';
+  }
+  
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then((clientList) => {
+        // Try to focus existing window
+        for (const client of clientList) {
+          if (client.url.includes('/mobile') && 'focus' in client) {
+            client.postMessage({
+              type: 'NOTIFICATION_CLICKED',
+              action,
+              notificationType: type
+            });
+            return client.focus();
+          }
+        }
+        
+        // Open new window if none exists
+        if (clients.openWindow) {
+          return clients.openWindow(targetUrl);
+        }
+      })
+  );
+});
+
 self.addEventListener('install', (event) => {
   console.log('[SW] Installing service worker...');
   
