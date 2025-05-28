@@ -15,7 +15,7 @@ import ragSearchRouter from "./ragSearch";
 import formToVoiceRouter from "./formToVoice";
 import hubspotAuthRouter from "./hubspotAuth";
 import voiceControlRouter from "./voiceControl";
-import { setupWebSocket } from "./websocket";
+import { setupWebSocket, broadcastUpdate } from "./websocket";
 import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
 import airtableRouter from "./airtable";
@@ -157,7 +157,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   setInterval(() => {
     // Simulate metrics updates every 30 seconds
     const randomMetric = Math.floor(Math.random() * 10);
-    broadcast({
+    broadcastUpdate({
       type: 'metrics_update',
       data: {
         callsToday: 247 + randomMetric,

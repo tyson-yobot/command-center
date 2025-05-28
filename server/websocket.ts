@@ -94,3 +94,10 @@ export const broadcastVoiceCommand = (command: string, user: string) => {
 
 // Get current metrics
 export const getCurrentMetrics = () => metrics;
+
+// Broadcast general updates to all clients
+export const broadcastUpdate = (data: any) => {
+  if (io) {
+    io.emit('update', data);
+  }
+};
