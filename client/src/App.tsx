@@ -26,12 +26,66 @@ function Router() {
         <Route path="/">
           <DesktopCommandCenter />
         </Route>
-        <Route path="/mobile" component={Dashboard} />
-        <Route path="/mobile/conversations" component={Conversations} />
-        <Route path="/mobile/controls" component={Controls} />
-        <Route path="/mobile/crm" component={CRM} />
-        <Route path="/mobile/reports" component={Reports} />
-        <Route path="/mobile/scanner" component={Scanner} />
+        <Route path="/mobile">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <Header />
+            <main className="pt-36 pb-20">
+              <Dashboard />
+            </main>
+            <BottomNav />
+            <InstallPrompt />
+          </div>
+        </Route>
+        <Route path="/mobile/conversations">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <Header />
+            <main className="pt-36 pb-20">
+              <Conversations />
+            </main>
+            <BottomNav />
+            <InstallPrompt />
+          </div>
+        </Route>
+        <Route path="/mobile/controls">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <Header />
+            <main className="pt-36 pb-20">
+              <Controls />
+            </main>
+            <BottomNav />
+            <InstallPrompt />
+          </div>
+        </Route>
+        <Route path="/mobile/crm">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <Header />
+            <main className="pt-36 pb-20">
+              <CRM />
+            </main>
+            <BottomNav />
+            <InstallPrompt />
+          </div>
+        </Route>
+        <Route path="/mobile/reports">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <Header />
+            <main className="pt-36 pb-20">
+              <Reports />
+            </main>
+            <BottomNav />
+            <InstallPrompt />
+          </div>
+        </Route>
+        <Route path="/mobile/scanner">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <Header />
+            <main className="pt-36 pb-20">
+              <Scanner />
+            </main>
+            <BottomNav />
+            <InstallPrompt />
+          </div>
+        </Route>
         <Route path="/mobile/*">
           <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
             <Header />
