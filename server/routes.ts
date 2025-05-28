@@ -15,6 +15,7 @@ import ragUploadRouter from "./ragUpload";
 import ragSearchRouter from "./ragSearch";
 import formToVoiceRouter from "./formToVoice";
 import hubspotAuthRouter from "./hubspotAuth";
+import voiceControlRouter from "./voiceControl";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -434,6 +435,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // HubSpot CRM integration
   app.use('/api/hubspot', hubspotAuthRouter);
+
+  // Voice Control integration
+  app.use('/api/voice', voiceControlRouter);
 
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
