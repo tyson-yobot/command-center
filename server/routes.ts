@@ -10,6 +10,7 @@ import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
+import aiChatRouter from "./aiChat";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -416,6 +417,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Google Calendar integration
   app.use('/api/calendar', calendarRouter);
+
+  // AI Chat integration
+  app.use('/api/ai', aiChatRouter);
 
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
