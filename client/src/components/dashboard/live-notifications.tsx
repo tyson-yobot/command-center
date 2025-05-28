@@ -10,6 +10,7 @@ import type { Notification } from "@shared/schema";
 
 export default function LiveNotifications() {
   const { toast } = useToast();
+  const [filter, setFilter] = useState<"all" | "escalations" | "meetings">("all");
 
   const { data: notifications = [], isLoading } = useQuery<Notification[]>({
     queryKey: ["/api/notifications"],
@@ -79,6 +80,17 @@ export default function LiveNotifications() {
   };
 
   const unreadNotifications = notifications.filter(n => !n.isRead);
+  
+  const filteredNotifications = unreadNotifications.filter(notification => {
+    switch (filter) {
+      case "escalations":
+        return notification.type === "call_escalation";
+      case "meetings":
+        return notification.type === "meeting_booked";
+      default:
+        return true;
+    }
+  });
 
   if (isLoading) {
     return (
@@ -116,9 +128,37 @@ export default function LiveNotifications() {
           <div className="flex items-center space-x-2">
             <div className="w-2 h-2 bg-green-500 rounded-full notification-dot" />
             <Badge variant="secondary" className="text-xs">
-              {unreadNotifications.length} new
+              {filteredNotifications.length} new
             </Badge>
           </div>
+        </div>
+        
+        {/* Filter Buttons */}
+        <div className="flex items-center justify-center space-x-1 mt-4">
+          <Button
+            size="sm"
+            variant={filter === "all" ? "default" : "outline"}
+            onClick={() => setFilter("all")}
+            className="text-xs px-3 py-1"
+          >
+            🔔 All
+          </Button>
+          <Button
+            size="sm"
+            variant={filter === "escalations" ? "default" : "outline"}
+            onClick={() => setFilter("escalations")}
+            className="text-xs px-3 py-1"
+          >
+            📣 Escalations Only
+          </Button>
+          <Button
+            size="sm"
+            variant={filter === "meetings" ? "default" : "outline"}
+            onClick={() => setFilter("meetings")}
+            className="text-xs px-3 py-1"
+          >
+            📅 Meetings Only
+          </Button>
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -131,15 +171,15 @@ export default function LiveNotifications() {
             </p>
           </div>
         ) : (
-          unreadNotifications.slice(0, 5).map((notification) => {
+          filteredNotifications.slice(0, 5).map((notification) => {
             const Icon = getNotificationIcon(notification.type);
             const style = getNotificationStyle(notification.type);
             
             return (
               <div
                 key={notification.id}
-                className={`flex items-start space-x-3 p-3 ${style.bgColor} rounded-lg border-l-4 ${style.borderColor} ${
-                  notification.type === "call_escalation" ? "animate-pulse" : ""
+                className={`flex items-start space-x-3 p-3 ${style.bgColor} rounded-lg border-l-4 ${style.borderColor} cursor-pointer hover:shadow-md transition-all duration-200 active:scale-98 ${
+                  notification.type === "call_escalation" ? "animate-pulse hover:bg-red-100" : "hover:bg-gray-50"
                 }`}
               >
                 <div className={`w-8 h-8 ${style.iconBg} rounded-lg flex items-center justify-center flex-shrink-0`}>

@@ -81,7 +81,7 @@ export default function ConversationLog() {
             return (
               <div
                 key={conversation.id}
-                className="conversation-item p-3 rounded-lg border border-border cursor-pointer touch-feedback"
+                className="conversation-item p-3 rounded-lg border border-border cursor-pointer touch-feedback hover:bg-gray-50 hover:shadow-md transition-all duration-200 active:scale-98 active:bg-gray-100"
               >
                 <div className="flex items-start space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center flex-shrink-0">
