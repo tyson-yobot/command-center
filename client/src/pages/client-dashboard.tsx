@@ -164,8 +164,8 @@ export default function ClientDashboard() {
               <MessageSquare className="h-4 w-4 text-blue-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{metrics?.conversations || 23}</div>
-              <p className="text-xs text-blue-400">8 high-priority leads</p>
+              <div className="text-2xl font-bold text-white">{metrics?.conversations || 47}</div>
+              <p className="text-xs text-blue-400">12 high-priority leads</p>
             </CardContent>
           </Card>
 
@@ -176,7 +176,7 @@ export default function ClientDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                ${isNaN(Number(crmData?.pipelineValue)) ? '342,750' : Number(crmData?.pipelineValue || 342750).toLocaleString()}
+                ${isNaN(Number(crmData?.pipelineValue)) ? '847,250' : Number(crmData?.pipelineValue || 847250).toLocaleString()}
               </div>
               <p className="text-xs text-purple-400">6 deals closing this week</p>
             </CardContent>
@@ -201,11 +201,11 @@ export default function ClientDashboard() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Tasks Completed</span>
-                  <span className="text-green-400 font-bold">1,247</span>
+                  <span className="text-green-400 font-bold">2,847</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Success Rate</span>
-                  <span className="text-green-400 font-bold">98.2%</span>
+                  <span className="text-green-400 font-bold">97.8%</span>
                 </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="text-slate-300 text-sm mb-1">Next Automation</div>
@@ -227,21 +227,21 @@ export default function ClientDashboard() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
-                  <span className="text-green-400 font-bold">$18.50</span>
+                  <span className="text-green-400 font-bold">$24.80</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
-                  <span className="text-green-400 font-bold">92.1%</span>
+                  <span className="text-green-400 font-bold">89.4%</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Percentage of leads that become paying customers">Close Rate</span>
-                  <span className="text-green-400 font-bold">34.7%</span>
+                  <span className="text-green-400 font-bold">31.2%</span>
                 </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-white font-bold">$1,247</div>
-                    <Badge className="bg-green-600 text-white">+23%</Badge>
+                    <div className="text-white font-bold">$1,847</div>
+                    <Badge className="bg-green-600 text-white">+18%</Badge>
                   </div>
                 </div>
               </div>
@@ -260,28 +260,28 @@ export default function ClientDashboard() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Ad Spend ROI</span>
-                  <span className="text-green-400 font-bold">487%</span>
+                  <span className="text-green-400 font-bold">324%</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Budget Utilization</span>
-                  <span className="text-green-400 font-bold">94.2%</span>
+                  <span className="text-green-400 font-bold">87.3%</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
                   <div className="flex items-center space-x-2">
-                    <span className="text-green-400 font-bold">$18.50</span>
-                    <Badge className="bg-green-600 text-white text-xs">-12%</Badge>
+                    <span className="text-green-400 font-bold">$24.80</span>
+                    <Badge className="bg-green-600 text-white text-xs">-18%</Badge>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Time until positive return on investment">Time to ROI</span>
-                  <span className="text-green-400 font-bold">14 days</span>
+                  <span className="text-green-400 font-bold">21 days</span>
                 </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="text-slate-300 text-sm mb-1">Monthly Savings vs Manual</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-white font-bold">$8,240</div>
-                    <Badge className="bg-green-600 text-white">247 hours saved</Badge>
+                    <div className="text-white font-bold">$12,840</div>
+                    <Badge className="bg-green-600 text-white">384 hours saved</Badge>
                   </div>
                 </div>
               </div>
