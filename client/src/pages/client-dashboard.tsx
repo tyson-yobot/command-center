@@ -227,7 +227,7 @@ export default function ClientDashboard() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
-                  <span className="text-green-400 font-bold">$24.80</span>
+                  <span className="text-green-400 font-bold">$4.20</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
@@ -269,7 +269,7 @@ export default function ClientDashboard() {
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
                   <div className="flex items-center space-x-2">
-                    <span className="text-green-400 font-bold">$24.80</span>
+                    <span className="text-green-400 font-bold">$4.20</span>
                     <Badge className="bg-green-600 text-white text-xs">-18%</Badge>
                   </div>
                 </div>
