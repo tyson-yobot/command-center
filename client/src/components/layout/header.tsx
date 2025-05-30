@@ -36,16 +36,16 @@ export default function Header() {
                 <Sun className="h-4 w-4" />
               )}
             </Button>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2" title={isConnected ? 'System Online' : 'Connection Lost'}>
               <div 
                 className={`w-3 h-3 rounded-full ${
-                  isConnected ? 'bg-green-500 animate-pulse shadow-lg shadow-green-500/50' : 'bg-red-500 animate-ping shadow-lg shadow-red-500/50'
+                  isConnected ? 'bg-green-400 status-active' : 'bg-amber-400 animate-pulse'
                 }`}
               />
-              <span className={`text-sm font-semibold ${
-                isConnected ? 'text-green-400' : 'text-red-400'
+              <span className={`text-xs font-medium ${
+                isConnected ? 'text-green-400' : 'text-amber-400'
               }`}>
-                {isConnected ? '🟢 LIVE' : '🔴 OFFLINE'}
+                {isConnected ? 'Online' : 'Reconnecting'}
               </span>
             </div>
           </div>

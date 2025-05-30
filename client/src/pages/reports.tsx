@@ -1,3 +1,4 @@
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,15 +14,28 @@ import {
   Activity,
   Phone,
   Users,
-  DollarSign
+  DollarSign,
+  Filter,
+  LineChart,
+  Copy,
+  Share2,
+  ChevronDown
 } from "lucide-react";
 import type { Metrics } from "@shared/schema";
 
 export default function Reports() {
+  const [selectedFilter, setSelectedFilter] = React.useState('All');
+  const [chartView, setChartView] = React.useState<'bar' | 'line'>('bar');
+  const [expandedCard, setExpandedCard] = React.useState<string | null>(null);
+  
   const { data: metrics, isLoading } = useQuery<Metrics>({
     queryKey: ["/api/metrics"],
     refetchInterval: 30000,
   });
+
+  const copyToClipboard = (value: string, title: string) => {
+    navigator.clipboard.writeText(`${title}: ${value}`);
+  };
 
   if (isLoading) {
     return (
@@ -164,42 +178,113 @@ export default function Reports() {
         })}
       </div>
 
-      {/* Performance Insights */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+      {/* 7-Day Trend Summary */}
+      <Card className="bg-white/5 backdrop-blur-sm border border-white/20">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-white flex items-center text-sm">
+            <TrendingUp className="w-4 h-4 mr-2 text-blue-400" />
+            7-Day Trend Summary
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="grid grid-cols-1 gap-3 text-xs">
+            <div className="flex justify-between items-center p-2 rounded bg-slate-800/50">
+              <span className="text-slate-300">Average Daily Calls</span>
+              <div className="flex items-center space-x-2">
+                <span className="text-white font-bold">189</span>
+                <span className="text-green-400 font-medium">↗ +17%</span>
+              </div>
+            </div>
+            <div className="flex justify-between items-center p-2 rounded bg-slate-800/50">
+              <span className="text-slate-300">Conversion Rate</span>
+              <div className="flex items-center space-x-2">
+                <span className="text-white font-bold">36%</span>
+                <span className="text-green-400 font-medium">↗ +12%</span>
+              </div>
+            </div>
+            <div className="flex justify-between items-center p-2 rounded bg-slate-800/50">
+              <span className="text-slate-300">Response Time</span>
+              <div className="flex items-center space-x-2">
+                <span className="text-white font-bold">1.2s</span>
+                <span className="text-amber-400 font-medium">↘ -5%</span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Enhanced Performance Insights */}
+      <Card className="bg-white/5 backdrop-blur-sm border border-white/20">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center space-x-2 text-white">
             <Activity className="h-5 w-5" />
             <span>Performance Insights</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+        <CardContent className="space-y-3">
+          {/* Critical Alert */}
+          <div className="p-3 bg-red-900/20 border border-red-800 rounded-lg insight-card">
             <div className="flex items-start space-x-3">
-              <div className="w-8 h-8 bg-green-100 dark:bg-green-900/40 rounded-lg flex items-center justify-center">
-                <TrendingUp className="h-4 w-4 text-green-600" />
+              <div className="w-6 h-6 bg-red-900/40 rounded-lg flex items-center justify-center">
+                <TrendingDown className="h-3 w-3 text-red-400" />
               </div>
               <div>
-                <h4 className="font-medium text-green-900 dark:text-green-100">
-                  Strong Performance Today
+                <h4 className="font-medium text-red-300 text-sm">
+                  ⚠️ Failed Calls Alert
                 </h4>
-                <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-                  Your bot's conversion rate is 15% higher than average. Great work on the recent optimizations!
+                <p className="text-xs text-red-400 mt-1">
+                  12 failed calls detected (-3% trend). Most failures during 3-4 PM. Consider bot capacity scaling.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+          {/* Success Insight */}
+          <div className="p-3 bg-green-900/20 border border-green-800 rounded-lg insight-card">
             <div className="flex items-start space-x-3">
-              <div className="w-8 h-8 bg-yellow-100 dark:bg-yellow-900/40 rounded-lg flex items-center justify-center">
-                <Calendar className="h-4 w-4 text-yellow-600" />
+              <div className="w-6 h-6 bg-green-900/40 rounded-lg flex items-center justify-center">
+                <DollarSign className="h-3 w-3 text-green-400" />
               </div>
               <div>
-                <h4 className="font-medium text-yellow-900 dark:text-yellow-100">
-                  Peak Hours Identified
+                <h4 className="font-medium text-green-300 text-sm">
+                  📈 Revenue Impact
                 </h4>
-                <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                  Most leads are captured between 10 AM - 2 PM. Consider optimizing bot responses during these hours.
+                <p className="text-xs text-green-400 mt-1">
+                  Your optimizations generated an estimated $12,400 additional revenue this week.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Optimization Opportunity */}
+          <div className="p-3 bg-amber-900/20 border border-amber-800 rounded-lg insight-card">
+            <div className="flex items-start space-x-3">
+              <div className="w-6 h-6 bg-amber-900/40 rounded-lg flex items-center justify-center">
+                <Activity className="h-3 w-3 text-amber-400" />
+              </div>
+              <div>
+                <h4 className="font-medium text-amber-300 text-sm">
+                  Optimization Opportunity
+                </h4>
+                <p className="text-xs text-amber-400 mt-1">
+                  12 failed calls detected. Consider adjusting response templates during low-conversion hours.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Trend Alert */}
+          <div className="p-3 bg-blue-900/20 border border-blue-800 rounded-lg insight-card">
+            <div className="flex items-start space-x-3">
+              <div className="w-6 h-6 bg-blue-900/40 rounded-lg flex items-center justify-center">
+                <TrendingUp className="h-3 w-3 text-blue-400" />
+              </div>
+              <div>
+                <h4 className="font-medium text-blue-300 text-sm">
+                  Trend Alert
+                </h4>
+                <p className="text-xs text-blue-400 mt-1">
+                  New leads up 15% this week. Current bot capacity can handle 23% more volume.
                 </p>
               </div>
             </div>
