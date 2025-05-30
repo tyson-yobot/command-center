@@ -192,14 +192,14 @@ export default function Reports() {
               <span className="text-slate-300">Average Daily Calls</span>
               <div className="flex items-center space-x-2">
                 <span className="text-white font-bold">189</span>
-                <span className="text-green-400 font-medium">↗ +17%</span>
+                <span className="text-green-400 font-medium trend-positive">↗ +17%</span>
               </div>
             </div>
             <div className="flex justify-between items-center p-2 rounded bg-slate-800/50">
               <span className="text-slate-300">Conversion Rate</span>
               <div className="flex items-center space-x-2">
                 <span className="text-white font-bold">36%</span>
-                <span className="text-green-400 font-medium">↗ +12%</span>
+                <span className="text-green-400 font-medium trend-positive">↗ +12%</span>
               </div>
             </div>
             <div className="flex justify-between items-center p-2 rounded bg-slate-800/50">
@@ -221,18 +221,18 @@ export default function Reports() {
             <span>Performance Insights</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-4">
           {/* Critical Alert */}
-          <div className="p-3 bg-red-900/20 border border-red-800 rounded-lg insight-card">
+          <div className="p-4 bg-red-900/20 border border-red-800 rounded-lg insight-card">
             <div className="flex items-start space-x-3">
-              <div className="w-6 h-6 bg-red-900/40 rounded-lg flex items-center justify-center">
-                <TrendingDown className="h-3 w-3 text-red-400" />
+              <div className="w-8 h-8 bg-red-900/40 rounded-lg flex items-center justify-center flex-shrink-0">
+                <TrendingDown className="h-4 w-4 text-red-400" />
               </div>
-              <div>
-                <h4 className="font-medium text-red-300 text-sm">
+              <div className="flex-1">
+                <h4 className="font-semibold text-red-200 text-base mb-2">
                   ⚠️ Failed Calls Alert
                 </h4>
-                <p className="text-xs text-red-400 mt-1">
+                <p className="text-sm text-red-300 leading-relaxed">
                   12 failed calls detected (-3% trend). Most failures during 3-4 PM. Consider bot capacity scaling.
                 </p>
               </div>
@@ -240,16 +240,16 @@ export default function Reports() {
           </div>
 
           {/* Success Insight */}
-          <div className="p-3 bg-green-900/20 border border-green-800 rounded-lg insight-card">
+          <div className="p-4 bg-green-900/20 border border-green-800 rounded-lg insight-card">
             <div className="flex items-start space-x-3">
-              <div className="w-6 h-6 bg-green-900/40 rounded-lg flex items-center justify-center">
-                <DollarSign className="h-3 w-3 text-green-400" />
+              <div className="w-8 h-8 bg-green-900/40 rounded-lg flex items-center justify-center flex-shrink-0">
+                <DollarSign className="h-4 w-4 text-green-400" />
               </div>
-              <div>
-                <h4 className="font-medium text-green-300 text-sm">
+              <div className="flex-1">
+                <h4 className="font-semibold text-green-200 text-base mb-2">
                   📈 Revenue Impact
                 </h4>
-                <p className="text-xs text-green-400 mt-1">
+                <p className="text-sm text-green-300 leading-relaxed">
                   Your optimizations generated an estimated $12,400 additional revenue this week.
                 </p>
               </div>
@@ -257,33 +257,33 @@ export default function Reports() {
           </div>
 
           {/* Optimization Opportunity */}
-          <div className="p-3 bg-amber-900/20 border border-amber-800 rounded-lg insight-card">
+          <div className="p-4 bg-amber-900/20 border border-amber-800 rounded-lg insight-card">
             <div className="flex items-start space-x-3">
-              <div className="w-6 h-6 bg-amber-900/40 rounded-lg flex items-center justify-center">
-                <Activity className="h-3 w-3 text-amber-400" />
+              <div className="w-8 h-8 bg-amber-900/40 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Activity className="h-4 w-4 text-amber-400" />
               </div>
-              <div>
-                <h4 className="font-medium text-amber-300 text-sm">
+              <div className="flex-1">
+                <h4 className="font-semibold text-amber-200 text-base mb-2">
                   Optimization Opportunity
                 </h4>
-                <p className="text-xs text-amber-400 mt-1">
-                  12 failed calls detected. Consider adjusting response templates during low-conversion hours.
+                <p className="text-sm text-amber-300 leading-relaxed">
+                  Consider adjusting response templates during low-conversion hours for better results.
                 </p>
               </div>
             </div>
           </div>
 
           {/* Trend Alert */}
-          <div className="p-3 bg-blue-900/20 border border-blue-800 rounded-lg insight-card">
+          <div className="p-4 bg-blue-900/20 border border-blue-800 rounded-lg insight-card">
             <div className="flex items-start space-x-3">
-              <div className="w-6 h-6 bg-blue-900/40 rounded-lg flex items-center justify-center">
-                <TrendingUp className="h-3 w-3 text-blue-400" />
+              <div className="w-8 h-8 bg-blue-900/40 rounded-lg flex items-center justify-center flex-shrink-0">
+                <TrendingUp className="h-4 w-4 text-blue-400" />
               </div>
-              <div>
-                <h4 className="font-medium text-blue-300 text-sm">
+              <div className="flex-1">
+                <h4 className="font-semibold text-blue-200 text-base mb-2">
                   Trend Alert
                 </h4>
-                <p className="text-xs text-blue-400 mt-1">
+                <p className="text-sm text-blue-300 leading-relaxed">
                   New leads up 15% this week. Current bot capacity can handle 23% more volume.
                 </p>
               </div>
