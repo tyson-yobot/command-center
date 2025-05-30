@@ -4,12 +4,15 @@ import BotControls from "@/components/dashboard/bot-controls";
 import LiveNotifications from "@/components/dashboard/live-notifications";
 import ConversationLog from "@/components/dashboard/conversation-log";
 import CrmSnapshot from "@/components/dashboard/crm-snapshot";
-import { ChevronDown, AlertTriangle, Activity, TrendingUp, Users, Gauge } from "lucide-react";
+import { ChevronDown, AlertTriangle, Activity, TrendingUp, Users, Gauge, Calendar, Phone, MessageSquare, FileText, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import React from 'react';
 
 export default function Dashboard() {
+  const [selectedTier, setSelectedTier] = React.useState('All');
+  
   const testAlert = async () => {
     // Trigger critical alert overlay directly
     const alertEvent = new CustomEvent('message', {
@@ -32,6 +35,25 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white px-4 space-y-6">
       <SearchBar />
+      
+      {/* Client Tier Filter */}
+      <div className="flex items-center space-x-1">
+        <span className="text-white text-xs font-medium">Tier:</span>
+        {['All', 'Enterprise', 'SMB', 'Internal'].map((tier) => (
+          <Button
+            key={tier}
+            size="sm"
+            variant={selectedTier === tier ? "default" : "outline"}
+            className={`text-xs px-2 py-1 ${selectedTier === tier 
+              ? "bg-blue-600 hover:bg-blue-700 text-white" 
+              : "bg-white/10 border-white/20 text-white hover:bg-white/20"
+            }`}
+            onClick={() => setSelectedTier(tier)}
+          >
+            {tier}
+          </Button>
+        ))}
+      </div>
       
       {/* Daily Totals Summary Banner */}
       <Card className="bg-blue-600/90 backdrop-blur-sm border border-blue-400/30">
@@ -191,6 +213,117 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Escalation Alerts (Condensed) */}
+      <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-white flex items-center text-sm">
+            <AlertTriangle className="w-4 h-4 mr-2 text-red-400" />
+            Priority Alerts
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between bg-red-900/40 rounded p-2">
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                <span className="text-red-100 text-xs">🔥 Hot Lead - Acme Corp</span>
+              </div>
+              <span className="text-red-300 text-xs">2m ago</span>
+            </div>
+            <div className="flex items-center justify-between bg-yellow-900/40 rounded p-2">
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                <span className="text-yellow-100 text-xs">🟡 Follow-up Due - TechStart</span>
+              </div>
+              <span className="text-yellow-300 text-xs">15m ago</span>
+            </div>
+            <div className="flex items-center justify-between bg-red-900/60 rounded p-2">
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
+                <span className="text-red-100 text-xs">🔴 Critical Failure - Email Bot</span>
+              </div>
+              <span className="text-red-300 text-xs">⏱️ 2m overdue</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Conversation Analytics (Mini Version) */}
+      <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-white flex items-center text-sm">
+            <MessageSquare className="w-4 h-4 mr-2 text-blue-400" />
+            Performance Insights
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div>
+              <div className="text-green-400 font-bold text-sm">87% 😊</div>
+              <div className="text-slate-300 text-xs">Sentiment</div>
+            </div>
+            <div>
+              <div className="text-blue-400 font-bold text-sm">4m 32s</div>
+              <div className="text-slate-300 text-xs">Avg Call</div>
+            </div>
+            <div>
+              <div className="text-green-400 font-bold text-sm">91.5% ✅</div>
+              <div className="text-slate-300 text-xs">Resolution</div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Smart Calendar (Compact) */}
+      <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-white flex items-center text-sm">
+            <Calendar className="w-4 h-4 mr-2 text-purple-400" />
+            Today's Schedule
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="flex space-x-3 overflow-x-auto pb-2">
+            <div className="flex-shrink-0 bg-blue-900/40 rounded p-2 min-w-[140px]">
+              <div className="text-blue-300 text-xs font-medium">📞 2:00 PM</div>
+              <div className="text-white text-xs">Demo - Acme</div>
+              <Badge className="bg-blue-600 text-white text-xs mt-1">Join</Badge>
+            </div>
+            <div className="flex-shrink-0 bg-green-900/40 rounded p-2 min-w-[140px]">
+              <div className="text-green-300 text-xs font-medium">🗓️ 3:30 PM</div>
+              <div className="text-white text-xs">Follow-up - TechStart</div>
+              <Badge className="bg-green-600 text-white text-xs mt-1">Prepare</Badge>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Live Activity Feed */}
+      <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-white flex items-center text-sm">
+            <Activity className="w-4 h-4 mr-2 text-green-400" />
+            Live Activity
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-green-300 text-xs">🟢 New lead – Acme Corp</span>
+              <span className="text-slate-400 text-xs">now</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-blue-300 text-xs">📅 Meeting booked – TechStart</span>
+              <span className="text-slate-400 text-xs">5m ago</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-purple-300 text-xs">🧾 Quote sent – Innovate LLC</span>
+              <span className="text-slate-400 text-xs">12m ago</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <BotControls />
       <LiveNotifications />
       
@@ -219,14 +352,47 @@ export default function Dashboard() {
         </div>
       </div>
       
+      {/* Quote Snapshot (Stats Only) */}
+      <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-white flex items-center text-sm">
+            <FileText className="w-4 h-4 mr-2 text-green-400" />
+            Quote Performance
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div>
+              <div className="text-white font-bold text-sm">4</div>
+              <div className="text-slate-300 text-xs">📄 Today</div>
+            </div>
+            <div>
+              <div className="text-green-400 font-bold text-sm">$8.5K</div>
+              <div className="text-slate-300 text-xs">💰 Avg</div>
+            </div>
+            <div>
+              <div className="text-green-400 font-bold text-sm">52%</div>
+              <div className="text-slate-300 text-xs">🟩 Win Rate</div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <ConversationLog />
       <CrmSnapshot />
       
-      {/* Subtle scroll indicator */}
-      <div className="flex justify-center py-4 opacity-50">
-        <div className="flex flex-col items-center space-y-1 text-slate-400">
-          <ChevronDown className="h-4 w-4 animate-bounce" />
-          <span className="text-xs">Scroll for more</span>
+      {/* System Status Footer */}
+      <div className="flex justify-center py-4">
+        <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2">
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-green-400 text-xs font-medium">🟢 Online</span>
+          </div>
+          <div className="w-px h-4 bg-white/20"></div>
+          <div className="flex flex-col items-center space-y-1 text-slate-400">
+            <ChevronDown className="h-3 w-3 animate-bounce" />
+            <span className="text-xs">More</span>
+          </div>
         </div>
       </div>
     </div>
