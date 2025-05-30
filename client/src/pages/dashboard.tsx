@@ -33,6 +33,28 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white px-4 space-y-6">
       <SearchBar />
       
+      {/* Daily Totals Summary Banner */}
+      <Card className="bg-blue-600/90 backdrop-blur-sm border border-blue-400/30">
+        <CardContent className="p-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-white font-semibold text-sm">📅 Today's Totals</h3>
+              <div className="flex items-center space-x-4 text-xs text-blue-100 mt-1">
+                <span>🧠 AI Tasks: 58</span>
+                <span>💬 Conversations: 47</span>
+                <span>✅ Automations: 182</span>
+              </div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-bold">
+                93%
+              </div>
+              <span className="text-xs text-blue-100 mt-1">Health</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      
       {/* System Alerts for Mobile */}
       <Card className="bg-red-600/90 backdrop-blur-sm border border-red-400/30">
         <CardContent className="p-3">
