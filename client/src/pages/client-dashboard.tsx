@@ -178,9 +178,9 @@ export default function ClientDashboard() {
               </div>
               
               <div className="flex items-center space-x-3">
-                <div className={`w-3 h-3 rounded-full ${bot?.status === 'active' ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                <div className={`w-3 h-3 rounded-full ${bot?.status === 'active' ? 'bg-green-400 status-active' : 'bg-amber-400'}`}></div>
                 <span className="text-white text-sm">
-                  Bot Status: {bot?.status === 'active' ? 'Online' : 'Offline'}
+                  Bot Status: {bot?.status === 'active' ? 'Online' : 'Standby'}
                 </span>
               </div>
             </div>

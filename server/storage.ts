@@ -89,6 +89,9 @@ export class MemStorage implements IStorage {
       status: "active",
       tone: "professional",
       routingMode: "auto-assign",
+      hoursSaved: 142,
+      revenueGenerated: 847250,
+      conversations: 89,
       createdAt: new Date(),
     };
     this.bots.set(1, defaultBot);

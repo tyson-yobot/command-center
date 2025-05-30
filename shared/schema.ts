@@ -23,6 +23,9 @@ export const bots = pgTable("bots", {
   status: text("status").notNull().default("active"), // active, paused, offline
   tone: text("tone").notNull().default("professional"), // professional, friendly, casual, formal
   routingMode: text("routing_mode").notNull().default("auto-assign"),
+  hoursSaved: integer("hours_saved").default(0),
+  revenueGenerated: integer("revenue_generated").default(0),
+  conversations: integer("conversations").default(0),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
