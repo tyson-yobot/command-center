@@ -11,16 +11,20 @@ import {
 } from "lucide-react";
 import type { Notification } from "@shared/schema";
 
-const navItems = [
-  { path: "/", label: "Dashboard", icon: BarChart3 },
-  { path: "/conversations", label: "Chats", icon: MessageCircle },
-  { path: "/scanner", label: "Scan", icon: Scan },
-  { path: "/crm", label: "CRM", icon: Users },
-  { path: "/reports", label: "Reports", icon: FileText },
-];
-
 export default function BottomNav() {
   const [location] = useLocation();
+  
+  // Determine if we're in mobile mode and adjust paths accordingly
+  const isMobile = location.startsWith('/mobile');
+  const basePath = isMobile ? '/mobile' : '';
+  
+  const navItems = [
+    { path: isMobile ? "/mobile" : "/", label: "Dashboard", icon: BarChart3 },
+    { path: `${basePath}/conversations`, label: "Chats", icon: MessageCircle },
+    { path: `${basePath}/scanner`, label: "Scan", icon: Scan },
+    { path: `${basePath}/crm`, label: "CRM", icon: Users },
+    { path: `${basePath}/reports`, label: "Reports", icon: FileText },
+  ];
   
   // Get unread notifications count for chat badge
   const { data: notifications } = useQuery<Notification[]>({

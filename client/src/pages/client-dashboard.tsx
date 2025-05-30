@@ -229,7 +229,7 @@ export default function ClientDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                ${isNaN(Number(crmData?.pipelineValue)) ? '847,250' : Number(crmData?.pipelineValue || 847250).toLocaleString()}
+                {crmData?.pipelineValue || '$847K'}
               </div>
               <p className="text-xs text-purple-400">6 deals closing this week</p>
             </CardContent>
