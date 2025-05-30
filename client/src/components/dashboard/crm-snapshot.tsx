@@ -71,6 +71,7 @@ export default function CrmSnapshot() {
       description: "Requiring immediate attention",
       icon: AlertCircle,
       color: "text-red-600",
+      highlight: false,
     },
     {
       title: "Follow-ups Due",
@@ -78,6 +79,7 @@ export default function CrmSnapshot() {
       description: "Scheduled for today",
       icon: Clock,
       color: "text-yellow-600",
+      highlight: false,
     },
     {
       title: "Pipeline Value",
