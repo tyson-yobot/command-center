@@ -64,6 +64,8 @@ export default function Reports() {
       icon: Phone,
       color: "text-blue-600",
       bgColor: "bg-blue-100 dark:bg-blue-900/20",
+      trend: "up",
+      type: "metric-success"
     },
     {
       title: "Conversions",
@@ -72,6 +74,8 @@ export default function Reports() {
       icon: TrendingUp,
       color: "text-green-600",
       bgColor: "bg-green-100 dark:bg-green-900/20",
+      trend: "up",
+      type: "metric-success"
     },
     {
       title: "New Leads",
@@ -80,6 +84,8 @@ export default function Reports() {
       icon: Users,
       color: "text-purple-600",
       bgColor: "bg-purple-100 dark:bg-purple-900/20",
+      trend: "up",
+      type: "metric-success"
     },
     {
       title: "Failed Calls",
@@ -88,6 +94,8 @@ export default function Reports() {
       icon: TrendingDown,
       color: "text-red-600",
       bgColor: "bg-red-100 dark:bg-red-900/20",
+      trend: "down",
+      type: "metric-warning"
     },
   ];
 
@@ -127,27 +135,27 @@ export default function Reports() {
           const Icon = card.icon;
           const isPositiveChange = card.change >= 0;
           return (
-            <Card key={card.title} className="metric-card">
+            <Card key={card.title} className={`metric-card ${card.type} card`}>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <div className={`w-8 h-8 ${card.bgColor} rounded-lg flex items-center justify-center`}>
                     <Icon className={`h-4 w-4 ${card.color}`} />
                   </div>
                   <div className="flex items-center space-x-1">
-                    {isPositiveChange ? (
-                      <TrendingUp className="h-3 w-3 text-green-600" />
+                    {card.trend === "up" ? (
+                      <TrendingUp className="h-3 w-3 text-green-400" />
                     ) : (
-                      <TrendingDown className="h-3 w-3 text-red-600" />
+                      <TrendingDown className="h-3 w-3 text-amber-400" />
                     )}
-                    <span className={`text-xs font-medium ${isPositiveChange ? 'text-green-600' : 'text-red-600'}`}>
-                      {isPositiveChange ? '+' : ''}{card.change}%
+                    <span className={`text-xs font-medium ${card.trend === "up" ? 'text-green-400' : 'text-amber-400'}`}>
+                      {(card.change || 0) >= 0 ? '+' : ''}{card.change || 0}%
                     </span>
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-foreground mb-1">
+                <div className="text-2xl font-bold text-white mb-1">
                   {card.value}
                 </div>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-sm text-slate-300">
                   {card.title}
                 </div>
               </CardContent>
