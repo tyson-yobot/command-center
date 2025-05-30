@@ -36,6 +36,7 @@ export default function ClientDashboard() {
   const { data: crmData } = useQuery({ queryKey: ['/api/crm'] });
   const [isListening, setIsListening] = React.useState(false);
   const [showEscalation, setShowEscalation] = React.useState(false);
+  const [selectedTier, setSelectedTier] = React.useState('All');
 
   const handleVoiceToggle = () => {
     setIsListening(!isListening);
@@ -52,6 +53,35 @@ export default function ClientDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-8">
       <div className="w-full">
+        {/* System Alerts Bar */}
+        <div className="mb-6">
+          <Card className="bg-red-600/90 backdrop-blur-sm border border-red-400/30">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <AlertTriangle className="w-5 h-5 text-white" />
+                  <div>
+                    <h3 className="text-white font-semibold">🚨 System Alerts</h3>
+                    <p className="text-red-100 text-sm">2 automation failures detected, 1 missed follow-up</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Badge variant="destructive" className="bg-red-800 text-white">
+                    High Priority
+                  </Badge>
+                  <Button 
+                    size="sm" 
+                    className="bg-white/20 hover:bg-white/30 text-white"
+                    onClick={testEscalation}
+                  >
+                    View Details
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Escalation Alert Overlay */}
         {showEscalation && (
           <div className="fixed inset-0 bg-red-900/90 backdrop-blur-sm z-50 flex items-center justify-center">
@@ -60,16 +90,16 @@ export default function ClientDashboard() {
                 <AlertTriangle className="w-8 h-8 text-red-600" />
                 <div>
                   <h3 className="text-lg font-bold text-red-900">🚨 URGENT ESCALATION</h3>
-                  <p className="text-red-700 text-sm">High-value client needs immediate attention</p>
+                  <p className="text-red-700 text-sm">Automation failure requires immediate attention</p>
                 </div>
               </div>
               <div className="bg-red-50 p-3 rounded mb-4">
-                <p className="text-red-900 font-medium">Mike Rodriguez - $125,000 deal at risk</p>
-                <p className="text-red-700 text-sm">Requires immediate callback within 15 minutes</p>
+                <p className="text-red-900 font-medium">Mike Rodriguez - CRM sync failure</p>
+                <p className="text-red-700 text-sm">Follow-up sequence stopped 2 hours ago</p>
               </div>
               <div className="flex space-x-3">
                 <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white">
-                  Call Now
+                  Fix Now
                 </Button>
                 <Button 
                   variant="outline" 
@@ -82,6 +112,29 @@ export default function ClientDashboard() {
             </div>
           </div>
         )}
+
+        {/* Tier Filter Toggle */}
+        <div className="mb-6">
+          <div className="flex items-center space-x-2">
+            <span className="text-white text-sm font-medium">Filter by Tier:</span>
+            <div className="flex items-center space-x-1">
+              {['All', 'Enterprise', 'SMB', 'Internal'].map((tier) => (
+                <Button
+                  key={tier}
+                  size="sm"
+                  variant={selectedTier === tier ? "default" : "outline"}
+                  className={selectedTier === tier 
+                    ? "bg-blue-600 hover:bg-blue-700 text-white" 
+                    : "bg-white/10 border-white/20 text-white hover:bg-white/20"
+                  }
+                  onClick={() => setSelectedTier(tier)}
+                >
+                  {tier}
+                </Button>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {/* Header */}
         <div className="mb-8">
@@ -96,7 +149,7 @@ export default function ClientDashboard() {
                 />
                 YoBot® Command Center
               </h1>
-              <p className="text-slate-300">Your Complete AI Automation Dashboard</p>
+              <p className="text-slate-300">Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}</p>
             </div>
             <div className="flex items-center space-x-4">
               <Button
@@ -179,6 +232,133 @@ export default function ClientDashboard() {
                 ${isNaN(Number(crmData?.pipelineValue)) ? '847,250' : Number(crmData?.pipelineValue || 847250).toLocaleString()}
               </div>
               <p className="text-xs text-purple-400">6 deals closing this week</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Essential Business Modules */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+          {/* Bot Health Monitor */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Activity className="w-5 h-5 mr-2 text-green-400" />
+                🤖 Bot Health Monitor
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Total Bots:</span>
+                  <span className="text-white font-bold">8</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Avg Response Time:</span>
+                  <span className="text-green-400 font-bold">1.2s</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Current Errors:</span>
+                  <span className="text-orange-400 font-bold">2 bots impacted</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Worst Performer:</span>
+                  <span className="text-red-400 font-bold">Email Bot</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Uptime Status:</span>
+                  <span className="text-green-400 font-bold">✅ 98.7%</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Revenue Forecast */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <TrendingUp className="w-5 h-5 mr-2 text-blue-400" />
+                📈 Revenue Forecast
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">MRR:</span>
+                  <span className="text-white font-bold">$24,500</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Projected 30d:</span>
+                  <span className="text-green-400 font-bold">$31,200</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Pipeline Deals:</span>
+                  <span className="text-blue-400 font-bold">14</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Confidence:</span>
+                  <span className="text-green-400 font-bold">87%</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Client Pulse Summary */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Users className="w-5 h-5 mr-2 text-purple-400" />
+                🧭 Client Pulse
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Active Clients:</span>
+                  <span className="text-white font-bold">47</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Client NPS:</span>
+                  <span className="text-green-400 font-bold">72/100</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Churn Risk Flags:</span>
+                  <span className="text-orange-400 font-bold">3 accounts</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Last Login:</span>
+                  <span className="text-blue-400 font-bold">2.1 days ago</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Ops Metrics */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Gauge className="w-5 h-5 mr-2 text-yellow-400" />
+                📊 Ops Metrics
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Avg Bot Response:</span>
+                  <span className="text-green-400 font-bold">1.2s</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Success Rate:</span>
+                  <span className="text-green-400 font-bold">97.8%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Error Trend (7d):</span>
+                  <span className="text-red-400 font-bold">12 errors ↗︎</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">API Usage:</span>
+                  <span className="text-blue-400 font-bold">68% of plan</span>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
