@@ -4,8 +4,10 @@ import BotControls from "@/components/dashboard/bot-controls";
 import LiveNotifications from "@/components/dashboard/live-notifications";
 import ConversationLog from "@/components/dashboard/conversation-log";
 import CrmSnapshot from "@/components/dashboard/crm-snapshot";
-import { ChevronDown, AlertTriangle } from "lucide-react";
+import { ChevronDown, AlertTriangle, Activity, TrendingUp, Users, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 export default function Dashboard() {
   const testAlert = async () => {
@@ -30,7 +32,143 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white px-4 space-y-6">
       <SearchBar />
+      
+      {/* System Alerts for Mobile */}
+      <Card className="bg-red-600/90 backdrop-blur-sm border border-red-400/30">
+        <CardContent className="p-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <AlertTriangle className="w-4 h-4 text-white" />
+              <div>
+                <h3 className="text-white font-semibold text-sm">🚨 System Alerts</h3>
+                <p className="text-red-100 text-xs">2 automation failures, 1 missed follow-up</p>
+              </div>
+            </div>
+            <Badge variant="destructive" className="bg-red-800 text-white text-xs">
+              High Priority
+            </Badge>
+          </div>
+        </CardContent>
+      </Card>
+
       <MetricsGrid />
+      
+      {/* Essential Business Modules for Mobile */}
+      <div className="grid grid-cols-1 gap-4">
+        {/* Bot Health Monitor */}
+        <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-white flex items-center text-sm">
+              <Activity className="w-4 h-4 mr-2 text-green-400" />
+              🤖 Bot Health Monitor
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="flex justify-between">
+                <span className="text-slate-300">Total Bots:</span>
+                <span className="text-white font-bold">8</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">Response Time:</span>
+                <span className="text-green-400 font-bold">1.2s</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">Errors:</span>
+                <span className="text-orange-400 font-bold">2 impacted</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">Uptime:</span>
+                <span className="text-green-400 font-bold">✅ 98.7%</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Revenue Forecast */}
+        <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-white flex items-center text-sm">
+              <TrendingUp className="w-4 h-4 mr-2 text-blue-400" />
+              📈 Revenue Forecast
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="flex justify-between">
+                <span className="text-slate-300">MRR:</span>
+                <span className="text-white font-bold">$24,500</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">30d Proj:</span>
+                <span className="text-green-400 font-bold">$31,200</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">Pipeline:</span>
+                <span className="text-blue-400 font-bold">14 deals</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">Confidence:</span>
+                <span className="text-green-400 font-bold">87%</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Client Pulse & Ops Metrics Combined for Mobile */}
+        <div className="grid grid-cols-2 gap-4">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-white flex items-center text-xs">
+                <Users className="w-3 h-3 mr-1 text-purple-400" />
+                🧭 Client Pulse
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="space-y-1 text-xs">
+                <div className="flex justify-between">
+                  <span className="text-slate-300">Active:</span>
+                  <span className="text-white font-bold">47</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300">NPS:</span>
+                  <span className="text-green-400 font-bold">72/100</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300">Risk:</span>
+                  <span className="text-orange-400 font-bold">3</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-white flex items-center text-xs">
+                <Gauge className="w-3 h-3 mr-1 text-yellow-400" />
+                📊 Ops Metrics
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="space-y-1 text-xs">
+                <div className="flex justify-between">
+                  <span className="text-slate-300">Success:</span>
+                  <span className="text-green-400 font-bold">97.8%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300">Errors:</span>
+                  <span className="text-red-400 font-bold">12 ↗︎</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300">API:</span>
+                  <span className="text-blue-400 font-bold">68%</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
       <BotControls />
       <LiveNotifications />
       
