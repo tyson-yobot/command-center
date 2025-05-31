@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Activity, Sun, Moon, Settings } from "lucide-react";
 import { useWebSocket } from "@/hooks/use-websocket";
 import { useTheme } from "@/hooks/use-theme";
@@ -5,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
 import { useLocation } from "wouter";
 import yobotLogoPath from "@assets/Engage Smarter Logo Transparent.png";
 
