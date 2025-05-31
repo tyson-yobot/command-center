@@ -11,7 +11,7 @@ from elevenlabs.client import ElevenLabs
 class ElevenLabsVoiceGenerator:
     def __init__(self):
         self.api_key = os.getenv("ELEVENLABS_API_KEY")
-        self.voice_id = os.getenv("ELEVENLABS_VOICE_ID", "cjVigY5qzO86Huf0OWal")  # Default YoBot voice
+        self.voice_id = os.getenv("ELEVENLABS_VOICE_ID", "nPczCjzI2devNBz1zQrb")  # Default YoBot voice
         
         if not self.api_key:
             raise ValueError("ELEVENLABS_API_KEY environment variable is required")
