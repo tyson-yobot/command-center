@@ -114,6 +114,43 @@ export async function createFollowUpTask(contact: Contact) {
   }
 }
 
+export async function tagContactSource(contact: Contact) {
+  try {
+    if (!process.env.HUBSPOT_API_KEY || !contact.email) {
+      console.log('HubSpot API key or contact email missing, skipping contact tagging');
+      return;
+    }
+
+    const updatePayload = {
+      properties: [
+        {
+          property: 'source',
+          value: 'business_card_scanner'
+        },
+        {
+          property: 'hs_lead_status',
+          value: 'NEW'
+        }
+      ]
+    };
+
+    const res = await axios.post(
+      `https://api.hubapi.com/contacts/v1/contact/email/${contact.email}/profile`,
+      updatePayload,
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    console.log('🏷️ Contact tagged with source "business_card_scanner"');
+  } catch (err: any) {
+    console.error('⚠️ Failed to tag contact:', err.response?.data || err.message);
+  }
+}
+
 export async function pushToCRM(contact: Contact) {
   try {
     if (!process.env.HUBSPOT_API_KEY) {
