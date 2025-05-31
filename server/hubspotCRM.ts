@@ -351,7 +351,7 @@ export async function sendSlackScanAlert(contact: Contact) {
     const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email || 'Unknown Contact';
     
     const message = {
-      text: `📇 New Business Card Scanned:\n👤 *${fullName}*\n🏢 ${contact.company || 'N/A'}\n📧 ${contact.email || 'N/A'}\n📞 ${contact.phone || 'N/A'}\n📥 CRM + Deal + Task created.`
+      text: `📇 *New Business Card Scanned!*\n👤 *${fullName}*\n🏢 ${contact.company || 'N/A'}\n✅ CRM + Deal + Task created.`
     };
 
     await axios.post(process.env.SLACK_WEBHOOK_URL, message, {
