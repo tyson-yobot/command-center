@@ -1064,6 +1064,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // PDF Generation endpoints
+  app.post("/api/generate-pdf/quote", async (req, res) => {
+    try {
+      const quoteData = req.body;
+      const filePath = await generateQuotePDF(quoteData);
+      res.json({ 
+        success: true, 
+        filePath,
+        message: "Quote PDF generated successfully"
+      });
+    } catch (error: any) {
+      console.error('Quote PDF generation error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message 
+      });
+    }
+  });
+
+  app.post("/api/generate-pdf/roi", async (req, res) => {
+    try {
+      const roiData = req.body;
+      const filePath = await generateROIPDF(roiData);
+      res.json({ 
+        success: true, 
+        filePath,
+        message: "ROI report PDF generated successfully"
+      });
+    } catch (error: any) {
+      console.error('ROI PDF generation error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message 
+      });
+    }
+  });
+
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
     if (!req.user) {
