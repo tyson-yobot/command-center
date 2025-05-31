@@ -8,6 +8,7 @@ import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
 import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet } from "./hubspotCRM";
+import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan } from "./airtableSync";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
 import aiChatRouter from "./aiChat";
@@ -301,6 +302,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Export to Google Sheets as backup
           await exportToGoogleSheet(contactInfo);
           
+          // Log deal creation to Airtable
+          await logDealCreated(contactInfo);
+          
+          // Log business card scan to Airtable
+          await logBusinessCardScan(contactInfo);
+          
           // Update status to processed since CRM push succeeded
           await storage.updateScannedContact(scannedContact.id, { status: "processed" });
         } else {
@@ -408,6 +415,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error('PDF generation failed:', error);
       res.status(500).json({ error: error.message });
+    }
+  });
+
+  // VoiceBot Trigger Webhook - Routes high-value voice events to backend ops
+  app.post('/api/voice-trigger', async (req, res) => {
+    try {
+      const { user_id, intent, sentiment, confidence, source } = req.body;
+      
+      console.log(`[🎙️ VOICEBOT] Trigger received from ${user_id} — ${intent} (${sentiment})`);
+      
+      if (intent === 'cancel' && confidence >= 0.85) {
+        // Critical escalation for cancel intent
+        await sendEmergencyEscalation('call', {
+          userId: user_id,
+          reason: 'Customer expressed cancellation intent',
+          confidence: confidence,
+          source: source
+        });
+        
+        // Send Slack alert
+        await sendSlackAlert(`🚨 URGENT: Customer ${user_id} expressed cancellation intent (${confidence}% confidence)`);
+        
+        // Log to Airtable for tracking
+        await logVoiceEscalation({ user_id, intent, sentiment, confidence, source });
+      } 
+      else if (sentiment === 'negative') {
+        // Ops review for negative sentiment
+        await sendSlackAlert(`⚠️ Negative sentiment detected for user ${user_id} - requires ops review`);
+        
+        // Log to Airtable for tracking
+        await logVoiceEscalation({ user_id, intent, sentiment, confidence, source });
+        
+        // Log for follow-up
+        await storage.createNotification({
+          userId: parseInt(user_id) || 1,
+          type: 'voice_escalation',
+          title: 'Negative Sentiment Alert',
+          message: `Voice interaction showed negative sentiment - source: ${source}`,
+          priority: 'high',
+          read: false
+        });
+      } 
+      else if (intent === 'silent') {
+        // Log warning for dead air
+        console.log(`⚠️ Dead air detected for user ${user_id} - source: ${source}`);
+        
+        await storage.createNotification({
+          userId: parseInt(user_id) || 1,
+          type: 'system_warning',
+          title: 'Dead Air Detected',
+          message: `Extended silence in voice interaction - may need technical review`,
+          priority: 'medium',
+          read: false
+        });
+      }
+      
+      res.status(200).json({ status: 'trigger_processed', intent, sentiment });
+    } catch (error) {
+      console.error('Voice trigger processing error:', error);
+      res.status(500).json({ error: 'Failed to process voice trigger' });
     }
   });
 
