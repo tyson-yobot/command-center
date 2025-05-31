@@ -673,6 +673,107 @@ export default function DesktopCommandCenter() {
         </Card>
       </div>
 
+      {/* System Module Controls */}
+      <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center space-x-2">
+            <Settings className="w-5 h-5 text-blue-400" />
+            <span>System Module Controls</span>
+            <div className="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded-full">ADMIN</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Core Modules */}
+            <div className="space-y-3">
+              <h5 className="text-white font-semibold text-sm border-b border-gray-600 pb-1">Core Modules</h5>
+              
+              <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <Database className="w-4 h-4 text-emerald-400" />
+                  <span className="text-white text-sm">SmartSpend Dashboard</span>
+                </div>
+                <Switch />
+              </div>
+
+              <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <BarChart3 className="w-4 h-4 text-blue-400" />
+                  <span className="text-white text-sm">Command Center</span>
+                </div>
+                <Switch defaultChecked />
+              </div>
+
+              <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <TrendingUp className="w-4 h-4 text-purple-400" />
+                  <span className="text-white text-sm">Botalytics</span>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* AI & Communication */}
+            <div className="space-y-3">
+              <h5 className="text-white font-semibold text-sm border-b border-gray-600 pb-1">AI & Communication</h5>
+              
+              <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <Brain className="w-4 h-4 text-green-400" />
+                  <span className="text-white text-sm">ChatGPT Booster</span>
+                </div>
+                <Switch defaultChecked />
+              </div>
+
+              <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <Bell className="w-4 h-4 text-red-400" />
+                  <span className="text-white text-sm">Slack Notifications</span>
+                </div>
+                <Switch defaultChecked />
+              </div>
+
+              <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <Mic className="w-4 h-4 text-pink-400" />
+                  <span className="text-white text-sm">Voice Analytics</span>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* Business Tools */}
+            <div className="space-y-3">
+              <h5 className="text-white font-semibold text-sm border-b border-gray-600 pb-1">Business Tools</h5>
+              
+              <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <FileText className="w-4 h-4 text-indigo-400" />
+                  <span className="text-white text-sm">Smart Quoting</span>
+                </div>
+                <Switch defaultChecked />
+              </div>
+
+              <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <Calendar className="w-4 h-4 text-yellow-400" />
+                  <span className="text-white text-sm">Calendar Integration</span>
+                </div>
+                <Switch />
+              </div>
+
+              <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <Target className="w-4 h-4 text-orange-400" />
+                  <span className="text-white text-sm">Lead Generation</span>
+                </div>
+                <Switch />
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* SmartSpend™ Analytics Dashboard */}
       <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
         <CardHeader>
