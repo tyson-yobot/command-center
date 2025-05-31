@@ -995,6 +995,106 @@ export async function logVoiceTranscript(contact: Contact, transcriptData: any =
   }
 }
 
+export async function assignCRMOwner(contact: Contact) {
+  try {
+    const contactType = await autoTagContactType(contact);
+    let assignedRep = "Unassigned";
+
+    if (contactType === 'Gov') {
+      assignedRep = "Daniel Sharpe";
+    } else if (contactType === 'B2B') {
+      assignedRep = "Tyson Lerfald";
+    }
+
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    console.log(`🧑‍💼 CRM Owner assigned: ${fullName} → ${assignedRep} (${contactType})`);
+    
+    return assignedRep;
+  } catch (error: any) {
+    console.error('Failed to assign CRM owner:', error.message);
+    return "Unassigned";
+  }
+}
+
+export async function logVoiceEscalationEvent(contact: Contact, escalationData: any = {}) {
+  try {
+    const escalationUrl = process.env.VOICE_ESCALATION_WEBHOOK_URL || "https://hook.us2.make.com/npqxkjwvm8q7z2rj9dy76w";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+
+    await axios.post(escalationUrl, {
+      full_name: fullName,
+      email: contact.email,
+      company: contact.company,
+      reason: escalationData.escalation_reason || 'Voice trigger detected',
+      timestamp: new Date().toISOString(),
+      escalated_by: "VoiceBot",
+      source: 'Business Card Scanner'
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('🛑 Voice escalation logged for', fullName);
+  } catch (error: any) {
+    console.error('Failed to log voice escalation:', error.message);
+  }
+}
+
+export async function dispatchCallSummary(contact: Contact, callData: any = {}) {
+  try {
+    const callSummaryUrl = process.env.CALL_SUMMARY_WEBHOOK_URL || "https://hook.us2.make.com/vqp92zwkx7lp8yk9gz4o3w";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+
+    await axios.post(callSummaryUrl, {
+      full_name: fullName,
+      company: contact.company,
+      summary: callData.call_summary || `Business card scan completed for ${fullName}`,
+      duration: callData.call_duration || '2:30',
+      sentiment_score: callData.sentiment_score || 0.8,
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('✅ Call summary dispatched for', fullName);
+  } catch (error: any) {
+    console.error('Failed to dispatch call summary:', error.message);
+  }
+}
+
+export async function pushToMetricsTracker(contact: Contact, metricsData: any = {}) {
+  try {
+    const metricsUrl = process.env.METRICS_TRACKER_WEBHOOK_URL || "https://hook.us2.make.com/nzm39kp0od0s87wvbz92ew";
+    
+    await axios.post(metricsUrl, {
+      email: contact.email,
+      company: contact.company,
+      interaction_type: "Business Card Scanner",
+      duration: metricsData.call_duration || '2:30',
+      score: metricsData.sentiment_score || 0.8,
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('📈 Metrics pushed to Command Center tracker');
+  } catch (error: any) {
+    console.error('Failed to push metrics:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
