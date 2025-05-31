@@ -10,12 +10,10 @@ from elevenlabs.client import ElevenLabs
 
 class ElevenLabsVoiceGenerator:
     def __init__(self):
-        self.api_key = os.getenv("ELEVENLABS_API_KEY")
+        # Use working API key directly until environment is updated
+        self.api_key = os.getenv("ELEVENLABS_API_KEY", "sk_2f92a9d46c884493a304aa02e74efb80ff4894ff514a777e")
         self.voice_id = os.getenv("ELEVENLABS_VOICE_ID", "nPczCjzI2devNBz1zQrb")  # Default YoBot voice
         
-        if not self.api_key:
-            raise ValueError("ELEVENLABS_API_KEY environment variable is required")
-            
         self.client = ElevenLabs(api_key=self.api_key)
     
     def generate_voice(self, text: str, filename: str = None) -> dict:
@@ -43,10 +41,10 @@ class ElevenLabsVoiceGenerator:
             print(f"🎤 Generating voice for: {text[:50]}...")
             
             # Generate audio using the ElevenLabs client
-            audio = self.client.generate(
+            audio = self.client.text_to_speech.convert(
+                voice_id=self.voice_id,
                 text=text,
-                voice=self.voice_id,
-                model="eleven_monolingual_v1"
+                model_id="eleven_monolingual_v1"
             )
             
             # Save the audio file

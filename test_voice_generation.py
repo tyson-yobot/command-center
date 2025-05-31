@@ -20,11 +20,11 @@ def test_voice_generation():
         # Test text
         test_text = "Hello! This is YoBot's AI support system. Your ticket has been processed successfully."
         
-        # Generate audio
-        audio = client.generate(
+        # Generate audio using text_to_speech
+        audio = client.text_to_speech.convert(
+            voice_id=VOICE_ID,
             text=test_text,
-            voice=VOICE_ID,
-            model="eleven_monolingual_v1"
+            model_id="eleven_monolingual_v1"
         )
         
         # Save to uploads directory

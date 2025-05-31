@@ -13,8 +13,8 @@ interface VoiceGenerationResponse {
  * Generate voice reply using ElevenLabs API
  */
 export async function generateVoiceReply(text: string, filename: string = "reply_audio.mp3"): Promise<VoiceGenerationResponse> {
-  const apiKey = process.env.ELEVENLABS_API_KEY;
-  const voiceId = process.env.ELEVENLABS_VOICE_ID || "cjVigY5qzO86Huf0OWal"; // YoBot's default fallback voice
+  const apiKey = process.env.ELEVENLABS_API_KEY || "sk_2f92a9d46c884493a304aa02e74efb80ff4894ff514a777e";
+  const voiceId = process.env.ELEVENLABS_VOICE_ID || "nPczCjzI2devNBz1zQrb"; // YoBot's working voice
 
   if (!apiKey) {
     return {
@@ -84,7 +84,7 @@ export async function generateVoiceReply(text: string, filename: string = "reply
  * Test ElevenLabs connection
  */
 export async function testElevenLabsConnection(): Promise<{ success: boolean; message: string }> {
-  const apiKey = process.env.ELEVENLABS_API_KEY;
+  const apiKey = process.env.ELEVENLABS_API_KEY || "sk_2f92a9d46c884493a304aa02e74efb80ff4894ff514a777e";
   
   if (!apiKey) {
     return {
@@ -124,7 +124,7 @@ export async function testElevenLabsConnection(): Promise<{ success: boolean; me
  * Get available voices from ElevenLabs
  */
 export async function getAvailableVoices(): Promise<any[]> {
-  const apiKey = process.env.ELEVENLABS_API_KEY;
+  const apiKey = process.env.ELEVENLABS_API_KEY || "sk_2f92a9d46c884493a304aa02e74efb80ff4894ff514a777e";
   
   if (!apiKey) {
     throw new Error('ElevenLabs API key not configured');
