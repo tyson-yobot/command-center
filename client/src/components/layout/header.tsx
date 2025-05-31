@@ -48,11 +48,11 @@ export default function Header() {
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="sm"
-                  className="h-8 w-8 p-0 hover:bg-slate-800 text-slate-400 hover:text-white"
+                  className="px-3 py-1 h-8 bg-blue-600 hover:bg-blue-700 text-white border-blue-500 font-medium text-sm"
                 >
-                  <Settings className="h-4 w-4" />
+                  Admin
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md bg-slate-900 border-slate-700">
