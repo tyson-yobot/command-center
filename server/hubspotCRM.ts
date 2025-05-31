@@ -645,6 +645,64 @@ export async function alertSlackFailure(contact: Contact, errorMessage: string) 
   }
 }
 
+export async function sendHubSpotFallback(contact: Contact) {
+  try {
+    const fallbackWebhookUrl = process.env.HUBSPOT_FALLBACK_WEBHOOK_URL || "https://hook.us2.make.com/bkq2nv4pqlc8y0jtp9a2le4g";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    const contactType = await autoTagContactType(contact);
+
+    await axios.post(fallbackWebhookUrl, {
+      full_name: fullName,
+      email: contact.email,
+      company: contact.company,
+      type: contactType,
+      phone: contact.phone,
+      source: "HubSpot Fallback",
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('🔄 HubSpot fallback webhook triggered for', fullName);
+  } catch (error: any) {
+    console.error('Failed to send HubSpot fallback:', error.message);
+  }
+}
+
+export async function pushToQuoteDashboard(contact: Contact) {
+  try {
+    const quoteDashboardUrl = process.env.QUOTE_DASHBOARD_WEBHOOK_URL || "https://hook.us2.make.com/3dx9f28jqwlzcvjv8mpks1r";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    const contactType = await autoTagContactType(contact);
+    const quoteId = `YB-${Date.now()}`;
+
+    await axios.post(quoteDashboardUrl, {
+      full_name: fullName,
+      email: contact.email,
+      company: contact.company,
+      quote_id: quoteId,
+      type: contactType,
+      quote_status: "Pending",
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('📄 Quote dashboard entry created for', fullName);
+  } catch (error: any) {
+    console.error('Failed to push to quote dashboard:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;

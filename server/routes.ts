@@ -7,7 +7,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
-import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe, sendNDAEmail, autoTagContactType, sendVoicebotWebhookResponse } from "./hubspotCRM";
+import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe, sendNDAEmail, autoTagContactType, sendVoicebotWebhookResponse, syncToQuickBooks, alertSlackFailure, sendHubSpotFallback, pushToQuoteDashboard } from "./hubspotCRM";
 import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan, logSyncError, runRetryQueue } from "./airtableSync";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
@@ -397,6 +397,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await pushToStripe(contactInfo);
           } catch (error) {
             await logSyncError(contactInfo, `Stripe billing flow failed: ${error.message}`);
+          }
+
+          // Sync to QuickBooks for B2B/Gov contacts
+          try {
+            await syncToQuickBooks(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `QuickBooks sync failed: ${error.message}`);
+          }
+
+          // Push to Airtable Quote Dashboard
+          try {
+            await pushToQuoteDashboard(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Quote dashboard push failed: ${error.message}`);
           }
           
           // Update status to processed since CRM push succeeded
