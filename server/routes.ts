@@ -7,8 +7,8 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
-import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF } from "./hubspotCRM";
-import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan, logSyncError } from "./airtableSync";
+import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar } from "./hubspotCRM";
+import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan, logSyncError, runRetryQueue } from "./airtableSync";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
 import aiChatRouter from "./aiChat";
@@ -368,6 +368,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await logSyncError(contactInfo, `Supabase logging failed: ${error.message}`);
           }
           
+          // Add follow-up calendar event
+          try {
+            await addToCalendar(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Calendar event creation failed: ${error.message}`);
+          }
+
           // Trigger PDF quote generation if contact qualifies
           try {
             await triggerQuotePDF(contactInfo);

@@ -110,3 +110,53 @@ export async function logSyncError(contact: any, reason: string) {
     console.error('Failed to log error to Airtable:', error.message);
   }
 }
+
+export async function runRetryQueue() {
+  try {
+    if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID || !process.env.AIRTABLE_TABLE_ID) {
+      console.log('Airtable credentials not configured for retry queue');
+      return;
+    }
+
+    const response = await axios.get(
+      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.AIRTABLE_TABLE_ID}?filterByFormula=Status="Failed"`,
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`
+        }
+      }
+    );
+
+    const records = response.data.records || [];
+    
+    for (const record of records) {
+      const fields = record.fields;
+      const contact = { 
+        email: fields.Email,
+        firstName: fields.Contact?.split(' ')[0] || '',
+        lastName: fields.Contact?.split(' ').slice(1).join(' ') || ''
+      };
+      const reason = fields.Details;
+
+      console.log(`🔁 Retrying for ${contact.email}: ${reason}`);
+      
+      // Update status to retrying
+      await axios.patch(
+        `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.AIRTABLE_TABLE_ID}/${record.id}`,
+        {
+          fields: { Status: 'Retried' }
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+    }
+
+    console.log(`🔁 Processed ${records.length} retry queue items`);
+  } catch (error: any) {
+    console.error('Failed to process retry queue:', error.message);
+  }
+}

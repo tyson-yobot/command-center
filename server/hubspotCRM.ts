@@ -442,6 +442,38 @@ export async function triggerQuotePDF(contact: Contact) {
   }
 }
 
+export async function addToCalendar(contact: Contact) {
+  try {
+    const calendarWebhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL || process.env.CALENDAR_WEBHOOK_URL;
+    
+    if (!calendarWebhookUrl) {
+      console.log('Calendar webhook URL not configured');
+      return;
+    }
+
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+
+    await axios.post(calendarWebhookUrl, {
+      title: `Follow-Up: ${fullName}`,
+      start: new Date(Date.now() + 3600000).toISOString(), // +1 hour from now
+      email: contact.email,
+      company: contact.company,
+      source: 'Business Card Scanner',
+      type: 'follow-up',
+      contact: {
+        name: fullName,
+        email: contact.email,
+        phone: contact.phone,
+        company: contact.company
+      }
+    });
+
+    console.log('📅 Calendar follow-up event created for', fullName);
+  } catch (error: any) {
+    console.error('Failed to add calendar event:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
