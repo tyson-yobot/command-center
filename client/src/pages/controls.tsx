@@ -771,6 +771,300 @@ export default function Controls() {
                 <Switch />
               </div>
             </div>
+
+            {/* Booking Tool Setup */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">📅</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Booking Tool Setup</h4>
+                    <p className="text-xs text-gray-600">$399 one-time</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* Advanced Data Integration Hub */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-violet-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🔗</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Data Integration Hub</h4>
+                    <p className="text-xs text-gray-600">$1,899 + $299/mo</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* Automated Content Generation */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-amber-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">✍️</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Content Generation Studio</h4>
+                    <p className="text-xs text-gray-600">$999 + $99/mo</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* Predictive Analytics Engine */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-rose-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🔮</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Predictive Analytics</h4>
+                    <p className="text-xs text-gray-600">$1,499 + $149/mo</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* Conversational Intelligence */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🧠</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Conversational Intelligence</h4>
+                    <p className="text-xs text-gray-600">$999 + $99/mo</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* Customer Journey Orchestration */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-sky-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🗺️</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Journey Orchestration</h4>
+                    <p className="text-xs text-gray-600">$1,299 + $129/mo</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* Competitive Intelligence */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-slate-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🔍</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Competitive Intelligence</h4>
+                    <p className="text-xs text-gray-600">$899 + $89/mo</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* Voice Pattern Recognition */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-fuchsia-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🎤</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Voice Pattern Recognition</h4>
+                    <p className="text-xs text-gray-600">$1,299 + $129/mo</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* Call Sentiment Log */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-lime-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">😊</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Call Sentiment Log</h4>
+                    <p className="text-xs text-gray-600">$499 + $49/mo</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* Custom Request */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-stone-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">⚙️</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Custom Request</h4>
+                    <p className="text-xs text-gray-600">Quote-based</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Smart Bundle Controls */}
+      <Card className="bg-white border-2 border-white shadow-xl">
+        <CardHeader className="pb-3 bg-black">
+          <CardTitle className="flex items-center justify-between text-white">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-[#0d82da] rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">📦</span>
+              </div>
+              <span className="text-xl font-bold">SMART BUNDLE PACKS</span>
+            </div>
+            <div className="text-xs font-mono bg-[#0d82da] px-2 py-1 rounded text-white">BUNDLES</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-6 bg-white">
+          <div className="space-y-4">
+            {/* Sales Booster Pack */}
+            <div className="p-4 bg-green-100 rounded-lg border-2 border-green-300">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h4 className="font-bold text-black text-lg">Sales Booster Pack</h4>
+                  <p className="text-sm text-gray-600">$1,199 one-time (save $347)</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Badge className="bg-green-500 text-white">SALES</Badge>
+                  <Switch />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>ChatGPT Booster</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>A/B Script Testing</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Live Transfer Routing</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Smart Quoting Engine</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Smart Ops Pack */}
+            <div className="p-4 bg-blue-100 rounded-lg border-2 border-blue-300">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h4 className="font-bold text-black text-lg">Smart Ops Pack</h4>
+                  <p className="text-sm text-gray-600">$1,599 + $120/mo (save $398 + $25/mo)</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Badge className="bg-blue-500 text-white">OPS</Badge>
+                  <Switch />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>SmartSpend Dashboard</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>QuickBooks Sync</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Command Center Pro</span>
+                </div>
+              </div>
+            </div>
+
+            {/* AI Enhancement Pack */}
+            <div className="p-4 bg-purple-100 rounded-lg border-2 border-purple-300">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h4 className="font-bold text-black text-lg">AI Enhancement Pack</h4>
+                  <p className="text-sm text-gray-600">$899 one-time (save $248)</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Badge className="bg-purple-500 text-white">AI</Badge>
+                  <Switch />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>ChatGPT Booster</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Custom Personality Pack</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Smart Quoting Engine</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Brand & UX Upgrade Pack */}
+            <div className="p-4 bg-yellow-100 rounded-lg border-2 border-yellow-300">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h4 className="font-bold text-black text-lg">Brand & UX Upgrade Pack</h4>
+                  <p className="text-sm text-gray-600">$2,199 one-time (save $498)</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Badge className="bg-yellow-500 text-white">BRAND</Badge>
+                  <Switch />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>White Label Mode</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Custom Personality Pack</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Booking Tool Setup</span>
+                </div>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
