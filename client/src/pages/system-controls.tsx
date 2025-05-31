@@ -354,7 +354,7 @@ export default function SystemControls() {
   // Package tier configurations based on YoBot price sheet
   const packageConfigurations = {
     starter: {
-      // Starter: AI Chatbot, SMS/Email Flows, Basic CRM Logging, Simple Integrations
+      // Starter ($499/mo): AI Chatbot, SMS/Email Flows, Basic CRM Logging, Simple Integrations
       voiceBotCore: false,
       callRouting: false,
       emergencyEscalation: true,
@@ -378,7 +378,19 @@ export default function SystemControls() {
       googleCalendar: false,
       stripePayments: false,
       quickbooks: false,
-      twilioSms: true
+      twilioSms: true,
+      documentGeneration: false,
+      pdfProcessor: false,
+      fileStorage: true,
+      backupSystem: false,
+      webhookMonitoring: false,
+      emergencyStop: true,
+      scenarioControl: false,
+      rateLimiting: true,
+      dataEncryption: true,
+      gdprCompliance: false,
+      accessLogging: false,
+      auditTrail: false
     },
     pro: {
       // Pro: All Starter + VoiceBot, Calendar Tools, Smart Follow-Ups, AI Quote Generation
