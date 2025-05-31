@@ -469,6 +469,46 @@ export async function addToCalendar(contact: Contact) {
   }
 }
 
+export async function pushToStripe(contact: Contact) {
+  try {
+    const stripeWebhookUrl = process.env.STRIPE_WEBHOOK_URL;
+    
+    if (!stripeWebhookUrl) {
+      console.log('Stripe webhook URL not configured, skipping billing flow');
+      return;
+    }
+
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+
+    // Check if contact qualifies for billing (has company and email domain)
+    const qualifiesForBilling = contact.company && contact.email && contact.email.includes('@') && !contact.email.includes('gmail.com');
+    
+    if (!qualifiesForBilling) {
+      console.log('Contact does not qualify for automated billing flow');
+      return;
+    }
+
+    await axios.post(stripeWebhookUrl, {
+      email: contact.email,
+      full_name: fullName,
+      company: contact.company,
+      phone: contact.phone,
+      selected_package: 'Pro',
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('💳 Stripe billing flow triggered for', fullName);
+  } catch (error: any) {
+    console.error('Failed to trigger Stripe billing:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
