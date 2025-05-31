@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { io, Socket } from "socket.io-client";
 
 interface WebSocketContextType {
   isConnected: boolean;
@@ -9,23 +10,20 @@ interface WebSocketContextType {
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
 
 export function WebSocketProvider({ children }: { children: ReactNode }) {
-  const [socket, setSocket] = useState<WebSocket | null>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
-    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const wsUrl = `${protocol}//${window.location.host}/ws`;
-    
-    const ws = new WebSocket(wsUrl);
+    const ws = io({ path: '/ws' });
 
-    ws.onopen = () => {
+    ws.on('connect', () => {
       setIsConnected(true);
       setSocket(ws);
       console.log("WebSocket connected");
-    };
+    });
 
-    ws.onclose = () => {
+    ws.on('disconnect', () => {
       setIsConnected(false);
       setSocket(null);
       console.log("WebSocket disconnected");
@@ -36,28 +34,31 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
         description: "Attempting to reconnect...",
         variant: "destructive",
       });
-    };
+    });
 
-    ws.onerror = (error) => {
+    ws.on('connect_error', (error) => {
       console.error("WebSocket error:", error);
       toast({
         title: "Connection Error",
         description: "Unable to establish real-time connection",
         variant: "destructive",
       });
-    };
+    });
 
-    ws.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        handleWebSocketMessage(data);
-      } catch (error) {
-        console.error("Failed to parse WebSocket message:", error);
-      }
-    };
+    ws.on('metrics', (data) => {
+      handleWebSocketMessage({ type: 'metrics_update', data });
+    });
+
+    ws.on('notification', (data) => {
+      handleWebSocketMessage({ type: 'notification', ...data });
+    });
+
+    ws.on('command_processing', (data) => {
+      handleWebSocketMessage({ type: 'command_processing', data });
+    });
 
     return () => {
-      ws.close();
+      ws.disconnect();
     };
   }, [toast]);
 
@@ -85,10 +86,10 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
   };
 
   const sendMessage = (message: any) => {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(JSON.stringify(message));
+    if (socket && socket.connected) {
+      socket.emit('message', message);
     } else {
-      console.warn("WebSocket is not connected");
+      console.warn("Socket.IO is not connected");
     }
   };
 

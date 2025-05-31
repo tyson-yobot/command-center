@@ -1,33 +1,13 @@
-import React, { useState } from "react";
-import { Activity, Sun, Moon, Settings } from "lucide-react";
+import React from "react";
+import { Sun, Moon } from "lucide-react";
 import { useWebSocket } from "@/hooks/use-websocket";
 import { useTheme } from "@/hooks/use-theme";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useLocation } from "wouter";
 import yobotLogoPath from "@assets/Engage Smarter Logo Transparent.png";
 
 export default function Header() {
   const { isConnected } = useWebSocket();
   const { theme, setTheme } = useTheme();
-  const [, setLocation] = useLocation();
-  const [password, setPassword] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleAdminAccess = () => {
-    if (password === "yobot2025") {
-      setIsDialogOpen(false);
-      setPassword("");
-      setError("");
-      setLocation("/system-controls");
-    } else {
-      setError("Incorrect password");
-      setPassword("");
-    }
-  };
 
   return (
     <>
