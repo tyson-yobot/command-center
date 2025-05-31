@@ -1202,6 +1202,58 @@ export async function pushCommandSuggestions(contact: Contact, suggestionData: a
   }
 }
 
+export async function logScenarioLoop(contact: Contact, testData: any = {}) {
+  try {
+    const scenarioUrl = process.env.QA_SCENARIO_WEBHOOK_URL || "https://hook.us2.make.com/vqz0mky9xnzjgwdqka0jv3";
+
+    await axios.post(scenarioUrl, {
+      test_case_id: testData.test_case_id || `tc_${Date.now()}`,
+      scenario_name: testData.scenario_name || 'business_card_scan_workflow',
+      loop_count: testData.loop_count || 1,
+      success: testData.test_passed || true,
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('🔁 QA scenario loop tracked');
+  } catch (error: any) {
+    console.error('Failed to log scenario loop:', error.message);
+  }
+}
+
+export async function logABScriptTest(contact: Contact, scriptData: any = {}) {
+  try {
+    const abTestUrl = process.env.AB_SCRIPT_WEBHOOK_URL || "https://hook.us2.make.com/1npkjv9xdqzr52wv3kj8m6";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+
+    await axios.post(abTestUrl, {
+      full_name: fullName,
+      email: contact.email,
+      company: contact.company,
+      script_variant: scriptData.script_variant || 'variant_a',
+      conversion_result: scriptData.conversion_result || 'pending',
+      call_id: scriptData.call_id || `call_${Date.now()}`,
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('🧪 A/B script test logged for optimization');
+  } catch (error: any) {
+    console.error('Failed to log A/B script test:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
