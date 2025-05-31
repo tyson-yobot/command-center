@@ -37,7 +37,8 @@ import {
   Timer,
   Bell,
   DollarSign,
-  Bot as BotIcon
+  Bot as BotIcon,
+  Lock
 } from "lucide-react";
 import type { Metrics, Bot, Notification, CrmData } from "@shared/schema";
 
@@ -48,6 +49,10 @@ export default function DesktopCommandCenter() {
   const [isListening, setIsListening] = useState(false);
   const [ragQueryTime, setRagQueryTime] = useState<number | null>(null);
   const [showEmergencyConfirm, setShowEmergencyConfirm] = useState(false);
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [adminAuthError, setAdminAuthError] = useState("");
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [voiceQuery, setVoiceQuery] = useState("");
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [conversationMemory, setConversationMemory] = useState([]);
@@ -389,6 +394,16 @@ export default function DesktopCommandCenter() {
                 Test Alert
               </Button>
             )}
+            
+            {/* Admin Controls Button */}
+            <Button 
+              onClick={() => setShowAdminLogin(true)}
+              className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-3 rounded-xl flex items-center space-x-2"
+              title="Access System Controls"
+            >
+              <Lock className="w-4 h-4" />
+              <span>Admin</span>
+            </Button>
             
             {/* Automation Toggle */}
             <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3">
@@ -1410,6 +1425,74 @@ export default function DesktopCommandCenter() {
           </Card>
         </div>
       </div>
+
+      {/* Admin Login Modal */}
+      {showAdminLogin && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 w-96">
+            <h3 className="text-white text-lg font-bold mb-4 flex items-center">
+              <Lock className="w-5 h-5 mr-2" />
+              Admin Access Required
+            </h3>
+            <p className="text-slate-300 text-sm mb-4">
+              Enter admin password to access system controls
+            </p>
+            
+            <input
+              type="password"
+              value={adminPassword}
+              onChange={(e) => setAdminPassword(e.target.value)}
+              placeholder="Admin password"
+              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white mb-4"
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  if (adminPassword === 'YoBot2025!') {
+                    setIsAdminAuthenticated(true);
+                    setShowAdminLogin(false);
+                    setAdminAuthError("");
+                    window.open('/system-controls', '_blank');
+                  } else {
+                    setAdminAuthError("Invalid password");
+                  }
+                }
+              }}
+            />
+            
+            {adminAuthError && (
+              <p className="text-red-400 text-sm mb-4">{adminAuthError}</p>
+            )}
+            
+            <div className="flex space-x-3">
+              <Button 
+                onClick={() => {
+                  if (adminPassword === 'YoBot2025!') {
+                    setIsAdminAuthenticated(true);
+                    setShowAdminLogin(false);
+                    setAdminAuthError("");
+                    window.open('/system-controls', '_blank');
+                  } else {
+                    setAdminAuthError("Invalid password");
+                  }
+                }}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Access Controls
+              </Button>
+              <Button 
+                onClick={() => {
+                  setShowAdminLogin(false);
+                  setAdminPassword("");
+                  setAdminAuthError("");
+                }}
+                variant="outline" 
+                className="flex-1 border-slate-600 text-white hover:bg-slate-700"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
