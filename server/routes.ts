@@ -27,6 +27,43 @@ import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
 import airtableRouter from "./airtable";
 
+// Make.com webhook integration
+async function triggerMakeScenario(data: any) {
+  const webhookUrl = process.env.MAKE_WEBHOOK_URL;
+  if (!webhookUrl) {
+    console.log("MAKE_WEBHOOK_URL not configured");
+    return { success: false, message: "MAKE_WEBHOOK_URL not configured" };
+  }
+
+  const payload = {
+    ticket: data,
+    source: "YoBot AI Support",
+    event: "ticket_processed", 
+    timestamp: new Date().toISOString()
+  };
+
+  try {
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      console.log("✅ Make.com webhook triggered successfully");
+      return { success: true, message: "Webhook triggered successfully" };
+    } else {
+      console.log(`❌ Make webhook failed: ${response.status} - ${response.statusText}`);
+      return { success: false, message: `Webhook failed: ${response.status}` };
+    }
+  } catch (error: any) {
+    console.error('Make webhook error:', error);
+    return { success: false, message: error.message };
+  }
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
 
@@ -849,6 +886,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         );
       }
 
+      // Trigger Make.com webhook
+      let makeWebhookResult = null;
+      try {
+        makeWebhookResult = await triggerMakeScenario({
+          ticketId,
+          clientName,
+          ticketBody,
+          topic,
+          aiReply: aiResponse.reply,
+          escalationFlag: aiResponse.escalationFlag,
+          sentiment: aiResponse.sentiment,
+          escalationAnalysis,
+          priority: escalationAnalysis.riskLevel,
+          status: "processed"
+        });
+      } catch (error) {
+        console.error('Make.com webhook error:', error);
+        makeWebhookResult = { success: false, error: error.message };
+      }
+
       // Log interaction
       await logSupportInteraction({ ticketId, clientName, ticketBody, topic }, aiResponse);
 
@@ -864,6 +921,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         priorityUpdate,
         escalationTicket,
         voiceGeneration,
+        makeWebhook: makeWebhookResult,
         status: "processed"
       });
 
