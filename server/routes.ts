@@ -7,7 +7,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
-import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet } from "./hubspotCRM";
+import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, sendSlackScanAlert } from "./hubspotCRM";
 import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan } from "./airtableSync";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
@@ -281,6 +281,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const exists = contactInfo.email ? await contactExistsInHubSpot(contactInfo.email) : false;
         
         if (!exists) {
+          // Enrich contact data with Clearbit before CRM push
+          await enrichContactWithClearbit(contactInfo);
+          
           await pushToCRM(contactInfo);
           console.log('✅ Contact pushed to HubSpot CRM successfully');
           
@@ -307,6 +310,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           // Log business card scan to Airtable
           await logBusinessCardScan(contactInfo);
+          
+          // Send enhanced Slack scan alert
+          await sendSlackScanAlert(contactInfo);
           
           // Update status to processed since CRM push succeeded
           await storage.updateScannedContact(scannedContact.id, { status: "processed" });

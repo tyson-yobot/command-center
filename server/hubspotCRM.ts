@@ -253,6 +253,72 @@ export async function createDealForContact(contact: Contact) {
   }
 }
 
+export async function enrichContactWithClearbit(contact: Contact) {
+  try {
+    if (!process.env.CLEARBIT_API_KEY || !contact.email) {
+      console.log('Clearbit API key not configured or no email provided, skipping enrichment');
+      return contact;
+    }
+
+    const response = await axios.get(`https://person.clearbit.com/v2/people/find?email=${contact.email}`, {
+      headers: {
+        'Authorization': `Bearer ${process.env.CLEARBIT_API_KEY}`
+      },
+      timeout: 5000
+    });
+
+    if (response.status === 200 && response.data) {
+      const data = response.data;
+      
+      // Enrich contact with Clearbit data
+      if (data.name?.fullName && !contact.firstName && !contact.lastName) {
+        const nameParts = data.name.fullName.split(' ');
+        contact.firstName = nameParts[0];
+        contact.lastName = nameParts.slice(1).join(' ');
+      }
+      
+      contact.company = data.employment?.name || contact.company;
+      contact.title = data.employment?.title || contact.title;
+      
+      console.log('✨ Contact enriched with Clearbit data');
+    }
+  } catch (error: any) {
+    if (error.response?.status === 404) {
+      console.log(`Clearbit enrichment: No data found for ${contact.email}`);
+    } else {
+      console.log(`Clearbit enrichment failed for ${contact.email}:`, error.message);
+    }
+  }
+  
+  return contact;
+}
+
+export async function sendSlackScanAlert(contact: Contact) {
+  try {
+    if (!process.env.SLACK_WEBHOOK_URL) {
+      console.log('Slack webhook URL not configured, skipping scan alert');
+      return;
+    }
+
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email || 'Unknown Contact';
+    
+    const message = {
+      text: `📇 New Business Card Scanned:\n👤 *${fullName}*\n🏢 ${contact.company || 'N/A'}\n📧 ${contact.email || 'N/A'}\n📞 ${contact.phone || 'N/A'}\n📥 CRM + Deal + Task created.`
+    };
+
+    await axios.post(process.env.SLACK_WEBHOOK_URL, message, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 5000
+    });
+
+    console.log('📱 Slack scan alert sent successfully');
+  } catch (error: any) {
+    console.error('Failed to send Slack scan alert:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
