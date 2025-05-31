@@ -394,6 +394,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Test HubSpot CRM connection
+  app.get("/api/test-crm", async (req, res) => {
+    try {
+      if (!process.env.HUBSPOT_API_KEY) {
+        return res.status(400).json({ 
+          error: "HubSpot API key not configured",
+          message: "Please set HUBSPOT_API_KEY environment variable"
+        });
+      }
+
+      // Test with sample contact data
+      const testContact = {
+        firstName: "Test",
+        lastName: "Contact",
+        email: "test@example.com",
+        company: "Test Company"
+      };
+
+      await pushToCRM(testContact);
+      
+      res.json({
+        success: true,
+        message: "HubSpot CRM connection successful",
+        testContact
+      });
+    } catch (error: any) {
+      res.status(500).json({ 
+        error: "CRM connection failed",
+        message: error.message 
+      });
+    }
+  });
+
   // Debug route to check current user role
   app.get('/api/me', (req, res) => {
     res.json({ user: req.user || null });
