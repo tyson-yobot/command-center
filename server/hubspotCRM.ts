@@ -1146,6 +1146,62 @@ export async function updateContractStatus(contact: Contact, contractData: any =
   }
 }
 
+export async function logIntentAndEntities(contact: Contact, nluData: any = {}) {
+  try {
+    const intentUrl = process.env.INTENT_ENTITY_WEBHOOK_URL || "https://hook.us2.make.com/oq7l1wkv39xpejkz6ev2m3";
+
+    await axios.post(intentUrl, {
+      email: contact.email,
+      company: contact.company,
+      intent: nluData.detected_intent || 'business_card_scan',
+      entities: nluData.extracted_entities || { name: contact.firstName + ' ' + contact.lastName, company: contact.company },
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('🧠 Intent and entities logged for NLU analysis');
+  } catch (error: any) {
+    console.error('Failed to log intent and entities:', error.message);
+  }
+}
+
+export async function pushCommandSuggestions(contact: Contact, suggestionData: any = {}) {
+  try {
+    const suggestionsUrl = process.env.COMMAND_SUGGESTIONS_WEBHOOK_URL || "https://hook.us2.make.com/7ndopkwz4x2mqlvgjm0yka";
+    
+    const contactType = await autoTagContactType(contact);
+    const suggestions = suggestionData.bot_suggestions || [
+      `Follow up with ${contact.firstName} within 24 hours`,
+      `Send personalized demo for ${contact.company}`,
+      `Schedule discovery call for enterprise features`
+    ];
+
+    await axios.post(suggestionsUrl, {
+      email: contact.email,
+      company: contact.company,
+      suggestions: suggestions,
+      trigger_event: suggestionData.suggestion_trigger || 'new_business_card_scan',
+      contact_type: contactType,
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('🧠 Command suggestions pushed to dashboard');
+  } catch (error: any) {
+    console.error('Failed to push command suggestions:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
