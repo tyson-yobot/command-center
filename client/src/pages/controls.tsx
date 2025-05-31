@@ -273,6 +273,257 @@ export default function Controls() {
         </CardContent>
       </Card>
 
+      {/* Automation Controls */}
+      <Card className="bg-white border-2 border-white shadow-xl">
+        <CardHeader className="pb-3 bg-black">
+          <CardTitle className="flex items-center justify-between text-white">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-[#0d82da] rounded-lg flex items-center justify-center">
+                <Settings className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-xl font-bold">AUTOMATION CONTROLS</span>
+            </div>
+            <div className="text-xs font-mono bg-[#0d82da] px-2 py-1 rounded text-white">AUTO-SYS</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-6 bg-white">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* OCR Processing */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">OCR</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Business Card OCR</h4>
+                    <p className="text-xs text-gray-600">Extract contact data</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* CRM Integration */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">CRM</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">HubSpot Sync</h4>
+                    <p className="text-xs text-gray-600">Auto-create contacts</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* QuickBooks Integration */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">QB</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">QuickBooks Sync</h4>
+                    <p className="text-xs text-gray-600">Customer creation</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* Slack Notifications */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
+                    <Bell className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Slack Alerts</h4>
+                    <p className="text-xs text-gray-600">Team notifications</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* Lead Scoring */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🎯</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Lead Scoring</h4>
+                    <p className="text-xs text-gray-600">Hot/Warm/Cold tags</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* PDF Generation */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">PDF</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Quote Generator</h4>
+                    <p className="text-xs text-gray-600">Auto-generate quotes</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* Calendar Tasks */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">📅</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Follow-Up Tasks</h4>
+                    <p className="text-xs text-gray-600">Schedule reminders</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* Voice Analytics */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-pink-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🎤</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Voice Analytics</h4>
+                    <p className="text-xs text-gray-600">ElevenLabs integration</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Package Permissions */}
+      <Card className="bg-white border-2 border-white shadow-xl">
+        <CardHeader className="pb-3 bg-black">
+          <CardTitle className="flex items-center justify-between text-white">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-[#0d82da] rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">👤</span>
+              </div>
+              <span className="text-xl font-bold">PACKAGE PERMISSIONS</span>
+            </div>
+            <div className="text-xs font-mono bg-[#0d82da] px-2 py-1 rounded text-white">PKG-MGR</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-6 bg-white">
+          <div className="space-y-4">
+            {/* Basic Package */}
+            <div className="p-4 bg-gray-100 rounded-lg border-2 border-gray-300">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h4 className="font-bold text-black text-lg">Basic Package</h4>
+                  <p className="text-sm text-gray-600">$99/month - Core features</p>
+                </div>
+                <Badge className="bg-gray-500 text-white">BASIC</Badge>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Business Card OCR</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Basic CRM Sync</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span>Lead Scoring</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span>Voice Analytics</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Pro Package */}
+            <div className="p-4 bg-blue-100 rounded-lg border-2 border-blue-300">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h4 className="font-bold text-black text-lg">Pro Package</h4>
+                  <p className="text-sm text-gray-600">$299/month - Advanced automation</p>
+                </div>
+                <Badge className="bg-blue-500 text-white">PRO</Badge>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>All Basic Features</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Lead Scoring</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>PDF Generation</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Calendar Integration</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Enterprise Package */}
+            <div className="p-4 bg-yellow-100 rounded-lg border-2 border-yellow-300">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h4 className="font-bold text-black text-lg">Enterprise Package</h4>
+                  <p className="text-sm text-gray-600">$699/month - Full automation suite</p>
+                </div>
+                <Badge className="bg-yellow-500 text-white">ENTERPRISE</Badge>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>All Pro Features</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Voice Analytics</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>QuickBooks Integration</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Custom Integrations</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Quick Actions */}
       <Card>
         <CardHeader>
