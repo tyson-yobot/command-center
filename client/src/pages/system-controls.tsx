@@ -5,6 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { 
   Settings, 
   Database, 
@@ -1077,6 +1084,90 @@ export default function SystemControls() {
           </Button>
         </div>
       </div>
+
+      {/* Action Log Modal */}
+      <Dialog open={showActionLog} onOpenChange={setShowActionLog}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-slate-900 border-slate-700">
+          <DialogHeader>
+            <DialogTitle className="text-white flex items-center space-x-2">
+              <ScrollText className="w-5 h-5" />
+              <span>System Action Log</span>
+            </DialogTitle>
+            <DialogDescription className="text-slate-300">
+              Real-time module activity and troubleshooting details
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            {/* Filter Controls */}
+            <div className="flex items-center space-x-4 p-4 bg-slate-800/50 rounded-lg">
+              <Label className="text-white text-sm">Filter:</Label>
+              <Button size="sm" variant="outline" className="text-xs border-slate-600 text-white hover:bg-slate-700">All</Button>
+              <Button size="sm" variant="outline" className="text-xs border-red-600 text-red-300 hover:bg-red-900/20">Errors Only</Button>
+              <Button size="sm" variant="outline" className="text-xs border-yellow-600 text-yellow-300 hover:bg-yellow-900/20">Warnings</Button>
+              <Button size="sm" variant="outline" className="text-xs border-slate-600 text-white hover:bg-slate-700">Last 24h</Button>
+            </div>
+
+            {/* Log Entries */}
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {actionLog.map((log) => (
+                <div 
+                  key={log.id}
+                  className={`p-3 rounded-lg border-l-4 ${
+                    log.status === 'Failed' || log.status === 'Error' 
+                      ? 'bg-red-900/20 border-red-500' 
+                      : log.status === 'Warning'
+                      ? 'bg-yellow-900/20 border-yellow-500'
+                      : 'bg-green-900/20 border-green-500'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-white font-medium text-sm">{log.module}</span>
+                      <Badge variant="outline" className="text-xs border-slate-600 text-slate-300">
+                        {log.action}
+                      </Badge>
+                      <Badge 
+                        className={`text-xs ${
+                          log.status === 'Failed' || log.status === 'Error'
+                            ? 'bg-red-500/20 text-red-300 border-red-500/30'
+                            : log.status === 'Warning'
+                            ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
+                            : 'bg-green-500/20 text-green-300 border-green-500/30'
+                        }`}
+                      >
+                        {log.status}
+                      </Badge>
+                    </div>
+                    <span className="text-slate-400 text-xs">
+                      {new Date(log.timestamp).toLocaleTimeString()}
+                    </span>
+                  </div>
+                  <p className="text-slate-300 text-sm mt-1">{log.details}</p>
+                </div>
+              ))}
+            </div>
+            
+            <div className="flex justify-end space-x-2 pt-4 border-t border-slate-700">
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="border-slate-600 text-white hover:bg-slate-700"
+                onClick={() => setActionLog([])}
+              >
+                Clear Log
+              </Button>
+              <Button 
+                size="sm"
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => setShowActionLog(false)}
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
