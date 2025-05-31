@@ -119,10 +119,10 @@ export default function Controls() {
   };
 
   return (
-    <div className="px-4 py-6 space-y-6 min-h-screen bg-gray-50">
+    <div className="px-4 py-6 space-y-6 min-h-screen bg-white">
       {/* Bot Status */}
-      <Card className="bg-white border-2 border-white shadow-2xl">
-        <CardHeader className="pb-3 bg-black">
+      <Card className="bg-white border-2 border-gray-200 shadow-lg">
+        <CardHeader className="pb-3 bg-blue-600">
           <CardTitle className="flex items-center justify-between text-white">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-[#0d82da] rounded-lg flex items-center justify-center">
@@ -139,7 +139,7 @@ export default function Controls() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 bg-white">
-          <div className="flex items-center justify-between p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+          <div className="flex items-center justify-between p-4 bg-gray-100 rounded-lg border border-gray-300">
             <div className="flex items-center space-x-4">
               <div className={`w-14 h-14 rounded-xl flex items-center justify-center relative overflow-hidden ${
                 bot.status === "active" 
