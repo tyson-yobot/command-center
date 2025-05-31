@@ -119,7 +119,7 @@ export default function Controls() {
   };
 
   return (
-    <div className="px-4 space-y-6">
+    <div className="px-4 py-6 space-y-6 min-h-screen bg-gray-50">
       {/* Bot Status */}
       <Card className="bg-white border-2 border-white shadow-2xl">
         <CardHeader className="pb-3 bg-black">
