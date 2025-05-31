@@ -7,7 +7,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
-import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe, sendNDAEmail, autoTagContactType, sendVoicebotWebhookResponse, syncToQuickBooks, alertSlackFailure, sendHubSpotFallback, pushToQuoteDashboard } from "./hubspotCRM";
+import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe, sendNDAEmail, autoTagContactType, sendVoicebotWebhookResponse, syncToQuickBooks, alertSlackFailure, sendHubSpotFallback, pushToQuoteDashboard, scheduleFollowUpTask, logEventToAirtable } from "./hubspotCRM";
 import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan, logSyncError, runRetryQueue } from "./airtableSync";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
@@ -411,6 +411,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await pushToQuoteDashboard(contactInfo);
           } catch (error) {
             await logSyncError(contactInfo, `Quote dashboard push failed: ${error.message}`);
+          }
+
+          // Schedule follow-up task in calendar
+          try {
+            await scheduleFollowUpTask(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Follow-up task scheduling failed: ${error.message}`);
+          }
+
+          // Final event logging to Airtable
+          try {
+            await logEventToAirtable(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Final event logging failed: ${error.message}`);
           }
           
           // Update status to processed since CRM push succeeded

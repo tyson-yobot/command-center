@@ -703,6 +703,64 @@ export async function pushToQuoteDashboard(contact: Contact) {
   }
 }
 
+export async function scheduleFollowUpTask(contact: Contact) {
+  try {
+    const taskSchedulerUrl = process.env.TASK_SCHEDULER_WEBHOOK_URL || "https://hook.us2.make.com/q0z48nfwhv7xgcxdjkpx81";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    const followUpDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // 24 hours from now
+
+    await axios.post(taskSchedulerUrl, {
+      full_name: fullName,
+      email: contact.email,
+      company: contact.company,
+      task_type: "Follow-Up",
+      due_date: followUpDate,
+      assigned_to: "Tyson",
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('📅 Follow-up task scheduled for', fullName);
+  } catch (error: any) {
+    console.error('Failed to schedule follow-up task:', error.message);
+  }
+}
+
+export async function logEventToAirtable(contact: Contact) {
+  try {
+    const eventLogUrl = process.env.EVENT_LOG_WEBHOOK_URL || "https://hook.us2.make.com/ed0s19v7wlzr1jbqgk6v2k";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    const contactType = await autoTagContactType(contact);
+
+    await axios.post(eventLogUrl, {
+      full_name: fullName,
+      email: contact.email,
+      company: contact.company,
+      event_type: "Business Card Automation Flow",
+      status: "Complete",
+      contact_type: contactType,
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('📡 Event logged to Airtable for', fullName);
+  } catch (error: any) {
+    console.error('Failed to log event to Airtable:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
