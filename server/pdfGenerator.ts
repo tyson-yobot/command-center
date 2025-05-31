@@ -1,6 +1,26 @@
 import fs from 'fs';
 import puppeteer from 'puppeteer';
 import path from 'path';
+import axios from 'axios';
+
+// Make webhook URL from environment
+const MAKE_WEBHOOK_URL = process.env.MAKE_WEBHOOK_URL || 'https://hook.us2.make.com/q8jd4o7mpku0cddAdd';
+
+/**
+ * Notify Make.com webhook with PDF generation data
+ */
+async function notifyMakeWithPDF(pdfData: Record<string, any>): Promise<void> {
+  try {
+    const response = await axios.post(MAKE_WEBHOOK_URL, pdfData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('✅ Make Webhook Triggered:', response.status);
+  } catch (error: any) {
+    console.error('❌ Failed to trigger Make:', error.message);
+  }
+}
 
 /**
  * Replace {{keys}} in the HTML template with real values
@@ -64,6 +84,7 @@ export async function generateQuotePDF(quoteData: {
   version: string;
 }): Promise<string> {
   const timestamp = Date.now();
+  const quoteId = `Q${timestamp}`;
   const filename = `quote-${quoteData.clientName.replace(/\s+/g, '-')}-${timestamp}.pdf`;
   const outputPath = path.join(process.cwd(), 'static', filename);
 
@@ -74,6 +95,22 @@ export async function generateQuotePDF(quoteData: {
   }
 
   await generatePDF('quote', quoteData, outputPath);
+
+  // Trigger Make webhook after successful PDF generation
+  const webhookPayload = {
+    pdf_url: `/static/${filename}`,
+    client: quoteData.clientName,
+    type: "quote",
+    quote_id: quoteId,
+    timestamp: new Date().toISOString(),
+    package: quoteData.botPackage,
+    one_time_price: quoteData.oneTime,
+    recurring_price: quoteData.recurring,
+    addons: quoteData.addons
+  };
+
+  await notifyMakeWithPDF(webhookPayload);
+
   return outputPath;
 }
 
@@ -96,6 +133,7 @@ export async function generateROIPDF(roiData: {
   achievement3: string;
 }): Promise<string> {
   const timestamp = Date.now();
+  const reportId = `ROI${timestamp}`;
   const filename = `roi-report-${roiData.clientName.replace(/\s+/g, '-')}-${timestamp}.pdf`;
   const outputPath = path.join(process.cwd(), 'static', filename);
 
@@ -106,5 +144,23 @@ export async function generateROIPDF(roiData: {
   }
 
   await generatePDF('roi', roiData, outputPath);
+
+  // Trigger Make webhook after successful PDF generation
+  const webhookPayload = {
+    pdf_url: `/static/${filename}`,
+    client: roiData.clientName,
+    type: "roi_report",
+    report_id: reportId,
+    timestamp: new Date().toISOString(),
+    package: roiData.package,
+    report_period: roiData.reportPeriod,
+    tickets_processed: roiData.ticketsProcessed,
+    roi_percentage: roiData.roiPercentage,
+    monthly_savings: roiData.monthlySavings,
+    satisfaction: roiData.satisfaction
+  };
+
+  await notifyMakeWithPDF(webhookPayload);
+
   return outputPath;
 }
