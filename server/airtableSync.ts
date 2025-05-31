@@ -72,3 +72,41 @@ export async function logBusinessCardScan(contact: any) {
     Status: 'Completed'
   });
 }
+
+export async function logSyncError(contact: any, reason: string) {
+  try {
+    if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID || !process.env.AIRTABLE_TABLE_ID) {
+      console.log('Airtable credentials not configured for error logging');
+      return;
+    }
+
+    const contactName = contact?.name || `${contact?.firstName || ''} ${contact?.lastName || ''}`.trim() || 'Unknown Contact';
+    const traceId = `R-${Math.floor(Math.random() * 10000)}`;
+
+    await axios.post(
+      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.AIRTABLE_TABLE_ID}`,
+      {
+        fields: {
+          Event: 'System Error',
+          Contact: contactName,
+          Email: contact?.email || 'N/A',
+          Source: 'Business Card Scanner',
+          Timestamp: new Date().toISOString(),
+          Status: 'Failed',
+          Details: reason,
+          TraceID: traceId
+        }
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    console.log(`❌ Error logged to Airtable: ${reason} (Trace: ${traceId})`);
+  } catch (error: any) {
+    console.error('Failed to log error to Airtable:', error.message);
+  }
+}

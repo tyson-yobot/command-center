@@ -8,7 +8,7 @@ import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
 import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF } from "./hubspotCRM";
-import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan } from "./airtableSync";
+import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan, logSyncError } from "./airtableSync";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
 import aiChatRouter from "./aiChat";
@@ -282,46 +282,98 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         if (!exists) {
           // Enrich contact data with Apollo first
-          await enrichContactWithApollo(contactInfo);
+          try {
+            await enrichContactWithApollo(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Apollo enrichment failed: ${error.message}`);
+          }
           
           // Then enrich with Clearbit for additional data
-          await enrichContactWithClearbit(contactInfo);
+          try {
+            await enrichContactWithClearbit(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Clearbit enrichment failed: ${error.message}`);
+          }
           
           await pushToCRM(contactInfo);
           console.log('✅ Contact pushed to HubSpot CRM successfully');
           
           // Send Slack notification to team
-          await notifySlack(contactInfo);
+          try {
+            await notifySlack(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Slack notification failed: ${error.message}`);
+          }
           
           // Create follow-up task in HubSpot
-          await createFollowUpTask(contactInfo);
+          try {
+            await createFollowUpTask(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Follow-up task creation failed: ${error.message}`);
+          }
           
           // Tag contact with source attribution
-          await tagContactSource(contactInfo);
+          try {
+            await tagContactSource(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Contact tagging failed: ${error.message}`);
+          }
           
           // Enroll contact in automated workflow
-          await enrollInWorkflow(contactInfo);
+          try {
+            await enrollInWorkflow(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Workflow enrollment failed: ${error.message}`);
+          }
           
           // Create deal in HubSpot pipeline
-          await createDealForContact(contactInfo);
+          try {
+            await createDealForContact(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Deal creation failed: ${error.message}`);
+          }
           
           // Export to Google Sheets as backup
-          await exportToGoogleSheet(contactInfo);
+          try {
+            await exportToGoogleSheet(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Google Sheets export failed: ${error.message}`);
+          }
           
           // Log deal creation to Airtable
-          await logDealCreated(contactInfo);
+          try {
+            await logDealCreated(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Airtable deal logging failed: ${error.message}`);
+          }
           
           // Log business card scan to Airtable
-          await logBusinessCardScan(contactInfo);
+          try {
+            await logBusinessCardScan(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Airtable scan logging failed: ${error.message}`);
+          }
           
           // Send enhanced Slack scan alert
-          await sendSlackScanAlert(contactInfo);
+          try {
+            await sendSlackScanAlert(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Slack scan alert failed: ${error.message}`);
+          }
           
           // Log to Supabase for long-term database storage
-          await logToSupabase(contactInfo, '📇 Business Card Scan');
+          try {
+            await logToSupabase(contactInfo, '📇 Business Card Scan');
+          } catch (error) {
+            await logSyncError(contactInfo, `Supabase logging failed: ${error.message}`);
+          }
           
           // Trigger PDF quote generation if contact qualifies
-          await triggerQuotePDF(contactInfo);
+          try {
+            await triggerQuotePDF(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `PDF quote trigger failed: ${error.message}`);
+          }
           
           // Update status to processed since CRM push succeeded
           await storage.updateScannedContact(scannedContact.id, { status: "processed" });
@@ -332,6 +384,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       } catch (crmError) {
         console.error('❌ CRM push failed:', crmError);
+        await logSyncError(contactInfo, `HubSpot CRM push failed: ${crmError.message}`);
         // Keep status as pending if CRM push fails - contact won't be lost
       }
 
