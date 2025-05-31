@@ -45,10 +45,10 @@ export default function BottomNav() {
           return (
             <Link key={item.path} href={item.path}>
               <button 
-                className={`relative flex flex-col items-center justify-center py-3 px-2 text-xs font-medium transition-all duration-200 transform active:scale-95 active:bg-slate-800 hover:shadow-md ${
+                className={`relative flex flex-col items-center justify-center py-3 px-2 text-xs font-semibold transition-all duration-200 transform active:scale-95 active:bg-slate-800 hover:shadow-md ${
                   isActive 
-                    ? 'text-blue-400' 
-                    : 'text-slate-400 hover:text-white'
+                    ? 'text-blue-400 bg-slate-800/50' 
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/30'
                 }`}
               >
                 <Icon className="h-5 w-5 mb-1" />

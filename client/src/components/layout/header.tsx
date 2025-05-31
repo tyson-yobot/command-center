@@ -33,18 +33,21 @@ export default function Header() {
     <>
       {/* Dark Header with White Logo Background */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg">
-        <div className="flex items-center justify-center px-4 py-3 relative">
+        <div className="flex items-center justify-between px-4 py-3">
+          {/* Left spacer for mobile balance */}
+          <div className="w-20"></div>
+          
           {/* Centered Logo with White Background for Brand */}
-          <div className="bg-white rounded-lg px-4 py-2 shadow-lg">
+          <div className="bg-white rounded-lg px-4 py-2 shadow-lg flex-shrink-0">
             <img 
               src={yobotLogoPath} 
               alt="YoBot Logo" 
-              className="h-12 w-auto"
+              className="h-10 w-auto"
             />
           </div>
           
-          {/* Admin Access & Connection Status - Top Right */}
-          <div className="absolute right-4 flex items-center space-x-3">
+          {/* Admin Access & Connection Status - Right Side */}
+          <div className="flex items-center space-x-2">
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button
