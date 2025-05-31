@@ -33,7 +33,10 @@ export default function Header() {
     <>
       {/* Dark Header with White Logo Background */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg">
-        <div className="flex items-center justify-center px-4 py-3 relative">
+        <div className="flex items-center justify-between px-2 py-3">
+          {/* Left spacer */}
+          <div className="w-16"></div>
+          
           {/* Centered Logo with White Background for Brand */}
           <div className="bg-white rounded-lg px-4 py-2 shadow-lg">
             <img 
@@ -43,8 +46,8 @@ export default function Header() {
             />
           </div>
           
-          {/* Connection Status & Theme Toggle - Absolute Right */}
-          <div className="absolute right-4 flex items-center space-x-2">
+          {/* Connection Status & Theme Toggle - Right Side */}
+          <div className="flex items-center space-x-1 w-16 justify-end">
             <Button
               variant="ghost"
               size="sm"
