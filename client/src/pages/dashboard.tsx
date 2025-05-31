@@ -55,40 +55,54 @@ export default function Dashboard() {
         ))}
       </div>
       
-      {/* Daily Totals Summary Banner */}
-      <Card className="bg-blue-600/90 backdrop-blur-sm border border-blue-400/30">
-        <CardContent className="p-3">
+      {/* Daily Totals Summary Banner - Desktop Styled */}
+      <Card className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl">
+        <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-white font-semibold text-sm">📅 Today's Totals</h3>
-              <div className="flex items-center space-x-4 text-xs text-blue-100 mt-1">
-                <span>🧠 AI Tasks: 58</span>
-                <span>💬 Conversations: 47</span>
-                <span>✅ Automations: 182</span>
+              <h3 className="text-white font-semibold text-sm flex items-center">
+                <TrendingUp className="w-4 h-4 mr-2 text-blue-400" />
+                Today's Performance
+              </h3>
+              <div className="flex items-center space-x-4 text-xs text-slate-300 mt-2">
+                <span className="flex items-center">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full mr-1"></div>
+                  AI Tasks: 58
+                </span>
+                <span className="flex items-center">
+                  <div className="w-2 h-2 bg-green-400 rounded-full mr-1"></div>
+                  Conversations: 47
+                </span>
+                <span className="flex items-center">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-1"></div>
+                  Automations: 182
+                </span>
               </div>
             </div>
             <div className="flex flex-col items-center">
-              <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-bold">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center text-white text-xs font-bold shadow-lg">
                 93%
               </div>
-              <span className="text-xs text-blue-100 mt-1">Health</span>
+              <span className="text-xs text-green-300 mt-1 font-medium">Health</span>
             </div>
           </div>
         </CardContent>
       </Card>
       
-      {/* System Alerts for Mobile */}
-      <Card className="bg-red-600/90 backdrop-blur-sm border border-red-400/30">
-        <CardContent className="p-3">
+      {/* System Alerts - Desktop Styled */}
+      <Card className="bg-gradient-to-r from-red-500/20 to-orange-500/20 backdrop-blur-lg border border-red-400/30 shadow-xl">
+        <CardContent className="p-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <AlertTriangle className="w-4 h-4 text-white" />
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center">
+                <AlertTriangle className="w-4 h-4 text-red-400" />
+              </div>
               <div>
-                <h3 className="text-white font-semibold text-sm">🚨 System Alerts</h3>
-                <p className="text-red-100 text-xs">2 automation failures, 1 missed follow-up</p>
+                <h3 className="text-white font-semibold text-sm">System Alerts</h3>
+                <p className="text-red-200 text-xs">2 automation failures, 1 missed follow-up</p>
               </div>
             </div>
-            <Badge variant="destructive" className="bg-red-800 text-white text-xs">
+            <Badge className="bg-red-600/80 text-white text-xs border-red-400/50">
               High Priority
             </Badge>
           </div>
@@ -97,25 +111,27 @@ export default function Dashboard() {
 
       <MetricsGrid />
       
-      {/* Essential Business Modules for Mobile */}
+      {/* Essential Business Modules - Desktop Styled */}
       <div className="grid grid-cols-1 gap-4">
         {/* Bot Health Monitor */}
-        <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
-          <CardHeader className="pb-2">
+        <Card className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl">
+          <CardHeader className="pb-3">
             <CardTitle className="text-white flex items-center text-sm">
-              <Activity className="w-4 h-4 mr-2 text-green-400" />
-              🤖 Bot Health Monitor
+              <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center mr-3">
+                <Activity className="w-4 h-4 text-green-400" />
+              </div>
+              Bot Health Monitor
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="flex justify-between">
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="flex justify-between items-center">
                 <span className="text-slate-300">Total Bots:</span>
-                <span className="text-white font-bold">8</span>
+                <span className="text-white font-bold bg-white/10 px-2 py-1 rounded">8</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center">
                 <span className="text-slate-300">Response Time:</span>
-                <span className="text-green-400 font-bold">1.2s</span>
+                <span className="text-green-400 font-bold bg-green-500/20 px-2 py-1 rounded">1.2s</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-300">Errors:</span>
