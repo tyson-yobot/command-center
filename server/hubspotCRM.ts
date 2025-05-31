@@ -761,6 +761,58 @@ export async function logEventToAirtable(contact: Contact) {
   }
 }
 
+export async function pushStripeConfirmation(contact: Contact, paymentData: any = {}) {
+  try {
+    const stripeConfirmationUrl = process.env.STRIPE_CONFIRMATION_WEBHOOK_URL || "https://hook.us2.make.com/4z2rnkq6bpp0v2t7c6qf1j";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+
+    await axios.post(stripeConfirmationUrl, {
+      full_name: fullName,
+      email: contact.email,
+      company: contact.company,
+      stripe_id: paymentData.stripe_id || `stripe_${Date.now()}`,
+      amount_paid: paymentData.amount_paid || 5000,
+      payment_date: paymentData.payment_date || new Date().toISOString(),
+      payment_type: "Initial Deposit",
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('💰 Stripe payment confirmation logged for', fullName);
+  } catch (error: any) {
+    console.error('Failed to push Stripe confirmation:', error.message);
+  }
+}
+
+export async function notifyStripePaymentSlack(contact: Contact, paymentData: any = {}) {
+  try {
+    const salesConfirmationUrl = process.env.SALES_CONFIRMATION_WEBHOOK_URL || "https://hooks.slack.com/services/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";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    const amountPaid = paymentData.amount_paid || 5000;
+    const stripeId = paymentData.stripe_id || `stripe_${Date.now()}`;
+
+    await axios.post(salesConfirmationUrl, {
+      text: `💰 *YoBot® Payment Received*\n• ${fullName} (${contact.email})\n• Amount: $${amountPaid}\n• Company: ${contact.company || 'N/A'}\n• Stripe ID: ${stripeId}\n• Time: ${new Date().toLocaleString()}`
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 5000
+    });
+
+    console.log('🎉 Sales confirmation alert sent to #sales-confirmations');
+  } catch (error: any) {
+    console.error('Failed to send sales confirmation alert:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
