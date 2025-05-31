@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { 
   Settings, 
   Database, 
@@ -20,10 +22,19 @@ import {
   MessageSquare,
   Activity,
   CheckCircle,
-  AlertTriangle
+  AlertTriangle,
+  Lock,
+  Unlock
 } from "lucide-react";
 
 export default function SystemControls() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState("");
+  const [authError, setAuthError] = useState("");
+  const [adminPassword, setAdminPassword] = useState("YoBot2025!"); // Default password
+  const [showPasswordSetup, setShowPasswordSetup] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+
   const [moduleStates, setModuleStates] = useState({
     // Voice & Communication
     voiceBotCore: true,
@@ -62,6 +73,33 @@ export default function SystemControls() {
     twilioSms: true
   });
 
+  const handleLogin = () => {
+    if (password === adminPassword) {
+      setIsAuthenticated(true);
+      setAuthError("");
+      setPassword("");
+    } else {
+      setAuthError("Invalid password. Access denied.");
+      setPassword("");
+    }
+  };
+
+  const handlePasswordUpdate = () => {
+    if (newPassword.length >= 8) {
+      setAdminPassword(newPassword);
+      setNewPassword("");
+      setShowPasswordSetup(false);
+      // Store in localStorage for persistence
+      localStorage.setItem("yobot_admin_password", newPassword);
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setPassword("");
+    setAuthError("");
+  };
+
   const toggleModule = (module: string) => {
     setModuleStates(prev => ({
       ...prev,
@@ -76,6 +114,89 @@ export default function SystemControls() {
   const getStatusIcon = (isActive: boolean) => {
     return isActive ? <CheckCircle className="w-4 h-4 text-green-500" /> : <AlertTriangle className="w-4 h-4 text-gray-500" />;
   };
+
+  // Login Screen
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-6">
+        <Card className="w-full max-w-md bg-white/10 backdrop-blur-sm border border-white/20">
+          <CardHeader className="text-center">
+            <div className="w-16 h-16 bg-red-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <Lock className="w-8 h-8 text-white" />
+            </div>
+            <CardTitle className="text-2xl font-black text-white">RESTRICTED ACCESS</CardTitle>
+            <p className="text-red-300 text-sm font-medium">System Control Panel</p>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-white font-semibold">Admin Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+                className="bg-white/10 border-white/20 text-white placeholder-white/50"
+                placeholder="Enter admin password"
+              />
+            </div>
+            
+            {authError && (
+              <div className="p-3 bg-red-500/20 border border-red-500/30 rounded-lg">
+                <p className="text-red-300 text-sm font-medium">{authError}</p>
+              </div>
+            )}
+            
+            <Button 
+              onClick={handleLogin}
+              className="w-full bg-red-600 hover:bg-red-700 text-white font-bold"
+            >
+              <Unlock className="w-4 h-4 mr-2" />
+              Authenticate
+            </Button>
+            
+            <div className="pt-4 border-t border-white/20">
+              <Button 
+                variant="outline"
+                onClick={() => setShowPasswordSetup(!showPasswordSetup)}
+                className="w-full border-white/20 text-white hover:bg-white/10"
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Change Password
+              </Button>
+              
+              {showPasswordSetup && (
+                <div className="mt-4 space-y-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="newPassword" className="text-white font-semibold">New Password</Label>
+                    <Input
+                      id="newPassword"
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="bg-white/10 border-white/20 text-white placeholder-white/50"
+                      placeholder="Minimum 8 characters"
+                    />
+                  </div>
+                  <Button 
+                    onClick={handlePasswordUpdate}
+                    disabled={newPassword.length < 8}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Update Password
+                  </Button>
+                </div>
+              )}
+            </div>
+            
+            <div className="text-center pt-4">
+              <p className="text-white/60 text-xs">Default: YoBot2025!</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white p-6">
@@ -471,6 +592,14 @@ export default function SystemControls() {
         <div className="flex space-x-3">
           <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
             Reset All
+          </Button>
+          <Button 
+            onClick={handleLogout}
+            variant="outline" 
+            className="border-red-500/30 text-red-300 hover:bg-red-500/10"
+          >
+            <Lock className="w-4 h-4 mr-2" />
+            Logout
           </Button>
           <Button className="bg-blue-600 hover:bg-blue-700 text-white">
             Save Configuration
