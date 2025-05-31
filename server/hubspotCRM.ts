@@ -549,6 +549,102 @@ export async function sendNDAEmail(contact: Contact) {
   }
 }
 
+export async function autoTagContactType(contact: Contact): Promise<string> {
+  let contactType = 'B2B'; // Default
+
+  if (contact.email?.includes('.gov') || contact.email?.includes('.mil')) {
+    contactType = 'Gov';
+  } else if (contact.email?.includes('@gmail.') || contact.email?.includes('@yahoo.') || contact.email?.includes('@hotmail.')) {
+    contactType = 'B2C';
+  } else {
+    contactType = 'B2B';
+  }
+
+  console.log(`🏷️ Contact tagged as ${contactType} based on email domain`);
+  return contactType;
+}
+
+export async function sendVoicebotWebhookResponse(contact: Contact, status: string = 'success') {
+  const contactType = await autoTagContactType(contact);
+  const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+
+  return {
+    status: status,
+    message: 'Contact processed and logged in CRM.',
+    contact_type: contactType,
+    contact_name: fullName,
+    company: contact.company,
+    next_steps: 'Follow-up scheduled and NDA sent for qualified contacts.',
+    timestamp: new Date().toISOString()
+  };
+}
+
+export async function syncToQuickBooks(contact: Contact) {
+  try {
+    const quickbooksWebhookUrl = process.env.QUICKBOOKS_WEBHOOK_URL || "https://hook.us2.make.com/1n4fqwckdjfdwdq28sds8";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    const contactType = await autoTagContactType(contact);
+
+    // Check if contact qualifies for QuickBooks invoice (B2B or Gov)
+    const qualifiesForInvoice = contactType === 'B2B' || contactType === 'Gov';
+    
+    if (!qualifiesForInvoice) {
+      console.log('Contact does not qualify for QuickBooks invoice generation');
+      return;
+    }
+
+    await axios.post(quickbooksWebhookUrl, {
+      email: contact.email,
+      company: contact.company,
+      full_name: fullName,
+      amount: 5000, // Default Pro package amount
+      line_items: [
+        {
+          description: "YoBot Pro Automation Package",
+          quantity: 1,
+          rate: 5000
+        }
+      ],
+      contact_type: contactType,
+      quote_id: `YB-${Date.now()}`,
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('📊 QuickBooks invoice sync triggered for', fullName);
+  } catch (error: any) {
+    console.error('Failed to sync to QuickBooks:', error.message);
+  }
+}
+
+export async function alertSlackFailure(contact: Contact, errorMessage: string) {
+  try {
+    const slackFailWebhookUrl = process.env.SLACK_FAIL_WEBHOOK_URL || "https://hooks.slack.com/services/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";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    const contactType = await autoTagContactType(contact);
+
+    await axios.post(slackFailWebhookUrl, {
+      text: `❌ *YoBot® Alert: System Failure Detected*\n• Contact: ${fullName} (${contact.email})\n• Company: ${contact.company || 'N/A'}\n• Type: ${contactType}\n• Error: ${errorMessage}\n• Time: ${new Date().toLocaleString()}`
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 5000
+    });
+
+    console.log('🚨 Failure alert sent to #yobot-fails channel');
+  } catch (error: any) {
+    console.error('Failed to send Slack failure alert:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;

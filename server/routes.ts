@@ -7,7 +7,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
-import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe, sendNDAEmail } from "./hubspotCRM";
+import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe, sendNDAEmail, autoTagContactType, sendVoicebotWebhookResponse } from "./hubspotCRM";
 import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan, logSyncError, runRetryQueue } from "./airtableSync";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
@@ -281,6 +281,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const exists = contactInfo.email ? await contactExistsInHubSpot(contactInfo.email) : false;
         
         if (!exists) {
+          // Auto-tag contact type based on email domain
+          const contactType = await autoTagContactType(contactInfo);
+          
           // Enrich contact data with Apollo first
           try {
             await enrichContactWithApollo(contactInfo);
@@ -398,15 +401,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           // Update status to processed since CRM push succeeded
           await storage.updateScannedContact(scannedContact.id, { status: "processed" });
+          
+          // Generate VoiceBot webhook response
+          const voicebotResponse = await sendVoicebotWebhookResponse(contactInfo, 'success');
+          
+          res.json({
+            success: true,
+            extractedText: text,
+            contact: contactInfo,
+            voicebot_response: voicebotResponse,
+            status: "Contact processed and added to CRM workflow"
+          });
+          return;
         } else {
           console.log('⚠️ Contact already exists in HubSpot. Skipping duplicate.');
           // Still mark as processed since we handled it appropriately
           await storage.updateScannedContact(scannedContact.id, { status: "processed" });
+          
+          // Generate VoiceBot response for existing contact
+          const voicebotResponse = await sendVoicebotWebhookResponse(contactInfo, 'duplicate');
+          
+          res.json({
+            success: true,
+            extractedText: text,
+            contact: contactInfo,
+            voicebot_response: voicebotResponse,
+            status: "Contact already exists in CRM"
+          });
+          return;
         }
       } catch (crmError) {
         console.error('❌ CRM push failed:', crmError);
         await logSyncError(contactInfo, `HubSpot CRM push failed: ${crmError.message}`);
         // Keep status as pending if CRM push fails - contact won't be lost
+        
+        // Generate error response for VoiceBot
+        const voicebotResponse = await sendVoicebotWebhookResponse(contactInfo, 'error');
+        
+        res.json({
+          success: false,
+          extractedText: text,
+          contact: contactInfo,
+          voicebot_response: voicebotResponse,
+          error: "CRM processing failed - contact saved for retry"
+        });
+        return;
       }
 
       // Send to Make webhook
