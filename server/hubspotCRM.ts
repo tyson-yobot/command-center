@@ -200,6 +200,59 @@ export async function enrollInWorkflow(contact: Contact) {
   }
 }
 
+export async function createDealForContact(contact: Contact) {
+  try {
+    if (!process.env.HUBSPOT_API_KEY || !contact.email) {
+      console.log('HubSpot API key or contact email missing, skipping deal creation');
+      return;
+    }
+
+    const name = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || 'Unknown Contact';
+
+    // Step 1: Get contact ID from email
+    const contactRes = await axios.get(
+      `https://api.hubapi.com/contacts/v1/contact/email/${contact.email}/profile`,
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    const contactId = contactRes.data.vid;
+
+    // Step 2: Create the deal
+    const dealPayload = {
+      properties: [
+        { name: 'dealname', value: `Business Card Lead - ${name}` },
+        { name: 'dealstage', value: 'appointmentscheduled' },
+        { name: 'pipeline', value: 'default' },
+        { name: 'amount', value: '0' },
+        { name: 'source', value: 'business_card_scanner' }
+      ],
+      associations: {
+        associatedVids: [contactId]
+      }
+    };
+
+    const res = await axios.post(
+      'https://api.hubapi.com/deals/v1/deal',
+      dealPayload,
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    console.log('📈 Deal created for contact:', res.data.dealId);
+  } catch (err: any) {
+    console.error('❌ Failed to create deal:', err.response?.data || err.message);
+  }
+}
+
 export async function pushToCRM(contact: Contact) {
   try {
     if (!process.env.HUBSPOT_API_KEY) {

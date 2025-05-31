@@ -7,7 +7,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
-import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow } from "./hubspotCRM";
+import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact } from "./hubspotCRM";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
 import aiChatRouter from "./aiChat";
@@ -294,6 +294,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           // Enroll contact in automated workflow
           await enrollInWorkflow(contactInfo);
+          
+          // Create deal in HubSpot pipeline
+          await createDealForContact(contactInfo);
           
           // Update status to processed since CRM push succeeded
           await storage.updateScannedContact(scannedContact.id, { status: "processed" });
