@@ -597,6 +597,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Retry queue endpoint for processing failed syncs
+  app.post('/api/retry-queue', async (req, res) => {
+    try {
+      await runRetryQueue();
+      res.json({ 
+        success: true, 
+        message: 'Retry queue processed successfully' 
+      });
+    } catch (error) {
+      console.error('Retry queue processing failed:', error);
+      res.status(500).json({ error: 'Failed to process retry queue' });
+    }
+  });
+
   // Debug route to check current user role
   app.get('/api/me', (req, res) => {
     res.json({ user: req.user || null });

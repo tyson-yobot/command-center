@@ -444,28 +444,23 @@ export async function triggerQuotePDF(contact: Contact) {
 
 export async function addToCalendar(contact: Contact) {
   try {
-    const calendarWebhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL || process.env.CALENDAR_WEBHOOK_URL;
+    const calendarWebhookUrl = process.env.CALENDAR_WEBHOOK_URL || "https://hook.us2.make.com/pd6js5hayd17egoe0o28b7adwbqy5yyo";
     
-    if (!calendarWebhookUrl) {
-      console.log('Calendar webhook URL not configured');
-      return;
-    }
-
     const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
 
     await axios.post(calendarWebhookUrl, {
-      title: `Follow-Up: ${fullName}`,
-      start: new Date(Date.now() + 3600000).toISOString(), // +1 hour from now
+      title: `👤 Follow-Up: ${fullName}`,
       email: contact.email,
-      company: contact.company,
+      start_time: new Date(Date.now() + 3600000).toISOString(), // 1 hour from now
       source: 'Business Card Scanner',
-      type: 'follow-up',
-      contact: {
-        name: fullName,
-        email: contact.email,
-        phone: contact.phone,
-        company: contact.company
-      }
+      company: contact.company,
+      phone: contact.phone,
+      full_name: fullName
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
     });
 
     console.log('📅 Calendar follow-up event created for', fullName);
