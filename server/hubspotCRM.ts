@@ -579,48 +579,129 @@ export async function sendVoicebotWebhookResponse(contact: Contact, status: stri
   };
 }
 
-export async function syncToQuickBooks(contact: Contact) {
+export async function sendWebhookResponse(contact: Contact, status: string, webhookReplyUrl?: string) {
   try {
-    const quickbooksWebhookUrl = process.env.QUICKBOOKS_WEBHOOK_URL || "https://hook.us2.make.com/1n4fqwckdjfdwdq28sds8";
-    
-    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
-    const contactType = await autoTagContactType(contact);
-
-    // Check if contact qualifies for QuickBooks invoice (B2B or Gov)
-    const qualifiesForInvoice = contactType === 'B2B' || contactType === 'Gov';
-    
-    if (!qualifiesForInvoice) {
-      console.log('Contact does not qualify for QuickBooks invoice generation');
+    if (!webhookReplyUrl) {
+      console.log('No webhook reply URL provided, skipping response');
       return;
     }
 
-    await axios.post(quickbooksWebhookUrl, {
-      email: contact.email,
-      company: contact.company,
-      full_name: fullName,
-      amount: 5000, // Default Pro package amount
-      line_items: [
-        {
-          description: "YoBot Pro Automation Package",
-          quantity: 1,
-          rate: 5000
-        }
-      ],
-      contact_type: contactType,
-      quote_id: `YB-${Date.now()}`,
-      source: 'Business Card Scanner',
-      timestamp: new Date().toISOString()
-    }, {
-      headers: {
-        'Content-Type': 'application/json'
+    const responseBody = {
+      contactId: contact.email, // Using email as unique identifier
+      voiceBotReply: status === "success"
+        ? `Got it. Your request has been completed.`
+        : `There was a hiccup. I've logged the issue for review.`,
+      status: status,
+      timestamp: new Date().toISOString(),
+      source: 'YoBot Business Card Scanner'
+    };
+
+    await axios.post(webhookReplyUrl, responseBody, {
+      headers: { 
+        "Content-Type": "application/json" 
       },
-      timeout: 10000
+      timeout: 5000
     });
 
-    console.log('📊 QuickBooks invoice sync triggered for', fullName);
+    console.log('📬 Webhook response sent to VoiceBot');
+  } catch (error: any) {
+    console.error('Failed to send webhook response:', error.message);
+  }
+}
+
+export async function syncToQuickBooks(contact: Contact) {
+  try {
+    // Try direct QuickBooks API first, fallback to webhook
+    if (process.env.QUICKBOOKS_TOKEN && process.env.QUICKBOOKS_COMPANY_ID) {
+      await syncToQuickBooksDirectAPI(contact);
+    } else {
+      await syncToQuickBooksWebhook(contact);
+    }
   } catch (error: any) {
     console.error('Failed to sync to QuickBooks:', error.message);
   }
+}
+
+async function syncToQuickBooksDirectAPI(contact: Contact) {
+  const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+  const contactType = await autoTagContactType(contact);
+
+  // Check if contact qualifies for QuickBooks (B2B or Gov)
+  const qualifiesForQuickBooks = contactType === 'B2B' || contactType === 'Gov';
+  
+  if (!qualifiesForQuickBooks) {
+    console.log('Contact does not qualify for QuickBooks sync');
+    return;
+  }
+
+  const quickBooksPayload = {
+    displayName: fullName,
+    primaryEmailAddr: { address: contact.email },
+    notes: `Imported from YoBot® | CRM → QuickBooks`,
+    companyName: contact.company,
+    customField: [
+      {
+        DefinitionId: "1",
+        Name: "Lead Source",
+        Type: "StringType",
+        StringValue: "YoBot® AI"
+      }
+    ]
+  };
+
+  await axios.post(
+    `https://quickbooks.api.intuit.com/v3/company/${process.env.QUICKBOOKS_COMPANY_ID}/customer`,
+    quickBooksPayload,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.QUICKBOOKS_TOKEN}`
+      },
+      timeout: 10000
+    }
+  );
+
+  console.log('✅ QuickBooks direct API sync complete for', fullName);
+}
+
+async function syncToQuickBooksWebhook(contact: Contact) {
+  const quickbooksWebhookUrl = process.env.QUICKBOOKS_WEBHOOK_URL || "https://hook.us2.make.com/1n4fqwckdjfdwdq28sds8";
+  
+  const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+  const contactType = await autoTagContactType(contact);
+
+  // Check if contact qualifies for QuickBooks invoice (B2B or Gov)
+  const qualifiesForInvoice = contactType === 'B2B' || contactType === 'Gov';
+  
+  if (!qualifiesForInvoice) {
+    console.log('Contact does not qualify for QuickBooks invoice generation');
+    return;
+  }
+
+  await axios.post(quickbooksWebhookUrl, {
+    email: contact.email,
+    company: contact.company,
+    full_name: fullName,
+    amount: 5000, // Default Pro package amount
+    line_items: [
+      {
+        description: "YoBot Pro Automation Package",
+        quantity: 1,
+        rate: 5000
+      }
+    ],
+    contact_type: contactType,
+    quote_id: `YB-${Date.now()}`,
+    source: 'Business Card Scanner',
+    timestamp: new Date().toISOString()
+  }, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    timeout: 10000
+  });
+
+  console.log('📊 QuickBooks webhook sync triggered for', fullName);
 }
 
 export async function alertSlackFailure(contact: Contact, errorMessage: string) {
