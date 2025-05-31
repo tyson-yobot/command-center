@@ -1,12 +1,33 @@
-import { Activity, Sun, Moon } from "lucide-react";
+import { Activity, Sun, Moon, Settings } from "lucide-react";
 import { useWebSocket } from "@/hooks/use-websocket";
 import { useTheme } from "@/hooks/use-theme";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { useLocation } from "wouter";
 import yobotLogoPath from "@assets/Engage Smarter Logo Transparent.png";
 
 export default function Header() {
   const { isConnected } = useWebSocket();
   const { theme, setTheme } = useTheme();
+  const [, setLocation] = useLocation();
+  const [password, setPassword] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleAdminAccess = () => {
+    if (password === "yobot2025") {
+      setIsDialogOpen(false);
+      setPassword("");
+      setError("");
+      setLocation("/system-controls");
+    } else {
+      setError("Incorrect password");
+      setPassword("");
+    }
+  };
 
   return (
     <>
@@ -22,8 +43,63 @@ export default function Header() {
             />
           </div>
           
-          {/* Connection Status & Theme Toggle - Top Right */}
+          {/* Admin Access & Connection Status - Top Right */}
           <div className="absolute right-4 flex items-center space-x-3">
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0 hover:bg-slate-800 text-slate-400 hover:text-white"
+                >
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md bg-slate-900 border-slate-700">
+                <DialogHeader>
+                  <DialogTitle className="text-white">Admin Access</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="admin-password" className="text-slate-300">
+                      Enter Admin Password
+                    </Label>
+                    <Input
+                      id="admin-password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleAdminAccess()}
+                      className="mt-1 bg-slate-800 border-slate-600 text-white"
+                      placeholder="Password"
+                    />
+                    {error && (
+                      <p className="text-red-400 text-sm mt-1">{error}</p>
+                    )}
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setIsDialogOpen(false);
+                        setPassword("");
+                        setError("");
+                      }}
+                      className="bg-slate-800 border-slate-600 text-white hover:bg-slate-700"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleAdminAccess}
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      Access Control Panel
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+            
             <Button
               variant="ghost"
               size="sm"

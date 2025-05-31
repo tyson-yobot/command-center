@@ -50,7 +50,7 @@ export default function SystemControls() {
   const [newPassword, setNewPassword] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [userRole, setUserRole] = useState<'admin' | 'client' | 'support'>('admin');
-  const [selectedPackage, setSelectedPackage] = useState<'starter' | 'professional' | 'enterprise' | 'custom'>('professional');
+  const [selectedPackage, setSelectedPackage] = useState<'starter' | 'pro' | 'enterprise' | 'platinum'>('pro');
   const [showPackageBuilder, setShowPackageBuilder] = useState(false);
   const [billingMode, setBillingMode] = useState<'subscription' | 'usage' | 'trial'>('subscription');
   const [showActionLog, setShowActionLog] = useState(false);
