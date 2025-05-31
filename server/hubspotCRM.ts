@@ -813,6 +813,129 @@ export async function notifyStripePaymentSlack(contact: Contact, paymentData: an
   }
 }
 
+export async function triggerToneVariant(contact: Contact, voiceData: any = {}) {
+  try {
+    const toneVariantUrl = process.env.TONE_VARIANT_WEBHOOK_URL || "https://hook.us2.make.com/22nsdvwb0rvyakx7qe67k9";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    const contactType = await autoTagContactType(contact);
+    
+    // Determine preferred tone based on contact type
+    const preferredTone = contactType === 'Gov' ? 'professional' : 
+                         contactType === 'B2B' ? 'friendly' : 'casual';
+
+    await axios.post(toneVariantUrl, {
+      voice_id: "cjVigY5qzO86Huf0OWal",
+      full_name: fullName,
+      tone: voiceData.preferred_tone || preferredTone,
+      response_text: voiceData.voice_response_text || `Hello ${fullName}, thank you for your interest in YoBot automation solutions.`,
+      contact_type: contactType,
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('🗣️ Voice tone variant triggered for', fullName);
+  } catch (error: any) {
+    console.error('Failed to trigger tone variant:', error.message);
+  }
+}
+
+export async function generateFallbackAudio(contact: Contact, audioData: any = {}) {
+  try {
+    if (!process.env.ELEVENLABS_API_KEY) {
+      console.log('ElevenLabs API key not configured');
+      return;
+    }
+
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    const fallbackText = audioData.fallback_text || 
+      `Thank you ${fullName} for connecting with YoBot. We'll be in touch soon regarding your automation needs.`;
+
+    const response = await axios.post(
+      "https://api.elevenlabs.io/v1/text-to-speech/cjVigY5qzO86Huf0OWal/stream",
+      {
+        text: fallbackText,
+        voice_settings: {
+          stability: 0.65,
+          similarity_boost: 0.8
+        }
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "xi-api-key": process.env.ELEVENLABS_API_KEY
+        },
+        timeout: 15000,
+        responseType: 'stream'
+      }
+    );
+
+    console.log('🎧 Fallback audio generated for', fullName);
+    return response.data;
+  } catch (error: any) {
+    console.error('Failed to generate fallback audio:', error.message);
+  }
+}
+
+export async function triggerPDFReceipt(contact: Contact, paymentData: any = {}) {
+  try {
+    const pdfReceiptUrl = process.env.PDF_RECEIPT_WEBHOOK_URL || "https://hook.us2.make.com/ed89qp23lzjmf71jxdplnc";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+
+    await axios.post(pdfReceiptUrl, {
+      full_name: fullName,
+      email: contact.email,
+      company: contact.company,
+      amount_paid: paymentData.amount_paid || 5000,
+      stripe_id: paymentData.stripe_id || `stripe_${Date.now()}`,
+      payment_date: paymentData.payment_date || new Date().toISOString(),
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('📄 PDF receipt generation triggered for', fullName);
+  } catch (error: any) {
+    console.error('Failed to trigger PDF receipt:', error.message);
+  }
+}
+
+export async function handleStripeRetry(contact: Contact, errorData: any = {}) {
+  try {
+    const stripeRetryUrl = process.env.STRIPE_RETRY_WEBHOOK_URL || "https://hook.us2.make.com/xd7vw9c1k8qpqv03pdrzsb";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+
+    await axios.post(stripeRetryUrl, {
+      email: contact.email,
+      full_name: fullName,
+      company: contact.company,
+      failed_reason: errorData.payment_error || 'Payment processing failed',
+      retry_flag: true,
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('🔁 Stripe retry handler triggered for', fullName);
+  } catch (error: any) {
+    console.error('Failed to handle Stripe retry:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
