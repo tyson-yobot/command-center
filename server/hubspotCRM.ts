@@ -936,6 +936,65 @@ export async function handleStripeRetry(contact: Contact, errorData: any = {}) {
   }
 }
 
+export async function logToneMatch(contact: Contact, voiceData: any = {}) {
+  try {
+    const toneMatchUrl = process.env.TONE_MATCH_WEBHOOK_URL || "https://hook.us2.make.com/9r2xkm67dpvlxqk1mzpa4e";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    const contactType = await autoTagContactType(contact);
+    
+    // Calculate tone match score based on contact type alignment
+    const selectedTone = voiceData.preferred_tone || (contactType === 'Gov' ? 'professional' : contactType === 'B2B' ? 'friendly' : 'casual');
+    const matchScore = voiceData.tone_match_score || 0.85;
+
+    await axios.post(toneMatchUrl, {
+      full_name: fullName,
+      email: contact.email,
+      company: contact.company,
+      selected_tone: selectedTone,
+      match_score: matchScore,
+      contact_type: contactType,
+      source: "VoiceBot Personality Sync",
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('🧠 Voice tone match logged for', fullName);
+  } catch (error: any) {
+    console.error('Failed to log tone match:', error.message);
+  }
+}
+
+export async function logVoiceTranscript(contact: Contact, transcriptData: any = {}) {
+  try {
+    const transcriptUrl = process.env.VOICE_TRANSCRIPT_WEBHOOK_URL || "https://hook.us2.make.com/8pxdmlvqzqptokjv3n9nrr";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+
+    await axios.post(transcriptUrl, {
+      full_name: fullName,
+      email: contact.email,
+      company: contact.company,
+      transcript_text: transcriptData.transcript_fallback || `Business card scan initiated for ${fullName}`,
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('📝 Voice transcript logged for', fullName);
+  } catch (error: any) {
+    console.error('Failed to log voice transcript:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
