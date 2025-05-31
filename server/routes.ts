@@ -7,7 +7,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
-import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe, sendNDAEmail, autoTagContactType, sendVoicebotWebhookResponse, syncToQuickBooks, alertSlackFailure, sendHubSpotFallback, pushToQuoteDashboard, scheduleFollowUpTask, logEventToAirtable, triggerToneVariant, generateFallbackAudio, triggerPDFReceipt, handleStripeRetry, logToneMatch, logVoiceTranscript, assignCRMOwner, logVoiceEscalationEvent, dispatchCallSummary, pushToMetricsTracker, logCRMVoiceMatch, updateContractStatus, logIntentAndEntities, pushCommandSuggestions, logScenarioLoop, logABScriptTest, sendWebhookResponse, sendErrorSlackAlert, pushToProposalDashboard, assignLeadScore, logToSmartSpend, markContactComplete } from "./hubspotCRM";
+import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe, sendNDAEmail, autoTagContactType, sendVoicebotWebhookResponse, syncToQuickBooks, alertSlackFailure, sendHubSpotFallback, pushToQuoteDashboard, scheduleFollowUpTask, logEventToAirtable, triggerToneVariant, generateFallbackAudio, triggerPDFReceipt, handleStripeRetry, logToneMatch, logVoiceTranscript, assignCRMOwner, logVoiceEscalationEvent, dispatchCallSummary, pushToMetricsTracker, logCRMVoiceMatch, updateContractStatus, logIntentAndEntities, pushCommandSuggestions, logScenarioLoop, logABScriptTest, sendWebhookResponse, sendErrorSlackAlert, pushToProposalDashboard, assignLeadScore, logToSmartSpend, markContactComplete, logToCommandCenter } from "./hubspotCRM";
 import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan, logSyncError, runRetryQueue } from "./airtableSync";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
@@ -444,6 +444,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           } catch (error) {
             await logSyncError(contactInfo, `SmartSpend ROI logging failed: ${error.message}`);
             await sendErrorSlackAlert(contactInfo, 'SmartSpend ROI', error);
+          }
+
+          // Log to Command Center Metrics Tracker
+          try {
+            await logToCommandCenter(contactInfo, "Business Card Scanner");
+          } catch (error) {
+            await logSyncError(contactInfo, `Command Center logging failed: ${error.message}`);
+            await sendErrorSlackAlert(contactInfo, 'Command Center', error);
           }
 
           // Mark contact as complete in tracking system

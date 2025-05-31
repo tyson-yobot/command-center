@@ -1627,3 +1627,45 @@ export async function markContactComplete(contact: Contact, airtableRecordId?: s
     console.error('Failed to mark contact complete:', error.message);
   }
 }
+
+export async function logToCommandCenter(contact: Contact, source: string = "Business Card Scanner") {
+  try {
+    if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID) {
+      console.log('Airtable credentials not configured for Command Center logging');
+      return;
+    }
+
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    const leadScore = await assignLeadScore(contact);
+    const contactType = await autoTagContactType(contact);
+
+    const payload = {
+      fields: {
+        "Contact": fullName,
+        "Email": contact.email,
+        "Company": contact.company || "",
+        "Package Type": "YoBot Pro", // Default package
+        "Lead Score": leadScore,
+        "Contact Type": contactType,
+        "Source": source,
+        "Timestamp": new Date().toISOString()
+      }
+    };
+
+    await axios.post(
+      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Command%20Center%20Metrics%20Tracker`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        timeout: 10000
+      }
+    );
+
+    console.log('📊 Logged to Command Center Metrics Tracker');
+  } catch (error: any) {
+    console.error('Failed to log to Command Center:', error.message);
+  }
+}
