@@ -21,6 +21,7 @@ import { generateAIResponse, logSupportInteraction } from "./aiSupportAgent";
 import { analyzeEscalationRisk, routeEscalation } from "./escalationEngine";
 import { postReplyToZendesk, updateTicketPriority, createEscalationTicket, testZendeskConnection } from "./zendeskIntegration";
 import { generateVoiceReply, testElevenLabsConnection, getAvailableVoices } from "./voiceGeneration";
+import { sendSlackAlert } from "./alerts";
 import { setupWebSocket, broadcastUpdate } from "./websocket";
 import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
@@ -978,6 +979,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       res.status(500).json({
         error: "Failed to fetch voices",
+        message: error.message
+      });
+    }
+  });
+
+  // Test Slack integration
+  app.post('/api/test-slack', async (req, res) => {
+    try {
+      const { message } = req.body;
+      const testMessage = message || "YoBot Command Center - Slack integration test";
+      
+      // Send test message to Slack
+      await sendSlackAlert(testMessage);
+      
+      res.json({
+        success: true,
+        message: "Slack notification sent successfully"
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
         message: error.message
       });
     }
