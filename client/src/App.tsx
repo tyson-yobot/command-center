@@ -13,6 +13,7 @@ import AdminConsole from "@/pages/admin";
 import ClientDashboard from "@/pages/client-dashboard";
 import DemoMode from "@/pages/demo";
 import DesktopCommandCenter from "@/components/desktop-command-center";
+import SystemControls from "@/pages/system-controls";
 import Header from "@/components/layout/header";
 import BottomNav from "@/components/layout/bottom-nav";
 import InstallPrompt from "@/components/pwa/install-prompt";
@@ -31,6 +32,9 @@ function Router() {
         </Route>
         <Route path="/admin">
           <DesktopCommandCenter />
+        </Route>
+        <Route path="/system-controls">
+          <SystemControls />
         </Route>
         <Route path="/dashboard">
           <ClientDashboard />
