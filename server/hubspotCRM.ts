@@ -1095,6 +1095,57 @@ export async function pushToMetricsTracker(contact: Contact, metricsData: any = 
   }
 }
 
+export async function logCRMVoiceMatch(contact: Contact, matchData: any = {}) {
+  try {
+    const crossRefUrl = process.env.CRM_VOICE_MATCH_WEBHOOK_URL || "https://hook.us2.make.com/lqr9jpvbx7xkmdo2apxe8j";
+    
+    await axios.post(crossRefUrl, {
+      email: contact.email,
+      company: contact.company,
+      crm_id: matchData.crm_id || `hubspot_${Date.now()}`,
+      voice_log_id: matchData.voice_log_id || `voice_${Date.now()}`,
+      matched: true,
+      synced_at: new Date().toISOString(),
+      source: 'Business Card Scanner'
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('🔗 CRM-VoiceBot cross-reference logged');
+  } catch (error: any) {
+    console.error('Failed to log CRM-Voice match:', error.message);
+  }
+}
+
+export async function updateContractStatus(contact: Contact, contractData: any = {}) {
+  try {
+    const contractUrl = process.env.CONTRACT_STATUS_WEBHOOK_URL || "https://hook.us2.make.com/2zyqjkwlbdl09vqw7am3o8";
+    
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+
+    await axios.post(contractUrl, {
+      full_name: fullName,
+      email: contact.email,
+      company: contact.company,
+      contract_status: contractData.contract_status || "Pending",
+      signed_at: contractData.contract_signed_date || new Date().toISOString(),
+      source: 'Business Card Scanner'
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('🧾 Contract status updated for', fullName);
+  } catch (error: any) {
+    console.error('Failed to update contract status:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
