@@ -38,7 +38,7 @@ export async function postReplyToZendesk(data: ZendeskReplyData): Promise<Zendes
   const url = `https://${config.domain}/api/v2/tickets/${ticketId}.json`;
 
   const headers = {
-    'Authorization': `Bearer ${config.apiKey}`,
+    'Authorization': `Basic ${Buffer.from(`${config.email}/token:${config.apiKey}`).toString('base64')}`,
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   };

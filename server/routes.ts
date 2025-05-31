@@ -886,6 +886,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Test Zendesk connection
+  app.get('/api/support/zendesk/test', async (req, res) => {
+    try {
+      const result = await testZendeskConnection();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  });
+
+  // Manual Zendesk reply endpoint
+  app.post('/api/support/zendesk/reply', async (req, res) => {
+    try {
+      const { ticketId, replyText, isPublic = false } = req.body;
+
+      if (!ticketId || !replyText) {
+        return res.status(400).json({
+          error: "Missing required fields",
+          required: ["ticketId", "replyText"]
+        });
+      }
+
+      const result = await postReplyToZendesk({
+        ticketId,
+        replyText,
+        isPublic
+      });
+
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        status: 'error',
+        message: error.message
+      });
+    }
+  });
+
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
     if (!req.user) {
