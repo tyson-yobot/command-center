@@ -7,6 +7,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
+import { pushToCRM } from "./hubspotCRM";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
 import aiChatRouter from "./aiChat";
@@ -272,6 +273,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         source: "card_scan",
         status: "pending"
       });
+
+      // Push to HubSpot CRM
+      try {
+        await pushToCRM(contactInfo);
+        console.log('✅ Contact pushed to HubSpot CRM successfully');
+        // Update status to processed since CRM push succeeded
+        await storage.updateScannedContact(scannedContact.id, { status: "processed" });
+      } catch (crmError) {
+        console.error('❌ CRM push failed:', crmError);
+        // Keep status as pending if CRM push fails
+      }
 
       // Send to Make webhook
       const webhookUrl = "https://hook.us2.make.com/zotpeemkmmftah364aownf3gt94a5v8g";
