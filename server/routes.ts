@@ -7,7 +7,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
-import { pushToCRM } from "./hubspotCRM";
+import { pushToCRM, contactExistsInHubSpot, notifySlack } from "./hubspotCRM";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
 import aiChatRouter from "./aiChat";
@@ -274,15 +274,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         status: "pending"
       });
 
-      // Push to HubSpot CRM
+      // Enhanced CRM integration with duplicate prevention and notifications
       try {
-        await pushToCRM(contactInfo);
-        console.log('✅ Contact pushed to HubSpot CRM successfully');
-        // Update status to processed since CRM push succeeded
-        await storage.updateScannedContact(scannedContact.id, { status: "processed" });
+        // Check if contact already exists in HubSpot
+        const exists = contactInfo.email ? await contactExistsInHubSpot(contactInfo.email) : false;
+        
+        if (!exists) {
+          await pushToCRM(contactInfo);
+          console.log('✅ Contact pushed to HubSpot CRM successfully');
+          
+          // Send Slack notification to team
+          await notifySlack(contactInfo);
+          
+          // Update status to processed since CRM push succeeded
+          await storage.updateScannedContact(scannedContact.id, { status: "processed" });
+        } else {
+          console.log('⚠️ Contact already exists in HubSpot. Skipping duplicate.');
+          // Still mark as processed since we handled it appropriately
+          await storage.updateScannedContact(scannedContact.id, { status: "processed" });
+        }
       } catch (crmError) {
         console.error('❌ CRM push failed:', crmError);
-        // Keep status as pending if CRM push fails
+        // Keep status as pending if CRM push fails - contact won't be lost
       }
 
       // Send to Make webhook

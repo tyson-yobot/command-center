@@ -1,0 +1,122 @@
+1. // Log the contact push to the backend database after CRM sync
+ts
+Copy
+Edit
+// After the contact is successfully pushed to HubSpot,
+// also log it to your internal database for tracking or reporting.
+
+import { db } from '@/server/db'; // adjust path to your database module
+
+async function logContactToDB(contact) {
+  try {
+    await db.contacts.create({
+      data: {
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone,
+        source: 'business_card',
+        status: 'synced'
+      }
+    });
+
+    console.log('📦 Contact logged to internal DB');
+  } catch (err) {
+    console.error('🧨 Failed to log contact:', err.message);
+  }
+}
+⚔️ 2. // Fallback: If CRM push fails, log the contact to a "failed_sync" table
+ts
+Copy
+Edit
+// If pushToCRM fails, capture the contact info and reason in a separate table
+// so no lead is ever lost.
+
+async function logFailedCRMContact(contact, errorMessage) {
+  try {
+    await db.failedSync.create({
+      data: {
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone,
+        reason: errorMessage || 'Unknown error'
+      }
+    });
+
+    console.log('🚨 Contact logged to failed_sync table');
+  } catch (err) {
+    console.error('❌ Failed to log to failed_sync:', err.message);
+  }
+}
+Then modify your pushToCRM function like this:
+
+ts
+Copy
+Edit
+await pushToCRM(contact).catch(async (err) => {
+  await logFailedCRMContact(contact, err.message);
+});
+⚔️ 3. // Send Slack notification when a new contact is scanned and synced
+ts
+Copy
+Edit
+// After contact is synced to CRM, notify your ops/sales team in Slack
+
+import axios from 'axios';
+
+async function notifySlack(contact) {
+  const webhookUrl = process.env.SLACK_WEBHOOK_URL; // set this in Replit Secrets
+
+  const message = {
+    text: `📇 New contact scanned & synced:\n*Name:* ${contact.name}\n*Email:* ${contact.email}\n*Phone:* ${contact.phone}`
+  };
+
+  try {
+    await axios.post(webhookUrl, message);
+    console.log('📣 Slack notified');
+  } catch (err) {
+    console.error('🧨 Slack notification failed:', err.message);
+  }
+}
+Add this call right after a successful CRM sync:
+
+ts
+Copy
+Edit
+await notifySlack(contact);
+⚔️ 4. // Prevent duplicate contacts by checking if they already exist in HubSpot
+ts
+Copy
+Edit
+// Before pushing to HubSpot, check if the contact email already exists
+
+async function contactExistsInHubSpot(email) {
+  try {
+    const response = await axios.get(
+      `https://api.hubapi.com/contacts/v1/contact/email/${email}/profile`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`
+        }
+      }
+    );
+
+    return response.status === 200;
+  } catch (err) {
+    if (err.response?.status === 404) {
+      return false;
+    }
+
+    throw new Error('Error checking HubSpot for existing contact');
+  }
+}
+Use this check before pushing to CRM:
+
+ts
+Copy
+Edit
+const exists = await contactExistsInHubSpot(contact.email);
+if (!exists) {
+  await pushToCRM(contact);
+} else {
+  console.log('⚠️ Contact already exists in HubSpot. Skipping.');
+}

@@ -9,6 +9,52 @@ interface Contact {
   title?: string;
 }
 
+export async function contactExistsInHubSpot(email: string): Promise<boolean> {
+  try {
+    if (!process.env.HUBSPOT_API_KEY || !email) {
+      return false;
+    }
+
+    const response = await axios.get(
+      `https://api.hubapi.com/contacts/v1/contact/email/${email}/profile`,
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    return response.status === 200;
+  } catch (err: any) {
+    if (err.response?.status === 404) {
+      return false;
+    }
+    throw new Error('Error checking HubSpot for existing contact');
+  }
+}
+
+export async function notifySlack(contact: Contact) {
+  const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+  
+  if (!webhookUrl) {
+    console.log('Slack webhook not configured, skipping notification');
+    return;
+  }
+
+  const name = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || 'Unknown';
+  const message = {
+    text: `📇 New contact scanned & synced:\n*Name:* ${name}\n*Email:* ${contact.email || 'N/A'}\n*Phone:* ${contact.phone || 'N/A'}\n*Company:* ${contact.company || 'N/A'}`
+  };
+
+  try {
+    await axios.post(webhookUrl, message);
+    console.log('📣 Slack notified');
+  } catch (err: any) {
+    console.error('🧨 Slack notification failed:', err.message);
+  }
+}
+
 export async function pushToCRM(contact: Contact) {
   try {
     if (!process.env.HUBSPOT_API_KEY) {
