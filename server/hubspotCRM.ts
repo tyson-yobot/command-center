@@ -263,7 +263,10 @@ export async function exportToGoogleSheet(contact: Contact) {
 
     const name = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || 'Unknown Contact';
     
-    const response = await axios.post(webhookUrl, {
+    // Ensure URL has proper protocol
+    const cleanUrl = webhookUrl.startsWith('http') ? webhookUrl : `https://${webhookUrl}`;
+    
+    const response = await axios.post(cleanUrl, {
       name: name,
       email: contact.email,
       phone: contact.phone,
@@ -276,7 +279,8 @@ export async function exportToGoogleSheet(contact: Contact) {
     }, {
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      timeout: 10000
     });
 
     console.log('📄 Contact exported to Google Sheet for backup');
