@@ -7,7 +7,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
-import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe, sendNDAEmail, autoTagContactType, sendVoicebotWebhookResponse, syncToQuickBooks, alertSlackFailure, sendHubSpotFallback, pushToQuoteDashboard, scheduleFollowUpTask, logEventToAirtable, triggerToneVariant, generateFallbackAudio, triggerPDFReceipt, handleStripeRetry, logToneMatch, logVoiceTranscript, assignCRMOwner, logVoiceEscalationEvent, dispatchCallSummary, pushToMetricsTracker, logCRMVoiceMatch, updateContractStatus, logIntentAndEntities, pushCommandSuggestions, logScenarioLoop, logABScriptTest, sendWebhookResponse } from "./hubspotCRM";
+import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe, sendNDAEmail, autoTagContactType, sendVoicebotWebhookResponse, syncToQuickBooks, alertSlackFailure, sendHubSpotFallback, pushToQuoteDashboard, scheduleFollowUpTask, logEventToAirtable, triggerToneVariant, generateFallbackAudio, triggerPDFReceipt, handleStripeRetry, logToneMatch, logVoiceTranscript, assignCRMOwner, logVoiceEscalationEvent, dispatchCallSummary, pushToMetricsTracker, logCRMVoiceMatch, updateContractStatus, logIntentAndEntities, pushCommandSuggestions, logScenarioLoop, logABScriptTest, sendWebhookResponse, sendErrorSlackAlert, pushToProposalDashboard } from "./hubspotCRM";
 import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan, logSyncError, runRetryQueue } from "./airtableSync";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
@@ -411,6 +411,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await pushToQuoteDashboard(contactInfo);
           } catch (error) {
             await logSyncError(contactInfo, `Quote dashboard push failed: ${error.message}`);
+            await sendErrorSlackAlert(contactInfo, 'Quote Dashboard', error);
+          }
+
+          // Push to Proposal Dashboard
+          try {
+            await pushToProposalDashboard(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `Proposal dashboard push failed: ${error.message}`);
+            await sendErrorSlackAlert(contactInfo, 'Proposal Dashboard', error);
           }
 
           // Schedule follow-up task in calendar
@@ -418,6 +427,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await scheduleFollowUpTask(contactInfo);
           } catch (error) {
             await logSyncError(contactInfo, `Follow-up task scheduling failed: ${error.message}`);
+            await sendErrorSlackAlert(contactInfo, 'Task Scheduler', error);
           }
 
           // Final event logging to Airtable
@@ -425,6 +435,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await logEventToAirtable(contactInfo);
           } catch (error) {
             await logSyncError(contactInfo, `Final event logging failed: ${error.message}`);
+            await sendErrorSlackAlert(contactInfo, 'Event Logger', error);
           }
           
           // Update status to processed since CRM push succeeded
@@ -461,6 +472,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       } catch (crmError) {
         console.error('❌ CRM push failed:', crmError);
         await logSyncError(contactInfo, `HubSpot CRM push failed: ${crmError.message}`);
+        await sendErrorSlackAlert(contactInfo, 'HubSpot CRM', crmError);
+        
+        // Trigger fallback webhook for CRM failures
+        try {
+          await sendHubSpotFallback(contactInfo);
+        } catch (fallbackError) {
+          console.error('Fallback webhook also failed:', fallbackError.message);
+          await sendErrorSlackAlert(contactInfo, 'HubSpot Fallback', fallbackError);
+        }
+        
         // Keep status as pending if CRM push fails - contact won't be lost
         
         // Generate error response for VoiceBot

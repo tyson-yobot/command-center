@@ -550,17 +550,36 @@ export async function sendNDAEmail(contact: Contact) {
 }
 
 export async function autoTagContactType(contact: Contact): Promise<string> {
-  let contactType = 'B2B'; // Default
+  let contactType = "Unknown";
+  const domain = contact.email?.split("@")[1] || "";
+  const company = contact.company?.toLowerCase() || "";
 
-  if (contact.email?.includes('.gov') || contact.email?.includes('.mil')) {
-    contactType = 'Gov';
-  } else if (contact.email?.includes('@gmail.') || contact.email?.includes('@yahoo.') || contact.email?.includes('@hotmail.')) {
-    contactType = 'B2C';
-  } else {
-    contactType = 'B2B';
+  // Government detection
+  if (domain.endsWith(".gov") || domain.endsWith(".mil") || 
+      company.includes("department") || company.includes("municipal") || 
+      company.includes("federal") || company.includes("county") || 
+      company.includes("city of")) {
+    contactType = "Gov";
+  }
+  // Business detection
+  else if (company.includes("llc") || company.includes("inc") || 
+           company.includes("corp") || company.includes("solutions") ||
+           company.includes("consulting") || company.includes("services") ||
+           (!domain.includes("gmail") && !domain.includes("yahoo") && !domain.includes("hotmail") && company)) {
+    contactType = "B2B";
+  }
+  // Consumer detection
+  else if (domain.includes("gmail") || domain.includes("yahoo") || 
+           domain.includes("hotmail") || domain.includes("outlook") ||
+           !company) {
+    contactType = "B2C";
+  }
+  // Default to B2B if we have company info but unclear domain
+  else {
+    contactType = "B2B";
   }
 
-  console.log(`🏷️ Contact tagged as ${contactType} based on email domain`);
+  console.log(`🏷️ Tagged contact as: ${contactType}`);
   return contactType;
 }
 
@@ -751,6 +770,74 @@ export async function sendHubSpotFallback(contact: Contact) {
     console.log('🔄 HubSpot fallback webhook triggered for', fullName);
   } catch (error: any) {
     console.error('Failed to send HubSpot fallback:', error.message);
+  }
+}
+
+export async function sendErrorSlackAlert(contact: Contact, moduleName: string, error: Error) {
+  try {
+    const errorWebhookUrl = process.env.SLACK_ERROR_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL;
+    
+    if (!errorWebhookUrl) {
+      console.log('No error Slack webhook configured');
+      return;
+    }
+
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || 'Unknown Contact';
+
+    const message = {
+      text: `🚨 *YoBot® Error Alert*\n• *Module:* ${moduleName}\n• *Name:* ${fullName}\n• *Email:* ${contact.email || 'N/A'}\n• *Error:* ${error.message}\n• *Time:* ${new Date().toLocaleString()}`
+    };
+
+    await axios.post(errorWebhookUrl, message, {
+      headers: { 
+        "Content-Type": "application/json" 
+      },
+      timeout: 5000
+    });
+
+    console.log('⚠️ Sent error alert to Slack error channel');
+  } catch (alertError: any) {
+    console.error('Failed to send error alert:', alertError.message);
+  }
+}
+
+export async function pushToProposalDashboard(contact: Contact) {
+  try {
+    if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID) {
+      console.log('Airtable credentials not configured for proposal dashboard');
+      return;
+    }
+
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    const contactType = await autoTagContactType(contact);
+
+    const payload = {
+      fields: {
+        "Contact Name": fullName,
+        "Email": contact.email,
+        "Company": contact.company || "",
+        "Submitted At": new Date().toISOString(),
+        "Package Type": "YoBot Pro", // Default package
+        "Contact Type": contactType,
+        "Source": "Business Card Scanner"
+      }
+    };
+
+    await axios.post(
+      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Proposal%20Dashboard`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        timeout: 10000
+      }
+    );
+
+    console.log('📤 Contact pushed to Proposal Dashboard');
+  } catch (error: any) {
+    console.error('Failed to push to proposal dashboard:', error.message);
   }
 }
 
