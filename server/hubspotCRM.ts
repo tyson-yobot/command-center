@@ -319,6 +319,81 @@ export async function sendSlackScanAlert(contact: Contact) {
   }
 }
 
+export async function logToSupabase(contact: Contact, eventType: string) {
+  try {
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
+      console.log('Supabase credentials not configured, skipping database logging');
+      return;
+    }
+
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || 'Unknown Contact';
+    
+    const payload = {
+      event_type: eventType,
+      contact_name: fullName,
+      email: contact.email,
+      company: contact.company,
+      phone: contact.phone,
+      timestamp: new Date().toISOString(),
+      source: 'Business Card Scanner',
+      status: 'Success'
+    };
+
+    await axios.post(`${process.env.SUPABASE_URL}/rest/v1/EventLogs`, payload, {
+      headers: {
+        'apikey': process.env.SUPABASE_KEY,
+        'Authorization': `Bearer ${process.env.SUPABASE_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      timeout: 5000
+    });
+
+    console.log('🗄️ Event logged to Supabase database');
+  } catch (error: any) {
+    console.error('Failed to log to Supabase:', error.message);
+  }
+}
+
+export async function triggerQuotePDF(contact: Contact) {
+  try {
+    if (!process.env.PDF_QUOTE_WEBHOOK_URL) {
+      console.log('PDF quote webhook URL not configured, skipping quote generation');
+      return;
+    }
+
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || 'Unknown Contact';
+    
+    // Check if contact qualifies for quote (has company domain)
+    const qualifiesForQuote = contact.company && contact.email && contact.email.includes('@');
+    
+    if (!qualifiesForQuote) {
+      console.log('Contact does not qualify for automated quote generation');
+      return;
+    }
+
+    const payload = {
+      contact_email: contact.email,
+      company: contact.company,
+      full_name: fullName,
+      phone: contact.phone,
+      title: contact.title,
+      scan_source: 'business_card_scanner',
+      timestamp: new Date().toISOString()
+    };
+
+    await axios.post(process.env.PDF_QUOTE_WEBHOOK_URL, payload, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('📄 PDF quote generation triggered via Make.com webhook');
+  } catch (error: any) {
+    console.error('Failed to trigger PDF quote:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;

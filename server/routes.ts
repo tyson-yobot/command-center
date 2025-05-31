@@ -7,7 +7,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
-import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, sendSlackScanAlert } from "./hubspotCRM";
+import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, sendSlackScanAlert, logToSupabase, triggerQuotePDF } from "./hubspotCRM";
 import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan } from "./airtableSync";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
@@ -313,6 +313,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           // Send enhanced Slack scan alert
           await sendSlackScanAlert(contactInfo);
+          
+          // Log to Supabase for long-term database storage
+          await logToSupabase(contactInfo, '📇 Business Card Scan');
+          
+          // Trigger PDF quote generation if contact qualifies
+          await triggerQuotePDF(contactInfo);
           
           // Update status to processed since CRM push succeeded
           await storage.updateScannedContact(scannedContact.id, { status: "processed" });
