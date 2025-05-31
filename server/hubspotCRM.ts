@@ -55,6 +55,65 @@ export async function notifySlack(contact: Contact) {
   }
 }
 
+export async function createFollowUpTask(contact: Contact) {
+  try {
+    if (!process.env.HUBSPOT_API_KEY || !contact.email) {
+      console.log('HubSpot API key or contact email missing, skipping task creation');
+      return;
+    }
+
+    const dueDate = new Date();
+    dueDate.setDate(dueDate.getDate() + 1); // +1 day
+
+    const name = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || 'Unknown Contact';
+
+    // Step 1: Get contact ID from email
+    const searchRes = await axios.get(
+      `https://api.hubapi.com/contacts/v1/contact/email/${contact.email}/profile`,
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    const contactId = searchRes.data.vid;
+
+    // Step 2: Create the follow-up task
+    const taskPayload = {
+      engagement: {
+        active: true,
+        type: 'TASK',
+        timestamp: dueDate.getTime()
+      },
+      associations: {
+        contactIds: [contactId]
+      },
+      metadata: {
+        subject: `Follow up with ${name}`,
+        body: `Contact scanned from business card\nEmail: ${contact.email}\nPhone: ${contact.phone || 'N/A'}\nCompany: ${contact.company || 'N/A'}\nTitle: ${contact.title || 'N/A'}\n\nSource: Business Card Scanner`,
+        status: 'NOT_STARTED'
+      }
+    };
+
+    const taskRes = await axios.post(
+      'https://api.hubapi.com/engagements/v1/engagements',
+      taskPayload,
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    console.log('🗓️ Follow-up task created in HubSpot:', taskRes.data.engagement?.id);
+  } catch (err: any) {
+    console.error('❌ Failed to create follow-up task:', err.response?.data || err.message);
+  }
+}
+
 export async function pushToCRM(contact: Contact) {
   try {
     if (!process.env.HUBSPOT_API_KEY) {
