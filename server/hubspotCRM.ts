@@ -151,6 +151,55 @@ export async function tagContactSource(contact: Contact) {
   }
 }
 
+export async function enrollInWorkflow(contact: Contact) {
+  try {
+    if (!process.env.HUBSPOT_API_KEY || !contact.email) {
+      console.log('HubSpot API key or contact email missing, skipping workflow enrollment');
+      return;
+    }
+
+    // Get the workflow ID from environment variable
+    const workflowId = process.env.HUBSPOT_WORKFLOW_ID;
+    if (!workflowId) {
+      console.log('HUBSPOT_WORKFLOW_ID not configured, skipping workflow enrollment');
+      return;
+    }
+
+    // First, get the contact ID
+    const contactRes = await axios.get(
+      `https://api.hubapi.com/contacts/v1/contact/email/${contact.email}/profile`,
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    const contactId = contactRes.data.vid;
+
+    // Enroll contact in workflow
+    const response = await axios.post(
+      `https://api.hubapi.com/automation/v3/workflows/${workflowId}/enrollments/contacts/${contactId}`,
+      {},
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    console.log('📤 Contact enrolled in HubSpot workflow:', response.data);
+  } catch (err: any) {
+    if (err.response?.status === 404) {
+      console.log('⚠️ Workflow not found or contact already enrolled');
+    } else {
+      console.error('⚠️ Failed to enroll contact in workflow:', err.response?.data || err.message);
+    }
+  }
+}
+
 export async function pushToCRM(contact: Contact) {
   try {
     if (!process.env.HUBSPOT_API_KEY) {
