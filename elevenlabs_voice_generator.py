@@ -1,23 +1,22 @@
-#!/usr/bin/env python3
 """
 ElevenLabs Voice Generation for YoBot Support System
 Converts AI-generated text responses into high-quality MP3 audio files
 """
 
 import os
-import requests
-import json
 from pathlib import Path
 from datetime import datetime
+from elevenlabs.client import ElevenLabs
 
 class ElevenLabsVoiceGenerator:
     def __init__(self):
         self.api_key = os.getenv("ELEVENLABS_API_KEY")
         self.voice_id = os.getenv("ELEVENLABS_VOICE_ID", "cjVigY5qzO86Huf0OWal")  # Default YoBot voice
-        self.base_url = "https://api.elevenlabs.io/v1"
         
         if not self.api_key:
             raise ValueError("ELEVENLABS_API_KEY environment variable is required")
+            
+        self.client = ElevenLabs(api_key=self.api_key)
     
     def generate_voice(self, text: str, filename: str = None) -> dict:
         """
@@ -40,143 +39,101 @@ class ElevenLabsVoiceGenerator:
         
         filepath = uploads_dir / filename
         
-        # ElevenLabs API endpoint
-        url = f"{self.base_url}/text-to-speech/{self.voice_id}"
-        
-        headers = {
-            "xi-api-key": self.api_key,
-            "Content-Type": "application/json"
-        }
-        
-        # Voice generation parameters
-        payload = {
-            "text": text,
-            "model_id": "eleven_monolingual_v1",
-            "voice_settings": {
-                "stability": 0.4,
-                "similarity_boost": 0.8,
-                "style": 0.0,
-                "use_speaker_boost": True
-            }
-        }
-        
         try:
             print(f"🎤 Generating voice for: {text[:50]}...")
             
-            response = requests.post(
-                url, 
-                json=payload, 
-                headers=headers,
-                timeout=30
+            # Generate audio using the ElevenLabs client
+            audio = self.client.generate(
+                text=text,
+                voice=self.voice_id,
+                model="eleven_monolingual_v1"
             )
             
-            if response.status_code == 200:
-                # Save the audio file
-                with open(filepath, "wb") as f:
-                    f.write(response.content)
-                
-                print(f"✅ Voice generated successfully: {filepath}")
-                
-                return {
-                    "success": True,
-                    "message": f"Audio saved as {filename}",
-                    "filename": str(filepath),
-                    "file_size": len(response.content)
-                }
-            else:
-                error_msg = f"HTTP {response.status_code}: {response.text}"
-                print(f"❌ ElevenLabs API error: {error_msg}")
-                
-                return {
-                    "success": False,
-                    "message": "Voice generation failed",
-                    "error": error_msg
-                }
-                
-        except requests.exceptions.Timeout:
+            # Save the audio file
+            with open(filepath, "wb") as f:
+                for chunk in audio:
+                    f.write(chunk)
+            
+            file_size = filepath.stat().st_size
+            print(f"✅ Voice generated successfully: {filepath}")
+            
             return {
-                "success": False,
-                "message": "Voice generation timed out",
-                "error": "Request timeout after 30 seconds"
+                "success": True,
+                "message": f"Audio saved as {filename}",
+                "filename": str(filepath),
+                "file_size": file_size
             }
-        except requests.exceptions.RequestException as e:
+                
+        except Exception as e:
+            error_msg = str(e)
+            print(f"❌ ElevenLabs API error: {error_msg}")
+            
             return {
                 "success": False,
                 "message": "Voice generation failed",
-                "error": str(e)
+                "error": error_msg
             }
     
     def test_connection(self) -> dict:
         """Test connection to ElevenLabs API"""
-        url = f"{self.base_url}/voices"
-        headers = {"xi-api-key": self.api_key}
-        
         try:
-            response = requests.get(url, headers=headers, timeout=10)
+            print("Testing ElevenLabs connection...")
+            voices = self.client.voices.get_all()
             
-            if response.status_code == 200:
-                data = response.json()
-                voice_count = len(data.get("voices", []))
-                return {
-                    "success": True,
-                    "message": f"Connected successfully. Found {voice_count} available voices."
-                }
-            else:
-                return {
-                    "success": False,
-                    "message": f"Connection failed with status {response.status_code}"
-                }
+            voice_count = len(voices.voices) if hasattr(voices, 'voices') else 0
+            print(f"✅ Connection successful! Found {voice_count} voices")
+            
+            return {
+                "success": True,
+                "message": f"Connected successfully. {voice_count} voices available",
+                "voices": voices.voices if hasattr(voices, 'voices') else []
+            }
+        
         except Exception as e:
+            error_msg = f"Connection failed: {str(e)}"
+            print(f"❌ {error_msg}")
             return {
                 "success": False,
-                "message": f"Connection test failed: {str(e)}"
+                "message": error_msg,
+                "error": str(e)
             }
     
     def get_available_voices(self) -> list:
         """Get list of available voices from ElevenLabs"""
-        url = f"{self.base_url}/voices"
-        headers = {"xi-api-key": self.api_key}
-        
         try:
-            response = requests.get(url, headers=headers)
-            if response.status_code == 200:
-                return response.json().get("voices", [])
-            else:
-                raise Exception(f"API request failed: {response.status_code}")
+            voices = self.client.voices.get_all()
+            return voices.voices if hasattr(voices, 'voices') else []
         except Exception as e:
-            print(f"Error fetching voices: {e}")
+            print(f"Error getting voices: {str(e)}")
             return []
+
 
 def main():
     """Example usage of the ElevenLabs Voice Generator"""
     try:
-        # Initialize the voice generator
-        voice_gen = ElevenLabsVoiceGenerator()
+        generator = ElevenLabsVoiceGenerator()
         
         # Test connection
-        print("Testing ElevenLabs connection...")
-        connection_test = voice_gen.test_connection()
-        print(f"Connection test: {connection_test['message']}")
+        connection_result = generator.test_connection()
+        print(f"Connection test: {connection_result['message']}")
         
-        if connection_test["success"]:
-            # Generate voice for sample support response
-            sample_text = """Hi Sarah Johnson, thank you for contacting YoBot support. 
-            We've received your message regarding voice integration issues and our team 
-            will respond within 24 hours. For urgent issues, please call our support hotline."""
+        if connection_result['success']:
+            # Generate a test voice message
+            test_text = "Hello! This is YoBot's AI support system. Your ticket has been processed and a team member will follow up with you shortly."
             
-            result = voice_gen.generate_voice(sample_text, "test_support_reply.mp3")
+            result = generator.generate_voice(test_text, "test_support_reply.mp3")
             
-            if result["success"]:
-                print(f"✅ Voice file generated: {result['filename']}")
+            if result['success']:
+                print(f"🎉 Test voice generation completed: {result['filename']}")
                 print(f"File size: {result['file_size']} bytes")
             else:
                 print(f"❌ Voice generation failed: {result['error']}")
-    
+        
     except ValueError as e:
         print(f"❌ Configuration error: {e}")
-        print("Please set ELEVENLABS_API_KEY environment variable")
     except Exception as e:
         print(f"❌ Unexpected error: {e}")
+
 
 if __name__ == "__main__":
     main()
