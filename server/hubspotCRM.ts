@@ -1507,3 +1507,123 @@ export async function pushToCRM(contact: Contact) {
     throw err;
   }
 }
+
+export async function assignLeadScore(contact: Contact): Promise<string> {
+  let score = "🧊 Cold";
+  
+  const domain = contact.email?.split("@")[1] || "";
+  const company = contact.company?.toLowerCase() || "";
+  const contactType = await autoTagContactType(contact);
+  
+  // Hot lead criteria
+  if (contactType === "Gov" || 
+      company.includes("enterprise") || 
+      company.includes("fortune") ||
+      domain.includes("microsoft") || 
+      domain.includes("amazon") ||
+      domain.includes("google")) {
+    score = "🔥 Hot";
+  }
+  // Warm lead criteria
+  else if (contactType === "B2B" || 
+           company.includes("llc") || 
+           company.includes("inc") || 
+           company.includes("corp")) {
+    score = "⚠️ Warm";
+  }
+  // Cold remains default for B2C or unclear contacts
+
+  console.log(`🎯 Lead scored as: ${score}`);
+  return score;
+}
+
+export async function logToSmartSpend(contact: Contact) {
+  try {
+    if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID) {
+      console.log('Airtable credentials not configured for SmartSpend logging');
+      return;
+    }
+
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+    const leadScore = await assignLeadScore(contact);
+    const contactType = await autoTagContactType(contact);
+
+    // Estimate budget based on contact type and lead score
+    let estimatedBudget = 0;
+    if (contactType === "Gov" && leadScore === "🔥 Hot") {
+      estimatedBudget = 25000;
+    } else if (contactType === "B2B" && leadScore === "🔥 Hot") {
+      estimatedBudget = 15000;
+    } else if (contactType === "B2B" && leadScore === "⚠️ Warm") {
+      estimatedBudget = 7500;
+    } else {
+      estimatedBudget = 2500;
+    }
+
+    const payload = {
+      fields: {
+        "Contact": fullName,
+        "Email": contact.email,
+        "Company": contact.company || "",
+        "Lead Score": leadScore,
+        "Contact Type": contactType,
+        "Estimated Budget": estimatedBudget,
+        "ROI Estimate": `${Math.round(estimatedBudget * 3.2)}`, // 3.2x ROI estimate
+        "Source": "Business Card Scanner",
+        "Logged At": new Date().toISOString()
+      }
+    };
+
+    await axios.post(
+      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Botalytics%20Monthly%20Log`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        timeout: 10000
+      }
+    );
+
+    console.log('🧾 Contact ROI logged to SmartSpend with', leadScore, 'scoring');
+  } catch (error: any) {
+    console.error('Failed to log to SmartSpend:', error.message);
+  }
+}
+
+export async function markContactComplete(contact: Contact, airtableRecordId?: string) {
+  try {
+    if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID || !airtableRecordId) {
+      console.log('Cannot mark contact complete - missing Airtable config or record ID');
+      return;
+    }
+
+    await axios.patch(
+      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Contacts`,
+      {
+        records: [
+          {
+            id: airtableRecordId,
+            fields: {
+              "Completed": true,
+              "Completed At": new Date().toISOString(),
+              "Status": "Processing Complete"
+            }
+          }
+        ]
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        timeout: 10000
+      }
+    );
+
+    console.log('✅ Contact marked complete in Airtable');
+  } catch (error: any) {
+    console.error('Failed to mark contact complete:', error.message);
+  }
+}
