@@ -253,6 +253,38 @@ export async function createDealForContact(contact: Contact) {
   }
 }
 
+export async function exportToGoogleSheet(contact: Contact) {
+  try {
+    const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
+    if (!webhookUrl) {
+      console.log('Google Sheets webhook URL not configured, skipping backup export');
+      return;
+    }
+
+    const name = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || 'Unknown Contact';
+    
+    const response = await axios.post(webhookUrl, {
+      name: name,
+      email: contact.email,
+      phone: contact.phone,
+      company: contact.company,
+      title: contact.title,
+      source: 'business_card_scanner',
+      timestamp: new Date().toISOString(),
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    console.log('📄 Contact exported to Google Sheet for backup');
+  } catch (err: any) {
+    console.error('⚠️ Failed to export to Google Sheet:', err.response?.data || err.message);
+  }
+}
+
 export async function pushToCRM(contact: Contact) {
   try {
     if (!process.env.HUBSPOT_API_KEY) {

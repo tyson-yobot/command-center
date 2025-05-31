@@ -7,7 +7,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
-import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact } from "./hubspotCRM";
+import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet } from "./hubspotCRM";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
 import aiChatRouter from "./aiChat";
@@ -297,6 +297,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           // Create deal in HubSpot pipeline
           await createDealForContact(contactInfo);
+          
+          // Export to Google Sheets as backup
+          await exportToGoogleSheet(contactInfo);
           
           // Update status to processed since CRM push succeeded
           await storage.updateScannedContact(scannedContact.id, { status: "processed" });
