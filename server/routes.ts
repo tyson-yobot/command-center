@@ -7,7 +7,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
-import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, sendSlackScanAlert, logToSupabase, triggerQuotePDF } from "./hubspotCRM";
+import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF } from "./hubspotCRM";
 import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan } from "./airtableSync";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
@@ -281,7 +281,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const exists = contactInfo.email ? await contactExistsInHubSpot(contactInfo.email) : false;
         
         if (!exists) {
-          // Enrich contact data with Clearbit before CRM push
+          // Enrich contact data with Apollo first
+          await enrichContactWithApollo(contactInfo);
+          
+          // Then enrich with Clearbit for additional data
           await enrichContactWithClearbit(contactInfo);
           
           await pushToCRM(contactInfo);

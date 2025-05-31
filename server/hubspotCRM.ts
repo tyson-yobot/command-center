@@ -253,6 +253,54 @@ export async function createDealForContact(contact: Contact) {
   }
 }
 
+export async function enrichContactWithApollo(contact: Contact) {
+  try {
+    if (!process.env.APOLLO_API_KEY || !contact.email) {
+      console.log('Apollo API key not configured or no email provided, skipping Apollo enrichment');
+      return contact;
+    }
+
+    const response = await axios.post('https://api.apollo.io/v1/people/match', {
+      email: contact.email
+    }, {
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'application/json',
+        'X-Api-Key': process.env.APOLLO_API_KEY
+      },
+      timeout: 5000
+    });
+
+    if (response.data && response.data.person) {
+      const person = response.data.person;
+      
+      // Enrich contact with Apollo data
+      if (person.first_name && !contact.firstName) {
+        contact.firstName = person.first_name;
+      }
+      if (person.last_name && !contact.lastName) {
+        contact.lastName = person.last_name;
+      }
+      if (person.organization?.name && !contact.company) {
+        contact.company = person.organization.name;
+      }
+      if (person.title && !contact.title) {
+        contact.title = person.title;
+      }
+      
+      console.log('✨ Contact enriched with Apollo data');
+    }
+  } catch (error: any) {
+    if (error.response?.status === 404) {
+      console.log(`Apollo enrichment: No data found for ${contact.email}`);
+    } else {
+      console.log(`Apollo enrichment failed for ${contact.email}:`, error.message);
+    }
+  }
+  
+  return contact;
+}
+
 export async function enrichContactWithClearbit(contact: Contact) {
   try {
     if (!process.env.CLEARBIT_API_KEY || !contact.email) {
