@@ -7,7 +7,7 @@ import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
-import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe } from "./hubspotCRM";
+import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe, sendNDAEmail } from "./hubspotCRM";
 import { postToAirtable, logDealCreated, logVoiceEscalation, logBusinessCardScan, logSyncError, runRetryQueue } from "./airtableSync";
 import { requireRole } from "./roles";
 import { calendarRouter } from "./calendar";
@@ -380,6 +380,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await triggerQuotePDF(contactInfo);
           } catch (error) {
             await logSyncError(contactInfo, `PDF quote trigger failed: ${error.message}`);
+          }
+
+          // Send NDA email to qualified enterprise contacts
+          try {
+            await sendNDAEmail(contactInfo);
+          } catch (error) {
+            await logSyncError(contactInfo, `NDA email failed: ${error.message}`);
           }
 
           // Trigger Stripe billing flow for qualified enterprise contacts

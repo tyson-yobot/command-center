@@ -509,6 +509,45 @@ export async function pushToStripe(contact: Contact) {
   }
 }
 
+export async function sendNDAEmail(contact: Contact) {
+  try {
+    const ndaEmailWebhookUrl = process.env.NDA_EMAIL_WEBHOOK_URL;
+    
+    if (!ndaEmailWebhookUrl) {
+      console.log('NDA email webhook URL not configured, skipping NDA email');
+      return;
+    }
+
+    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
+
+    // Check if contact qualifies for NDA (has company and business email)
+    const qualifiesForNDA = contact.company && contact.email && contact.email.includes('@') && !contact.email.includes('gmail.com');
+    
+    if (!qualifiesForNDA) {
+      console.log('Contact does not qualify for automated NDA email');
+      return;
+    }
+
+    await axios.post(ndaEmailWebhookUrl, {
+      email: contact.email,
+      full_name: fullName,
+      company: contact.company,
+      nda_link: process.env.NDA_DOCUMENT_URL || "https://your-nda-url.com",
+      source: 'Business Card Scanner',
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    console.log('📧 NDA email sent to', fullName);
+  } catch (error: any) {
+    console.error('Failed to send NDA email:', error.message);
+  }
+}
+
 export async function exportToGoogleSheet(contact: Contact) {
   try {
     const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
