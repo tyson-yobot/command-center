@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { generateQuotePDF, generateROIPDF } from "./pdfGenerator";
 import { z } from "zod";
 import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertCrmDataSchema, insertScannedContactSchema } from "@shared/schema";
 import { createWorker } from 'tesseract.js';

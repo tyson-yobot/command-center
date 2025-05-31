@@ -1,0 +1,127 @@
+✅ Node.js Setup with Puppeteer for PDF Generation
+1. Dependencies Installation
+bash
+Copy
+Edit
+npm init -y
+npm install puppeteer express body-parser
+2. Folder Structure
+pgsql
+Copy
+Edit
+project-root/
+│
+├── templates/
+│   ├── quote.html
+│   └── roi-report.html
+│
+├── static/
+│   └── (PDFs saved here)
+│
+├── generate.js
+└── server.js
+3. HTML Templates (Dynamic Data Binding)
+templates/quote.html
+html
+Copy
+Edit
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Quote</title>
+  <style>
+    body { font-family: Arial; padding: 2rem; }
+    .section { margin-bottom: 1.5rem; }
+    h1 { color: #0d82da; }
+  </style>
+</head>
+<body>
+  <h1>Quote for {{clientName}}</h1>
+  <div class="section">
+    <strong>Bot Package:</strong> {{botPackage}}<br>
+    <strong>Add-ons:</strong> {{addons}}<br>
+    <strong>One-time Price:</strong> ${{oneTime}}<br>
+    <strong>Recurring Price:</strong> ${{recurring}}/mo<br>
+    <strong>Quote Date:</strong> {{date}}<br>
+    <strong>Version:</strong> {{version}}
+  </div>
+</body>
+</html>
+4. PDF Generation Engine – generate.js
+js
+Copy
+Edit
+const fs = require('fs');
+const puppeteer = require('puppeteer');
+const path = require('path');
+
+/**
+ * Replace {{keys}} in the HTML template with real values
+ */
+function injectData(template, data) {
+  return template.replace(/{{(.*?)}}/g, (_, key) => data[key.trim()] || '');
+}
+
+async function generatePDF(type, data, outputPath) {
+  const fileMap = {
+    quote: 'quote.html',
+    roi: 'roi-report.html',
+  };
+
+  const templatePath = path.join(__dirname, 'templates', fileMap[type]);
+  const templateHtml = fs.readFileSync(templatePath, 'utf-8');
+  const html = injectData(templateHtml, data);
+
+  const browser = await puppeteer.launch({ headless: 'new' });
+  const page = await browser.newPage();
+  await page.setContent(html, { waitUntil: 'domcontentloaded' });
+  await page.pdf({ path: outputPath, format: 'A4' });
+  await browser.close();
+}
+
+module.exports = { generatePDF };
+5. Express Server – server.js
+js
+Copy
+Edit
+const express = require('express');
+const bodyParser = require('body-parser');
+const { generatePDF } = require('./generate');
+const path = require('path');
+const fs = require('fs');
+
+const app = express();
+app.use(bodyParser.json());
+
+app.post('/generate-pdf/:type', async (req, res) => {
+  const { type } = req.params;
+  const data = req.body;
+
+  const outputPath = path.join(__dirname, 'static', `${type}-${Date.now()}.pdf`);
+  try {
+    await generatePDF(type, data, outputPath);
+    res.status(200).json({ success: true, filePath: outputPath });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`PDF Generator running at http://localhost:${PORT}`);
+});
+6. Sample POST Payload for /generate-pdf/quote
+json
+Copy
+Edit
+{
+  "clientName": "YoTech Ltd.",
+  "botPackage": "Enterprise AI",
+  "addons": "Voice Routing, Custom Tones",
+  "oneTime": "1999",
+  "recurring": "299",
+  "date": "2025-06-01",
+  "version": "v1.3.0"
+}
