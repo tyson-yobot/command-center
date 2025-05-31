@@ -532,7 +532,8 @@ export async function sendNDAEmail(contact: Contact) {
       email: contact.email,
       full_name: fullName,
       company: contact.company,
-      nda_link: process.env.NDA_DOCUMENT_URL || "https://your-nda-url.com",
+      subject: `YoBot NDA - Confidentiality Agreement for ${contact.company}`,
+      message: `Hi ${fullName},\n\nThank you for your interest in YoBot's automation solutions. To proceed with our business discussions, please review and sign the attached Non-Disclosure Agreement.\n\nThis NDA will protect both parties' confidential information as we explore potential collaboration opportunities.\n\nBest regards,\nYoBot Team`,
       source: 'Business Card Scanner',
       timestamp: new Date().toISOString()
     }, {
