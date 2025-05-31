@@ -26,7 +26,12 @@ import {
   Lock,
   Unlock,
   Search,
-  Filter
+  Filter,
+  Clock,
+  AlertCircle,
+  Wifi,
+  WifiOff,
+  ScrollText
 } from "lucide-react";
 
 export default function SystemControls() {
@@ -38,6 +43,94 @@ export default function SystemControls() {
   const [newPassword, setNewPassword] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [userRole, setUserRole] = useState<'admin' | 'client' | 'support'>('admin');
+  const [selectedPackage, setSelectedPackage] = useState<'starter' | 'professional' | 'enterprise' | 'custom'>('professional');
+  const [showPackageBuilder, setShowPackageBuilder] = useState(false);
+  const [billingMode, setBillingMode] = useState<'subscription' | 'usage' | 'trial'>('subscription');
+  const [showActionLog, setShowActionLog] = useState(false);
+  
+  // Module status tracking (live, warning, failed)
+  const [moduleStatus, setModuleStatus] = useState<Record<string, 'live' | 'warning' | 'failed'>>({
+    voiceBotCore: 'live',
+    callRouting: 'live',
+    emergencyEscalation: 'warning',
+    slackNotifications: 'live',
+    hubspotSync: 'failed',
+    airtableLogging: 'live',
+    leadScoring: 'live',
+    contactEnrichment: 'warning',
+    smartWorkflows: 'live',
+    emailAutomation: 'live',
+    followupTasks: 'live',
+    pdfGeneration: 'failed',
+    quoteGenerator: 'live',
+    calendarBooking: 'live',
+    ndaGenerator: 'live',
+    businessCardOcr: 'live',
+    realtimeMetrics: 'live',
+    performanceTracking: 'live',
+    usageAnalytics: 'live',
+    errorMonitoring: 'warning',
+    googleCalendar: 'live',
+    stripePayments: 'live',
+    quickbooks: 'failed',
+    twilioSms: 'live',
+    documentGeneration: 'live',
+    pdfProcessor: 'warning',
+    fileStorage: 'live',
+    backupSystem: 'live',
+    webhookMonitoring: 'live',
+    emergencyStop: 'live',
+    scenarioControl: 'live',
+    rateLimiting: 'live',
+    dataEncryption: 'live',
+    gdprCompliance: 'live',
+    accessLogging: 'live',
+    auditTrail: 'live'
+  });
+
+  // Action log for troubleshooting
+  const [actionLog, setActionLog] = useState([
+    {
+      id: 1,
+      timestamp: new Date(Date.now() - 300000).toISOString(),
+      module: 'HubSpot Sync',
+      action: 'Toggle OFF',
+      status: 'Failed',
+      details: 'API key expired - contact sync failed'
+    },
+    {
+      id: 2,
+      timestamp: new Date(Date.now() - 180000).toISOString(),
+      module: 'PDF Generation',
+      action: 'Generate Quote',
+      status: 'Error',
+      details: 'Puppeteer timeout after 30s'
+    },
+    {
+      id: 3,
+      timestamp: new Date(Date.now() - 120000).toISOString(),
+      module: 'Emergency Escalation',
+      action: 'Toggle ON',
+      status: 'Warning',
+      details: 'SMS delivery delayed by 15s'
+    },
+    {
+      id: 4,
+      timestamp: new Date(Date.now() - 60000).toISOString(),
+      module: 'QuickBooks',
+      action: 'Sync Contact',
+      status: 'Failed',
+      details: 'OAuth token refresh failed'
+    },
+    {
+      id: 5,
+      timestamp: new Date(Date.now() - 30000).toISOString(),
+      module: 'VoiceBot Core',
+      action: 'Process Call',
+      status: 'Success',
+      details: 'Call routed to Mike Rodriguez'
+    }
+  ]);
 
   const [moduleStates, setModuleStates] = useState({
     // Voice & Communication
@@ -135,6 +228,38 @@ export default function SystemControls() {
 
   const getStatusIcon = (isActive: boolean) => {
     return isActive ? <CheckCircle className="w-4 h-4 text-green-500" /> : <AlertTriangle className="w-4 h-4 text-gray-500" />;
+  };
+
+  // Get live status indicator
+  const getStatusIndicator = (moduleKey: string) => {
+    const status = moduleStatus[moduleKey] || 'live';
+    switch (status) {
+      case 'live':
+        return <Wifi className="w-3 h-3 text-green-400" title="Active & Working" />;
+      case 'warning':
+        return <Clock className="w-3 h-3 text-yellow-400 animate-pulse" title="Enabled but Warning" />;
+      case 'failed':
+        return <WifiOff className="w-3 h-3 text-red-400" title="Failed/Disconnected" />;
+      default:
+        return <Wifi className="w-3 h-3 text-green-400" />;
+    }
+  };
+
+  // Get status details for tooltip
+  const getStatusDetails = (moduleKey: string) => {
+    const status = moduleStatus[moduleKey] || 'live';
+    const recentLog = actionLog.find(log => log.module.toLowerCase().includes(moduleKey.toLowerCase()));
+    
+    switch (status) {
+      case 'live':
+        return `✅ Active & Working${recentLog ? `\nLast action: ${recentLog.details}` : ''}`;
+      case 'warning':
+        return `⚠️ Enabled but Warning${recentLog ? `\nIssue: ${recentLog.details}` : ''}`;
+      case 'failed':
+        return `❌ Failed/Disconnected${recentLog ? `\nError: ${recentLog.details}` : ''}`;
+      default:
+        return 'Status unknown';
+    }
   };
 
   // Module metadata with RBAC permissions
@@ -367,6 +492,13 @@ export default function SystemControls() {
           <Button className="bg-blue-600 hover:bg-blue-700 text-white">
             Apply Changes
           </Button>
+          <Button 
+            onClick={() => setShowActionLog(true)}
+            className="bg-slate-600 hover:bg-slate-700 text-white flex items-center space-x-2"
+          >
+            <ScrollText className="w-4 h-4" />
+            <span>Logs</span>
+          </Button>
         </div>
       </div>
 
@@ -388,6 +520,9 @@ export default function SystemControls() {
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.voiceBotCore)} rounded-full`}></div>
                   <span className="text-white text-sm">VoiceBot Core</span>
                   {getStatusIcon(moduleStates.voiceBotCore)}
+                  <div title={getStatusDetails('voiceBotCore')}>
+                    {getStatusIndicator('voiceBotCore')}
+                  </div>
                 </div>
                 <Switch 
                   checked={moduleStates.voiceBotCore} 

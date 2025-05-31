@@ -1,0 +1,89 @@
+✅ CORE UX & CONTROL UPGRADES
+1. 🔍 Search Bar (already added — great)
+Purpose: Instantly locate toggles as module list grows.
+
+Good job: This is live in the new screenshot — keep it!
+
+2. 🧑‍⚖️ Role-Based Access Control (RBAC)
+Purpose: Only show toggles based on user role (Admin, Client, Support, Reseller).
+
+How:
+
+Add a visibleTo property per module.
+
+Hide restricted toggles from non-admins.
+
+Show a 🔒 icon or a lockout overlay if needed.
+
+3. 🟢 Real-Time Status Indicators
+Purpose: Show whether a module is actively working, not just “on.”
+
+Status icons next to each toggle:
+
+✅ = On & healthy
+
+⚠️ = Warning (e.g., webhook lag, 429 error)
+
+❌ = On but failing
+
+How: Ping module or check last API/log result every 60s or on toggle.
+
+4. 📋 Action Log Console
+Purpose: See real-time toggle results without leaving the panel.
+
+Add a button: 🔧 View Logs or 🪵 Action Console
+
+Display:
+
+mathematica
+Copy
+Edit
+[05:42 PM] Slack Notifications → Enabled → ✅ Success
+[05:44 PM] QuickBooks Sync → Enabled → ❌ Failed: 401 Token expired
+Bonus: Allow filters like "Errors Only" or "Last 24h"
+
+⚙️ ADMIN / OPS AUTOMATION FEATURES
+5. 💣 Emergency STOP Group Toggle
+You added this already — nice touch.
+
+Suggestion: Make it flash red if any critical path module fails (QuickBooks, HubSpot, VoiceBot Core).
+
+6. 📦 Preset Module Bundles
+Purpose: Apply toggle presets for different packages (e.g., Starter, Pro, Platinum, Custom).
+
+Add dropdown or buttons:
+
+📦 Starter Plan, 🚀 Pro Plan, 💎 Platinum Plan
+
+Auto-toggle matching modules and disable extras.
+
+7. 📁 Client-Specific Views / Profiles
+Purpose: Each client only sees what they purchased.
+
+How:
+
+On login, load a toggle profile based on CRM ID.
+
+Limit visibility based on contract line items.
+
+📊 VISUAL/STRUCTURAL IMPROVEMENTS
+8. 🧩 Category Collapse / Expand
+Allow collapsing categories (e.g., “Webhook Management”).
+
+Helps if you scale to 10+ sections.
+
+9. 🧠 Tooltip / Help Icon per Module
+Add small “ℹ️” icons with hover text or mini docs.
+
+Example:
+
+Lead Scoring ℹ️ → “Scores leads based on custom criteria in Airtable. Auto-ranks top 10 daily.”
+
+10. 📈 Analytics Panel or Usage Heatmap
+Optional but powerful:
+
+Show when each module was last used
+
+Color code high-usage modules
+
+Warn about “unused for 30 days” logic to deactivate
