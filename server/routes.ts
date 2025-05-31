@@ -20,6 +20,7 @@ import voiceControlRouter from "./voiceControl";
 import { generateAIResponse, logSupportInteraction } from "./aiSupportAgent";
 import { analyzeEscalationRisk, routeEscalation } from "./escalationEngine";
 import { postReplyToZendesk, updateTicketPriority, createEscalationTicket, testZendeskConnection } from "./zendeskIntegration";
+import { generateVoiceReply, testElevenLabsConnection, getAvailableVoices } from "./voiceGeneration";
 import { setupWebSocket, broadcastUpdate } from "./websocket";
 import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
@@ -796,6 +797,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         topic
       });
 
+      // Generate voice reply for the AI response
+      let voiceGeneration = null;
+      if (aiResponse.reply) {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const audioFilename = `support_reply_${ticketId}_${timestamp}.mp3`;
+        voiceGeneration = await generateVoiceReply(aiResponse.reply, audioFilename);
+      }
+
       // Route escalation if needed
       let routingResult = null;
       if (escalationAnalysis.recommendedAction !== 'auto_reply') {
@@ -853,6 +862,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         zendeskResponse,
         priorityUpdate,
         escalationTicket,
+        voiceGeneration,
         status: "processed"
       });
 
@@ -921,6 +931,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       res.status(500).json({
         status: 'error',
+        message: error.message
+      });
+    }
+  });
+
+  // ElevenLabs voice generation endpoints
+  app.post('/api/voice/generate', async (req, res) => {
+    try {
+      const { text, filename } = req.body;
+
+      if (!text) {
+        return res.status(400).json({
+          error: "Missing required field: text"
+        });
+      }
+
+      const result = await generateVoiceReply(text, filename);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  });
+
+  // Test ElevenLabs connection
+  app.get('/api/voice/test', async (req, res) => {
+    try {
+      const result = await testElevenLabsConnection();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  });
+
+  // Get available voices
+  app.get('/api/voice/voices', async (req, res) => {
+    try {
+      const voices = await getAvailableVoices();
+      res.json({ voices });
+    } catch (error: any) {
+      res.status(500).json({
+        error: "Failed to fetch voices",
         message: error.message
       });
     }
