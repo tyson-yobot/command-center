@@ -46,63 +46,8 @@ export default function Header() {
             />
           </div>
           
-          {/* Admin Access & Connection Status - Right Side */}
+          {/* Connection Status & Theme Toggle - Right Side */}
           <div className="flex items-center space-x-2">
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="px-3 py-1 h-8 bg-blue-600 hover:bg-blue-700 text-white border-blue-500 font-medium text-sm"
-                >
-                  Admin
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-md bg-slate-900 border-slate-700">
-                <DialogHeader>
-                  <DialogTitle className="text-white">Admin Access</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="admin-password" className="text-slate-300">
-                      Enter Admin Password
-                    </Label>
-                    <Input
-                      id="admin-password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleAdminAccess()}
-                      className="mt-1 bg-slate-800 border-slate-600 text-white"
-                      placeholder="Password"
-                    />
-                    {error && (
-                      <p className="text-red-400 text-sm mt-1">{error}</p>
-                    )}
-                  </div>
-                  <div className="flex justify-end space-x-2">
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setIsDialogOpen(false);
-                        setPassword("");
-                        setError("");
-                      }}
-                      className="bg-slate-800 border-slate-600 text-white hover:bg-slate-700"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={handleAdminAccess}
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
-                    >
-                      Access Control Panel
-                    </Button>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-            
             <Button
               variant="ghost"
               size="sm"
