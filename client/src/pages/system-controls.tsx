@@ -351,6 +351,138 @@ export default function SystemControls() {
     return metadata && metadata.visibleTo.includes(userRole);
   };
 
+  // Package tier configurations based on YoBot price sheet
+  const packageConfigurations = {
+    starter: {
+      // Starter: AI Chatbot, SMS/Email Flows, Basic CRM Logging, Simple Integrations
+      voiceBotCore: false,
+      callRouting: false,
+      emergencyEscalation: true,
+      slackNotifications: false,
+      hubspotSync: true,
+      airtableLogging: true,
+      leadScoring: false,
+      contactEnrichment: false,
+      smartWorkflows: true,
+      emailAutomation: true,
+      followupTasks: true,
+      pdfGeneration: false,
+      quoteGenerator: false,
+      calendarBooking: false,
+      ndaGenerator: false,
+      businessCardOcr: true,
+      realtimeMetrics: true,
+      performanceTracking: false,
+      usageAnalytics: false,
+      errorMonitoring: true,
+      googleCalendar: false,
+      stripePayments: false,
+      quickbooks: false,
+      twilioSms: true
+    },
+    pro: {
+      // Pro: All Starter + VoiceBot, Calendar Tools, Smart Follow-Ups, AI Quote Generation
+      voiceBotCore: true,
+      callRouting: true,
+      emergencyEscalation: true,
+      slackNotifications: false,
+      hubspotSync: true,
+      airtableLogging: true,
+      leadScoring: false,
+      contactEnrichment: true,
+      smartWorkflows: true,
+      emailAutomation: true,
+      followupTasks: true,
+      pdfGeneration: true,
+      quoteGenerator: true,
+      calendarBooking: true,
+      ndaGenerator: false,
+      businessCardOcr: true,
+      realtimeMetrics: true,
+      performanceTracking: true,
+      usageAnalytics: false,
+      errorMonitoring: true,
+      googleCalendar: true,
+      stripePayments: false,
+      quickbooks: false,
+      twilioSms: true
+    },
+    enterprise: {
+      // Enterprise: All Pro + Lead Scoring, Performance Dashboards, Multi-Platform Sync, Payment Integration
+      voiceBotCore: true,
+      callRouting: true,
+      emergencyEscalation: true,
+      slackNotifications: true,
+      hubspotSync: true,
+      airtableLogging: true,
+      leadScoring: true,
+      contactEnrichment: true,
+      smartWorkflows: true,
+      emailAutomation: true,
+      followupTasks: true,
+      pdfGeneration: true,
+      quoteGenerator: true,
+      calendarBooking: true,
+      ndaGenerator: true,
+      businessCardOcr: true,
+      realtimeMetrics: true,
+      performanceTracking: true,
+      usageAnalytics: true,
+      errorMonitoring: true,
+      googleCalendar: true,
+      stripePayments: true,
+      quickbooks: true,
+      twilioSms: true
+    },
+    platinum: {
+      // Platinum: Everything + White Label, Advanced Analytics, Unlimited Workflows
+      voiceBotCore: true,
+      callRouting: true,
+      emergencyEscalation: true,
+      slackNotifications: true,
+      hubspotSync: true,
+      airtableLogging: true,
+      leadScoring: true,
+      contactEnrichment: true,
+      smartWorkflows: true,
+      emailAutomation: true,
+      followupTasks: true,
+      pdfGeneration: true,
+      quoteGenerator: true,
+      calendarBooking: true,
+      ndaGenerator: true,
+      businessCardOcr: true,
+      realtimeMetrics: true,
+      performanceTracking: true,
+      usageAnalytics: true,
+      errorMonitoring: true,
+      googleCalendar: true,
+      stripePayments: true,
+      quickbooks: true,
+      twilioSms: true,
+      documentGeneration: true,
+      pdfProcessor: true,
+      fileStorage: true,
+      backupSystem: true,
+      webhookMonitoring: true,
+      emergencyStop: true,
+      scenarioControl: true,
+      rateLimiting: true,
+      dataEncryption: true,
+      gdprCompliance: true,
+      accessLogging: true,
+      auditTrail: true
+    }
+  };
+
+  const applyPackageSettings = (packageType: 'starter' | 'pro' | 'enterprise' | 'platinum') => {
+    const config = packageConfigurations[packageType];
+    setModuleStates(prevStates => ({
+      ...prevStates,
+      ...config
+    }));
+  };
+
   // Login Screen
   if (!isAuthenticated) {
     return (
@@ -461,6 +593,25 @@ export default function SystemControls() {
                   className="data-[state=checked]:bg-red-600"
                 />
               </div>
+            </div>
+
+            {/* Package Tier Selector */}
+            <div className="flex items-center space-x-2">
+              <Label className="text-white text-sm">Package:</Label>
+              <select 
+                value={selectedPackage}
+                onChange={(e) => {
+                  const newPackage = e.target.value as 'starter' | 'pro' | 'enterprise' | 'platinum';
+                  setSelectedPackage(newPackage);
+                  applyPackageSettings(newPackage);
+                }}
+                className="bg-white/10 border border-white/20 rounded-lg px-3 py-1 text-white text-sm"
+              >
+                <option value="starter">Starter - $499/mo</option>
+                <option value="pro">Pro - $999/mo</option>
+                <option value="enterprise">Enterprise - $1,499/mo</option>
+                <option value="platinum">Platinum - $1,999/mo</option>
+              </select>
             </div>
 
             {/* Role Selector */}
