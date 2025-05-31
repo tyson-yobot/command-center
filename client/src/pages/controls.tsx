@@ -419,87 +419,96 @@ export default function Controls() {
         </CardContent>
       </Card>
 
-      {/* Package Permissions */}
+      {/* YoBot Package Controls */}
       <Card className="bg-white border-2 border-white shadow-xl">
         <CardHeader className="pb-3 bg-black">
           <CardTitle className="flex items-center justify-between text-white">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-[#0d82da] rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">👤</span>
+                <span className="text-white font-bold text-sm">📦</span>
               </div>
-              <span className="text-xl font-bold">PACKAGE PERMISSIONS</span>
+              <span className="text-xl font-bold">YOBOT® BOT PACKAGES</span>
             </div>
-            <div className="text-xs font-mono bg-[#0d82da] px-2 py-1 rounded text-white">PKG-MGR</div>
+            <div className="text-xs font-mono bg-[#0d82da] px-2 py-1 rounded text-white">BOT-PKG</div>
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-6 bg-white">
           <div className="space-y-4">
-            {/* Basic Package */}
+            {/* Starter Bot */}
             <div className="p-4 bg-gray-100 rounded-lg border-2 border-gray-300">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h4 className="font-bold text-black text-lg">Basic Package</h4>
-                  <p className="text-sm text-gray-600">$99/month - Core features</p>
+                  <h4 className="font-bold text-black text-lg">Starter Bot</h4>
+                  <p className="text-sm text-gray-600">$5,000 setup + $499/month</p>
                 </div>
-                <Badge className="bg-gray-500 text-white">BASIC</Badge>
+                <div className="flex items-center space-x-3">
+                  <Badge className="bg-gray-500 text-white">STARTER</Badge>
+                  <Switch defaultChecked />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>Business Card OCR</span>
+                  <span>AI Chatbot</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>Basic CRM Sync</span>
+                  <span>SMS/Email Flows</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span>Lead Scoring</span>
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Basic CRM Logging</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span>Voice Analytics</span>
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Simple Integrations</span>
                 </div>
               </div>
             </div>
 
-            {/* Pro Package */}
+            {/* Pro Bot */}
             <div className="p-4 bg-blue-100 rounded-lg border-2 border-blue-300">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h4 className="font-bold text-black text-lg">Pro Package</h4>
-                  <p className="text-sm text-gray-600">$299/month - Advanced automation</p>
+                  <h4 className="font-bold text-black text-lg">Pro Bot</h4>
+                  <p className="text-sm text-gray-600">$8,500 setup + $999/month</p>
                 </div>
-                <Badge className="bg-blue-500 text-white">PRO</Badge>
+                <div className="flex items-center space-x-3">
+                  <Badge className="bg-blue-500 text-white">PRO</Badge>
+                  <Switch defaultChecked />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>All Basic Features</span>
+                  <span>All Starter Features</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>Lead Scoring</span>
+                  <span>VoiceBot</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>PDF Generation</span>
+                  <span>Calendar Tools</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>Calendar Integration</span>
+                  <span>Smart Follow-Ups</span>
                 </div>
               </div>
             </div>
 
-            {/* Enterprise Package */}
+            {/* Enterprise Bot */}
             <div className="p-4 bg-yellow-100 rounded-lg border-2 border-yellow-300">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h4 className="font-bold text-black text-lg">Enterprise Package</h4>
-                  <p className="text-sm text-gray-600">$699/month - Full automation suite</p>
+                  <h4 className="font-bold text-black text-lg">Enterprise Bot</h4>
+                  <p className="text-sm text-gray-600">$12,500 setup + $1,499/month</p>
                 </div>
-                <Badge className="bg-yellow-500 text-white">ENTERPRISE</Badge>
+                <div className="flex items-center space-x-3">
+                  <Badge className="bg-yellow-500 text-white">ENTERPRISE</Badge>
+                  <Switch defaultChecked />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div className="flex items-center space-x-2">
@@ -508,16 +517,258 @@ export default function Controls() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>Voice Analytics</span>
+                  <span>Lead Scoring</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>QuickBooks Integration</span>
+                  <span>Quoting Engine</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>Custom Integrations</span>
+                  <span>Performance Dashboards</span>
                 </div>
+              </div>
+            </div>
+
+            {/* Platinum Bot */}
+            <div className="p-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg border-2 border-purple-300">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h4 className="font-bold text-black text-lg">Platinum Bot</h4>
+                  <p className="text-sm text-gray-600">$25,000 setup + $1,999/month</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">PLATINUM</Badge>
+                  <Switch defaultChecked />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>All Enterprise Features</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Full White Label</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Custom Analytics</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Unlimited Workflows</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Add-On Modules */}
+      <Card className="bg-white border-2 border-white shadow-xl">
+        <CardHeader className="pb-3 bg-black">
+          <CardTitle className="flex items-center justify-between text-white">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-[#0d82da] rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">🧩</span>
+              </div>
+              <span className="text-xl font-bold">ADD-ON MODULES</span>
+            </div>
+            <div className="text-xs font-mono bg-[#0d82da] px-2 py-1 rounded text-white">ADD-ONS</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-6 bg-white">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* SmartSpend Dashboard */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">💰</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">SmartSpend™ Dashboard</h4>
+                    <p className="text-xs text-gray-600">$499 + $49/mo</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* Command Center */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">📊</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Command Center Dashboard</h4>
+                    <p className="text-xs text-gray-600">$999 + $79/mo</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* Botalytics */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">📈</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Botalytics</h4>
+                    <p className="text-xs text-gray-600">$499 + $49/mo</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* ChatGPT Booster */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🤖</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">ChatGPT Booster</h4>
+                    <p className="text-xs text-gray-600">$299 one-time</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* Slack Notifications */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">📢</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Slack Notifications</h4>
+                    <p className="text-xs text-gray-600">$249 + $29/mo</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* A/B Script Testing */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🧪</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">A/B Script Testing</h4>
+                    <p className="text-xs text-gray-600">$299 + $49/mo</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* Live Transfer Routing */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">📞</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Live Transfer Routing</h4>
+                    <p className="text-xs text-gray-600">$399 + $39/mo</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* Smart Quoting Engine */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-teal-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">💼</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Smart Quoting Engine</h4>
+                    <p className="text-xs text-gray-600">$499 + $49/mo</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* Custom Personality Pack */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-pink-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🎭</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Custom Personality Pack</h4>
+                    <p className="text-xs text-gray-600">$399 + $39/mo</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* QuickBooks Sync */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">QB</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">QuickBooks Online Sync</h4>
+                    <p className="text-xs text-gray-600">$499 + $29/mo</p>
+                  </div>
+                </div>
+                <Switch defaultChecked />
+              </div>
+            </div>
+
+            {/* White Label Mode */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🏷️</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">White Label Mode</h4>
+                    <p className="text-xs text-gray-600">$1,999 + $199/mo</p>
+                  </div>
+                </div>
+                <Switch />
+              </div>
+            </div>
+
+            {/* Lead Generation Tools */}
+            <div className="p-4 bg-[#c3c3c3] rounded-lg border-2 border-black">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-cyan-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🎯</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-black">Lead Generation Tools</h4>
+                    <p className="text-xs text-gray-600">$999 + $99/mo</p>
+                  </div>
+                </div>
+                <Switch />
               </div>
             </div>
           </div>
