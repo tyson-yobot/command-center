@@ -70,7 +70,25 @@ export default function SystemControls() {
     googleCalendar: false,
     stripePayments: false,
     quickbooks: false,
-    twilioSms: true
+    twilioSms: true,
+    
+    // File Management
+    documentGeneration: true,
+    pdfProcessor: true,
+    fileStorage: true,
+    backupSystem: true,
+    
+    // Webhook Management
+    webhookMonitoring: true,
+    emergencyStop: true,
+    scenarioControl: true,
+    rateLimiting: true,
+    
+    // Security & Compliance
+    dataEncryption: true,
+    gdprCompliance: false,
+    accessLogging: true,
+    auditTrail: true
   });
 
   const handleLogin = () => {
@@ -214,10 +232,13 @@ export default function SystemControls() {
         
         <div className="flex items-center space-x-4">
           <Badge className="bg-green-500/20 text-green-300 border-green-500/30">
-            24 Active Modules
+            32 Active Modules
           </Badge>
           <Badge className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
-            6 Disabled
+            8 Disabled
+          </Badge>
+          <Badge className="bg-red-500/20 text-red-300 border-red-500/30 animate-pulse">
+            Emergency Controls Available
           </Badge>
           <Button className="bg-blue-600 hover:bg-blue-700 text-white">
             Apply Changes
@@ -577,6 +598,183 @@ export default function SystemControls() {
               <Switch 
                 checked={moduleStates.twilioSms} 
                 onCheckedChange={() => toggleModule('twilioSms')}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* File Management */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-white text-base flex items-center space-x-2">
+              <FileText className="w-4 h-4 text-indigo-400" />
+              <span>File Management</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
+              <div className="flex items-center space-x-3">
+                <div className={`w-2 h-2 ${getStatusColor(moduleStates.documentGeneration)} rounded-full`}></div>
+                <span className="text-white text-sm">Document Generation</span>
+                {getStatusIcon(moduleStates.documentGeneration)}
+              </div>
+              <Switch 
+                checked={moduleStates.documentGeneration} 
+                onCheckedChange={() => toggleModule('documentGeneration')}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
+              <div className="flex items-center space-x-3">
+                <div className={`w-2 h-2 ${getStatusColor(moduleStates.pdfProcessor)} rounded-full`}></div>
+                <span className="text-white text-sm">PDF Processor</span>
+                {getStatusIcon(moduleStates.pdfProcessor)}
+              </div>
+              <Switch 
+                checked={moduleStates.pdfProcessor} 
+                onCheckedChange={() => toggleModule('pdfProcessor')}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
+              <div className="flex items-center space-x-3">
+                <div className={`w-2 h-2 ${getStatusColor(moduleStates.fileStorage)} rounded-full`}></div>
+                <span className="text-white text-sm">File Storage</span>
+                {getStatusIcon(moduleStates.fileStorage)}
+              </div>
+              <Switch 
+                checked={moduleStates.fileStorage} 
+                onCheckedChange={() => toggleModule('fileStorage')}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
+              <div className="flex items-center space-x-3">
+                <div className={`w-2 h-2 ${getStatusColor(moduleStates.backupSystem)} rounded-full`}></div>
+                <span className="text-white text-sm">Backup System</span>
+                {getStatusIcon(moduleStates.backupSystem)}
+              </div>
+              <Switch 
+                checked={moduleStates.backupSystem} 
+                onCheckedChange={() => toggleModule('backupSystem')}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Webhook Management */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-white text-base flex items-center space-x-2">
+              <Activity className="w-4 h-4 text-red-400" />
+              <span>Webhook Management</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
+              <div className="flex items-center space-x-3">
+                <div className={`w-2 h-2 ${getStatusColor(moduleStates.webhookMonitoring)} rounded-full`}></div>
+                <span className="text-white text-sm">Webhook Monitoring</span>
+                {getStatusIcon(moduleStates.webhookMonitoring)}
+              </div>
+              <Switch 
+                checked={moduleStates.webhookMonitoring} 
+                onCheckedChange={() => toggleModule('webhookMonitoring')}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-red-500/20 border border-red-500/30 rounded-lg hover:bg-red-500/30 transition-colors">
+              <div className="flex items-center space-x-3">
+                <div className={`w-2 h-2 ${getStatusColor(moduleStates.emergencyStop)} rounded-full animate-pulse`}></div>
+                <span className="text-white text-sm font-bold">EMERGENCY STOP</span>
+                {getStatusIcon(moduleStates.emergencyStop)}
+              </div>
+              <Switch 
+                checked={moduleStates.emergencyStop} 
+                onCheckedChange={() => toggleModule('emergencyStop')}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
+              <div className="flex items-center space-x-3">
+                <div className={`w-2 h-2 ${getStatusColor(moduleStates.scenarioControl)} rounded-full`}></div>
+                <span className="text-white text-sm">Scenario Control</span>
+                {getStatusIcon(moduleStates.scenarioControl)}
+              </div>
+              <Switch 
+                checked={moduleStates.scenarioControl} 
+                onCheckedChange={() => toggleModule('scenarioControl')}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
+              <div className="flex items-center space-x-3">
+                <div className={`w-2 h-2 ${getStatusColor(moduleStates.rateLimiting)} rounded-full`}></div>
+                <span className="text-white text-sm">Rate Limiting</span>
+                {getStatusIcon(moduleStates.rateLimiting)}
+              </div>
+              <Switch 
+                checked={moduleStates.rateLimiting} 
+                onCheckedChange={() => toggleModule('rateLimiting')}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Security & Compliance */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-white text-base flex items-center space-x-2">
+              <Shield className="w-4 h-4 text-emerald-400" />
+              <span>Security & Compliance</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
+              <div className="flex items-center space-x-3">
+                <div className={`w-2 h-2 ${getStatusColor(moduleStates.dataEncryption)} rounded-full`}></div>
+                <span className="text-white text-sm">Data Encryption</span>
+                {getStatusIcon(moduleStates.dataEncryption)}
+              </div>
+              <Switch 
+                checked={moduleStates.dataEncryption} 
+                onCheckedChange={() => toggleModule('dataEncryption')}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
+              <div className="flex items-center space-x-3">
+                <div className={`w-2 h-2 ${getStatusColor(moduleStates.gdprCompliance)} rounded-full`}></div>
+                <span className="text-white text-sm">GDPR Compliance</span>
+                {getStatusIcon(moduleStates.gdprCompliance)}
+              </div>
+              <Switch 
+                checked={moduleStates.gdprCompliance} 
+                onCheckedChange={() => toggleModule('gdprCompliance')}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
+              <div className="flex items-center space-x-3">
+                <div className={`w-2 h-2 ${getStatusColor(moduleStates.accessLogging)} rounded-full`}></div>
+                <span className="text-white text-sm">Access Logging</span>
+                {getStatusIcon(moduleStates.accessLogging)}
+              </div>
+              <Switch 
+                checked={moduleStates.accessLogging} 
+                onCheckedChange={() => toggleModule('accessLogging')}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
+              <div className="flex items-center space-x-3">
+                <div className={`w-2 h-2 ${getStatusColor(moduleStates.auditTrail)} rounded-full`}></div>
+                <span className="text-white text-sm">Audit Trail</span>
+                {getStatusIcon(moduleStates.auditTrail)}
+              </div>
+              <Switch 
+                checked={moduleStates.auditTrail} 
+                onCheckedChange={() => toggleModule('auditTrail')}
               />
             </div>
           </CardContent>
