@@ -450,6 +450,19 @@ export default function SystemControls() {
           </div>
           
           <div className="flex items-center space-x-4">
+            {/* Emergency Stop - Prominent Position */}
+            <div className="bg-red-500/20 border-2 border-red-500/50 rounded-lg p-3 animate-pulse">
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                <span className="text-red-300 font-bold text-sm">EMERGENCY STOP</span>
+                <Switch 
+                  checked={moduleStates.emergencyStop} 
+                  onCheckedChange={() => toggleModule('emergencyStop')}
+                  className="data-[state=checked]:bg-red-600"
+                />
+              </div>
+            </div>
+
             {/* Role Selector */}
             <div className="flex items-center space-x-2">
               <Label className="text-white text-sm">Role:</Label>
@@ -956,22 +969,13 @@ export default function SystemControls() {
                 <div className={`w-2 h-2 ${getStatusColor(moduleStates.webhookMonitoring)} rounded-full`}></div>
                 <span className="text-white text-sm">Webhook Monitoring</span>
                 {getStatusIcon(moduleStates.webhookMonitoring)}
+                <div title={getStatusDetails('webhookMonitoring')}>
+                  {getStatusIndicator('webhookMonitoring')}
+                </div>
               </div>
               <Switch 
                 checked={moduleStates.webhookMonitoring} 
                 onCheckedChange={() => toggleModule('webhookMonitoring')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-red-500/20 border border-red-500/30 rounded-lg hover:bg-red-500/30 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.emergencyStop)} rounded-full animate-pulse`}></div>
-                <span className="text-white text-sm font-bold">EMERGENCY STOP</span>
-                {getStatusIcon(moduleStates.emergencyStop)}
-              </div>
-              <Switch 
-                checked={moduleStates.emergencyStop} 
-                onCheckedChange={() => toggleModule('emergencyStop')}
               />
             </div>
             
