@@ -1,0 +1,71 @@
+✅ STEP 1: webhook_handler.py (Paste this in Replit)
+python
+Copy
+Edit
+from flask import Flask, request, jsonify
+from ai_support_agent import generate_ai_response
+
+app = Flask(__name__)
+
+@app.route('/receive-ticket', methods=['POST'])
+def receive_ticket():
+    data = request.json
+
+    # Extract incoming fields
+    ticket_id = data.get('ticket_id')
+    client_name = data.get('client_name')
+    ticket_body = data.get('ticket_body')
+    topic = data.get('topic')
+
+    if not all([ticket_id, client_name, ticket_body]):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    # Generate AI response
+    ai_reply = generate_ai_response(client_name, ticket_body, topic)
+
+    # Return structured output to Make.com or Zendesk
+    return jsonify({
+        "ticket_id": ticket_id,
+        "ai_reply": ai_reply,
+        "status": "reply_generated"
+    }), 200
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+✅ STEP 2: ai_support_agent.py (Paste this in Replit)
+python
+Copy
+Edit
+import openai
+import os
+
+# Set your OpenAI key (or store securely in Replit secrets)
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# Dummy context pull from Airtable or bot logs can be added here
+def get_context_for_client(client_name):
+    return f"This client is {client_name}. They are using the YoBot® platform. Pull in any known bot behavior or support history here."
+
+def generate_ai_response(client_name, ticket_body, topic):
+    context = get_context_for_client(client_name)
+
+    prompt = f"""
+    You are an AI support agent for YoBot®.
+    
+    Context:
+    {context}
+
+    Ticket Topic: {topic}
+    Client Message: {ticket_body}
+
+    Provide a professional, helpful response. Be clear and solution-oriented. Keep it under 200 words.
+    """
+
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "system", "content": "You are a support agent."},
+                  {"role": "user", "content": prompt}],
+        temperature=0.5
+    )
+
+    return response['choices'][0]['message']['content']

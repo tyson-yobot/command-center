@@ -17,6 +17,9 @@ import ragSearchRouter from "./ragSearch";
 import formToVoiceRouter from "./formToVoice";
 import hubspotAuthRouter from "./hubspotAuth";
 import voiceControlRouter from "./voiceControl";
+import { generateAIResponse, logSupportInteraction } from "./aiSupportAgent";
+import { analyzeEscalationRisk, routeEscalation } from "./escalationEngine";
+import { postReplyToZendesk, updateTicketPriority, createEscalationTicket, testZendeskConnection } from "./zendeskIntegration";
 import { setupWebSocket, broadcastUpdate } from "./websocket";
 import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
@@ -769,6 +772,119 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Airtable integration
   app.use('/api/airtable', airtableRouter);
+
+  // AI Support Agent Routes
+  app.post('/api/support/ticket', async (req, res) => {
+    try {
+      const { ticketId, clientName, ticketBody, topic } = req.body;
+
+      if (!ticketId || !clientName || !ticketBody) {
+        return res.status(400).json({
+          error: "Missing required fields",
+          required: ["ticketId", "clientName", "ticketBody"]
+        });
+      }
+
+      // Analyze escalation risk
+      const escalationAnalysis = analyzeEscalationRisk(ticketBody);
+
+      // Generate AI response
+      const aiResponse = await generateAIResponse({
+        ticketId,
+        clientName,
+        ticketBody,
+        topic
+      });
+
+      // Route escalation if needed
+      let routingResult = null;
+      if (escalationAnalysis.recommendedAction !== 'auto_reply') {
+        routingResult = await routeEscalation(escalationAnalysis, clientName, {
+          ticketId,
+          ticketBody,
+          topic
+        });
+      }
+
+      // Post reply to Zendesk if not escalated
+      let zendeskResponse = null;
+      if (escalationAnalysis.recommendedAction === 'auto_reply') {
+        zendeskResponse = await postReplyToZendesk({
+          ticketId,
+          replyText: aiResponse.reply,
+          isPublic: false // Internal note by default
+        });
+      }
+
+      // Update ticket priority based on escalation analysis
+      let priorityUpdate = null;
+      if (escalationAnalysis.riskLevel !== 'low') {
+        const priority = escalationAnalysis.riskLevel === 'critical' ? 'urgent' :
+                        escalationAnalysis.riskLevel === 'high' ? 'high' : 'normal';
+        
+        priorityUpdate = await updateTicketPriority(ticketId, priority, [
+          `ai_risk_${escalationAnalysis.riskLevel}`,
+          `sentiment_${aiResponse.sentiment}`
+        ]);
+      }
+
+      // Create escalation ticket for critical issues
+      let escalationTicket = null;
+      if (escalationAnalysis.riskLevel === 'critical') {
+        escalationTicket = await createEscalationTicket(
+          ticketId,
+          escalationAnalysis.triggers.join(', '),
+          clientName,
+          'urgent'
+        );
+      }
+
+      // Log interaction
+      await logSupportInteraction({ ticketId, clientName, ticketBody, topic }, aiResponse);
+
+      res.json({
+        ticketId,
+        aiReply: aiResponse.reply,
+        escalationFlag: aiResponse.escalationFlag,
+        sentiment: aiResponse.sentiment,
+        suggestedAction: aiResponse.suggestedAction,
+        escalationAnalysis,
+        routing: routingResult,
+        zendeskResponse,
+        priorityUpdate,
+        escalationTicket,
+        status: "processed"
+      });
+
+    } catch (error: any) {
+      console.error('Support ticket processing error:', error);
+      res.status(500).json({
+        error: "Failed to process support ticket",
+        message: error.message
+      });
+    }
+  });
+
+  // Test escalation analysis endpoint
+  app.post('/api/support/analyze', async (req, res) => {
+    try {
+      const { ticketBody } = req.body;
+
+      if (!ticketBody) {
+        return res.status(400).json({ error: "ticketBody is required" });
+      }
+
+      const analysis = analyzeEscalationRisk(ticketBody);
+      res.json(analysis);
+
+    } catch (error: any) {
+      console.error('Escalation analysis error:', error);
+      res.status(500).json({
+        error: "Failed to analyze escalation risk",
+        message: error.message
+      });
+    }
+  });
 
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
