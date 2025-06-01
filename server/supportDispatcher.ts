@@ -37,7 +37,7 @@ export async function dispatchSupportResponse(data: DispatchData): Promise<void>
       threadTs = messageResponse.ts;
 
       // 2. Upload MP3 with error handling in thread
-      if (mp3Filename) {
+      if (mp3Filename && threadTs) {
         try {
           await slackClient.files.upload({
             channels: SLACK_CHANNEL,

@@ -28,6 +28,7 @@ import { setupWebSocket, broadcastUpdate } from "./websocket";
 import { dispatchSupportResponse } from "./supportDispatcher";
 import { captureChatContact, logChatInteraction } from "./chatContactCapture";
 import { syncKnowledgeBase, forceResyncKnowledgeBase } from "./ragKnowledgeSync";
+import { processVoiceBotWebhook } from "./voiceBotEscalation";
 import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
 import airtableRouter from "./airtable";
@@ -1026,6 +1027,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({
         error: "Failed to analyze escalation risk",
         message: error.message
+      });
+    }
+  });
+
+  // VoiceBot escalation webhook endpoint
+  app.post('/api/voicebot/escalation', async (req, res) => {
+    try {
+      const result = await processVoiceBotWebhook(req.body);
+      res.status(result.success ? 200 : 400).json(result);
+    } catch (error: any) {
+      console.error('VoiceBot webhook processing error:', error);
+      res.status(500).json({
+        success: false,
+        message: `Webhook processing failed: ${error.message}`
       });
     }
   });

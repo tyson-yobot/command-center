@@ -24,16 +24,94 @@ function extractText(filepath: string): string {
   const ext = path.extname(filepath).toLowerCase();
   
   try {
-    if (ext === '.txt' || ext === '.md') {
-      return fs.readFileSync(filepath, 'utf-8');
-    } else if (ext === '.json') {
-      const jsonData = JSON.parse(fs.readFileSync(filepath, 'utf-8'));
-      return JSON.stringify(jsonData, null, 2);
+    switch (ext) {
+      case '.txt':
+      case '.md':
+        return fs.readFileSync(filepath, 'utf-8');
+      
+      case '.json':
+        const jsonData = JSON.parse(fs.readFileSync(filepath, 'utf-8'));
+        return JSON.stringify(jsonData, null, 2);
+      
+      case '.csv':
+        const csvContent = fs.readFileSync(filepath, 'utf-8');
+        return csvContent.replace(/,/g, ' | ').replace(/\n/g, '\n');
+      
+      case '.pdf':
+        return extractPDFText(filepath);
+      
+      case '.doc':
+      case '.docx':
+        return extractDocText(filepath);
+      
+      case '.html':
+      case '.htm':
+        const htmlContent = fs.readFileSync(filepath, 'utf-8');
+        return htmlContent.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      
+      default:
+        console.log(`Unsupported file type: ${ext}`);
+        return `File: ${path.basename(filepath)} (${ext} format)`;
     }
-    // For other file types, return basic file info
-    return `File: ${path.basename(filepath)} (${ext} format)`;
   } catch (error) {
     throw new Error(`Failed to extract text from ${filepath}: ${error}`);
+  }
+}
+
+/**
+ * Extract text from PDF files using basic text extraction
+ */
+function extractPDFText(filepath: string): string {
+  try {
+    const buffer = fs.readFileSync(filepath);
+    const pdfText = buffer.toString('latin1');
+    
+    // Look for text between stream objects and extract readable content
+    const textMatches = pdfText.match(/stream\s*(.+?)\s*endstream/g);
+    
+    if (textMatches) {
+      return textMatches
+        .map(match => {
+          const text = match.replace(/stream\s*|\s*endstream/g, '');
+          return text.replace(/[^\x20-\x7E\n]/g, ' ');
+        })
+        .join(' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+    
+    return `PDF document: ${path.basename(filepath)} - content requires advanced parsing`;
+  } catch (error) {
+    console.error('PDF extraction error:', error);
+    return `PDF file: ${path.basename(filepath)} - extraction failed`;
+  }
+}
+
+/**
+ * Extract text from DOC/DOCX files
+ */
+function extractDocText(filepath: string): string {
+  try {
+    const buffer = fs.readFileSync(filepath);
+    const ext = path.extname(filepath).toLowerCase();
+    
+    if (ext === '.docx') {
+      const content = buffer.toString('utf8');
+      const textMatches = content.match(/<w:t[^>]*>([^<]+)<\/w:t>/g);
+      
+      if (textMatches) {
+        return textMatches
+          .map(match => match.replace(/<[^>]*>/g, ''))
+          .join(' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+    }
+    
+    return `Document file: ${path.basename(filepath)} - content requires advanced parsing`;
+  } catch (error) {
+    console.error('Document extraction error:', error);
+    return `Document file: ${path.basename(filepath)} - extraction failed`;
   }
 }
 
