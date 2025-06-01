@@ -1,0 +1,64 @@
+#20: Stripe Webhook → QBO Invoice Lookup + Payment Record
+python
+Copy
+Edit
+# stripe_to_qbo.py
+
+import requests, os
+
+def record_stripe_payment(invoice_id, amount_paid, customer_email):
+    url = f"https://quickbooks.api.intuit.com/v3/company/{os.getenv('QUICKBOOKS_REALM_ID')}/payment"
+    headers = {
+        "Authorization": f"Bearer {os.getenv('QUICKBOOKS_ACCESS_TOKEN')}",
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+    }
+    data = {
+        "CustomerRef": {"value": get_customer_ref(customer_email)},
+        "TotalAmt": amount_paid,
+        "Line": [{
+            "Amount": amount_paid,
+            "LinkedTxn": [{"TxnId": invoice_id, "TxnType": "Invoice"}]
+        }]
+    }
+    requests.post(url, headers=headers, json=data)
+
+def get_customer_ref(email):
+    res = requests.get(
+        f"https://quickbooks.api.intuit.com/v3/company/{os.getenv('QUICKBOOKS_REALM_ID')}/query",
+        headers={
+            "Authorization": f"Bearer {os.getenv('QUICKBOOKS_ACCESS_TOKEN')}",
+            "Accept": "application/json"
+        },
+        params={"query": f"select * from Customer where PrimaryEmailAddr = '{email}'"}
+    )
+    customers = res.json().get("QueryResponse", {}).get("Customer", [])
+    return customers[0]["Id"] if customers else None
+✅ #21: Stripe → Airtable Payment Log
+python
+Copy
+Edit
+# stripe_to_airtable.py
+
+def log_stripe_to_airtable(email, amount, payment_id, timestamp):
+    requests.post(f"https://api.airtable.com/v0/{os.getenv('AIRTABLE_BASE_ID')}/💸%20Stripe%20Payments", headers={
+        "Authorization": f"Bearer {os.getenv('AIRTABLE_TOKEN')}",
+        "Content-Type": "application/json"
+    }, json={
+        "fields": {
+            "📧 Email": email,
+            "💰 Amount": amount,
+            "🧾 Payment ID": payment_id,
+            "🕒 Timestamp": timestamp
+        }
+    })
+✅ #22: Stripe → Slack Notification
+python
+Copy
+Edit
+# stripe_slack_alert.py
+
+def send_stripe_payment_alert(email, amount):
+    requests.post(os.getenv("SLACK_WEBHOOK_URL"), json={
+        "text": f"💸 Payment Received: {email} paid ${amount} via Stripe"
+    })

@@ -302,5 +302,4 @@ router.get('/stats', async (req, res) => {
   }
 });
 
-export { logChatToCRM, logChatToAirtable, injectChatToRAG };
 export default router;
