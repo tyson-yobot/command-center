@@ -843,6 +843,327 @@ export default function ClientDashboard() {
             </Button>
           </div>
         </div>
+
+        {/* Advanced Intelligence & Analytics Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
+          {/* Smart Calendar */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Calendar className="w-5 h-5 mr-2 text-blue-400" />
+                Smart Calendar
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Today's Meetings:</span>
+                  <span className="text-white font-bold">8</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Auto-Scheduled:</span>
+                  <span className="text-green-400 font-bold">6</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Follow-ups Due:</span>
+                  <span className="text-orange-400 font-bold">12</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Voice Command Center */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Headphones className="w-5 h-5 mr-2 text-purple-400" />
+                Voice Command Center
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Commands Today:</span>
+                  <span className="text-white font-bold">24</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Success Rate:</span>
+                  <span className="text-green-400 font-bold">94%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Processing:</span>
+                  <span className="text-blue-400 font-bold">2 active</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Sentiment Analysis */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Brain className="w-5 h-5 mr-2 text-green-400" />
+                Sentiment Analysis
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Positive:</span>
+                  <span className="text-green-400 font-bold">72%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Neutral:</span>
+                  <span className="text-slate-400 font-bold">21%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Negative:</span>
+                  <span className="text-red-400 font-bold">7%</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* AI & Automation Engine Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+          {/* AI Automation Engine */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Zap className="w-5 h-5 mr-2 text-yellow-400" />
+                AI Automation Engine
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Tasks Automated:</span>
+                  <span className="text-white font-bold">156</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Hours Saved:</span>
+                  <span className="text-green-400 font-bold">23.4</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Efficiency:</span>
+                  <span className="text-blue-400 font-bold">89%</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Botalytics */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <BarChart3 className="w-5 h-5 mr-2 text-cyan-400" />
+                Botalytics
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Interactions:</span>
+                  <span className="text-white font-bold">1,247</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Accuracy:</span>
+                  <span className="text-green-400 font-bold">96.2%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Learning Rate:</span>
+                  <span className="text-blue-400 font-bold">+12%</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* SmartSpend Analytics */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <DollarSign className="w-5 h-5 mr-2 text-green-400" />
+                SmartSpend Analytics
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Monthly Spend:</span>
+                  <span className="text-white font-bold">$12.4K</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Cost per Lead:</span>
+                  <span className="text-green-400 font-bold">$32</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">ROI:</span>
+                  <span className="text-blue-400 font-bold">340%</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Bot Intelligence */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Brain className="w-5 h-5 mr-2 text-purple-400" />
+                Bot Intelligence
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">IQ Score:</span>
+                  <span className="text-white font-bold">142</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Confidence:</span>
+                  <span className="text-green-400 font-bold">91%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Training:</span>
+                  <span className="text-blue-400 font-bold">Active</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Live Activity & System Monitoring */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          {/* Live Activity Feed */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Activity className="w-5 h-5 mr-2 text-green-400" />
+                Live Activity Feed
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="text-sm text-slate-300 bg-slate-800/50 p-2 rounded">
+                  📞 Call completed: Mike Rodriguez - 4m 32s
+                </div>
+                <div className="text-sm text-slate-300 bg-slate-800/50 p-2 rounded">
+                  ✅ Lead qualified: Sarah Chen - High Priority
+                </div>
+                <div className="text-sm text-slate-300 bg-slate-800/50 p-2 rounded">
+                  🤖 Bot training: Voice model updated +2.3%
+                </div>
+                <div className="text-sm text-slate-300 bg-slate-800/50 p-2 rounded">
+                  💰 Deal closed: TechCorp - $45,000
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Master Data Sync Monitor */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Monitor className="w-5 h-5 mr-2 text-blue-400" />
+                Master Data Sync Monitor
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">CRM Sync:</span>
+                  <span className="text-green-400 font-bold">✅ Active</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Airtable:</span>
+                  <span className="text-green-400 font-bold">✅ Connected</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Last Sync:</span>
+                  <span className="text-white font-bold">2m ago</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Records:</span>
+                  <span className="text-blue-400 font-bold">1,247</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Voice & Conversation Analytics */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          {/* Voice Analytics */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Mic className="w-5 h-5 mr-2 text-red-400" />
+                Voice Analytics
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Calls Today:</span>
+                  <span className="text-white font-bold">{metrics?.activeCalls || 0}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Avg Duration:</span>
+                  <span className="text-green-400 font-bold">4m 23s</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Conversion Rate:</span>
+                  <span className="text-blue-400 font-bold">34%</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* System Audit Log */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <FileText className="w-5 h-5 mr-2 text-orange-400" />
+                System Audit Log
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="text-xs text-slate-400">14:32 - Admin login successful</div>
+                <div className="text-xs text-slate-400">14:28 - Automation rule updated</div>
+                <div className="text-xs text-slate-400">14:15 - Bot training completed</div>
+                <div className="text-xs text-slate-400">14:02 - CRM sync executed</div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Stats Dashboard */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Gauge className="w-5 h-5 mr-2 text-cyan-400" />
+                Quick Stats
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">New Leads:</span>
+                  <span className="text-green-400 font-bold">23</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Conversions:</span>
+                  <span className="text-blue-400 font-bold">8</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Escalations:</span>
+                  <span className="text-orange-400 font-bold">2</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
       </div>
     </div>
   );
