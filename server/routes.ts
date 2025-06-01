@@ -832,6 +832,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Zendesk Smart Auto-Close
   app.use('/api/zendesk', zendeskSmartCloseRouter);
 
+  // Stripe to QuickBooks Integration
+  app.use('/api/stripe', stripeToQboRouter);
+
   // Chat Contact Capture
   app.post('/api/chat/capture', async (req, res) => {
     try {
