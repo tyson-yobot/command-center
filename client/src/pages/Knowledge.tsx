@@ -13,7 +13,7 @@ import { Slider } from "@/components/ui/slider";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Plus, Search, Eye, Edit, Trash2, Tag, Settings, User, Calendar, Target, Upload, FileText, File, Clock, Mic, MessageCircle, Users, Activity, Brain, AlertTriangle, TrendingUp, Filter } from "lucide-react";
+import { Plus, Search, Eye, Edit, Trash2, Tag, Settings, User, Calendar, Target, Upload, FileText, File, Clock, Mic, MessageCircle, Users, Activity, Brain, AlertTriangle, TrendingUp, Filter, Download, Mail, FileCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -71,6 +71,26 @@ export function Knowledge() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingKnowledge, setEditingKnowledge] = useState<KnowledgeBase | null>(null);
+  
+  // Business documents that are always available
+  const businessDocuments = [
+    {
+      id: 'nda',
+      name: 'YoBot NDA - Non-Disclosure Form',
+      description: 'Mutual Non-Disclosure Agreement for confidential business discussions',
+      downloadUrl: '/api/documents/download/nda'
+    },
+    {
+      id: 'contract',
+      name: 'YoBot Sales Contract',
+      description: 'Standard AI Services Agreement with pricing and terms',
+      downloadUrl: '/api/documents/download/contract'
+    }
+  ];
+
+  const handleDownloadDocument = (downloadUrl: string) => {
+    window.open(downloadUrl, '_blank');
+  };
   const [previewKnowledge, setPreviewKnowledge] = useState<KnowledgeBase | null>(null);
   const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);

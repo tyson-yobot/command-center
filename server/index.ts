@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
+import documentRoutes from "./documentManager";
 import { setupVite, serveStatic, log } from "./vite";
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
@@ -69,6 +70,9 @@ app.post('/api/reports/pdf', async (req, res) => {
 
 (async () => {
   const server = await registerRoutes(app);
+
+  // Register document management routes
+  app.use('/api/documents', documentRoutes);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
