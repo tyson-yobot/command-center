@@ -1,0 +1,185 @@
+🔷 Top Row
+✅ YoBot® Command Center
+Perfect title. Professional. Leave as is.
+
+⚠️ Hours Saved
+✅ Metric makes sense
+
+💡 Rename suggestion:
+From: Hours Saved
+To: ⏱️ Manual Hours Avoided (sounds more like automation payoff)
+
+✅ Revenue Captured
+Reads clearly and logically. No change needed.
+
+⚠️ Active Conversations
+Metric: 47 + 10 high-priority leads = good
+
+💡 Add a subtitle for clarity:
+Current Open Conversations (or “Live Bot Threads”)
+
+⚠️ Pipeline Value
+Suggest:
+From: Pipeline Value
+To: 🎯 Projected Deal Volume
+(Pipeline can sound vague without context — “deal volume” = sales clarity)
+
+🟦 Midsection Cards
+✅ 🧠 Bot Health Monitor
+All labels are aligned
+
+✅ Uptime Status is helpful
+
+💡 Optional: Rename “Current Errors” → Live Error Events for clarity
+
+✅ 📈 Revenue Forecast
+MRR, 30d Projection, Confidence all align with heading
+No change needed.
+
+⚠️ 🎯 Client Pulse
+NPS + Churn Risk Flags = good
+
+Add clarity to heading:
+From: Client Pulse
+To: 🫀 Client Satisfaction Overview (“pulse” is vague)
+
+✅ 📊 Ops Metrics
+All metrics make sense. No change needed.
+
+📉 Workflow + Insights
+✅ ⚙️ Workflow Performance
+Tasks, success rate, and automation queue make sense.
+
+💡 Optional: Change Next Automation → Next Triggered Workflow
+
+⚠️ 📊 Botalytics™
+This is where you called it out — you’re right:
+
+Cost Per Lead, Quality Score, Close Rate = classic Botalytics KPIs
+
+✅ Fix:
+
+Title should be: 📊 Botalytics™ Metrics
+
+⚠️ 📈 SmartSpend™
+ROI, Budget, CPL Trend, Time to ROI = all good
+
+✅ “Monthly Savings vs Manual” is a clear automation ROI metric
+
+✅ Fix:
+
+Title should be: 📈 SmartSpend™ Analytics
+
+💡 Deeper System Panels
+⚠️ 🧠 AI Assistant Insights
+These are training, learning, injection metrics — not general "insights"
+
+✅ Rename to:
+AI Assistant Performance or AI Behavior Stats
+
+✅ 🛠 System Status (Read-Only)
+Everything here is clear. “Last Maintenance” is a great trust signal.
+
+💡 Optional: “System Health” → Infra Health Score
+
+🎉 Bottom Panels
+✅ 🎉 Hours Saved (Green Bar)
+Perfect celebratory UX and motivational stat.
+
+✅ 🗣️ Voice Commands
+Perfect — reads like a quick-access bot interface.
+
+💡 Optional: add toggle to “Edit Voice Snippets” or “Train New Commands”
+
+✅ 📞 Conversation Analytics
+Sentiment, Resolution, Intent — clean
+
+"Top Intent: Product Demo Request" = gold
+
+💡 Optional: Add “Last Updated” timestamp for data freshness tracking
+
+🧾 Final Cosmetic Polish
+UI Element	Suggestion
+Blue buttons top right (Voice Command, etc.)	Slight glow or icon touch to match visual hierarchy
+Section Spacing	Add thin dividers or background fades between rows for quick visual chunking
+Tooltip Layer	Add hover-tooltips on every metric title for explanation (especially for clients)
+
+✅ Final Renamed Block List Summary
+Old Name	New Name
+Botalytics™	📊 Botalytics™ Metrics
+SmartSpend™	📈 SmartSpend™ Analytics
+AI Assistant Insights	🧠 AI Assistant Performance
+Client Pulse	🫀 Client Satisfaction Overview
+Pipeline Value	🎯 Projected Deal Volume
+Hours Saved	⏱️ Manual Hours Avoided (optional)
+
+Let me know if you want a fully updated Figma label map, or I can drop this into your dev spec or Help Guide voice script. You're basically done — just needs a label cleanup to match the gold-standard system you’ve built.
+
+
+
+
+
+
+You said:
+ROI is more of a botalytic wouldnt you say?
+
+
+ChatGPT said:
+✅ 100% — yes, ROI belongs under Botalytics™, not SmartSpend™. You're absolutely right to challenge that.
+
+Here’s the clean breakdown:
+
+🔍 What Botalytics™ Should Own
+Botalytics™ is your AI performance and business impact module. It should capture revenue, leads, and financial efficiency — including:
+
+✅ Revenue Per Lead
+
+✅ Lead Quality Score
+
+✅ Close Rate
+
+✅ Cost Per Lead
+
+✅ ROI (Return on Investment) ← This belongs here
+
+✅ Sentiment-to-Sale Tracking (if added later)
+
+✅ Churn Reduction Impact (client stickiness)
+
+💬 Why?
+Because ROI is a performance yield metric, not an ad-spend metric. It reflects what your bot or system produced in return for what was spent — not how it was budgeted. That’s what SmartSpend™ is for.
+
+🔍 What SmartSpend™ Should Own
+SmartSpend™ is your spending efficiency & automation savings engine. It should cover:
+
+✅ Ad Spend ROI (if it's marketing-specific only)
+
+✅ Budget Utilization
+
+✅ Cost Per Lead Trend (ad-focused)
+
+✅ Time to ROI
+
+✅ Hours Saved vs Manual
+
+✅ Manual Process Avoidance Savings
+
+💬 Why?
+This is about efficiency vs effort — how much automation is reducing overhead cost, time, and spend across systems.
+
+🧠 Final Fix
+Move this line:
+
+ROI: 324%
+FROM SmartSpend™
+TO Botalytics™ (as "ROI: 324%")
+
+And clarify SmartSpend’s stat:
+
+Monthly Savings vs Manual: $12,840
+✅ This belongs under SmartSpend™
+
+💡 BONUS: Rename SmartSpend™ Metric
+Change ROI: 324% →
+→ Manual Process ROI (if you want to keep a version in SmartSpend™)
+But the main ROI belongs in Botalytics™.

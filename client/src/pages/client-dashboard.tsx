@@ -191,7 +191,7 @@ export default function ClientDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Hours Saved</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-300">⏱️ Manual Hours Avoided</CardTitle>
               <Clock className="h-4 w-4 text-green-400" />
             </CardHeader>
             <CardContent>
@@ -213,7 +213,7 @@ export default function ClientDashboard() {
 
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Active Conversations</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-300">Live Bot Threads</CardTitle>
               <MessageSquare className="h-4 w-4 text-blue-400" />
             </CardHeader>
             <CardContent>
@@ -224,7 +224,7 @@ export default function ClientDashboard() {
 
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Pipeline Value</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-300">🎯 Projected Deal Volume</CardTitle>
               <TrendingUp className="h-4 w-4 text-purple-400" />
             </CardHeader>
             <CardContent>

@@ -695,7 +695,7 @@ export default function DesktopCommandCenter() {
         <CardHeader>
           <CardTitle className="text-white flex items-center space-x-2">
             <DollarSign className="w-5 h-5 text-green-400" />
-            <span>SmartSpend™ Analytics</span>
+            <span>📈 SmartSpend™ Analytics</span>
             <div className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full">PROPRIETARY</div>
           </CardTitle>
         </CardHeader>
@@ -741,7 +741,7 @@ export default function DesktopCommandCenter() {
         <CardHeader>
           <CardTitle className="text-white flex items-center space-x-2">
             <TrendingUp className="w-5 h-5 text-cyan-400" />
-            <span>Botalytics™ ROI Dashboard</span>
+            <span>📊 Botalytics™ Metrics</span>
             <div className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded-full">PROPRIETARY</div>
           </CardTitle>
         </CardHeader>
