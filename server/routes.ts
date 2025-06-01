@@ -21,6 +21,9 @@ import voiceControlRouter from "./voiceControl";
 import { qboDataRouter } from "./qboDataRetrieval";
 import { invoiceRouter } from "./invoiceAutomation";
 import { qboTokenRouter } from "./qboTokenExchange";
+import { salesEventRouter } from "./salesEventTracker";
+import { zendeskSmartCloseRouter } from "./zendeskSmartClose";
+import { stripeToQboRouter } from "./stripeToQboIntegration";
 import { generateAIResponse, logSupportInteraction } from "./aiSupportAgent";
 import { analyzeEscalationRisk, routeEscalation } from "./escalationEngine";
 import { ragEngine } from "./ragEngine";
@@ -822,6 +825,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Airtable integration
   app.use('/api/airtable', airtableRouter);
+
+  // Sales Event Tracking
+  app.use('/api/sales', salesEventRouter);
+
+  // Zendesk Smart Auto-Close
+  app.use('/api/zendesk', zendeskSmartCloseRouter);
 
   // Chat Contact Capture
   app.post('/api/chat/capture', async (req, res) => {
