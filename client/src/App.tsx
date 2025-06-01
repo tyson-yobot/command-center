@@ -36,6 +36,9 @@ function Router() {
         <Route path="/admin">
           <AdminConsole />
         </Route>
+        <Route path="/lite">
+          <AdminConsole />
+        </Route>
         <Route path="/knowledge">
           <Knowledge />
         </Route>

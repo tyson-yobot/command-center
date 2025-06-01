@@ -1,28 +1,26 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { useQuery } from "@tanstack/react-query";
 import robotHeadPath from "@assets/A_flat_vector_illustration_features_a_robot_face_i.png";
 import { 
-  DollarSign,
-  TrendingUp,
-  Users,
-  MessageCircle,
-  Clock,
-  Target,
+  Database,
+  Activity,
   Zap,
-  Brain,
-  Mic,
   AlertTriangle,
   CheckCircle,
-  Activity,
+  Clock,
   BarChart3,
-  Phone,
-  Mail,
-  Calendar,
-  FileText,
   Wifi,
-  Shield
+  Eye,
+  Shield,
+  RefreshCw,
+  ChevronRight,
+  Cpu,
+  Server,
+  TrendingUp,
+  Users
 } from "lucide-react";
 
 interface MetricsData {
@@ -69,237 +67,217 @@ export default function MainCommandCenter() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-8">
-      <div className="w-full">
+    <div className="min-h-screen bg-[#0F172A] p-6">
+      <div className="w-full max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-4xl font-bold text-white mb-2 flex items-center">
-              <img 
-                src={robotHeadPath} 
-                alt="YoBot Robot Head" 
-                className="w-12 h-12 mr-3 inline-block"
-                style={{ marginTop: '-4px' }}
-              />
-              YoBot® Command Center
-            </h1>
-            <p className="text-blue-300 text-lg">Live Intelligence Dashboard</p>
+          <div className="flex items-center space-x-4">
+            <img 
+              src={robotHeadPath} 
+              alt="YoBot Robot Head" 
+              className="w-8 h-8"
+            />
+            <div>
+              <h1 className="text-xl font-semibold text-white">YoBot Control Center</h1>
+              <p className="text-blue-400 text-sm">All-in-one Control Hub</p>
+            </div>
           </div>
           
-          <div className="flex items-center space-x-6">
-            <div className="text-right">
-              <div className="text-white text-2xl font-mono">{formatTime(currentTime)}</div>
-              <div className="text-blue-300 text-sm">{currentTime.toLocaleDateString()}</div>
-            </div>
-            <div className="flex items-center space-x-2 bg-green-500/20 border-green-500/30 rounded-full px-4 py-2 border">
-              <Wifi className="w-4 h-4 text-green-400" />
-              <span className="text-green-300 font-medium">OPERATIONAL</span>
-            </div>
+          <div className="flex items-center space-x-4">
+            <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+              <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+              LIVE
+            </Badge>
+            <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">
+              View All
+            </Badge>
+            <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
+              Alerts
+            </Badge>
+            <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+              Auto Mode
+            </Badge>
           </div>
         </div>
 
-        {/* Top Row - Key Business Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          {/* Hours Saved */}
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-white flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Clock className="w-5 h-5 text-green-400" />
-                  <span className="text-sm">Manual Hours Avoided</span>
-                </div>
-                <Badge className="bg-green-500/20 text-green-300 text-xs">SAVINGS</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-black text-green-400 mb-2">
-                {crmData?.hoursSaved?.toLocaleString() || '2,847'}
+        {/* Master Data Sync Monitor */}
+        <Card className="bg-slate-800/50 border-slate-700/50 mb-6">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Database className="w-5 h-5 text-blue-400" />
+                <CardTitle className="text-white">Master Data Sync Monitor</CardTitle>
+                <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">REAL-TIME SYNC</Badge>
+                <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-xs">LIVE FEED</Badge>
               </div>
-              <div className="text-green-300 text-sm">hours this month</div>
-              <div className="text-xs text-slate-400 mt-1">+23% vs last month</div>
-            </CardContent>
-          </Card>
-
-          {/* Revenue Generated */}
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-white flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <DollarSign className="w-5 h-5 text-blue-400" />
-                  <span className="text-sm">Revenue Generated</span>
-                </div>
-                <Badge className="bg-blue-500/20 text-blue-300 text-xs">REVENUE</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-black text-blue-400 mb-2">
-                ${(crmData?.revenueGenerated || 324000).toLocaleString()}
-              </div>
-              <div className="text-blue-300 text-sm">this quarter</div>
-              <div className="text-xs text-slate-400 mt-1">+18% vs Q3</div>
-            </CardContent>
-          </Card>
-
-          {/* Active Conversations */}
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-white flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <MessageCircle className="w-5 h-5 text-purple-400" />
-                  <span className="text-sm">Conversations</span>
-                </div>
-                <Badge className="bg-purple-500/20 text-purple-300 text-xs">LIVE</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-black text-purple-400 mb-2">
-                {metricsData?.activeCalls || 8}
-              </div>
-              <div className="text-purple-300 text-sm">active now</div>
-              <div className="text-xs text-slate-400 mt-1">{crmData?.conversations || 12493} total today</div>
-            </CardContent>
-          </Card>
-
-          {/* Pipeline Value */}
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-white flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Target className="w-5 h-5 text-orange-400" />
-                  <span className="text-sm">Pipeline Value</span>
-                </div>
-                <Badge className="bg-orange-500/20 text-orange-300 text-xs">PIPELINE</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-black text-orange-400 mb-2">
-                ${(crmData?.pipelineValue || 847000).toLocaleString()}
-              </div>
-              <div className="text-orange-300 text-sm">in opportunities</div>
-              <div className="text-xs text-slate-400 mt-1">324% ROI potential</div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* System Status Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* AI System Status */}
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center space-x-2">
-                <Brain className="w-5 h-5 text-cyan-400" />
-                <span>AI Intelligence Engine</span>
-                <Badge className="bg-green-500/20 text-green-300">ACTIVE</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300">Responses Today</span>
-                  <span className="text-cyan-400 font-bold">{metricsData?.aiResponsesToday || 0}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300">Avg Response Time</span>
-                  <span className="text-cyan-400 font-bold">{metricsData?.responseTime || '180ms'}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300">System Health</span>
-                  <span className="text-green-400 font-bold">{metricsData?.systemHealth || 97}%</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Voice Processing */}
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center space-x-2">
-                <Mic className="w-5 h-5 text-pink-400" />
-                <span>Voice Processing</span>
-                <Badge className="bg-green-500/20 text-green-300">ONLINE</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300">Queue Length</span>
-                  <span className="text-pink-400 font-bold">{metricsData?.queuedVoiceJobs || 0}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300">Processing Tasks</span>
-                  <span className="text-pink-400 font-bold">{metricsData?.processingTasks || 0}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300">Uptime</span>
-                  <span className="text-green-400 font-bold">{metricsData?.uptime || '100%'}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Connected Clients */}
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center space-x-2">
-                <Users className="w-5 h-5 text-yellow-400" />
-                <span>Connected Clients</span>
-                <Badge className="bg-green-500/20 text-green-300">LIVE</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300">Active Sessions</span>
-                  <span className="text-yellow-400 font-bold">{metricsData?.connectedClients || 0}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300">Peak Today</span>
-                  <span className="text-yellow-400 font-bold">24</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300">Avg Session</span>
-                  <span className="text-yellow-400 font-bold">4.2min</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Recent Activity Feed */}
-        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center space-x-2">
-              <Activity className="w-5 h-5 text-blue-400" />
-              <span>Live Activity Feed</span>
-              <Badge className="bg-green-500/20 text-green-300">REAL-TIME</Badge>
-            </CardTitle>
+              <div className="text-slate-400 text-sm">{formatTime(currentTime)} • Auto-refresh: ON</div>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3 text-sm">
-                <CheckCircle className="w-4 h-4 text-green-400" />
-                <span className="text-white">Voice escalation resolved for Sarah Chen - Account #4782</span>
-                <span className="text-slate-400 ml-auto">{formatTime(new Date())}</span>
+            <div className="grid grid-cols-4 gap-6">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-400 mb-1">24</div>
+                <div className="text-slate-400 text-sm">Airtable</div>
+                <div className="text-xs text-green-400">Last sync: 2m</div>
               </div>
-              <div className="flex items-center space-x-3 text-sm">
-                <MessageCircle className="w-4 h-4 text-blue-400" />
-                <span className="text-white">New conversation started with Mike Rodriguez - High Priority</span>
-                <span className="text-slate-400 ml-auto">5:52:14</span>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-400 mb-1">47</div>
+                <div className="text-slate-400 text-sm">HubSpot</div>
+                <div className="text-xs text-blue-400">Last sync: 1m</div>
               </div>
-              <div className="flex items-center space-x-3 text-sm">
-                <DollarSign className="w-4 h-4 text-green-400" />
-                <span className="text-white">Deal closed: $15,000 contract with TechStart Inc.</span>
-                <span className="text-slate-400 ml-auto">5:51:33</span>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-400 mb-1">12</div>
+                <div className="text-slate-400 text-sm">Stripe</div>
+                <div className="text-xs text-purple-400">Last sync: 30s</div>
               </div>
-              <div className="flex items-center space-x-3 text-sm">
-                <Zap className="w-4 h-4 text-yellow-400" />
-                <span className="text-white">Automation trigger activated for lead qualification</span>
-                <span className="text-slate-400 ml-auto">5:49:12</span>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-red-400 mb-1">
+                  <span className="text-red-400">0</span>
+                </div>
+                <div className="text-slate-400 text-sm">Overwatch</div>
+                <div className="text-xs text-red-400 bg-red-500/20 px-2 py-1 rounded">ALERT RAISED</div>
               </div>
-              <div className="flex items-center space-x-3 text-sm">
-                <AlertTriangle className="w-4 h-4 text-orange-400" />
-                <span className="text-white">Client escalation flagged - requires manager review</span>
-                <span className="text-slate-400 ml-auto">5:47:55</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Active Bot Instances */}
+        <Card className="bg-slate-800/50 border-slate-700/50 mb-6">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Activity className="w-5 h-5 text-green-400" />
+                <CardTitle className="text-white">Active Bot Instances</CardTitle>
+                <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">ACTIVE</Badge>
+              </div>
+              <Badge className="bg-green-500/20 text-green-400 border-green-500/30">12</Badge>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-400 mb-1">12</div>
+                <div className="text-green-400 text-sm">Total Bots Live</div>
+                <div className="text-xs text-slate-400">Voice Bot, Form Bot, Qualify Assistant</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-400 mb-1">8</div>
+                <div className="text-blue-400 text-sm">Full Automation</div>
+                <div className="text-xs text-slate-400">24/7 Automated</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-yellow-400 mb-1">4</div>
+                <div className="text-yellow-400 text-sm">Missing Integration</div>
+                <div className="text-xs text-slate-400">Requires human</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Bottom Grid - 4 Cards */}
+        <div className="grid grid-cols-4 gap-6">
+          {/* Bot Uptime */}
+          <Card className="bg-slate-800/50 border-slate-700/50">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-white text-sm">Bot Uptime</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-400 mb-2">99.7%</div>
+                <Progress value={99.7} className="h-2 mb-2" />
+                <div className="text-xs text-slate-400">Status: All systems operational</div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Active Workflows */}
+          <Card className="bg-slate-800/50 border-slate-700/50">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-white text-sm">Active Workflows</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-400 mb-2">47</div>
+                <div className="text-xs text-blue-400 mb-1">Follow-up Sequences</div>
+                <Progress value={75} className="h-2" />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Error Queue */}
+          <Card className="bg-slate-800/50 border-slate-700/50">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-white text-sm">Error Queue</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-orange-400 mb-2">2</div>
+                <div className="text-xs text-orange-400 mb-1">Pending</div>
+                <div className="w-full bg-orange-500/20 h-2 rounded"></div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Processing Queue */}
+          <Card className="bg-slate-800/50 border-slate-700/50">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-white text-sm">Processing Queue</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-purple-400 mb-2">47</div>
+                <div className="text-xs text-purple-400 mb-1">1.7s avg processing</div>
+                <Progress value={65} className="h-2" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* API Health Monitor */}
+        <Card className="bg-slate-800/50 border-slate-700/50 mt-6">
+          <CardHeader className="pb-4">
+            <div className="flex items-center space-x-2">
+              <Shield className="w-5 h-5 text-cyan-400" />
+              <CardTitle className="text-white">API Health Monitor</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-6 gap-4">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <CheckCircle className="w-6 h-6 text-green-400" />
+                </div>
+                <div className="text-xs text-slate-400">CRM</div>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <CheckCircle className="w-6 h-6 text-green-400" />
+                </div>
+                <div className="text-xs text-slate-400">Email</div>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <CheckCircle className="w-6 h-6 text-green-400" />
+                </div>
+                <div className="text-xs text-slate-400">SMS</div>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <CheckCircle className="w-6 h-6 text-green-400" />
+                </div>
+                <div className="text-xs text-slate-400">Calendar</div>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <AlertTriangle className="w-6 h-6 text-yellow-400" />
+                </div>
+                <div className="text-xs text-slate-400">Webhooks</div>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <CheckCircle className="w-6 h-6 text-green-400" />
+                </div>
+                <div className="text-xs text-slate-400">Webhooks</div>
               </div>
             </div>
           </CardContent>
