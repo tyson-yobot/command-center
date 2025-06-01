@@ -13,7 +13,7 @@ import { Slider } from "@/components/ui/slider";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Plus, Search, Eye, Edit, Trash2, Tag, Settings, User, Calendar, Target, Upload, FileText, File, Clock, Mic, MessageCircle, Users, Activity, Brain, AlertTriangle, TrendingUp, Filter, Download, Mail, FileCheck } from "lucide-react";
+import { Plus, Search, Eye, Edit, Trash2, Tag, Settings, User, Calendar, Target, Upload, FileText, File, Clock, Mic, MessageCircle, Users, Activity, Brain, AlertTriangle, TrendingUp, Filter, Download, Mail, FileCheck, Printer } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -88,6 +88,13 @@ export function Knowledge() {
 
   const handleDownloadDocument = (downloadUrl: string) => {
     window.open(downloadUrl, '_blank');
+  };
+
+  const handlePrintDocument = (downloadUrl: string) => {
+    window.open(downloadUrl, '_blank');
+    setTimeout(() => {
+      window.print();
+    }, 1000);
   };
 
   const [previewKnowledge, setPreviewKnowledge] = useState<KnowledgeBase | null>(null);
@@ -300,52 +307,7 @@ export function Knowledge() {
           </div>
         </div>
 
-        {/* Business Documents Access Panel */}
-        <Card className="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 border border-blue-500/30 shadow-xl mb-6">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
-              <FileCheck className="h-5 w-5 text-blue-400" />
-              Critical Business Documents
-            </CardTitle>
-            <CardDescription className="text-gray-300">
-              Instant access to legal agreements for voice escalation and client interactions
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {businessDocuments.map((doc) => (
-                <div key={doc.id} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3 className="text-white font-medium text-sm mb-1">{doc.name}</h3>
-                      <p className="text-gray-400 text-xs mb-3">{doc.description}</p>
-                      <div className="flex gap-2">
-                        <Button 
-                          size="sm" 
-                          onClick={() => handleDownloadDocument(doc.downloadUrl)}
-                          className="bg-blue-500/20 border-blue-500/30 text-blue-300 hover:bg-blue-500/30 text-xs"
-                        >
-                          <Download className="w-3 h-3 mr-1" />
-                          Download
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="bg-green-500/20 border-green-500/30 text-green-300 hover:bg-green-500/30 text-xs"
-                        >
-                          <Mail className="w-3 h-3 mr-1" />
-                          Email
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Dialog open={isFileUploadOpen} onOpenChange={setIsFileUploadOpen}>
             <DialogTrigger asChild>
               <Button className="bg-green-600 hover:bg-green-700 text-white">
@@ -393,6 +355,28 @@ export function Knowledge() {
                 Add Knowledge
               </Button>
             </DialogTrigger>
+
+          {/* Business Documents - Quick Access */}
+          {businessDocuments.map((doc) => (
+            <div key={doc.id} className="flex gap-1">
+              <Button 
+                size="sm"
+                onClick={() => handleDownloadDocument(doc.downloadUrl)}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs"
+              >
+                <Download className="w-3 h-3 mr-1" />
+                {doc.name}
+              </Button>
+              <Button 
+                size="sm"
+                onClick={() => handlePrintDocument(doc.downloadUrl)}
+                className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs px-2"
+                title={`Print ${doc.name}`}
+              >
+                <Printer className="w-3 h-3" />
+              </Button>
+            </div>
+          ))}
             <DialogContent className="bg-slate-800 border-slate-700 max-w-4xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="text-white">
