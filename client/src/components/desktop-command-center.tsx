@@ -42,7 +42,7 @@ import {
   Pin
 } from "lucide-react";
 import type { Metrics, Bot, Notification, CrmData } from "@shared/schema";
-import robotHeadPath from "@assets/image_1748754307508.png";
+import robotHeadPath from "@assets/A_flat_vector_illustration_features_a_robot_face_i.png";
 
 export default function DesktopCommandCenter() {
   const [automationMode, setAutomationMode] = useState(true);
