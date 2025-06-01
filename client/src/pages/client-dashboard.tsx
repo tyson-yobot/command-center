@@ -37,6 +37,9 @@ export default function ClientDashboard() {
   const [isListening, setIsListening] = React.useState(false);
   const [showEscalation, setShowEscalation] = React.useState(false);
   const [selectedTier, setSelectedTier] = React.useState('All');
+  const [voiceCommand, setVoiceCommand] = React.useState('');
+  const [automationMode, setAutomationMode] = React.useState(true);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = React.useState(false);
 
   const handleVoiceToggle = () => {
     setIsListening(!isListening);
@@ -48,6 +51,65 @@ export default function ClientDashboard() {
   const testEscalation = () => {
     setShowEscalation(true);
     setTimeout(() => setShowEscalation(false), 5000);
+  };
+
+  // Voice Command Handler
+  const sendVoiceCommand = async () => {
+    if (!voiceCommand.trim()) {
+      alert('Please enter a command.');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/voice/trigger', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          command: voiceCommand,
+          user: 'Command Center',
+          context: 'YoBot Dashboard',
+          priority: 'high',
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert('✅ Command sent to VoiceBot');
+        setVoiceCommand('');
+      } else {
+        alert('❌ Error: ' + data.error);
+      }
+    } catch (error) {
+      alert('❌ Failed to send voice command');
+    }
+  };
+
+  // PDF Download Handler
+  const handleDownloadPDF = async () => {
+    try {
+      const response = await fetch('/api/pdf/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: 'YoBot Command Center Report',
+          data: { metrics, bot, crmData }
+        })
+      });
+      
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `yobot-report-${new Date().toISOString().split('T')[0]}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }
+    } catch (error) {
+      console.error('PDF generation failed:', error);
+    }
   };
 
   return (
@@ -126,26 +188,55 @@ export default function ClientDashboard() {
                   className="w-12 h-12 mr-3 inline-block"
                   style={{ marginTop: '-4px' }}
                 />
-                YoBot® Command Center LITE
+                YoBot® Command Center
               </h1>
               <p className="text-slate-300">Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}</p>
             </div>
             <div className="flex items-center space-x-4">
+              {/* Voice Command Input */}
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={voiceCommand}
+                  onChange={(e) => setVoiceCommand(e.target.value)}
+                  placeholder="Enter voice command..."
+                  className="px-3 py-2 bg-slate-700 text-white rounded border border-slate-500 w-48"
+                  onKeyPress={(e) => e.key === 'Enter' && sendVoiceCommand()}
+                />
+                <Button
+                  onClick={sendVoiceCommand}
+                  disabled={!voiceCommand.trim()}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                  size="sm"
+                >
+                  Send
+                </Button>
+              </div>
+
               <Button
                 onClick={handleVoiceToggle}
                 className={`${isListening ? 'bg-red-600 hover:bg-red-700 shadow-lg shadow-red-500/25' : 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/25'} text-white border-2 ${isListening ? 'border-red-300' : 'border-blue-300'}`}
               >
                 {isListening ? <MicOff className="w-5 h-5 mr-2 text-white" /> : <Mic className="w-5 h-5 mr-2 text-white" />}
-                {isListening ? 'Listening...' : 'Voice Command'}
+                {isListening ? 'Listening...' : 'Voice Input'}
               </Button>
               
-              {/* Quick Actions Panel */}
+              {/* Enhanced Controls */}
               <div className="flex items-center space-x-2">
+                <Button 
+                  onClick={handleDownloadPDF}
+                  size="sm"
+                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                >
+                  <FileText className="w-4 h-4 mr-1" />
+                  PDF Report
+                </Button>
                 <Button 
                   size="sm"
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                  Request Training
+                  <Settings className="w-4 h-4 mr-1" />
+                  Admin
                 </Button>
                 <Button 
                   size="sm"
