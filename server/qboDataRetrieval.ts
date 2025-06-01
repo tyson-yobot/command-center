@@ -42,9 +42,36 @@ interface QBOInvoiceData {
   CustomerRef: { value: string };
 }
 
+async function refreshAccessToken() {
+  const refreshToken = process.env.QUICKBOOKS_REFRESH_TOKEN;
+  const clientId = 'ABFKQruSPhRVxF89f0OfjopDH75UfGrCvswLR185exeZti85ep';
+  const clientSecret = process.env.QUICKBOOKS_CLIENT_SECRET;
+  
+  if (!refreshToken || !clientSecret) {
+    throw new Error('Refresh token or client secret not configured');
+  }
+
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: 'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer',
+      headers: {
+        'Authorization': `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: `grant_type=refresh_token&refresh_token=${refreshToken}`
+    });
+    
+    return response.data.access_token;
+  } catch (error) {
+    console.error('Token refresh error:', error.response?.data || error.message);
+    throw new Error('Failed to refresh access token');
+  }
+}
+
 async function makeQBORequest(endpoint: string, method: 'GET' | 'POST' = 'GET', data?: any) {
-  const accessToken = process.env.QUICKBOOKS_ACCESS_TOKEN;
-  const realmId = process.env.QUICKBOOKS_REALM_ID;
+  let accessToken = process.env.QUICKBOOKS_ACCESS_TOKEN;
+  const realmId = process.env.QUICKBOOKS_REALM_ID || '9341454769403223';
   
   if (!accessToken || !realmId) {
     throw new Error('QuickBooks credentials not configured');
@@ -66,6 +93,31 @@ async function makeQBORequest(endpoint: string, method: 'GET' | 'POST' = 'GET', 
     
     return response.data;
   } catch (error) {
+    // If we get a 401, try refreshing the token
+    if (error.response?.status === 401) {
+      console.log('Access token expired, attempting refresh...');
+      try {
+        accessToken = await refreshAccessToken();
+        
+        // Retry the request with the new token
+        const retryResponse = await axios({
+          method,
+          url,
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          data
+        });
+        
+        return retryResponse.data;
+      } catch (refreshError) {
+        console.error('Token refresh failed:', refreshError);
+        throw new Error('Authentication failed - please re-authorize QuickBooks');
+      }
+    }
+    
     console.error('QuickBooks API Error:', error.response?.data || error.message);
     throw new Error(`QuickBooks API failed: ${error.response?.status || error.message}`);
   }
