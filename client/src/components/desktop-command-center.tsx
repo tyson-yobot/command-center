@@ -330,7 +330,7 @@ export default function DesktopCommandCenter() {
               className={`w-12 h-12 mr-2 inline-block ${isProcessing ? 'animate-pulse' : ''}`}
               style={{ marginTop: '-4px' }}
             />
-            YoBot Control Center
+            YoBot Command Center
             {isProcessing && (
               <div className="absolute ml-8 -mt-2 w-4 h-4 bg-green-400 rounded-full animate-ping"></div>
             )}
