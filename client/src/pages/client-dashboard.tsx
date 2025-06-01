@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 import { 
   TrendingUp, 
   Phone, 
@@ -185,8 +186,8 @@ export default function ClientDashboard() {
                 <img 
                   src={yobotLogo} 
                   alt="YoBot Logo" 
-                  className="w-8 h-8 mr-1 inline-block"
-                  style={{ marginTop: '-4px' }}
+                  className="w-9 h-9 mr-1 inline-block"
+                  style={{ marginTop: '-2px' }}
                 />
                 YoBot® Command Center
               </h1>
@@ -831,6 +832,146 @@ export default function ClientDashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Botalytics™ Performance Dashboard */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center space-x-2">
+              <TrendingUp className="w-5 h-5 text-cyan-400" />
+              <span>📊 Botalytics™ Metrics</span>
+              <div className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded-full">PROPRIETARY</div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+              {/* Cost Per Lead */}
+              <div className="bg-slate-800/50 rounded-lg p-4">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-cyan-400 mb-1">$47</div>
+                  <div className="text-cyan-300 text-sm">Cost Per Lead</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Last Month</span>
+                    <span className="text-green-400">$62</span>
+                  </div>
+                  <Progress value={76} className="h-1" />
+                  <div className="text-center text-xs text-green-400">-24% improvement</div>
+                </div>
+              </div>
+
+              {/* Interaction Quality */}
+              <div className="bg-slate-800/50 rounded-lg p-4">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-green-400 mb-1">96.2%</div>
+                  <div className="text-green-300 text-sm">Accuracy Rate</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Target</span>
+                    <span className="text-blue-400">95%</span>
+                  </div>
+                  <Progress value={96} className="h-1" />
+                  <div className="text-center text-xs text-green-400">Above target</div>
+                </div>
+              </div>
+
+              {/* Learning Rate */}
+              <div className="bg-slate-800/50 rounded-lg p-4">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-blue-400 mb-1">+12%</div>
+                  <div className="text-blue-300 text-sm">Learning Rate</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Weekly</span>
+                    <span className="text-green-400">+3%</span>
+                  </div>
+                  <Progress value={88} className="h-1" />
+                  <div className="text-center text-xs text-blue-400">Accelerating</div>
+                </div>
+              </div>
+
+              {/* Total Interactions */}
+              <div className="bg-slate-800/50 rounded-lg p-4">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-purple-400 mb-1">1,247</div>
+                  <div className="text-purple-300 text-sm">Interactions</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Today</span>
+                    <span className="text-green-400">89</span>
+                  </div>
+                  <Progress value={67} className="h-1" />
+                  <div className="text-center text-xs text-purple-400">Peak: 2-4 PM</div>
+                </div>
+              </div>
+
+              {/* Conversion Rate */}
+              <div className="bg-slate-800/50 rounded-lg p-4">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-yellow-400 mb-1">31.2%</div>
+                  <div className="text-yellow-300 text-sm">Close Rate</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Industry Avg</span>
+                    <span className="text-red-400">18%</span>
+                  </div>
+                  <Progress value={82} className="h-1" />
+                  <div className="text-center text-xs text-green-400">+73% vs avg</div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* SmartSpend™ Analytics Dashboard */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center space-x-2">
+              <DollarSign className="w-5 h-5 text-green-400" />
+              <span>📈 SmartSpend™ Analytics</span>
+              <div className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full">PROPRIETARY</div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              <div className="bg-gradient-to-br from-green-600/20 to-green-800/20 border border-green-500/30 rounded-lg p-4">
+                <div className="text-center">
+                  <div className="text-3xl font-black text-green-400 mb-2">$127K</div>
+                  <div className="text-green-300 text-sm">Monthly Savings</div>
+                  <div className="text-green-200 text-xs mt-1">↑ 23% vs last month</div>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-500/30 rounded-lg p-4">
+                <div className="text-center">
+                  <div className="text-3xl font-black text-blue-400 mb-2">47%</div>
+                  <div className="text-blue-300 text-sm">Cost Reduction</div>
+                  <div className="text-blue-200 text-xs mt-1">vs Manual Process</div>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30 rounded-lg p-4">
+                <div className="text-center">
+                  <div className="text-3xl font-black text-purple-400 mb-2">340%</div>
+                  <div className="text-purple-300 text-sm">ROI</div>
+                  <div className="text-purple-200 text-xs mt-1">12-month period</div>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 border border-yellow-500/30 rounded-lg p-4">
+                <div className="text-center">
+                  <div className="text-3xl font-black text-yellow-400 mb-2">21</div>
+                  <div className="text-yellow-300 text-sm">Payback Days</div>
+                  <div className="text-yellow-200 text-xs mt-1">Industry: 90+ days</div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Footer - Support Contact */}
         <div className="text-center">
