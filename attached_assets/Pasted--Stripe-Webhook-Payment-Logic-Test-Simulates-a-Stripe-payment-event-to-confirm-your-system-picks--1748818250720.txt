@@ -1,0 +1,61 @@
+✅ Stripe Webhook + Payment Logic Test
+Simulates a Stripe payment event to confirm your system picks it up and triggers the right flow.
+
+Paste this into Replit:
+
+python
+Copy
+Edit
+from datetime import datetime
+import requests
+
+# Airtable Logger
+def log_test_to_airtable(name, status, notes, module_type="Payments", link=""):
+    url = f"https://api.airtable.com/v0/{BASE_ID}/🧪 Integration Test Log"
+    headers = {
+        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "fields": {
+            "🔧 Integration Name": name,
+            "✅ Pass/Fail": status,
+            "🧠 Notes / Debug": notes,
+            "📅 Test Date": datetime.today().strftime("%Y-%m-%d"),
+            "🧑‍💻 QA Owner": "Tyson",
+            "📤 Output Data Populated": True,
+            "🗃️ Record Created?": True,
+            "🔁 Retry Attempted?": False,
+            "🧩 Module Type": module_type,
+            "📂 Related Scenario Link": link
+        }
+    }
+    requests.post(url, headers=headers, json=data)
+
+# Stripe Webhook Simulation
+def test_stripe_webhook():
+    try:
+        # Replace with your real Stripe webhook URL
+        webhook_url = "https://yobot.api/stripe-webhook"
+        payload = {
+            "type": "checkout.session.completed",
+            "data": {
+                "object": {
+                    "customer_email": "test@yobot.bot",
+                    "amount_total": 49900,
+                    "payment_status": "paid",
+                    "client_reference_id": "YOBOT-ORDER-999"
+                }
+            }
+        }
+
+        r = requests.post(webhook_url, json=payload)
+
+        if r.status_code == 200:
+            print("✅ Stripe webhook accepted:", r.text)
+            log_test_to_airtable("Stripe Payment Webhook", "✅", "Payment flow triggered")
+        else:
+            raise Exception(f"Stripe webhook failed: {r.status_code} {r.text}")
+
+    except Exception as e:
+        log_test_to_airtable("Stripe Payment Webhook", "❌", str(e))
