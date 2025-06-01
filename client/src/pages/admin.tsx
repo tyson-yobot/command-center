@@ -569,8 +569,8 @@ export default function AdminConsole() {
                     <div className="text-green-300 text-sm">Avg Confidence</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-black text-yellow-400 mb-2">1,247</div>
-                    <div className="text-yellow-300 text-sm">Queries Today</div>
+                    <div className="text-3xl font-black text-orange-400 mb-2">324%</div>
+                    <div className="text-orange-300 text-sm">ROI</div>
                   </div>
                 </div>
               </CardContent>

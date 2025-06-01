@@ -126,7 +126,7 @@ export default function ClientDashboard() {
                   className="w-12 h-12 mr-3 inline-block"
                   style={{ marginTop: '-4px' }}
                 />
-                YoBot® Command Center
+                YoBot® Command Center LITE
               </h1>
               <p className="text-slate-300">Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}</p>
             </div>
