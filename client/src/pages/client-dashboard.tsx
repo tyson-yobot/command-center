@@ -185,7 +185,7 @@ export default function ClientDashboard() {
                 <img 
                   src={yobotLogo} 
                   alt="YoBot Logo" 
-                  className="w-12 h-12 mr-3 inline-block"
+                  className="w-8 h-8 mr-1 inline-block"
                   style={{ marginTop: '-4px' }}
                 />
                 YoBot® Command Center
@@ -953,57 +953,7 @@ export default function ClientDashboard() {
             </CardContent>
           </Card>
 
-          {/* Botalytics */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <BarChart3 className="w-5 h-5 mr-2 text-cyan-400" />
-                Botalytics
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Interactions:</span>
-                  <span className="text-white font-bold">1,247</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Accuracy:</span>
-                  <span className="text-green-400 font-bold">96.2%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Learning Rate:</span>
-                  <span className="text-blue-400 font-bold">+12%</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
 
-          {/* SmartSpend Analytics */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <DollarSign className="w-5 h-5 mr-2 text-green-400" />
-                SmartSpend Analytics
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Monthly Spend:</span>
-                  <span className="text-white font-bold">$12.4K</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Cost per Lead:</span>
-                  <span className="text-green-400 font-bold">$32</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">ROI:</span>
-                  <span className="text-blue-400 font-bold">340%</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
 
           {/* Bot Intelligence */}
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
