@@ -38,7 +38,7 @@ function Router() {
           <AdminConsole />
         </Route>
         <Route path="/lite">
-          <LiteCommandCenter />
+          <ClientDashboard />
         </Route>
         <Route path="/knowledge">
           <Knowledge />
