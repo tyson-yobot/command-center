@@ -124,12 +124,8 @@ export class RAGEngine {
         }
       }
       
-      // Role visibility check
-      if (isRelevant && knowledge.roleVisibility && context.userRole) {
-        if (!knowledge.roleVisibility.includes(context.userRole)) {
-          isRelevant = false;
-        }
-      }
+      // Remove role visibility restrictions - allow all access
+      // All knowledge entries are now universally accessible
       
       if (isRelevant) {
         relevantEntries.push(knowledge);

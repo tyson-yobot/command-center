@@ -113,28 +113,7 @@ export default function ClientDashboard() {
           </div>
         )}
 
-        {/* Tier Filter Toggle */}
-        <div className="mb-6">
-          <div className="flex items-center space-x-2">
-            <span className="text-white text-sm font-medium">Filter by Tier:</span>
-            <div className="flex items-center space-x-1">
-              {['All', 'Enterprise', 'SMB', 'Internal'].map((tier) => (
-                <Button
-                  key={tier}
-                  size="sm"
-                  variant={selectedTier === tier ? "default" : "outline"}
-                  className={selectedTier === tier 
-                    ? "bg-blue-600 hover:bg-blue-700 text-white" 
-                    : "bg-white/10 border-white/20 text-white hover:bg-white/20"
-                  }
-                  onClick={() => setSelectedTier(tier)}
-                >
-                  {tier}
-                </Button>
-              ))}
-            </div>
-          </div>
-        </div>
+  
 
         {/* Header */}
         <div className="mb-8">

@@ -711,24 +711,24 @@ export default function DesktopCommandCenter() {
             
             <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-500/30 rounded-lg p-4">
               <div className="text-center">
-                <div className="text-3xl font-black text-blue-400 mb-2">47%</div>
-                <div className="text-blue-300 text-sm">Cost Reduction</div>
-                <div className="text-blue-200 text-xs mt-1">vs Manual Operations</div>
+                <div className="text-3xl font-black text-blue-400 mb-2">$2.4M</div>
+                <div className="text-blue-300 text-sm">🎯 Projected Deal Volume</div>
+                <div className="text-blue-200 text-xs mt-1">This Quarter</div>
               </div>
             </div>
             
             <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30 rounded-lg p-4">
               <div className="text-center">
-                <div className="text-3xl font-black text-purple-400 mb-2">$2.3M</div>
-                <div className="text-purple-300 text-sm">Annual Projection</div>
-                <div className="text-purple-200 text-xs mt-1">Automation ROI</div>
+                <div className="text-3xl font-black text-purple-400 mb-2">12</div>
+                <div className="text-purple-300 text-sm">Live Bot Threads</div>
+                <div className="text-purple-200 text-xs mt-1">Active Now</div>
               </div>
             </div>
             
             <div className="bg-gradient-to-br from-orange-600/20 to-orange-800/20 border border-orange-500/30 rounded-lg p-4">
               <div className="text-center">
                 <div className="text-3xl font-black text-orange-400 mb-2">156</div>
-                <div className="text-orange-300 text-sm">Hours Saved</div>
+                <div className="text-orange-300 text-sm">⏱️ Manual Hours Avoided</div>
                 <div className="text-orange-200 text-xs mt-1">This Week</div>
               </div>
             </div>
@@ -747,22 +747,22 @@ export default function DesktopCommandCenter() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* ROI Metrics */}
+            {/* ROI Performance Metrics */}
             <div className="space-y-4">
               <div className="bg-slate-800/50 rounded-lg p-4">
                 <div className="text-center mb-3">
                   <div className="text-2xl font-black text-cyan-400 mb-1">847%</div>
-                  <div className="text-cyan-300 text-sm">Total ROI</div>
+                  <div className="text-cyan-300 text-sm">📈 Total ROI</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Lead Generation</span>
-                    <span className="text-green-400">+$450K</span>
+                    <span className="text-slate-400">Revenue Generated</span>
+                    <span className="text-green-400">+$2.3M</span>
                   </div>
                   <Progress value={78} className="h-1" />
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Cost Savings</span>
-                    <span className="text-blue-400">+$280K</span>
+                    <span className="text-blue-400">+$730K</span>
                   </div>
                   <Progress value={65} className="h-1" />
                 </div>
@@ -1383,44 +1383,29 @@ export default function DesktopCommandCenter() {
                 📄 Download Power Report
               </Button>
 
-              {/* Emergency Alerts - Admin/Dev only */}
-              {['admin', 'dev'].includes(userRole || '') && (
-                <Button 
-                  className="w-full bg-gradient-to-r from-pink-600 to-red-600 hover:from-pink-700 hover:to-red-700 text-white font-bold"
-                  onClick={handleEmergencyAlert}
-                >
-                  🔔 Alert via Slack/SMS
-                </Button>
-              )}
+              {/* Emergency Alerts - Available to all users */}
+              <Button 
+                className="w-full bg-gradient-to-r from-pink-600 to-red-600 hover:from-pink-700 hover:to-red-700 text-white font-bold"
+                onClick={handleEmergencyAlert}
+              >
+                🔔 Alert via Slack/SMS
+              </Button>
               
-              {/* Advanced Controls - Admin only */}
-              {userRole === 'admin' && (
-                <>
-                  <Button className="w-full bg-gradient-to-r from-green-600 to-cyan-600 hover:from-green-700 hover:to-cyan-700 text-white font-bold">
-                    <BarChart3 className="w-4 h-4 mr-2" />
-                    Admin Power Reports
-                  </Button>
-                  
-                  <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold">
-                    <Brain className="w-4 h-4 mr-2" />
-                    AI Configuration
-                  </Button>
-                  
-                  <Button className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold">
-                    <Database className="w-4 h-4 mr-2" />
-                    RAG Knowledge Base
-                  </Button>
-                </>
-              )}
-
-              {/* Role-specific message for restricted users */}
-              {userRole === 'sales' && (
-                <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
-                  <div className="text-blue-300 text-sm">
-                    Sales Dashboard - Contact admin for additional controls
-                  </div>
-                </div>
-              )}
+              {/* Advanced Controls - Available to all users */}
+              <Button className="w-full bg-gradient-to-r from-green-600 to-cyan-600 hover:from-green-700 hover:to-cyan-700 text-white font-bold">
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Power Reports
+              </Button>
+              
+              <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold">
+                <Brain className="w-4 h-4 mr-2" />
+                AI Configuration
+              </Button>
+              
+              <Button className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold">
+                <Database className="w-4 h-4 mr-2" />
+                RAG Knowledge Base
+              </Button>
             </CardContent>
           </Card>
         </div>
