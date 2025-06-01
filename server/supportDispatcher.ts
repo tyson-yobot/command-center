@@ -27,14 +27,16 @@ export async function dispatchSupportResponse(data: DispatchData): Promise<void>
   const { ticketId, clientName, topic, aiReply, escalationFlag, sentiment, mp3Filename } = data;
   
   try {
-    // 1. Send Slack Message
+    // 1. Send Slack Message and get thread timestamp
+    let threadTs = null;
     if (slackClient) {
-      await slackClient.chat.postMessage({
+      const messageResponse = await slackClient.chat.postMessage({
         channel: SLACK_CHANNEL,
         text: `*🎟 New AI Support Reply* for \`${ticketId}\`:\n> ${aiReply}`
       });
+      threadTs = messageResponse.ts;
 
-      // 2. Upload MP3 with error handling
+      // 2. Upload MP3 with error handling in thread
       if (mp3Filename) {
         try {
           await slackClient.files.upload({
@@ -42,17 +44,20 @@ export async function dispatchSupportResponse(data: DispatchData): Promise<void>
             file: `./uploads/${mp3Filename}`,
             filename: mp3Filename,
             title: "🎧 Voice Reply",
-            initial_comment: "Here's the MP3 reply from YoBot 🎙"
+            initial_comment: "Here's the MP3 reply from YoBot 🎙",
+            thread_ts: threadTs // Reply in thread
           });
         } catch (fileError: any) {
           if (fileError.code === 'ENOENT') {
             await slackClient.chat.postMessage({
               channel: SLACK_CHANNEL,
+              thread_ts: threadTs,
               text: `⚠️ MP3 file *${mp3Filename}* not found for ticket \`${ticketId}\`. Check ElevenLabs voice generation.`
             });
           } else if (fileError.data?.error) {
             await slackClient.chat.postMessage({
               channel: SLACK_CHANNEL,
+              thread_ts: threadTs,
               text: `⚠️ Failed to upload MP3 for \`${ticketId}\`: ${fileError.data.error}`
             });
           }

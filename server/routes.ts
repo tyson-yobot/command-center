@@ -26,6 +26,8 @@ import { generateVoiceReply, testElevenLabsConnection, getAvailableVoices } from
 import { sendSlackAlert } from "./alerts";
 import { setupWebSocket, broadcastUpdate } from "./websocket";
 import { dispatchSupportResponse } from "./supportDispatcher";
+import { captureChatContact, logChatInteraction } from "./chatContactCapture";
+import { syncKnowledgeBase, forceResyncKnowledgeBase } from "./ragKnowledgeSync";
 import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
 import airtableRouter from "./airtable";
@@ -814,6 +816,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Airtable integration
   app.use('/api/airtable', airtableRouter);
+
+  // Chat Contact Capture
+  app.post('/api/chat/capture', async (req, res) => {
+    try {
+      const { name, email, phone, message, source } = req.body;
+
+      if (!name || !message || (!email && !phone)) {
+        return res.status(400).json({
+          error: "Missing required fields",
+          required: ["name", "message", "email or phone"]
+        });
+      }
+
+      const result = await captureChatContact({ name, email, phone, message, source });
+      await logChatInteraction({ name, email, phone, message, source }, result);
+
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        error: "Failed to capture chat contact",
+        message: error.message
+      });
+    }
+  });
+
+  // RAG Knowledge Sync
+  app.post('/api/rag/sync', async (req, res) => {
+    try {
+      const syncResult = await syncKnowledgeBase();
+      res.json(syncResult);
+    } catch (error: any) {
+      res.status(500).json({
+        error: "Failed to sync knowledge base",
+        message: error.message
+      });
+    }
+  });
+
+  // Force RAG Knowledge Re-sync
+  app.post('/api/rag/force-sync', async (req, res) => {
+    try {
+      const syncResult = await forceResyncKnowledgeBase();
+      res.json(syncResult);
+    } catch (error: any) {
+      res.status(500).json({
+        error: "Failed to force sync knowledge base",
+        message: error.message
+      });
+    }
+  });
 
   // AI Support Agent Routes
   app.post('/api/support/ticket', async (req, res) => {
