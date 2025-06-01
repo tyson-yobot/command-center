@@ -29,6 +29,7 @@ import { dispatchSupportResponse } from "./supportDispatcher";
 import { captureChatContact, logChatInteraction } from "./chatContactCapture";
 import { syncKnowledgeBase, forceResyncKnowledgeBase } from "./ragKnowledgeSync";
 import { processVoiceBotWebhook } from "./voiceBotEscalation";
+import { getQBOAuthorizationUrl, exchangeCodeForToken, testQBOConnection, syncDealToQBOInvoice } from "./qboIntegration";
 import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
 import airtableRouter from "./airtable";
@@ -1297,6 +1298,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
         error: 'RAG processing failed',
         message: error.message
       });
+    }
+  });
+
+  // QuickBooks OAuth endpoints
+  app.get('/api/qbo/auth', (req, res) => {
+    try {
+      const authUrl = getQBOAuthorizationUrl();
+      res.json({ authUrl });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to generate auth URL', message: error.message });
+    }
+  });
+
+  app.post('/api/qbo/token', async (req, res) => {
+    try {
+      const { code, realmId } = req.body;
+      if (!code || !realmId) {
+        return res.status(400).json({ error: 'Missing authorization code or realm ID' });
+      }
+
+      const result = await exchangeCodeForToken(code, realmId);
+      if (result.error) {
+        return res.status(400).json({ error: result.error });
+      }
+
+      res.json({
+        success: true,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+        realmId
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Token exchange failed', message: error.message });
+    }
+  });
+
+  app.get('/api/qbo/test', async (req, res) => {
+    try {
+      const { accessToken, realmId } = req.query;
+      const result = await testQBOConnection(accessToken as string, realmId as string);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Connection test failed', message: error.message });
+    }
+  });
+
+  app.post('/api/qbo/sync-deal', async (req, res) => {
+    try {
+      const { dealData, accessToken, realmId } = req.body;
+      if (!dealData || !accessToken || !realmId) {
+        return res.status(400).json({ error: 'Missing required parameters' });
+      }
+
+      const result = await syncDealToQBOInvoice(dealData, accessToken, realmId);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Deal sync failed', message: error.message });
     }
   });
 
