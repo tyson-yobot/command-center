@@ -32,6 +32,29 @@ def post_slack_alert(uuid, integration, result, notes, scenario_link):
     except Exception as e:
         print(f"Slack notification failed: {e}")
 
+def post_escalation_alert(uuid, integration, notes, scenario_link):
+    """Send escalation alert for failed QA tests"""
+    slack_webhook = os.environ.get('ESCALATION_SLACK_WEBHOOK')
+    
+    if not slack_webhook:
+        print("Escalation webhook URL not configured")
+        return
+    
+    message = {
+        "text": f"🚨 *FAILED QA TEST: {integration}*\n"
+                f"• Status: ❌ Fail\n"
+                f"• Notes: {notes or 'None'}\n"
+                f"• [📂 Scenario]({scenario_link})\n"
+                f"• 🆔 *Test UUID:* `{uuid}`\n"
+                f"<@daniel.sharpe> please investigate"
+    }
+    
+    try:
+        response = requests.post(slack_webhook, json=message, timeout=5)
+        print(f"Escalation alert sent: {response.status_code}")
+    except Exception as e:
+        print(f"Escalation alert failed: {e}")
+
 def log_to_airtable(table_name, data):
     """
     Universal logging function for all modules
@@ -111,6 +134,12 @@ def log_to_airtable(table_name, data):
                            simplified_data["✅ Pass/Fail"], 
                            simplified_data["🧠 Notes / Debug"],
                            simplified_data["📂 Related Scenario Link"])
+            
+            # Send escalation alert for failed tests
+            if simplified_data["✅ Pass/Fail"] == "❌ Fail":
+                post_escalation_alert(test_uuid, simplified_data["🔧 Integration Name"],
+                                     simplified_data["🧠 Notes / Debug"],
+                                     simplified_data["📂 Related Scenario Link"])
             
             return True
         else:
