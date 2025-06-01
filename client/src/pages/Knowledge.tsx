@@ -505,21 +505,31 @@ export function Knowledge() {
                     />
                   </div>
                   <div>
-                    <Label className="text-gray-300">Source</Label>
+                    <Label className="text-gray-300">Source URL</Label>
                     <Input 
-                      {...form.register("source")}
+                      {...form.register("sourceUrl")}
                       className="bg-slate-700 border-slate-600 text-white"
-                      placeholder="Source of information"
+                      placeholder="https://example.com or internal reference"
                     />
                   </div>
+                </div>
+
+                <div>
+                  <Label className="text-gray-300">Source</Label>
+                  <Input 
+                    {...form.register("source")}
+                    className="bg-slate-700 border-slate-600 text-white"
+                    placeholder="Document, Manual, Training, etc."
+                  />
                 </div>
 
                 <div>
                   <Label className="text-gray-300">Content</Label>
                   <Textarea 
                     {...form.register("content")}
-                    className="bg-slate-700 border-slate-600 text-white min-h-[200px]"
-                    placeholder="Enter the knowledge content..."
+                    className="bg-slate-700 border-slate-600 text-white min-h-[300px] resize-y"
+                    placeholder="Enter the detailed knowledge content here... You can paste documentation, procedures, FAQ answers, or any information that should be available to your AI assistant."
+                    rows={12}
                   />
                 </div>
 
