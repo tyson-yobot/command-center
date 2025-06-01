@@ -366,6 +366,10 @@ export default function ClientDashboard() {
                   <span className="text-slate-300">Success Rate</span>
                   <span className="text-green-400 font-bold">97.8%</span>
                 </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">Avg Completion Time</span>
+                  <span className="text-blue-400 font-bold">3.2 min</span>
+                </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="text-slate-300 text-sm mb-1">Next Automation</div>
                   <div className="text-white font-medium">Lead Follow-up in 5 min</div>

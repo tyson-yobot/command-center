@@ -769,41 +769,46 @@ export default function DesktopCommandCenter() {
               </div>
             </div>
 
-            {/* ROI Performance */}
+            {/* Bot Performance Metrics */}
             <div className="space-y-4">
               <div className="bg-slate-800/50 rounded-lg p-4">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-green-400 mb-1">847%</div>
-                  <div className="text-green-300 text-sm">📈 Total ROI</div>
+                  <div className="text-2xl font-black text-green-400 mb-1">94.2%</div>
+                  <div className="text-green-300 text-sm">Bot Accuracy Rate</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Revenue Generated</span>
-                    <span className="text-green-400">+$2.3M</span>
+                    <span className="text-slate-400">Successful Interactions</span>
+                    <span className="text-green-400">847/900</span>
                   </div>
-                  <Progress value={78} className="h-1" />
+                  <Progress value={94} className="h-1" />
                   <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Cost Savings</span>
-                    <span className="text-blue-400">+$730K</span>
+                    <span className="text-slate-400">Avg Response Time</span>
+                    <span className="text-blue-400">0.2s</span>
                   </div>
-                  <Progress value={65} className="h-1" />
+                  <Progress value={95} className="h-1" />
                 </div>
               </div>
             </div>
 
-            {/* Cost Analysis */}
+            {/* ROI Analysis */}
             <div className="space-y-4">
               <div className="bg-slate-800/50 rounded-lg p-4">
-                <div className="text-white text-sm font-medium mb-3">Cost Per Interaction</div>
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-green-400 mb-1">$0.23</div>
-                  <div className="text-green-300 text-xs">vs $47.50 Manual</div>
+                  <div className="text-2xl font-black text-green-400 mb-1">324%</div>
+                  <div className="text-green-300 text-sm">Return on Investment</div>
                 </div>
                 <div className="space-y-2">
-                  <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-2 text-center">
-                    <div className="text-green-400 text-sm font-medium">99.5% Cost Reduction</div>
-                    <div className="text-green-300 text-xs">Automated Operations</div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Revenue Generated</span>
+                    <span className="text-green-400">$2.3M</span>
                   </div>
+                  <Progress value={78} className="h-1" />
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Investment Cost</span>
+                    <span className="text-blue-400">$710K</span>
+                  </div>
+                  <Progress value={32} className="h-1" />
                 </div>
               </div>
             </div>
