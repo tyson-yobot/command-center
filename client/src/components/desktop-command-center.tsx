@@ -42,6 +42,7 @@ import {
   Pin
 } from "lucide-react";
 import type { Metrics, Bot, Notification, CrmData } from "@shared/schema";
+import robotHeadPath from "@assets/image_1748754307508.png";
 
 export default function DesktopCommandCenter() {
   const [automationMode, setAutomationMode] = useState(true);
@@ -323,8 +324,12 @@ export default function DesktopCommandCenter() {
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center space-x-4">
           <div className="relative">
-            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-2xl">
-              <BotIcon className={`w-8 h-8 text-white ${isProcessing ? 'animate-pulse' : ''}`} />
+            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden">
+              <img 
+                src={robotHeadPath} 
+                alt="YoBot" 
+                className={`w-12 h-12 object-contain ${isProcessing ? 'animate-pulse' : ''}`}
+              />
             </div>
             {isProcessing && (
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-ping"></div>
