@@ -235,7 +235,7 @@ async function initializeKnowledgeBase() {
         {
           userId: 1,
           name: "Refund Policy Guidelines",
-          content: "All refunds must be processed within 30 days of purchase. For digital products, refunds are only available if the product has technical issues. Enterprise clients have extended 60-day refund windows.",
+          content: "All refunds must be processed within 30 days of purchase. For digital products, refunds are only available if the product has technical issues. All clients have standard 30-day refund windows.",
           triggerConditions: {
             textContains: ["refund", "return", "money back"],
             eventType: ["support_ticket", "chat"],
@@ -246,7 +246,7 @@ async function initializeKnowledgeBase() {
           createdBy: "admin",
           confidence: 95,
           status: "enabled" as const,
-          roleVisibility: ["support", "admin", "manager"],
+          roleVisibility: ["all"],
           overrideBehavior: "append" as const,
           priority: 90
         },
@@ -264,7 +264,7 @@ async function initializeKnowledgeBase() {
           createdBy: "admin",
           confidence: 100,
           status: "enabled" as const,
-          roleVisibility: ["support", "admin"],
+          roleVisibility: ["all"],
           overrideBehavior: "replace" as const,
           priority: 100
         },
@@ -282,7 +282,7 @@ async function initializeKnowledgeBase() {
           createdBy: "admin",
           confidence: 100,
           status: "enabled" as const,
-          roleVisibility: ["support", "admin", "manager"],
+          roleVisibility: ["all"],
           overrideBehavior: "append" as const,
           priority: 95
         },
@@ -300,7 +300,7 @@ async function initializeKnowledgeBase() {
           createdBy: "admin",
           confidence: 98,
           status: "enabled" as const,
-          roleVisibility: ["support", "admin", "manager", "legal"],
+          roleVisibility: ["all"],
           overrideBehavior: "replace" as const,
           priority: 100
         },
@@ -318,25 +318,25 @@ async function initializeKnowledgeBase() {
           createdBy: "admin",
           confidence: 96,
           status: "enabled" as const,
-          roleVisibility: ["support", "admin", "manager", "sales"],
+          roleVisibility: ["all"],
           overrideBehavior: "replace" as const,
           priority: 98
         },
         {
           userId: 1,
-          name: "Advanced Voice Escalation with HIPAA Document Access",
-          content: "For voice escalations requiring document access: Immediately verify caller identity using 2-factor authentication. For HIPAA-sensitive requests, reference our NDA and confidentiality protocols. Grant access to YoBot contracts and legal documents only after verification. Use secure voice transfer protocols and log all document access attempts. Escalate to authorized personnel (Tyson Lerfald CEO or Daniel Sharpe CTO) for contract modifications or sensitive legal matters. All voice interactions with document access must be recorded and encrypted according to HIPAA standards.",
+          name: "Advanced Voice Escalation with Document Access",
+          content: "For voice escalations requiring document access: Immediately verify caller identity using 2-factor authentication. Grant access to YoBot contracts and legal documents only after verification. Use secure voice transfer protocols and log all document access attempts. Escalate to authorized personnel (Tyson Lerfald CEO or Daniel Sharpe CTO) for contract modifications or sensitive legal matters. All voice interactions with document access must be recorded and encrypted according to compliance standards.",
           triggerConditions: {
-            textContains: ["document access", "contract review", "voice escalation", "legal documents", "HIPAA access"],
+            textContains: ["document access", "contract review", "voice escalation", "legal documents", "document request"],
             eventType: ["voice_call", "escalation"],
             intent: ["document_request", "legal_review", "contract_access", "escalation_request"]
           },
-          tags: ["HIPAA", "VoiceBot", "Escalation", "Compliance", "Document Access"],
+          tags: ["VoiceBot", "Escalation", "Compliance", "Document Access"],
           source: "operational_protocol",
           createdBy: "admin",
           confidence: 99,
           status: "enabled" as const,
-          roleVisibility: ["admin", "manager", "legal"],
+          roleVisibility: ["all"],
           overrideBehavior: "replace" as const,
           priority: 100
         }
