@@ -19,6 +19,7 @@ import formToVoiceRouter from "./formToVoice";
 import hubspotAuthRouter from "./hubspotAuth";
 import voiceControlRouter from "./voiceControl";
 import { qboDataRouter } from "./qboDataRetrieval";
+import { invoiceRouter } from "./invoiceAutomation";
 import { generateAIResponse, logSupportInteraction } from "./aiSupportAgent";
 import { analyzeEscalationRisk, routeEscalation } from "./escalationEngine";
 import { ragEngine } from "./ragEngine";
@@ -1305,6 +1306,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // QuickBooks data endpoints
   app.use('/api/qbo', qboDataRouter);
+  
+  // Invoice automation endpoints
+  app.use('/api/invoice', invoiceRouter);
 
   // QuickBooks OAuth endpoints
   app.get('/api/qbo/auth', (req, res) => {
