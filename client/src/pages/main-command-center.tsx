@@ -41,7 +41,7 @@ interface CRMData {
   pipelineValue: number;
 }
 
-export default function MainCommandCenter() {
+export default function MainCommandCenter_OLD_BROKEN() {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   const { data: metricsData } = useQuery<MetricsData>({
