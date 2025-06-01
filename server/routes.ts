@@ -20,6 +20,7 @@ import hubspotAuthRouter from "./hubspotAuth";
 import voiceControlRouter from "./voiceControl";
 import { generateAIResponse, logSupportInteraction } from "./aiSupportAgent";
 import { analyzeEscalationRisk, routeEscalation } from "./escalationEngine";
+import { ragEngine } from "./ragEngine";
 import { postReplyToZendesk, updateTicketPriority, createEscalationTicket, testZendeskConnection } from "./zendeskIntegration";
 import { generateVoiceReply, testElevenLabsConnection, getAvailableVoices } from "./voiceGeneration";
 import { sendSlackAlert } from "./alerts";
@@ -1170,6 +1171,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(results);
     } catch (error: any) {
       res.status(500).json({ error: 'Failed to search knowledge base' });
+    }
+  });
+
+  // RAG Query endpoint - Enhanced AI responses with knowledge retrieval
+  app.post('/api/rag/query', async (req, res) => {
+    try {
+      const { query, userRole, eventType, intent, conversationHistory } = req.body;
+      
+      if (!query) {
+        return res.status(400).json({ error: 'Query is required' });
+      }
+
+      const ragContext = {
+        userQuery: query,
+        userRole: userRole || 'support',
+        eventType: eventType || 'chat',
+        intent,
+        conversationHistory
+      };
+
+      const result = await ragEngine.processQuery(ragContext);
+      
+      res.json({
+        success: true,
+        enhancedReply: result.enhancedReply,
+        sourcesUsed: result.sourcesUsed,
+        confidence: result.confidence,
+        processingTime: result.processingTime,
+        timestamp: new Date().toISOString()
+      });
+
+    } catch (error: any) {
+      console.error('RAG query error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'RAG processing failed',
+        message: error.message
+      });
     }
   });
 

@@ -13,6 +13,7 @@ import AdminConsole from "@/pages/admin";
 import ClientDashboard from "@/pages/client-dashboard";
 import DemoMode from "@/pages/demo";
 import { Knowledge } from "@/pages/Knowledge";
+import { RAGTester } from "@/pages/RAGTester";
 import DesktopCommandCenter from "@/components/desktop-command-center";
 import SystemControls from "@/pages/system-controls";
 import Header from "@/components/layout/header";
@@ -36,6 +37,9 @@ function Router() {
         </Route>
         <Route path="/knowledge">
           <Knowledge />
+        </Route>
+        <Route path="/rag">
+          <RAGTester />
         </Route>
         <Route path="/system-controls">
           <SystemControls />
