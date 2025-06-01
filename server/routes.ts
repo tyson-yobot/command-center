@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./newStorage";
 import { generateQuotePDF, generateROIPDF } from "./pdfGenerator";
 import { z } from "zod";
-import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertCrmDataSchema, insertScannedContactSchema } from "@shared/schema";
+import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertCrmDataSchema, insertScannedContactSchema, insertKnowledgeBaseSchema } from "@shared/schema";
 import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
@@ -1098,6 +1098,78 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: false, 
         error: error.message 
       });
+    }
+  });
+
+  // Knowledge Base API endpoints
+  app.get('/api/knowledge', async (req, res) => {
+    try {
+      const userId = 1; // Default user for demo
+      const knowledge = await storage.getKnowledgeBase(userId);
+      res.json(knowledge);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to fetch knowledge base' });
+    }
+  });
+
+  app.get('/api/knowledge/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const knowledge = await storage.getKnowledgeBaseById(id);
+      if (!knowledge) {
+        return res.status(404).json({ error: 'Knowledge entry not found' });
+      }
+      res.json(knowledge);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to fetch knowledge entry' });
+    }
+  });
+
+  app.post('/api/knowledge', async (req, res) => {
+    try {
+      const knowledgeData = insertKnowledgeBaseSchema.parse(req.body);
+      const knowledge = await storage.createKnowledgeBase(knowledgeData);
+      res.status(201).json(knowledge);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: 'Invalid knowledge data', details: error.errors });
+      } else {
+        res.status(500).json({ error: 'Failed to create knowledge entry' });
+      }
+    }
+  });
+
+  app.put('/api/knowledge/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates = req.body;
+      const knowledge = await storage.updateKnowledgeBase(id, updates);
+      res.json(knowledge);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to update knowledge entry' });
+    }
+  });
+
+  app.delete('/api/knowledge/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteKnowledgeBase(id);
+      res.status(204).send();
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to delete knowledge entry' });
+    }
+  });
+
+  app.get('/api/knowledge/search', async (req, res) => {
+    try {
+      const userId = 1; // Default user for demo
+      const query = req.query.q as string || '';
+      const tags = req.query.tags ? (req.query.tags as string).split(',') : undefined;
+      
+      const results = await storage.searchKnowledgeBase(userId, query, tags);
+      res.json(results);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to search knowledge base' });
     }
   });
 

@@ -12,6 +12,7 @@ import Scanner from "@/pages/scanner";
 import AdminConsole from "@/pages/admin";
 import ClientDashboard from "@/pages/client-dashboard";
 import DemoMode from "@/pages/demo";
+import { Knowledge } from "@/pages/Knowledge";
 import DesktopCommandCenter from "@/components/desktop-command-center";
 import SystemControls from "@/pages/system-controls";
 import Header from "@/components/layout/header";
@@ -32,6 +33,9 @@ function Router() {
         </Route>
         <Route path="/admin">
           <DesktopCommandCenter />
+        </Route>
+        <Route path="/knowledge">
+          <Knowledge />
         </Route>
         <Route path="/system-controls">
           <SystemControls />
