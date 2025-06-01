@@ -1,0 +1,75 @@
+# Automation #1: QuickBooks - Auto-Invoice from CRM
+import requests
+
+def create_invoice(customer_id, item_id):
+    url = "https://quickbooks.api.intuit.com/v3/company/<REALM_ID>/invoice"
+    headers = {
+        "Authorization": f"Bearer {ACCESS_TOKEN}",
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+    }
+    data = {
+        "CustomerRef": {"value": customer_id},
+        "Line": [{
+            "Amount": 100.0,
+            "DetailType": "SalesItemLineDetail",
+            "SalesItemLineDetail": {"ItemRef": {"value": item_id}}
+        }]
+    }
+    response = requests.post(url, headers=headers, json=data)
+    print(response.json())
+
+
+# Automation #2: Fetch QBO Customers & Products
+def get_qbo_entities():
+    headers = {
+        "Authorization": f"Bearer {ACCESS_TOKEN}",
+        "Accept": "application/json"
+    }
+    base = "https://quickbooks.api.intuit.com/v3/company/<REALM_ID>/query"
+
+    customers = requests.get(base + "?query=SELECT * FROM Customer", headers=headers)
+    products = requests.get(base + "?query=SELECT * FROM Item", headers=headers)
+
+    print("Customers:", customers.json())
+    print("Products:", products.json())
+
+
+# Automation #3: Slack Lead Summary to Channel
+def post_to_slack(lead_info):
+    url = "https://slack.com/api/chat.postMessage"
+    headers = {
+        "Authorization": f"Bearer {SLACK_BOT_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    message = {
+        "channel": "#leads",
+        "text": f"New Lead Captured:\nName: {lead_info['name']}\nEmail: {lead_info['email']}"
+    }
+    response = requests.post(url, headers=headers, json=message)
+    print(response.json())
+
+
+# Automation #4: Auto-Capture Web Chat to CRM
+def capture_chat_to_crm(chat_data):
+    crm_url = "https://api.yobotcrm.com/leads"
+    headers = {"Authorization": f"Bearer {CRM_TOKEN}", "Content-Type": "application/json"}
+    payload = {
+        "name": chat_data["name"],
+        "email": chat_data["email"],
+        "message": chat_data["message"]
+    }
+    res = requests.post(crm_url, headers=headers, json=payload)
+    print(res.json())
+
+
+# Automation #5: Lead Scoring Bot Based on Activity
+def score_lead(lead):
+    score = 0
+    if lead["visited_pricing"]:
+        score += 50
+    if lead["opened_emails"] > 3:
+        score += 30
+    if lead["clicked_demo"]:
+        score += 20
+    print(f"Lead: {lead['name']} | Score: {score}")
