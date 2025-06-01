@@ -792,61 +792,6 @@ export default function ClientDashboard() {
           </Card>
         </div>
 
-        {/* Escalation Alerts */}
-        <div className="mb-12">
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Bell className="w-5 h-5 mr-2" />
-                Escalation Alerts
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-green-500/20 border border-green-400 rounded-lg">
-                  <div>
-                    <p className="text-green-400 font-medium">Hot Lead Alert</p>
-                    <p className="text-slate-300 text-sm">Sarah Chen - Ready to close</p>
-                  </div>
-                  <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
-                    Call
-                  </Button>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-yellow-500/20 border border-yellow-400 rounded-lg">
-                  <div>
-                    <p className="text-yellow-400 font-medium">Follow-up Due</p>
-                    <p className="text-slate-300 text-sm">Tom Wilson - Demo scheduled</p>
-                  </div>
-                  <Button size="sm" variant="outline" className="border-yellow-400 text-yellow-400">
-                    Review
-                  </Button>
-                </div>
-                <Button 
-                  onClick={testEscalation}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white"
-                >
-                  <AlertTriangle className="w-4 h-4 mr-2" />
-                  Test Critical Escalation
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-
-
-        {/* Footer - Support Contact */}
-        <div className="text-center">
-          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-white mb-2">Need Support?</h3>
-            <p className="text-slate-300 mb-4">Our team is here to help optimize your automation</p>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-              <Headphones className="w-4 h-4 mr-2" />
-              Contact Support
-            </Button>
-          </div>
-        </div>
-
         {/* Advanced Intelligence & Analytics Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
           {/* Smart Calendar */}
@@ -1253,6 +1198,59 @@ export default function ClientDashboard() {
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Escalation Alerts */}
+        <div className="mb-12">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Bell className="w-5 h-5 mr-2" />
+                Escalation Alerts
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 bg-green-500/20 border border-green-400 rounded-lg">
+                  <div>
+                    <p className="text-green-400 font-medium">Hot Lead Alert</p>
+                    <p className="text-slate-300 text-sm">Sarah Chen - Ready to close</p>
+                  </div>
+                  <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
+                    Call
+                  </Button>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-yellow-500/20 border border-yellow-400 rounded-lg">
+                  <div>
+                    <p className="text-yellow-400 font-medium">Follow-up Due</p>
+                    <p className="text-slate-300 text-sm">Tom Wilson - Demo scheduled</p>
+                  </div>
+                  <Button size="sm" variant="outline" className="border-yellow-400 text-yellow-400">
+                    Review
+                  </Button>
+                </div>
+                <Button 
+                  onClick={testEscalation}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white"
+                >
+                  <AlertTriangle className="w-4 h-4 mr-2" />
+                  Test Critical Escalation
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Footer - Support Contact */}
+        <div className="text-center">
+          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-white mb-2">Need Support?</h3>
+            <p className="text-slate-300 mb-4">Our team is here to help optimize your automation</p>
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Headphones className="w-4 h-4 mr-2" />
+              Contact Support
+            </Button>
+          </div>
         </div>
 
       </div>
