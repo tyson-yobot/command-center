@@ -10,6 +10,28 @@ import json
 import uuid
 from datetime import datetime
 
+def post_slack_alert(uuid, integration, result, notes, scenario_link):
+    """Send Slack notification for integration test results"""
+    slack_webhook = os.environ.get('SLACK_WEBHOOK_URL')
+    
+    if not slack_webhook:
+        print("Slack webhook URL not configured")
+        return
+    
+    message = {
+        "text": f"🧪 *{integration}* test completed\n"
+                f"• Status: *{result}*\n"
+                f"• Notes: {notes or 'None'}\n"
+                f"• [📂 Scenario]({scenario_link})\n"
+                f"• 🆔 *Test UUID:* `{uuid}`"
+    }
+    
+    try:
+        response = requests.post(slack_webhook, json=message, timeout=5)
+        print(f"Slack notification sent: {response.status_code}")
+    except Exception as e:
+        print(f"Slack notification failed: {e}")
+
 def log_to_airtable(table_name, data):
     """
     Universal logging function for all modules
