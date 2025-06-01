@@ -492,14 +492,32 @@ export default function DesktopCommandCenter() {
             </div>
           </div>
           <div className="mt-4 space-y-2">
-            {['AMT66', 'ClientCorp', 'TechStart', 'GlobalSales'].map((project, index) => (
-              <div key={project} className="flex items-center justify-between p-2 bg-slate-800/30 rounded-lg">
+            {[
+              { name: 'Acme Roofing', workflows: ['Lead Gen', 'Demo Follow-up', 'Quote', 'Escalation'], status: 'green' },
+              { name: 'Global Enterprises', workflows: ['Lead Gen', 'Billing Error'], status: 'green' },
+              { name: 'TechStart', workflows: ['Lead Gen', 'Support'], status: 'yellow' },
+              { name: 'ClientCorp', workflows: ['Lead Gen'], status: 'yellow' }
+            ].map((client, index) => (
+              <div key={client.name} className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-800/50 transition-colors">
                 <div className="flex items-center space-x-3">
-                  <div className={`w-2 h-2 rounded-full ${index < 2 ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
-                  <span className="text-white text-sm">{project}</span>
+                  <div className={`w-2 h-2 rounded-full ${client.status === 'green' ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-white text-sm font-medium">{client.name}</span>
+                      {client.name === 'Acme Roofing' && (
+                        <div className="group relative">
+                          <Pin className="w-3 h-3 text-blue-400 cursor-pointer" />
+                          <div className="absolute left-0 top-5 bg-slate-700 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                            CRM team replacing API next week
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-xs text-slate-400 mt-0.5">{client.workflows.length} Workflows: {client.workflows.join(', ')}</div>
+                  </div>
                 </div>
                 <div className="text-slate-400 text-xs">
-                  {index < 2 ? 'Fully Active' : 'Setup Pending'}
+                  {client.status === 'green' ? 'All Active' : 'Partial Setup'}
                 </div>
               </div>
             ))}
@@ -1435,6 +1453,66 @@ export default function DesktopCommandCenter() {
           </Card>
         </div>
       </div>
+
+      {/* Recent Error Highlights */}
+      <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center space-x-2">
+            <AlertTriangle className="w-5 h-5 text-red-400" />
+            <span>Recent Error Highlights</span>
+            <div className="text-xs bg-red-500/20 text-red-300 px-2 py-1 rounded-full">2 CRITICAL</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {[
+              { 
+                timestamp: '2m ago', 
+                module: 'QuickBooks API', 
+                error: 'Auth Token Expired', 
+                code: 'QB401',
+                severity: 'critical'
+              },
+              { 
+                timestamp: '15m ago', 
+                module: 'Voice Processing', 
+                error: 'Transcription Timeout', 
+                code: 'VP503',
+                severity: 'warning'
+              },
+              { 
+                timestamp: '1h ago', 
+                module: 'HubSpot Sync', 
+                error: 'Rate Limit Exceeded', 
+                code: 'HS429',
+                severity: 'warning'
+              }
+            ].map((error, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <div className={`w-2 h-2 rounded-full ${
+                    error.severity === 'critical' ? 'bg-red-400' : 'bg-yellow-400'
+                  }`}></div>
+                  <div>
+                    <div className="text-white text-sm font-medium">{error.module}</div>
+                    <div className="text-slate-400 text-xs">{error.error} • {error.code}</div>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-slate-400 text-xs">{error.timestamp}</span>
+                  <Button size="sm" variant="outline" className="h-6 text-xs">
+                    View Log
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <Button className="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-white">
+            <FileText className="w-4 h-4 mr-2" />
+            View Full Error Log
+          </Button>
+        </CardContent>
+      </Card>
 
       {/* Admin Login Modal */}
       {showAdminLogin && (
