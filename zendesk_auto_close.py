@@ -6,6 +6,7 @@ from zendesk_closure_logger import log_zendesk_closure
 from hubspot_logger import log_to_hubspot
 from command_center_logger import post_to_command_center
 from metrics_tracker_airtable import log_metrics_to_airtable
+from voicebot_alert import send_voicebot_alert
 
 ZENDESK_DOMAIN = os.getenv("ZENDESK_DOMAIN")  # e.g., yoursubdomain.zendesk.com
 ZENDESK_EMAIL = os.getenv("ZENDESK_EMAIL")
@@ -84,6 +85,11 @@ def auto_close_solved_tickets():
                     summary=subject,
                     timestamp=ticket.get("updated_at", "")
                 )
+                
+                # Send VoiceBot alert to customer if phone available
+                customer_phone = ticket.get("requester", {}).get("phone", "")
+                if customer_phone:
+                    send_voicebot_alert(ticket_id, subject, customer_phone)
                 
             else:
                 print(f"❌ Failed to close ticket {ticket_id}: {close_res.status_code}")
