@@ -285,6 +285,60 @@ async function initializeKnowledgeBase() {
           roleVisibility: ["support", "admin", "manager"],
           overrideBehavior: "append" as const,
           priority: 95
+        },
+        {
+          userId: 1,
+          name: "YoBot NDA & Confidentiality Agreement",
+          content: "YoBot Mutual Non-Disclosure Agreement covers proprietary information, automation technologies, AI solutions, pricing strategies, source code, scripts, data models, and workflows. Confidential Information includes all non-public, proprietary information disclosed by either party. Recipients must use information only for business evaluation, not disclose to third parties, and protect with same care as own confidential information. Agreement remains in effect for 2 years with survival of confidentiality obligations. Governed by State law with no license grants to intellectual property.",
+          triggerConditions: {
+            textContains: ["NDA", "confidential", "non-disclosure", "proprietary", "legal agreement", "contract"],
+            eventType: ["support_ticket", "chat", "voice_call"],
+            intent: ["legal_inquiry", "contract_question", "confidentiality_concern"]
+          },
+          tags: ["HIPAA", "Legal", "Confidentiality", "VoiceBot", "Contract"],
+          source: "business_document",
+          createdBy: "admin",
+          confidence: 98,
+          status: "enabled" as const,
+          roleVisibility: ["support", "admin", "manager", "legal"],
+          overrideBehavior: "replace" as const,
+          priority: 100
+        },
+        {
+          userId: 1,
+          name: "YoBot AI Services Agreement & Contract Terms",
+          content: "YoBot AI Services Agreement covers custom AI VoiceBot design, CRM integrations, payment processing, and system maintenance. One-time build fee (50% upon signing, 50% before go-live) plus monthly platform fee. 7-10 business day go-live timeline. Month-to-month term with 30-day termination notice. All chatbot scripts, workflows, source code, and voice models remain YoBot property. Client receives non-exclusive license during agreement term. Includes confidentiality obligations, warranty disclaimers, and Arizona arbitration clause.",
+          triggerConditions: {
+            textContains: ["contract", "agreement", "payment", "pricing", "terms", "services", "build fee"],
+            eventType: ["support_ticket", "chat", "voice_call", "sales_inquiry"],
+            intent: ["pricing_question", "contract_inquiry", "payment_terms", "service_scope"]
+          },
+          tags: ["Legal", "Contract", "Payment", "VoiceBot", "Services"],
+          source: "business_document",
+          createdBy: "admin",
+          confidence: 96,
+          status: "enabled" as const,
+          roleVisibility: ["support", "admin", "manager", "sales"],
+          overrideBehavior: "replace" as const,
+          priority: 98
+        },
+        {
+          userId: 1,
+          name: "Advanced Voice Escalation with HIPAA Document Access",
+          content: "For voice escalations requiring document access: Immediately verify caller identity using 2-factor authentication. For HIPAA-sensitive requests, reference our NDA and confidentiality protocols. Grant access to YoBot contracts and legal documents only after verification. Use secure voice transfer protocols and log all document access attempts. Escalate to authorized personnel (Tyson Lerfald CEO or Daniel Sharpe CTO) for contract modifications or sensitive legal matters. All voice interactions with document access must be recorded and encrypted according to HIPAA standards.",
+          triggerConditions: {
+            textContains: ["document access", "contract review", "voice escalation", "legal documents", "HIPAA access"],
+            eventType: ["voice_call", "escalation"],
+            intent: ["document_request", "legal_review", "contract_access", "escalation_request"]
+          },
+          tags: ["HIPAA", "VoiceBot", "Escalation", "Compliance", "Document Access"],
+          source: "operational_protocol",
+          createdBy: "admin",
+          confidence: 99,
+          status: "enabled" as const,
+          roleVisibility: ["admin", "manager", "legal"],
+          overrideBehavior: "replace" as const,
+          priority: 100
         }
       ];
 
