@@ -146,7 +146,7 @@ export default function LiteCommandCenter() {
               className={`w-12 h-12 mr-2 inline-block ${isProcessing ? 'animate-pulse' : ''}`}
               style={{ marginTop: '-4px' }}
             />
-            YoBot Command Center LITE
+            LITE
             {isProcessing && (
               <div className="absolute ml-8 -mt-2 w-4 h-4 bg-green-400 rounded-full animate-ping"></div>
             )}
