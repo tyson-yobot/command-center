@@ -505,8 +505,8 @@ export default function ClientDashboard() {
                   <span className="text-green-400 font-bold">31.2%</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300" title="Average revenue generated per customer">Customer LTV</span>
-                  <span className="text-blue-400 font-bold">$3,240</span>
+                  <span className="text-slate-300" title="Return on investment from automation">ROI</span>
+                  <span className="text-blue-400 font-bold">247%</span>
                 </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
