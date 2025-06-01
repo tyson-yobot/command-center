@@ -575,6 +575,235 @@ export default function AdminConsole() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* System Controls Section */}
+            <div className="mt-8">
+              <h3 className="text-white text-lg font-semibold mb-4 flex items-center">
+                <Settings className="w-5 h-5 mr-2 text-blue-400" />
+                System Controls
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* RAG System Control */}
+                <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center space-x-2">
+                      <Brain className="w-5 h-5 text-green-400" />
+                      <span>RAG System</span>
+                      <Badge className={`${ragEnabled ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>
+                        {ragEnabled ? 'ACTIVE' : 'OFF'}
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className={`font-medium transition-colors duration-300 ${
+                          ragEnabled ? 'text-white' : 'text-slate-500'
+                        }`}>Knowledge Engine</span>
+                        <Switch 
+                          checked={ragEnabled && !emergencyMode} 
+                          onCheckedChange={setRagEnabled}
+                          disabled={emergencyMode}
+                          className="data-[state=checked]:bg-green-500"
+                        />
+                      </div>
+                      <div className={`text-xs transition-colors duration-300 ${
+                        ragEnabled ? 'text-slate-400' : 'text-slate-600'
+                      }`}>
+                        {ragEnabled ? 'Vector search active' : 'Knowledge retrieval disabled'}
+                      </div>
+                      <div className="pt-2 border-t border-white/10">
+                        <div className={`text-sm mb-2 transition-colors duration-300 ${
+                          ragEnabled ? 'text-white' : 'text-slate-500'
+                        }`}>Documents: {ragEnabled ? '2,847' : '0'}</div>
+                        <div className={`text-xs transition-colors duration-300 ${
+                          ragEnabled ? 'text-slate-400' : 'text-slate-600'
+                        }`}>Confidence: 94.7%</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Bot System Control */}
+                <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center space-x-2">
+                      <Bot className="w-5 h-5 text-blue-400" />
+                      <span>Bot System</span>
+                      <Badge className={`${botSystemEnabled ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>
+                        {botSystemEnabled ? 'ONLINE' : 'OFFLINE'}
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className={`font-medium transition-colors duration-300 ${
+                          botSystemEnabled ? 'text-white' : 'text-slate-500'
+                        }`}>Main Bot</span>
+                        <Switch 
+                          checked={botSystemEnabled && !emergencyMode} 
+                          onCheckedChange={setBotSystemEnabled}
+                          disabled={emergencyMode}
+                          className="data-[state=checked]:bg-blue-500"
+                        />
+                      </div>
+                      <div className={`text-xs transition-colors duration-300 ${
+                        botSystemEnabled ? 'text-slate-400' : 'text-slate-600'
+                      }`}>
+                        {botSystemEnabled ? 'Accepting conversations' : 'Bot is offline'}
+                      </div>
+                      <div className="pt-2 border-t border-white/10">
+                        <div className={`text-sm mb-2 transition-colors duration-300 ${
+                          botSystemEnabled ? 'text-white' : 'text-slate-500'
+                        }`}>Active chats: {botSystemEnabled ? '12' : '0'}</div>
+                        <div className={`text-xs transition-colors duration-300 ${
+                          botSystemEnabled ? 'text-slate-400' : 'text-slate-600'
+                        }`}>Response time: 1.2s</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Voice Processing Control */}
+                <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center space-x-2">
+                      <Mic className="w-5 h-5 text-cyan-400" />
+                      <span>Voice Processing</span>
+                      <Badge className={`${voiceProcessing ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>
+                        {voiceProcessing ? 'ACTIVE' : 'MUTED'}
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className={`font-medium transition-colors duration-300 ${
+                          voiceProcessing ? 'text-white' : 'text-slate-500'
+                        }`}>Voice Engine</span>
+                        <Switch 
+                          checked={voiceProcessing && !emergencyMode} 
+                          onCheckedChange={setVoiceProcessing}
+                          disabled={emergencyMode}
+                          className="data-[state=checked]:bg-cyan-500"
+                        />
+                      </div>
+                      <div className={`text-xs transition-colors duration-300 ${
+                        voiceProcessing ? 'text-slate-400' : 'text-slate-600'
+                      }`}>
+                        {voiceProcessing ? 'Ready for voice commands' : 'Voice input disabled'}
+                      </div>
+                      <div className="pt-2 border-t border-white/10">
+                        <div className={`text-sm mb-2 transition-colors duration-300 ${
+                          voiceProcessing ? 'text-white' : 'text-slate-500'
+                        }`}>Queue: {voiceProcessing ? '3' : '0'}</div>
+                        <div className={`text-xs transition-colors duration-300 ${
+                          voiceProcessing ? 'text-slate-400' : 'text-slate-600'
+                        }`}>Avg processing: 2.1s</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Automation Control */}
+                <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center space-x-2">
+                      <Zap className="w-5 h-5 text-yellow-400" />
+                      <span>Automation</span>
+                      <Badge className={`${automationMode ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>
+                        {automationMode ? 'AUTO' : 'MANUAL'}
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className={`font-medium transition-colors duration-300 ${
+                          automationMode ? 'text-white' : 'text-slate-500'
+                        }`}>Auto Mode</span>
+                        <Switch 
+                          checked={automationMode && !emergencyMode} 
+                          onCheckedChange={setAutomationMode}
+                          disabled={emergencyMode}
+                          className="data-[state=checked]:bg-yellow-500"
+                        />
+                      </div>
+                      <div className={`text-xs transition-colors duration-300 ${
+                        automationMode ? 'text-slate-400' : 'text-slate-600'
+                      }`}>
+                        {automationMode ? 'Workflows run automatically' : 'Manual approval required'}
+                      </div>
+                      <div className="pt-2 border-t border-white/10">
+                        <div className={`text-sm mb-2 transition-colors duration-300 ${
+                          automationMode ? 'text-white' : 'text-slate-500'
+                        }`}>Active Workflows: {automationMode ? '8' : '0'}</div>
+                        <div className={`text-xs transition-colors duration-300 ${
+                          automationMode ? 'text-slate-400' : 'text-slate-600'
+                        }`}>Success rate: 94.2%</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Emergency Controls */}
+              <Card className="bg-red-900/20 backdrop-blur-sm border border-red-500/30 mt-6">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center space-x-2">
+                    <AlertCircle className="w-5 h-5 text-red-400" />
+                    <span>Emergency Controls</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-white font-bold mb-1">System Emergency Shutdown</h3>
+                      <p className="text-red-200 text-sm">Immediately stops all bot operations, voice processing, and automation</p>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      {showConfirmShutdown ? (
+                        <div className="flex items-center space-x-2">
+                          <Button 
+                            onClick={() => {
+                              setBotSystemEnabled(false);
+                              setRagEnabled(false);
+                              setVoiceProcessing(false);
+                              setAutomationMode(false);
+                              setEmergencyMode(true);
+                              setShowConfirmShutdown(false);
+                            }}
+                            className="bg-red-600 hover:bg-red-700 text-white animate-pulse"
+                          >
+                            <AlertCircle className="w-4 h-4 mr-2" />
+                            CONFIRM SHUTDOWN
+                          </Button>
+                          <Button 
+                            onClick={() => setShowConfirmShutdown(false)}
+                            variant="outline"
+                            className="text-slate-400 border-slate-600"
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button 
+                          onClick={() => {
+                            setShowConfirmShutdown(true);
+                            setTimeout(() => setShowConfirmShutdown(false), 5000);
+                          }}
+                          className="bg-red-600 hover:bg-red-700 text-white"
+                        >
+                          <AlertCircle className="w-4 h-4 mr-2" />
+                          Emergency Shutdown
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           {/* VoiceBot Configuration */}
