@@ -290,7 +290,8 @@ export function Knowledge() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6 bg-gray-900 min-h-screen text-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
+      <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-white">Knowledge Base</h1>
@@ -622,6 +623,7 @@ export function Knowledge() {
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 }
