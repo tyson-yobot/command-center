@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from airtable_logger import log_sales_event
 from zendesk_closure_logger import log_zendesk_closure
 from hubspot_logger import log_to_hubspot
+from command_center_logger import post_to_command_center
 
 ZENDESK_DOMAIN = os.getenv("ZENDESK_DOMAIN")  # e.g., yoursubdomain.zendesk.com
 ZENDESK_EMAIL = os.getenv("ZENDESK_EMAIL")
@@ -64,6 +65,15 @@ def auto_close_solved_tickets():
                 
                 # Log closure activity to HubSpot CRM
                 log_to_hubspot(ticket_id, subject, ticket.get("updated_at", ""))
+                
+                # Sync to Command Center live feed
+                post_to_command_center(
+                    event_type="🎫 Auto-Close",
+                    source="Zendesk",
+                    ref_id=ticket_id,
+                    summary=subject,
+                    timestamp=ticket.get("updated_at", "")
+                )
                 
             else:
                 print(f"❌ Failed to close ticket {ticket_id}: {close_res.status_code}")
