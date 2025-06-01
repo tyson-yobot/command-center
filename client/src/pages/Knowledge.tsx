@@ -13,7 +13,7 @@ import { Slider } from "@/components/ui/slider";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Plus, Search, Eye, Edit, Trash2, Tag, Settings, User, Calendar, Target, Upload, FileText, File, Clock, Mic, MessageCircle, Users, Activity, Brain } from "lucide-react";
+import { Plus, Search, Eye, Edit, Trash2, Tag, Settings, User, Calendar, Target, Upload, FileText, File, Clock, Mic, MessageCircle, Users, Activity, Brain, AlertTriangle, TrendingUp, Filter } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -565,10 +565,33 @@ export function Knowledge() {
                       +{kb.tags.length - 3} more
                     </Badge>
                   )}
+                  
+                  {/* Error Risk Flag - Auto-flag entries with poor performance */}
+                  {(kb.usageCount || 0) > 5 && (kb.confidence || 0) < 70 && (
+                    <Badge className="bg-red-500/20 text-red-300 border-red-500/30 text-xs flex items-center gap-1">
+                      <AlertTriangle className="w-3 h-3" />
+                      High Risk
+                    </Badge>
+                  )}
+                  
+                  {!kb.lastUsedAt && (kb.usageCount || 0) === 0 && (
+                    <Badge className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30 text-xs">
+                      Unused
+                    </Badge>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="flex gap-2">
+                    {/* Preview Injection Button */}
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="bg-blue-500/10 border-blue-500/30 text-blue-300 hover:bg-blue-500/20"
+                      title="Preview how this knowledge appears in bot responses"
+                    >
+                      <Eye className="w-3 h-3" />
+                    </Button>
                     <Button
                       size="sm"
                       variant="outline"
