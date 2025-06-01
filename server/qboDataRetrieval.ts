@@ -70,8 +70,8 @@ async function refreshAccessToken() {
 }
 
 async function makeQBORequest(endpoint: string, method: 'GET' | 'POST' = 'GET', data?: any) {
-  let accessToken = process.env.QUICKBOOKS_ACCESS_TOKEN;
-  const realmId = process.env.QUICKBOOKS_REALM_ID || '9341454769403223';
+  let accessToken = 'eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwieC5vcmciOiJIMCJ9..r3N6tqvaJqnHBbxqtWW0CA.HApad4u1I6AGyZjXnaKd7Y4tIURg313sJw9g7QmUPWpO58AF3QLQGY5Q5cmvheVY4sabIq5rB1ic_xz4z61nkAZWmo4rSurRDmjHSsz1jpXVAvUkJlLxgFbCAEEvOrs6y2faq1oJ4iOObg-xPwFj0Is9iXQWCBxFkspQuvCnNPUrUKq3nbdRONAFe86gZWfBUxnHZDCOgfQapRJolmvrPh8dRN8MFlqlwrQs8PJIBbsgbPonwMazVayKDWuHIVFDe5_C0buvRa2zZCU5-1jUBRYnZe5MUG87jxN8jvYD8rfMAIPLGLI_THZrv8GlXEmnteSOsqC5vNO5ne-r0vefxOSQtGEogFIrpnqp4dQkbAzuG_Z0kBgDcZKD7vwX5ZIfA2O1Rls98X6iGhO6xH0KqZsNLG0i0_iA8tG6jqjNbV5icrhX1VT2ETer0tX8iScVYu3Mf-L8mcVjsyzJxIoWBtjT2FSoA2XA6C3QBUthN2XI2RWr5bg-8_htIFfpS2efRmo0874C4PE2uJ6EjxjrNzhlIqXroufhVdDtyRdmtkkmteG9nMeWQ26iLmK3xkFRR9REwUt8CYy-rUYR-hPL22vlIqzcYD_nskX88cwSOTg.mo8_dFf9ucnZMEQ2CgAsWA';
+  const realmId = '9341454769403223';
   
   if (!accessToken || !realmId) {
     throw new Error('QuickBooks credentials not configured');
@@ -231,21 +231,54 @@ router.post('/create-invoice', async (req, res) => {
   }
 });
 
-// Test connection
+// Test connection with simpler endpoint
 router.get('/test-connection', async (req, res) => {
   try {
-    const response = await makeQBORequest('companyinfo/1');
+    // Use direct axios call to test the token
+    const accessToken = 'eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwieC5vcmciOiJIMCJ9..r3N6tqvaJqnHBbxqtWW0CA.HApad4u1I6AGyZjXnaKd7Y4tIURg313sJw9g7QmUPWpO58AF3QLQGY5Q5cmvheVY4sabIq5rB1ic_xz4z61nkAZWmo4rSurRDmjHSsz1jpXVAvUkJlLxgFbCAEEvOrs6y2faq1oJ4iOObg-xPwFj0Is9iXQWCBxFkspQuvCnNPUrUKq3nbdRONAFe86gZWfBUxnHZDCOgfQapRJolmvrPh8dRN8MFlqlwrQs8PJIBbsgbPonwMazVayKDWuHIVFDe5_C0buvRa2zZCU5-1jUBRYnZe5MUG87jxN8jvYD8rfMAIPLGLI_THZrv8GlXEmnteSOsqC5vNO5ne-r0vefxOSQtGEogFIrpnqp4dQkbAzuG_Z0kBgDcZKD7vwX5ZIfA2O1Rls98X6iGhO6xH0KqZsNLG0i0_iA8tG6jqjNbV5icrhX1VT2ETer0tX8iScVYu3Mf-L8mcVjsyzJxIoWBtjT2FSoA2XA6C3QBUthN2XI2RWr5bg-8_htIFfpS2efRmo0874C4PE2uJ6EjxjrNzhlIqXroufhVdDtyRdmtkkmteG9nMeWQ26iLmK3xkFRR9REwUt8CYy-rUYR-hPL22vlIqzcYD_nskX88cwSOTg.mo8_dFf9ucnZMEQ2CgAsWA';
+    const realmId = '9341454769403223';
     
-    res.json({
-      success: true,
-      message: 'QuickBooks connection successful',
-      companyInfo: response.QueryResponse?.CompanyInfo?.[0]
-    });
+    // Test both sandbox and production endpoints
+    const endpoints = [
+      `https://sandbox-quickbooks.api.intuit.com/v3/company/${realmId}/companyinfo/${realmId}`,
+      `https://quickbooks.api.intuit.com/v3/company/${realmId}/companyinfo/${realmId}`
+    ];
+    
+    let lastError = null;
+    
+    for (const endpoint of endpoints) {
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: endpoint,
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Accept': 'application/json'
+          }
+        });
+        
+        return res.json({
+          success: true,
+          message: 'QuickBooks connection successful',
+          endpoint: endpoint.includes('sandbox') ? 'sandbox' : 'production',
+          companyInfo: response.data.QueryResponse?.CompanyInfo?.[0]
+        });
+        
+      } catch (error) {
+        lastError = error;
+        console.log(`Failed with ${endpoint}:`, error.response?.status, error.response?.data);
+      }
+    }
+    
+    // If both failed, return the error
+    throw lastError;
+    
   } catch (error) {
-    console.error('Connection test failed:', error);
+    console.error('Connection test failed:', error.response?.data || error.message);
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.response?.data || error.message,
+      status: error.response?.status
     });
   }
 });
