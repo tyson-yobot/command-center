@@ -25,6 +25,7 @@ import { postReplyToZendesk, updateTicketPriority, createEscalationTicket, testZ
 import { generateVoiceReply, testElevenLabsConnection, getAvailableVoices } from "./voiceGeneration";
 import { sendSlackAlert } from "./alerts";
 import { setupWebSocket, broadcastUpdate } from "./websocket";
+import { dispatchSupportResponse } from "./supportDispatcher";
 import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
 import airtableRouter from "./airtable";
@@ -910,6 +911,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Log interaction
       await logSupportInteraction({ ticketId, clientName, ticketBody, topic }, aiResponse);
+
+      // Dispatch support response to Slack and Airtable
+      let dispatchResult = null;
+      try {
+        const audioFilename = voiceGeneration?.success ? `support_reply_${ticketId}_${new Date().toISOString().replace(/[:.]/g, '-')}.mp3` : undefined;
+        await dispatchSupportResponse({
+          ticketId,
+          clientName,
+          topic: topic || 'General Support',
+          aiReply: aiResponse.reply,
+          escalationFlag: aiResponse.escalationFlag,
+          sentiment: aiResponse.sentiment,
+          mp3Filename: audioFilename
+        });
+        dispatchResult = { success: true };
+      } catch (error: any) {
+        console.error('Support dispatch error:', error);
+        dispatchResult = { success: false, error: error.message };
+      }
 
       res.json({
         ticketId,
