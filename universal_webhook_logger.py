@@ -64,8 +64,8 @@ def log_to_airtable(table_name, data):
         
         simplified_data["🔧 Integration Name"] = data.get("source", "YoBot System")
         simplified_data["✅ Pass/Fail"] = "✅ Pass" if data.get("success", True) else "❌ Fail"
-        simplified_data["📤 Output Data Populated"] = bool(data.get("conversations", 0) > 0 or data.get("revenue", 0) > 0)
-        simplified_data["🗃️ Record Created?"] = True
+        simplified_data["📤 Output Data Populated"] = "Yes" if (data.get("conversations", 0) > 0 or data.get("revenue", 0) > 0) else "No"
+        simplified_data["🗃️ Record Created?"] = "Yes"
         simplified_data["🐞 Errors Observed"] = str(data.get("errors", ""))
         simplified_data["🧠 Notes / Debug"] = str(data.get("details", data.get("summary", str(data))))[:500]
         simplified_data["🧑‍💻 QA Owner"] = "System"
