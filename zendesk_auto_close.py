@@ -7,6 +7,7 @@ from hubspot_logger import log_to_hubspot
 from command_center_logger import post_to_command_center
 from metrics_tracker_airtable import log_metrics_to_airtable
 from voicebot_alert import send_voicebot_alert
+from rag_memory_logger import inject_rag_memory
 
 ZENDESK_DOMAIN = os.getenv("ZENDESK_DOMAIN")  # e.g., yoursubdomain.zendesk.com
 ZENDESK_EMAIL = os.getenv("ZENDESK_EMAIL")
@@ -90,6 +91,14 @@ def auto_close_solved_tickets():
                 customer_phone = ticket.get("requester", {}).get("phone", "")
                 if customer_phone:
                     send_voicebot_alert(ticket_id, subject, customer_phone)
+                
+                # Inject closure into RAG memory for future bot conversations
+                inject_rag_memory(
+                    ticket_id=ticket_id,
+                    subject=subject,
+                    closed_time=ticket.get("updated_at", ""),
+                    notes="User did not respond within 48 hours. Closed automatically by Smart Close Engine."
+                )
                 
             else:
                 print(f"❌ Failed to close ticket {ticket_id}: {close_res.status_code}")
