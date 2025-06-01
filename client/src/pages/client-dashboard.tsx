@@ -277,6 +277,10 @@ export default function ClientDashboard() {
                   <span className="text-slate-300 text-sm">Confidence:</span>
                   <span className="text-green-400 font-bold">87%</span>
                 </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Sales Velocity:</span>
+                  <span className="text-blue-400 font-bold">3.2 deals/week</span>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -307,6 +311,10 @@ export default function ClientDashboard() {
                   <span className="text-slate-300 text-sm">Last Login:</span>
                   <span className="text-blue-400 font-bold">2.1 days ago</span>
                 </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Bot Utilization Rate:</span>
+                  <span className="text-green-400 font-bold">78% usage</span>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -336,6 +344,10 @@ export default function ClientDashboard() {
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">API Usage:</span>
                   <span className="text-blue-400 font-bold">68% of plan</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Bot Processing Load:</span>
+                  <span className="text-green-400 font-bold">2,847 tasks</span>
                 </div>
               </div>
             </CardContent>
