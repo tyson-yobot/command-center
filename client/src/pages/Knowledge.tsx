@@ -383,7 +383,7 @@ export function Knowledge() {
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <FileCheck className="h-5 w-5 text-blue-400" />
-              Critical Business Documents
+              Contract & Escalation Documents
             </CardTitle>
             <CardDescription className="text-gray-300">
               Instant access to legal agreements for voice escalation and client interactions
@@ -436,7 +436,7 @@ export function Knowledge() {
             <DialogTrigger asChild>
               <Button className="bg-green-600 hover:bg-green-700 text-white">
                 <Upload className="w-4 h-4 mr-2" />
-                Upload Files
+                Upload Docs to Train AI
               </Button>
             </DialogTrigger>
             <DialogContent className="bg-slate-800 border-slate-700">
@@ -476,7 +476,7 @@ export function Knowledge() {
             <DialogTrigger asChild>
               <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                 <Plus className="w-4 h-4 mr-2" />
-                Add Knowledge
+                Add Knowledge Entry
               </Button>
             </DialogTrigger>
 
@@ -486,7 +486,7 @@ export function Knowledge() {
             className={`${isRecording ? 'bg-red-600 hover:bg-red-700 animate-pulse' : 'bg-purple-600 hover:bg-purple-700'} text-white`}
           >
             {isRecording ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
-            {isRecording ? 'Stop Recording' : 'Voice Input'}
+            {isRecording ? 'Stop Recording' : 'Train via Voice Input'}
           </Button>
             <DialogContent className="bg-slate-800 border-slate-700 max-w-4xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
