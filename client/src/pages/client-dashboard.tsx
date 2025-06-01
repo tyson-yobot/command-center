@@ -186,7 +186,7 @@ export default function ClientDashboard() {
                 <img 
                   src={yobotLogo} 
                   alt="YoBot Logo" 
-                  className="w-9 h-9 mr-1 inline-block"
+                  className="w-10 h-10 mr-1 inline-block"
                   style={{ marginTop: '-2px' }}
                 />
                 YoBot® Command Center
