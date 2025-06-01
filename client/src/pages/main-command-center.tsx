@@ -78,7 +78,7 @@ export default function MainCommandCenter() {
               className="w-8 h-8"
             />
             <div>
-              <h1 className="text-xl font-semibold text-white">YoBot Control Center</h1>
+              <h1 className="text-xl font-semibold text-white">YoBot Command Center</h1>
               <p className="text-blue-400 text-sm">All-in-one Control Hub</p>
             </div>
           </div>
