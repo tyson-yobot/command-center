@@ -378,6 +378,59 @@ export function Knowledge() {
           </div>
         </div>
 
+        {/* Business Documents Access Panel */}
+        <Card className="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 border border-blue-500/30 shadow-xl mb-6">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center gap-2">
+              <FileCheck className="h-5 w-5 text-blue-400" />
+              Critical Business Documents
+            </CardTitle>
+            <CardDescription className="text-gray-300">
+              Instant access to legal agreements for voice escalation and client interactions
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {businessDocuments.map((doc) => (
+                <div key={doc.id} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <h3 className="text-white font-medium mb-1">{doc.name}</h3>
+                      <p className="text-gray-400 text-sm mb-3">{doc.description}</p>
+                      <div className="flex gap-2">
+                        <Button 
+                          size="default" 
+                          onClick={() => handleDownloadDocument(doc.downloadUrl)}
+                          className="bg-blue-500/20 border-blue-500/30 text-blue-300 hover:bg-blue-500/30"
+                        >
+                          <Download className="w-4 h-4 mr-2" />
+                          Download
+                        </Button>
+                        <Button 
+                          size="default" 
+                          variant="outline"
+                          className="bg-green-500/20 border-green-500/30 text-green-300 hover:bg-green-500/30"
+                        >
+                          <Mail className="w-4 h-4 mr-2" />
+                          Email
+                        </Button>
+                        <Button 
+                          size="default"
+                          onClick={() => handlePrintDocument(doc.downloadUrl)}
+                          className="bg-purple-500/20 border-purple-500/30 text-purple-300 hover:bg-purple-500/30"
+                        >
+                          <Printer className="w-4 h-4 mr-2" />
+                          Print
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="flex gap-2 flex-wrap">
           <Dialog open={isFileUploadOpen} onOpenChange={setIsFileUploadOpen}>
             <DialogTrigger asChild>
