@@ -76,7 +76,7 @@ export default function AdminConsole() {
                 className="w-12 h-12 mr-2 inline-block"
                 style={{ marginTop: '-4px' }}
               />
-              YoBot Control Center
+              YoBot Control Center LITE
             </h1>
             <p className="text-blue-300 text-lg">System Administration & RAG Knowledge</p>
           </div>
@@ -138,12 +138,18 @@ export default function AdminConsole() {
             {/* Main System Controls */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {/* Bot System Control */}
-              <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+              <Card className={`backdrop-blur-sm border transition-all duration-300 ${
+                botSystemEnabled ? 'bg-white/5 border-white/10' : 'bg-white/2 border-white/5 opacity-60'
+              }`}>
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center space-x-2">
-                    <BotIcon className="w-5 h-5 text-blue-400" />
+                  <CardTitle className={`flex items-center space-x-2 transition-colors duration-300 ${
+                    botSystemEnabled ? 'text-white' : 'text-slate-500'
+                  }`}>
+                    <BotIcon className={`w-5 h-5 transition-colors duration-300 ${
+                      botSystemEnabled ? 'text-blue-400' : 'text-slate-600'
+                    }`} />
                     <span>Bot System</span>
-                    <Badge className={`${botSystemEnabled ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>
+                    <Badge className={`${botSystemEnabled ? 'bg-green-500/20 text-green-300' : 'bg-gray-500/20 text-gray-500'}`}>
                       {botSystemEnabled ? 'ACTIVE' : 'OFFLINE'}
                     </Badge>
                   </CardTitle>
@@ -151,7 +157,9 @@ export default function AdminConsole() {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-white font-medium">Master Power</span>
+                      <span className={`font-medium transition-colors duration-300 ${
+                        botSystemEnabled ? 'text-white' : 'text-slate-500'
+                      }`}>Master Power</span>
                       <Switch 
                         checked={botSystemEnabled && !emergencyMode} 
                         onCheckedChange={setBotSystemEnabled}
@@ -159,24 +167,36 @@ export default function AdminConsole() {
                         className="data-[state=checked]:bg-green-500"
                       />
                     </div>
-                    <div className="text-xs text-slate-400">
+                    <div className={`text-xs transition-colors duration-300 ${
+                      botSystemEnabled ? 'text-slate-400' : 'text-slate-600'
+                    }`}>
                       {botSystemEnabled ? 'All bot instances are operational' : 'All bots are shutdown'}
                     </div>
                     <div className="pt-2 border-t border-white/10">
-                      <div className="text-sm text-white mb-2">Active Instances: {botSystemEnabled ? '12' : '0'}</div>
-                      <div className="text-xs text-slate-400">Last restart: 2 hours ago</div>
+                      <div className={`text-sm mb-2 transition-colors duration-300 ${
+                        botSystemEnabled ? 'text-white' : 'text-slate-500'
+                      }`}>Active Instances: {botSystemEnabled ? '12' : '0'}</div>
+                      <div className={`text-xs transition-colors duration-300 ${
+                        botSystemEnabled ? 'text-slate-400' : 'text-slate-600'
+                      }`}>Last restart: 2 hours ago</div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
               {/* RAG Knowledge System */}
-              <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+              <Card className={`backdrop-blur-sm border transition-all duration-300 ${
+                ragEnabled ? 'bg-white/5 border-white/10' : 'bg-white/2 border-white/5 opacity-60'
+              }`}>
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center space-x-2">
-                    <Brain className="w-5 h-5 text-purple-400" />
+                  <CardTitle className={`flex items-center space-x-2 transition-colors duration-300 ${
+                    ragEnabled ? 'text-white' : 'text-slate-500'
+                  }`}>
+                    <Brain className={`w-5 h-5 transition-colors duration-300 ${
+                      ragEnabled ? 'text-purple-400' : 'text-slate-600'
+                    }`} />
                     <span>Knowledge RAG</span>
-                    <Badge className={`${ragEnabled ? 'bg-purple-500/20 text-purple-300' : 'bg-gray-500/20 text-gray-300'}`}>
+                    <Badge className={`${ragEnabled ? 'bg-purple-500/20 text-purple-300' : 'bg-gray-500/20 text-gray-500'}`}>
                       {ragEnabled ? 'ENABLED' : 'DISABLED'}
                     </Badge>
                   </CardTitle>
@@ -184,7 +204,9 @@ export default function AdminConsole() {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-white font-medium">RAG Processing</span>
+                      <span className={`font-medium transition-colors duration-300 ${
+                        ragEnabled ? 'text-white' : 'text-slate-500'
+                      }`}>RAG Processing</span>
                       <Switch 
                         checked={ragEnabled && !emergencyMode} 
                         onCheckedChange={setRagEnabled}
@@ -192,24 +214,36 @@ export default function AdminConsole() {
                         className="data-[state=checked]:bg-purple-500"
                       />
                     </div>
-                    <div className="text-xs text-slate-400">
+                    <div className={`text-xs transition-colors duration-300 ${
+                      ragEnabled ? 'text-slate-400' : 'text-slate-600'
+                    }`}>
                       {ragEnabled ? 'AI knowledge retrieval active' : 'Knowledge system offline'}
                     </div>
                     <div className="pt-2 border-t border-white/10">
-                      <div className="text-sm text-white mb-2">Vector Store: {ragEnabled ? 'Connected' : 'Offline'}</div>
-                      <div className="text-xs text-slate-400">Documents indexed: 2,847</div>
+                      <div className={`text-sm mb-2 transition-colors duration-300 ${
+                        ragEnabled ? 'text-white' : 'text-slate-500'
+                      }`}>Vector Store: {ragEnabled ? 'Connected' : 'Offline'}</div>
+                      <div className={`text-xs transition-colors duration-300 ${
+                        ragEnabled ? 'text-slate-400' : 'text-slate-600'
+                      }`}>Documents indexed: 2,847</div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Voice Processing Engine */}
-              <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+              <Card className={`backdrop-blur-sm border transition-all duration-300 ${
+                voiceProcessing ? 'bg-white/5 border-white/10' : 'bg-white/2 border-white/5 opacity-60'
+              }`}>
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center space-x-2">
-                    <Headphones className="w-5 h-5 text-green-400" />
+                  <CardTitle className={`flex items-center space-x-2 transition-colors duration-300 ${
+                    voiceProcessing ? 'text-white' : 'text-slate-500'
+                  }`}>
+                    <Headphones className={`w-5 h-5 transition-colors duration-300 ${
+                      voiceProcessing ? 'text-green-400' : 'text-slate-600'
+                    }`} />
                     <span>Voice Engine</span>
-                    <Badge className={`${voiceProcessing ? 'bg-green-500/20 text-green-300' : 'bg-gray-500/20 text-gray-300'}`}>
+                    <Badge className={`${voiceProcessing ? 'bg-green-500/20 text-green-300' : 'bg-gray-500/20 text-gray-500'}`}>
                       {voiceProcessing ? 'PROCESSING' : 'PAUSED'}
                     </Badge>
                   </CardTitle>
@@ -217,7 +251,9 @@ export default function AdminConsole() {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-white font-medium">Voice Calls</span>
+                      <span className={`font-medium transition-colors duration-300 ${
+                        voiceProcessing ? 'text-white' : 'text-slate-500'
+                      }`}>Voice Calls</span>
                       <Switch 
                         checked={voiceProcessing && !emergencyMode} 
                         onCheckedChange={setVoiceProcessing}
@@ -225,24 +261,36 @@ export default function AdminConsole() {
                         className="data-[state=checked]:bg-green-500"
                       />
                     </div>
-                    <div className="text-xs text-slate-400">
+                    <div className={`text-xs transition-colors duration-300 ${
+                      voiceProcessing ? 'text-slate-400' : 'text-slate-600'
+                    }`}>
                       {voiceProcessing ? 'Processing incoming calls' : 'Voice calls disabled'}
                     </div>
                     <div className="pt-2 border-t border-white/10">
-                      <div className="text-sm text-white mb-2">Queue: {voiceProcessing ? '3 pending' : 'Empty'}</div>
-                      <div className="text-xs text-slate-400">Response time: 1.2s avg</div>
+                      <div className={`text-sm mb-2 transition-colors duration-300 ${
+                        voiceProcessing ? 'text-white' : 'text-slate-500'
+                      }`}>Queue: {voiceProcessing ? '3 pending' : 'Empty'}</div>
+                      <div className={`text-xs transition-colors duration-300 ${
+                        voiceProcessing ? 'text-slate-400' : 'text-slate-600'
+                      }`}>Response time: 1.2s avg</div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Automation Controls */}
-              <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+              <Card className={`backdrop-blur-sm border transition-all duration-300 ${
+                automationMode ? 'bg-white/5 border-white/10' : 'bg-white/2 border-white/5 opacity-60'
+              }`}>
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center space-x-2">
-                    <Zap className="w-5 h-5 text-yellow-400" />
+                  <CardTitle className={`flex items-center space-x-2 transition-colors duration-300 ${
+                    automationMode ? 'text-white' : 'text-slate-500'
+                  }`}>
+                    <Zap className={`w-5 h-5 transition-colors duration-300 ${
+                      automationMode ? 'text-yellow-400' : 'text-slate-600'
+                    }`} />
                     <span>Automation</span>
-                    <Badge className={`${automationMode ? 'bg-yellow-500/20 text-yellow-300' : 'bg-gray-500/20 text-gray-300'}`}>
+                    <Badge className={`${automationMode ? 'bg-yellow-500/20 text-yellow-300' : 'bg-gray-500/20 text-gray-500'}`}>
                       {automationMode ? 'AUTO' : 'MANUAL'}
                     </Badge>
                   </CardTitle>
@@ -250,7 +298,9 @@ export default function AdminConsole() {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-white font-medium">Auto Mode</span>
+                      <span className={`font-medium transition-colors duration-300 ${
+                        automationMode ? 'text-white' : 'text-slate-500'
+                      }`}>Auto Mode</span>
                       <Switch 
                         checked={automationMode && !emergencyMode} 
                         onCheckedChange={setAutomationMode}
@@ -258,12 +308,18 @@ export default function AdminConsole() {
                         className="data-[state=checked]:bg-yellow-500"
                       />
                     </div>
-                    <div className="text-xs text-slate-400">
+                    <div className={`text-xs transition-colors duration-300 ${
+                      automationMode ? 'text-slate-400' : 'text-slate-600'
+                    }`}>
                       {automationMode ? 'Workflows run automatically' : 'Manual approval required'}
                     </div>
                     <div className="pt-2 border-t border-white/10">
-                      <div className="text-sm text-white mb-2">Active Workflows: {automationMode ? '8' : '0'}</div>
-                      <div className="text-xs text-slate-400">Success rate: 94.2%</div>
+                      <div className={`text-sm mb-2 transition-colors duration-300 ${
+                        automationMode ? 'text-white' : 'text-slate-500'
+                      }`}>Active Workflows: {automationMode ? '8' : '0'}</div>
+                      <div className={`text-xs transition-colors duration-300 ${
+                        automationMode ? 'text-slate-400' : 'text-slate-600'
+                      }`}>Success rate: 94.2%</div>
                     </div>
                   </div>
                 </CardContent>
@@ -415,11 +471,13 @@ export default function AdminConsole() {
                     onClick={async () => {
                       if (!ragQuery.trim()) return;
                       try {
-                        const response = await apiRequest(`/api/rag/query`, {
+                        const response = await fetch('/api/rag/query', {
                           method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({ query: ragQuery })
                         });
-                        setRagResponse(response.answer || "No response received");
+                        const data = await response.json();
+                        setRagResponse(data.answer || "No response received");
                       } catch (error) {
                         setRagResponse("Error querying knowledge base");
                       }
@@ -464,16 +522,18 @@ export default function AdminConsole() {
                     onClick={async () => {
                       if (!newKnowledge.trim() || !newKnowledgeTitle.trim()) return;
                       try {
-                        await apiRequest(`/api/rag/knowledge`, {
+                        const response = await fetch('/api/rag/knowledge', {
                           method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({ 
                             title: newKnowledgeTitle,
                             content: newKnowledge 
                           })
                         });
-                        setNewKnowledge("");
-                        setNewKnowledgeTitle("");
-                        // Show success message
+                        if (response.ok) {
+                          setNewKnowledge("");
+                          setNewKnowledgeTitle("");
+                        }
                       } catch (error) {
                         console.error('Error adding knowledge:', error);
                       }
