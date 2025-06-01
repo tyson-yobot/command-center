@@ -322,13 +322,13 @@ export default function DesktopCommandCenter() {
       <CriticalAlertOverlay />
       {/* Header Section */}
       <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2">
           <div className="relative">
-            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden">
+            <div className="w-14 h-14 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-xl overflow-hidden">
               <img 
                 src={robotHeadPath} 
                 alt="YoBot" 
-                className={`w-12 h-12 object-contain ${isProcessing ? 'animate-pulse' : ''}`}
+                className={`w-10 h-10 object-contain ${isProcessing ? 'animate-pulse' : ''}`}
               />
             </div>
             {isProcessing && (
@@ -337,7 +337,7 @@ export default function DesktopCommandCenter() {
           </div>
           <div>
             <h1 className="text-4xl font-black text-white mb-1">YoBot Control Center</h1>
-            <p className="text-purple-300 text-lg">AI Automation Control Hub</p>
+            <p className="text-blue-300 text-lg">AI Automation Control Hub</p>
           </div>
         </div>
         
