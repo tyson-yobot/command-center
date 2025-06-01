@@ -15,7 +15,7 @@ TABLE_NAME = "🧪 Integration Test Log"
 def log_test_to_airtable(name, status, notes, module_type="LLM", link=""):
     """Log test results to Airtable Integration Test Log table"""
     if AIRTABLE_API_KEY:
-        url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
+        url = f"https://api.airtable.com/v0/{BASE_ID}/🧪 Integration Test Log"
         headers = {
             "Authorization": f"Bearer {AIRTABLE_API_KEY}",
             "Content-Type": "application/json"
