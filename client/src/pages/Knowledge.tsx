@@ -13,7 +13,7 @@ import { Slider } from "@/components/ui/slider";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Plus, Search, Eye, Edit, Trash2, Tag, Settings, User, Calendar, Target, Upload, FileText, File, Clock, Mic, MessageCircle, Users, Activity, Brain, AlertTriangle, TrendingUp, Filter, Download, Mail, FileCheck, Printer } from "lucide-react";
+import { Plus, Search, Eye, Edit, Trash2, Tag, Settings, User, Calendar, Target, Upload, FileText, File, Clock, Mic, MessageCircle, Users, Activity, Brain, AlertTriangle, TrendingUp, Filter, Download, Mail, FileCheck, Printer, MicOff, History, TestTube, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -97,10 +97,81 @@ export function Knowledge() {
     }, 1000);
   };
 
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      const audioChunks: Blob[] = [];
+
+      recorder.ondataavailable = (event) => {
+        audioChunks.push(event.data);
+      };
+
+      recorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        const formData = new FormData();
+        formData.append('audio', audioBlob, 'recording.wav');
+
+        try {
+          const response = await fetch('/api/transcribe', {
+            method: 'POST',
+            body: formData,
+          });
+          const result = await response.json();
+          
+          if (result.text) {
+            form.setValue('content', form.getValues('content') + ' ' + result.text);
+            toast({ title: "Voice transcribed successfully" });
+          }
+        } catch (error) {
+          toast({ title: "Transcription failed", variant: "destructive" });
+        }
+      };
+
+      recorder.start();
+      setMediaRecorder(recorder);
+      setIsRecording(true);
+    } catch (error) {
+      toast({ title: "Microphone access denied", variant: "destructive" });
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder) {
+      mediaRecorder.stop();
+      mediaRecorder.stream.getTracks().forEach(track => track.stop());
+      setIsRecording(false);
+      setMediaRecorder(null);
+    }
+  };
+
+  const testTrigger = async (kb: KnowledgeBase, query: string) => {
+    try {
+      const response = await fetch('/api/knowledge/test-trigger', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ knowledgeId: kb.id, query }),
+      });
+      const result = await response.json();
+      
+      toast({ 
+        title: result.wouldTrigger ? "Trigger Match" : "No Match",
+        description: `Confidence: ${result.confidence}% - ${result.reason}`
+      });
+    } catch (error) {
+      toast({ title: "Test failed", variant: "destructive" });
+    }
+  };
+
   const [previewKnowledge, setPreviewKnowledge] = useState<KnowledgeBase | null>(null);
   const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [auditLogOpen, setAuditLogOpen] = useState<KnowledgeBase | null>(null);
+  const [triggerTestOpen, setTriggerTestOpen] = useState<KnowledgeBase | null>(null);
+  const [testQuery, setTestQuery] = useState('');
   
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -356,27 +427,14 @@ export function Knowledge() {
               </Button>
             </DialogTrigger>
 
-          {/* Business Documents - Quick Access */}
-          {businessDocuments.map((doc) => (
-            <div key={doc.id} className="flex gap-1">
-              <Button 
-                size="sm"
-                onClick={() => handleDownloadDocument(doc.downloadUrl)}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs"
-              >
-                <Download className="w-3 h-3 mr-1" />
-                {doc.name}
-              </Button>
-              <Button 
-                size="sm"
-                onClick={() => handlePrintDocument(doc.downloadUrl)}
-                className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs px-2"
-                title={`Print ${doc.name}`}
-              >
-                <Printer className="w-3 h-3" />
-              </Button>
-            </div>
-          ))}
+          {/* Voice Recording Button */}
+          <Button 
+            onClick={isRecording ? stopRecording : startRecording}
+            className={`${isRecording ? 'bg-red-600 hover:bg-red-700 animate-pulse' : 'bg-purple-600 hover:bg-purple-700'} text-white`}
+          >
+            {isRecording ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
+            {isRecording ? 'Stop Recording' : 'Voice Input'}
+          </Button>
             <DialogContent className="bg-slate-800 border-slate-700 max-w-4xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="text-white">
@@ -555,11 +613,40 @@ export function Knowledge() {
                       )}
                     </div>
                     <div className="flex gap-2 ml-4">
+                      {/* Audit Log Button */}
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => setAuditLogOpen(kb)}
+                        className="text-blue-400 hover:text-blue-300"
+                        title="View Audit Log"
+                      >
+                        <History className="w-4 h-4" />
+                      </Button>
+                      
+                      {/* Trigger Tester Button */}
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => setTriggerTestOpen(kb)}
+                        className="text-green-400 hover:text-green-300"
+                        title="Test Trigger"
+                      >
+                        <TestTube className="w-4 h-4" />
+                      </Button>
+                      
+                      {/* Permission Lock Indicator */}
+                      <div className="flex items-center gap-1 px-2 py-1 bg-slate-700 rounded text-xs">
+                        <Shield className="w-3 h-3 text-yellow-400" />
+                        <span className="text-gray-300">Owner: {kb.createdBy}</span>
+                      </div>
+                      
                       <Button 
                         size="sm" 
                         variant="ghost" 
                         onClick={() => setPreviewKnowledge(kb)}
                         className="text-gray-400 hover:text-white"
+                        title="Preview"
                       >
                         <Eye className="w-4 h-4" />
                       </Button>
