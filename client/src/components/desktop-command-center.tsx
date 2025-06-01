@@ -116,7 +116,7 @@ export default function DesktopCommandCenter() {
           </div>
           
           <div class="metric-card">
-            <div class="metric-value">${liveMetrics.callsToday || metricsData?.callsToday || 247}</div>
+            <div class="metric-value">${liveMetrics.callsToday || 247}</div>
             <div class="metric-label">Total Calls Today</div>
           </div>
           
