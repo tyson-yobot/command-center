@@ -20,17 +20,14 @@ def log_test_to_airtable(name, status, notes, module_type="Core Automation", lin
             "Authorization": f"Bearer {AIRTABLE_API_KEY}",
             "Content-Type": "application/json"
         }
-        # Use exact field names from your Integration Test Log table
+        # Use correct checkbox boolean for Pass/Fail field
         data = {
             "fields": {
                 "🔧 Integration Name": name,
-                "✅ Pass/Fail": "Pass" if status == "✅" else "Fail",
+                "✅ Pass/Fail": status == "✅",
                 "🧠 Notes / Debug": notes,
                 "📅 Test Date": datetime.today().strftime("%Y-%m-%d"),
                 "🧑‍💻 QA Owner": "Tyson",
-                "📤 Output Data Populated": True,
-                "🗃️ Record Created?": True,
-                "🔁 Retry Attempted?": False,
                 "🧩 Module Type": module_type,
                 "📂 Related Scenario Link": link
             }
