@@ -102,6 +102,29 @@ export const scannedContacts = pgTable("scanned_contacts", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const knowledgeBase = pgTable("knowledge_base", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  name: text("name").notNull(),
+  content: text("content").notNull(),
+  triggerConditions: jsonb("trigger_conditions"), // Structured logic for when to use
+  tags: text("tags").array(), // Multi-tiered metadata tags
+  source: text("source").notNull().default("manual"), // manual, scraped, generated, transcript
+  sourceUrl: text("source_url"), // Reference URL if applicable
+  createdBy: text("created_by").notNull(),
+  lastReviewedBy: text("last_reviewed_by"),
+  lastReviewedAt: timestamp("last_reviewed_at"),
+  confidence: integer("confidence").default(85), // 0-100 confidence score
+  status: text("status").notNull().default("enabled"), // enabled, disabled, review_needed
+  roleVisibility: text("role_visibility").array(), // Which roles can see this
+  overrideBehavior: text("override_behavior").default("append"), // append, replace, conditional
+  priority: integer("priority").default(50), // 1-100 priority for retrieval
+  usageCount: integer("usage_count").default(0),
+  lastUsedAt: timestamp("last_used_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
