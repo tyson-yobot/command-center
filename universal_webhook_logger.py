@@ -12,42 +12,119 @@ from datetime import datetime
 def log_to_airtable(table_name, data):
     """
     Universal logging function for all modules
-    Maintains consistent schema across all bots and services
+    Routes to your existing Airtable tables with proper field mapping
     """
     try:
-        airtable_api_url = os.getenv("AIRTABLE_API_URL", "https://airtable-api.yobot.com")
-        airtable_token = os.getenv("AIRTABLE_API_KEY")
+        base_id = os.getenv("AIRTABLE_BASE_ID")
+        api_key = os.getenv("AIRTABLE_API_KEY")
         
-        if not airtable_token:
-            print("Airtable API key not configured")
+        if not base_id or not api_key:
+            print("Missing Airtable credentials")
             return False
-            
-        # Ensure timestamp is included
-        if "timestamp" not in data:
-            data["timestamp"] = datetime.utcnow().isoformat()
-            
-        payload = {
-            "table": table_name,
-            "data": data
+        
+        # Map to your existing tables
+        table_mapping = {
+            "Voice Call Log": "📞 Voice Call Log",
+            "Integration Sync Tracker": "🔗 Integration Sync Tracker", 
+            "File Upload Tracker": "🗃 File Upload Tracker",
+            "Slack Alerts Log": "📣 Slack Alerts Log",
+            "Lead Qualification Tracker": "🎯 Lead Qualification Tracker",
+            "Escalation Tracker": "🚨 Escalation Tracker",
+            "System Alerts Log": "🚨 System Alerts Log",
+            "Ops Metrics Log": "📊 Ops Metrics Log",
+            "CRM + Voice Audit Log": "🔗 CRM + Voice Audit Log",
+            "Support Metrics Rollup": "📊 Support Metrics Rollup",
+            "Command Center Wiring Tracker": "Command Center Wiring Tracker",
+            "Tone Logs": "🗣️ Tone Response Variant Library",
+            "Payment Logs": "🧾 Stripe Price Tracker (Live)",
+            "OCR Logs": "🗃 File Upload Tracker",
+            "Chat Logs": "💼 Client Touchpoint Log",
+            "Quote Logs": "🧾 PDF Quote Generator Log",
+            "Upload Logs": "🗃 File Upload Tracker",
+            "RAG Logs": "🔗 Integration Sync Tracker",
+            "System Logs": "🚨 System Alerts Log",
+            "Workflow Logs": "📊 Ops Metrics Log"
         }
         
+        actual_table = table_mapping.get(table_name, "🚨 System Alerts Log")
+        
+        url = f"https://api.airtable.com/v0/{base_id}/{actual_table}"
         headers = {
-            "Authorization": f"Bearer {airtable_token}",
+            "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json"
         }
         
-        response = requests.post(
-            f"{airtable_api_url}/log",
-            headers=headers,
-            json=payload,
-            timeout=10
-        )
+        # Ensure timestamp
+        if "timestamp" not in data:
+            data["timestamp"] = datetime.utcnow().isoformat()
+        
+        # Map to specific field structures for each table
+        simplified_data = {}
+        
+        if actual_table == "🚨 System Alerts Log":
+            simplified_data["🚨 Alert Type"] = data.get("event_type", data.get("action", "automation"))
+            simplified_data["⚙️ Triggered By"] = data.get("source", "system")
+            simplified_data["🔥 Severity"] = data.get("severity", "info")
+            simplified_data["📍 Status"] = data.get("status", "active")
+            simplified_data["🕒 Timestamp"] = data["timestamp"]
+        
+        elif "File Upload" in actual_table:
+            simplified_data["File Name"] = data.get("filename", "unknown")
+            simplified_data["User"] = data.get("email", "system")
+            simplified_data["Status"] = data.get("status", "processed")
+            simplified_data["Timestamp"] = data["timestamp"]
+        
+        elif "Integration Sync" in actual_table:
+            simplified_data["Integration"] = data.get("source", "system")
+            simplified_data["Event"] = data.get("event_type", data.get("action", "sync"))
+            simplified_data["Status"] = data.get("status", "completed")
+            simplified_data["Timestamp"] = data["timestamp"]
+        
+        elif "Slack Alerts" in actual_table:
+            simplified_data["Alert Type"] = data.get("event_type", "notification")
+            simplified_data["Message"] = str(data.get("details", data.get("summary", data)))[:200]
+            simplified_data["Timestamp"] = data["timestamp"]
+        
+        elif "Lead Qualification" in actual_table:
+            simplified_data["Lead Email"] = data.get("email", "unknown")
+            simplified_data["Action"] = data.get("action", data.get("event_type", "qualification"))
+            simplified_data["Score"] = data.get("score", 0)
+            simplified_data["Timestamp"] = data["timestamp"]
+        
+        elif "Voice Call" in actual_table:
+            simplified_data["Caller"] = data.get("email", data.get("phone", "unknown"))
+            simplified_data["Call Type"] = data.get("event_type", "automated")
+            simplified_data["Duration"] = data.get("duration", 0)
+            simplified_data["Timestamp"] = data["timestamp"]
+        
+        elif "Client Touchpoint" in actual_table:
+            simplified_data["Client Email"] = data.get("email", "unknown")
+            simplified_data["Touchpoint Type"] = data.get("event_type", data.get("action", "interaction"))
+            simplified_data["Details"] = str(data.get("details", data.get("message", "")))[:200]
+            simplified_data["Timestamp"] = data["timestamp"]
+        
+        elif "Ops Metrics" in actual_table:
+            simplified_data["Metric Type"] = data.get("event_type", "automation")
+            simplified_data["Value"] = data.get("amount", data.get("count", 1))
+            simplified_data["Source"] = data.get("source", "system")
+            simplified_data["Timestamp"] = data["timestamp"]
+        
+        else:
+            # Fallback generic mapping
+            simplified_data["Event"] = data.get("event_type", data.get("action", "automation"))
+            simplified_data["Source"] = data.get("source", "system")
+            simplified_data["Details"] = str(data)[:200]
+            simplified_data["Timestamp"] = data["timestamp"]
+        
+        airtable_data = {"fields": simplified_data}
+        
+        response = requests.post(url, json=airtable_data, headers=headers, timeout=10)
         
         if response.status_code == 200:
-            print(f"Logged to {table_name}: {data.get('email', 'system')}")
+            print(f"Logged to {actual_table}")
             return True
         else:
-            print(f"Failed to log to {table_name}: {response.status_code}")
+            print(f"Failed to log to {actual_table}: {response.status_code}")
             return False
             
     except Exception as e:
