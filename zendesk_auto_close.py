@@ -2,6 +2,7 @@ import os
 import requests
 from datetime import datetime, timedelta
 from airtable_logger import log_sales_event
+from zendesk_closure_logger import log_zendesk_closure
 
 ZENDESK_DOMAIN = os.getenv("ZENDESK_DOMAIN")  # e.g., yoursubdomain.zendesk.com
 ZENDESK_EMAIL = os.getenv("ZENDESK_EMAIL")
@@ -56,6 +57,9 @@ def auto_close_solved_tickets():
                 
                 # Send Slack alert for the closure
                 send_slack_alert(ticket_id, subject)
+                
+                # Log closure to dedicated Airtable table
+                log_zendesk_closure(ticket_id, subject, ticket.get("updated_at", ""))
                 
             else:
                 print(f"❌ Failed to close ticket {ticket_id}: {close_res.status_code}")
