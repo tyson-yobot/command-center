@@ -7,6 +7,7 @@ Drop-in logging system for all YoBot modules with consistent schema
 import os
 import requests
 import json
+import uuid
 from datetime import datetime
 
 def log_to_airtable(table_name, data):
@@ -59,9 +60,13 @@ def log_to_airtable(table_name, data):
         if "timestamp" not in data:
             data["timestamp"] = datetime.utcnow().isoformat()
         
+        # Generate unique test UUID for traceability
+        test_uuid = str(uuid.uuid4())
+        
         # Map to your Integration QA table field structure
         simplified_data = {}
         
+        simplified_data["🆔 Test UUID"] = test_uuid
         simplified_data["🔧 Integration Name"] = data.get("source", "YoBot System")
         simplified_data["✅ Pass/Fail"] = "✅ Pass" if data.get("success", True) else "❌ Fail"
         simplified_data["📤 Output Data Populated"] = "Yes" if (data.get("conversations", 0) > 0 or data.get("revenue", 0) > 0) else "No"
@@ -78,6 +83,13 @@ def log_to_airtable(table_name, data):
         
         if response.status_code == 200:
             print(f"Logged to table {table_id}")
+            
+            # Send Slack notification if webhook URL is available
+            post_slack_alert(test_uuid, simplified_data["🔧 Integration Name"], 
+                           simplified_data["✅ Pass/Fail"], 
+                           simplified_data["🧠 Notes / Debug"],
+                           simplified_data["📂 Related Scenario Link"])
+            
             return True
         else:
             print(f"Failed to log to table {table_id}: {response.status_code}")
