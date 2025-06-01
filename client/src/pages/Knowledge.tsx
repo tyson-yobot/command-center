@@ -103,7 +103,12 @@ export function Knowledge() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data: KnowledgeFormData) => apiRequest('/api/knowledge', { method: 'POST', body: JSON.stringify(data) }),
+    mutationFn: (data: KnowledgeFormData) => 
+      fetch('/api/knowledge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/knowledge'] });
       setIsAddDialogOpen(false);
@@ -116,7 +121,11 @@ export function Knowledge() {
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<KnowledgeBase> }) => 
-      apiRequest(`/api/knowledge/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+      fetch(`/api/knowledge/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/knowledge'] });
       setEditingKnowledge(null);
@@ -128,7 +137,7 @@ export function Knowledge() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => apiRequest(`/api/knowledge/${id}`, { method: 'DELETE' }),
+    mutationFn: (id: number) => fetch(`/api/knowledge/${id}`, { method: 'DELETE' }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/knowledge'] });
       toast({ title: "Knowledge entry deleted successfully" });
@@ -510,7 +519,7 @@ export function Knowledge() {
               <SelectValue placeholder="Filter by tags" />
             </SelectTrigger>
             <SelectContent className="bg-slate-700 border-slate-600">
-              <SelectItem value="">All Tags</SelectItem>
+              <SelectItem value="all">All Tags</SelectItem>
               {allTags.map(tag => (
                 <SelectItem key={tag} value={tag}>{tag}</SelectItem>
               ))}
