@@ -29,7 +29,7 @@ import { dispatchSupportResponse } from "./supportDispatcher";
 import { captureChatContact, logChatInteraction } from "./chatContactCapture";
 import { syncKnowledgeBase, forceResyncKnowledgeBase } from "./ragKnowledgeSync";
 import { processVoiceBotWebhook } from "./voiceBotEscalation";
-import { getQBOAuthorizationUrl, exchangeCodeForToken, testQBOConnection, syncDealToQBOInvoice } from "./qboIntegration";
+import { getQBOAuthorizationUrl, exchangeCodeForToken, testQBOConnection, syncDealToQBOInvoice, listQBOCustomers, listQBOItems } from "./qboIntegration";
 import { extractLinkedInLeads, enrichCompanyData, extractInstagramProfiles, testPhantombusterConnection, scoreLeadData } from "./phantombusterIntegration";
 import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
@@ -1356,6 +1356,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(result);
     } catch (error: any) {
       res.status(500).json({ error: 'Deal sync failed', message: error.message });
+    }
+  });
+
+  app.get('/api/qbo/customers', async (req, res) => {
+    try {
+      const { accessToken, realmId } = req.query;
+      if (!accessToken || !realmId) {
+        return res.status(400).json({ error: 'Missing access token or realm ID' });
+      }
+
+      const result = await listQBOCustomers(accessToken as string, realmId as string);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to fetch customers', message: error.message });
+    }
+  });
+
+  app.get('/api/qbo/items', async (req, res) => {
+    try {
+      const { accessToken, realmId } = req.query;
+      if (!accessToken || !realmId) {
+        return res.status(400).json({ error: 'Missing access token or realm ID' });
+      }
+
+      const result = await listQBOItems(accessToken as string, realmId as string);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to fetch items', message: error.message });
     }
   });
 

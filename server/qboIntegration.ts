@@ -196,6 +196,74 @@ export async function getQBOCompanyInfo(accessToken: string, realmId: string): P
 }
 
 /**
+ * List all customers from QuickBooks
+ */
+export async function listQBOCustomers(accessToken: string, realmId: string): Promise<{ success: boolean; customers?: any[]; error?: string }> {
+  if (!accessToken || !realmId) {
+    return { success: false, error: 'Missing access token or realm ID' };
+  }
+
+  try {
+    const response = await axios.post(
+      `https://sandbox-quickbooks.api.intuit.com/v3/company/${realmId}/query?minorversion=65`,
+      { query: "SELECT * FROM Customer" },
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    return {
+      success: true,
+      customers: response.data.QueryResponse?.Customer || []
+    };
+  } catch (error: any) {
+    console.error('QBO customers list error:', error.response?.data || error.message);
+    return {
+      success: false,
+      error: error.response?.data?.Fault?.[0]?.Detail || error.message
+    };
+  }
+}
+
+/**
+ * List all items from QuickBooks
+ */
+export async function listQBOItems(accessToken: string, realmId: string): Promise<{ success: boolean; items?: any[]; error?: string }> {
+  if (!accessToken || !realmId) {
+    return { success: false, error: 'Missing access token or realm ID' };
+  }
+
+  try {
+    const response = await axios.post(
+      `https://sandbox-quickbooks.api.intuit.com/v3/company/${realmId}/query?minorversion=65`,
+      { query: "SELECT * FROM Item" },
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    return {
+      success: true,
+      items: response.data.QueryResponse?.Item || []
+    };
+  } catch (error: any) {
+    console.error('QBO items list error:', error.response?.data || error.message);
+    return {
+      success: false,
+      error: error.response?.data?.Fault?.[0]?.Detail || error.message
+    };
+  }
+}
+
+/**
  * Test QuickBooks connection
  */
 export async function testQBOConnection(accessToken?: string, realmId?: string): Promise<{ success: boolean; message: string; company?: any }> {
