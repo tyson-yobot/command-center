@@ -1,0 +1,58 @@
+# 1. Demo No-Show Rebooker Bot
+
+def demo_no_show_rebooker(demo_records):
+    for record in demo_records:
+        if record['status'] == 'no_show':
+            send_sms(record['phone'], "Sorry we missed you! Rebook here: https://calendly.com/your-rebook-link")
+            send_email(record['email'], "Let's Reschedule Your Demo", "Use this link to rebook: https://calendly.com/your-rebook-link")
+            log_to_crm(record['id'], note="Auto-followup sent for no-show.")
+            notify_slack(f"🚫 Missed Demo: {record['name']} - follow-up sent.")
+
+
+# 2. Lead Scoring Auto-Tagger
+
+def lead_scorer(lead):
+    score = 0
+    if lead['job_title'] in ['CEO', 'Founder']: score += 30
+    if lead['company_size'] > 50: score += 20
+    if lead['industry'] in ['Tech', 'AI']: score += 20
+    if score >= 60:
+        tag = '🔥 Hot'
+    elif score >= 40:
+        tag = '🟡 Warm'
+    else:
+        tag = '🧊 Cold'
+    update_lead_tag(lead['id'], tag)
+    if tag == '🔥 Hot':
+        notify_slack(f"🔥 New Hot Lead: {lead['name']} | Score: {score}")
+
+
+# 3. Tally Form → CRM Contact Builder
+
+def tally_to_crm(tally_submission):
+    contact = {
+        'name': tally_submission['Name'],
+        'email': tally_submission['Email'],
+        'phone': tally_submission['Phone'],
+        'tags': ["Source:Tally", tally_submission['Tag']]
+    }
+    create_crm_contact(contact)
+
+
+# 4. Auto-Invoice on Closed Deal (QuickBooks)
+
+def create_invoice_on_closed(deal):
+    if deal['stage'] == 'Closed Won':
+        customer_id = deal['qbo_customer_id']
+        product_id = deal['qbo_product_id']
+        invoice = create_qbo_invoice(customer_id, product_id, amount=deal['amount'])
+        email_invoice_to_customer(invoice['id'], deal['customer_email'])
+        log_to_crm(deal['id'], note=f"Invoice created: {invoice['id']}")
+
+
+# 5. Slack Deal Summary Bot
+
+def slack_deal_summary(deal):
+    if deal['stage'] == 'Closed Won':
+        message = f"✅ Deal Closed!\n🧑 {deal['customer_name']}\n💵 ${deal['amount']}\n👤 Rep: {deal['owner']}\n🔗 Invoice: {deal.get('invoice_link', 'N/A')}"
+        post_to_slack('#sales-wins', message)
