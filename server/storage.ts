@@ -6,6 +6,8 @@ import {
   metrics, 
   crmData,
   scannedContacts,
+  knowledgeBase,
+  clientCompanies,
   type User, 
   type Bot, 
   type Conversation, 
@@ -13,14 +15,20 @@ import {
   type Metrics, 
   type CrmData,
   type ScannedContact,
+  type KnowledgeBase,
+  type ClientCompany,
   type InsertUser, 
   type InsertBot, 
   type InsertConversation, 
   type InsertNotification, 
   type InsertMetrics, 
   type InsertCrmData,
-  type InsertScannedContact
+  type InsertScannedContact,
+  type InsertKnowledgeBase,
+  type InsertClientCompany
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;

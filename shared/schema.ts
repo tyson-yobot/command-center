@@ -169,6 +169,14 @@ export const insertScannedContactSchema = createInsertSchema(scannedContacts).om
   createdAt: true,
 });
 
+export const insertKnowledgeBaseSchema = createInsertSchema(knowledgeBase).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  usageCount: true,
+  lastUsedAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Bot = typeof bots.$inferSelect;
@@ -178,6 +186,7 @@ export type Metrics = typeof metrics.$inferSelect;
 export type CrmData = typeof crmData.$inferSelect;
 export type ClientCompany = typeof clientCompanies.$inferSelect;
 export type ScannedContact = typeof scannedContacts.$inferSelect;
+export type KnowledgeBase = typeof knowledgeBase.$inferSelect;
 export type InsertBot = z.infer<typeof insertBotSchema>;
 export type InsertConversation = z.infer<typeof insertConversationSchema>;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
@@ -185,3 +194,4 @@ export type InsertMetrics = z.infer<typeof insertMetricsSchema>;
 export type InsertCrmData = z.infer<typeof insertCrmDataSchema>;
 export type InsertClientCompany = z.infer<typeof insertClientCompanySchema>;
 export type InsertScannedContact = z.infer<typeof insertScannedContactSchema>;
+export type InsertKnowledgeBase = z.infer<typeof insertKnowledgeBaseSchema>;
