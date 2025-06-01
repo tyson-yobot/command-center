@@ -327,7 +327,7 @@ export default function DesktopCommandCenter() {
             <img 
               src={robotHeadPath} 
               alt="YoBot" 
-              className={`w-10 h-10 object-contain ${isProcessing ? 'animate-pulse' : ''}`}
+              className={`w-12 h-12 object-contain ${isProcessing ? 'animate-pulse' : ''}`}
             />
             {isProcessing && (
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-ping"></div>
