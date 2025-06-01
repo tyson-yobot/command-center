@@ -944,6 +944,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         escalationTicket,
         voiceGeneration,
         makeWebhook: makeWebhookResult,
+        dispatch: dispatchResult,
         status: "processed"
       });
 
