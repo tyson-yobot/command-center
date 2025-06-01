@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,7 @@ import { Slider } from "@/components/ui/slider";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Plus, Search, Eye, Edit, Trash2, Tag, Settings, User, Calendar, Target } from "lucide-react";
+import { Plus, Search, Eye, Edit, Trash2, Tag, Settings, User, Calendar, Target, Upload, FileText, File } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -68,6 +68,9 @@ export function Knowledge() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingKnowledge, setEditingKnowledge] = useState<KnowledgeBase | null>(null);
   const [previewKnowledge, setPreviewKnowledge] = useState<KnowledgeBase | null>(null);
+  const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -197,6 +200,89 @@ export function Knowledge() {
     return 'text-green-600';
   };
 
+  const handleFileUpload = async (files: FileList) => {
+    setUploadingFile(true);
+    
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      try {
+        const text = await readFileAsText(file);
+        const knowledgeEntry = {
+          userId: 1,
+          name: file.name.replace(/\.[^/.]+$/, ""),
+          content: text,
+          tags: ["uploaded", "file"],
+          source: "file_upload",
+          createdBy: "user",
+          confidence: 85,
+          status: "enabled" as const,
+          roleVisibility: ["support", "admin"],
+          overrideBehavior: "append" as const,
+          priority: 70,
+          triggerConditions: {
+            textContains: extractKeywords(text),
+            eventType: ["chat", "support_ticket"],
+            intent: ["information_request"]
+          }
+        };
+        
+        await createMutation.mutateAsync(knowledgeEntry);
+        toast({ title: `Successfully uploaded ${file.name}` });
+      } catch (error) {
+        toast({ 
+          title: `Failed to upload ${file.name}`, 
+          description: "Please try again",
+          variant: "destructive"
+        });
+      }
+    }
+    
+    setUploadingFile(false);
+    setIsFileUploadOpen(false);
+  };
+
+  const readFileAsText = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const text = e.target?.result as string;
+        resolve(text);
+      };
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsText(file);
+    });
+  };
+
+  const extractKeywords = (text: string): string[] => {
+    const words = text.toLowerCase()
+      .replace(/[^\w\s]/g, ' ')
+      .split(/\s+/)
+      .filter(word => word.length > 3)
+      .filter(word => !['the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'can', 'had', 'her', 'was', 'one', 'our', 'out', 'day', 'get', 'has', 'him', 'his', 'how', 'its', 'may', 'new', 'now', 'old', 'see', 'two', 'way', 'who', 'boy', 'did', 'she', 'use', 'her', 'they', 'each', 'which', 'their', 'said', 'will', 'from', 'have', 'this', 'that', 'with', 'what', 'were', 'been', 'have', 'there', 'would', 'could', 'other', 'after', 'first', 'well', 'water', 'long', 'little', 'very', 'after', 'words', 'without', 'think'].includes(word));
+    
+    const wordCount: Record<string, number> = {};
+    words.forEach(word => {
+      wordCount[word] = (wordCount[word] || 0) + 1;
+    });
+    
+    return Object.entries(wordCount)
+      .sort(([,a], [,b]) => (b as number) - (a as number))
+      .slice(0, 10)
+      .map(([word]) => word);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      handleFileUpload(files);
+    }
+  };
+
   return (
     <div className="container mx-auto p-6 space-y-6 bg-gray-900 min-h-screen text-white">
       <div className="flex justify-between items-center">
@@ -207,14 +293,168 @@ export function Knowledge() {
           </p>
         </div>
         
-        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-              <Plus className="w-4 h-4 mr-2" />
-              Add knowledge
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gray-800 text-white border-gray-700">
+        <div className="flex gap-2">
+          <Dialog open={isFileUploadOpen} onOpenChange={setIsFileUploadOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-green-600 hover:bg-green-700 text-white">
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Files
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-slate-800 border-slate-700 text-white max-w-2xl">
+              <DialogHeader>
+                <DialogTitle className="text-white flex items-center gap-2">
+                  <Upload className="w-5 h-5 text-green-400" />
+                  Upload Training Files
+                </DialogTitle>
+                <DialogDescription className="text-slate-300">
+                  Upload text files or documents to train your bot. The system will automatically extract keywords and create knowledge entries.
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div 
+                className="border-2 border-dashed border-slate-600 rounded-lg p-8 text-center hover:border-slate-500 transition-colors"
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+              >
+                <div className="space-y-4">
+                  <div className="w-16 h-16 bg-slate-700 rounded-full flex items-center justify-center mx-auto">
+                    <FileText className="w-8 h-8 text-slate-400" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-medium text-white">Drop files here to upload</p>
+                    <p className="text-sm text-slate-400">or click to browse files</p>
+                  </div>
+                  <Button 
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingFile}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    {uploadingFile ? 'Uploading...' : 'Choose Files'}
+                  </Button>
+                  <input 
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    accept=".txt,.md"
+                    onChange={(e) => e.target.files && handleFileUpload(e.target.files)}
+                    className="hidden"
+                  />
+                </div>
+              </div>
+              
+              <div className="text-sm text-slate-400">
+                <p className="font-medium mb-2">Supported file types:</p>
+                <ul className="space-y-1">
+                  <li>• Text files (.txt)</li>
+                  <li>• Markdown files (.md)</li>
+                </ul>
+              </div>
+            </DialogContent>
+          </Dialog>
+          
+          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Plus className="w-4 h-4 mr-2" />
+                Add knowledge
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gray-800 text-white border-gray-700">
+              <DialogHeader>
+                <DialogTitle className="text-white">
+                  {editingKnowledge ? "Edit Knowledge Entry" : "Add Knowledge Entry"}
+                </DialogTitle>
+                <DialogDescription className="text-gray-400">
+                  Create training content for YoBot AI responses
+                </DialogDescription>
+              </DialogHeader>
+              
+              <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="name" className="text-white">Knowledge Title</Label>
+                    <Input
+                      id="name"
+                      {...form.register('name')}
+                      className="bg-gray-700 border-gray-600 text-white"
+                      placeholder="e.g., Refund Policy"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="source" className="text-white">Source</Label>
+                    <Input
+                      id="source"
+                      {...form.register('source')}
+                      className="bg-gray-700 border-gray-600 text-white"
+                      placeholder="e.g., Company Documentation"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="content" className="text-white">Content</Label>
+                  <Textarea
+                    id="content"
+                    {...form.register('content')}
+                    rows={8}
+                    className="bg-gray-700 border-gray-600 text-white"
+                    placeholder="Enter the knowledge content that will train the AI..."
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-white">Status</Label>
+                    <Controller
+                      name="status"
+                      control={form.control}
+                      render={({ field }) => (
+                        <Select value={field.value} onValueChange={field.onChange}>
+                          <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-gray-800 border-gray-700">
+                            <SelectItem value="enabled">Enabled</SelectItem>
+                            <SelectItem value="disabled">Disabled</SelectItem>
+                            <SelectItem value="review_needed">Review Needed</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
+
+                  <div>
+                    <Label className="text-white">Confidence ({form.watch('confidence')}%)</Label>
+                    <Controller
+                      name="confidence"
+                      control={form.control}
+                      render={({ field }) => (
+                        <Slider
+                          value={[field.value]}
+                          onValueChange={(value) => field.onChange(value[0])}
+                          max={100}
+                          step={1}
+                          className="mt-2"
+                        />
+                      )}
+                    />
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <Button type="button" variant="outline" onClick={handleCloseDialog}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+                    {editingKnowledge ? "Update" : "Create"} Knowledge
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
             <DialogHeader>
               <DialogTitle className="text-white">
                 {editingKnowledge ? "Edit Knowledge Entry" : "Add Knowledge Entry"}
