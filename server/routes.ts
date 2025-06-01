@@ -30,6 +30,7 @@ import { captureChatContact, logChatInteraction } from "./chatContactCapture";
 import { syncKnowledgeBase, forceResyncKnowledgeBase } from "./ragKnowledgeSync";
 import { processVoiceBotWebhook } from "./voiceBotEscalation";
 import { getQBOAuthorizationUrl, exchangeCodeForToken, testQBOConnection, syncDealToQBOInvoice } from "./qboIntegration";
+import { extractLinkedInLeads, enrichCompanyData, extractInstagramProfiles, testPhantombusterConnection, scoreLeadData } from "./phantombusterIntegration";
 import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
 import airtableRouter from "./airtable";
@@ -1355,6 +1356,67 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(result);
     } catch (error: any) {
       res.status(500).json({ error: 'Deal sync failed', message: error.message });
+    }
+  });
+
+  // Phantombuster lead generation endpoints
+  app.get('/api/phantombuster/test', async (req, res) => {
+    try {
+      const result = await testPhantombusterConnection();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Connection test failed', message: error.message });
+    }
+  });
+
+  app.post('/api/phantombuster/linkedin-leads', async (req, res) => {
+    try {
+      const { searchQuery, maxResults = 50 } = req.body;
+      if (!searchQuery) {
+        return res.status(400).json({ error: 'Search query is required' });
+      }
+
+      const result = await extractLinkedInLeads(searchQuery, maxResults);
+      if (result.success && result.leads) {
+        // Auto-score leads
+        const scoredLeads = result.leads.map(lead => ({
+          ...lead,
+          leadScore: scoreLeadData(lead)
+        }));
+        res.json({ success: true, leads: scoredLeads });
+      } else {
+        res.status(400).json(result);
+      }
+    } catch (error: any) {
+      res.status(500).json({ error: 'LinkedIn extraction failed', message: error.message });
+    }
+  });
+
+  app.post('/api/phantombuster/enrich-company', async (req, res) => {
+    try {
+      const { companyName } = req.body;
+      if (!companyName) {
+        return res.status(400).json({ error: 'Company name is required' });
+      }
+
+      const result = await enrichCompanyData(companyName);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Company enrichment failed', message: error.message });
+    }
+  });
+
+  app.post('/api/phantombuster/instagram-leads', async (req, res) => {
+    try {
+      const { hashtag, maxProfiles = 30 } = req.body;
+      if (!hashtag) {
+        return res.status(400).json({ error: 'Hashtag is required' });
+      }
+
+      const result = await extractInstagramProfiles(hashtag, maxProfiles);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Instagram extraction failed', message: error.message });
     }
   });
 
