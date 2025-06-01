@@ -40,6 +40,10 @@ import { extractLinkedInLeads, enrichCompanyData, extractInstagramProfiles, test
 import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
 import airtableRouter from "./airtable";
+import masterDataSyncRouter from "./masterDataSync";
+import adminToolsRouter from "./adminTools";
+import conversionFunnelRouter from "./conversionFunnel";
+import systemAuditLogRouter, { auditLogger } from "./systemAuditLog";
 
 // Make.com webhook integration
 async function triggerMakeScenario(data: any) {
@@ -1471,6 +1475,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: 'Instagram extraction failed', message: error.message });
     }
   });
+
+  // Mount the new enterprise routes
+  app.use('/api/master-data-sync', masterDataSyncRouter);
+  app.use('/api/admin-tools', adminToolsRouter);
+  app.use('/api/conversion-funnel', conversionFunnelRouter);
+  app.use('/api/audit-log', systemAuditLogRouter);
 
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
