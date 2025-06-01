@@ -32,5 +32,8 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm run dev"
+args = run = "node server.js"
+language = "nodejs"
+entrypoint = "server.js"
 waitForPort = 5000
+
