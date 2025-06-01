@@ -33,7 +33,7 @@ function Router() {
           <ClientDashboard />
         </Route>
         <Route path="/admin">
-          <DesktopCommandCenter />
+          <AdminConsole />
         </Route>
         <Route path="/knowledge">
           <Knowledge />
