@@ -20,16 +20,19 @@ def log_test_to_airtable(name, status, notes, module_type="Core Automation", lin
             "Authorization": f"Bearer {AIRTABLE_API_KEY}",
             "Content-Type": "application/json"
         }
-        # Simplified data format that works with most Airtable configurations
+        # Use exact field names from your Integration Test Log table
         data = {
             "fields": {
-                "Integration Name": name,
-                "Status": "Pass" if status == "✅" else "Fail",
-                "Notes": notes,
-                "Test Date": datetime.today().strftime("%Y-%m-%d"),
-                "QA Owner": "Tyson",
-                "Module Type": module_type,
-                "Link": link
+                "🔧 Integration Name": name,
+                "✅ Pass/Fail": "Pass" if status == "✅" else "Fail",
+                "🧠 Notes / Debug": notes,
+                "📅 Test Date": datetime.today().strftime("%Y-%m-%d"),
+                "🧑‍💻 QA Owner": "Tyson",
+                "📤 Output Data Populated": True,
+                "🗃️ Record Created?": True,
+                "🔁 Retry Attempted?": False,
+                "🧩 Module Type": module_type,
+                "📂 Related Scenario Link": link
             }
         }
         
