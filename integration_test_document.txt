@@ -1,0 +1,13 @@
+YoBot Integration Test Document
+Generated: 2025-06-01 22:42:17
+
+This is a test document for the PDF summarizer integration.
+The system is testing document processing capabilities.
+
+Key features:
+- Text extraction
+- Content summarization  
+- Integration logging
+- Airtable connectivity
+
+Status: Operational
