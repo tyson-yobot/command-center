@@ -16,6 +16,7 @@ import DemoMode from "@/pages/demo";
 import { Knowledge } from "@/pages/Knowledge";
 import { RAGTester } from "@/pages/RAGTester";
 import DesktopCommandCenter from "@/components/desktop-command-center";
+import LiteCommandCenter from "@/components/lite-command-center";
 import SystemControls from "@/pages/system-controls";
 import Header from "@/components/layout/header";
 import BottomNav from "@/components/layout/bottom-nav";
