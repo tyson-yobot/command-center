@@ -38,7 +38,8 @@ import {
   Bell,
   DollarSign,
   Bot as BotIcon,
-  Lock
+  Lock,
+  Pin
 } from "lucide-react";
 import type { Metrics, Bot, Notification, CrmData } from "@shared/schema";
 
@@ -322,16 +323,16 @@ export default function DesktopCommandCenter() {
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center space-x-4">
           <div className="relative">
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl">
-              <Brain className={`w-8 h-8 text-white ${isProcessing ? 'animate-pulse' : ''}`} />
+            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-2xl">
+              <BotIcon className={`w-8 h-8 text-white ${isProcessing ? 'animate-pulse' : ''}`} />
             </div>
             {isProcessing && (
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-ping"></div>
             )}
           </div>
           <div>
-            <h1 className="text-4xl font-black text-white mb-1">YoBot Command Center</h1>
-            <p className="text-blue-300 text-lg">AI Automation Control Hub</p>
+            <h1 className="text-4xl font-black text-white mb-1">YoBot Control Center</h1>
+            <p className="text-purple-300 text-lg">AI Automation Control Hub</p>
           </div>
         </div>
         
