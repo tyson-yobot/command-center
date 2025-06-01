@@ -711,17 +711,17 @@ export default function DesktopCommandCenter() {
             
             <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-500/30 rounded-lg p-4">
               <div className="text-center">
-                <div className="text-3xl font-black text-blue-400 mb-2">$2.4M</div>
-                <div className="text-blue-300 text-sm">🎯 Projected Deal Volume</div>
-                <div className="text-blue-200 text-xs mt-1">This Quarter</div>
+                <div className="text-3xl font-black text-blue-400 mb-2">47%</div>
+                <div className="text-blue-300 text-sm">Cost Reduction</div>
+                <div className="text-blue-200 text-xs mt-1">vs Manual Operations</div>
               </div>
             </div>
             
             <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30 rounded-lg p-4">
               <div className="text-center">
-                <div className="text-3xl font-black text-purple-400 mb-2">12</div>
-                <div className="text-purple-300 text-sm">Live Bot Threads</div>
-                <div className="text-purple-200 text-xs mt-1">Active Now</div>
+                <div className="text-3xl font-black text-purple-400 mb-2">$89K</div>
+                <div className="text-purple-300 text-sm">Efficiency Gains</div>
+                <div className="text-purple-200 text-xs mt-1">This Month</div>
               </div>
             </div>
             
@@ -769,31 +769,24 @@ export default function DesktopCommandCenter() {
               </div>
             </div>
 
-            {/* Bot Performance Comparison */}
+            {/* Performance Metrics */}
             <div className="space-y-4">
               <div className="bg-slate-800/50 rounded-lg p-4">
-                <div className="text-white text-sm font-medium mb-3">Bot vs Human Performance</div>
-                <div className="space-y-3">
-                  <div>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span className="text-slate-400">Response Speed</span>
-                      <span className="text-green-400">Bot: 0.2s | Human: 45s</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-green-400 h-2 rounded"></div>
-                      <div className="bg-red-400/30 h-2 rounded"></div>
-                    </div>
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-blue-400 mb-1">$2.4M</div>
+                  <div className="text-blue-300 text-sm">🎯 Projected Deal Volume</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Live Bot Threads</span>
+                    <span className="text-green-400">12 Active</span>
                   </div>
-                  <div>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span className="text-slate-400">Accuracy Rate</span>
-                      <span className="text-green-400">Bot: 94% | Human: 87%</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-green-400 h-2 rounded"></div>
-                      <div className="bg-yellow-400/50 h-2 rounded"></div>
-                    </div>
+                  <Progress value={85} className="h-1" />
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Conversion Rate</span>
+                    <span className="text-blue-400">94.2%</span>
                   </div>
+                  <Progress value={94} className="h-1" />
                 </div>
               </div>
             </div>
