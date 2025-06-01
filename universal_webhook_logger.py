@@ -46,9 +46,10 @@ def log_to_airtable(table_name, data):
             "Workflow Logs": "📊 Ops Metrics Log"
         }
         
-        actual_table = table_mapping.get(table_name, "🚨 System Alerts Log")
+        # Use the corrected table ID for direct access
+        table_id = "tbljRrOMdPXvRngEy"
         
-        url = f"https://api.airtable.com/v0/{base_id}/{actual_table}"
+        url = f"https://api.airtable.com/v0/{base_id}/{table_id}"
         headers = {
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json"
@@ -58,35 +59,28 @@ def log_to_airtable(table_name, data):
         if "timestamp" not in data:
             data["timestamp"] = datetime.utcnow().isoformat()
         
-        # Map to your actual table field structure
+        # Map to your Integration QA table field structure
         simplified_data = {}
         
-        # Default to the main operations metrics table structure
-        simplified_data["📅 Date"] = data["timestamp"][:10]  # Extract date from timestamp
-        simplified_data["🏷️ Client / Bot Name"] = data.get("source", "System")
-        simplified_data["💬 Conversations"] = data.get("conversations", 1)
-        simplified_data["✉️ Messages Exchanged"] = data.get("messages", 1)
-        simplified_data["🎯 Leads Captured"] = data.get("leads", 0)
-        simplified_data["🔀 Live Transfers"] = data.get("transfers", 0)
-        simplified_data["⏱️ Avg Response Time (sec)"] = data.get("response_time", 180)
-        simplified_data["📈 Conversion Rate"] = data.get("conversion_rate", 0.0)
-        simplified_data["💰 Revenue Booked"] = data.get("revenue", 0)
-        simplified_data["📛 Errors/Fallbacks"] = data.get("errors", 0)
-        simplified_data["📊 Engagement Score"] = data.get("engagement", 85)
-        simplified_data["📣 Notifications Sent"] = data.get("notifications", 1)
-        simplified_data["😃 Avg Sentiment Score"] = data.get("sentiment", 0.8)
-        simplified_data["📄 Docs Retrieved"] = data.get("docs", 0)
-        simplified_data["📝 Notes"] = str(data.get("details", data.get("summary", str(data))))[:500]
+        simplified_data["🔧 Integration Name"] = data.get("source", "YoBot System")
+        simplified_data["✅ Pass/Fail"] = "✅ Pass" if data.get("success", True) else "❌ Fail"
+        simplified_data["📤 Output Data Populated"] = bool(data.get("conversations", 0) > 0 or data.get("revenue", 0) > 0)
+        simplified_data["🗃️ Record Created?"] = True
+        simplified_data["🐞 Errors Observed"] = str(data.get("errors", ""))
+        simplified_data["🧠 Notes / Debug"] = str(data.get("details", data.get("summary", str(data))))[:500]
+        simplified_data["🧑‍💻 QA Owner"] = "System"
+        simplified_data["📅 Test Date"] = data["timestamp"][:10]
+        simplified_data["📂 Related Scenario Link"] = data.get("url", "https://replit.com/@YoBot/CommandCenter")
         
         airtable_data = {"fields": simplified_data}
         
         response = requests.post(url, json=airtable_data, headers=headers, timeout=10)
         
         if response.status_code == 200:
-            print(f"Logged to {actual_table}")
+            print(f"Logged to table {table_id}")
             return True
         else:
-            print(f"Failed to log to {actual_table}: {response.status_code}")
+            print(f"Failed to log to table {table_id}: {response.status_code}")
             return False
             
     except Exception as e:
