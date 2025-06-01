@@ -833,6 +833,101 @@ export default function ClientDashboard() {
           </Card>
         </div>
 
+
+
+        {/* Footer - Support Contact */}
+        <div className="text-center">
+          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-white mb-2">Need Support?</h3>
+            <p className="text-slate-300 mb-4">Our team is here to help optimize your automation</p>
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Headphones className="w-4 h-4 mr-2" />
+              Contact Support
+            </Button>
+          </div>
+        </div>
+
+        {/* Advanced Intelligence & Analytics Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
+          {/* Smart Calendar */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Calendar className="w-5 h-5 mr-2 text-blue-400" />
+                Smart Calendar
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Today's Meetings:</span>
+                  <span className="text-white font-bold">8</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Auto-Scheduled:</span>
+                  <span className="text-green-400 font-bold">6</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Follow-ups Due:</span>
+                  <span className="text-orange-400 font-bold">12</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Voice Command Center */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Headphones className="w-5 h-5 mr-2 text-purple-400" />
+                Voice Command Center
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Commands Today:</span>
+                  <span className="text-white font-bold">24</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Success Rate:</span>
+                  <span className="text-green-400 font-bold">94%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Processing:</span>
+                  <span className="text-blue-400 font-bold">2 active</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Sentiment Analysis */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Brain className="w-5 h-5 mr-2 text-green-400" />
+                Sentiment Analysis
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Positive:</span>
+                  <span className="text-green-400 font-bold">72%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Neutral:</span>
+                  <span className="text-slate-400 font-bold">21%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Negative:</span>
+                  <span className="text-red-400 font-bold">7%</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Botalytics™ Performance Dashboard */}
         <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
           <CardHeader>
@@ -972,99 +1067,6 @@ export default function ClientDashboard() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Footer - Support Contact */}
-        <div className="text-center">
-          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-white mb-2">Need Support?</h3>
-            <p className="text-slate-300 mb-4">Our team is here to help optimize your automation</p>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-              <Headphones className="w-4 h-4 mr-2" />
-              Contact Support
-            </Button>
-          </div>
-        </div>
-
-        {/* Advanced Intelligence & Analytics Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
-          {/* Smart Calendar */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Calendar className="w-5 h-5 mr-2 text-blue-400" />
-                Smart Calendar
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Today's Meetings:</span>
-                  <span className="text-white font-bold">8</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Auto-Scheduled:</span>
-                  <span className="text-green-400 font-bold">6</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Follow-ups Due:</span>
-                  <span className="text-orange-400 font-bold">12</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Voice Command Center */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Headphones className="w-5 h-5 mr-2 text-purple-400" />
-                Voice Command Center
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Commands Today:</span>
-                  <span className="text-white font-bold">24</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-green-400 font-bold">94%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Processing:</span>
-                  <span className="text-blue-400 font-bold">2 active</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Sentiment Analysis */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Brain className="w-5 h-5 mr-2 text-green-400" />
-                Sentiment Analysis
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Positive:</span>
-                  <span className="text-green-400 font-bold">72%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Neutral:</span>
-                  <span className="text-slate-400 font-bold">21%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Negative:</span>
-                  <span className="text-red-400 font-bold">7%</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
 
         {/* AI & Automation Engine Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
