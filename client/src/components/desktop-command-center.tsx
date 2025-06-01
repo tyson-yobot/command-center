@@ -327,7 +327,7 @@ export default function DesktopCommandCenter() {
             <img 
               src={robotHeadPath} 
               alt="YoBot" 
-              className={`w-12 h-12 mr-3 inline-block ${isProcessing ? 'animate-pulse' : ''}`}
+              className={`w-12 h-12 mr-2 inline-block ${isProcessing ? 'animate-pulse' : ''}`}
               style={{ marginTop: '-4px' }}
             />
             YoBot Control Center
