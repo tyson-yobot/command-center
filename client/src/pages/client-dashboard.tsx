@@ -494,25 +494,25 @@ export default function ClientDashboard() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
-                  <span className="text-green-400 font-bold">$4.20</span>
+                  <span className="text-green-400 font-bold">$42.80</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
-                  <span className="text-green-400 font-bold">89.4%</span>
+                  <span className="text-green-400 font-bold">84.7%</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Percentage of leads that become paying customers">Close Rate</span>
-                  <span className="text-green-400 font-bold">31.2%</span>
+                  <span className="text-green-400 font-bold">28.6%</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Return on investment from automation">ROI</span>
-                  <span className="text-blue-400 font-bold">247%</span>
+                  <span className="text-blue-400 font-bold">340%</span>
                 </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-white font-bold">$1,847</div>
-                    <Badge className="bg-green-600 text-white">+18%</Badge>
+                    <div className="text-white font-bold">$986</div>
+                    <Badge className="bg-green-600 text-white">+23%</Badge>
                   </div>
                 </div>
               </div>
