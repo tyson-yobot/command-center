@@ -1,6 +1,7 @@
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
+import { WebClient } from '@slack/web-api';
 
 interface VoiceGenerationResponse {
   success: boolean;
@@ -71,6 +72,20 @@ export async function generateVoiceReply(text: string, filename: string = "reply
     }
   } catch (error: any) {
     console.error('ElevenLabs API error:', error.response?.data || error.message);
+    
+    // Send Slack alert for voice generation failure
+    try {
+      const slackToken = process.env.SLACK_BOT_TOKEN;
+      if (slackToken) {
+        const slackClient = new WebClient(slackToken);
+        await slackClient.chat.postMessage({
+          channel: "#support-queue",
+          text: `❌ ElevenLabs voice gen failed for \`${filename}\`:\n\`\`\`${error.response?.data?.detail || error.message || "Unknown error"}\`\`\``
+        });
+      }
+    } catch (slackError) {
+      console.error('Failed to send Slack alert for voice generation failure:', slackError);
+    }
     
     return {
       success: false,

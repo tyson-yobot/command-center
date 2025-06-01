@@ -15,6 +15,7 @@ const SLACK_TOKEN = process.env.SLACK_BOT_TOKEN;
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
 const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
 const AIRTABLE_TABLE_NAME = "📄 Manual Review Queue";
+const METRICS_TABLE_NAME = "📊 Command Center · Metrics Tracker";
 const SLACK_CHANNEL = "#support-queue";
 
 let slackClient: WebClient | null = null;
@@ -77,6 +78,28 @@ export async function dispatchSupportResponse(data: DispatchData): Promise<void>
           'Content-Type': 'application/json'
         }
       });
+    }
+
+    // 4. Log to Command Center Metrics Tracker
+    if (AIRTABLE_API_KEY && AIRTABLE_BASE_ID) {
+      try {
+        await axios.post(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${METRICS_TABLE_NAME}`, {
+          fields: {
+            "📁 Source": "Support Ticket AI",
+            "📄 Ticket ID": ticketId,
+            "🕒 Timestamp": new Date().toISOString(),
+            "📣 Action": "Reply posted + MP3 uploaded",
+            "⚠️ Result": escalationFlag ? "Escalated" : "Success"
+          }
+        }, {
+          headers: {
+            'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        });
+      } catch (metricsError) {
+        console.error('Failed to log to metrics tracker:', metricsError);
+      }
     }
 
     console.log('✅ Support response dispatched successfully.');
