@@ -425,7 +425,8 @@ export default function DesktopCommandCenter() {
           <CardTitle className="text-white flex items-center space-x-2">
             <Database className="w-5 h-5 text-cyan-400" />
             <span>Master Data Sync Monitor</span>
-            <div className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded-full">CRITICAL</div>
+            <div className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full">🔄 Sync Health: 75%</div>
+            <div className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded-full">3/4 ACTIVE</div>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -439,10 +440,17 @@ export default function DesktopCommandCenter() {
               <div key={platform.name} className="bg-slate-800/50 rounded-lg p-4 text-center">
                 <div className="text-2xl mb-2">{platform.icon}</div>
                 <div className="text-white font-medium text-sm mb-1">{platform.name}</div>
-                <div className={`w-3 h-3 rounded-full mx-auto mb-2 ${
+                <div className={`w-3 h-3 rounded-full mx-auto mb-1 ${
                   platform.status === 'green' ? 'bg-green-400' :
                   platform.status === 'yellow' ? 'bg-yellow-400' : 'bg-red-400'
                 }`}></div>
+                <div className={`text-xs font-medium mb-1 ${
+                  platform.status === 'green' ? 'text-green-400' :
+                  platform.status === 'yellow' ? 'text-yellow-400' : 'text-red-400'
+                }`}>
+                  {platform.status === 'green' ? '✅ Healthy' :
+                   platform.status === 'yellow' ? '⚠️ Warning' : '❌ Out of Sync'}
+                </div>
                 <div className="text-xs text-slate-400">Last: {platform.lastSync}</div>
                 {platform.status === 'red' && (
                   <Button size="sm" className="mt-2 bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 h-6">
