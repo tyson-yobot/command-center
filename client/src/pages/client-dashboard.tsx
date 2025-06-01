@@ -1068,63 +1068,6 @@ export default function ClientDashboard() {
           </CardContent>
         </Card>
 
-        {/* AI & Automation Engine Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
-          {/* AI Automation Engine */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Zap className="w-5 h-5 mr-2 text-yellow-400" />
-                AI Automation Engine
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Tasks Automated:</span>
-                  <span className="text-white font-bold">156</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Hours Saved:</span>
-                  <span className="text-green-400 font-bold">23.4</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Efficiency:</span>
-                  <span className="text-blue-400 font-bold">89%</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-
-
-          {/* Bot Intelligence */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Brain className="w-5 h-5 mr-2 text-purple-400" />
-                Bot Intelligence
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">IQ Score:</span>
-                  <span className="text-white font-bold">142</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Confidence:</span>
-                  <span className="text-green-400 font-bold">91%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Training:</span>
-                  <span className="text-blue-400 font-bold">Active</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
         {/* Live Activity & System Monitoring */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Live Activity Feed */}
@@ -1178,6 +1121,61 @@ export default function ClientDashboard() {
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Records:</span>
                   <span className="text-blue-400 font-bold">1,247</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* AI & Automation Engine Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+          {/* AI Automation Engine */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Zap className="w-5 h-5 mr-2 text-yellow-400" />
+                AI Automation Engine
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Tasks Automated:</span>
+                  <span className="text-white font-bold">156</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Hours Saved:</span>
+                  <span className="text-green-400 font-bold">23.4</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Efficiency:</span>
+                  <span className="text-blue-400 font-bold">89%</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Bot Intelligence */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Brain className="w-5 h-5 mr-2 text-purple-400" />
+                Bot Intelligence
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">IQ Score:</span>
+                  <span className="text-white font-bold">142</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Confidence:</span>
+                  <span className="text-green-400 font-bold">91%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Training:</span>
+                  <span className="text-blue-400 font-bold">Active</span>
                 </div>
               </div>
             </CardContent>
