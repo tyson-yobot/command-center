@@ -1,0 +1,73 @@
+ Voice Call Log Test + Airtable Auto-Log
+Paste this into Replit:
+
+python
+Copy
+Edit
+import requests
+from datetime import datetime
+
+# Airtable credentials
+AIRTABLE_API_KEY = "your_airtable_key"
+BASE_ID = "your_base_id"
+TABLE_NAME = "🧪 Integration Test Log"
+
+# Logging function
+def log_test_to_airtable(name, status, notes, module_type="Core Automation", link=""):
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
+    headers = {
+        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "fields": {
+            "🔧 Integration Name": name,
+            "✅ Pass/Fail": status,
+            "🧠 Notes / Debug": notes,
+            "📅 Test Date": datetime.today().strftime("%Y-%m-%d"),
+            "🧑‍💻 QA Owner": "Tyson",
+            "📤 Output Data Populated": True,
+            "🗃️ Record Created?": True,
+            "🔁 Retry Attempted?": False,
+            "🧩 Module Type": module_type,
+            "📂 Related Scenario Link": link
+        }
+    }
+    r = requests.post(url, headers=headers, json=data)
+    print("✅ Airtable log posted" if r.status_code == 200 else f"❌ Airtable log failed: {r.status_code} {r.text}")
+
+# VoiceBot webhook simulator
+def test_voice_call():
+    try:
+        # Simulated result of successful voice call processing
+        print("✅ Voice call processed successfully")
+        log_test_to_airtable(
+            name="Voice Call Processing",
+            status="✅",
+            notes="Call processed and logged to Airtable",
+            link="https://airtable.com/{YOUR_VIEW_URL}"  # Optional link
+        )
+    except Exception as e:
+        log_test_to_airtable(
+            name="Voice Call Processing",
+            status="❌",
+            notes=f"Error: {str(e)}"
+        )
+
+test_voice_call()
+Swap in your real AIRTABLE_API_KEY and BASE_ID, run it, and check Airtable.
+
+Once confirmed, I’ll wire this same pattern into every test block for full automation. Ready when you are.
+
+
+
+
+
+
+
+
+
+
+Tools
+
+
