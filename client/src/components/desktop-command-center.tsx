@@ -747,24 +747,24 @@ export default function DesktopCommandCenter() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* ROI Performance Metrics */}
+            {/* Bot Performance */}
             <div className="space-y-4">
               <div className="bg-slate-800/50 rounded-lg p-4">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-cyan-400 mb-1">847%</div>
-                  <div className="text-cyan-300 text-sm">📈 Total ROI</div>
+                  <div className="text-2xl font-black text-cyan-400 mb-1">12</div>
+                  <div className="text-cyan-300 text-sm">Live Bot Threads</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Revenue Generated</span>
-                    <span className="text-green-400">+$2.3M</span>
+                    <span className="text-slate-400">Response Time</span>
+                    <span className="text-green-400">0.2s avg</span>
                   </div>
-                  <Progress value={78} className="h-1" />
+                  <Progress value={95} className="h-1" />
                   <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Cost Savings</span>
-                    <span className="text-blue-400">+$730K</span>
+                    <span className="text-slate-400">Accuracy Rate</span>
+                    <span className="text-blue-400">94.2%</span>
                   </div>
-                  <Progress value={65} className="h-1" />
+                  <Progress value={94} className="h-1" />
                 </div>
               </div>
             </div>
