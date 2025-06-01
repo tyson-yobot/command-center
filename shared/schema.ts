@@ -125,6 +125,17 @@ export const knowledgeBase = pgTable("knowledge_base", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const knowledgeUsageLog = pgTable("knowledge_usage_log", {
+  id: serial("id").primaryKey(),
+  knowledgeId: integer("knowledge_id").notNull(),
+  usedBy: text("used_by").notNull(), // "VoiceBot", "ZendeskBot", "ChatBot", etc.
+  triggerSource: text("trigger_source").notNull(), // "voice", "chat", "form", "intent_match"
+  confidence: integer("confidence").notNull(),
+  successful: boolean("successful").default(true), // Did it lead to escalation?
+  conversationId: text("conversation_id"), // Link to conversation if available
+  usedAt: timestamp("used_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
