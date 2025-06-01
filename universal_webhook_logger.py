@@ -15,8 +15,8 @@ def log_to_airtable(table_name, data):
     Routes to your existing Airtable tables with proper field mapping
     """
     try:
-        base_id = os.getenv("AIRTABLE_BASE_ID")
-        api_key = os.getenv("AIRTABLE_API_KEY")
+        base_id = "appRt8V3tH4g5Z5if"
+        api_key = "patOBlGeI7sSi2Pn9.1ca51aa3a13aadc43cf821dbb6cbaab11e29736f330cffb066fcc1c64854327f"
         
         if not base_id or not api_key:
             print("Missing Airtable credentials")
@@ -58,63 +58,25 @@ def log_to_airtable(table_name, data):
         if "timestamp" not in data:
             data["timestamp"] = datetime.utcnow().isoformat()
         
-        # Map to specific field structures for each table
+        # Map to your actual table field structure
         simplified_data = {}
         
-        if actual_table == "🚨 System Alerts Log":
-            simplified_data["🚨 Alert Type"] = data.get("event_type", data.get("action", "automation"))
-            simplified_data["⚙️ Triggered By"] = data.get("source", "system")
-            simplified_data["🔥 Severity"] = data.get("severity", "info")
-            simplified_data["📍 Status"] = data.get("status", "active")
-            simplified_data["🕒 Timestamp"] = data["timestamp"]
-        
-        elif "File Upload" in actual_table:
-            simplified_data["File Name"] = data.get("filename", "unknown")
-            simplified_data["User"] = data.get("email", "system")
-            simplified_data["Status"] = data.get("status", "processed")
-            simplified_data["Timestamp"] = data["timestamp"]
-        
-        elif "Integration Sync" in actual_table:
-            simplified_data["Integration"] = data.get("source", "system")
-            simplified_data["Event"] = data.get("event_type", data.get("action", "sync"))
-            simplified_data["Status"] = data.get("status", "completed")
-            simplified_data["Timestamp"] = data["timestamp"]
-        
-        elif "Slack Alerts" in actual_table:
-            simplified_data["Alert Type"] = data.get("event_type", "notification")
-            simplified_data["Message"] = str(data.get("details", data.get("summary", data)))[:200]
-            simplified_data["Timestamp"] = data["timestamp"]
-        
-        elif "Lead Qualification" in actual_table:
-            simplified_data["Lead Email"] = data.get("email", "unknown")
-            simplified_data["Action"] = data.get("action", data.get("event_type", "qualification"))
-            simplified_data["Score"] = data.get("score", 0)
-            simplified_data["Timestamp"] = data["timestamp"]
-        
-        elif "Voice Call" in actual_table:
-            simplified_data["Caller"] = data.get("email", data.get("phone", "unknown"))
-            simplified_data["Call Type"] = data.get("event_type", "automated")
-            simplified_data["Duration"] = data.get("duration", 0)
-            simplified_data["Timestamp"] = data["timestamp"]
-        
-        elif "Client Touchpoint" in actual_table:
-            simplified_data["Client Email"] = data.get("email", "unknown")
-            simplified_data["Touchpoint Type"] = data.get("event_type", data.get("action", "interaction"))
-            simplified_data["Details"] = str(data.get("details", data.get("message", "")))[:200]
-            simplified_data["Timestamp"] = data["timestamp"]
-        
-        elif "Ops Metrics" in actual_table:
-            simplified_data["Metric Type"] = data.get("event_type", "automation")
-            simplified_data["Value"] = data.get("amount", data.get("count", 1))
-            simplified_data["Source"] = data.get("source", "system")
-            simplified_data["Timestamp"] = data["timestamp"]
-        
-        else:
-            # Fallback generic mapping
-            simplified_data["Event"] = data.get("event_type", data.get("action", "automation"))
-            simplified_data["Source"] = data.get("source", "system")
-            simplified_data["Details"] = str(data)[:200]
-            simplified_data["Timestamp"] = data["timestamp"]
+        # Default to the main operations metrics table structure
+        simplified_data["📅 Date"] = data["timestamp"][:10]  # Extract date from timestamp
+        simplified_data["🏷️ Client / Bot Name"] = data.get("source", "System")
+        simplified_data["💬 Conversations"] = data.get("conversations", 1)
+        simplified_data["✉️ Messages Exchanged"] = data.get("messages", 1)
+        simplified_data["🎯 Leads Captured"] = data.get("leads", 0)
+        simplified_data["🔀 Live Transfers"] = data.get("transfers", 0)
+        simplified_data["⏱️ Avg Response Time (sec)"] = data.get("response_time", 180)
+        simplified_data["📈 Conversion Rate"] = data.get("conversion_rate", 0.0)
+        simplified_data["💰 Revenue Booked"] = data.get("revenue", 0)
+        simplified_data["📛 Errors/Fallbacks"] = data.get("errors", 0)
+        simplified_data["📊 Engagement Score"] = data.get("engagement", 85)
+        simplified_data["📣 Notifications Sent"] = data.get("notifications", 1)
+        simplified_data["😃 Avg Sentiment Score"] = data.get("sentiment", 0.8)
+        simplified_data["📄 Docs Retrieved"] = data.get("docs", 0)
+        simplified_data["📝 Notes"] = str(data.get("details", data.get("summary", str(data))))[:500]
         
         airtable_data = {"fields": simplified_data}
         
