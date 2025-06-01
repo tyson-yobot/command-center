@@ -1,0 +1,66 @@
+🧪 Full QA Test Logger + Slack Escalation Handler
+python
+Copy
+Edit
+import requests
+import uuid
+from datetime import datetime
+
+# Airtable Setup
+AIRTABLE_BASE_ID = "appRt8V3tH4g5Z5if"
+AIRTABLE_TABLE_ID = "tbljRrOMdPXvRngEy"
+AIRTABLE_TOKEN = "YOUR_ACCESS_TOKEN"  # Store this in Replit secrets
+
+# Slack Webhooks
+ALERTS_WEBHOOK = "https://hooks.slack.com/services/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"       # #yobot-alerts
+ESCALATION_WEBHOOK = "https://hooks.slack.com/services/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"  # #yobot-escalation
+
+def post_slack_alert(uuid, integration, result, notes, scenario_link):
+    message = {
+        "text": f"🧪 *{integration}* test completed\n"
+                f"• Status: *{result}*\n"
+                f"• Notes: {notes or 'None'}\n"
+                f"• [📂 Scenario]({scenario_link})\n"
+                f"• 🆔 *Test UUID:* `{uuid}`"
+    }
+    requests.post(ALERTS_WEBHOOK, json=message)
+
+    if result == "❌ Fail":
+        escalation_msg = {
+            "text": f"🚨 *FAILED QA TEST: {integration}*\n"
+                    f"• Status: ❌ Fail\n"
+                    f"• Notes: {notes or 'None'}\n"
+                    f"• [📂 Scenario]({scenario_link})\n"
+                    f"• 🆔 *Test UUID:* `{uuid}`\n"
+                    f"<@daniel.sharpe> please investigate"
+        }
+        requests.post(ESCALATION_WEBHOOK, json=escalation_msg)
+
+def log_integration_test(integration_name, pass_fail, output_populated, record_created, errors, notes, qa_owner, scenario_link):
+    url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_TABLE_ID}"
+    headers = {
+        "Authorization": f"Bearer {AIRTABLE_TOKEN}",
+        "Content-Type": "application/json"
+    }
+
+    test_uuid = str(uuid.uuid4())
+
+    data = {
+        "fields": {
+            "🆔 Test UUID": test_uuid,
+            "🔧 Integration Name": integration_name,
+            "✅ Pass/Fail": pass_fail,
+            "📤 Output Data Populated": output_populated,
+            "🗃️ Record Created?": record_created,
+            "🐞 Errors Observed": errors,
+            "🧠 Notes / Debug": notes,
+            "🧑‍💻 QA Owner": qa_owner,
+            "📅 Test Date": datetime.utcnow().strftime('%Y-%m-%d'),
+            "📂 Related Scenario Link": scenario_link
+        }
+    }
+
+    response = requests.post(url, json=data, headers=headers)
+    print(f"Airtable response: {response.status_code} → {response.text}")
+
+    post_slack_alert(test_uuid, integration_name, pass_fail, notes, scenario_link)

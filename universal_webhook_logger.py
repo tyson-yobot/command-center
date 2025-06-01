@@ -12,12 +12,10 @@ from datetime import datetime
 
 def post_slack_alert(uuid, integration, result, notes, scenario_link):
     """Send Slack notification for integration test results"""
-    slack_webhook = os.environ.get('SLACK_WEBHOOK_URL')
+    alerts_webhook = "https://hooks.slack.com/services/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"
+    escalation_webhook = "https://hooks.slack.com/services/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"
     
-    if not slack_webhook:
-        print("Slack webhook URL not configured")
-        return
-    
+    # Send standard alert to #yobot-alerts
     message = {
         "text": f"🧪 *{integration}* test completed\n"
                 f"• Status: *{result}*\n"
@@ -27,33 +25,28 @@ def post_slack_alert(uuid, integration, result, notes, scenario_link):
     }
     
     try:
-        response = requests.post(slack_webhook, json=message, timeout=5)
-        print(f"Slack notification sent: {response.status_code}")
+        response = requests.post(alerts_webhook, json=message, timeout=5)
+        print(f"Slack alert sent: {response.status_code}")
+        
+        # Send escalation alert for failures to #yobot-escalation
+        if result == "❌ Fail":
+            escalation_msg = {
+                "text": f"🚨 *FAILED QA TEST: {integration}*\n"
+                        f"• Status: ❌ Fail\n"
+                        f"• Notes: {notes or 'None'}\n"
+                        f"• [📂 Scenario]({scenario_link})\n"
+                        f"• 🆔 *Test UUID:* `{uuid}`\n"
+                        f"<@daniel.sharpe> please investigate"
+            }
+            escalation_response = requests.post(escalation_webhook, json=escalation_msg, timeout=5)
+            print(f"Escalation alert sent: {escalation_response.status_code}")
+            
     except Exception as e:
         print(f"Slack notification failed: {e}")
 
 def post_escalation_alert(uuid, integration, notes, scenario_link):
-    """Send escalation alert for failed QA tests"""
-    slack_webhook = os.environ.get('ESCALATION_SLACK_WEBHOOK')
-    
-    if not slack_webhook:
-        print("Escalation webhook URL not configured")
-        return
-    
-    message = {
-        "text": f"🚨 *FAILED QA TEST: {integration}*\n"
-                f"• Status: ❌ Fail\n"
-                f"• Notes: {notes or 'None'}\n"
-                f"• [📂 Scenario]({scenario_link})\n"
-                f"• 🆔 *Test UUID:* `{uuid}`\n"
-                f"<@daniel.sharpe> please investigate"
-    }
-    
-    try:
-        response = requests.post(slack_webhook, json=message, timeout=5)
-        print(f"Escalation alert sent: {response.status_code}")
-    except Exception as e:
-        print(f"Escalation alert failed: {e}")
+    """Legacy function - escalation now handled in post_slack_alert"""
+    print("Escalation handled by main alert function")
 
 def log_to_airtable(table_name, data):
     """
