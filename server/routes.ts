@@ -44,6 +44,10 @@ import masterDataSyncRouter from "./masterDataSync";
 import adminToolsRouter from "./adminTools";
 import conversionFunnelRouter from "./conversionFunnel";
 import systemAuditLogRouter, { auditLogger } from "./systemAuditLog";
+import ragUsageAnalyticsRouter from "./ragUsageAnalytics";
+import missedCallHandlerRouter from "./missedCallHandler";
+import voiceBotCallbackRouter from "./voiceBotCallback";
+import chatIntegrationRouter from "./chatIntegration";
 
 // Make.com webhook integration
 async function triggerMakeScenario(data: any) {
@@ -1481,6 +1485,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/api/admin-tools', adminToolsRouter);
   app.use('/api/conversion-funnel', conversionFunnelRouter);
   app.use('/api/audit-log', systemAuditLogRouter);
+  app.use('/api/rag-usage', ragUsageAnalyticsRouter);
+  app.use('/api/missed-call', missedCallHandlerRouter);
+  app.use('/api/voicebot-callback', voiceBotCallbackRouter);
+  app.use('/api/chat-integration', chatIntegrationRouter);
 
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {

@@ -208,5 +208,4 @@ router.post('/entry/:entryId/flag', (req, res) => {
   }
 });
 
-export { trackRAGUsage };
 export default router;
