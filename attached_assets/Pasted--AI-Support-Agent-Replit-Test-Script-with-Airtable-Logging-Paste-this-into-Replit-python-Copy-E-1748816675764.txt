@@ -1,0 +1,60 @@
+✅ AI Support Agent – Replit Test Script with Airtable Logging
+Paste this into Replit:
+
+python
+Copy
+Edit
+import requests
+from datetime import datetime
+
+# Airtable Logging
+AIRTABLE_API_KEY = "your_airtable_key"
+BASE_ID = "your_base_id"
+TABLE_NAME = "🧪 Integration Test Log"
+
+def log_test_to_airtable(name, status, notes, module_type="Core Automation", link=""):
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
+    headers = {
+        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "fields": {
+            "🔧 Integration Name": name,
+            "✅ Pass/Fail": status,
+            "🧠 Notes / Debug": notes,
+            "📅 Test Date": datetime.today().strftime("%Y-%m-%d"),
+            "🧑‍💻 QA Owner": "Tyson",
+            "📤 Output Data Populated": True,
+            "🗃️ Record Created?": True,
+            "🔁 Retry Attempted?": False,
+            "🧩 Module Type": module_type,
+            "📂 Related Scenario Link": link
+        }
+    }
+    r = requests.post(url, headers=headers, json=data)
+    print("✅ Airtable log posted" if r.status_code == 200 else f"❌ Airtable log failed: {r.status_code} {r.text}")
+
+# AI Support Agent API Test
+def test_ai_support_agent():
+    try:
+        url = "https://yobot.api/ai_support_agent"  # Replace with your real endpoint
+        payload = {
+            "ticket_id": 23,
+            "question": "Where is my order?"
+        }
+        headers = { "Content-Type": "application/json" }
+
+        r = requests.post(url, json=payload, headers=headers)
+
+        if r.status_code == 200:
+            print("✅ AI Support Agent responded:", r.json())
+            log_test_to_airtable("AI Support Agent", "✅", "Response: " + str(r.json()))
+        else:
+            raise Exception(f"Status: {r.status_code}, Response: {r.text}")
+
+    except Exception as e:
+        log_test_to_airtable("AI Support Agent", "❌", str(e))
+
+test_ai_support_agent()
+Once you run it, tell me the result — and I’ll queue up the next test on the list automatically. Let's go.
