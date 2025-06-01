@@ -1,0 +1,81 @@
+✅ Batch Upgrade #2 — HubSpot Contact Test + Logging
+python
+Copy
+Edit
+import requests
+from datetime import datetime
+
+AIRTABLE_API_KEY = "your_airtable_key"
+BASE_ID = "your_base_id"
+TABLE_NAME = "🧪 Integration Test Log"
+
+def log_test_to_airtable(name, status, notes, module_type="Core Automation", link=""):
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
+    headers = {
+        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "fields": {
+            "🔧 Integration Name": name,
+            "✅ Pass/Fail": status,
+            "🧠 Notes / Debug": notes,
+            "📅 Test Date": datetime.today().strftime("%Y-%m-%d"),
+            "🧑‍💻 QA Owner": "Tyson",
+            "📤 Output Data Populated": True,
+            "🗃️ Record Created?": True,
+            "🔁 Retry Attempted?": False,
+            "🧩 Module Type": module_type,
+            "📂 Related Scenario Link": link
+        }
+    }
+    r = requests.post(url, headers=headers, json=data)
+    print("✅ Airtable log posted" if r.status_code == 200 else f"❌ Airtable log failed: {r.status_code} {r.text}")
+
+def test_hubspot_contact():
+    HUBSPOT_API_KEY = "your_hubspot_key"
+    url = "https://api.hubapi.com/crm/v3/objects/contacts"
+    headers = {
+        "Authorization": f"Bearer {HUBSPOT_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "properties": {
+            "email": "testcontact@yobot.bot",
+            "firstname": "Test",
+            "lastname": "Bot"
+        }
+    }
+    try:
+        r = requests.post(url, headers=headers, json=data)
+        if r.status_code == 201:
+            print("✅ HubSpot contact created")
+            log_test_to_airtable("CRM Contact Capture", "✅", "Contact created successfully")
+        else:
+            raise Exception(f"HubSpot error: {r.status_code} {r.text}")
+    except Exception as e:
+        log_test_to_airtable("CRM Contact Capture", "❌", str(e))
+
+test_hubspot_contact()
+✅ Batch Upgrade #3 — Booking Link Slack Trigger + Logging
+python
+Copy
+Edit
+def test_booking_link_alert():
+    SLACK_WEBHOOK_URL = "https://hooks.slack.com/services/XXX/YYY/ZZZ"  # Your live one
+    payload = {
+        "text": "📅 Booking Link Sent: https://calendly.com/yobot/30min",
+        "username": "YoBot Scheduler",
+        "icon_emoji": ":calendar:"
+    }
+    try:
+        r = requests.post(SLACK_WEBHOOK_URL, json=payload)
+        if r.status_code == 200:
+            print("✅ Booking link sent")
+            log_test_to_airtable("Booking Link Trigger", "✅", "Calendly link posted to Slack")
+        else:
+            raise Exception(f"Slack failed: {r.status_code} {r.text}")
+    except Exception as e:
+        log_test_to_airtable("Booking Link Trigger", "❌", str(e))
+
+test_booking_link_alert()
