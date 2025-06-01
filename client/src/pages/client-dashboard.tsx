@@ -504,6 +504,10 @@ export default function ClientDashboard() {
                   <span className="text-slate-300" title="Percentage of leads that become paying customers">Close Rate</span>
                   <span className="text-green-400 font-bold">31.2%</span>
                 </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300" title="Average revenue generated per customer">Customer LTV</span>
+                  <span className="text-blue-400 font-bold">$3,240</span>
+                </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
                   <div className="flex items-center justify-between">
