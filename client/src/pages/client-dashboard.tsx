@@ -434,10 +434,6 @@ export default function ClientDashboard() {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Ad Spend ROI</span>
-                  <span className="text-green-400 font-bold">324%</span>
-                </div>
-                <div className="flex items-center justify-between">
                   <span className="text-slate-300">Budget Utilization</span>
                   <span className="text-green-400 font-bold">87.3%</span>
                 </div>
@@ -449,8 +445,12 @@ export default function ClientDashboard() {
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300" title="Time until positive return on investment">Time to ROI</span>
+                  <span className="text-slate-300" title="Time until positive return on investment">Payback Period</span>
                   <span className="text-green-400 font-bold">21 days</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">Automation Coverage</span>
+                  <span className="text-blue-400 font-bold">78% tasks</span>
                 </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="text-slate-300 text-sm mb-1">Monthly Savings vs Manual</div>

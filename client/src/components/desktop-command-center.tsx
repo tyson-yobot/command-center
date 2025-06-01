@@ -746,69 +746,88 @@ export default function DesktopCommandCenter() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Bot Performance */}
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+            {/* Cost Per Lead */}
             <div className="space-y-4">
               <div className="bg-slate-800/50 rounded-lg p-4">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-cyan-400 mb-1">12</div>
-                  <div className="text-cyan-300 text-sm">Live Bot Threads</div>
+                  <div className="text-2xl font-black text-cyan-400 mb-1">$47</div>
+                  <div className="text-cyan-300 text-sm">Cost Per Lead</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Response Time</span>
-                    <span className="text-green-400">0.2s avg</span>
+                    <span className="text-slate-400">Last Month</span>
+                    <span className="text-green-400">$62</span>
                   </div>
-                  <Progress value={95} className="h-1" />
-                  <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Accuracy Rate</span>
-                    <span className="text-blue-400">94.2%</span>
-                  </div>
-                  <Progress value={94} className="h-1" />
+                  <Progress value={76} className="h-1" />
                 </div>
               </div>
             </div>
 
-            {/* Bot Performance Metrics */}
+            {/* Lead Quality Score */}
             <div className="space-y-4">
               <div className="bg-slate-800/50 rounded-lg p-4">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-green-400 mb-1">94.2%</div>
-                  <div className="text-green-300 text-sm">Bot Accuracy Rate</div>
+                  <div className="text-2xl font-black text-green-400 mb-1">8.4</div>
+                  <div className="text-green-300 text-sm">Lead Quality Score</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Successful Interactions</span>
-                    <span className="text-green-400">847/900</span>
+                    <span className="text-slate-400">Out of 10</span>
+                    <span className="text-green-400">84%</span>
                   </div>
-                  <Progress value={94} className="h-1" />
-                  <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Avg Response Time</span>
-                    <span className="text-blue-400">0.2s</span>
-                  </div>
-                  <Progress value={95} className="h-1" />
+                  <Progress value={84} className="h-1" />
                 </div>
               </div>
             </div>
 
-            {/* ROI Analysis */}
+            {/* Close Rate */}
+            <div className="space-y-4">
+              <div className="bg-slate-800/50 rounded-lg p-4">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-blue-400 mb-1">23.7%</div>
+                  <div className="text-blue-300 text-sm">Close Rate</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">This Quarter</span>
+                    <span className="text-blue-400">67/283</span>
+                  </div>
+                  <Progress value={24} className="h-1" />
+                </div>
+              </div>
+            </div>
+
+            {/* Revenue Per Lead */}
+            <div className="space-y-4">
+              <div className="bg-slate-800/50 rounded-lg p-4">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-purple-400 mb-1">$847</div>
+                  <div className="text-purple-300 text-sm">Revenue Per Lead</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Average</span>
+                    <span className="text-purple-400">+12%</span>
+                  </div>
+                  <Progress value={87} className="h-1" />
+                </div>
+              </div>
+            </div>
+
+            {/* ROI */}
             <div className="space-y-4">
               <div className="bg-slate-800/50 rounded-lg p-4">
                 <div className="text-center mb-3">
                   <div className="text-2xl font-black text-green-400 mb-1">324%</div>
-                  <div className="text-green-300 text-sm">Return on Investment</div>
+                  <div className="text-green-300 text-sm">ROI</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Revenue Generated</span>
+                    <span className="text-slate-400">Bot-Driven</span>
                     <span className="text-green-400">$2.3M</span>
                   </div>
                   <Progress value={78} className="h-1" />
-                  <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Investment Cost</span>
-                    <span className="text-blue-400">$710K</span>
-                  </div>
-                  <Progress value={32} className="h-1" />
                 </div>
               </div>
             </div>
