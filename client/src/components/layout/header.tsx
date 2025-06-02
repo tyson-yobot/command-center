@@ -16,7 +16,7 @@ export default function Header() {
         <div className="h-full flex items-center px-8 relative">
           
           {/* YoBot Command Center - ABSOLUTE CENTER */}
-          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl px-12 py-6 shadow-2xl border-4 border-blue-300 flex items-center space-x-8">
+          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 bg-white rounded-2xl px-12 py-6 shadow-2xl border-4 border-blue-300 flex items-center space-x-8">
             <img 
               src={yobotLogoPath} 
               alt="YoBot" 
