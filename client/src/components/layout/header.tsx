@@ -11,20 +11,24 @@ export default function Header() {
 
   return (
     <>
-      {/* Dark Header with White Logo Background - Larger */}
+      {/* Dark Header with Centered YoBot Command Center */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg">
-        <div className="flex items-center justify-center px-2 py-4 relative">
-          {/* YoBot Command Center Logo - Centered & Large */}
-          <div className="bg-white rounded-2xl px-8 py-4 shadow-2xl border-4 border-blue-300">
+        <div className="flex items-center justify-center px-4 py-6 relative">
+          {/* YoBot Command Center - Horizontal Layout, Centered */}
+          <div className="bg-white rounded-2xl px-10 py-5 shadow-2xl border-4 border-blue-300 flex items-center space-x-4">
             <img 
               src={yobotLogoPath} 
-              alt="YoBot Command Center" 
-              className="h-20 w-auto"
+              alt="YoBot" 
+              className="h-24 w-auto"
             />
+            <div className="flex items-center space-x-1">
+              <h1 className="text-4xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
+              <span className="text-xs text-slate-500 font-medium">®</span>
+            </div>
           </div>
           
           {/* Connection Status & Theme Toggle - Absolute Right */}
-          <div className="absolute right-2 flex items-center space-x-1">
+          <div className="absolute right-4 flex items-center space-x-2">
             <Button
               variant="ghost"
               size="sm"
