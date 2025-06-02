@@ -13,20 +13,10 @@ export default function Header() {
     <>
       {/* Dark Header - 2 INCHES EXACTLY */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48">
-        <div className="h-full flex items-center px-8 relative">
+        <div className="h-full grid grid-cols-3 items-center px-8">
           
-          {/* YoBot Command Center - ABSOLUTE CENTER ABOVE ALL */}
-          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white rounded-2xl px-12 py-6 shadow-2xl border-4 border-blue-300 flex items-center space-x-8">
-            <img 
-              src={yobotLogoPath} 
-              alt="YoBot" 
-              className="h-32 w-auto"
-            />
-            <div className="flex items-center space-x-2">
-              <h1 className="text-5xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
-              <span className="text-base text-slate-500 font-medium">®</span>
-            </div>
-          </div>
+          {/* Left Column - Voice Controls */}
+          <div className="flex flex-col space-y-3">
           
           {/* Voice Controls - Absolute Left */}
           <div className="absolute left-8 top-1/2 transform -translate-y-1/2 flex flex-col space-y-3">
