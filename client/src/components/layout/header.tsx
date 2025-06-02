@@ -13,11 +13,8 @@ export default function Header() {
     <>
       {/* Dark Header with White Logo Background - Larger */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg">
-        <div className="flex items-center justify-between px-2 py-4">
-          {/* Left spacer */}
-          <div className="w-16"></div>
-          
-          {/* YoBot Command Center Logo - Prominent & Large */}
+        <div className="flex items-center justify-center px-2 py-4 relative">
+          {/* YoBot Command Center Logo - Centered & Large */}
           <div className="bg-white rounded-2xl px-8 py-4 shadow-2xl border-4 border-blue-300">
             <img 
               src={yobotLogoPath} 
@@ -26,8 +23,8 @@ export default function Header() {
             />
           </div>
           
-          {/* Connection Status & Theme Toggle - Right Side */}
-          <div className="flex items-center space-x-1 w-16 justify-end">
+          {/* Connection Status & Theme Toggle - Absolute Right */}
+          <div className="absolute right-2 flex items-center space-x-1">
             <Button
               variant="ghost"
               size="sm"
