@@ -9,13 +9,17 @@ from airtable_test_logger import log_test_to_airtable
 
 def clean_lead_row(row):
     """Clean and format lead data for CRM entry"""
+    name = row.get("name", "").strip()
+    company = row.get("company", "").strip()
+    
     return {
-        "👤 Name": row.get("name", "").strip(),
-        "🏢 Company": row.get("company", "").strip(),
+        "👤 Name": name,
+        "🏢 Company": company,
         "📧 Email": row.get("email", "").lower(),
         "🔗 LinkedIn": row.get("linkedin", ""),
         "🧠 Source": "PhantomBuster",
-        "🕵️‍♂️ Lead Status": "🆕 New – Needs Contact"
+        "🕵️‍♂️ Lead Status": "🆕 New – Needs Contact",
+        "💬 Intro Message": f"Hi {name}, I came across {company} and thought YoBot® could help automate your ops. Can I show you a demo?"
     }
 
 def send_lead_to_airtable(lead):
