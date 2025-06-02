@@ -116,34 +116,7 @@ export default function ClientDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-8">
       <div className="w-full">
-        {/* System Alerts Bar */}
-        <div className="mb-6">
-          <Card className="bg-red-600/90 backdrop-blur-sm border border-red-400/30">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <AlertTriangle className="w-5 h-5 text-white" />
-                  <div>
-                    <h3 className="text-white font-semibold">🚨 System Alerts</h3>
-                    <p className="text-red-100 text-sm">2 automation failures detected, 1 missed follow-up</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Badge variant="destructive" className="bg-red-800 text-white">
-                    High Priority
-                  </Badge>
-                  <Button 
-                    size="sm" 
-                    className="bg-white/20 hover:bg-white/30 text-white"
-                    onClick={testEscalation}
-                  >
-                    View Details
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+
 
         {/* Escalation Alert Overlay */}
         {showEscalation && (
