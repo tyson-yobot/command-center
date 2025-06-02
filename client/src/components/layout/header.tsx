@@ -1,5 +1,5 @@
 import React from "react";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Mic, Headphones } from "lucide-react";
 import { useWebSocket } from "@/hooks/use-websocket";
 import { useTheme } from "@/hooks/use-theme";
 import { Button } from "@/components/ui/button";
@@ -13,9 +13,26 @@ export default function Header() {
     <>
       {/* Dark Header with Centered YoBot Command Center */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg">
-        <div className="flex items-center justify-center px-4 pt-8 pb-6 relative">
-          {/* YoBot Command Center - Horizontal Layout, Centered */}
-          <div className="bg-white rounded-2xl px-12 py-6 shadow-2xl border-4 border-blue-300 flex items-center space-x-6">
+        <div className="flex items-center justify-between px-6 pt-12 pb-8 relative">
+          
+          {/* Voice Input Controls - Left Side */}
+          <div className="flex items-center space-x-3">
+            <div className="bg-slate-800/50 rounded-lg px-4 py-2 border border-slate-700">
+              <div className="flex items-center space-x-2">
+                <Mic className="w-4 h-4 text-green-400" />
+                <span className="text-green-300 text-sm font-medium">Voice Ready</span>
+              </div>
+            </div>
+            <div className="bg-slate-800/50 rounded-lg px-4 py-2 border border-slate-700">
+              <div className="flex items-center space-x-2">
+                <Headphones className="w-4 h-4 text-blue-400" />
+                <span className="text-blue-300 text-sm font-medium">Audio Active</span>
+              </div>
+            </div>
+          </div>
+
+          {/* YoBot Command Center - Centered */}
+          <div className="bg-white rounded-2xl px-12 py-6 shadow-2xl border-4 border-blue-300 flex items-center space-x-6 absolute left-1/2 transform -translate-x-1/2">
             <img 
               src={yobotLogoPath} 
               alt="YoBot" 
@@ -27,8 +44,8 @@ export default function Header() {
             </div>
           </div>
           
-          {/* Connection Status & Theme Toggle - Absolute Right */}
-          <div className="absolute right-4 flex items-center space-x-2">
+          {/* Connection Status & Theme Toggle - Right Side */}
+          <div className="flex items-center space-x-2">
             <Button
               variant="ghost"
               size="sm"
