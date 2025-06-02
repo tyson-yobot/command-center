@@ -15,12 +15,18 @@ export default function Header() {
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48">
         <div className="h-full flex items-center justify-center px-8 relative">
           
-          {/* Voice Input - Absolute Left */}
+          {/* Voice Controls - Absolute Left */}
           <div className="absolute left-8 top-1/2 transform -translate-y-1/2 flex flex-col space-y-3">
             <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
               <div className="flex items-center space-x-2">
                 <Mic className="w-5 h-5 text-green-400" />
                 <span className="text-green-300 text-sm font-medium">Voice Input</span>
+              </div>
+            </div>
+            <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
+              <div className="flex items-center space-x-2">
+                <Headphones className="w-5 h-5 text-orange-400" />
+                <span className="text-orange-300 text-sm font-medium">Audio Control</span>
               </div>
             </div>
             <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
@@ -31,27 +37,21 @@ export default function Header() {
             </div>
           </div>
 
-          {/* YoBot Command Center - CENTERED */}
-          <div className="bg-white rounded-3xl px-20 py-12 shadow-2xl border-4 border-blue-300 flex items-center space-x-10">
+          {/* YoBot Command Center - BIGGER AND CENTERED */}
+          <div className="bg-white rounded-3xl px-24 py-16 shadow-2xl border-4 border-blue-300 flex items-center space-x-12">
             <img 
               src={yobotLogoPath} 
               alt="YoBot" 
-              className="h-40 w-auto"
+              className="h-48 w-auto"
             />
             <div className="flex items-center space-x-2">
-              <h1 className="text-7xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
-              <span className="text-lg text-slate-500 font-medium">®</span>
+              <h1 className="text-8xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
+              <span className="text-xl text-slate-500 font-medium">®</span>
             </div>
           </div>
           
-          {/* Controls & Reports - Absolute Right */}
+          {/* Admin Controls - Absolute Right */}
           <div className="absolute right-8 top-1/2 transform -translate-y-1/2 flex flex-col space-y-3">
-            <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
-              <div className="flex items-center space-x-2">
-                <Headphones className="w-5 h-5 text-orange-400" />
-                <span className="text-orange-300 text-sm font-medium">Audio Control</span>
-              </div>
-            </div>
             <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
               <div className="flex items-center space-x-2">
                 <div className="w-5 h-5 bg-purple-400 rounded" />
