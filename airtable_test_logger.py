@@ -31,18 +31,18 @@ def log_test_to_airtable(name, status, notes, module_type="Core Automation", lin
         if not link:
             link = f"https://replit.com/@command-center/{name.lower().replace(' ', '-')}"
         
-        # Enhanced notes with all tracking information
-        enhanced_notes = f"{notes}\n\nOutput Data: {output_data}\nRecord Created: {'Yes' if record_created else 'No'}\nRetry Attempted: {'Yes' if retry_attempted else 'No'}"
-        
         data = {
             "fields": {
                 "🔧 Integration Name": name,
                 "✅ Pass/Fail": "✅" if status else "❌",
-                "🧠 Notes / Debug": enhanced_notes,
+                "🧠 Notes / Debug": notes,
                 "📅 Test Date": datetime.today().strftime("%Y-%m-%d"),
                 "🧑‍💻 QA Owner": "Tyson",
                 "🧩 Module Type": module_type,
-                "📂 Related Scenario Link": link
+                "📂 Related Scenario Link": link,
+                "📤 Output Data Populated": bool(output_data),
+                "🗃️ Record Created?": record_created,
+                "🔁 Retry Attempted?": "Yes" if retry_attempted else "No"
             }
         }
         
