@@ -13,17 +13,17 @@ export default function Header() {
     <>
       {/* Dark Header with Centered YoBot Command Center */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg">
-        <div className="flex items-center justify-center px-4 py-6 relative">
+        <div className="flex items-center justify-center px-4 pt-8 pb-6 relative">
           {/* YoBot Command Center - Horizontal Layout, Centered */}
-          <div className="bg-white rounded-2xl px-10 py-5 shadow-2xl border-4 border-blue-300 flex items-center space-x-4">
+          <div className="bg-white rounded-2xl px-12 py-6 shadow-2xl border-4 border-blue-300 flex items-center space-x-6">
             <img 
               src={yobotLogoPath} 
               alt="YoBot" 
-              className="h-24 w-auto"
+              className="h-28 w-auto"
             />
             <div className="flex items-center space-x-1">
-              <h1 className="text-4xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
-              <span className="text-xs text-slate-500 font-medium">®</span>
+              <h1 className="text-5xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
+              <span className="text-sm text-slate-500 font-medium">®</span>
             </div>
           </div>
           
