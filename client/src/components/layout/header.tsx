@@ -37,16 +37,16 @@ export default function Header() {
             </div>
           </div>
 
-          {/* YoBot Command Center - BIGGER AND CENTERED */}
-          <div className="bg-white rounded-3xl px-24 py-16 shadow-2xl border-4 border-blue-300 flex items-center space-x-12">
+          {/* YoBot Command Center - CENTERED AND SIZED TO FIT */}
+          <div className="bg-white rounded-2xl px-8 py-4 shadow-2xl border-4 border-blue-300 flex items-center space-x-6">
             <img 
               src={yobotLogoPath} 
               alt="YoBot" 
-              className="h-48 w-auto"
+              className="h-20 w-auto"
             />
             <div className="flex items-center space-x-2">
-              <h1 className="text-8xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
-              <span className="text-xl text-slate-500 font-medium">®</span>
+              <h1 className="text-4xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
+              <span className="text-sm text-slate-500 font-medium">®</span>
             </div>
           </div>
           
