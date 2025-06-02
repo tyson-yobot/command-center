@@ -12,20 +12,33 @@ AIRTABLE_API_KEY = os.getenv('AIRTABLE_API_KEY')
 BASE_ID = "appRt8V3tH4g5Z5if"
 TABLE_ID = "tbly0fjE2M5uHET9X"
 
-def log_test_to_airtable(name, status, notes, module_type="Core Automation", link=""):
-    """Log integration test results to your specific Airtable table"""
+def log_test_to_airtable(name, status, notes, module_type="Core Automation", link="", output_data="", record_created=False, retry_attempted=False):
+    """Log integration test results to your specific Airtable table with comprehensive tracking"""
     if AIRTABLE_API_KEY:
         url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_ID}"
         headers = {
             "Authorization": f"Bearer {AIRTABLE_API_KEY}",
             "Content-Type": "application/json"
         }
-        # Use correct checkbox boolean for Pass/Fail field
+        
+        # Generate comprehensive output data if not provided
+        if not output_data and status:
+            output_data = f"✅ {name} executed successfully. Module: {module_type}. Timestamp: {datetime.now().strftime('%H:%M:%S')}"
+        elif not output_data:
+            output_data = f"❌ {name} failed. Error logged in notes. Module: {module_type}"
+        
+        # Set scenario link if not provided
+        if not link:
+            link = f"https://replit.com/@command-center/{name.lower().replace(' ', '-')}"
+        
+        # Enhanced notes with all tracking information
+        enhanced_notes = f"{notes}\n\nOutput Data: {output_data}\nRecord Created: {'Yes' if record_created else 'No'}\nRetry Attempted: {'Yes' if retry_attempted else 'No'}"
+        
         data = {
             "fields": {
                 "🔧 Integration Name": name,
                 "✅ Pass/Fail": "✅" if status else "❌",
-                "🧠 Notes / Debug": notes,
+                "🧠 Notes / Debug": enhanced_notes,
                 "📅 Test Date": datetime.today().strftime("%Y-%m-%d"),
                 "🧑‍💻 QA Owner": "Tyson",
                 "🧩 Module Type": module_type,
