@@ -1490,6 +1490,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/api/missed-call', missedCallHandlerRouter);
   app.use('/api/voicebot-callback', voiceBotCallbackRouter);
   app.use('/api/chat-integration', chatIntegrationRouter);
+  app.use('/api/phantombuster', phantombusterRouter);
 
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
