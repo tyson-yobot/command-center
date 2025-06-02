@@ -14,24 +14,17 @@ export default function Header() {
       {/* Dark Header - 2 INCHES EXACTLY */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48 relative">
         
-        {/* YoBot Command Center - CENTERED AT TOP */}
-        <div 
-          className="absolute top-4 z-[60]"
-          style={{ 
-            left: '50vw', 
-            transform: 'translateX(-50%)',
-            position: 'fixed'
-          }}
-        >
-          <div className="bg-white rounded-2xl px-12 py-6 shadow-2xl border-4 border-blue-300 flex items-center space-x-8">
+        {/* YoBot Command Center - ABOVE BUTTONS */}
+        <div className="absolute top-2 left-8 z-[60]">
+          <div className="bg-white rounded-2xl px-8 py-4 shadow-2xl border-4 border-blue-300 flex items-center space-x-6">
             <img 
               src={yobotLogoPath} 
               alt="YoBot" 
-              className="h-32 w-auto"
+              className="h-20 w-auto"
             />
             <div className="flex items-center space-x-2">
-              <h1 className="text-5xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
-              <span className="text-base text-slate-500 font-medium">®</span>
+              <h1 className="text-3xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
+              <span className="text-sm text-slate-500 font-medium">®</span>
             </div>
           </div>
         </div>
