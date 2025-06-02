@@ -14,13 +14,13 @@ export default function Header() {
       {/* Dark Header - 2 INCHES EXACTLY */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48 relative">
         
-        {/* YoBot Command Center - ABSOLUTE CENTER OF ENTIRE SCREEN */}
+        {/* YoBot Command Center - CENTERED AT TOP */}
         <div 
-          className="absolute top-8 z-[60]"
+          className="absolute top-4 z-[60]"
           style={{ 
-            left: '50%', 
+            left: '50vw', 
             transform: 'translateX(-50%)',
-            position: 'absolute'
+            position: 'fixed'
           }}
         >
           <div className="bg-white rounded-2xl px-12 py-6 shadow-2xl border-4 border-blue-300 flex items-center space-x-8">
