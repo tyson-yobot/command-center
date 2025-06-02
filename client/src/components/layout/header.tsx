@@ -11,9 +11,9 @@ export default function Header() {
 
   return (
     <>
-      {/* Dark Header with Much More Top Padding */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg">
-        <div className="pt-24 pb-8 px-6 relative">
+      {/* Dark Header - MASSIVE TOP PADDING */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48">
+        <div className="h-full flex items-center justify-center px-6 relative">
           
           {/* Voice Input Controls - Far Left Side */}
           <div className="absolute left-6 top-1/2 transform -translate-y-1/2 flex flex-col space-y-2">
@@ -31,18 +31,16 @@ export default function Header() {
             </div>
           </div>
 
-          {/* YoBot Command Center - PERFECTLY CENTERED AND BIGGER */}
-          <div className="flex justify-center">
-            <div className="bg-white rounded-3xl px-16 py-8 shadow-2xl border-4 border-blue-300 flex items-center space-x-8">
-              <img 
-                src={yobotLogoPath} 
-                alt="YoBot" 
-                className="h-32 w-auto"
-              />
-              <div className="flex items-center space-x-2">
-                <h1 className="text-6xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
-                <span className="text-base text-slate-500 font-medium">®</span>
-              </div>
+          {/* YoBot Command Center - MASSIVE AND CENTERED */}
+          <div className="bg-white rounded-3xl px-20 py-10 shadow-2xl border-4 border-blue-300 flex items-center space-x-10">
+            <img 
+              src={yobotLogoPath} 
+              alt="YoBot" 
+              className="h-40 w-auto"
+            />
+            <div className="flex items-center space-x-2">
+              <h1 className="text-7xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
+              <span className="text-lg text-slate-500 font-medium">®</span>
             </div>
           </div>
           
