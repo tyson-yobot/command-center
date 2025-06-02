@@ -13,7 +13,7 @@ export default function Header() {
     <>
       {/* Dark Header - 2 INCHES EXACTLY */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48">
-        <div className="h-full grid grid-cols-3 items-center px-8">
+        <div className="h-full flex items-center justify-between px-8 relative">
           
           {/* Left Column - Voice Controls */}
           <div className="flex flex-col space-y-3">
@@ -37,8 +37,8 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Center Column - YoBot Command Center */}
-          <div className="flex justify-center">
+          {/* YoBot Command Center - ABSOLUTE CENTER */}
+          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-60">
             <div className="bg-white rounded-2xl px-12 py-6 shadow-2xl border-4 border-blue-300 flex items-center space-x-8">
               <img 
                 src={yobotLogoPath} 
