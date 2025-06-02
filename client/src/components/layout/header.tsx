@@ -17,12 +17,12 @@ export default function Header() {
           {/* Left spacer */}
           <div className="w-16"></div>
           
-          {/* Centered Logo with White Background for Brand */}
-          <div className="bg-white rounded-lg px-4 py-2 shadow-lg">
+          {/* Enhanced YoBot Logo - Now Bigger and More Prominent */}
+          <div className="bg-white rounded-xl px-6 py-3 shadow-xl border-2 border-blue-200">
             <img 
               src={yobotLogoPath} 
-              alt="YoBot Logo" 
-              className="h-10 w-auto"
+              alt="YoBot Command Center" 
+              className="h-16 w-auto"
             />
           </div>
           
@@ -56,16 +56,7 @@ export default function Header() {
         </div>
       </div>
       
-      {/* Command Center Title Bar - Right Side Only */}
-      <div className="fixed top-20 right-0 z-40 w-1/3 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-700 border-b-4 border-red-500 border-l-4 border-l-red-500 shadow-xl rounded-bl-lg">
-        <div className="px-4 py-2">
-          <h1 className="text-center text-2xl font-black tracking-tight drop-shadow-lg">
-            <span className="bg-gradient-to-t from-white to-red-200 bg-clip-text text-transparent font-extrabold">COMMAND CENTER</span>
-          </h1>
-          {/* Accent stripe */}
-          <div className="mt-1 h-1 bg-gradient-to-r from-red-600 via-red-500 to-red-800 rounded-full mx-auto w-32"></div>
-        </div>
-      </div>
+
     </>
   );
 }
