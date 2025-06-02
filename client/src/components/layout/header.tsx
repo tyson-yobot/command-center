@@ -11,18 +11,18 @@ export default function Header() {
 
   return (
     <>
-      {/* Dark Header with White Logo Background */}
+      {/* Dark Header with White Logo Background - Larger */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg">
-        <div className="flex items-center justify-between px-2 py-3">
+        <div className="flex items-center justify-between px-2 py-4">
           {/* Left spacer */}
           <div className="w-16"></div>
           
-          {/* Enhanced YoBot Logo - Now Bigger and More Prominent */}
-          <div className="bg-white rounded-xl px-6 py-3 shadow-xl border-2 border-blue-200">
+          {/* YoBot Command Center Logo - Prominent & Large */}
+          <div className="bg-white rounded-2xl px-8 py-4 shadow-2xl border-4 border-blue-300">
             <img 
               src={yobotLogoPath} 
               alt="YoBot Command Center" 
-              className="h-16 w-auto"
+              className="h-20 w-auto"
             />
           </div>
           

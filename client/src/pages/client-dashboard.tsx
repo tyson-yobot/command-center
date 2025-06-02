@@ -118,6 +118,7 @@ export default function ClientDashboard() {
       <div className="w-full">
 
 
+
         {/* Escalation Alert Overlay */}
         {showEscalation && (
           <div className="fixed inset-0 bg-red-900/90 backdrop-blur-sm z-50 flex items-center justify-center">
@@ -1213,6 +1214,35 @@ export default function ClientDashboard() {
                   <AlertTriangle className="w-4 h-4 mr-2" />
                   Test Critical Escalation
                 </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* System Alerts - Bottom Bar */}
+        <div className="mb-6">
+          <Card className="bg-red-600/20 backdrop-blur-sm border border-red-400/30">
+            <CardContent className="p-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <AlertTriangle className="w-5 h-5 text-red-400" />
+                  <div>
+                    <h3 className="text-red-300 font-medium">System Alerts</h3>
+                    <p className="text-red-200 text-sm">2 automation failures detected, 1 missed follow-up</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Badge variant="destructive" className="bg-red-800/50 text-red-200">
+                    High Priority
+                  </Badge>
+                  <Button 
+                    size="sm" 
+                    className="bg-red-600/30 hover:bg-red-600/50 text-red-200"
+                    onClick={testEscalation}
+                  >
+                    View Details
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
