@@ -17,9 +17,6 @@ export default function Header() {
           
           {/* Left Column - Voice Controls */}
           <div className="flex flex-col space-y-3">
-          
-          {/* Voice Controls - Absolute Left */}
-          <div className="absolute left-8 top-1/2 transform -translate-y-1/2 flex flex-col space-y-3">
             <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
               <div className="flex items-center space-x-2">
                 <Mic className="w-5 h-5 text-green-400" />
@@ -40,10 +37,23 @@ export default function Header() {
             </div>
           </div>
 
+          {/* Center Column - YoBot Command Center */}
+          <div className="flex justify-center">
+            <div className="bg-white rounded-2xl px-12 py-6 shadow-2xl border-4 border-blue-300 flex items-center space-x-8">
+              <img 
+                src={yobotLogoPath} 
+                alt="YoBot" 
+                className="h-32 w-auto"
+              />
+              <div className="flex items-center space-x-2">
+                <h1 className="text-5xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
+                <span className="text-base text-slate-500 font-medium">®</span>
+              </div>
+            </div>
+          </div>
 
-          
-          {/* Admin Controls - Absolute Right */}
-          <div className="absolute right-8 top-1/2 transform -translate-y-1/2 flex flex-col space-y-3">
+          {/* Right Column - Admin Controls */}
+          <div className="flex flex-col space-y-3">
             <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
               <div className="flex items-center space-x-2">
                 <div className="w-5 h-5 bg-purple-400 rounded" />
@@ -52,49 +62,32 @@ export default function Header() {
             </div>
             <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
               <div className="flex items-center space-x-2">
-                <div className="w-5 h-5 bg-green-400 rounded" />
-                <span className="text-green-300 text-sm font-medium">PDF Reports</span>
-              </div>
-            </div>
-            <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
-              <div className="flex items-center space-x-2">
                 <div className="w-5 h-5 bg-red-400 rounded" />
-                <span className="text-red-300 text-sm font-medium">Admin Panel</span>
+                <span className="text-red-300 text-sm font-medium">Alert Monitor</span>
               </div>
             </div>
-          </div>
-          
-          {/* Connection Status & Theme Toggle - Bottom Right */}
-          <div className="absolute bottom-4 right-8 flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              className="h-8 w-8 p-0 hover:bg-slate-800 text-slate-400 hover:text-white"
-            >
-              {theme === "light" ? (
-                <Moon className="h-4 w-4" />
-              ) : (
-                <Sun className="h-4 w-4" />
-              )}
-            </Button>
-            <div className="flex items-center space-x-2" title={isConnected ? 'System Online' : 'Connection Lost'}>
-              <div 
-                className={`w-3 h-3 rounded-full ${
-                  isConnected ? 'bg-green-400 status-active' : 'bg-amber-400 animate-pulse'
-                }`}
-              />
-              <span className={`text-xs font-medium ${
-                isConnected ? 'text-green-400' : 'text-amber-400'
+            <div className="flex space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                className="bg-slate-800 border-slate-600 text-slate-300 hover:bg-slate-700"
+              >
+                {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+              </Button>
+              <div className={`flex items-center space-x-2 px-3 py-2 rounded text-sm ${
+                isConnected ? 'bg-green-900/30 text-green-300' : 'bg-red-900/30 text-red-300'
               }`}>
-                {isConnected ? 'Online' : 'Reconnecting'}
-              </span>
+                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'}`} />
+                <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      
 
+      {/* Content Spacer */}
+      <div className="h-48" />
     </>
   );
 }
