@@ -179,7 +179,7 @@ export class RAGEngine {
     score += (matchingWords.length / queryWords.length) * 50;
     
     // Usage frequency bonus (popular knowledge gets slight boost)
-    score += Math.min(knowledge.usageCount * 0.1, 5);
+    score += Math.min((knowledge.usageCount ?? 0) * 0.1, 5);
     
     return Math.min(score, 100);
   }

@@ -103,7 +103,7 @@ export function Knowledge() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data: KnowledgeFormData) => apiRequest('/api/knowledge', { method: 'POST', body: JSON.stringify(data) }),
+    mutationFn: (data: KnowledgeFormData) => apiRequest('POST', '/api/knowledge', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/knowledge'] });
       setIsAddDialogOpen(false);
@@ -116,7 +116,7 @@ export function Knowledge() {
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<KnowledgeBase> }) => 
-      apiRequest(`/api/knowledge/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+      apiRequest('PUT', `/api/knowledge/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/knowledge'] });
       setEditingKnowledge(null);
@@ -128,7 +128,7 @@ export function Knowledge() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => apiRequest(`/api/knowledge/${id}`, { method: 'DELETE' }),
+    mutationFn: (id: number) => apiRequest('DELETE', `/api/knowledge/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/knowledge'] });
       toast({ title: "Knowledge entry deleted successfully" });
