@@ -11,9 +11,9 @@ export default function Header() {
 
   return (
     <>
-      {/* Dark Header - FULL VISIBILITY */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-96">
-        <div className="pt-16 h-full flex items-center justify-center px-8 relative">
+      {/* Dark Header - 2 INCHES EXACTLY */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48">
+        <div className="h-full flex items-center justify-center px-8 relative">
           
           {/* Voice Input - Absolute Left */}
           <div className="absolute left-8 top-1/2 transform -translate-y-1/2 flex flex-col space-y-3">
