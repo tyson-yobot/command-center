@@ -122,8 +122,10 @@ def test_openai_fallback():
         print(f"Normal test failed: {e}")
     
     # Test 2: Simulate failure by using invalid API key
-    original_key = openai.api_key
-    openai.api_key = "invalid_key_test"
+    original_key = os.getenv('OPENAI_API_KEY')
+    os.environ['OPENAI_API_KEY'] = "invalid_key_test"
+    global client
+    client = OpenAI(api_key="invalid_key_test")
     
     try:
         response = handle_openai_call("Test failure scenario", "support")
@@ -131,15 +133,18 @@ def test_openai_fallback():
     except Exception as e:
         print(f"Fallback test failed: {e}")
     finally:
-        openai.api_key = original_key
+        os.environ['OPENAI_API_KEY'] = original_key
+        client = OpenAI(api_key=original_key)
     
     # Test 3: Test different agent types
     agent_types = ["general", "support", "sales"]
     for agent_type in agent_types:
-        openai.api_key = "invalid_key_test"
+        os.environ['OPENAI_API_KEY'] = "invalid_key_test"
+        client = OpenAI(api_key="invalid_key_test")
         response = handle_openai_call("Test message", agent_type)
         print(f"{agent_type.title()} Fallback: {response}")
-        openai.api_key = original_key
+        os.environ['OPENAI_API_KEY'] = original_key
+        client = OpenAI(api_key=original_key)
 
 def main():
     """Run OpenAI fallback tests"""

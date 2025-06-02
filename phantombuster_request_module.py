@@ -45,22 +45,52 @@ def get_phantom_agents():
         log_test_to_airtable("PhantomBuster Agents", False, f"{response.text}", "Lead Generation")
         return []
 
-def get_phantom_results(agent_id):
-    """Get results from a completed PhantomBuster agent"""
-    url = f"https://api.phantombuster.com/api/v2/agents/output?id={agent_id}"
-    headers = {
-        "X-Phantombuster-Key-1": PHANTOMBUSTER_API_KEY,
-        "Content-Type": "application/json"
-    }
-    
+def get_phantom_results(container_id):
+    """Get results from a completed PhantomBuster container"""
+    url = f"https://api.phantombuster.com/api/v2/containers/fetch-output?id={container_id}"
+    headers = { "X-Phantombuster-Key-1": PHANTOMBUSTER_API_KEY }
+
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        results = response.json()
-        log_test_to_airtable("PhantomBuster Results", True, f"Retrieved results for agent {agent_id}", "Lead Generation")
-        return results
+        data = response.json()
+        log_test_to_airtable("PhantomBuster Results", True, f"Pulled JSON data for container {container_id}", "Lead Generation")
+        return data
     else:
-        log_test_to_airtable("PhantomBuster Results", False, f"{response.text}", "Lead Generation")
+        log_test_to_airtable("PhantomBuster Results", False, response.text, "Lead Generation")
         return None
+
+def download_csv_from_phantom(container_id):
+    """Download CSV data from PhantomBuster container"""
+    url = f"https://api.phantombuster.com/api/v2/containers/fetch-output?id={container_id}"
+    headers = { "X-Phantombuster-Key-1": PHANTOMBUSTER_API_KEY }
+
+    res = requests.get(url, headers=headers)
+    if res.status_code == 200:
+        csv_url = res.json().get("csvUrl")
+        if csv_url:
+            csv_data = requests.get(csv_url).text
+            log_test_to_airtable("PhantomBuster CSV", True, f"Downloaded CSV from {csv_url}", "Lead Generation")
+            return csv_data
+        else:
+            log_test_to_airtable("PhantomBuster CSV", False, "No CSV URL found in response", "Lead Generation")
+            return None
+    else:
+        log_test_to_airtable("PhantomBuster CSV", False, res.text, "Lead Generation")
+        return None
+
+def summarize_leads(data):
+    """Summarize leads for VoiceBot integration"""
+    try:
+        if isinstance(data, list) and len(data) > 0:
+            first = data[0]
+            name = first.get('name', 'Unknown')
+            company = first.get('company', 'Unknown Company')
+            return f"I found a lead: {name} at {company}. Want to reach out?"
+        else:
+            return "No new leads came back just yet."
+    except Exception as e:
+        log_test_to_airtable("Lead Summarization", False, f"Error summarizing leads: {str(e)}", "Lead Generation")
+        return "No new leads came back just yet."
 
 def test_phantombuster_system():
     """Test complete PhantomBuster integration"""
