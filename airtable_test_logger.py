@@ -24,7 +24,7 @@ def log_test_to_airtable(name, status, notes, module_type="Core Automation", lin
         data = {
             "fields": {
                 "🔧 Integration Name": name,
-                "✅ Pass/Fail": status == "✅",
+                "✅ Pass/Fail": "✅" if status else "❌",
                 "🧠 Notes / Debug": notes,
                 "📅 Test Date": datetime.today().strftime("%Y-%m-%d"),
                 "🧑‍💻 QA Owner": "Tyson",
