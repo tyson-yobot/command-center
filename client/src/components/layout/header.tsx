@@ -12,11 +12,27 @@ export default function Header() {
   return (
     <>
       {/* Dark Header - 2 INCHES EXACTLY */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48">
-        <div className="h-full grid grid-cols-12 gap-4 items-center px-8">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48 relative">
+        
+        {/* YoBot Command Center - ABSOLUTE CENTER OF ENTIRE SCREEN */}
+        <div className="absolute left-1/2 top-8 transform -translate-x-1/2 z-[60]">
+          <div className="bg-white rounded-2xl px-12 py-6 shadow-2xl border-4 border-blue-300 flex items-center space-x-8">
+            <img 
+              src={yobotLogoPath} 
+              alt="YoBot" 
+              className="h-32 w-auto"
+            />
+            <div className="flex items-center space-x-2">
+              <h1 className="text-5xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
+              <span className="text-base text-slate-500 font-medium">®</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="h-full flex items-center justify-between px-8">
           
-          {/* Left Section - Voice Controls (Columns 1-3) */}
-          <div className="col-span-3 flex flex-col space-y-3">
+          {/* Left Section - Voice Controls */}
+          <div className="flex flex-col space-y-3">
             <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
               <div className="flex items-center space-x-2">
                 <Mic className="w-5 h-5 text-green-400" />
@@ -37,23 +53,8 @@ export default function Header() {
             </div>
           </div>
 
-          {/* CENTER SECTION - YoBot Command Center (Columns 4-9) */}
-          <div className="col-span-6 flex justify-center">
-            <div className="bg-white rounded-2xl px-12 py-6 shadow-2xl border-4 border-blue-300 flex items-center space-x-8">
-              <img 
-                src={yobotLogoPath} 
-                alt="YoBot" 
-                className="h-32 w-auto"
-              />
-              <div className="flex items-center space-x-2">
-                <h1 className="text-5xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
-                <span className="text-base text-slate-500 font-medium">®</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Section - Admin Controls (Columns 10-12) */}
-          <div className="col-span-3 flex flex-col space-y-3">
+          {/* Right Section - Admin Controls */}
+          <div className="flex flex-col space-y-3">
             <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
               <div className="flex items-center space-x-2">
                 <div className="w-5 h-5 bg-purple-400 rounded" />
