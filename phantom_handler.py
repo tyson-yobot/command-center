@@ -4,8 +4,12 @@ Processes leads from PhantomBuster, cleans data, and pushes to Airtable CRM
 """
 import os
 import requests
+from datetime import datetime, timedelta
 from phantombuster_request_module import get_phantom_results, download_csv_from_phantom
 from airtable_test_logger import log_test_to_airtable
+
+# LinkedIn Agent Configuration
+LINKEDIN_MSG_AGENT_ID = os.getenv('LINKEDIN_MSG_AGENT_ID')
 
 def clean_lead_row(row):
     """Clean and format lead data for CRM entry"""
