@@ -146,9 +146,13 @@ export class RAGEngine {
       }))
       .sort((a, b) => {
         // Sort by priority first, then relevance, then confidence
-        if (a.priority !== b.priority) return b.priority - a.priority;
+        const aPriority = a.priority ?? 0;
+        const bPriority = b.priority ?? 0;
+        if (aPriority !== bPriority) return bPriority - aPriority;
         if (a.relevanceScore !== b.relevanceScore) return b.relevanceScore - a.relevanceScore;
-        return b.confidence - a.confidence;
+        const aConfidence = a.confidence ?? 0;
+        const bConfidence = b.confidence ?? 0;
+        return bConfidence - aConfidence;
       })
       .slice(0, 5) // Limit to top 5 most relevant entries
       .map(({ relevanceScore, ...kb }) => kb); // Remove temporary score
@@ -161,8 +165,8 @@ export class RAGEngine {
     let score = 0;
     
     // Base score from confidence and priority
-    score += knowledge.confidence * 0.3;
-    score += knowledge.priority * 0.2;
+    score += (knowledge.confidence ?? 0) * 0.3;
+    score += (knowledge.priority ?? 0) * 0.2;
     
     // Text similarity bonus
     const queryWords = context.userQuery.toLowerCase().split(' ');
@@ -272,8 +276,8 @@ User Query: ${context.userQuery}`;
   private calculateOverallConfidence(knowledge: KnowledgeBase[]): number {
     if (knowledge.length === 0) return 50;
     
-    const avgConfidence = knowledge.reduce((sum, kb) => sum + kb.confidence, 0) / knowledge.length;
-    const priorityBonus = Math.max(...knowledge.map(kb => kb.priority)) * 0.1;
+    const avgConfidence = knowledge.reduce((sum, kb) => sum + (kb.confidence ?? 0), 0) / knowledge.length;
+    const priorityBonus = Math.max(...knowledge.map(kb => kb.priority ?? 0)) * 0.1;
     
     return Math.min(avgConfidence + priorityBonus, 100);
   }
