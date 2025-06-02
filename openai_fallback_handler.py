@@ -3,11 +3,11 @@ OpenAI Multi-Agent Fallback System for YoBot
 Provides robust error handling and fallback responses for AI interactions
 """
 import os
-import openai
+from openai import OpenAI
 from airtable_test_logger import log_test_to_airtable
 
-# Configure OpenAI
-openai.api_key = os.getenv('OPENAI_API_KEY')
+# Configure OpenAI client
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 def handle_openai_call(input_text, agent_type="general"):
     """
@@ -22,8 +22,8 @@ def handle_openai_call(input_text, agent_type="general"):
     """
     try:
         # Primary OpenAI agent call
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
+        response = client.chat.completions.create(
+            model="gpt-4o",  # the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
             messages=[
                 {
                     "role": "system", 
@@ -38,7 +38,7 @@ def handle_openai_call(input_text, agent_type="general"):
             temperature=0.7
         )
         
-        ai_response = response['choices'][0]['message']['content']
+        ai_response = response.choices[0].message.content
         
         # Log successful interaction
         log_test_to_airtable(
@@ -50,21 +50,20 @@ def handle_openai_call(input_text, agent_type="general"):
         
         return ai_response
         
-    except openai.error.RateLimitError as e:
-        log_test_to_airtable("OpenAI Fallback", True, f"Rate limit triggered: {str(e)}", "AI System")
-        return get_rate_limit_fallback(agent_type)
-        
-    except openai.error.InvalidRequestError as e:
-        log_test_to_airtable("OpenAI Fallback", True, f"Invalid request triggered: {str(e)}", "AI System")
-        return get_invalid_request_fallback(agent_type)
-        
-    except openai.error.AuthenticationError as e:
-        log_test_to_airtable("OpenAI Fallback", True, f"Auth error triggered: {str(e)}", "AI System")
-        return get_auth_error_fallback(agent_type)
-        
     except Exception as e:
-        log_test_to_airtable("OpenAI Fallback", True, f"✅ Triggered: {str(e)}", "AI System")
-        return get_general_fallback(agent_type)
+        error_message = str(e)
+        if "rate_limit" in error_message.lower():
+            log_test_to_airtable("OpenAI Fallback", True, f"Rate limit triggered: {error_message}", "AI System")
+            return get_rate_limit_fallback(agent_type)
+        elif "invalid_request" in error_message.lower():
+            log_test_to_airtable("OpenAI Fallback", True, f"Invalid request triggered: {error_message}", "AI System")
+            return get_invalid_request_fallback(agent_type)
+        elif "authentication" in error_message.lower():
+            log_test_to_airtable("OpenAI Fallback", True, f"Auth error triggered: {error_message}", "AI System")
+            return get_auth_error_fallback(agent_type)
+        else:
+            log_test_to_airtable("OpenAI Fallback", True, f"General fallback triggered: {error_message}", "AI System")
+            return get_general_fallback(agent_type)
 
 def get_system_prompt(agent_type):
     """Get system prompt based on agent type"""

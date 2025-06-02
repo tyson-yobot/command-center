@@ -46,12 +46,13 @@ class PhantombusterService {
     }
   }
 
-  async launchAgent(agentId: string, arguments?: any): Promise<any> {
+  async launchAgent(agentId: string, agentArgs?: any): Promise<any> {
     try {
-      const response = await axios.post(`${this.baseUrl}/agents/launch`, {
+      const payload = {
         id: agentId,
-        arguments: arguments || {}
-      }, {
+        ...(agentArgs && { arguments: agentArgs })
+      };
+      const response = await axios.post(`${this.baseUrl}/agents/launch`, payload, {
         headers: this.getHeaders()
       });
       return response.data;
