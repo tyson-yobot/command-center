@@ -11,12 +11,12 @@ export default function Header() {
 
   return (
     <>
-      {/* Dark Header - MASSIVE HEIGHT WITH 1.5" TOP PADDING */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-64">
-        <div className="pt-24 h-full flex items-center justify-between px-8 relative">
+      {/* Dark Header - 2" TOP GAP */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-80">
+        <div className="pt-32 h-full flex items-center justify-center px-8 relative">
           
-          {/* Voice Input Controls - Left Side with spacing */}
-          <div className="flex flex-col space-y-3">
+          {/* Voice Input - Absolute Left */}
+          <div className="absolute left-8 top-1/2 transform -translate-y-1/2 flex flex-col space-y-3">
             <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
               <div className="flex items-center space-x-2">
                 <Mic className="w-5 h-5 text-green-400" />
@@ -25,39 +25,49 @@ export default function Header() {
             </div>
             <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
               <div className="flex items-center space-x-2">
-                <Headphones className="w-5 h-5 text-blue-400" />
-                <span className="text-blue-300 text-sm font-medium">Audio Active</span>
+                <div className="w-5 h-5 bg-blue-400 rounded" />
+                <span className="text-blue-300 text-sm font-medium">Live Chat</span>
               </div>
             </div>
           </div>
 
-          {/* YoBot Command Center - PERFECTLY CENTERED */}
-          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="bg-white rounded-3xl px-20 py-12 shadow-2xl border-4 border-blue-300 flex items-center space-x-10">
-              <img 
-                src={yobotLogoPath} 
-                alt="YoBot" 
-                className="h-40 w-auto"
-              />
-              <div className="flex items-center space-x-2">
-                <h1 className="text-7xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
-                <span className="text-lg text-slate-500 font-medium">®</span>
-              </div>
+          {/* YoBot Command Center - CENTERED */}
+          <div className="bg-white rounded-3xl px-20 py-12 shadow-2xl border-4 border-blue-300 flex items-center space-x-10">
+            <img 
+              src={yobotLogoPath} 
+              alt="YoBot" 
+              className="h-40 w-auto"
+            />
+            <div className="flex items-center space-x-2">
+              <h1 className="text-7xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
+              <span className="text-lg text-slate-500 font-medium">®</span>
             </div>
           </div>
           
-          {/* PDF Report & Admin Controls - Right Side */}
-          <div className="flex flex-col space-y-3">
+          {/* Controls & Reports - Absolute Right */}
+          <div className="absolute right-8 top-1/2 transform -translate-y-1/2 flex flex-col space-y-3">
             <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
               <div className="flex items-center space-x-2">
-                <div className="w-5 h-5 bg-orange-400 rounded" />
-                <span className="text-orange-300 text-sm font-medium">PDF Reports</span>
+                <Headphones className="w-5 h-5 text-orange-400" />
+                <span className="text-orange-300 text-sm font-medium">Audio Control</span>
               </div>
             </div>
             <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
               <div className="flex items-center space-x-2">
                 <div className="w-5 h-5 bg-purple-400 rounded" />
-                <span className="text-purple-300 text-sm font-medium">Admin Panel</span>
+                <span className="text-purple-300 text-sm font-medium">System Status</span>
+              </div>
+            </div>
+            <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
+              <div className="flex items-center space-x-2">
+                <div className="w-5 h-5 bg-green-400 rounded" />
+                <span className="text-green-300 text-sm font-medium">PDF Reports</span>
+              </div>
+            </div>
+            <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
+              <div className="flex items-center space-x-2">
+                <div className="w-5 h-5 bg-red-400 rounded" />
+                <span className="text-red-300 text-sm font-medium">Admin Panel</span>
               </div>
             </div>
           </div>
