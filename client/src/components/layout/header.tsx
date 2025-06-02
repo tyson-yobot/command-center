@@ -11,36 +11,38 @@ export default function Header() {
 
   return (
     <>
-      {/* Dark Header with Centered YoBot Command Center */}
+      {/* Dark Header with Much More Top Padding */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg">
-        <div className="flex items-center justify-between px-6 pt-12 pb-8 relative">
+        <div className="pt-24 pb-8 px-6 relative">
           
-          {/* Voice Input Controls - Left Side */}
-          <div className="flex items-center space-x-3">
-            <div className="bg-slate-800/50 rounded-lg px-4 py-2 border border-slate-700">
+          {/* Voice Input Controls - Far Left Side */}
+          <div className="absolute left-6 top-1/2 transform -translate-y-1/2 flex flex-col space-y-2">
+            <div className="bg-slate-800/50 rounded-lg px-3 py-2 border border-slate-700">
               <div className="flex items-center space-x-2">
                 <Mic className="w-4 h-4 text-green-400" />
-                <span className="text-green-300 text-sm font-medium">Voice Ready</span>
+                <span className="text-green-300 text-xs font-medium">Voice Ready</span>
               </div>
             </div>
-            <div className="bg-slate-800/50 rounded-lg px-4 py-2 border border-slate-700">
+            <div className="bg-slate-800/50 rounded-lg px-3 py-2 border border-slate-700">
               <div className="flex items-center space-x-2">
                 <Headphones className="w-4 h-4 text-blue-400" />
-                <span className="text-blue-300 text-sm font-medium">Audio Active</span>
+                <span className="text-blue-300 text-xs font-medium">Audio Active</span>
               </div>
             </div>
           </div>
 
-          {/* YoBot Command Center - Centered */}
-          <div className="bg-white rounded-2xl px-12 py-6 shadow-2xl border-4 border-blue-300 flex items-center space-x-6 absolute left-1/2 transform -translate-x-1/2">
-            <img 
-              src={yobotLogoPath} 
-              alt="YoBot" 
-              className="h-28 w-auto"
-            />
-            <div className="flex items-center space-x-1">
-              <h1 className="text-5xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
-              <span className="text-sm text-slate-500 font-medium">®</span>
+          {/* YoBot Command Center - PERFECTLY CENTERED AND BIGGER */}
+          <div className="flex justify-center">
+            <div className="bg-white rounded-3xl px-16 py-8 shadow-2xl border-4 border-blue-300 flex items-center space-x-8">
+              <img 
+                src={yobotLogoPath} 
+                alt="YoBot" 
+                className="h-32 w-auto"
+              />
+              <div className="flex items-center space-x-2">
+                <h1 className="text-6xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
+                <span className="text-base text-slate-500 font-medium">®</span>
+              </div>
             </div>
           </div>
           
