@@ -48,6 +48,7 @@ import ragUsageAnalyticsRouter from "./ragUsageAnalytics";
 import missedCallHandlerRouter from "./missedCallHandler";
 import voiceBotCallbackRouter from "./voiceBotCallback";
 import chatIntegrationRouter from "./chatIntegration";
+import phantombusterRouter from "./phantombuster";
 
 // Make.com webhook integration
 async function triggerMakeScenario(data: any) {
