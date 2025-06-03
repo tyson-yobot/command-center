@@ -1,113 +1,106 @@
+#!/usr/bin/env python3
+"""
+Support Dispatcher - Command Line Version
+Dispatches support tickets to Slack and Airtable via command line arguments
+"""
+
+import sys
+import json
 import os
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
-from pyairtable import Table
-from datetime import datetime
+import requests
 
-# === CONFIGURATION ===
-SLACK_TOKEN = os.getenv("SLACK_BOT_TOKEN", "xRYo7LD89mNz2EvZy3kOrFiv")
-SLACK_CHANNEL = "#support-queue"
+SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
+SLACK_CHANNEL_ID = os.getenv("SLACK_CHANNEL_ID", "#support-queue")
+AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
+AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID", "appCoAtCZdARb4AM2")
+AIRTABLE_TABLE_ID = "tblo1ESkt9ybkvaJH"
 
-AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY", "patQdihpuEhLfx2vP")
-BASE_ID = os.getenv("AIRTABLE_BASE_ID", "appCoAtCZdARb4AM2")
-
-TICKET_LOG_TABLE = "tblQPr9cHyNZDpipS"
-ERROR_LOG_TABLE = "tblo1ESkt9ybkvaJH"
-
-VOICE_FILE_PATH = "./uploads/test_yobot_voice.mp3"
-
-# === INITIALIZE CLIENTS ===
-try:
-    slack_client = WebClient(token=SLACK_TOKEN)
-    ticket_log = Table(AIRTABLE_API_KEY, BASE_ID, TICKET_LOG_TABLE)
-    error_log = Table(AIRTABLE_API_KEY, BASE_ID, ERROR_LOG_TABLE)
-except Exception as e:
-    print(f"Initialization error: {e}")
-    slack_client = None
-    ticket_log = None
-    error_log = None
-
-# === ERROR LOGGING FUNCTION ===
-def log_error(module, error_type, message, ticket_id=None, file_name=None):
+def post_to_slack(ticket):
+    """Post ticket to Slack channel"""
     try:
-        if error_log:
-            error_log.create({
-                "🧩 Source Module": module,
-                "🚨 Error Type": error_type,
-                "📝 Error Message": message,
-                "📁 Fallback File Name": file_name or VOICE_FILE_PATH,
-                "🔁 Retry Attempted": True,
-                "📊 Retry Result": "Failed",
-                "🧠 Context Ticket ID": ticket_id or "N/A",
-                "📆 Date": datetime.now().strftime("%Y-%m-%d"),
-                "⏰ Time": datetime.now().strftime("%H:%M:%S")
-            })
-    except Exception as e:
-        print(f"[FATAL] Failed to log error to Airtable: {e}")
+        if not SLACK_BOT_TOKEN:
+            return False
+            
+        text = f"""
+📨 *Support Ticket*: `{ticket['ticketId']}`
+👤 *Client*: {ticket['clientName']}
+🧠 *Topic*: {ticket['topic']}
+🎯 *AI Reply*: {ticket.get('aiReply', 'No reply generated')}
+🚨 *Escalate*: `{ticket.get('escalationFlag', False)}`
+"""
 
-# === MAIN FUNCTION ===
+        headers = {
+            "Authorization": f"Bearer {SLACK_BOT_TOKEN}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "channel": SLACK_CHANNEL_ID,
+            "text": text
+        }
+
+        response = requests.post("https://slack.com/api/chat.postMessage", json=payload, headers=headers)
+        return response.json().get("ok", False)
+
+    except Exception:
+        return False
+
+def log_to_airtable(ticket):
+    """Log ticket to Airtable"""
+    try:
+        if not AIRTABLE_API_KEY:
+            return False
+            
+        url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_TABLE_ID}"
+        headers = {
+            "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "fields": {
+                "ticketId": ticket["ticketId"],
+                "clientName": ticket["clientName"],
+                "topic": ticket["topic"],
+                "aiReply": ticket.get("aiReply", "No reply generated"),
+                "escalationFlag": str(ticket.get("escalationFlag", False)),
+                "sentiment": ticket.get("sentiment", "unknown")
+            }
+        }
+
+        response = requests.post(url, json=data, headers=headers)
+        return response.status_code == 200
+
+    except Exception:
+        return False
+
 def dispatch_support_response(ticket):
-    try:
-        ticket_id = ticket["ticketId"]
-        client_name = ticket["clientName"]
-        topic = ticket["topic"]
-        ai_reply = ticket["aiReply"]
-        escalation_flag = ticket["escalationFlag"]
-        sentiment = ticket["sentiment"]
-
-        # 1. Post Slack text
-        if slack_client:
-            slack_client.chat_postMessage(
-                channel=SLACK_CHANNEL,
-                text=f"*🎟 AI Reply for Ticket `{ticket_id}`*\n*Client:* {client_name}\n*Topic:* {topic}\n> {ai_reply}"
-            )
-
-        # 2. Upload MP3
-        mp3_url = "No voice file"
-        if slack_client and os.path.exists(VOICE_FILE_PATH):
-            upload = slack_client.files_upload(
-                channels=SLACK_CHANNEL,
-                file=VOICE_FILE_PATH,
-                filename=f"{ticket_id}_reply.mp3",
-                title="🎧 Voice Reply",
-                initial_comment="Here's the MP3 reply from YoBot 🎙"
-            )
-            mp3_url = upload["file"]["permalink"]
-
-        # 3. Log ticket to Airtable
-        if ticket_log:
-            ticket_log.create({
-                "🆔 Ticket ID": ticket_id,
-                "🧑 Client Name": client_name,
-                "📌 Topic": topic,
-                "🤖 AI Reply": ai_reply,
-                "🚩 Escalation Flag": escalation_flag,
-                "📉 Sentiment": sentiment,
-                "🎧 Voice File": mp3_url
-            })
-
-        print(f"[{datetime.now()}] ✅ Support ticket dispatched: {ticket_id}")
-        return True
-
-    except SlackApiError as e:
-        print(f"[Slack Error] {e.response['error']}")
-        return False
-    except Exception as e:
-        print(f"[Dispatch Error] {e}")
-        return False
-
-def test_support_dispatcher():
-    """Test support dispatcher functionality"""
-    ticket = {
-        "ticketId": "TCK-1234",
-        "clientName": "Test Client",
-        "topic": "Bot Not Responding",
-        "aiReply": "We've reconnected your bot and it's back online.",
-        "escalationFlag": True,
-        "sentiment": "Negative"
-    }
+    """Dispatch ticket to all configured services"""
+    slack_success = post_to_slack(ticket)
+    airtable_success = log_to_airtable(ticket)
     
-    return dispatch_support_response(ticket)
+    return {
+        "slack_success": slack_success,
+        "airtable_success": airtable_success
+    }
 
 if __name__ == "__main__":
-    test_support_dispatcher()
+    if len(sys.argv) > 1:
+        try:
+            ticket = json.loads(sys.argv[1])
+            result = dispatch_support_response(ticket)
+            
+            if result["slack_success"]:
+                print("Slack notification sent")
+            else:
+                print("Slack notification failed")
+                
+            if result["airtable_success"]:
+                print("Airtable record created")
+            else:
+                print("Airtable logging failed")
+                
+        except json.JSONDecodeError:
+            print("Invalid JSON input")
+        except Exception:
+            print("Dispatch failed")
+    else:
+        print("No input provided")

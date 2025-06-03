@@ -15,14 +15,14 @@ app.post("/webhook", async (req, res) => {
   console.log("🎟 Incoming Ticket:", ticket);
 
   try {
-    const text = await runPython("ai_support_agent.py", ticket);
+    const text = await runPython("ai_support_agent_refactored.py", ticket);
     if (!text) throw new Error("No AI reply");
 
     ticket.aiReply = text;
     ticket.escalationFlag = text.includes("escalate") ? true : false;
     ticket.sentiment = text.includes("sorry") ? "negative" : "neutral";
 
-    await runPython("elevenlabs_voice_generator.py", { text });
+    await runPython("elevenlabs_voice_generator_refactored.py", { text });
 
     await runPython("support_dispatcher.py", ticket);
 
