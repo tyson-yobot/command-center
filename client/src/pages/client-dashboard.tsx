@@ -242,7 +242,9 @@ export default function ClientDashboard() {
               <FileText className="h-4 w-4 text-green-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{testMetrics?.totalTests || 0}</div>
+              <div className="text-2xl font-bold text-white">
+                {testMetrics?.isAuthenticated ? (testMetrics?.totalTests || 0) : "No Data"}
+              </div>
               <p className="text-xs text-green-400">Integration Test Log</p>
             </CardContent>
           </Card>
@@ -253,8 +255,12 @@ export default function ClientDashboard() {
               <CheckCircle className="h-4 w-4 text-green-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{testMetrics?.passedTests || 0}</div>
-              <p className="text-xs text-green-400">{testMetrics?.passRate || 0}% pass rate</p>
+              <div className="text-2xl font-bold text-white">
+                {testMetrics?.isAuthenticated ? (testMetrics?.passedTests || 0) : "No Data"}
+              </div>
+              <p className="text-xs text-green-400">
+                {testMetrics?.isAuthenticated ? `${testMetrics?.passRate || 0}% pass rate` : "Airtable disconnected"}
+              </p>
             </CardContent>
           </Card>
 
@@ -264,8 +270,12 @@ export default function ClientDashboard() {
               <AlertTriangle className="h-4 w-4 text-red-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{testMetrics?.failedTests || 0}</div>
-              <p className="text-xs text-red-400">Requires attention</p>
+              <div className="text-2xl font-bold text-white">
+                {testMetrics?.isAuthenticated ? (testMetrics?.failedTests || 0) : "No Data"}
+              </div>
+              <p className="text-xs text-red-400">
+                {testMetrics?.isAuthenticated ? "Requires attention" : "Airtable disconnected"}
+              </p>
             </CardContent>
           </Card>
 
@@ -275,8 +285,12 @@ export default function ClientDashboard() {
               <Calendar className="h-4 w-4 text-blue-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{testMetrics?.todayTests || 0}</div>
-              <p className="text-xs text-blue-400">Active testing</p>
+              <div className="text-2xl font-bold text-white">
+                {testMetrics?.isAuthenticated ? (testMetrics?.todayTests || 0) : "No Data"}
+              </div>
+              <p className="text-xs text-blue-400">
+                {testMetrics?.isAuthenticated ? "Active testing" : "Airtable disconnected"}
+              </p>
             </CardContent>
           </Card>
         </div>

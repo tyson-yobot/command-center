@@ -65,18 +65,24 @@ export async function getTestMetrics(req: Request, res: Response) {
       uniqueTesters,
       functionDistribution,
       recentActivity: records.slice(0, 10).map(r => ({
-        name: r.fields["🧩 Integration Name"],
-        status: r.fields["✅ Pass/Fail"],
-        date: r.fields["📅 Test Date"],
-        tester: r.fields["👤 QA Owner"],
-        notes: r.fields["📝 Notes / Debug"]
-      }))
+        name: r.fields["🧩 Integration Name"] || "Unknown Test",
+        status: r.fields["✅ Pass/Fail"] || "Unknown",
+        date: r.fields["📅 Test Date"] || "",
+        tester: r.fields["👤 QA Owner"] || "Unknown",
+        notes: r.fields["📝 Notes / Debug"] || ""
+      })),
+      isAuthenticated: true,
+      lastUpdated: new Date().toISOString()
     };
 
     res.json(metrics);
   } catch (error) {
     console.error("Error fetching test metrics:", error);
-    res.status(500).json({ error: "Failed to fetch test metrics" });
+    res.status(500).json({ 
+      error: "Failed to fetch test metrics",
+      isAuthenticated: false,
+      message: "Unable to connect to Airtable Integration Test Log. Please verify API credentials."
+    });
   }
 }
 
