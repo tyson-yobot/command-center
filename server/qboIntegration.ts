@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const QBO_CLIENT_ID = process.env.QBO_CLIENT_ID || 'ABFKQruSPhRVxF89f0OfjopDH75UfGrCvswLR185exeZti85ep';
 const QBO_CLIENT_SECRET = process.env.QBO_CLIENT_SECRET || 'E2TnUZabfdR7Ty2jV4d8R95VlD4Fl4GwoEaXjm17';
-const QBO_REDIRECT_URI = process.env.QBO_REDIRECT_URI || 'https://developer.intuit.com/v2/OAuth2Playground/RedirectUrl';
+const QBO_REDIRECT_URI = process.env.QBO_REDIRECT_URI || 'https://workspace--tyson44.replit.app/api/qbo/callback';
 const QBO_REALM_ID = process.env.QBO_REALM_ID;
 
 interface QBOCustomer {
