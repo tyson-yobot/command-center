@@ -3,6 +3,7 @@ import { z } from "zod";
 import { storage } from "./storage";
 import { insertPhantombusterLeadSchema } from "@shared/schema";
 import axios from "axios";
+import { logLeadIntake, logIntegrationTest, logCRMContact } from "./airtableIntegrations";
 
 // Webhook payload validation schema - supports both underscore and camelCase
 const leadIngestionSchema = z.object({

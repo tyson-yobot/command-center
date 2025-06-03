@@ -23,6 +23,27 @@ import { invoiceRouter } from "./invoiceAutomation";
 import { qboTokenRouter } from "./qboTokenExchange";
 import { ingestLead, testLeadIngestion } from "./leadIngestion";
 import { 
+  logCommandCenterMetrics, 
+  logIntegrationTest, 
+  logLeadIntake, 
+  logCallSentiment,
+  logEscalation,
+  logMissedCall,
+  logABTest,
+  logSlackAlert,
+  logFallback,
+  logBotHealth,
+  logCRMContact,
+  logSupportTicket,
+  logQuoteGeneration,
+  logErrorFallback,
+  logEventSync,
+  logSupportTicketOps,
+  logClientROI,
+  logSmartSpendIntake,
+  testAirtableConnection
+} from "./airtableIntegrations";
+import { 
   testQBOConnection, 
   createQBOCustomer, 
   createQBOInvoice, 
@@ -1197,6 +1218,180 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Test Lead Ingestion Endpoint
   app.post('/api/test-lead-ingestion', testLeadIngestion);
+
+  // Comprehensive Airtable Integration Endpoints
+  app.get('/api/airtable/test-connection', async (req, res) => {
+    try {
+      const result = await testAirtableConnection();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        basesTested: 0
+      });
+    }
+  });
+
+  // Command Center Metrics Logging
+  app.post('/api/airtable/log-metrics', async (req, res) => {
+    try {
+      const result = await logCommandCenterMetrics(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Integration Test Logging
+  app.post('/api/airtable/log-integration-test', async (req, res) => {
+    try {
+      const result = await logIntegrationTest(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Lead Intake Logging
+  app.post('/api/airtable/log-lead-intake', async (req, res) => {
+    try {
+      const result = await logLeadIntake(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Call Sentiment Logging
+  app.post('/api/airtable/log-call-sentiment', async (req, res) => {
+    try {
+      const result = await logCallSentiment(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Escalation Logging
+  app.post('/api/airtable/log-escalation', async (req, res) => {
+    try {
+      const result = await logEscalation(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Missed Call Logging
+  app.post('/api/airtable/log-missed-call', async (req, res) => {
+    try {
+      const result = await logMissedCall(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // A/B Test Logging
+  app.post('/api/airtable/log-ab-test', async (req, res) => {
+    try {
+      const result = await logABTest(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Fallback Logging
+  app.post('/api/airtable/log-fallback', async (req, res) => {
+    try {
+      const result = await logFallback(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Bot Health Monitoring
+  app.post('/api/airtable/log-bot-health', async (req, res) => {
+    try {
+      const result = await logBotHealth(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // CRM Contact Logging
+  app.post('/api/airtable/log-crm-contact', async (req, res) => {
+    try {
+      const result = await logCRMContact(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Support Ticket Logging
+  app.post('/api/airtable/log-support-ticket', async (req, res) => {
+    try {
+      const result = await logSupportTicket(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Quote Generation Logging
+  app.post('/api/airtable/log-quote-generation', async (req, res) => {
+    try {
+      const result = await logQuoteGeneration(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Error/Fallback Logging
+  app.post('/api/airtable/log-error-fallback', async (req, res) => {
+    try {
+      const result = await logErrorFallback(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Event Sync Logging
+  app.post('/api/airtable/log-event-sync', async (req, res) => {
+    try {
+      const result = await logEventSync(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // ROI Calculation Logging
+  app.post('/api/airtable/log-client-roi', async (req, res) => {
+    try {
+      const result = await logClientROI(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // SmartSpend Intake Logging
+  app.post('/api/airtable/log-smartspend-intake', async (req, res) => {
+    try {
+      const result = await logSmartSpendIntake(req.body);
+      res.json({ success: true, record: result });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
 
   // PDF Generation endpoints
   app.post("/api/generate-pdf/quote", async (req, res) => {
