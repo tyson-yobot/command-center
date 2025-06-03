@@ -1524,9 +1524,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Lead captured:", lead);
 
       const { exec } = require('child_process');
-      const leadData = JSON.stringify(lead).replace(/"/g, '\\"');
+      const leadData = JSON.stringify(lead);
       
-      exec(`python3 automation_webhook_manager.py lead-capture "${leadData}"`, (err, stdout, stderr) => {
+      exec(`python3 automation_webhook_manager.py lead-capture '${leadData}'`, (err: any, stdout: any, stderr: any) => {
         if (err) {
           console.error("Lead processing error:", stderr);
         } else {
@@ -1537,7 +1537,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         status: "accepted",
         leadId: lead.id || `lead_${Date.now()}`,
-        message: "Lead processing initiated"
+        message: "Lead processing initiated",
+        automations_triggered: [
+          "lead_scoring",
+          "crm_sync", 
+          "email_sequence",
+          "sales_assignment"
+        ]
       });
 
     } catch (error: any) {
