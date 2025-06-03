@@ -1717,6 +1717,128 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // QuickBooks OAuth Authentication Routes
+  app.get("/api/qbo/auth", (req, res) => {
+    const CLIENT_ID = "ABFKQruSPhRVxF89f0OfjopDH75UfGrCvswLR185exeZti85ep";
+    const REDIRECT_URI = "https://workspace--tyson44.replit.app/api/qbo/callback";
+    const AUTH_BASE = "https://sandbox-accounts.intuit.com";
+    
+    const scope = "com.intuit.quickbooks.accounting";
+    const state = "secure123" + Date.now();
+    const authUrl = `${AUTH_BASE}/oauth2/v1/tokens/bearer?client_id=${CLIENT_ID}&response_type=code&scope=${scope}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}`;
+    
+    console.log("Redirecting to QuickBooks OAuth:", authUrl);
+    res.redirect(authUrl);
+  });
+
+  app.get("/api/qbo/callback", async (req, res) => {
+    const { code, realmId, state } = req.query;
+    const CLIENT_ID = "ABFKQruSPhRVxF89f0OfjopDH75UfGrCvswLR185exeZti85ep";
+    const CLIENT_SECRET = "E2TnUZabfdR7Ty2jV4d8R95VlD4Fl4GwoEaXjm17";
+    const REDIRECT_URI = "https://workspace--tyson44.replit.app/api/qbo/callback";
+    const TOKEN_URL = "https://sandbox-accounts.intuit.com/oauth2/v1/tokens/bearer";
+    
+    console.log("QuickBooks callback received:", { code: code ? "present" : "missing", realmId, state });
+    
+    if (!code) {
+      return res.status(400).send("Authorization code missing");
+    }
+
+    try {
+      const axios = require('axios');
+      const qs = require('querystring');
+      
+      const response = await axios.post(
+        TOKEN_URL,
+        qs.stringify({
+          grant_type: "authorization_code",
+          code: code as string,
+          redirect_uri: REDIRECT_URI
+        }),
+        {
+          auth: {
+            username: CLIENT_ID,
+            password: CLIENT_SECRET
+          },
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+        }
+      );
+
+      const { access_token, refresh_token, token_type, expires_in } = response.data;
+      
+      console.log("QuickBooks OAuth Success!");
+      console.log("Access Token:", access_token.substring(0, 20) + "...");
+      console.log("Refresh Token:", refresh_token.substring(0, 20) + "...");
+      console.log("Realm ID:", realmId);
+      console.log("Expires in:", expires_in, "seconds");
+
+      res.json({
+        status: "success",
+        message: "QuickBooks connected successfully!",
+        realmId,
+        expiresIn: expires_in,
+        instructions: [
+          "Add these environment variables to your Replit Secrets:",
+          `QUICKBOOKS_ACCESS_TOKEN=${access_token}`,
+          `QUICKBOOKS_REFRESH_TOKEN=${refresh_token}`,
+          `QUICKBOOKS_REALM_ID=${realmId}`
+        ]
+      });
+
+    } catch (error: any) {
+      console.error("QuickBooks OAuth Failed:", error.response?.data || error.message);
+      res.status(500).json({
+        status: "error",
+        message: "QuickBooks authentication failed",
+        error: error.response?.data || error.message
+      });
+    }
+  });
+
+  // QuickBooks connection test
+  app.get("/api/qbo/test", async (req, res) => {
+    const accessToken = process.env.QUICKBOOKS_ACCESS_TOKEN;
+    const realmId = process.env.QUICKBOOKS_REALM_ID;
+    
+    if (!accessToken || !realmId) {
+      return res.status(400).json({
+        status: "error",
+        message: "QuickBooks tokens not configured. Visit /api/qbo/auth first."
+      });
+    }
+
+    try {
+      const axios = require('axios');
+      const baseUrl = "https://sandbox-quickbooks.api.intuit.com";
+      
+      const response = await axios.get(
+        `${baseUrl}/v3/company/${realmId}/companyinfo/${realmId}`,
+        {
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Accept": "application/json"
+          }
+        }
+      );
+
+      res.json({
+        status: "success",
+        message: "QuickBooks connection verified!",
+        companyInfo: response.data
+      });
+
+    } catch (error: any) {
+      console.error("QuickBooks test failed:", error.response?.data || error.message);
+      res.status(500).json({
+        status: "error",
+        message: "QuickBooks connection test failed",
+        error: error.response?.data || error.message
+      });
+    }
+  });
+
   // Mount the new enterprise routes
   app.use('/api/master-data-sync', masterDataSyncRouter);
   app.use('/api/admin-tools', adminToolsRouter);

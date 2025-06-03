@@ -1,0 +1,70 @@
+routes/qbo.js – Drop this entire file:
+js
+Copy
+Edit
+// routes/qbo.js
+const express = require("express");
+const axios = require("axios");
+const qs = require("querystring");
+const router = express.Router();
+
+const CLIENT_ID = process.env.QUICKBOOKS_CLIENT_ID;
+const CLIENT_SECRET = process.env.QUICKBOOKS_CLIENT_SECRET;
+const REDIRECT_URI = process.env.QUICKBOOKS_REDIRECT_URI;
+const ENVIRONMENT = process.env.QUICKBOOKS_ENVIRONMENT;
+
+const AUTH_BASE = ENVIRONMENT === "sandbox"
+  ? "https://sandbox-accounts.intuit.com"
+  : "https://accounts.intuit.com";
+
+const TOKEN_URL = `${AUTH_BASE}/oauth2/v1/tokens/bearer`;
+
+router.get("/auth", (req, res) => {
+  const authUrl = `${AUTH_BASE}/oauth2/v1/tokens/bearer`;
+  const scope = "com.intuit.quickbooks.accounting";
+  const url = `${AUTH_BASE}/oauth2/v1/tokens/bearer?client_id=${CLIENT_ID}&response_type=code&scope=${scope}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=secure123`;
+  res.redirect(url);
+});
+
+router.get("/callback", async (req, res) => {
+  const { code } = req.query;
+  try {
+    const result = await axios.post(
+      TOKEN_URL,
+      qs.stringify({
+        grant_type: "authorization_code",
+        code,
+        redirect_uri: REDIRECT_URI
+      }),
+      {
+        auth: {
+          username: CLIENT_ID,
+          password: CLIENT_SECRET
+        },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      }
+    );
+    console.log("✅ QBO Access Token Response:", result.data);
+    res.send("QuickBooks connected! You can now use the API.");
+  } catch (err) {
+    console.error("❌ QBO Auth Failed", err.response?.data || err.message);
+    res.status(500).send("QuickBooks authentication failed.");
+  }
+});
+
+module.exports = router;
+📦 2. Update server.js to include this router
+Inside server.js, add this line near your other routers:
+
+js
+Copy
+Edit
+app.use("/api/qbo", require("./routes/qbo"));
+🔄 3. Restart Replit, then visit:
+bash
+Copy
+Edit
+https://workspace--tyson44.replit.app/api/qbo/auth
+This will trigger the QuickBooks login → authorize → redirect → and dump your access token to logs.
