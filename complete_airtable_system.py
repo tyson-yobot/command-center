@@ -736,6 +736,85 @@ def get_failed_notes_only(api_key):
     return [f["📝 Notes / Debug"] for f in failed if f.get("📝 Notes / Debug")]
 
 # ========================================
+# BATCH 9: Enhanced Management Functions (51-60)
+# ========================================
+
+def tag_test_in_notes(api_key, test_name, tag):
+    """Add custom tag to notes field"""
+    tagged_note = f"[TAG:{tag}]"
+    return append_to_test_notes(api_key, test_name, tagged_note)
+
+def get_tests_by_date_range(api_key, start_date, end_date):
+    """Get test results by date range"""
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {
+        "filterByFormula": f"AND(IS_AFTER({{📅 Test Date}}, '{start_date}'), IS_BEFORE({{📅 Test Date}}, '{end_date}'))"
+    }
+    response = requests.get(url, headers=headers, params=params)
+    return response.json()
+
+def search_tests_by_partial_name(api_key, partial):
+    """Search tests by partial match in test name"""
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {
+        "filterByFormula": f"FIND('{partial}', {{🧩 Integration Name}})"
+    }
+    response = requests.get(url, headers=headers, params=params)
+    return response.json()
+
+def group_tests_by_date(api_key):
+    """Group tests by date tested"""
+    from collections import defaultdict
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    grouped = defaultdict(list)
+    for r in records:
+        date = r["fields"].get("📅 Test Date")
+        if date:
+            grouped[date].append(r)
+    return dict(grouped)
+
+def add_batch_test_links(api_key, test_links_dict):
+    """Add batch of test links (dict of name:link)"""
+    for test_name, link in test_links_dict.items():
+        add_reference_link(api_key, test_name, link)
+    return {"status": "Links added", "count": len(test_links_dict)}
+
+def fail_test_with_reason(api_key, test_name, reason):
+    """Set test to failed with reason"""
+    toggle_test_result(api_key, test_name, False)
+    append_to_test_notes(api_key, test_name, f"❌ Reason: {reason}")
+    return {"status": "Marked as failed"}
+
+def mark_tests_in_review(api_key, test_names):
+    """Mark multiple tests 'In Review'"""
+    for name in test_names:
+        mark_test_in_review(api_key, name)
+    return {"status": "Marked in review", "count": len(test_names)}
+
+def get_tests_with_empty_notes(api_key):
+    """Pull tests with empty notes"""
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return [r for r in records if not r["fields"].get("📝 Notes / Debug")]
+
+def reassign_test_owner(api_key, test_name, new_tester):
+    """Reassign 'Tested By' for a given test"""
+    record = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧩 Integration Name", test_name)
+    if not record.get("records"):
+        return {"error": "Test not found"}
+    record_id = record["records"][0]["id"]
+    return update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record_id, api_key, {
+        "👤 QA Owner": new_tester
+    })
+
+def log_debug_to_test(api_key, test_name, debug_msg):
+    """Add debug info to test notes (auto-labeled)"""
+    timestamp = datetime.now().strftime("%H:%M:%S")
+    note = f"[DEBUG {timestamp}] {debug_msg}"
+    return append_to_test_notes(api_key, test_name, note)
+
+# ========================================
 # COMPREHENSIVE TESTING SYSTEM
 # ========================================
 
