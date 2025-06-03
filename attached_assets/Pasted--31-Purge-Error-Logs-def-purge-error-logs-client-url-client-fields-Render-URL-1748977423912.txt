@@ -1,0 +1,59 @@
+# 31. 🗑️ Purge Error Logs
+def purge_error_logs(client):
+    url = client["fields"]["📦 Render URL"]
+    requests.delete(f"{url}/logs/errors")
+    print(f"🗑️ Error logs purged for {client['fields']['🧾 Client Name']}")
+
+# 32. 🧾 Push Billing Adjustment
+def adjust_billing(client, adjustment):
+    url = client["fields"]["📦 Render URL"]
+    requests.post(f"{url}/billing/adjust", json={"amount": adjustment})
+    print(f"💰 Billing adjusted by {adjustment} for {client['fields']['🧾 Client Name']}")
+
+# 33. 🔍 Pull Current Bot Settings
+def get_bot_settings(client):
+    url = client["fields"]["📦 Render URL"]
+    res = requests.get(f"{url}/settings")
+    print(f"⚙️ Settings for {client['fields']['🧾 Client Name']}:\n{res.text[:1000]}")
+
+# 34. ✏️ Update Bot Setting
+def update_bot_setting(client, key, value):
+    url = client["fields"]["📦 Render URL"]
+    requests.patch(f"{url}/settings", json={key: value})
+    print(f"✏️ Updated {key} to {value} for {client['fields']['🧾 Client Name']}")
+
+# 35. 🧪 Test Payment Flow
+def test_payment_flow(client):
+    url = client["fields"]["📦 Render URL"]
+    res = requests.post(f"{url}/payment/test")
+    print(f"💳 Payment test triggered for {client['fields']['🧾 Client Name']}: {res.status_code}")
+
+# 36. 🧾 Pull Last Invoice
+def get_last_invoice(client):
+    url = client["fields"]["📦 Render URL"]
+    res = requests.get(f"{url}/invoice/last")
+    print(f"🧾 Last invoice for {client['fields']['🧾 Client Name']}:\n{res.text[:1000]}")
+
+# 37. 🧠 Push AI Prompt Update
+def update_ai_prompt(client, prompt_text):
+    url = client["fields"]["📦 Render URL"]
+    requests.post(f"{url}/ai/prompt", json={"prompt": prompt_text})
+    print(f"🧠 AI prompt updated for {client['fields']['🧾 Client Name']}")
+
+# 38. 🧪 Simulate Prompt Response
+def test_prompt_response(client, input_text):
+    url = client["fields"]["📦 Render URL"]
+    res = requests.post(f"{url}/ai/test", json={"input": input_text})
+    print(f"🧪 Prompt test on {client['fields']['🧾 Client Name']}:\n{res.text[:1000]}")
+
+# 39. 🔒 Lockdown Mode
+def activate_lockdown(client):
+    url = client["fields"]["📦 Render URL"]
+    requests.post(f"{url}/lockdown", json={"active": True})
+    print(f"🔒 Lockdown activated for {client['fields']['🧾 Client Name']}")
+
+# 40. 🔓 Release Lockdown
+def deactivate_lockdown(client):
+    url = client["fields"]["📦 Render URL"]
+    requests.post(f"{url}/lockdown", json={"active": False})
+    print(f"🔓 Lockdown lifted for {client['fields']['🧾 Client Name']}")
