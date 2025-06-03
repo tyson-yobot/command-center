@@ -1,0 +1,132 @@
+elevenlabs_voice_generator.py
+python
+Copy
+Edit
+import os
+import requests
+
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+OUTPUT_PATH = "./uploads/test_yobot_voice.mp3"
+
+def generate_voice_reply(text):
+    try:
+        url = "https://api.elevenlabs.io/v1/text-to-speech/EXAVITQu4vr4xnSDxMaL"
+        headers = {
+            "xi-api-key": ELEVENLABS_API_KEY,
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "text": text,
+            "voice_settings": {
+                "stability": 0.4,
+                "similarity_boost": 0.75
+            }
+        }
+
+        response = requests.post(url, headers=headers, json=payload)
+
+        if response.status_code == 200:
+            with open(OUTPUT_PATH, 'wb') as f:
+                f.write(response.content)
+            return OUTPUT_PATH
+        else:
+            print(f"[ElevenLabs Error] Status {response.status_code}: {response.text}")
+            return None
+
+    except Exception as e:
+        print(f"[VoiceGen Error] {e}")
+        return None
+📁 support_dispatcher.py
+python
+Copy
+Edit
+from slack_poster import post_to_slack
+from airtable_logger import log_to_airtable
+
+def dispatch_support_response(ticket):
+    print("📬 Posting to Slack...")
+    post_to_slack(ticket)
+
+    print("🗃 Logging to Airtable...")
+    log_to_airtable(ticket)
+📁 slack_poster.py
+python
+Copy
+Edit
+import os
+import requests
+
+SLACK_TOKEN = os.getenv("SLACK_TOKEN")
+CHANNEL = "#support-queue"
+MP3_URL = "https://yobotassistant.tyson44.repl.co/uploads/test_yobot_voice.mp3"
+
+def post_to_slack(ticket):
+    try:
+        text = f"""
+📨 *Support Ticket*: `{ticket['ticketId']}`
+👤 *Client*: {ticket['clientName']}
+🧠 *Topic*: {ticket['topic']}
+🎯 *AI Reply*: {ticket['aiReply']}
+🚨 *Escalate*: `{ticket['escalationFlag']}`
+🔊 *Voice Reply:* {MP3_URL}
+"""
+
+        headers = {
+            "Authorization": f"Bearer {SLACK_TOKEN}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "channel": CHANNEL,
+            "text": text
+        }
+
+        response = requests.post("https://slack.com/api/chat.postMessage", json=payload, headers=headers)
+        if not response.json().get("ok"):
+            print("[Slack Error] ", response.text)
+
+    except Exception as e:
+        print(f"[Slack Poster Error] {e}")
+📁 airtable_logger.py
+python
+Copy
+Edit
+import os
+import requests
+
+AIRTABLE_KEY = os.getenv("AIRTABLE_API_KEY")
+BASE_ID = "appCoAtCZdARb4AM2"
+TABLE_ID = "tblo1ESkt9ybkvaJH"
+MP3_URL = "https://yobotassistant.tyson44.repl.co/uploads/test_yobot_voice.mp3"
+
+def log_to_airtable(ticket):
+    try:
+        url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_ID}"
+        headers = {
+            "Authorization": f"Bearer {AIRTABLE_KEY}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "fields": {
+                "ticketId": ticket["ticketId"],
+                "clientName": ticket["clientName"],
+                "topic": ticket["topic"],
+                "aiReply": ticket["aiReply"],
+                "escalationFlag": str(ticket["escalationFlag"]),
+                "sentiment": ticket["sentiment"],
+                "mp3URL": MP3_URL
+            }
+        }
+
+        response = requests.post(url, json=data, headers=headers)
+        if response.status_code != 200:
+            print("[Airtable Error]", response.text)
+
+    except Exception as e:
+        print(f"[Airtable Logger Error] {e}")
+📁 uploads/ folder
+Make sure this exists in your Replit file tree. Create it manually if needed:
+
+Copy
+Edit
+📁 uploads
+   ↳ test_yobot_voice.mp3 ← created dynamically
