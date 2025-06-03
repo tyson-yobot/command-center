@@ -1341,10 +1341,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // QuickBooks OAuth redirect endpoint
   app.get('/api/qbo/auth', (req, res) => {
-    const CLIENT_ID = 'ABFKQruSPhRVxF89f0OfjopDH75UfGrCvswLR185exeZti85ep';
+    const CLIENT_ID = process.env.QUICKBOOKS_CLIENT_ID;
     const REDIRECT_URI = 'https://72ddfeee-d145-4891-a820-14d5b3e09c66-00-c9rkbm78q1s2.worf.replit.dev/api/qbo/callback';
     const scope = 'com.intuit.quickbooks.accounting openid profile email';
     const state = 'yobot_auth_' + Date.now();
+    
+    if (!CLIENT_ID) {
+      return res.status(500).json({ error: 'QuickBooks Client ID not configured' });
+    }
     
     const authUrl = `https://appcenter.intuit.com/connect/oauth2?client_id=${CLIENT_ID}&response_type=code&scope=${encodeURIComponent(scope)}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}`;
     

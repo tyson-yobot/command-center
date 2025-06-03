@@ -51,26 +51,7 @@ app.get('/api/test-slack-alert', async (req, res) => {
   }
 });
 
-// QuickBooks OAuth endpoint - bypass routing issues
-app.get('/api/qbo/auth', (req, res) => {
-  try {
-    const QBO_CLIENT_ID = 'ABFKQruSPhRVxF89f0OfjopDH75UfGrCvswLR185exeZti85ep';
-    const QBO_REDIRECT_URI = 'https://developer.intuit.com/v2/OAuth2Playground/RedirectUrl';
-    
-    const params = new URLSearchParams({
-      client_id: QBO_CLIENT_ID,
-      redirect_uri: QBO_REDIRECT_URI,
-      response_type: 'code',
-      scope: 'com.intuit.quickbooks.accounting openid profile email',
-      state: 'yobot_auth'
-    });
-    
-    const authUrl = `https://appcenter.intuit.com/connect/oauth2?${params.toString()}`;
-    res.json({ authUrl });
-  } catch (error: any) {
-    res.status(500).json({ error: 'Failed to generate auth URL', message: error.message });
-  }
-});
+
 
 // PDF Report generation endpoint
 app.post('/api/reports/pdf', async (req, res) => {
