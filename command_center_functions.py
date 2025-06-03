@@ -13,7 +13,7 @@ COMMAND_CENTER_BASE_ID = "appRt8V3tH4g5Z51f"
 
 def get_api_key():
     """Get the appropriate API key for Command Center"""
-    return os.getenv("AIRTABLE_COMMAND_CENTER_API_KEY") or os.getenv("AIRTABLE_COMMAND_CENTER_TOKEN") or os.getenv("AIRTABLE_COMMAND_CENTER_BASE_TOKEN") or os.getenv("AIRTABLE_VALID_TOKEN") or os.getenv("AIRTABLE_API_KEY")
+    return os.getenv("AIRTABLE_PERSONAL_ACCESS_TOKEN") or os.getenv("AIRTABLE_COMMAND_CENTER_TOKEN") or os.getenv("AIRTABLE_COMMAND_CENTER_BASE_TOKEN") or os.getenv("AIRTABLE_VALID_TOKEN") or os.getenv("AIRTABLE_API_KEY")
 
 def log_to_test_log(function_name, status, notes=""):
     """Log function execution to Integration Test Log for internal documentation"""
@@ -74,131 +74,131 @@ def log_to_command_center_table(table_name, data, function_name=""):
 def log_support_ticket(ticket_id, client_name, topic, ai_reply, escalation_flag=False):
     """Log support ticket to Command Center"""
     data = {
-        "🆔 Ticket ID": ticket_id,
-        "🧑 Client Name": client_name,
-        "📌 Topic": topic,
-        "🤖 AI Reply": ai_reply,
-        "🚩 Escalation Flag": "Yes" if escalation_flag else "No",
-        "📅 Date": datetime.now().strftime("%Y-%m-%d"),
-        "⏰ Time": datetime.now().strftime("%H:%M:%S")
+        "Ticket ID": ticket_id,
+        "Client Name": client_name,
+        "Topic": topic,
+        "AI Reply": ai_reply,
+        "Escalation Flag": "Yes" if escalation_flag else "No",
+        "Date": datetime.now().strftime("%Y-%m-%d"),
+        "Time": datetime.now().strftime("%H:%M:%S")
     }
     
-    return log_to_command_center_table("📄 Support Ticket Log", data, "log_support_ticket")
+    return log_to_command_center_table("Support Ticket Log", data, "log_support_ticket")
 
 # 2. Call Recording Tracker
 def log_call_recording(call_id, contact_name, phone_number, recording_url, duration_minutes=0):
     """Log call recording to Command Center"""
     data = {
-        "🔗 Call ID": call_id,
-        "🧑‍💼 Contact Name": contact_name,
-        "📞 Phone Number": phone_number,
-        "🎥 Recording URL": recording_url,
-        "⏱️ Duration (min)": str(duration_minutes),
-        "📅 Date": datetime.now().strftime("%Y-%m-%d"),
-        "⏰ Time": datetime.now().strftime("%H:%M:%S")
+        "Call ID": call_id,
+        "Contact Name": contact_name,
+        "Phone Number": phone_number,
+        "Recording URL": recording_url,
+        "Duration (min)": str(duration_minutes),
+        "Date": datetime.now().strftime("%Y-%m-%d"),
+        "Time": datetime.now().strftime("%H:%M:%S")
     }
     
-    return log_to_command_center_table("📁 Call Recording Tracker", data, "log_call_recording")
+    return log_to_command_center_table("Call Recording Tracker", data, "log_call_recording")
 
 # 3. Call Sentiment Analysis
 def log_sentiment(call_id, sentiment_rating, confidence_score, transcript_snippet=""):
     """Log sentiment analysis to Command Center"""
     data = {
-        "📞 Call ID": call_id,
-        "😊 Sentiment Rating": sentiment_rating,
-        "📈 Confidence Score": str(confidence_score),
-        "📝 Transcript Snippet": transcript_snippet,
-        "📅 Call Date": datetime.now().strftime("%Y-%m-%d"),
-        "⏰ Analysis Time": datetime.now().strftime("%H:%M:%S")
+        "Call ID": call_id,
+        "Sentiment Rating": sentiment_rating,
+        "Confidence Score": str(confidence_score),
+        "Transcript Snippet": transcript_snippet,
+        "Call Date": datetime.now().strftime("%Y-%m-%d"),
+        "Analysis Time": datetime.now().strftime("%H:%M:%S")
     }
     
-    return log_to_command_center_table("📊 Call Sentiment Log", data, "log_sentiment")
+    return log_to_command_center_table("Call Sentiment Log", data, "log_sentiment")
 
 # 4. Escalation Tracker
 def log_escalation(escalation_id, contact_name, urgency_level, issue_description, assigned_to=""):
     """Log escalation event to Command Center"""
     data = {
-        "🚨 Escalation ID": escalation_id,
-        "🧑‍💼 Contact Name": contact_name,
-        "🔥 Urgency Level": urgency_level,
-        "📝 Issue Description": issue_description,
-        "👤 Assigned To": assigned_to,
-        "📅 Date": datetime.now().strftime("%Y-%m-%d"),
-        "⏰ Time": datetime.now().strftime("%H:%M:%S")
+        "Escalation ID": escalation_id,
+        "Contact Name": contact_name,
+        "Urgency Level": urgency_level,
+        "Issue Description": issue_description,
+        "Assigned To": assigned_to,
+        "Date": datetime.now().strftime("%Y-%m-%d"),
+        "Time": datetime.now().strftime("%H:%M:%S")
     }
     
-    return log_to_command_center_table("🚨 Escalation Tracker", data, "log_escalation")
+    return log_to_command_center_table("Escalation Tracker", data, "log_escalation")
 
 # 5. Client Touchpoint Log
 def log_client_touchpoint(contact_name, company, channel, interaction_type, notes=""):
     """Log client interaction to Command Center"""
     data = {
-        "🧑‍💼 Contact Name": contact_name,
-        "🏢 Company": company,
-        "📞 Channel": channel,
-        "🔄 Interaction Type": interaction_type,
-        "📝 Notes": notes,
-        "📅 Date": datetime.now().strftime("%Y-%m-%d"),
-        "⏰ Time": datetime.now().strftime("%H:%M:%S")
+        "Contact Name": contact_name,
+        "Company": company,
+        "Channel": channel,
+        "Interaction Type": interaction_type,
+        "Notes": notes,
+        "Date": datetime.now().strftime("%Y-%m-%d"),
+        "Time": datetime.now().strftime("%H:%M:%S")
     }
     
-    return log_to_command_center_table("💼 Client Touchpoint Log", data, "log_client_touchpoint")
+    return log_to_command_center_table("Client Touchpoint Log", data, "log_client_touchpoint")
 
 # 6. Missed Call Log
 def log_missed_call(caller_name, phone_number, source, follow_up_required=True):
     """Log missed call to Command Center"""
     data = {
-        "🧑‍💼 Caller Name": caller_name,
-        "📞 Phone Number": phone_number,
-        "📡 Source": source,
-        "📅 Missed Date & Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "🔄 Follow-up Required": "Yes" if follow_up_required else "No"
+        "Caller Name": caller_name,
+        "Phone Number": phone_number,
+        "Source": source,
+        "Missed Date & Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "Follow-up Required": "Yes" if follow_up_required else "No"
     }
     
-    return log_to_command_center_table("📞 Missed Call Log", data, "log_missed_call")
+    return log_to_command_center_table("Missed Call Log", data, "log_missed_call")
 
 # 7. QA Call Review Log
 def log_qa_review(call_id, reviewed_by, qa_tag, score, notes=""):
     """Log QA review to Command Center"""
     data = {
-        "📞 Call ID": call_id,
-        "👤 Reviewed By": reviewed_by,
-        "🧪 QA Tag": qa_tag,
-        "⭐ Score": str(score),
-        "📝 Notes": notes,
-        "📅 Review Date": datetime.now().strftime("%Y-%m-%d"),
-        "⏰ Review Time": datetime.now().strftime("%H:%M:%S")
+        "Call ID": call_id,
+        "Reviewed By": reviewed_by,
+        "QA Tag": qa_tag,
+        "Score": str(score),
+        "Notes": notes,
+        "Review Date": datetime.now().strftime("%Y-%m-%d"),
+        "Review Time": datetime.now().strftime("%H:%M:%S")
     }
     
-    return log_to_command_center_table("🧪 QA Call Review Log", data, "log_qa_review")
+    return log_to_command_center_table("QA Call Review Log", data, "log_qa_review")
 
 # 8. NLP Keyword Tracker
 def log_keywords(event_id, keywords_detected, confidence_level, context=""):
     """Log NLP keywords to Command Center"""
     data = {
-        "🔑 Event ID": event_id,
-        "🧠 Keywords Detected": keywords_detected,
-        "📊 Confidence Level": str(confidence_level),
-        "📝 Context": context,
-        "📅 Detection Date": datetime.now().strftime("%Y-%m-%d"),
-        "⏰ Detection Time": datetime.now().strftime("%H:%M:%S")
+        "Event ID": event_id,
+        "Keywords Detected": keywords_detected,
+        "Confidence Level": str(confidence_level),
+        "Context": context,
+        "Detection Date": datetime.now().strftime("%Y-%m-%d"),
+        "Detection Time": datetime.now().strftime("%H:%M:%S")
     }
     
-    return log_to_command_center_table("🧠 NLP Keyword Tracker", data, "log_keywords")
+    return log_to_command_center_table("NLP Keyword Tracker", data, "log_keywords")
 
 # 9. Command Center Metrics
 def log_command_center_metrics(daily_calls, success_rate, error_count, api_usage_percent, avg_response_time=0):
     """Log daily metrics to Command Center"""
     data = {
-        "📅 Date": datetime.now().strftime("%Y-%m-%d"),
-        "📞 Daily Calls": str(daily_calls),
-        "✅ Success Rate %": str(success_rate),
-        "❌ Error Count": str(error_count),
-        "📡 API Usage %": str(api_usage_percent),
-        "⏱️ Avg Response Time (s)": str(avg_response_time)
+        "Date": datetime.now().strftime("%Y-%m-%d"),
+        "Daily Calls": str(daily_calls),
+        "Success Rate %": str(success_rate),
+        "Error Count": str(error_count),
+        "API Usage %": str(api_usage_percent),
+        "Avg Response Time (s)": str(avg_response_time)
     }
     
-    return log_to_command_center_table("📊 Ops Metrics Log", data, "log_command_center_metrics")
+    return log_to_command_center_table("Ops Metrics Log", data, "log_command_center_metrics")
 
 def test_all_command_center_functions():
     """Test all 9 Command Center functions"""
