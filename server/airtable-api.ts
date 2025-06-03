@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_VALID_TOKEN || process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_COMMAND_CENTER_BASE_TOKEN;
 const INTEGRATION_TEST_BASE = "appCoAtCZdARb4AM2";
-const INTEGRATION_TEST_TABLE = "tblRNjNnaGL5ICIf9";
+const INTEGRATION_TEST_TABLE = "🧪 Integration Test Log 2";
 const COMMAND_CENTER_BASE = "appRt8V3tH4g5Z51f";
 
 // Get Integration Test Log metrics
