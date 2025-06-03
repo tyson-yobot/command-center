@@ -412,7 +412,8 @@ def log_test_to_airtable(test_name, function_name, passed, notes, api_key):
     
     try:
         result = create_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, test_data)
-        if "id" in result:
+        # Check for successful record creation (either single record or records array)
+        if ("id" in result) or ("records" in result and len(result["records"]) > 0):
             print(f"✅ TEST LOGGED: {test_name} -> {function_name}")
             return True
         else:
