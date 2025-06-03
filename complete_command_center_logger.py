@@ -9,7 +9,9 @@ from datetime import datetime
 
 def get_api_token():
     """Get API token with fallback options"""
-    return (os.getenv('AIRTABLE_API_KEY') or 
+    return (os.getenv('AIRTABLE_COMMAND_CENTER_BASE_TOKEN') or
+            os.getenv('AIRTABLE_COMMAND_CENTER_TOKEN') or
+            os.getenv('AIRTABLE_API_KEY') or 
             os.getenv('AIRTABLE_PERSONAL_ACCESS_TOKEN') or 
             os.getenv('AIRTABLE_SUPPORT_LOG_ACCESS_TOKEN') or
             os.getenv('AIRTABLE_CALL_RECORDINGS_ACCESS_TOKEN') or

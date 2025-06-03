@@ -48,6 +48,7 @@ import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";
 import airtableRouter from "./airtable";
 import masterDataSyncRouter from "./masterDataSync";
+import { getTestMetrics, getCommandCenterMetrics, updateTestResult, logTestResult } from "./airtable-api";
 import adminToolsRouter from "./adminTools";
 import conversionFunnelRouter from "./conversionFunnel";
 import systemAuditLogRouter, { auditLogger } from "./systemAuditLog";
