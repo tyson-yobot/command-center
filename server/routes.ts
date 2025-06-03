@@ -1341,14 +1341,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // QuickBooks OAuth redirect endpoint
   app.get('/api/qbo/auth', (req, res) => {
-    const CLIENT_ID = process.env.QUICKBOOKS_CLIENT_ID;
+    const CLIENT_ID = process.env.QUICKBOOKS_CLIENT_ID || 'ABjndHEMJVzcfEEo4lLKRg1qWOhsXOyAxqzrGkKKQCfbbrXBWf';
     const REDIRECT_URI = 'https://72ddfeee-d145-4891-a820-14d5b3e09c66-00-c9rkbm78q1s2.worf.replit.dev/api/qbo/callback';
     const scope = 'com.intuit.quickbooks.accounting openid profile email';
     const state = 'yobot_auth_' + Date.now();
-    
-    if (!CLIENT_ID) {
-      return res.status(500).json({ error: 'QuickBooks Client ID not configured' });
-    }
     
     const authUrl = `https://appcenter.intuit.com/connect/oauth2?client_id=${CLIENT_ID}&response_type=code&scope=${encodeURIComponent(scope)}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}`;
     
@@ -1376,6 +1372,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error: any) {
       res.status(500).json({ error: 'Token exchange failed', message: error.message });
+    }
+  });
+
+  // QuickBooks API test connection
+  app.get('/api/qbo/test-connection', async (req, res) => {
+    try {
+      const accessToken = process.env.QUICKBOOKS_ACCESS_TOKEN;
+      const realmId = process.env.QUICKBOOKS_REALM_ID;
+      
+      if (!accessToken || !realmId) {
+        return res.json({ 
+          success: false, 
+          message: 'QuickBooks credentials not configured' 
+        });
+      }
+
+      const result = await testQBOConnection(accessToken, realmId);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ 
+        success: false, 
+        message: 'Connection test failed', 
+        error: error.message 
+      });
+    }
+  });
+
+  // QuickBooks create customer
+  app.post('/api/qbo/create-customer', async (req, res) => {
+    try {
+      const accessToken = process.env.QUICKBOOKS_ACCESS_TOKEN;
+      const realmId = process.env.QUICKBOOKS_REALM_ID;
+      
+      if (!accessToken || !realmId) {
+        return res.json({ 
+          success: false, 
+          error: 'QuickBooks credentials not configured' 
+        });
+      }
+
+      const result = await createQBOCustomer(req.body, accessToken, realmId);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ 
+        success: false, 
+        error: 'Customer creation failed', 
+        message: error.message 
+      });
+    }
+  });
+
+  // QuickBooks create invoice
+  app.post('/api/qbo/create-invoice', async (req, res) => {
+    try {
+      const accessToken = process.env.QUICKBOOKS_ACCESS_TOKEN;
+      const realmId = process.env.QUICKBOOKS_REALM_ID;
+      
+      if (!accessToken || !realmId) {
+        return res.json({ 
+          success: false, 
+          error: 'QuickBooks credentials not configured' 
+        });
+      }
+
+      const result = await createQBOInvoice(req.body, accessToken, realmId);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ 
+        success: false, 
+        error: 'Invoice creation failed', 
+        message: error.message 
+      });
+    }
+  });
+
+  // QuickBooks list customers
+  app.get('/api/qbo/customers', async (req, res) => {
+    try {
+      const accessToken = process.env.QUICKBOOKS_ACCESS_TOKEN;
+      const realmId = process.env.QUICKBOOKS_REALM_ID;
+      
+      if (!accessToken || !realmId) {
+        return res.status(400).json({ 
+          error: 'Missing access token or realm ID' 
+        });
+      }
+
+      const result = await listQBOCustomers(accessToken, realmId);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to list customers', 
+        message: error.message 
+      });
     }
   });
 
