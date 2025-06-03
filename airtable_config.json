@@ -1,0 +1,79 @@
+{
+  "integration_test_log": {
+    "baseId": "appRt8V3tH4g5Z51f",
+    "tableName": "Integration Test Log",
+    "tableId": "tblIntegrationTestLog",
+    "view": "❌ Fails Only",
+    "fields": {
+      "integration_name": "🔧 Integration Name",
+      "pass_fail": "✅ Pass/Fail",
+      "notes_debug": "🧠 Notes / Debug",
+      "test_date": "📅 Test Date",
+      "retry_attempted": "🔁 Retry Attempted?",
+      "output_data": "📤 Output Data",
+      "module_type": "🏗️ Module Type",
+      "link": "🌐 Link"
+    }
+  },
+  "leads_intake": {
+    "baseId": "appRt8V3tH4g5Z51f",
+    "tableName": "Leads - Intake",
+    "tableId": "tblZhtHGNNRncYG9v",
+    "view": "⚙️ All Leads (Latest First)",
+    "fields": {
+      "scraped_on": "🗓️ Scraped On",
+      "crm_synced": "📥 CRM Synced",
+      "call_scheduled": "📤 Call Scheduled",
+      "reschedule_time": "📆 Reschedule Time",
+      "client_name": "🧾 Client Name",
+      "phone_number": "📞 Phone Number",
+      "email": "📧 Email"
+    }
+  },
+  "client_instances": {
+    "baseId": "appRt8V3tH4g5Z51f",
+    "tableName": "Client Instances",
+    "tableId": "tblClientInstances",
+    "fields": {
+      "client_name": "🧾 Client Name",
+      "render_url": "📦 Render URL",
+      "restart_hook": "🔄 Restart Hook",
+      "slack_webhook": "🔔 Slack Webhook",
+      "status": "🟢 Status",
+      "last_updated": "⏰ Last Updated"
+    }
+  },
+  "command_center_metrics": {
+    "baseId": "appRt8V3tH4g5Z51f",
+    "tableName": "Command Center - Metrics Tracker",
+    "tableId": "tblMetricsTracker",
+    "fields": {
+      "metric_name": "📊 Metric Name",
+      "value": "🔢 Value",
+      "timestamp": "⏰ Timestamp",
+      "client": "👤 Client"
+    }
+  },
+  "industry_templates": {
+    "baseId": "appRt8V3tH4g5Z51f",
+    "tableName": "Industry Templates",
+    "tableId": "tblIndustryTemplates",
+    "fields": {
+      "template_name": "🏭 Template Name",
+      "industry": "🏢 Industry",
+      "config_json": "⚙️ Config JSON",
+      "active": "✅ Active"
+    }
+  },
+  "client_intake": {
+    "baseId": "appRt8V3tH4g5Z51f",
+    "tableName": "Client Intake",
+    "tableId": "tblClientIntake",
+    "fields": {
+      "company_name": "🏢 Company Name",
+      "contact_email": "📧 Contact Email",
+      "industry": "🏭 Industry",
+      "status": "📋 Status"
+    }
+  }
+}
