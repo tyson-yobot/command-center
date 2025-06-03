@@ -1848,6 +1848,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/api/audit-log', systemAuditLogRouter);
   app.use('/api/rag-usage', ragUsageAnalyticsRouter);
   app.use('/api/missed-call', missedCallHandlerRouter);
+
+  // Airtable Integration Test Log API endpoints
+  app.get('/api/airtable/test-metrics', getTestMetrics);
+  app.get('/api/airtable/command-center-metrics', getCommandCenterMetrics);
+  app.post('/api/airtable/update-test', updateTestResult);
+  app.post('/api/airtable/log-test', logTestResult);
   app.use('/api/voicebot-callback', voiceBotCallbackRouter);
   app.use('/api/chat-integration', chatIntegrationRouter);
   app.use('/api/phantombuster', phantombusterRouter);

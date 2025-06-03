@@ -35,6 +35,8 @@ export default function ClientDashboard() {
   const { data: metrics } = useQuery({ queryKey: ['/api/metrics'] });
   const { data: bot } = useQuery({ queryKey: ['/api/bot'] });
   const { data: crmData } = useQuery({ queryKey: ['/api/crm'] });
+  const { data: testMetrics } = useQuery({ queryKey: ['/api/airtable/test-metrics'] });
+  const { data: commandCenterMetrics } = useQuery({ queryKey: ['/api/airtable/command-center-metrics'] });
   const [isListening, setIsListening] = React.useState(false);
   const [showEscalation, setShowEscalation] = React.useState(false);
   const [selectedTier, setSelectedTier] = React.useState('All');
@@ -236,46 +238,44 @@ export default function ClientDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">⏱️ Manual Hours Avoided</CardTitle>
-              <Clock className="h-4 w-4 text-green-400" />
+              <CardTitle className="text-sm font-medium text-slate-300">Total Tests</CardTitle>
+              <FileText className="h-4 w-4 text-green-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{metrics?.hoursSaved || 247}</div>
-              <p className="text-xs text-green-400">+15 hours this week</p>
+              <div className="text-2xl font-bold text-white">{testMetrics?.totalTests || 0}</div>
+              <p className="text-xs text-green-400">Integration Test Log</p>
             </CardContent>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Revenue Captured</CardTitle>
-              <DollarSign className="h-4 w-4 text-green-400" />
+              <CardTitle className="text-sm font-medium text-slate-300">Tests Passed</CardTitle>
+              <CheckCircle className="h-4 w-4 text-green-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">${metrics?.revenueGenerated?.toLocaleString() || '87,340'}</div>
-              <p className="text-xs text-green-400">+12.3% from last month</p>
+              <div className="text-2xl font-bold text-white">{testMetrics?.passedTests || 0}</div>
+              <p className="text-xs text-green-400">{testMetrics?.passRate || 0}% pass rate</p>
             </CardContent>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Live Bot Threads</CardTitle>
-              <MessageSquare className="h-4 w-4 text-blue-400" />
+              <CardTitle className="text-sm font-medium text-slate-300">Tests Failed</CardTitle>
+              <AlertTriangle className="h-4 w-4 text-red-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{metrics?.conversations || 47}</div>
-              <p className="text-xs text-blue-400">12 high-priority leads</p>
+              <div className="text-2xl font-bold text-white">{testMetrics?.failedTests || 0}</div>
+              <p className="text-xs text-red-400">Requires attention</p>
             </CardContent>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">🎯 Projected Deal Volume</CardTitle>
-              <TrendingUp className="h-4 w-4 text-purple-400" />
+              <CardTitle className="text-sm font-medium text-slate-300">Today's Tests</CardTitle>
+              <Calendar className="h-4 w-4 text-blue-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">
-                {crmData?.pipelineValue || '$847K'}
-              </div>
+              <div className="text-2xl font-bold text-white">{testMetrics?.todayTests || 0}</div>
               <p className="text-xs text-purple-400">6 deals closing this week</p>
             </CardContent>
           </Card>
