@@ -21,6 +21,13 @@ import voiceControlRouter from "./voiceControl";
 import { qboDataRouter } from "./qboDataRetrieval";
 import { invoiceRouter } from "./invoiceAutomation";
 import { qboTokenRouter } from "./qboTokenExchange";
+import { 
+  testQBOConnection, 
+  createQBOCustomer, 
+  createQBOInvoice, 
+  listQBOCustomers,
+  exchangeCodeForToken 
+} from "./qboIntegration";
 import { salesEventRouter } from "./salesEventTracker";
 import { zendeskSmartCloseRouter } from "./zendeskSmartClose";
 import { stripeToQboRouter } from "./stripeToQboIntegration";
