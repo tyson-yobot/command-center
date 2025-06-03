@@ -1725,9 +1725,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     const scope = "com.intuit.quickbooks.accounting";
     const state = "secure123" + Date.now();
-    const authUrl = `${AUTH_BASE}/oauth2/v1/tokens/bearer?client_id=${CLIENT_ID}&response_type=code&scope=${scope}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}`;
+    // Fixed: Use correct authorization endpoint
+    const authUrl = `${AUTH_BASE}/oauth2/v1/authorize?client_id=${CLIENT_ID}&response_type=code&scope=${scope}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}`;
     
-    console.log("Redirecting to QuickBooks OAuth:", authUrl);
+    console.log("QuickBooks OAuth request received");
+    console.log("Redirecting to:", authUrl);
     res.redirect(authUrl);
   });
 
