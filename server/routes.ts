@@ -1339,7 +1339,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // QuickBooks token exchange endpoints
   app.use('/api/qbo-token', qboTokenRouter);
 
-  // QuickBooks OAuth endpoints are handled by qbo.js router
+  // QuickBooks OAuth redirect endpoint
+  app.get('/api/qbo/auth', (req, res) => {
+    const CLIENT_ID = 'ABFKQruSPhRVxF89f0OfjopDH75UfGrCvswLR185exeZti85ep';
+    const REDIRECT_URI = 'https://72ddfeee-d145-4891-a820-14d5b3e09c66-00-c9rkbm78q1s2.worf.replit.dev/api/qbo/callback';
+    const scope = 'com.intuit.quickbooks.accounting openid profile email';
+    const state = 'yobot_auth_' + Date.now();
+    
+    const authUrl = `https://appcenter.intuit.com/connect/oauth2?client_id=${CLIENT_ID}&response_type=code&scope=${encodeURIComponent(scope)}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}`;
+    
+    console.log('QuickBooks OAuth redirect to:', authUrl);
+    res.redirect(authUrl);
+  });
 
   app.post('/api/qbo/token', async (req, res) => {
     try {
