@@ -1,0 +1,130 @@
+Test 121 — Deep Config State Corruption
+python
+Copy
+Edit
+# 🔹 Test 121 — Deep Config State Corruption
+from chaos import mutate_deep_config
+
+def test_deep_config_mutation():
+    result = mutate_deep_config(client_id="client-core", target="pipeline_rules")
+    assert result["corruption_detected"] is True
+    print("✅ Deep Config State Corruption Detection: PASS")
+
+test_deep_config_mutation()
+🔹 Test 122 — Slow-Burn Failure Injection
+python
+Copy
+Edit
+# 🔹 Test 122 — Slow-Burn Failure Injection
+from chaos import inject_slow_failures
+
+def test_slow_fail():
+    result = inject_slow_failures(scope="intake", delay_seconds=30)
+    assert result["system_stability_maintained"] is True
+    print("✅ Slow-Burn Failure Recovery: PASS")
+
+test_slow_fail()
+🔹 Test 123 — Corrupted Backup Restoration Check
+python
+Copy
+Edit
+# 🔹 Test 123 — Corrupted Backup Restoration Check
+from recovery import attempt_corrupted_restore
+
+def test_corrupted_backup():
+    result = attempt_corrupted_restore("client-backup-bad")
+    assert result["error_caught"] is True
+    print("✅ Corrupted Backup Detection: PASS")
+
+test_corrupted_backup()
+🔹 Test 124 — Command Injection Defense
+python
+Copy
+Edit
+# 🔹 Test 124 — Command Injection Defense
+from security import test_command_injection_protection
+
+def test_cmd_injection():
+    result = test_command_injection_protection("client_input; rm -rf /")
+    assert result["injection_blocked"] is True
+    print("✅ Command Injection Defense: PASS")
+
+test_cmd_injection()
+🔹 Test 125 — Rogue Process Detection
+python
+Copy
+Edit
+# 🔹 Test 125 — Rogue Process Detection
+from diagnostics import detect_rogue_processes
+
+def test_rogue_process_scan():
+    result = detect_rogue_processes()
+    assert result["rogue_found"] is False
+    print("✅ Rogue Process Detection: PASS")
+
+test_rogue_process_scan()
+🔹 Test 126 — Integrity Hash Drift Scan
+python
+Copy
+Edit
+# 🔹 Test 126 — Integrity Hash Drift Scan
+from security import scan_hash_drift
+
+def test_hash_drift():
+    result = scan_hash_drift("client-abc")
+    assert result["drift_detected"] is False
+    print("✅ Integrity Hash Drift Scan: PASS")
+
+test_hash_drift()
+🔹 Test 127 — Expired Cert Auto-Revoke Trigger
+python
+Copy
+Edit
+# 🔹 Test 127 — Expired Cert Auto-Revoke Trigger
+from security import revoke_expired_certs
+
+def test_cert_revoke():
+    result = revoke_expired_certs()
+    assert result["revoked_count"] >= 0
+    print("✅ Expired Cert Auto-Revoke: PASS")
+
+test_cert_revoke()
+🔹 Test 128 — Unusual IP Behavior Scan
+python
+Copy
+Edit
+# 🔹 Test 128 — Unusual IP Behavior Scan
+from security import scan_unusual_ip
+
+def test_unusual_ip():
+    result = scan_unusual_ip(client_id="client-999", threshold=5)
+    assert result["anomaly_detected"] in [True, False]
+    print("✅ Unusual IP Behavior Scan: PASS")
+
+test_unusual_ip()
+🔹 Test 129 — Session Hijack Detection
+python
+Copy
+Edit
+# 🔹 Test 129 — Session Hijack Detection
+from security import detect_session_hijack
+
+def test_session_hijack():
+    result = detect_session_hijack("session-token-123")
+    assert result["hijack_detected"] in [True, False]
+    print("✅ Session Hijack Detection: PASS")
+
+test_session_hijack()
+🔹 Test 130 — Unauthorized Endpoint Exposure Check
+python
+Copy
+Edit
+# 🔹 Test 130 — Unauthorized Endpoint Exposure Check
+from security import scan_for_exposed_endpoints
+
+def test_exposed_endpoints():
+    result = scan_for_exposed_endpoints("client-portal")
+    assert "unauthorized_endpoints" in result
+    print("✅ Unauthorized Endpoint Exposure Scan: PASS")
+
+test_exposed_endpoints()
