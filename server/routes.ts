@@ -1481,13 +1481,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // YoBot Support Ticket Webhook
-  app.post('/api/webhook', async (req, res) => {
+  // Comprehensive Automation Webhook Endpoints
+  
+  // Support Ticket Webhook
+  app.post('/api/webhook/support', async (req, res) => {
     try {
       const ticket = req.body;
-      console.log("🔥 Webhook received:", ticket);
+      console.log("Support ticket received:", ticket);
 
-      // Validate required fields
       if (!ticket.ticketId || !ticket.clientName || !ticket.topic) {
         return res.status(400).json({
           error: "Missing required fields",
@@ -1495,35 +1496,218 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Save ticket to file for Python processing
       const fs = require('fs');
       fs.writeFileSync('ticket.json', JSON.stringify(ticket));
 
-      // Trigger Python support dispatcher
       const { exec } = require('child_process');
       exec('python run_yobot_support.py', (err, stdout, stderr) => {
         if (err) {
-          console.error("Dispatch error:", stderr);
-          return res.status(500).json({ 
-            error: "Failed to process ticket",
-            details: stderr 
-          });
+          console.error("Support processing error:", stderr);
         }
-        console.log(stdout);
       });
 
       res.json({
         status: "accepted",
-        message: "Ticket received and processing",
-        ticketId: ticket.ticketId
+        ticketId: ticket.ticketId,
+        message: "Support ticket processing initiated"
       });
 
     } catch (error: any) {
-      console.error("Webhook error:", error);
-      res.status(500).json({
-        error: "Webhook processing failed",
-        message: error.message
+      res.status(500).json({ error: "Support webhook failed", message: error.message });
+    }
+  });
+
+  // Lead Capture Webhook
+  app.post('/api/webhook/lead', async (req, res) => {
+    try {
+      const lead = req.body;
+      console.log("Lead captured:", lead);
+
+      const { exec } = require('child_process');
+      const leadData = JSON.stringify(lead).replace(/"/g, '\\"');
+      
+      exec(`python3 automation_webhook_manager.py lead-capture "${leadData}"`, (err, stdout, stderr) => {
+        if (err) {
+          console.error("Lead processing error:", stderr);
+        } else {
+          console.log("Lead processing result:", stdout);
+        }
       });
+
+      res.json({
+        status: "accepted",
+        leadId: lead.id || `lead_${Date.now()}`,
+        message: "Lead processing initiated"
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ error: "Lead webhook failed", message: error.message });
+    }
+  });
+
+  // Payment Webhook
+  app.post('/api/webhook/payment', async (req, res) => {
+    try {
+      const payment = req.body;
+      console.log("Payment received:", payment);
+
+      const { exec } = require('child_process');
+      const paymentData = JSON.stringify(payment).replace(/"/g, '\\"');
+      
+      exec(`python3 automation_webhook_manager.py payment-completed "${paymentData}"`, (err, stdout, stderr) => {
+        if (err) {
+          console.error("Payment processing error:", stderr);
+        } else {
+          console.log("Payment processing result:", stdout);
+        }
+      });
+
+      res.json({
+        status: "accepted",
+        paymentId: payment.id || `payment_${Date.now()}`,
+        message: "Payment processing initiated"
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ error: "Payment webhook failed", message: error.message });
+    }
+  });
+
+  // Stripe Webhook
+  app.post('/api/webhook/stripe', async (req, res) => {
+    try {
+      const stripeEvent = req.body;
+      console.log("Stripe event received:", stripeEvent.type);
+
+      const { exec } = require('child_process');
+      const eventData = JSON.stringify(stripeEvent).replace(/"/g, '\\"');
+      
+      exec(`python3 automation_webhook_manager.py stripe-event "${eventData}"`, (err, stdout, stderr) => {
+        if (err) {
+          console.error("Stripe processing error:", stderr);
+        } else {
+          console.log("Stripe processing result:", stdout);
+        }
+      });
+
+      res.json({
+        status: "accepted",
+        eventType: stripeEvent.type,
+        message: "Stripe event processing initiated"
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ error: "Stripe webhook failed", message: error.message });
+    }
+  });
+
+  // HubSpot Webhook
+  app.post('/api/webhook/hubspot', async (req, res) => {
+    try {
+      const hubspotData = req.body;
+      console.log("HubSpot webhook received:", hubspotData);
+
+      const { exec } = require('child_process');
+      const contactData = JSON.stringify(hubspotData).replace(/"/g, '\\"');
+      
+      exec(`python3 automation_webhook_manager.py hubspot-contact "${contactData}"`, (err, stdout, stderr) => {
+        if (err) {
+          console.error("HubSpot processing error:", stderr);
+        } else {
+          console.log("HubSpot processing result:", stdout);
+        }
+      });
+
+      res.json({
+        status: "accepted",
+        message: "HubSpot data processing initiated"
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ error: "HubSpot webhook failed", message: error.message });
+    }
+  });
+
+  // Usage Threshold Webhook
+  app.post('/api/webhook/usage', async (req, res) => {
+    try {
+      const usageData = req.body;
+      console.log("Usage threshold triggered:", usageData);
+
+      const { exec } = require('child_process');
+      const thresholdData = JSON.stringify(usageData).replace(/"/g, '\\"');
+      
+      exec(`python3 automation_webhook_manager.py usage-threshold "${thresholdData}"`, (err, stdout, stderr) => {
+        if (err) {
+          console.error("Usage processing error:", stderr);
+        } else {
+          console.log("Usage processing result:", stdout);
+        }
+      });
+
+      res.json({
+        status: "accepted",
+        customerId: usageData.customer_id,
+        thresholdType: usageData.threshold_type,
+        message: "Usage threshold processing initiated"
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ error: "Usage webhook failed", message: error.message });
+    }
+  });
+
+  // Calendar Booking Webhook
+  app.post('/api/webhook/calendar', async (req, res) => {
+    try {
+      const booking = req.body;
+      console.log("Calendar booking received:", booking);
+
+      // Auto-create CRM contact and follow-up tasks
+      const { exec } = require('child_process');
+      const bookingData = JSON.stringify(booking).replace(/"/g, '\\"');
+      
+      exec(`python3 calendar_automation.py process-booking "${bookingData}"`, (err, stdout, stderr) => {
+        if (err) {
+          console.error("Calendar processing error:", stderr);
+        }
+      });
+
+      res.json({
+        status: "accepted",
+        bookingId: booking.id || `booking_${Date.now()}`,
+        message: "Calendar booking processed"
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ error: "Calendar webhook failed", message: error.message });
+    }
+  });
+
+  // Form Submission Webhook
+  app.post('/api/webhook/form', async (req, res) => {
+    try {
+      const submission = req.body;
+      console.log("Form submission received:", submission);
+
+      // Auto-process form data and trigger sequences
+      const { exec } = require('child_process');
+      const formData = JSON.stringify(submission).replace(/"/g, '\\"');
+      
+      exec(`python3 form_automation.py process-submission "${formData}"`, (err, stdout, stderr) => {
+        if (err) {
+          console.error("Form processing error:", stderr);
+        }
+      });
+
+      res.json({
+        status: "accepted",
+        submissionId: submission.id || `form_${Date.now()}`,
+        message: "Form submission processed"
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ error: "Form webhook failed", message: error.message });
     }
   });
 
