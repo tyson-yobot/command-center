@@ -1343,7 +1343,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/qbo/auth', (req, res) => {
     try {
       const authUrl = getQBOAuthorizationUrl();
-      res.json({ authUrl });
+      res.redirect(authUrl);
     } catch (error: any) {
       res.status(500).json({ error: 'Failed to generate auth URL', message: error.message });
     }
