@@ -1,6 +1,1 @@
-{
-  "ticketId": "TCK-123",
-  "clientName": "Jordan Maxwell",
-  "topic": "Can't log in to dashboard",
-  "sentiment": "frustrated"
-}
+{"ticketId":"TICKET-001","clientName":"Test Client","topic":"automation","email":"test@example.com","message":"Testing automation workflow","urgency":"high"}

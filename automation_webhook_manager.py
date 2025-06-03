@@ -265,6 +265,36 @@ class WebhookAutomationManager:
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
+    def process_calendar_webhook(self, payload):
+        """Process calendar booking webhook"""
+        try:
+            booking_data = payload.get('booking', {})
+            customer_id = booking_data.get('customer_id')
+            
+            # Create calendar event
+            calendar_event = self.create_calendar_event(booking_data)
+            
+            # Send confirmation email
+            confirmation_sent = self.send_booking_confirmation(booking_data)
+            
+            # Update CRM with booking
+            crm_update = self.update_crm_booking(booking_data)
+            
+            # Notify sales team
+            sales_notification = self.notify_sales_team_booking(booking_data)
+            
+            return {
+                "status": "success",
+                "booking_id": booking_data.get('id'),
+                "calendar_created": calendar_event,
+                "confirmation_sent": confirmation_sent,
+                "crm_updated": crm_update,
+                "actions_completed": 4
+            }
+            
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
     def process_usage_webhook(self, payload):
         """Process usage threshold webhook"""
         try:

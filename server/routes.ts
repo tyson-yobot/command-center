@@ -1529,7 +1529,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const lead = req.body;
       console.log("Lead captured:", lead);
 
-      const { exec } = require('child_process');
+      const { exec } = await import('child_process');
       const leadData = JSON.stringify(lead);
       
       exec(`python3 automation_webhook_manager.py lead-capture '${leadData}'`, (err: any, stdout: any, stderr: any) => {
@@ -1563,10 +1563,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const payment = req.body;
       console.log("Payment received:", payment);
 
-      const { exec } = require('child_process');
+      const { exec } = await import('child_process');
       const paymentData = JSON.stringify(payment).replace(/"/g, '\\"');
       
-      exec(`python3 automation_webhook_manager.py payment-completed "${paymentData}"`, (err, stdout, stderr) => {
+      exec(`python3 automation_webhook_manager.py payment-completed "${paymentData}"`, (err: any, stdout: any, stderr: any) => {
         if (err) {
           console.error("Payment processing error:", stderr);
         } else {
