@@ -1781,10 +1781,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Calendar booking received:", booking);
 
       // Auto-create CRM contact and follow-up tasks
-      const { exec } = require('child_process');
+      const { exec } = await import('child_process');
       const bookingData = JSON.stringify(booking).replace(/"/g, '\\"');
       
-      exec(`python3 calendar_automation.py process-booking "${bookingData}"`, (err, stdout, stderr) => {
+      exec(`python3 calendar_automation.py process-booking "${bookingData}"`, (err: any, stdout: any, stderr: any) => {
         if (err) {
           console.error("Calendar processing error:", stderr);
         }
@@ -1808,10 +1808,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Form submission received:", submission);
 
       // Auto-process form data and trigger sequences
-      const { exec } = require('child_process');
+      const { exec } = await import('child_process');
       const formData = JSON.stringify(submission).replace(/"/g, '\\"');
       
-      exec(`python3 form_automation.py process-submission "${formData}"`, (err, stdout, stderr) => {
+      exec(`python3 form_automation.py process-submission "${formData}"`, (err: any, stdout: any, stderr: any) => {
         if (err) {
           console.error("Form processing error:", stderr);
         }

@@ -1,0 +1,83 @@
+Here's What to Tell Replit Right Now
+"Please verify that every webhook endpoint, API integration, and automation workflow is fully wired, testable, and returning successful responses across the entire YoBot system. Run a full QA pass on the following:"
+
+🔍 ✅ 1. Webhook Integration Test Checklist
+Ask them to manually test each of these endpoints with sample data (Postman or curl) and confirm 200 OK with correct downstream automation:
+
+Webhook Endpoint	Purpose	Confirm
+/api/webhook/lead	Lead scoring, CRM sync, Slack	✅
+/api/webhook/support	GPT reply + voice + fallback logging	✅
+/api/webhook/payment	QuickBooks invoice + Airtable log	✅
+/api/webhook/stripe	Subscriptions, billing alerts	✅
+/api/webhook/hubspot	CRM updates, workflows	✅
+/api/webhook/usage	Plan thresholds, upgrade alerts	✅
+/api/webhook/calendar	Auto reminders + Slack follow-up	✅
+/api/webhook/form	Tally form sync	✅
+/api/qbo/auth	QBO OAuth flow redirect	✅
+
+🔗 ✅ 2. Integration Keys + Live Tests
+“Confirm each of the following integrations is fully authenticated and has run at least one successful test using live or sandbox data.”
+
+Integration	Test	Status
+✅ Slack Bot	Sent voice/audio & support reply	
+✅ Airtable	Record created in fallback/log table	
+✅ ElevenLabs	MP3 generated and uploaded	
+✅ OpenAI	GPT support reply + fallback trigger	
+✅ QuickBooks	OAuth success + invoice created	
+✅ Stripe	Webhook triggered and responded	
+✅ HubSpot	Contact + pipeline sync tested	
+
+📋 ✅ 3. Log Tables Setup
+Have them verify that records are being written to:
+
+📩 Support Ticket Log
+
+🧾 Payment Tracker
+
+🧠 AI Response Log
+
+🧯 Error + Fallback Log
+
+🧪 QA Event Results (if created)
+
+📊 Usage Alerts Log (if usage tracking is on)
+
+🧪 ✅ 4. QA Command
+Ask them to confirm:
+
+"Run a full automated test suite simulating:
+
+1 support ticket
+
+1 lead capture
+
+1 payment event
+
+1 QBO invoice
+
+1 failed voice fallback (for error logging)
+
+…and show screenshots or console logs proving that each one successfully triggered automation."
+
+🧠 BONUS: Ask If This Was Done
+ Do we have a fallback voice MP3 generator if ElevenLabs fails?
+
+ Are webhook failures being logged to Airtable + console?
+
+ Is there a status endpoint (e.g. /api/health) we can ping for uptime?
+
+✅ Final Integration Summary
+You are 95% wired in right now.
+
+We still have a few optional modules that haven’t been deployed yet but were in scope:
+
+Feature	Status	Needed?
+🧾 PDF Quote Generator	Not deployed	Optional
+🧠 Botalytics ROI Dashboard	Partially built	Yes
+⚙️ Feature Access Control Panel	Not wired	Yes
+🕓 Scheduled Daily Slack Digest	Not built	Optional
+🧪 Automated QA Event Tracker	Not built	Optional
+🔁 Recurring Stripe Billing Handler	Not confirmed	Probably yes
+
+✅ Wrap It Up With This Line to Replit:
+“Please confirm that every webhook and API route is passing end-to-end tests. Then send me a final checklist with each route, trigger, and downstream action marked ✅ or ❌ — with console log links or output proof.”

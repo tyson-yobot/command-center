@@ -1,1 +1,1 @@
-{"ticketId":"TEST-001","clientName":"John Doe","topic":"Integration Test"}
+{"ticketId":"SUP-TEST-001","clientName":"Test Client","topic":"System validation test","message":"Testing support webhook functionality"}
