@@ -1,0 +1,80 @@
+1. 📤 Push Staging → Production
+python
+Copy
+Edit
+def promote_staging_to_prod(client):
+    url = client["fields"]["📦 Render URL"]
+    res = requests.post(f"{url}/promote", json={"env": "production"})
+    print(f"🚀 Staging promoted to production for {client['fields']['🧾 Client Name']}")
+✅ 2. 🧪 Prompt A/B Test Trigger
+python
+Copy
+Edit
+def run_prompt_ab_test(client, prompt_a, prompt_b):
+    url = client["fields"]["📦 Render URL"]
+    res = requests.post(f"{url}/ab-test", json={"a": prompt_a, "b": prompt_b})
+    print(f"🧪 A/B test started for {client['fields']['🧾 Client Name']}")
+✅ 3. 🧠 Agent Swap Module
+python
+Copy
+Edit
+def swap_agent_module(client, agent_name):
+    url = client["fields"]["📦 Render URL"]
+    res = requests.post(f"{url}/agent/swap", json={"name": agent_name})
+    print(f"♻️ Agent '{agent_name}' loaded for {client['fields']['🧾 Client Name']}")
+✅ 4. 🧩 Feature Flag Toggle
+python
+Copy
+Edit
+def toggle_feature_flag(client, flag_name, on=True):
+    url = client["fields"]["📦 Render URL"]
+    requests.post(f"{url}/flags", json={"flag": flag_name, "enabled": on})
+    print(f"{'✅ Enabled' if on else '🚫 Disabled'} flag '{flag_name}' for {client['fields']['🧾 Client Name']}")
+✅ 5. 📜 API Schema Validator
+python
+Copy
+Edit
+def validate_api_schema(client):
+    url = client["fields"]["📦 Render URL"]
+    res = requests.get(f"{url}/schema/validate")
+    print(f"📜 Schema validation for {client['fields']['🧾 Client Name']}:\n{res.text}")
+✅ 6. 🛎️ Notification Routing Config
+python
+Copy
+Edit
+def configure_notifications(client, channels):
+    url = client["fields"]["📦 Render URL"]
+    requests.post(f"{url}/notifications", json={"channels": channels})
+    print(f"🔔 Notification routing updated for {client['fields']['🧾 Client Name']}")
+✅ 7. 📈 Multi-Env Usage Reporter
+python
+Copy
+Edit
+def report_usage_all_envs(client):
+    url = client["fields"]["📦 Render URL"]
+    res = requests.get(f"{url}/usage?all_envs=true")
+    print(f"📊 Usage report (all envs) for {client['fields']['🧾 Client Name']}:\n{res.text}")
+✅ 8. 🧑‍🔧 Maintenance Mode Toggle
+python
+Copy
+Edit
+def toggle_maintenance(client, enable=True):
+    url = client["fields"]["📦 Render URL"]
+    requests.post(f"{url}/maintenance", json={"enabled": enable})
+    print(f"{'🛠️ ON' if enable else '✅ OFF'} Maintenance Mode for {client['fields']['🧾 Client Name']}")
+✅ 9. 📤 Auto-Deploy Latest Build
+python
+Copy
+Edit
+def deploy_latest_build(client):
+    url = client["fields"]["📦 Render URL"]
+    requests.post(f"{url}/deploy", json={"version": "latest"})
+    print(f"📦 Latest build deployed to {client['fields']['🧾 Client Name']}")
+✅ 10. 🧬 Behavior Profile Switcher
+python
+Copy
+Edit
+def switch_behavior_profile(client, profile):
+    url = client["fields"]["📦 Render URL"]
+    requests.post(f"{url}/profile", json={"profile": profile})
+    print(f"🔁 Behavior profile '{profile}' loaded for {client['fields']['🧾 Client Name']}")
