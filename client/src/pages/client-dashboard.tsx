@@ -276,7 +276,7 @@ export default function ClientDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">{testMetrics?.todayTests || 0}</div>
-              <p className="text-xs text-purple-400">6 deals closing this week</p>
+              <p className="text-xs text-blue-400">Active testing</p>
             </CardContent>
           </Card>
         </div>
@@ -1219,29 +1219,51 @@ export default function ClientDashboard() {
           </Card>
         </div>
 
-        {/* System Alerts - Bottom Bar */}
-        <div className="mb-6">
-          <Card className="bg-red-600/20 backdrop-blur-sm border border-red-400/30">
-            <CardContent className="p-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <AlertTriangle className="w-5 h-5 text-red-400" />
-                  <div>
-                    <h3 className="text-red-300 font-medium">System Alerts</h3>
-                    <p className="text-red-200 text-sm">2 automation failures detected, 1 missed follow-up</p>
+        {/* Integration Test Log - Live Results */}
+        <div className="mb-8">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <FileText className="w-5 h-5 mr-2" />
+                Live Integration Test Results
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="text-slate-300 font-medium mb-3">Test Summary</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Total Tests:</span>
+                      <span className="text-white font-mono">{testMetrics?.totalTests || 0}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Pass Rate:</span>
+                      <span className="text-green-400 font-mono">{testMetrics?.passRate || 0}%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Unique Testers:</span>
+                      <span className="text-blue-400 font-mono">{testMetrics?.uniqueTesters || 0}</span>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Badge variant="destructive" className="bg-red-800/50 text-red-200">
-                    High Priority
-                  </Badge>
-                  <Button 
-                    size="sm" 
-                    className="bg-red-600/30 hover:bg-red-600/50 text-red-200"
-                    onClick={testEscalation}
-                  >
-                    View Details
-                  </Button>
+                <div>
+                  <h4 className="text-slate-300 font-medium mb-3">Recent Activity</h4>
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
+                    {testMetrics?.recentActivity?.slice(0, 5).map((test: any, index: number) => (
+                      <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded">
+                        <span className="text-slate-300 text-sm truncate">{test.name}</span>
+                        <Badge 
+                          variant={test.status === "✅ Pass" ? "default" : "destructive"}
+                          className="text-xs"
+                        >
+                          {test.status === "✅ Pass" ? "PASS" : "FAIL"}
+                        </Badge>
+                      </div>
+                    )) || (
+                      <div className="text-slate-400 text-sm">No recent test data available</div>
+                    )}
+                  </div>
                 </div>
               </div>
             </CardContent>
