@@ -43,6 +43,7 @@ import {
   logSmartSpendIntake,
   testAirtableConnection
 } from "./airtableIntegrations";
+import { runComprehensiveSystemTest, listAllIntegrations } from "./comprehensiveSystemTest";
 import { 
   testQBOConnection, 
   createQBOCustomer, 
@@ -1392,6 +1393,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ success: false, error: error.message });
     }
   });
+
+  // Comprehensive System Test
+  app.post('/api/airtable/run-system-test', runComprehensiveSystemTest);
+
+  // List All Integrations
+  app.get('/api/airtable/list-integrations', listAllIntegrations);
 
   // PDF Generation endpoints
   app.post("/api/generate-pdf/quote", async (req, res) => {
