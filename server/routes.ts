@@ -1400,6 +1400,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // List All Integrations
   app.get('/api/airtable/list-integrations', listAllIntegrations);
 
+  // Integration Test Logging (Critical for internal documentation)
+  app.post('/api/log-integration-test', async (req, res) => {
+    try {
+      const testData = {
+        testName: req.body.testName || "System Integration Test",
+        status: req.body.status || "RUNNING",
+        timestamp: new Date().toISOString(),
+        details: req.body.details || "Automated integration test execution",
+        errorMessage: req.body.errorMessage || "",
+        batchNumber: req.body.batchNumber || "Unknown",
+        automationCount: req.body.automationCount || 0
+      };
+
+      console.log("Logging integration test:", testData);
+
+      // Try to log to Airtable Integration Test Log
+      try {
+        const result = await logIntegrationTest(testData);
+        res.json({ 
+          success: true, 
+          message: "Integration test logged successfully",
+          record: result,
+          testData 
+        });
+      } catch (airtableError: any) {
+        // If Airtable fails, log locally and inform user
+        console.warn("Airtable logging failed:", airtableError.message);
+        res.json({
+          success: false,
+          message: "Integration test logged locally only - Airtable credentials needed",
+          testData,
+          airtableError: airtableError.message,
+          note: "Provide AIRTABLE_API_KEY to enable full logging"
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: "Failed to log integration test",
+        details: error.message
+      });
+    }
+  });
+
   // PDF Generation endpoints
   app.post("/api/generate-pdf/quote", async (req, res) => {
     try {
