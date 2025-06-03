@@ -1482,7 +1482,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // YoBot Support Ticket Webhook
-  app.post('/webhook', async (req, res) => {
+  app.post('/api/webhook', async (req, res) => {
     try {
       const ticket = req.body;
       console.log("🔥 Webhook received:", ticket);
