@@ -273,6 +273,129 @@ def batch_operations():
     elif choice == "4":
         generate_status_report(clients)
 
+def get_all_clients_with_render():
+    """Step 1: Pull all clients that have Render IDs"""
+    clients = get_all_clients()
+    return [c for c in clients if "📦 Render ID" in c["fields"] or "Render ID" in c["fields"]]
+
+def global_redeploy():
+    """Step 2: Global redeploy function for all clients"""
+    clients = get_all_clients_with_render()
+    
+    if not clients:
+        print("⚠️ No clients with Render IDs found")
+        return
+    
+    print(f"🔄 Starting global redeploy for {len(clients)} clients...")
+    
+    for c in clients:
+        try:
+            fields = c.get("fields", {})
+            client_name = fields.get("🧾 Client Name") or fields.get("Client Name") or "Unknown"
+            redeploy_client(c)
+        except Exception as e:
+            print(f"⚠️ Failed for {client_name}: {e}")
+    
+    print("✅ Global redeploy complete.")
+
+def toggle_feature_globally(feature_name, enable=True):
+    """Step 3: Apply feature toggle to all clients"""
+    clients = get_all_clients()
+    
+    if not clients:
+        print("⚠️ No clients found")
+        return
+    
+    action = "Enabling" if enable else "Disabling"
+    print(f"🎛️ {action} '{feature_name}' for {len(clients)} clients...")
+    
+    for c in clients:
+        try:
+            fields = c.get("fields", {})
+            client_name = fields.get("🧾 Client Name") or fields.get("Client Name") or "Unknown"
+            toggle_feature(c, feature_name, enable)
+        except Exception as e:
+            print(f"⚠️ Toggle failed for {client_name}: {e}")
+    
+    action_past = "Enabled" if enable else "Disabled"
+    print(f"✅ {action_past} '{feature_name}' across all clients.")
+
+def log_global_update(action, notes=""):
+    """Step 2: Function to log updates to Global Updates Log table"""
+    try:
+        headers = {"Authorization": f"Bearer {os.getenv('AIRTABLE_API_KEY')}"}
+        record = {
+            "fields": {
+                "📅 Date": datetime.now().strftime('%Y-%m-%d %H:%M'),
+                "👤 Operator": "Tyson",
+                "🔧 Action": action,
+                "📝 Notes": notes
+            }
+        }
+        
+        # Post to Global Updates Log table
+        response = requests.post(
+            "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📓%20Global%20Updates%20Log",
+            headers=headers,
+            json={"records": [record]}
+        )
+        
+        if response.status_code == 200:
+            print(f"📝 Logged: {action}")
+            return True
+        else:
+            print(f"⚠️ Log failed: {response.status_code}")
+            return False
+            
+    except Exception as e:
+        print(f"⚠️ Logging error: {str(e)}")
+        return False
+
+def broadcast_update():
+    """Step 4: One-command broadcast launcher with logging"""
+    print("📡 Starting broadcast update across all YoBot instances...")
+    
+    # Global redeploy
+    global_redeploy()
+    
+    # Enable demo mode globally
+    toggle_feature_globally("Demo Mode", True)
+    
+    # Additional broadcast actions
+    toggle_feature_globally("Auto Follow-up", True)
+    toggle_feature_globally("Voice Generation", True)
+    
+    # Log the global update
+    log_global_update(
+        "Global Redeploy + Demo Mode Enable", 
+        "All YoBots updated with latest build and feature toggles"
+    )
+    
+    print("✅ Broadcast update complete across all instances.")
+
+def emergency_shutdown():
+    """Emergency shutdown for all client instances"""
+    clients = get_all_clients()
+    
+    print("🚨 EMERGENCY SHUTDOWN: Disabling all YoBot instances...")
+    
+    for c in clients:
+        try:
+            fields = c.get("fields", {})
+            client_name = fields.get("🧾 Client Name") or fields.get("Client Name") or "Unknown"
+            
+            # Disable all critical features
+            toggle_feature(c, "Voice Bot", False)
+            toggle_feature(c, "Auto Follow-up", False)
+            toggle_feature(c, "Lead Capture", False)
+            
+            print(f"🛑 {client_name}: All systems disabled")
+            
+        except Exception as e:
+            print(f"⚠️ Shutdown failed for {client_name}: {e}")
+    
+    print("🚨 Emergency shutdown complete.")
+
 def generate_status_report(clients):
     """Generate a status report for all clients"""
     print("\n📊 YoBot System Status Report")
@@ -280,13 +403,17 @@ def generate_status_report(clients):
     print(f"Total Clients: {len(clients)}")
     
     active_count = 0
+    render_count = 0
     for client in clients:
         fields = client.get("fields", {})
         status = fields.get("Status", "Unknown")
         if status.lower() == "active":
             active_count += 1
+        if "📦 Render ID" in fields or "Render ID" in fields:
+            render_count += 1
     
     print(f"Active Instances: {active_count}")
+    print(f"With Render Services: {render_count}")
     print(f"Inactive/Other: {len(clients) - active_count}")
     print("=" * 40)
 
