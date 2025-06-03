@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { z } from "zod";
-import { storage } from "./newStorage";
+import { storage } from "./storage";
 import { insertPhantombusterLeadSchema } from "@shared/schema";
 import axios from "axios";
 

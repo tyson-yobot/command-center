@@ -21,6 +21,7 @@ import voiceControlRouter from "./voiceControl";
 import { qboDataRouter } from "./qboDataRetrieval";
 import { invoiceRouter } from "./invoiceAutomation";
 import { qboTokenRouter } from "./qboTokenExchange";
+import { ingestLead, testLeadIngestion } from "./leadIngestion";
 import { 
   testQBOConnection, 
   createQBOCustomer, 
@@ -1190,6 +1191,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }
   });
+
+  // Phantombuster Lead Ingestion Webhook
+  app.post('/api/ingest-lead', ingestLead);
+  
+  // Test Lead Ingestion Endpoint
+  app.post('/api/test-lead-ingestion', testLeadIngestion);
 
   // PDF Generation endpoints
   app.post("/api/generate-pdf/quote", async (req, res) => {
