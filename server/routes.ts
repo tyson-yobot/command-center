@@ -1481,6 +1481,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // YoBot Support Ticket Webhook
+  app.post('/webhook', async (req, res) => {
+    try {
+      const ticket = req.body;
+      console.log("🔥 Webhook received:", ticket);
+
+      // Validate required fields
+      if (!ticket.ticketId || !ticket.clientName || !ticket.topic) {
+        return res.status(400).json({
+          error: "Missing required fields",
+          required: ["ticketId", "clientName", "topic"]
+        });
+      }
+
+      // Save ticket to file for Python processing
+      const fs = require('fs');
+      fs.writeFileSync('ticket.json', JSON.stringify(ticket));
+
+      // Trigger Python support dispatcher
+      const { exec } = require('child_process');
+      exec('python run_yobot_support.py', (err, stdout, stderr) => {
+        if (err) {
+          console.error("Dispatch error:", stderr);
+          return res.status(500).json({ 
+            error: "Failed to process ticket",
+            details: stderr 
+          });
+        }
+        console.log(stdout);
+      });
+
+      res.json({
+        status: "accepted",
+        message: "Ticket received and processing",
+        ticketId: ticket.ticketId
+      });
+
+    } catch (error: any) {
+      console.error("Webhook error:", error);
+      res.status(500).json({
+        error: "Webhook processing failed",
+        message: error.message
+      });
+    }
+  });
+
   // Mount the new enterprise routes
   app.use('/api/master-data-sync', masterDataSyncRouter);
   app.use('/api/admin-tools', adminToolsRouter);

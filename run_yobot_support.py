@@ -1,14 +1,24 @@
 from ai_support_agent_refactored import generate_ai_reply
 from elevenlabs_voice_generator_refactored import generate_voice_reply
 from support_dispatcher import dispatch_support_response
+import json
+import os
 
-# === SAMPLE TICKET ===
-ticket = {
-    "ticketId": "TCK-2001",
-    "clientName": "Tina Sanchez",
-    "topic": "Voice bot loops back to intro",
-    "sentiment": "Frustrated"
-}
+# === LOAD DYNAMIC TICKET ===
+try:
+    # Load ticket from webhook file
+    with open('ticket.json', 'r') as f:
+        ticket = json.load(f)
+    print(f"Loaded ticket: {ticket['ticketId']}")
+except FileNotFoundError:
+    # Fallback to sample ticket for testing
+    ticket = {
+        "ticketId": "TCK-2001",
+        "clientName": "Tina Sanchez",
+        "topic": "Voice bot loops back to intro",
+        "sentiment": "Frustrated"
+    }
+    print("Using sample ticket (no webhook file found)")
 
 # === RUN FULL FLOW ===
 print("🔄 Generating AI reply...")
