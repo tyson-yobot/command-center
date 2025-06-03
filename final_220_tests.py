@@ -92,7 +92,7 @@ def simulate_channel_hijack(channel):
         "response_integrity": "maintained"
     }
 
-def test_anti_forensics(method):
+def test_anti_forensics_func(method):
     """Test anti-forensic countermeasures"""
     return {
         "method": method,
@@ -319,7 +319,7 @@ def test_anti_forensics():
     """Test 209 — Anti-Forensic Countermeasure Validation"""
     print("🔹 Test 209 — Anti-Forensic Countermeasure Validation")
     
-    result = test_anti_forensics(method="log_sanitization_override")
+    result = test_anti_forensics_func(method="log_sanitization_override")
     
     assert result["countermeasures_intact"] is True
     assert result["audit_trail_secure"] is True
