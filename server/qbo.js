@@ -19,7 +19,7 @@ router.get("/auth", (req, res) => {
   const url = `${AUTH_BASE}/connect/oauth2?client_id=${CLIENT_ID}&response_type=code&scope=${scope}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}`;
   
   console.log("Redirecting to QuickBooks:", url);
-  res.redirect(url);
+  res.redirect(302, url);
 });
 
 router.get("/callback", async (req, res) => {
