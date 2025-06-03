@@ -1,0 +1,90 @@
+// 021 - Trigger Stripe Product SKU (One-Time)
+async function createStripeOneTimeCharge(customerEmail, productSKU) {
+  const response = await stripeAPI.createCheckoutSession({
+    customer_email: customerEmail,
+    line_items: [{ price: productSKU, quantity: 1 }],
+    mode: "payment",
+    success_url: "https://yobot.ai/success",
+    cancel_url: "https://yobot.ai/cancel",
+  });
+  return response.url;
+}
+
+// 022 - Stripe Webhook → Airtable Sync
+async function handleStripeWebhook(event) {
+  if (event.type === "checkout.session.completed") {
+    const data = event.data.object;
+    await airtableAPI.createRecord("Stripe Payments", {
+      email: data.customer_email,
+      amount: data.amount_total / 100,
+      timestamp: new Date(data.created * 1000).toISOString(),
+    });
+  }
+}
+
+// 023 - SmartSpend Budget Alert to Slack
+async function alertSmartSpendOverage(client, category, amount) {
+  const message = `⚠️ ${client}'s SmartSpend budget exceeded in ${category}: $${amount}`;
+  await sendSlackNotification(message);
+}
+
+// 024 - ROI Snapshot → Airtable Entry
+async function saveROISnapshot(data) {
+  return await airtableAPI.createRecord("ROI Snapshots", {
+    client: data.client,
+    monthly_spend: data.spend,
+    estimated_return: data.return,
+    notes: data.notes,
+    timestamp: new Date().toISOString(),
+  });
+}
+
+// 025 - VoiceBot No-Match → Lambda Fallback
+async function handleVoiceNoMatch(input) {
+  const fallbackResponse = await fetch("https://lambda.yobot.ai/fallback", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ input }),
+  });
+  return await fallbackResponse.json();
+}
+
+// 026 - Create Slack Ticket from Support Form
+async function createSupportTicket(ticket) {
+  const message = `🛠 New Support Ticket:\n• Client: ${ticket.client}\n• Issue: ${ticket.issue}\n• Priority: ${ticket.priority}`;
+  await sendSlackNotification(message);
+}
+
+// 027 - Create Airtable Compliance Checklist Record
+async function logComplianceChecklist(entry) {
+  return await airtableAPI.createRecord("Compliance Tracker", entry);
+}
+
+// 028 - Push Deal to Airtable “Sales Tracker”
+async function pushDealToSalesTracker(deal) {
+  return await airtableAPI.createRecord("Sales Tracker", {
+    client: deal.client,
+    value: deal.amount,
+    source: deal.source,
+    stage: deal.stage,
+    created_at: new Date().toISOString(),
+  });
+}
+
+// 029 - RAG ↔ CRM Metric Linker (Placeholder/Future-Ready)
+async function syncRAGToCRM(insight) {
+  // Placeholder function for future RAG-to-CRM sync
+  console.log("RAG metric placeholder: ", insight);
+}
+
+// 030 - Stripe Subscription Start (Monthly Recurring)
+async function createMonthlySubscription(email, priceId) {
+  const session = await stripeAPI.createCheckoutSession({
+    customer_email: email,
+    line_items: [{ price: priceId, quantity: 1 }],
+    mode: "subscription",
+    success_url: "https://yobot.ai/sub-success",
+    cancel_url: "https://yobot.ai/sub-cancel",
+  });
+  return session.url;
+}
