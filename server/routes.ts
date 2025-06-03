@@ -1717,16 +1717,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // QuickBooks OAuth Routes (using existing integration)
+  // QuickBooks OAuth Routes - Direct Implementation
   app.get("/api/qbo/auth", (req, res) => {
-    try {
-      const authUrl = getQBOAuthorizationUrl();
-      console.log("QuickBooks OAuth request - redirecting to:", authUrl);
-      res.redirect(authUrl);
-    } catch (error: any) {
-      console.error("QBO auth error:", error);
-      res.status(500).json({ error: "Failed to generate QBO auth URL", message: error.message });
-    }
+    console.log("QuickBooks OAuth route accessed");
+    
+    const CLIENT_ID = "ABFKQruSPhRVxF89f0OfjopDH75UfGrCvswLR185exeZti85ep";
+    const REDIRECT_URI = "https://workspace--tyson44.replit.app/api/qbo/callback";
+    const scope = "com.intuit.quickbooks.accounting";
+    const state = "yobot_qb_auth_" + Date.now();
+    
+    const authUrl = `https://appcenter.intuit.com/connect/oauth2?client_id=${CLIENT_ID}&scope=${scope}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&state=${state}`;
+    
+    console.log("Redirecting to QuickBooks:", authUrl);
+    res.redirect(302, authUrl);
   });
 
   app.get("/api/qbo/callback", async (req, res) => {
