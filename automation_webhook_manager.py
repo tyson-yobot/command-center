@@ -26,7 +26,7 @@ class WebhookAutomationManager:
             "/webhook/hubspot-contact": self.process_hubspot_webhook,
             "/webhook/calendar-booking": self.process_calendar_webhook,
             "/webhook/voice-completed": self.process_voice_webhook,
-            "/webhook/form-submission": self.process_form_webhook,
+            "/webhook/form-submission": self.process_form_submission_webhook,
             "/webhook/email-opened": self.process_email_webhook,
             "/webhook/demo-scheduled": self.process_demo_webhook,
             "/webhook/contract-signed": self.process_contract_webhook,
