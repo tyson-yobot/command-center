@@ -15,6 +15,7 @@ import MainCommandCenter from "@/pages/main-command-center";
 import DemoMode from "@/pages/demo";
 import { Knowledge } from "@/pages/Knowledge";
 import { RAGTester } from "@/pages/RAGTester";
+import AirtableTestPage from "@/pages/airtable-test";
 import DesktopCommandCenter from "@/components/desktop-command-center";
 import LiteCommandCenter from "@/components/lite-command-center";
 import SystemControls from "@/pages/system-controls";
@@ -45,6 +46,9 @@ function Router() {
         </Route>
         <Route path="/rag">
           <RAGTester />
+        </Route>
+        <Route path="/airtable-test">
+          <AirtableTestPage />
         </Route>
         <Route path="/system-controls">
           <SystemControls />
