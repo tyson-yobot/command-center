@@ -1717,127 +1717,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // QuickBooks OAuth Authentication Routes
+  // QuickBooks OAuth Routes (using existing integration)
   app.get("/api/qbo/auth", (req, res) => {
-    const CLIENT_ID = "ABFKQruSPhRVxF89f0OfjopDH75UfGrCvswLR185exeZti85ep";
-    const REDIRECT_URI = "https://workspace--tyson44.replit.app/api/qbo/callback";
-    const AUTH_BASE = "https://sandbox-accounts.intuit.com";
-    
-    const scope = "com.intuit.quickbooks.accounting";
-    const state = "secure123" + Date.now();
-    // Fixed: Use correct authorization endpoint
-    const authUrl = `${AUTH_BASE}/oauth2/v1/authorize?client_id=${CLIENT_ID}&response_type=code&scope=${scope}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}`;
-    
-    console.log("QuickBooks OAuth request received");
-    console.log("Redirecting to:", authUrl);
-    res.redirect(authUrl);
+    try {
+      const authUrl = getQBOAuthorizationUrl();
+      console.log("QuickBooks OAuth request - redirecting to:", authUrl);
+      res.redirect(authUrl);
+    } catch (error: any) {
+      console.error("QBO auth error:", error);
+      res.status(500).json({ error: "Failed to generate QBO auth URL", message: error.message });
+    }
   });
 
   app.get("/api/qbo/callback", async (req, res) => {
-    const { code, realmId, state } = req.query;
-    const CLIENT_ID = "ABFKQruSPhRVxF89f0OfjopDH75UfGrCvswLR185exeZti85ep";
-    const CLIENT_SECRET = "E2TnUZabfdR7Ty2jV4d8R95VlD4Fl4GwoEaXjm17";
-    const REDIRECT_URI = "https://workspace--tyson44.replit.app/api/qbo/callback";
-    const TOKEN_URL = "https://sandbox-accounts.intuit.com/oauth2/v1/tokens/bearer";
-    
-    console.log("QuickBooks callback received:", { code: code ? "present" : "missing", realmId, state });
-    
-    if (!code) {
-      return res.status(400).send("Authorization code missing");
-    }
-
     try {
-      const axios = require('axios');
-      const qs = require('querystring');
+      const { code, realmId, state } = req.query;
+      console.log("QBO callback received:", { code: code ? "present" : "missing", realmId, state });
       
-      const response = await axios.post(
-        TOKEN_URL,
-        qs.stringify({
-          grant_type: "authorization_code",
-          code: code as string,
-          redirect_uri: REDIRECT_URI
-        }),
-        {
-          auth: {
-            username: CLIENT_ID,
-            password: CLIENT_SECRET
-          },
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          }
-        }
-      );
+      if (!code || !realmId) {
+        return res.status(400).json({ error: "Missing authorization code or realm ID" });
+      }
 
-      const { access_token, refresh_token, token_type, expires_in } = response.data;
+      const tokenResult = await exchangeCodeForToken(code as string, realmId as string);
       
-      console.log("QuickBooks OAuth Success!");
-      console.log("Access Token:", access_token.substring(0, 20) + "...");
-      console.log("Refresh Token:", refresh_token.substring(0, 20) + "...");
-      console.log("Realm ID:", realmId);
-      console.log("Expires in:", expires_in, "seconds");
+      if (tokenResult.error) {
+        return res.status(500).json({ error: "Token exchange failed", message: tokenResult.error });
+      }
 
       res.json({
         status: "success",
         message: "QuickBooks connected successfully!",
         realmId,
-        expiresIn: expires_in,
         instructions: [
           "Add these environment variables to your Replit Secrets:",
-          `QUICKBOOKS_ACCESS_TOKEN=${access_token}`,
-          `QUICKBOOKS_REFRESH_TOKEN=${refresh_token}`,
+          `QUICKBOOKS_ACCESS_TOKEN=${tokenResult.accessToken}`,
+          `QUICKBOOKS_REFRESH_TOKEN=${tokenResult.refreshToken}`,
           `QUICKBOOKS_REALM_ID=${realmId}`
         ]
       });
 
     } catch (error: any) {
-      console.error("QuickBooks OAuth Failed:", error.response?.data || error.message);
-      res.status(500).json({
-        status: "error",
-        message: "QuickBooks authentication failed",
-        error: error.response?.data || error.message
-      });
+      console.error("QBO callback error:", error);
+      res.status(500).json({ error: "QuickBooks callback failed", message: error.message });
     }
   });
 
-  // QuickBooks connection test
   app.get("/api/qbo/test", async (req, res) => {
-    const accessToken = process.env.QUICKBOOKS_ACCESS_TOKEN;
-    const realmId = process.env.QUICKBOOKS_REALM_ID;
-    
-    if (!accessToken || !realmId) {
-      return res.status(400).json({
-        status: "error",
-        message: "QuickBooks tokens not configured. Visit /api/qbo/auth first."
-      });
-    }
-
     try {
-      const axios = require('axios');
-      const baseUrl = "https://sandbox-quickbooks.api.intuit.com";
-      
-      const response = await axios.get(
-        `${baseUrl}/v3/company/${realmId}/companyinfo/${realmId}`,
-        {
-          headers: {
-            "Authorization": `Bearer ${accessToken}`,
-            "Accept": "application/json"
-          }
-        }
-      );
-
-      res.json({
-        status: "success",
-        message: "QuickBooks connection verified!",
-        companyInfo: response.data
-      });
-
+      const testResult = await testQBOConnection();
+      res.json(testResult);
     } catch (error: any) {
-      console.error("QuickBooks test failed:", error.response?.data || error.message);
-      res.status(500).json({
-        status: "error",
-        message: "QuickBooks connection test failed",
-        error: error.response?.data || error.message
-      });
+      console.error("QBO test error:", error);
+      res.status(500).json({ error: "QuickBooks test failed", message: error.message });
     }
   });
 
