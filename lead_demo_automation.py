@@ -341,6 +341,104 @@ def send_email(email, subject, body):
     except Exception:
         return False
 
+def follow_up_demo_lead(lead):
+    """Step 13: One-Click Demo Follow-Up Funnel"""
+    try:
+        name = lead.get('name', 'Valued Prospect')
+        email = lead.get('email', '')
+        demo_url = lead.get('demo_url', '')
+        
+        if not email:
+            return False
+        
+        subject = f"Your Next Step with YoBot®, {name}"
+        message = f"""
+Hey {name} 👋
+
+Thanks for checking out your YoBot® demo. 🚀
+
+If you're ready to:
+• Automate your lead follow-up  
+• Route messages directly to Slack  
+• Auto-generate emails, calls, & tracking  
+Then you're exactly who we built this for.
+
+👉 Let's get your YoBot launched: https://yobot.bot/activate
+
+Questions? Just reply to this email.
+
+Best regards,
+The YoBot Team
+
+P.S. Your demo is still available here: {demo_url}
+        """
+        
+        email_sent = send_email(email, subject, message)
+        
+        # Send Slack notification
+        webhook_url = os.getenv('SLACK_WEBHOOK_URL')
+        if webhook_url and email_sent:
+            slack_message = f"📬 Sent follow-up to demo viewer: {email}"
+            requests.post(webhook_url, json={"text": slack_message})
+        
+        log_test_to_airtable(
+            "Demo Follow-up Sent", 
+            email_sent, 
+            f"Follow-up email sent to {name}", 
+            "Follow-up Funnel",
+            "https://yobot.bot/activate",
+            f"Demo follow-up: {email} → activation funnel",
+            record_created=email_sent
+        )
+        
+        return email_sent
+        
+    except Exception as e:
+        log_test_to_airtable(
+            "Demo Follow-up Error", 
+            False, 
+            f"Error sending demo follow-up: {str(e)}", 
+            "Follow-up Funnel",
+            "",
+            f"Follow-up failed for {lead.get('email', 'unknown')}",
+            retry_attempted=True
+        )
+        return False
+
+def process_daily_demo_follow_ups():
+    """Process follow-ups for all demo viewers"""
+    try:
+        viewers = get_video_views_today()
+        follow_ups_sent = 0
+        
+        for viewer in viewers:
+            if follow_up_demo_lead(viewer):
+                follow_ups_sent += 1
+        
+        log_test_to_airtable(
+            "Daily Follow-ups Processed", 
+            True, 
+            f"Processed {len(viewers)} viewers, sent {follow_ups_sent} follow-ups", 
+            "Follow-up Automation",
+            "",
+            f"Daily batch: {follow_ups_sent}/{len(viewers)} follow-ups sent",
+            record_created=True if follow_ups_sent > 0 else False
+        )
+        
+        return follow_ups_sent
+        
+    except Exception as e:
+        log_test_to_airtable(
+            "Daily Follow-up Process Error", 
+            False, 
+            f"Error processing daily follow-ups: {str(e)}", 
+            "Follow-up Automation",
+            "",
+            "Daily follow-up batch failed",
+            retry_attempted=True
+        )
+        return 0
+
 def test_lead_demo_automation():
     """Test the complete lead demo automation system"""
     print("Testing Lead Demo Automation System...")
@@ -383,9 +481,26 @@ def test_lead_demo_automation():
         if demo_url and email_template:
             print(f"Demo URL created: {demo_url}")
     
-    # Test follow-up automation
+    # Test follow-up automation (Step 12)
     follow_ups = follow_up_if_viewed()
-    print(f"Follow-ups sent: {follow_ups}")
+    print(f"Automated follow-ups sent: {follow_ups}")
+    
+    # Test demo follow-up funnel (Step 13)
+    test_viewers = [
+        {
+            "name": "John Smith",
+            "email": "john@techstartup.com",
+            "demo_url": "https://yourdomain.com/demo/john_smith",
+            "view_time": "2025-01-03 12:00:00"
+        }
+    ]
+    
+    for viewer in test_viewers:
+        follow_up_demo_lead(viewer)
+    
+    # Test daily processing
+    daily_follow_ups = process_daily_demo_follow_ups()
+    print(f"Daily follow-ups processed: {daily_follow_ups}")
     
     # Final summary
     log_test_to_airtable(
@@ -394,7 +509,7 @@ def test_lead_demo_automation():
         "All lead demo automation components tested successfully", 
         "Complete Lead System",
         "https://replit.com/@command-center/lead-automation",
-        "Lead automation: Form triggers → Demo generation → Trackable URLs → Follow-ups",
+        "Lead automation: Form triggers → Demo generation → Trackable URLs → Follow-ups → Activation funnel",
         record_created=True
     )
     
