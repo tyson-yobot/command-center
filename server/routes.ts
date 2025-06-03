@@ -1331,7 +1331,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // QuickBooks data endpoints
-  app.use('/api/qbo', qboDataRouter);
+  app.use('/api/qbo-data', qboDataRouter);
   
   // Invoice automation endpoints
   app.use('/api/invoice', invoiceRouter);
@@ -1339,15 +1339,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // QuickBooks token exchange endpoints
   app.use('/api/qbo-token', qboTokenRouter);
 
-  // QuickBooks OAuth endpoints
-  app.get('/api/qbo/auth', (req, res) => {
-    try {
-      const authUrl = getQBOAuthorizationUrl();
-      res.redirect(authUrl);
-    } catch (error: any) {
-      res.status(500).json({ error: 'Failed to generate auth URL', message: error.message });
-    }
-  });
+  // QuickBooks OAuth endpoints are handled by qbo.js router
 
   app.post('/api/qbo/token', async (req, res) => {
     try {
