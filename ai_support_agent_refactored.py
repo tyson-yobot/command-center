@@ -21,8 +21,8 @@ Sentiment: {ticket['sentiment']}
 Give a concise but helpful reply:
 """
 
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
+        response = client.chat.completions.create(
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You are YoBot's support AI, friendly and helpful."},
                 {"role": "user", "content": prompt}
@@ -31,12 +31,12 @@ Give a concise but helpful reply:
             max_tokens=250
         )
 
-        ai_reply = response['choices'][0]['message']['content']
+        ai_reply = response.choices[0].message.content
 
         # Escalation check
         escalation_flag = (
-            any(word in ai_reply.lower() for word in ESCALATION_KEYWORDS)
-            or ticket["sentiment"].lower() in NEGATIVE_SENTIMENTS
+            any(word in (ai_reply or "").lower() for word in ESCALATION_KEYWORDS)
+            or (ticket.get("sentiment", "").lower() in NEGATIVE_SENTIMENTS)
         )
 
         return {
