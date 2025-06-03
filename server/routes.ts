@@ -90,75 +90,9 @@ async function triggerMakeScenario(data: any) {
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
 
-  // QuickBooks OAuth - Must be before other routes
-  app.get("/api/quickbooks/connect", (req, res) => {
-    console.log("QuickBooks OAuth connect route accessed");
-    
-    const CLIENT_ID = "ABFKQruSPhRVxF89f0OfjopDH75UfGrCvswLR185exeZti85ep";
-    const REDIRECT_URI = "https://workspace--tyson44.replit.app/api/qbo/callback";
-    const scope = "com.intuit.quickbooks.accounting";
-    const state = "yobot_qb_auth_" + Date.now();
-    
-    const authUrl = `https://appcenter.intuit.com/connect/oauth2?client_id=${CLIENT_ID}&scope=${scope}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&state=${state}`;
-    
-    console.log("Redirecting to QuickBooks OAuth:", authUrl);
-    res.redirect(302, authUrl);
-  });
-
-  app.get("/api/qbo/callback", async (req, res) => {
-    try {
-      const { code, realmId, state } = req.query;
-      console.log("QuickBooks callback received:", { code: code ? "present" : "missing", realmId, state });
-      
-      if (!code || !realmId) {
-        return res.status(400).json({ error: "Missing authorization code or realm ID" });
-      }
-
-      const CLIENT_ID = "ABFKQruSPhRVxF89f0OfjopDH75UfGrCvswLR185exeZti85ep";
-      const CLIENT_SECRET = "E2TnUZabfdR7Ty2jV4d8R95VlD4Fl4GwoEaXjm17";
-      const REDIRECT_URI = "https://workspace--tyson44.replit.app/api/quickbooks/callback";
-      
-      const axios = require('axios');
-      const qs = require('querystring');
-      
-      const tokenResponse = await axios.post(
-        'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer',
-        qs.stringify({
-          grant_type: 'authorization_code',
-          code: code as string,
-          redirect_uri: REDIRECT_URI
-        }),
-        {
-          headers: {
-            'Authorization': `Basic ${Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }
-      );
-
-      const { access_token, refresh_token, expires_in } = tokenResponse.data;
-
-      res.json({
-        status: "success",
-        message: "QuickBooks connected successfully!",
-        realmId,
-        expiresIn: expires_in,
-        instructions: [
-          "Add these environment variables to your Replit Secrets:",
-          `QUICKBOOKS_ACCESS_TOKEN=${access_token}`,
-          `QUICKBOOKS_REFRESH_TOKEN=${refresh_token}`,
-          `QUICKBOOKS_REALM_ID=${realmId}`
-        ]
-      });
-
-    } catch (error: any) {
-      console.error("QuickBooks callback error:", error.response?.data || error);
-      res.status(500).json({ 
-        error: "QuickBooks callback failed", 
-        message: error.response?.data || error.message 
-      });
-    }
-  });
+  // Mount QuickBooks OAuth router
+  const qboRouter = await import("./qbo.js");
+  app.use("/api/qbo", qboRouter.default);
 
   // Enhanced WebSocket server with Socket.IO for real-time updates
   setupWebSocket(httpServer);
