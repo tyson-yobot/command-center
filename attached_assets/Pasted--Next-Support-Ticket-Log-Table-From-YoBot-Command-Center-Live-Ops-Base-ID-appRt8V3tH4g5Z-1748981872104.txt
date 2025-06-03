@@ -1,0 +1,61 @@
+ Next: Support Ticket Log Table
+📍 From: YoBot® Command Center (Live Ops)
+🆔 Base ID: appRt8V3tH4g5Z51f
+🆔 Table ID: tblbU2C2F6YPMgLjx (from original sheet)
+
+✅ Replit Config (update your .env)
+env
+Copy
+Edit
+AIRTABLE_SUPPORT_LOG_BASE_ID=appRt8V3tH4g5Z51f
+AIRTABLE_SUPPORT_LOG_TABLE_ID=tblbU2C2F6YPMgLjx
+🧱 Field Names (from your table — exact match)
+Field Name	Type
+Ticket ID	Single line text or autonumber
+Submitted By	Email or text
+Submission Channel	Single select (Voice, Form, etc.)
+Ticket Type	Single select (Bug, Feature Request, etc.)
+Description	Long text
+Submitted Date	Date
+Resolution Status	Single select (Resolved, Pending, etc.)
+Resolution Notes	Long text
+Resolved Date	Date
+Assigned Rep	Linked/Single line text
+
+🧰 Replit Logging Function
+python
+Copy
+Edit
+def log_support_ticket(ticket_id, submitted_by, channel, ticket_type, description, assigned_rep=None, resolved=False, resolution_notes=""):
+    from datetime import datetime
+    import requests
+    import os
+
+    payload = {
+        "fields": {
+            "Ticket ID": ticket_id,
+            "Submitted By": submitted_by,
+            "Submission Channel": channel,
+            "Ticket Type": ticket_type,
+            "Description": description,
+            "Submitted Date": datetime.utcnow().isoformat(),
+            "Resolution Status": "Resolved" if resolved else "Pending",
+            "Resolution Notes": resolution_notes,
+            "Resolved Date": datetime.utcnow().isoformat() if resolved else None,
+            "Assigned Rep": assigned_rep or ""
+        }
+    }
+
+    response = requests.post(
+        f"https://api.airtable.com/v0/{os.getenv('AIRTABLE_SUPPORT_LOG_BASE_ID')}/{os.getenv('AIRTABLE_SUPPORT_LOG_TABLE_ID')}",
+        headers={
+            "Authorization": f"Bearer {os.getenv('AIRTABLE_API_KEY')}",
+            "Content-Type": "application/json"
+        },
+        json=payload
+    )
+
+    if response.status_code != 200:
+        print("❌ Support log failed:", response.text)
+    else:
+        print("✅ Support ticket logged.")
