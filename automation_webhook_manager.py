@@ -295,6 +295,35 @@ class WebhookAutomationManager:
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
+    def process_voice_webhook(self, payload):
+        """Process voice completion webhook"""
+        try:
+            voice_data = payload.get('voice', {})
+            customer_id = voice_data.get('customer_id')
+            
+            # Update voice job status
+            job_update = self.update_voice_job_status(voice_data)
+            
+            # Send voice file to customer
+            delivery_sent = self.deliver_voice_file(voice_data)
+            
+            # Log voice generation
+            voice_log = self.log_voice_generation(voice_data)
+            
+            # Trigger next automation step
+            next_step = self.trigger_voice_completion_workflow(voice_data)
+            
+            return {
+                "status": "success",
+                "voice_job_id": voice_data.get('job_id'),
+                "file_delivered": delivery_sent,
+                "next_automation": next_step,
+                "actions_completed": 4
+            }
+            
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
     def process_usage_webhook(self, payload):
         """Process usage threshold webhook"""
         try:
