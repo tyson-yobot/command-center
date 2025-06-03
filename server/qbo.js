@@ -5,7 +5,7 @@ const router = express.Router();
 
 const CLIENT_ID = "ABFKQruSPhRVxF89f0OfjopDH75UfGrCvswLR185exeZti85ep";
 const CLIENT_SECRET = "E2TnUZabfdR7Ty2jV4d8R95VlD4Fl4GwoEaXjm17";
-const REDIRECT_URI = "https://workspace--tyson44.replit.app/api/qbo/callback";
+const REDIRECT_URI = "https://72ddfeee-d145-4891-a820-14d5b3e09c66-00-c9rkbm78q1s2.worf.replit.dev/api/qbo/callback";
 const ENVIRONMENT = "sandbox";
 
 const AUTH_BASE = ENVIRONMENT === "sandbox"
@@ -20,6 +20,15 @@ router.get("/auth", (req, res) => {
   
   console.log("Redirecting to QuickBooks:", url);
   res.redirect(302, url);
+});
+
+router.get("/test", (req, res) => {
+  res.json({
+    status: "QuickBooks OAuth endpoint working",
+    redirect_uri: REDIRECT_URI,
+    client_id: CLIENT_ID,
+    environment: ENVIRONMENT
+  });
 });
 
 router.get("/callback", async (req, res) => {
