@@ -1,0 +1,55 @@
+BATCH 1: Airtable Functions to Wire In
+python
+Copy
+Edit
+# ✅ 1. Create a new Airtable record
+def create_airtable_record(base_id, table_id, api_key, data):
+    url = f"https://api.airtable.com/v0/{base_id}/{table_id}"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    payload = {"records": [{"fields": data}]}
+    response = requests.post(url, headers=headers, json=payload)
+    return response.json()
+
+# ✅ 2. Update a record by ID
+def update_airtable_record(base_id, table_id, record_id, api_key, data):
+    url = f"https://api.airtable.com/v0/{base_id}/{table_id}/{record_id}"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    payload = {"fields": data}
+    response = requests.patch(url, headers=headers, json=payload)
+    return response.json()
+
+# ✅ 3. Find a record by field match
+def find_airtable_record(base_id, table_id, api_key, field, value):
+    url = f"https://api.airtable.com/v0/{base_id}/{table_id}"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {"filterByFormula": f"{{{field}}}='{value}'"}
+    response = requests.get(url, headers=headers, params=params)
+    return response.json()
+
+# ✅ 4. Delete a record by ID
+def delete_airtable_record(base_id, table_id, record_id, api_key):
+    url = f"https://api.airtable.com/v0/{base_id}/{table_id}/{record_id}"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    response = requests.delete(url, headers=headers)
+    return response.json()
+
+# ✅ 5. Log test results to Integration Test Log 2
+def log_test_result(api_key, test_name, function_name, passed, notes, retested, tested_by, ref_link):
+    from datetime import datetime
+    data = {
+        "🧪 Test Name": test_name,
+        "🔌 Function Name": function_name,
+        "✅ Passed?": passed,
+        "🧠 Notes": notes,
+        "📅 Date Tested": datetime.now().strftime("%Y-%m-%d"),
+        "🔁 Retested?": retested,
+        "🧑‍💻 Tested By": tested_by,
+        "🔗 Reference Link": ref_link
+    }
+    return create_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, data)
