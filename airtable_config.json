@@ -1,14 +1,15 @@
 {
   "1_integration_test_log": {
-    "baseId": "appRt8V3tH4g5Z51f",
+    "baseId": "appCoAtCZdARb4AM2",
     "tableName": "Integration Test Log",
-    "tableId": "tbl_integration_test_log",
-    "view": "❌ Fails Only",
+    "tableId": "tblRNjNnaGL5ICIf9",
+    "view": "Full Test View",
     "fields": {
-      "integration_name": "🔧 Integration Name",
+      "integration_name": "🧪 Integration Name",
       "pass_fail": "✅ Pass/Fail",
-      "notes_debug": "🧠 Notes / Debug",
+      "notes_debug": "🔍 Notes / Debug",
       "test_date": "📅 Test Date",
+      "qa_owner": "👤 QA Owner",
       "retry_attempted": "🔁 Retry Attempted?",
       "output_data": "📤 Output Data",
       "module_type": "🏗️ Module Type",
