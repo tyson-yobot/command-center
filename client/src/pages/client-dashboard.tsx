@@ -154,19 +154,19 @@ export default function ClientDashboard() {
 
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-white mb-2 flex items-center">
-                <img 
-                  src={yobotLogo} 
-                  alt="YoBot Logo" 
-                  className="w-14 h-14 mr-1 inline-block"
-                  style={{ marginTop: '-2px' }}
-                />
-                YoBot® Command Center
-              </h1>
-              <p className="text-slate-300">Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}</p>
-            </div>
+          <div className="text-center mb-6">
+            <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center">
+              <img 
+                src={yobotLogo} 
+                alt="YoBot Logo" 
+                className="w-16 h-16 mr-2 inline-block"
+                style={{ marginTop: '-2px' }}
+              />
+              YoBot® Command Center
+            </h1>
+            <p className="text-slate-300 text-lg">Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}</p>
+          </div>
+          <div className="flex items-center justify-end">
             <div className="flex items-center space-x-4">
               {/* Voice Command Input */}
               <div className="flex items-center space-x-2">
