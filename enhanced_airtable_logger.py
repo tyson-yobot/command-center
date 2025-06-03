@@ -222,6 +222,38 @@ def summarize_list(items, max_display=3):
         return ", ".join(items)
     return ", ".join(items[:max_display]) + f", +{len(items) - max_display} more"
 
+# Final Utility Functions (41-50)
+def chunk_list(data, chunk_size):
+    return [data[i:i + chunk_size] for i in range(0, len(data), chunk_size)]
+
+def redact_fields(data_dict, fields_to_redact):
+    return {k: ("[REDACTED]" if k in fields_to_redact else v) for k, v in data_dict.items()}
+
+def default_if_empty(value, fallback):
+    return value if value not in [None, "", [], {}] else fallback
+
+def filter_dict(data_dict, allowed_keys):
+    return {k: v for k, v in data_dict.items() if k in allowed_keys}
+
+def resolve_toggle(name):
+    val = get_env_var(f"TOGGLE_{name.upper()}")
+    return val.lower() == "true" if val else False
+
+def smart_bool(value):
+    return str(value).strip().lower() in ["true", "yes", "1", "on", "✅"]
+
+def build_tag(tag, value=None):
+    return f"[{tag.upper()}]" + (f" {value}" if value else "")
+
+def list_to_comma_string(items):
+    return ", ".join(str(i) for i in items if i)
+
+def get_last_item(lst):
+    return lst[-1] if lst else None
+
+def is_duplicate_entry(existing_ids, new_id):
+    return new_id in existing_ids
+
 # Enhanced functions with correct field mapping
 def build_log_payload(integration_name, status, notes, module_type, scenario_link, output_data=None, qa_owner="Automated System"):
     """Build payload with correct emoji field names for Integration Test Log 2"""
