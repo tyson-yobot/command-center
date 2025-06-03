@@ -8,7 +8,7 @@ import requests
 from datetime import datetime
 
 # Production Airtable Configuration
-AIRTABLE_BASE_ID = "appRt8V3tH4g5Z5if"
+AIRTABLE_BASE_ID = "appRt8V3tH4g5Z51f"
 AIRTABLE_CLIENT_TABLE_ID = "tblCmBeyaJg9S1kPd"
 
 def get_airtable_headers():

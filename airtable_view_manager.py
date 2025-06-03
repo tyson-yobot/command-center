@@ -11,7 +11,7 @@ from airtable_test_logger import log_test_to_airtable
 def create_airtable_views():
     """Create the specific Airtable views for lead and call tracking"""
     
-    base_id = os.getenv("AIRTABLE_BASE_ID", "appRt8V3tH4g5Z5if")
+    base_id = os.getenv("AIRTABLE_BASE_ID", "appRt8V3tH4g5Z51f")
     leads_table_id = "tblZhtHGNNRncYG9v"
     calls_table_id = "tbl_calls_logs"  # You may need to provide the actual table ID
     
