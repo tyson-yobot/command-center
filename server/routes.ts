@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./newStorage";
+import { storage } from "./storage";
 import { generateQuotePDF, generateROIPDF } from "./pdfGenerator";
 import { z } from "zod";
 import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertCrmDataSchema, insertScannedContactSchema, insertKnowledgeBaseSchema } from "@shared/schema";

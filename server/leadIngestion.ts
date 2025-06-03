@@ -4,11 +4,14 @@ import { storage } from "./storage";
 import { insertPhantombusterLeadSchema } from "@shared/schema";
 import axios from "axios";
 
-// Webhook payload validation schema
+// Webhook payload validation schema - supports both underscore and camelCase
 const leadIngestionSchema = z.object({
-  lead_owner: z.string(),
+  // Support both formats
+  lead_owner: z.string().optional(),
+  leadOwner: z.string().optional(),
   source: z.string().default("Phantombuster"),
   campaign_id: z.string().optional(),
+  campaignId: z.string().optional(),
   platform: z.string(),
   name: z.string(),
   email: z.string().email().optional(),
@@ -21,7 +24,11 @@ const leadIngestionSchema = z.object({
   synced_hubspot: z.boolean().default(false),
   synced_yobot: z.boolean().default(false),
   score: z.number().default(0),
-  date_added: z.string().optional()
+  date_added: z.string().optional(),
+  linkedinUrl: z.string().optional(),
+  notes: z.string().optional()
+}).refine(data => data.lead_owner || data.leadOwner, {
+  message: "Either lead_owner or leadOwner is required"
 }).refine(data => data.email || data.phone, {
   message: "Either email or phone must be provided"
 });
