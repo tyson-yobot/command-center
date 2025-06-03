@@ -4,149 +4,118 @@ Airtable Table Mapper
 Maps correct table names and field structures for YoBot logging
 """
 
-import requests
 import os
-from datetime import datetime
+import requests
+from pyairtable import Api
+
+AIRTABLE_API_KEY = os.environ.get('AIRTABLE_API_KEY')
+AIRTABLE_BASE_ID = os.environ.get('AIRTABLE_BASE_ID')
 
 def get_airtable_base_schema():
     """Get the actual table structure from Airtable"""
+    if not AIRTABLE_API_KEY or not AIRTABLE_BASE_ID:
+        print("Missing Airtable credentials")
+        return None
+    
     try:
-        base_id = os.getenv("AIRTABLE_BASE_ID")
-        api_key = os.getenv("AIRTABLE_API_KEY")
+        # Use direct API to get base schema
+        headers = {'Authorization': f'Bearer {AIRTABLE_API_KEY}'}
+        url = f'https://api.airtable.com/v0/meta/bases/{AIRTABLE_BASE_ID}/tables'
         
-        if not base_id or not api_key:
-            return {"error": "Missing Airtable credentials"}
-        
-        # Get base metadata
-        url = f"https://api.airtable.com/v0/meta/bases/{base_id}/tables"
-        headers = {"Authorization": f"Bearer {api_key}"}
-        
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url, headers=headers)
         
         if response.status_code == 200:
-            tables = response.json().get("tables", [])
-            return {"tables": tables}
+            data = response.json()
+            print("Available tables in your Airtable base:")
+            for table in data.get('tables', []):
+                print(f"  - {table['name']} (ID: {table['id']})")
+                print(f"    Fields: {[field['name'] for field in table.get('fields', [])]}")
+            return data
         else:
-            return {"error": f"API Error: {response.status_code}"}
+            print(f"Error accessing base schema: {response.status_code}")
+            print(response.text)
+            return None
             
     except Exception as e:
-        return {"error": str(e)}
+        print(f"Error getting base schema: {e}")
+        return None
 
 def find_universal_logging_table():
     """Find the correct universal logging table name"""
-    schema = get_airtable_base_schema()
+    possible_names = [
+        'Integration Test Log',
+        'Failed tests to be fixed',
+        'Test Results',
+        'Integration Tests',
+        'QA Results',
+        'System Tests',
+        'Automation Tests'
+    ]
     
-    if "error" in schema:
+    if not AIRTABLE_API_KEY or not AIRTABLE_BASE_ID:
         return None
     
-    # Look for common logging table names
-    logging_keywords = ["log", "universal", "webhook", "automation", "tracker", "events"]
+    api = Api(AIRTABLE_API_KEY)
     
-    for table in schema.get("tables", []):
-        table_name = table.get("name", "").lower()
-        for keyword in logging_keywords:
-            if keyword in table_name:
-                return table.get("name")
-    
-    # If no specific logging table found, return the first table
-    if schema.get("tables"):
-        return schema["tables"][0].get("name")
+    for table_name in possible_names:
+        try:
+            table = api.table(AIRTABLE_BASE_ID, table_name)
+            # Test if we can read from this table
+            records = table.all(max_records=1)
+            print(f"Found accessible table: {table_name}")
+            return table_name
+        except Exception as e:
+            print(f"Cannot access table '{table_name}': {e}")
+            continue
     
     return None
 
 def create_universal_logging_table():
     """Create universal logging table if it doesn't exist"""
-    try:
-        base_id = os.getenv("AIRTABLE_BASE_ID")
-        api_key = os.getenv("AIRTABLE_API_KEY")
-        
-        table_name = "Universal Webhook Logger"
-        
-        # Try to log to this table first
-        url = f"https://api.airtable.com/v0/{base_id}/{table_name}"
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
-        }
-        
-        test_data = {
-            "fields": {
-                "Event Type": "test",
-                "Source": "system",
-                "Timestamp": datetime.utcnow().isoformat(),
-                "Data": "connection test"
-            }
-        }
-        
-        response = requests.post(url, json=test_data, headers=headers, timeout=10)
-        
-        if response.status_code == 200:
-            return table_name
-        else:
-            # Try alternative table name
-            return find_universal_logging_table()
-            
-    except Exception as e:
-        return None
+    # This would require additional permissions
+    print("Creating new table requires admin permissions")
+    return False
 
 def log_to_correct_airtable_table(data):
     """Log to the correct Airtable table with proper field mapping"""
+    table_name = find_universal_logging_table()
+    
+    if not table_name:
+        print("No accessible logging table found")
+        return False
+    
     try:
-        base_id = os.getenv("AIRTABLE_BASE_ID")
-        api_key = os.getenv("AIRTABLE_API_KEY")
+        api = Api(AIRTABLE_API_KEY)
+        table = api.table(AIRTABLE_BASE_ID, table_name)
         
-        # First, try to find the correct table
-        table_name = create_universal_logging_table()
-        
-        if not table_name:
-            return {"success": False, "error": "No suitable table found"}
-        
-        url = f"https://api.airtable.com/v0/{base_id}/{table_name}"
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
+        # Map data to correct field names
+        record_data = {
+            'Integration Name': data.get('test_name', 'Unknown Test'),
+            'Pass/Fail': '✅' if data.get('status') == 'PASS' else '❌',
+            'Notes / Debug': data.get('details', ''),
+            'Test Date': data.get('timestamp', ''),
+            'QA Owner': 'Automated System',
+            'Module Type': data.get('module_type', 'System Test')
         }
         
-        # Map data to simple field structure
-        airtable_data = {
-            "fields": {
-                "Event Type": data.get("event_type", "automation"),
-                "Source": data.get("source", "system"),
-                "Reference ID": str(data.get("ref_id", "")),
-                "Summary": data.get("summary", ""),
-                "Timestamp": data.get("timestamp", datetime.utcnow().isoformat()),
-                "Raw Data": str(data)[:1000]  # Truncate to avoid field limits
-            }
-        }
+        table.create(record_data)
+        return True
         
-        response = requests.post(url, json=airtable_data, headers=headers, timeout=10)
-        
-        if response.status_code == 200:
-            return {"success": True, "table": table_name, "record_id": response.json().get("id")}
-        else:
-            return {"success": False, "error": f"HTTP {response.status_code}", "table": table_name}
-            
     except Exception as e:
-        return {"success": False, "error": str(e)}
+        print(f"Error logging to table: {e}")
+        return False
 
 if __name__ == "__main__":
-    # Test the mapping
-    print("Testing Airtable table mapping...")
+    print("🔍 AIRTABLE TABLE MAPPER")
+    print("=" * 40)
     
+    # Get base schema
     schema = get_airtable_base_schema()
-    if "tables" in schema:
-        print(f"Found {len(schema['tables'])} tables in base:")
-        for table in schema["tables"]:
-            print(f"  - {table.get('name')}")
+    
+    # Find correct table
+    table_name = find_universal_logging_table()
+    if table_name:
+        print(f"\n✅ Found logging table: {table_name}")
     else:
-        print(f"Error getting schema: {schema.get('error')}")
-    
-    # Test logging
-    test_result = log_to_correct_airtable_table({
-        "event_type": "integration_test",
-        "source": "table_mapper",
-        "summary": "Testing correct table mapping",
-        "timestamp": datetime.utcnow().isoformat()
-    })
-    
-    print(f"Test logging result: {test_result}")
+        print("\n❌ No accessible logging table found")
+        print("Please check your Airtable permissions or provide the correct table name.")
