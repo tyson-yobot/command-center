@@ -154,5 +154,310 @@
       "industry": "🏭 Industry",
       "status": "📋 Status"
     }
+  },
+  "14_internal_config": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableName": "Internal Config",
+    "tableId": "tbl_internal_config",
+    "fields": {
+      "config_key": "🔑 Config Key",
+      "value": "🔢 Value",
+      "description": "📝 Description",
+      "environment": "🌍 Environment"
+    }
+  },
+  "15_stripe_price_tracker": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableName": "Stripe Price Tracker",
+    "tableId": "tbl_stripe_price_tracker",
+    "fields": {
+      "price_id": "💰 Price ID",
+      "amount": "💵 Amount",
+      "currency": "🌍 Currency",
+      "interval": "📅 Interval"
+    }
+  },
+  "16_stripe_products": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableName": "Stripe Products",
+    "tableId": "tbl_stripe_products",
+    "fields": {
+      "product_id": "🛍️ Product ID",
+      "name": "📝 Name",
+      "description": "📄 Description",
+      "active": "✅ Active"
+    }
+  },
+  "17_addon_modules": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableName": "Addon Modules",
+    "tableId": "tbl_addon_modules",
+    "fields": {
+      "module_name": "🧩 Module Name",
+      "price": "💰 Price",
+      "description": "📝 Description",
+      "active": "✅ Active"
+    }
+  },
+  "18_bot_packages": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableName": "Bot Packages",
+    "tableId": "tbl_bot_packages",
+    "fields": {
+      "package_name": "📦 Package Name",
+      "features": "⭐ Features",
+      "price": "💰 Price",
+      "tier": "🏆 Tier"
+    }
+  },
+  "19_sales_orders": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableName": "Sales Orders",
+    "tableId": "tbl_sales_orders",
+    "fields": {
+      "order_id": "🧾 Order ID",
+      "client": "👤 Client",
+      "amount": "💰 Amount",
+      "status": "📋 Status"
+    }
+  },
+  "20_invoice_tracking": {
+    "baseId": "appMbVQJ0n3nWR11N",
+    "tableName": "Invoice Tracking",
+    "tableId": "tbl_invoice_tracking",
+    "fields": {
+      "invoice_id": "🧾 Invoice ID",
+      "client": "👤 Client",
+      "amount": "💰 Amount",
+      "status": "📋 Status"
+    }
+  },
+  "21_contract_status_tracker": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableName": "Contract Status Tracker",
+    "tableId": "tbl_contract_status",
+    "fields": {
+      "contract_id": "📋 Contract ID",
+      "client": "👤 Client",
+      "status": "✅ Status",
+      "signed_date": "📅 Signed Date"
+    }
+  },
+  "22_quote_generator_logs": {
+    "baseId": "appMbVQJ0n3nWR11N",
+    "tableName": "Quote Generator Logs",
+    "tableId": "tbl_quote_logs",
+    "fields": {
+      "quote_id": "🧾 Quote ID",
+      "client": "👤 Client",
+      "amount": "💰 Amount",
+      "generated": "📅 Generated"
+    }
+  },
+  "23_deal_milestones": {
+    "baseId": "appMbVQJ0n3nWR11N",
+    "tableName": "Deal Milestones",
+    "tableId": "tbl_deal_milestones",
+    "fields": {
+      "milestone_name": "🎯 Milestone Name",
+      "deal_id": "🤝 Deal ID",
+      "completed": "✅ Completed",
+      "date": "📅 Date"
+    }
+  },
+  "24_crm_contacts": {
+    "baseId": "appMbVQJ0n3nWR11N",
+    "tableId": "tbl_crm_contacts",
+    "tableName": "CRM Contacts"
+  },
+  "25_rep_assignment_tracker": {
+    "baseId": "appMbVQJ0n3nWR11N",
+    "tableId": "tbl_rep_assignment",
+    "tableName": "Rep Assignment Tracker"
+  },
+  "26_support_ticket_summary": {
+    "baseId": "appMbVQJ0n3nWR11N",
+    "tableId": "tbl_support_summary",
+    "tableName": "Support Ticket Summary"
+  },
+  "27_client_bookings": {
+    "baseId": "appMbVQJ0n3nWR11N",
+    "tableId": "tbl_client_bookings",
+    "tableName": "Client Bookings"
+  },
+  "28_team_members": {
+    "baseId": "appMbVQJ0n3nWR11N",
+    "tableId": "tbl_team_members",
+    "tableName": "Team Members"
+  },
+  "29_qa_call_review": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_qa_review",
+    "tableName": "QA Call Review"
+  },
+  "30_call_recording_tracker": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_call_recordings",
+    "tableName": "Call Recording Tracker"
+  },
+  "31_nlp_keyword_tracker": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_nlp_keywords",
+    "tableName": "NLP Keyword Tracker"
+  },
+  "32_call_sentiment_log": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_call_sentiment",
+    "tableName": "Call Sentiment Log"
+  },
+  "33_escalation_tracker": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_escalation",
+    "tableName": "Escalation Tracker"
+  },
+  "34_client_touchpoint_log": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_touchpoints",
+    "tableName": "Client Touchpoint Log"
+  },
+  "35_missed_call_log": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_missed_calls",
+    "tableName": "Missed Call Log"
+  },
+  "36_ab_test_log": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_ab_tests",
+    "tableName": "AB Test Log"
+  },
+  "37_slack_alerts_log": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_slack_alerts",
+    "tableName": "Slack Alerts Log"
+  },
+  "38_integration_sync_tracker": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_integration_sync",
+    "tableName": "Integration Sync Tracker"
+  },
+  "39_personality_pack_tracker": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_personality_packs",
+    "tableName": "Personality Pack Tracker"
+  },
+  "40_voicebot_performance_log": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_voicebot_log",
+    "tableName": "Voicebot Performance Log"
+  },
+  "41_bot_health_monitor": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_bot_health",
+    "tableName": "Bot Health Monitor"
+  },
+  "42_revenue_forecast_log": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_forecast",
+    "tableName": "Revenue Forecast Log"
+  },
+  "43_client_pulse_tracker": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_pulse",
+    "tableName": "Client Pulse Tracker"
+  },
+  "44_ops_metrics_log": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_ops_metrics",
+    "tableName": "Ops Metrics Log"
+  },
+  "45_client_tier_view": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_tier_view",
+    "tableName": "Client Tier View"
+  },
+  "46_command_center_wiring_tracker": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_command_wiring",
+    "tableName": "Command Center Wiring Tracker"
+  },
+  "47_crm_voice_audit_log": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_crm_voice_audit",
+    "tableName": "CRM Voice Audit Log"
+  },
+  "48_suggestions_push_log": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_suggestions",
+    "tableName": "Suggestions Push Log"
+  },
+  "49_manual_review_queue": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_manual_review",
+    "tableName": "Manual Review Queue"
+  },
+  "50_followup_scheduler_log": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_followups",
+    "tableName": "Followup Scheduler Log"
+  },
+  "51_compliance_checklist_log": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_compliance",
+    "tableName": "Compliance Checklist Log"
+  },
+  "52_airtable_schema_documentation": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_schema_docs",
+    "tableName": "Airtable Schema Documentation"
+  },
+  "53_tone_response_variant_library": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableId": "tbl_tone_variants",
+    "tableName": "Tone Response Variant Library"
+  },
+  "54_client_roi_results": {
+    "baseId": "appbFDTqB2WtRNV1H",
+    "tableId": "tbl_roi_results",
+    "tableName": "Client ROI Results"
+  },
+  "55_botalytics_roi": {
+    "baseId": "appbFDTqB2WtRNV1H",
+    "tableId": "tbl_botalytics",
+    "tableName": "Botalytics ROI"
+  },
+  "56_smartspend_master": {
+    "baseId": "appGtcRZUd0JqnkQS",
+    "tableId": "tbl_smartspend_master",
+    "tableName": "SmartSpend Master"
+  },
+  "57_smartspend_budget_tracker": {
+    "baseId": "appGtcRZUd0JqnkQS",
+    "tableId": "tbl_smartspend_budget",
+    "tableName": "SmartSpend Budget Tracker"
+  },
+  "58_smartspend_intake_submissions": {
+    "baseId": "appGtcRZUd0JqnkQS",
+    "tableId": "tbl_smartspend_intake",
+    "tableName": "SmartSpend Intake Submissions"
+  },
+  "59_imported_table": {
+    "baseId": "appGtcRZUd0JqnkQS",
+    "tableId": "tbl_imported",
+    "tableName": "Imported Table"
+  },
+  "60_dashboard_intake_visual": {
+    "baseId": "appGtcRZUd0JqnkQS",
+    "tableId": "tbl_dashboard_visual",
+    "tableName": "Dashboard Intake Visual"
+  },
+  "61_completed_integration_qa": {
+    "baseId": "appRt8V3tH4g5Z51f",
+    "tableId": "tbl_completed_qa",
+    "tableName": "Completed Integration QA"
+  },
+  "62_industry_templates_expanded": {
+    "baseId": "appRt8V3tH4g5Z51f",
+    "tableId": "tbl_industry_templates",
+    "tableName": "Industry Templates Expanded"
   }
 }
