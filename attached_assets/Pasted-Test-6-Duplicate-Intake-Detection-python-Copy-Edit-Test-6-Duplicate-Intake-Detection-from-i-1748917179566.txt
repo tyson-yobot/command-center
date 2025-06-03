@@ -1,0 +1,75 @@
+Test 6 — Duplicate Intake Detection
+python
+Copy
+Edit
+# 🔹 Test 6 — Duplicate Intake Detection
+from intake_loader import is_duplicate_intake
+
+def test_duplicate_check():
+    intake = {"client_id": "client-001", "submitted_at": "2025-06-01T12:00:00Z"}
+    assert is_duplicate_intake(intake) is False  # Adjust based on test data
+    print("✅ Duplicate Detection: PASS")
+
+test_duplicate_check()
+🔹 Test 7 — Airtable Timeout Simulation
+python
+Copy
+Edit
+# 🔹 Test 7 — Airtable Timeout Simulation
+import requests
+from unittest.mock import patch
+from intake_loader import pull_new_intakes
+
+def test_airtable_timeout():
+    with patch('requests.get', side_effect=requests.Timeout):
+        try:
+            pull_new_intakes()
+        except Exception as e:
+            assert "timeout" in str(e).lower()
+            print("✅ Airtable Timeout Handling: PASS")
+
+test_airtable_timeout()
+🔹 Test 8 — Malformed Intake Entry
+python
+Copy
+Edit
+# 🔹 Test 8 — Malformed Intake Entry
+from intake_loader import build_config
+
+def test_malformed_intake():
+    broken_intake = {"client_name": "NoIndustryCo"}  # Missing 'industry'
+    try:
+        build_config(broken_intake)
+    except KeyError as e:
+        assert "industry" in str(e)
+        print("✅ Malformed Intake Handling: PASS")
+
+test_malformed_intake()
+🔹 Test 9 — Slack Hook Trigger Mock
+python
+Copy
+Edit
+# 🔹 Test 9 — Slack Hook Trigger Mock
+from unittest.mock import patch
+from deploy_hooks import notify_slack
+
+def test_slack_hook():
+    with patch('requests.post') as mock_post:
+        notify_slack("Deployment successful for Client X", dry_run=True)
+        mock_post.assert_not_called()
+        print("✅ Slack Hook Dry Mode: PASS")
+
+test_slack_hook()
+🔹 Test 10 — Missing Template Fallback
+python
+Copy
+Edit
+# 🔹 Test 10 — Missing Template Fallback
+from intake_loader import match_industry_template
+
+def test_template_fallback():
+    result = match_industry_template("Alien Abduction Services")
+    assert result is None or "default" in result.get("template_type", "")
+    print("✅ Missing Template Fallback: PASS")
+
+test_template_fallback()
