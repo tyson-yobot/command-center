@@ -89,7 +89,7 @@ def run_comprehensive_test_suite():
     print("TEST RESULTS SUMMARY")
     print("=" * 60)
     
-    passed = sum(test_results.values())
+    passed = sum(1 for result in test_results.values() if result)
     total = len(test_results)
     
     for test_name, result in test_results.items():
