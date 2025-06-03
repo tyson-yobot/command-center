@@ -1,0 +1,132 @@
+Test 161 — Zero-Day Input Mutation Simulation
+python
+Copy
+Edit
+# 🔹 Test 161 — Zero-Day Input Mutation Simulation
+from chaos import simulate_zero_day_input
+
+def test_zero_day_input():
+    result = simulate_zero_day_input(payload_type="unknown_format")
+    assert result["crash_prevented"] is True
+    print("✅ Zero-Day Input Mutation: PASS")
+
+test_zero_day_input()
+🔹 Test 162 — GPT Hallucination Watchdog Trigger
+python
+Copy
+Edit
+# 🔹 Test 162 — GPT Hallucination Watchdog Trigger
+from llm_security import trigger_hallucination_watchdog
+
+def test_gpt_hallucination():
+    prompt = "My name is John and my password is 'hunter2'"
+    result = trigger_hallucination_watchdog(prompt)
+    assert result["hallucination_detected"] is True
+    print("✅ GPT Hallucination Watchdog: PASS")
+
+test_gpt_hallucination()
+🔹 Test 163 — Unknown Format Input Handler
+python
+Copy
+Edit
+# 🔹 Test 163 — Unknown Format Input Handler
+from diagnostics import handle_unknown_format
+
+def test_unknown_format_input():
+    payload = "\x93\xfe\xab\x01"  # Garbage binary
+    result = handle_unknown_format(payload)
+    assert result["graceful_fail"] is True
+    print("✅ Unknown Format Input Handling: PASS")
+
+test_unknown_format_input()
+🔹 Test 164 — Entropy Flood Stress Test
+python
+Copy
+Edit
+# 🔹 Test 164 — Entropy Flood Stress Test
+from chaos import flood_entropy_input
+
+def test_entropy_flood():
+    result = flood_entropy_input(length=100000)
+    assert result["system_stable"] is True
+    print("✅ Entropy Flood Stress Test: PASS")
+
+test_entropy_flood()
+🔹 Test 165 — LLM Invalid State Persistence Trap
+python
+Copy
+Edit
+# 🔹 Test 165 — LLM Invalid State Persistence Trap
+from llm_security import test_invalid_state_persistence
+
+def test_invalid_state():
+    result = test_invalid_state_persistence()
+    assert result["state_reset_successful"] is True
+    print("✅ Invalid LLM State Reset: PASS")
+
+test_invalid_state()
+🔹 Test 166 — Token Pool Exhaustion Simulation
+python
+Copy
+Edit
+# 🔹 Test 166 — Token Pool Exhaustion Simulation
+from llm_security import simulate_token_exhaustion
+
+def test_token_pool_exhaustion():
+    result = simulate_token_exhaustion()
+    assert result["token_limit_enforced"] is True
+    print("✅ Token Pool Exhaustion Handling: PASS")
+
+test_token_pool_exhaustion()
+🔹 Test 167 — Core Dump Trap Validation
+python
+Copy
+Edit
+# 🔹 Test 167 — Core Dump Trap Validation
+from diagnostics import validate_core_dump_trap
+
+def test_core_dump_trap():
+    result = validate_core_dump_trap()
+    assert result["dump_prevented"] is True
+    print("✅ Core Dump Trap Triggered: PASS")
+
+test_core_dump_trap()
+🔹 Test 168 — GPT Prompt Fragmentation Check
+python
+Copy
+Edit
+# 🔹 Test 168 — GPT Prompt Fragmentation Check
+from llm_security import simulate_prompt_fragmentation
+
+def test_prompt_fragmentation():
+    result = simulate_prompt_fragmentation()
+    assert result["fragment_detected"] is True
+    print("✅ Prompt Fragmentation Detection: PASS")
+
+test_prompt_fragmentation()
+🔹 Test 169 — Multi-Agent Prompt Interference Defense
+python
+Copy
+Edit
+# 🔹 Test 169 — Multi-Agent Prompt Interference Defense
+from llm_security import detect_prompt_cross_talk
+
+def test_prompt_interference():
+    result = detect_prompt_cross_talk(agent_ids=["agentA", "agentB"])
+    assert result["cross_talk_prevented"] is True
+    print("✅ Multi-Agent Prompt Isolation: PASS")
+
+test_prompt_interference()
+🔹 Test 170 — GPT Feedback Loop Detection
+python
+Copy
+Edit
+# 🔹 Test 170 — GPT Feedback Loop Detection
+from llm_security import detect_feedback_loop
+
+def test_feedback_loop():
+    result = detect_feedback_loop()
+    assert result["loop_detected"] is True
+    print("✅ GPT Feedback Loop Detection: PASS")
+
+test_feedback_loop()
