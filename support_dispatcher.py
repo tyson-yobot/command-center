@@ -6,25 +6,44 @@ from datetime import datetime
 
 # === CONFIGURATION ===
 SLACK_TOKEN = os.getenv("SLACK_BOT_TOKEN", "xRYo7LD89mNz2EvZy3kOrFiv")
-SLACK_CHANNEL = "#support-queue"  # Change if needed
+SLACK_CHANNEL = "#support-queue"
 
-AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
-AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID")
-AIRTABLE_TABLE_ID = "tblQPr9cHyNZDpipS"
+AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY", "patQdihpuEhLfx2vP")
+BASE_ID = os.getenv("AIRTABLE_BASE_ID", "appCoAtCZdARb4AM2")
 
-VOICE_FILE_PATH = "./uploads/test_yobot_voice.mp3"  # Local MP3 path
+TICKET_LOG_TABLE = "tblQPr9cHyNZDpipS"
+ERROR_LOG_TABLE = "tblo1ESkt9ybkvaJH"
+
+VOICE_FILE_PATH = "./uploads/test_yobot_voice.mp3"
 
 # === INITIALIZE CLIENTS ===
 try:
     slack_client = WebClient(token=SLACK_TOKEN)
-    if AIRTABLE_API_KEY and AIRTABLE_BASE_ID:
-        airtable = Table(AIRTABLE_API_KEY, AIRTABLE_BASE_ID, AIRTABLE_TABLE_ID)
-    else:
-        airtable = None
+    ticket_log = Table(AIRTABLE_API_KEY, BASE_ID, TICKET_LOG_TABLE)
+    error_log = Table(AIRTABLE_API_KEY, BASE_ID, ERROR_LOG_TABLE)
 except Exception as e:
     print(f"Initialization error: {e}")
     slack_client = None
-    airtable = None
+    ticket_log = None
+    error_log = None
+
+# === ERROR LOGGING FUNCTION ===
+def log_error(module, error_type, message, ticket_id=None, file_name=None):
+    try:
+        if error_log:
+            error_log.create({
+                "🧩 Source Module": module,
+                "🚨 Error Type": error_type,
+                "📝 Error Message": message,
+                "📁 Fallback File Name": file_name or VOICE_FILE_PATH,
+                "🔁 Retry Attempted": True,
+                "📊 Retry Result": "Failed",
+                "🧠 Context Ticket ID": ticket_id or "N/A",
+                "📆 Date": datetime.now().strftime("%Y-%m-%d"),
+                "⏰ Time": datetime.now().strftime("%H:%M:%S")
+            })
+    except Exception as e:
+        print(f"[FATAL] Failed to log error to Airtable: {e}")
 
 # === MAIN FUNCTION ===
 def dispatch_support_response(ticket):
@@ -36,12 +55,14 @@ def dispatch_support_response(ticket):
         escalation_flag = ticket["escalationFlag"]
         sentiment = ticket["sentiment"]
 
-        # 1. Post Slack message
+        # 1. Post Slack text
         if slack_client:
-            slack_text = f"*🎟 AI Reply for Ticket `{ticket_id}`*\n*Client:* {client_name}\n*Topic:* {topic}\n> {ai_reply}"
-            slack_client.chat_postMessage(channel=SLACK_CHANNEL, text=slack_text)
+            slack_client.chat_postMessage(
+                channel=SLACK_CHANNEL,
+                text=f"*🎟 AI Reply for Ticket `{ticket_id}`*\n*Client:* {client_name}\n*Topic:* {topic}\n> {ai_reply}"
+            )
 
-        # 2. Upload MP3 to Slack (if file exists)
+        # 2. Upload MP3
         mp3_url = "No voice file"
         if slack_client and os.path.exists(VOICE_FILE_PATH):
             upload = slack_client.files_upload(
@@ -53,9 +74,9 @@ def dispatch_support_response(ticket):
             )
             mp3_url = upload["file"]["permalink"]
 
-        # 3. Log to Airtable
-        if airtable:
-            airtable.create({
+        # 3. Log ticket to Airtable
+        if ticket_log:
+            ticket_log.create({
                 "🆔 Ticket ID": ticket_id,
                 "🧑 Client Name": client_name,
                 "📌 Topic": topic,
