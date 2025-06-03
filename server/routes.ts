@@ -1500,11 +1500,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      const fs = require('fs');
+      // Import modules using ES module syntax
+      const fs = await import('fs');
+      const { exec } = await import('child_process');
+      
       fs.writeFileSync('ticket.json', JSON.stringify(ticket));
 
-      const { exec } = require('child_process');
-      exec('python run_yobot_support.py', (err, stdout, stderr) => {
+      exec('python run_yobot_support.py', (err: any, stdout: any, stderr: any) => {
         if (err) {
           console.error("Support processing error:", stderr);
         }
@@ -1589,10 +1591,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const stripeEvent = req.body;
       console.log("Stripe event received:", stripeEvent.type);
 
-      const { exec } = require('child_process');
+      const { exec } = await import('child_process');
       const eventData = JSON.stringify(stripeEvent).replace(/"/g, '\\"');
       
-      exec(`python3 automation_webhook_manager.py stripe-event "${eventData}"`, (err, stdout, stderr) => {
+      exec(`python3 automation_webhook_manager.py stripe-event "${eventData}"`, (err: any, stdout: any, stderr: any) => {
         if (err) {
           console.error("Stripe processing error:", stderr);
         } else {
@@ -1617,10 +1619,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const hubspotData = req.body;
       console.log("HubSpot webhook received:", hubspotData);
 
-      const { exec } = require('child_process');
+      const { exec } = await import('child_process');
       const contactData = JSON.stringify(hubspotData).replace(/"/g, '\\"');
       
-      exec(`python3 automation_webhook_manager.py hubspot-contact "${contactData}"`, (err, stdout, stderr) => {
+      exec(`python3 automation_webhook_manager.py hubspot-contact "${contactData}"`, (err: any, stdout: any, stderr: any) => {
         if (err) {
           console.error("HubSpot processing error:", stderr);
         } else {
@@ -1644,7 +1646,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const usageData = req.body;
       console.log("Usage threshold triggered:", usageData);
 
-      const { exec } = require('child_process');
+      const { exec } = await import('child_process');
       const thresholdData = JSON.stringify(usageData).replace(/"/g, '\\"');
       
       exec(`python3 automation_webhook_manager.py usage-threshold "${thresholdData}"`, (err, stdout, stderr) => {
