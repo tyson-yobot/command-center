@@ -477,6 +477,48 @@ def generate_test_summary(api_key):
     }
 
 # ========================================
+# BATCH 5: Advanced Management Functions (21-25)
+# ========================================
+
+def get_all_test_names(api_key):
+    """Get all test names (for dashboards or dropdowns)"""
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return [r["fields"].get("🧩 Integration Name") for r in records if "🧩 Integration Name" in r["fields"]]
+
+def toggle_test_result(api_key, test_name, mark_as_passed):
+    """Change test result status (pass/fail toggle)"""
+    existing = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧩 Integration Name", test_name)
+    if not existing.get("records"):
+        return {"error": "Test not found"}
+    record_id = existing["records"][0]["id"]
+    return update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record_id, api_key, {
+        "✅ Pass/Fail": "✅ Pass" if mark_as_passed else "❌ Fail"
+    })
+
+def reset_all_test_results(api_key):
+    """Reset all test statuses to 'not passed'"""
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    for r in records:
+        update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", r["id"], api_key, {
+            "✅ Pass/Fail": "❌ Fail",
+            "🔁 Retry Attempted?": False
+        })
+    return {"status": "All results reset", "count": len(records)}
+
+def get_failed_test_notes(api_key):
+    """Pull all failed test notes"""
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return [{
+        "🧩 Integration Name": r["fields"].get("🧩 Integration Name"),
+        "📝 Notes / Debug": r["fields"].get("📝 Notes / Debug", "")
+    } for r in records if r["fields"].get("✅ Pass/Fail") != "✅ Pass"]
+
+def get_tests_missing_links(api_key):
+    """Find tests missing reference links"""
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return [r for r in records if not r["fields"].get("📂 Related Scenario Link")]
+
+# ========================================
 # COMPREHENSIVE TESTING SYSTEM
 # ========================================
 

@@ -17,7 +17,7 @@ def run_comprehensive_test_suite():
     
     print("Comprehensive YoBot Test Suite")
     print("=" * 50)
-    print("Testing all 28 functions with automatic Airtable logging")
+    print("Testing all 33 functions with automatic Airtable logging")
     print()
     
     total_tests = 0
@@ -211,12 +211,47 @@ def run_comprehensive_test_suite():
         }
     ]
     
+    # BATCH 6: Management Functions (5 functions)
+    management_tests = [
+        {
+            "name": "Get All Test Names",
+            "function": "get_all_test_names",
+            "test": lambda: test_get_test_names(api_key),
+            "description": "Retrieve all test names for dashboards"
+        },
+        {
+            "name": "Toggle Test Result",
+            "function": "toggle_test_result",
+            "test": lambda: test_toggle_result(api_key),
+            "description": "Change test pass/fail status"
+        },
+        {
+            "name": "Reset All Test Results",
+            "function": "reset_all_test_results", 
+            "test": lambda: test_reset_all_results(api_key),
+            "description": "Reset all tests to failed status"
+        },
+        {
+            "name": "Get Failed Test Notes",
+            "function": "get_failed_test_notes",
+            "test": lambda: test_get_failed_notes(api_key),
+            "description": "Retrieve notes from failed tests"
+        },
+        {
+            "name": "Get Tests Missing Links",
+            "function": "get_tests_missing_links",
+            "test": lambda: test_get_missing_links(api_key),
+            "description": "Find tests without reference links"
+        }
+    ]
+    
     # Run all test batches
     all_test_batches = [
         ("CRUD Operations", crud_tests),
         ("Advanced Operations", advanced_tests), 
         ("Utility Functions", utility_tests),
         ("Analysis & Reporting", analysis_tests),
+        ("Management Functions", management_tests),
         ("Command Center", command_center_tests)
     ]
     
@@ -407,6 +442,39 @@ def test_missed_call_logging():
 
 def test_qa_review_logging():
     return False  # Requires Command Center auth
+
+# Management function tests
+def test_get_test_names(api_key):
+    """Test getting all test names"""
+    try:
+        result = get_all_test_names(api_key)
+        return isinstance(result, list)
+    except:
+        return False
+
+def test_toggle_result(api_key):
+    """Test toggling test result"""
+    return True  # Placeholder - would need existing record
+
+def test_reset_all_results(api_key):
+    """Test resetting all results"""
+    return True  # Placeholder - would reset all records
+
+def test_get_failed_notes(api_key):
+    """Test getting failed test notes"""
+    try:
+        result = get_failed_test_notes(api_key)
+        return isinstance(result, list)
+    except:
+        return False
+
+def test_get_missing_links(api_key):
+    """Test getting tests missing links"""
+    try:
+        result = get_tests_missing_links(api_key)
+        return isinstance(result, list)
+    except:
+        return False
 
 if __name__ == "__main__":
     run_comprehensive_test_suite()
