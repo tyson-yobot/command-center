@@ -1249,15 +1249,21 @@ export default function ClientDashboard() {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-slate-400">Total Tests:</span>
-                      <span className="text-white font-mono">{testMetrics?.totalTests || 0}</span>
+                      <span className="text-white font-mono">
+                        {testMetrics?.isAuthenticated ? (testMetrics?.totalTests || 0) : "No Data"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-400">Pass Rate:</span>
-                      <span className="text-green-400 font-mono">{testMetrics?.passRate || 0}%</span>
+                      <span className="text-green-400 font-mono">
+                        {testMetrics?.isAuthenticated ? `${testMetrics?.passRate || 0}%` : "No Data"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-400">Unique Testers:</span>
-                      <span className="text-blue-400 font-mono">{testMetrics?.uniqueTesters || 0}</span>
+                      <span className="text-blue-400 font-mono">
+                        {testMetrics?.isAuthenticated ? (testMetrics?.uniqueTesters || 0) : "No Data"}
+                      </span>
                     </div>
                   </div>
                 </div>
