@@ -576,6 +576,166 @@ Total: {test_summary['total']}
     return response.status_code == 200
 
 # ========================================
+# BATCH 7: Extended Management Functions (31-40)
+# ========================================
+
+def get_all_testers(api_key):
+    """Get all unique testers"""
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return list(set(r["fields"].get("👤 QA Owner") for r in records if "👤 QA Owner" in r["fields"]))
+
+def get_tests_flagged_for_retest(api_key):
+    """Get tests flagged for retest"""
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {"filterByFormula": "{🔁 Retry Attempted?} = true"}
+    response = requests.get(url, headers=headers, params=params)
+    return response.json()
+
+def add_reference_link(api_key, test_name, new_link):
+    """Add a reference link to an existing test"""
+    existing = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧩 Integration Name", test_name)
+    if not existing.get("records"):
+        return {"error": "Test not found"}
+    record_id = existing["records"][0]["id"]
+    return update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record_id, api_key, {
+        "📂 Related Scenario Link": new_link
+    })
+
+def get_tests_with_missing_fields(api_key):
+    """Get tests missing required fields"""
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    missing = []
+    for r in records:
+        fields = r.get("fields", {})
+        if not fields.get("🧩 Integration Name") or not fields.get("👤 QA Owner"):
+            missing.append(r)
+    return missing
+
+def clone_test_record(api_key, original_test_name, new_test_name):
+    """Clone a test record with new name"""
+    original = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧩 Integration Name", original_test_name)
+    if not original.get("records"):
+        return {"error": "Original test not found"}
+    fields = original["records"][0]["fields"].copy()
+    fields["🧩 Integration Name"] = new_test_name
+    return create_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, fields)
+
+def list_tests_sorted(api_key):
+    """List test names alphabetically"""
+    test_names = get_all_test_names(api_key)
+    return sorted(filter(None, test_names))
+
+def get_tests_before_date(api_key, date_str):
+    """Get tests created before a given date"""
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {"filterByFormula": f"IS_BEFORE({{📅 Test Date}}, '{date_str}')"}
+    response = requests.get(url, headers=headers, params=params)
+    return response.json()
+
+def count_tests_by_status(api_key):
+    """Count tests by pass/fail status"""
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    counts = {"Passed": 0, "Failed": 0}
+    for r in records:
+        if r["fields"].get("✅ Pass/Fail") == "✅ Pass":
+            counts["Passed"] += 1
+        else:
+            counts["Failed"] += 1
+    return counts
+
+def search_tests_by_note_keyword(api_key, keyword):
+    """Filter tests by keyword in notes"""
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {"filterByFormula": f"FIND('{keyword}', {{📝 Notes / Debug}})"}
+    response = requests.get(url, headers=headers, params=params)
+    return response.json()
+
+def batch_update_test_status(api_key, test_names, mark_as_passed):
+    """Batch update status for multiple test names"""
+    for name in test_names:
+        toggle_test_result(api_key, name, mark_as_passed)
+    return {"status": "Batch update complete", "count": len(test_names)}
+
+# ========================================
+# BATCH 8: Final Management Functions (41-50)
+# ========================================
+
+def delete_test_by_name(api_key, test_name):
+    """Delete test by name (safe wrapper)"""
+    record = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧩 Integration Name", test_name)
+    if not record.get("records"):
+        return {"error": "Test not found"}
+    record_id = record["records"][0]["id"]
+    return delete_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record_id, api_key)
+
+def get_tests_by_function_name(api_key, function_name):
+    """Get all tests with a specific function name"""
+    return search_test_by_function(api_key, function_name)
+
+def count_tests_with_links(api_key):
+    """Count how many tests have links attached"""
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return len([r for r in records if r["fields"].get("📂 Related Scenario Link")])
+
+def append_timestamped_note(api_key, test_name, new_note):
+    """Add timestamped note to test"""
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    full_note = f"[{timestamp}] {new_note}"
+    return append_to_test_notes(api_key, test_name, full_note)
+
+def get_test_by_id(api_key, record_id):
+    """Get test by record ID"""
+    return get_airtable_record_by_id("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record_id, api_key)
+
+def is_test_from_today(api_key, test_name):
+    """Check if test was created today"""
+    today = datetime.now().strftime("%Y-%m-%d")
+    test = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧩 Integration Name", test_name)
+    if not test.get("records"):
+        return False
+    record_date = test["records"][0]["fields"].get("📅 Test Date", "")
+    return record_date.startswith(today)
+
+def get_recent_tests(api_key, limit=10):
+    """Get most recent N test records"""
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    sorted_records = sorted(
+        records,
+        key=lambda r: r["fields"].get("📅 Test Date", ""),
+        reverse=True
+    )
+    return sorted_records[:limit]
+
+def mark_test_in_review(api_key, test_name):
+    """Flag test as 'in review'"""
+    existing = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧩 Integration Name", test_name)
+    if not existing.get("records"):
+        return {"error": "Test not found"}
+    record_id = existing["records"][0]["id"]
+    return update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record_id, api_key, {
+        "📁 Record Created?": False  # Use existing field as review flag
+    })
+
+def count_tests_this_week(api_key):
+    """Count tests run this week"""
+    today = datetime.now()
+    start = today - timedelta(days=today.weekday())
+    start_str = start.strftime("%Y-%m-%d")
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {"filterByFormula": f"IS_AFTER({{📅 Test Date}}, '{start_str}')"}
+    response = requests.get(url, headers=headers, params=params)
+    return len(response.json().get("records", []))
+
+def get_failed_notes_only(api_key):
+    """Get notes from failed tests only"""
+    failed = get_failed_test_notes(api_key)
+    return [f["📝 Notes / Debug"] for f in failed if f.get("📝 Notes / Debug")]
+
+# ========================================
 # COMPREHENSIVE TESTING SYSTEM
 # ========================================
 

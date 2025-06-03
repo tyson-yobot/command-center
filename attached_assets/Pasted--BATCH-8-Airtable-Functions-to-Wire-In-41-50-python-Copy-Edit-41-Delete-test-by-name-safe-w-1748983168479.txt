@@ -1,0 +1,78 @@
+ BATCH 8: Airtable Functions to Wire In (41–50)
+python
+Copy
+Edit
+# ✅ 41. Delete test by name (safe wrapper)
+def delete_test_by_name(api_key, test_name):
+    record = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧪 Test Name", test_name)
+    if not record.get("records"):
+        return {"error": "Test not found"}
+    record_id = record["records"][0]["id"]
+    return delete_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record_id, api_key)
+
+# ✅ 42. Get all tests with a specific function name
+def get_tests_by_function_name(api_key, function_name):
+    return search_test_by_function(api_key, function_name)
+
+# ✅ 43. Count how many tests have links attached
+def count_tests_with_links(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return len([r for r in records if r["fields"].get("🔗 Reference Link")])
+
+# ✅ 44. Add timestamped note to test
+def append_timestamped_note(api_key, test_name, new_note):
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    full_note = f"[{timestamp}] {new_note}"
+    return append_to_test_notes(api_key, test_name, full_note)
+
+# ✅ 45. Get test by record ID
+def get_test_by_id(api_key, record_id):
+    return get_airtable_record_by_id("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record_id, api_key)
+
+# ✅ 46. Check if test was created today
+def is_test_from_today(api_key, test_name):
+    from datetime import datetime
+    today = datetime.now().strftime("%Y-%m-%d")
+    test = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧪 Test Name", test_name)
+    if not test.get("records"):
+        return False
+    record_date = test["records"][0]["fields"].get("📅 Date Tested", "")
+    return record_date == today
+
+# ✅ 47. Get most recent N test records
+def get_recent_tests(api_key, limit=10):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    sorted_records = sorted(
+        records,
+        key=lambda r: r["fields"].get("📅 Date Tested", ""),
+        reverse=True
+    )
+    return sorted_records[:limit]
+
+# ✅ 48. Flag test as “in review” (optional field)
+def mark_test_in_review(api_key, test_name):
+    existing = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧪 Test Name", test_name)
+    if not existing.get("records"):
+        return {"error": "Test not found"}
+    record_id = existing["records"][0]["id"]
+    return update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record_id, api_key, {
+        "🕵️‍♂️ In Review?": "Yes"  # Field must exist
+    })
+
+# ✅ 49. Count tests run this week
+def count_tests_this_week(api_key):
+    from datetime import datetime, timedelta
+    today = datetime.now()
+    start = today - timedelta(days=today.weekday())
+    start_str = start.strftime("%Y-%m-%d")
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {"filterByFormula": f"IS_AFTER({{📅 Date Tested}}, '{start_str}')"}
+    response = requests.get(url, headers=headers, params=params)
+    return len(response.json().get("records", []))
+
+# ✅ 50. Get notes from failed tests only
+def get_failed_notes_only(api_key):
+    failed = get_failed_test_notes(api_key)
+    return [f["🧠 Notes"] for f in failed if f.get("🧠 Notes")]
