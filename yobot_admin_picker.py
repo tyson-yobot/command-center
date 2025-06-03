@@ -1236,6 +1236,230 @@ def master_control_panel():
     
     return functions
 
+def refine_ai_profile(client, persona_updates):
+    """1. AI Profile Refiner (Persona Updater)"""
+    try:
+        client_name = client["fields"].get("🧾 Client Name", "Unknown")
+        render_url = client["fields"].get("📦 Render URL")
+        
+        if not render_url:
+            print(f"No Render URL for {client_name}")
+            return False
+            
+        profile_data = {
+            "updates": persona_updates,
+            "timestamp": datetime.now().isoformat(),
+            "updated_by": "admin_panel"
+        }
+        
+        response = requests.post(
+            f"{render_url}/persona", 
+            json=profile_data,
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            print(f"🧠 AI persona updated for {client_name}")
+            
+            # Log the profile update
+            log_global_update(
+                f"AI Profile Updated: {client_name}",
+                f"Updates: {len(persona_updates)} changes applied"
+            )
+            
+            # Send notification
+            post_to_slack(f"🧠 AI persona refined for {client_name}")
+            
+            return True
+        else:
+            print(f"Profile update failed for {client_name}: {response.status_code}")
+            return False
+            
+    except Exception as e:
+        print(f"Profile update error: {str(e)}")
+        return False
+
+def fetch_lead_transcripts(client):
+    """2. Lead Transcript Fetcher"""
+    try:
+        client_name = client["fields"].get("🧾 Client Name", "Unknown")
+        render_url = client["fields"].get("📦 Render URL")
+        
+        if not render_url:
+            print(f"No Render URL for {client_name}")
+            return None
+            
+        response = requests.get(
+            f"{render_url}/transcripts",
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            transcripts = response.json()
+            print(f"📜 Lead transcripts for {client_name}:")
+            print("-" * 50)
+            
+            # Display transcript summary
+            if isinstance(transcripts, list):
+                print(f"Found {len(transcripts)} transcripts")
+                for i, transcript in enumerate(transcripts[:3]):  # Show first 3
+                    print(f"{i+1}. {transcript.get('lead_name', 'Unknown')} - {transcript.get('date', 'No date')}")
+            else:
+                print(str(transcripts)[:500] + "..." if len(str(transcripts)) > 500 else str(transcripts))
+            
+            print("-" * 50)
+            
+            # Log transcript access
+            log_global_update(
+                f"Transcripts Accessed: {client_name}",
+                f"Retrieved {len(transcripts) if isinstance(transcripts, list) else 1} transcripts"
+            )
+            
+            return transcripts
+        else:
+            print(f"Failed to fetch transcripts for {client_name}: {response.status_code}")
+            return None
+            
+    except Exception as e:
+        print(f"Transcript fetch error: {str(e)}")
+        return None
+
+def reexport_crm_data(client):
+    """3. Full CRM Re-Exporter"""
+    try:
+        client_name = client["fields"].get("🧾 Client Name", "Unknown")
+        base_id = client["fields"].get("📊 Airtable Base ID")
+        
+        if not base_id:
+            print(f"No Airtable Base ID for {client_name}")
+            return False
+            
+        headers = {"Authorization": f"Bearer {os.getenv('AIRTABLE_API_KEY')}"}
+        
+        # Trigger CRM export
+        export_data = {
+            "fields": {
+                "🔁 Export Trigger": "✅",
+                "📅 Export Timestamp": datetime.now().strftime('%Y-%m-%d %H:%M'),
+                "👤 Triggered By": "Admin Panel"
+            }
+        }
+        
+        response = requests.post(
+            f"https://api.airtable.com/v0/{base_id}/🎯%20CRM", 
+            headers=headers,
+            json={"records": [export_data]}
+        )
+        
+        if response.status_code == 200:
+            print(f"🔁 CRM re-export triggered for {client_name}")
+            
+            # Log the export action
+            log_global_update(
+                f"CRM Export: {client_name}",
+                "Full CRM data re-export initiated"
+            )
+            
+            # Send notification
+            post_to_slack(f"🔁 CRM data export started for {client_name}")
+            
+            return True
+        else:
+            print(f"CRM export failed for {client_name}: {response.status_code}")
+            return False
+            
+    except Exception as e:
+        print(f"CRM export error: {str(e)}")
+        return False
+
+def archive_bot_state(client):
+    """4. Bot State Snapshot Archiver"""
+    try:
+        client_name = client["fields"].get("🧾 Client Name", "Unknown")
+        render_url = client["fields"].get("📦 Render URL")
+        
+        if not render_url:
+            print(f"No Render URL for {client_name}")
+            return False
+            
+        response = requests.get(
+            f"{render_url}/state",
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            snapshot = response.json()
+            
+            # Create filename with timestamp
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            filename = f"{client_name.replace(' ', '_')}_{timestamp}_state.json"
+            
+            # Save snapshot to file
+            with open(filename, "w") as f:
+                json.dump(snapshot, f, indent=2)
+            
+            print(f"🗃️ State snapshot saved: {filename}")
+            
+            # Log the archive action
+            log_global_update(
+                f"State Archived: {client_name}",
+                f"Snapshot saved to {filename}"
+            )
+            
+            # Send notification
+            post_to_slack(f"🗃️ Bot state archived for {client_name}")
+            
+            return filename
+        else:
+            print(f"State fetch failed for {client_name}: {response.status_code}")
+            return False
+            
+    except Exception as e:
+        print(f"State archive error: {str(e)}")
+        return False
+
+def bulk_ai_profile_update(persona_changes):
+    """5. Bulk AI Profile Update Across All Clients"""
+    clients = get_all_clients()
+    updated_count = 0
+    
+    print(f"🧠 Updating AI profiles for {len(clients)} clients...")
+    
+    for client in clients:
+        if refine_ai_profile(client, persona_changes):
+            updated_count += 1
+    
+    summary = f"🧠 Bulk AI profile update complete: {updated_count}/{len(clients)} clients updated"
+    print(summary)
+    post_to_slack(summary)
+    
+    return updated_count
+
+def global_transcript_harvest():
+    """6. Global Transcript Harvest from All Clients"""
+    clients = get_all_clients()
+    all_transcripts = {}
+    
+    print(f"📜 Harvesting transcripts from {len(clients)} clients...")
+    
+    for client in clients:
+        client_name = client["fields"].get("🧾 Client Name", "Unknown")
+        transcripts = fetch_lead_transcripts(client)
+        if transcripts:
+            all_transcripts[client_name] = transcripts
+    
+    # Save combined transcripts
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    harvest_filename = f"global_transcript_harvest_{timestamp}.json"
+    
+    with open(harvest_filename, "w") as f:
+        json.dump(all_transcripts, f, indent=2)
+    
+    print(f"📜 Global transcript harvest saved: {harvest_filename}")
+    post_to_slack(f"📜 Global transcript harvest complete: {len(all_transcripts)} clients processed")
+    
+    return all_transcripts
+
 if __name__ == "__main__":
     try:
         print("YoBot Admin Control System")
