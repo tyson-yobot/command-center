@@ -101,6 +101,127 @@ def safe_get_nested(data, keys, default=""):
 def elapsed_seconds(start_time):
     return round((datetime.datetime.utcnow() - start_time).total_seconds(), 2)
 
+# Additional Core Utility Functions (21-30)
+def send_slack_alert(message, channel=None):
+    webhook_url = get_env_var("SLACK_WEBHOOK_URL")
+    if not webhook_url:
+        log_error("SLACK_WEBHOOK_URL is not set.")
+        return
+    payload = {
+        "text": message
+    }
+    if channel:
+        payload["channel"] = channel
+    try:
+        response = requests.post(webhook_url, json=payload)
+        if response.status_code != 200:
+            log_error(f"Slack alert failed: {response.text}")
+    except Exception as e:
+        log_error(f"Slack webhook error: {e}")
+
+def extract_email_from_text(text):
+    import re
+    match = re.search(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+", text)
+    return match.group(0) if match else ""
+
+def get_today_iso():
+    return datetime.datetime.utcnow().date().isoformat()
+
+def days_between(start_iso, end_iso=None):
+    try:
+        start = datetime.datetime.fromisoformat(start_iso)
+        end = datetime.datetime.fromisoformat(end_iso) if end_iso else datetime.datetime.utcnow()
+        return (end - start).days
+    except:
+        return 0
+
+def get_iso_datetime_offset(minutes=0):
+    return (datetime.datetime.utcnow() + datetime.timedelta(minutes=minutes)).isoformat()
+
+def ensure_https(url):
+    if url and not url.startswith("http"):
+        return "https://" + url
+    return url
+
+def truncate_string(text, max_len=250):
+    return text[:max_len] + "..." if len(text) > max_len else text
+
+def bool_to_checkbox(value):
+    return True if str(value).lower() in ["true", "1", "yes", "✅"] else False
+
+def airtable_date_now():
+    return datetime.datetime.utcnow().strftime("%Y-%m-%d")
+
+def json_safe_dict(obj):
+    try:
+        return json.loads(json.dumps(obj))
+    except Exception as e:
+        log_error(f"Failed to convert to JSON-safe dict: {e}")
+        return {}
+
+# Extended Utility Functions (31-40)
+def mask_sensitive(text, show_last=4):
+    if not text or len(text) <= show_last:
+        return "*" * len(text)
+    return "*" * (len(text) - show_last) + text[-show_last:]
+
+def flatten_dict(d, parent_key='', sep='__'):
+    items = []
+    for k, v in d.items():
+        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        if isinstance(v, dict):
+            items.extend(flatten_dict(v, new_key, sep=sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
+
+def remove_keys(d, keys_to_remove):
+    return {k: v for k, v in d.items() if k not in keys_to_remove}
+
+def strip_html_tags(text):
+    import re
+    clean = re.compile('<.*?>')
+    return re.sub(clean, '', text)
+
+def is_valid_url(url):
+    import re
+    pattern = re.compile(
+        r'^(https?|ftp):\/\/'  # protocol
+        r'(\S+(:\S*)?@)?'  # authentication
+        r'((([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,})|'  # domain...
+        r'localhost|'  # localhost...
+        r'(\d{1,3}\.){3}\d{1,3})'  # ...or IP
+        r'(:\d+)?'  # optional port
+        r'(\/[\w#!:.?+=&%@!\-/]*)?$'  # path
+    )
+    return re.match(pattern, url) is not None
+
+def pluralize(word, count):
+    return f"{count} {word}" + ("" if count == 1 else "s")
+
+def safe_int(val, default=0):
+    try:
+        return int(float(val))
+    except:
+        return default
+
+def safe_float(val, default=0.0):
+    try:
+        return float(val)
+    except:
+        return default
+
+def safe_divide(numerator, denominator, default=0):
+    try:
+        return numerator / denominator if denominator else default
+    except:
+        return default
+
+def summarize_list(items, max_display=3):
+    if len(items) <= max_display:
+        return ", ".join(items)
+    return ", ".join(items[:max_display]) + f", +{len(items) - max_display} more"
+
 # Enhanced functions with correct field mapping
 def build_log_payload(integration_name, status, notes, module_type, scenario_link, output_data=None, qa_owner="Automated System"):
     """Build payload with correct emoji field names for Integration Test Log 2"""
