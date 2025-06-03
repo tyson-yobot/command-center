@@ -136,6 +136,27 @@ export const knowledgeUsageLog = pgTable("knowledge_usage_log", {
   usedAt: timestamp("used_at").defaultNow(),
 });
 
+export const phantombusterLeads = pgTable("phantombuster_leads", {
+  id: serial("id").primaryKey(),
+  leadOwner: text("lead_owner").notNull(),
+  source: text("source").notNull().default("Phantombuster"),
+  campaignId: text("campaign_id"),
+  platform: text("platform").notNull(), // LinkedIn, Instagram, etc.
+  name: text("name").notNull(),
+  email: text("email"),
+  phone: text("phone"),
+  company: text("company"),
+  website: text("website"),
+  title: text("title"),
+  location: text("location"),
+  status: text("status").default("New"),
+  syncedHubspot: boolean("synced_hubspot").default(false),
+  syncedYobot: boolean("synced_yobot").default(false),
+  score: integer("score").default(0),
+  dateAdded: text("date_added"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -188,6 +209,11 @@ export const insertKnowledgeBaseSchema = createInsertSchema(knowledgeBase).omit(
   lastUsedAt: true,
 });
 
+export const insertPhantombusterLeadSchema = createInsertSchema(phantombusterLeads).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Bot = typeof bots.$inferSelect;
@@ -198,6 +224,7 @@ export type CrmData = typeof crmData.$inferSelect;
 export type ClientCompany = typeof clientCompanies.$inferSelect;
 export type ScannedContact = typeof scannedContacts.$inferSelect;
 export type KnowledgeBase = typeof knowledgeBase.$inferSelect;
+export type PhantombusterLead = typeof phantombusterLeads.$inferSelect;
 export type InsertBot = z.infer<typeof insertBotSchema>;
 export type InsertConversation = z.infer<typeof insertConversationSchema>;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
@@ -206,3 +233,4 @@ export type InsertCrmData = z.infer<typeof insertCrmDataSchema>;
 export type InsertClientCompany = z.infer<typeof insertClientCompanySchema>;
 export type InsertScannedContact = z.infer<typeof insertScannedContactSchema>;
 export type InsertKnowledgeBase = z.infer<typeof insertKnowledgeBaseSchema>;
+export type InsertPhantombusterLead = z.infer<typeof insertPhantombusterLeadSchema>;

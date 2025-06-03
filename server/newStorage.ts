@@ -8,6 +8,7 @@ import {
   scannedContacts,
   knowledgeBase,
   clientCompanies,
+  phantombusterLeads,
   type User, 
   type Bot, 
   type Conversation, 
@@ -17,6 +18,7 @@ import {
   type ScannedContact,
   type KnowledgeBase,
   type ClientCompany,
+  type PhantombusterLead,
   type InsertUser, 
   type InsertBot, 
   type InsertConversation, 
@@ -25,7 +27,8 @@ import {
   type InsertCrmData,
   type InsertScannedContact,
   type InsertKnowledgeBase,
-  type InsertClientCompany
+  type InsertClientCompany,
+  type InsertPhantombusterLead
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, like, and, or } from "drizzle-orm";
@@ -69,6 +72,12 @@ export interface IStorage {
   updateKnowledgeBase(id: number, updates: Partial<KnowledgeBase>): Promise<KnowledgeBase>;
   deleteKnowledgeBase(id: number): Promise<void>;
   searchKnowledgeBase(userId: number, query: string, tags?: string[]): Promise<KnowledgeBase[]>;
+  
+  // Phantombuster Lead methods
+  getPhantombusterLeads(): Promise<PhantombusterLead[]>;
+  getPhantombusterLead(id: number): Promise<PhantombusterLead | undefined>;
+  createPhantombusterLead(lead: InsertPhantombusterLead): Promise<PhantombusterLead>;
+  updatePhantombusterLead(id: number, updates: Partial<PhantombusterLead>): Promise<PhantombusterLead>;
 }
 
 export class DatabaseStorage implements IStorage {
