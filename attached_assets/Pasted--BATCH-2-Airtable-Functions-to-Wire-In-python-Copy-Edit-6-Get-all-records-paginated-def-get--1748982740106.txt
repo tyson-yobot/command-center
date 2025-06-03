@@ -1,0 +1,70 @@
+ BATCH 2: Airtable Functions to Wire In
+python
+Copy
+Edit
+# ✅ 6. Get all records (paginated)
+def get_all_airtable_records(base_id, table_id, api_key):
+    import time
+    url = f"https://api.airtable.com/v0/{base_id}/{table_id}"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    all_records = []
+    offset = None
+
+    while True:
+        params = {"pageSize": 100}
+        if offset:
+            params["offset"] = offset
+        response = requests.get(url, headers=headers, params=params).json()
+        records = response.get("records", [])
+        all_records.extend(records)
+        offset = response.get("offset")
+        if not offset:
+            break
+        time.sleep(0.2)  # prevent rate limit
+
+    return all_records
+
+# ✅ 7. Get record by Airtable record ID
+def get_airtable_record_by_id(base_id, table_id, record_id, api_key):
+    url = f"https://api.airtable.com/v0/{base_id}/{table_id}/{record_id}"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    response = requests.get(url, headers=headers)
+    return response.json()
+
+# ✅ 8. Check if a record exists by test name
+def test_result_exists(api_key, test_name):
+    result = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧪 Test Name", test_name)
+    return len(result.get("records", [])) > 0
+
+# ✅ 9. Update test result if exists, else create new
+def upsert_test_result(api_key, test_name, function_name, passed, notes, retested, tested_by, ref_link):
+    from datetime import datetime
+    existing = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧪 Test Name", test_name)
+    fields = {
+        "🧪 Test Name": test_name,
+        "🔌 Function Name": function_name,
+        "✅ Passed?": passed,
+        "🧠 Notes": notes,
+        "📅 Date Tested": datetime.now().strftime("%Y-%m-%d"),
+        "🔁 Retested?": retested,
+        "🧑‍💻 Tested By": tested_by,
+        "🔗 Reference Link": ref_link
+    }
+    if existing.get("records"):
+        record_id = existing["records"][0]["id"]
+        return update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record_id, api_key, fields)
+    else:
+        return create_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, fields)
+
+# ✅ 10. Batch insert multiple test logs
+def batch_log_tests(api_key, test_logs):
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "records": [{"fields": log} for log in test_logs]
+    }
+    response = requests.post(url, headers=headers, json=payload)
+    return response.json()
