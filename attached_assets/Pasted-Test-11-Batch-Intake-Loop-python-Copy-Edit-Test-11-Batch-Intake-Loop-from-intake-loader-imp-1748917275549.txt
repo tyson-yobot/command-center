@@ -1,0 +1,83 @@
+Test 11 — Batch Intake Loop
+python
+Copy
+Edit
+# 🔹 Test 11 — Batch Intake Loop
+from intake_loader import process_intake
+
+def test_batch_process():
+    result = process_intake(batch=True, dry_run=True)
+    assert isinstance(result, list)
+    assert all("status" in r for r in result)
+    print("✅ Batch Intake Loop: PASS")
+
+test_batch_process()
+🔹 Test 12 — Config Field Integrity
+python
+Copy
+Edit
+# 🔹 Test 12 — Config Field Integrity
+from intake_loader import build_config
+
+def test_config_fields():
+    intake = {
+        "client_name": "SteelFocus",
+        "industry": "Manufacturing",
+        "domain": "steelfocus.ai"
+    }
+    config = build_config(intake)
+    required_fields = ["env_vars", "voice_script", "gpt_prompts"]
+    assert all(field in config for field in required_fields)
+    print("✅ Config Field Integrity: PASS")
+
+test_config_fields()
+🔹 Test 13 — Render API Error Handling
+python
+Copy
+Edit
+# 🔹 Test 13 — Render API Error Handling
+from deploy_config_to_render import deploy_config
+
+def test_render_fail():
+    bad_config = {
+        "service_id": "nonexistent-service",
+        "env_vars": {"API_KEY": "fake"},
+        "dry_run": False
+    }
+    try:
+        deploy_config(bad_config)
+    except Exception as e:
+        assert "Render API" in str(e) or "404" in str(e)
+        print("✅ Render API Failure Handling: PASS")
+
+test_render_fail()
+🔹 Test 14 — Slack Payload Content Check
+python
+Copy
+Edit
+# 🔹 Test 14 — Slack Payload Content Check
+from deploy_hooks import format_slack_payload
+
+def test_slack_payload_content():
+    payload = format_slack_payload(client="SteelFocus", status="Success", url="https://render.com/steelfocus")
+    assert "SteelFocus" in payload["text"]
+    assert "Success" in payload["text"]
+    assert "https://" in payload["text"]
+    print("✅ Slack Payload Format: PASS")
+
+test_slack_payload_content()
+🔹 Test 15 — CRM Webhook Trigger
+python
+Copy
+Edit
+# 🔹 Test 15 — CRM Webhook Trigger
+from deploy_hooks import notify_crm
+from unittest.mock import patch
+
+def test_crm_hook():
+    with patch('requests.post') as mock_post:
+        notify_crm("client-xyz", "pipeline_updated", dry_run=True)
+        mock_post.assert_not_called()
+        print("✅ CRM Webhook Dry Mode: PASS")
+
+test_crm_hook()
