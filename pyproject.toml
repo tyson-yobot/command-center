@@ -8,8 +8,10 @@ dependencies = [
     "flask>=3.1.1",
     "openai>=1.83.0",
     "pandas>=2.2.3",
+    "pyairtable>=3.1.1",
     "requests>=2.32.3",
     "schedule>=1.2.2",
+    "slack-sdk>=3.35.0",
     "stripe>=12.2.0",
     "werkzeug>=3.1.3",
 ]
