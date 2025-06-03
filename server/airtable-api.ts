@@ -5,85 +5,15 @@ const INTEGRATION_TEST_BASE = "appCoAtCZdARb4AM2";
 const INTEGRATION_TEST_TABLE = "🧪 Integration Test Log 2";
 const COMMAND_CENTER_BASE = "appRt8V3tH4g5Z51f";
 
-// Get Integration Test Log metrics
+// Get test metrics - disconnected from Integration Test Log per user request
 export async function getTestMetrics(req: Request, res: Response) {
-  if (!AIRTABLE_API_KEY) {
-    return res.status(500).json({ error: "Airtable API key not configured" });
-  }
+  const metrics = {
+    isAuthenticated: false,
+    message: "Integration Test Log disconnected per user request",
+    lastUpdated: new Date().toISOString()
+  };
 
-  try {
-    const response = await fetch(
-      `https://api.airtable.com/v0/${INTEGRATION_TEST_BASE}/${INTEGRATION_TEST_TABLE}`,
-      {
-        headers: {
-          Authorization: `Bearer ${AIRTABLE_API_KEY}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Airtable API error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    const records = data.records || [];
-
-    // Calculate metrics from real test data
-    const totalTests = records.length;
-    const passedTests = records.filter(r => 
-      r.fields["✅ Pass/Fail"] === "✅ Pass"
-    ).length;
-    const failedTests = totalTests - passedTests;
-    const passRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
-
-    // Get recent test activity
-    const today = new Date().toISOString().split('T')[0];
-    const todayTests = records.filter(r => 
-      r.fields["📅 Test Date"]?.startsWith(today)
-    ).length;
-
-    // Calculate unique testers
-    const uniqueTesters = new Set(
-      records.map(r => r.fields["👤 QA Owner"]).filter(Boolean)
-    ).size;
-
-    // Get test distribution by function
-    const functionDistribution = records.reduce((acc: any, record) => {
-      const functionName = record.fields["🧩 Integration Name"];
-      if (functionName) {
-        acc[functionName] = (acc[functionName] || 0) + 1;
-      }
-      return acc;
-    }, {});
-
-    const metrics = {
-      totalTests,
-      passedTests,
-      failedTests,
-      passRate,
-      todayTests,
-      uniqueTesters,
-      functionDistribution,
-      recentActivity: records.slice(0, 10).map(r => ({
-        name: r.fields["🧩 Integration Name"] || "Unknown Test",
-        status: r.fields["✅ Pass/Fail"] || "Unknown",
-        date: r.fields["📅 Test Date"] || "",
-        tester: r.fields["👤 QA Owner"] || "Unknown",
-        notes: r.fields["📝 Notes / Debug"] || ""
-      })),
-      isAuthenticated: true,
-      lastUpdated: new Date().toISOString()
-    };
-
-    res.json(metrics);
-  } catch (error) {
-    console.error("Error fetching test metrics:", error);
-    res.status(500).json({ 
-      error: "Failed to fetch test metrics",
-      isAuthenticated: false,
-      message: "Unable to connect to Airtable Integration Test Log. Please verify API credentials."
-    });
-  }
+  res.json(metrics);
 }
 
 // Get Command Center metrics (when authentication is available)

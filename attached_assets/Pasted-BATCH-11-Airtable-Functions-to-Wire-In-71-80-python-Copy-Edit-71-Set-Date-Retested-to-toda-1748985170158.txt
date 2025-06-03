@@ -1,0 +1,85 @@
+BATCH 11: Airtable Functions to Wire In (71–80)
+python
+Copy
+Edit
+# ✅ 71. Set "Date Retested" to today
+def set_retest_date_today(api_key, test_name):
+    from datetime import datetime
+    today = datetime.now().strftime("%Y-%m-%d")
+    record = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧪 Test Name", test_name)
+    if not record.get("records"):
+        return {"error": "Test not found"}
+    return update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record["records"][0]["id"], api_key, {
+        "📅 Date Retested": today
+    })
+
+# ✅ 72. Find tests retested within last X days
+def get_recent_retests(api_key, days=7):
+    from datetime import datetime, timedelta
+    since = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {
+        "filterByFormula": f"IS_AFTER({{📅 Date Retested}}, '{since}')"
+    }
+    response = requests.get(url, headers=headers, params=params)
+    return response.json()
+
+# ✅ 73. Set QA score on test
+def set_test_qa_score(api_key, test_name, score):
+    record = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧪 Test Name", test_name)
+    if not record.get("records"):
+        return {"error": "Test not found"}
+    return update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record["records"][0]["id"], api_key, {
+        "🎯 QA Score": score
+    })
+
+# ✅ 74. Clear retest date field
+def clear_retest_date(api_key, test_name):
+    record = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧪 Test Name", test_name)
+    if not record.get("records"):
+        return {"error": "Test not found"}
+    return update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record["records"][0]["id"], api_key, {
+        "📅 Date Retested": ""
+    })
+
+# ✅ 75. Extract all override notes
+def get_all_override_notes(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return [r["fields"]["🧠 Notes"] for r in records if "MANUAL OVERRIDE" in r["fields"].get("🧠 Notes", "")]
+
+# ✅ 76. Calculate % passed from total tests
+def calculate_pass_rate(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    total = len(records)
+    passed = sum(1 for r in records if r["fields"].get("✅ Passed?") == "Yes")
+    return {"total": total, "passed": passed, "rate": (passed / total * 100) if total else 0}
+
+# ✅ 77. Get notes that contain "debug"
+def get_debug_notes(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return [r["fields"]["🧠 Notes"] for r in records if "DEBUG" in r["fields"].get("🧠 Notes", "")]
+
+# ✅ 78. Batch clear QA scores
+def clear_all_qa_scores(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    for r in records:
+        update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", r["id"], api_key, {"🎯 QA Score": ""})
+    return {"status": "QA scores cleared", "count": len(records)}
+
+# ✅ 79. Identify stale tests (older than X days)
+def get_stale_tests(api_key, days=30):
+    from datetime import datetime, timedelta
+    cutoff = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {"filterByFormula": f"IS_BEFORE({{📅 Date Tested}}, '{cutoff}')"}
+    response = requests.get(url, headers=headers, params=params)
+    return response.json()
+
+# ✅ 80. Add test tag with timestamp
+def tag_test_with_timestamp(api_key, test_name, tag):
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    full_tag = f"[{timestamp}] {tag}"
+    return append_to_test_notes(api_key, test_name, full_tag)

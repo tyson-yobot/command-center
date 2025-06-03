@@ -1,0 +1,70 @@
+ BATCH 12: Airtable Functions to Wire In (81–90)
+python
+Copy
+Edit
+# ✅ 81. Set test status to “In Progress”
+def mark_test_in_progress(api_key, test_name):
+    return append_to_test_notes(api_key, test_name, "⏳ Status: In Progress")
+
+# ✅ 82. Mark test as deprecated
+def deprecate_test(api_key, test_name, reason="No longer used"):
+    note = f"🗑️ DEPRECATED: {reason}"
+    return append_to_test_notes(api_key, test_name, note)
+
+# ✅ 83. List tests by tester
+def list_tests_by_tester(api_key, tester_name):
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {"filterByFormula": f"{{🧑‍💻 Tested By}} = '{tester_name}'"}
+    response = requests.get(url, headers=headers, params=params)
+    return response.json()
+
+# ✅ 84. Bulk mark tests as deprecated
+def bulk_deprecate_tests(api_key, test_names, reason="Obsolete"):
+    for name in test_names:
+        deprecate_test(api_key, name, reason)
+    return {"status": "Deprecated", "count": len(test_names)}
+
+# ✅ 85. Count tests with no retest date
+def count_tests_missing_retest_date(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return sum(1 for r in records if not r["fields"].get("📅 Date Retested"))
+
+# ✅ 86. Clear override messages only
+def clear_override_notes(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    for r in records:
+        notes = r["fields"].get("🧠 Notes", "")
+        if "MANUAL OVERRIDE" in notes:
+            cleaned = "\n".join([line for line in notes.splitlines() if "MANUAL OVERRIDE" not in line])
+            update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", r["id"], api_key, {"🧠 Notes": cleaned})
+    return {"status": "Override notes removed"}
+
+# ✅ 87. Mark test as passed and final
+def finalize_test(api_key, test_name):
+    toggle_test_result(api_key, test_name, True)
+    append_to_test_notes(api_key, test_name, "✅ Finalized & Passed")
+    return {"status": "Finalized"}
+
+# ✅ 88. Archive test by adding archive flag in notes
+def archive_test(api_key, test_name):
+    return append_to_test_notes(api_key, test_name, "📦 ARCHIVED")
+
+# ✅ 89. Find all archived tests
+def get_archived_tests(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return [r for r in records if "ARCHIVED" in r["fields"].get("🧠 Notes", "")]
+
+# ✅ 90. Get total test count by status
+def get_test_counts_by_status(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    summary = {"passed": 0, "failed": 0, "blank": 0}
+    for r in records:
+        status = r["fields"].get("✅ Passed?")
+        if status == "Yes":
+            summary["passed"] += 1
+        elif status == "No":
+            summary["failed"] += 1
+        else:
+            summary["blank"] += 1
+    return summary

@@ -1,0 +1,92 @@
+BATCH 13: Airtable Functions to Wire In (91–100)
+python
+Copy
+Edit
+# ✅ 91. Reset a single test (clear all fields except name)
+def reset_test_record(api_key, test_name):
+    record = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧪 Test Name", test_name)
+    if not record.get("records"):
+        return {"error": "Test not found"}
+    fields_to_clear = {
+        "✅ Passed?": "",
+        "🔁 Retested?": "",
+        "📅 Date Tested": "",
+        "📅 Date Retested": "",
+        "🧠 Notes": "",
+        "🎯 QA Score": "",
+        "🧑‍💻 Tested By": ""
+    }
+    return update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record["records"][0]["id"], api_key, fields_to_clear)
+
+# ✅ 92. Pull only failed tests with override notes
+def get_failed_overridden_tests(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return [
+        r for r in records
+        if r["fields"].get("✅ Passed?") == "No"
+        and "MANUAL OVERRIDE" in r["fields"].get("🧠 Notes", "")
+    ]
+
+# ✅ 93. Export tests to plain text (basic format)
+def export_test_names(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return "\n".join([r["fields"].get("🧪 Test Name", "Unnamed") for r in records])
+
+# ✅ 94. Detect duplicate test names
+def find_duplicate_tests(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    seen = {}
+    duplicates = []
+    for r in records:
+        name = r["fields"].get("🧪 Test Name", "")
+        if name in seen:
+            duplicates.append(name)
+        else:
+            seen[name] = True
+    return list(set(duplicates))
+
+# ✅ 95. Log test runtime duration
+def log_test_duration(api_key, test_name, duration_seconds):
+    return append_to_test_notes(api_key, test_name, f"⏱️ Duration: {duration_seconds} sec")
+
+# ✅ 96. List all tests by status (grouped)
+def list_tests_by_status(api_key):
+    results = {"Passed": [], "Failed": [], "Blank": []}
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    for r in records:
+        name = r["fields"].get("🧪 Test Name", "")
+        status = r["fields"].get("✅ Passed?")
+        if status == "Yes":
+            results["Passed"].append(name)
+        elif status == "No":
+            results["Failed"].append(name)
+        else:
+            results["Blank"].append(name)
+    return results
+
+# ✅ 97. Bulk assign tester name to all blank tests
+def assign_default_tester(api_key, tester_name):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    for r in records:
+        if not r["fields"].get("🧑‍💻 Tested By"):
+            update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", r["id"], api_key, {
+                "🧑‍💻 Tested By": tester_name
+            })
+    return {"status": "Default tester assigned"}
+
+# ✅ 98. Add batch tag to multiple tests
+def batch_tag_tests(api_key, test_names, tag):
+    for name in test_names:
+        append_to_test_notes(api_key, name, f"🏷️ {tag}")
+    return {"status": f"Tagged {len(test_names)} tests"}
+
+# ✅ 99. Get total number of notes logged
+def total_notes_logged(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return sum(1 for r in records if r["fields"].get("🧠 Notes"))
+
+# ✅ 100. Verify that all tests have unique names
+def verify_unique_test_names(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    names = [r["fields"].get("🧪 Test Name", "") for r in records]
+    return len(names) == len(set(names))

@@ -1,0 +1,68 @@
+# ✅ 61. Mark test as “blocked” with reason
+def mark_test_blocked(api_key, test_name, reason):
+    note = f"🚫 BLOCKED: {reason}"
+    append_to_test_notes(api_key, test_name, note)
+    return update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", find_airtable_record(
+        "appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧪 Test Name", test_name)["records"][0]["id"], api_key, {
+        "✅ Passed?": "No",
+        "🔁 Retested?": "No"
+    })
+
+# ✅ 62. Purge all test notes (for reset scenarios)
+def purge_all_test_notes(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    for r in records:
+        update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", r["id"], api_key, {"🧠 Notes": ""})
+    return {"status": "Notes cleared", "count": len(records)}
+
+# ✅ 63. Toggle retest field manually
+def toggle_retest_field(api_key, test_name, mark_retest=True):
+    existing = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧪 Test Name", test_name)
+    if not existing.get("records"):
+        return {"error": "Test not found"}
+    return update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", existing["records"][0]["id"], api_key, {
+        "🔁 Retested?": "Yes" if mark_retest else "No"
+    })
+
+# ✅ 64. Count all tests with status “Blocked”
+def count_blocked_tests(api_key):
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {"filterByFormula": "FIND('BLOCKED', {🧠 Notes})"}
+    response = requests.get(url, headers=headers, params=params)
+    return len(response.json().get("records", []))
+
+# ✅ 65. Rename a test (by cloning + deleting original)
+def rename_test(api_key, old_name, new_name):
+    result = clone_test_record(api_key, old_name, new_name)
+    if "error" not in result:
+        delete_test_by_name(api_key, old_name)
+    return result
+
+# ✅ 66. Pull full log history for a specific test
+def get_full_test_history(api_key, test_name):
+    return find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧪 Test Name", test_name)
+
+# ✅ 67. Clear all pass/fail/retest fields
+def clear_test_status_flags(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    for r in records:
+        update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", r["id"], api_key, {
+            "✅ Passed?": "",
+            "🔁 Retested?": ""
+        })
+    return {"status": "All flags cleared", "count": len(records)}
+
+# ✅ 68. Pull all tests with no pass/fail status
+def get_tests_with_blank_status(api_key):
+    records = get_all_airtable_records("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key)
+    return [r for r in records if not r["fields"].get("✅ Passed?")]
+
+# ✅ 69. Log manual override reason
+def log_override_reason(api_key, test_name, override_msg):
+    return append_to_test_notes(api_key, test_name, f"⚠️ MANUAL OVERRIDE: {override_msg}")
+
+# ✅ 70. Count all tests with the same function name
+def count_tests_per_function(api_key, function_name):
+    records = get_tests_by_function_name(api_key, function_name)
+    return len(records.get("records", []))
