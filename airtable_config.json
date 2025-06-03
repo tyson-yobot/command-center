@@ -1,8 +1,8 @@
 {
-  "integration_test_log": {
+  "1_integration_test_log": {
     "baseId": "appRt8V3tH4g5Z51f",
     "tableName": "Integration Test Log",
-    "tableId": "tblIntegrationTestLog",
+    "tableId": "tbl_integration_test_log",
     "view": "❌ Fails Only",
     "fields": {
       "integration_name": "🔧 Integration Name",
@@ -15,7 +15,7 @@
       "link": "🌐 Link"
     }
   },
-  "leads_intake": {
+  "2_leads_intake": {
     "baseId": "appRt8V3tH4g5Z51f",
     "tableName": "Leads - Intake",
     "tableId": "tblZhtHGNNRncYG9v",
@@ -30,10 +30,10 @@
       "email": "📧 Email"
     }
   },
-  "client_instances": {
+  "3_client_instances": {
     "baseId": "appRt8V3tH4g5Z51f",
     "tableName": "Client Instances",
-    "tableId": "tblClientInstances",
+    "tableId": "tbl_client_instances",
     "fields": {
       "client_name": "🧾 Client Name",
       "render_url": "📦 Render URL",
@@ -43,10 +43,89 @@
       "last_updated": "⏰ Last Updated"
     }
   },
-  "command_center_metrics": {
+  "4_call_logs": {
+    "baseId": "appRt8V3tH4g5Z51f",
+    "tableName": "Call Logs",
+    "tableId": "tbl_calls_logs",
+    "view": "📞 Call Failures",
+    "fields": {
+      "client_name": "🧾 Client Name",
+      "fail_reason": "⚠️ Fail Reason",
+      "date": "📅 Date",
+      "outcome": "🎯 Outcome"
+    }
+  },
+  "5_support_ticket_log": {
+    "baseId": "appCoAtCZdARb4A4F",
+    "tableName": "Support Ticket Log",
+    "tableId": "tbl_support_ticket_log",
+    "fields": {
+      "ticket_id": "🎫 Ticket ID",
+      "client": "👤 Client",
+      "status": "📋 Status",
+      "priority": "⚡ Priority",
+      "created": "🗓️ Created"
+    }
+  },
+  "6_error_fallback_log": {
+    "baseId": "appCoAtCZdARb4A4F",
+    "tableName": "Error + Fallback Log",
+    "tableId": "tbl_error_fallback_log",
+    "fields": {
+      "error_type": "❌ Error Type",
+      "client": "👤 Client",
+      "timestamp": "⏰ Timestamp",
+      "fallback_used": "🔄 Fallback Used"
+    }
+  },
+  "7_event_sync_log": {
+    "baseId": "appCoAtCZdARb4A4F",
+    "tableName": "Event Sync Log",
+    "tableId": "tbl_event_sync_log",
+    "fields": {
+      "event_type": "📋 Event Type",
+      "sync_status": "✅ Sync Status",
+      "timestamp": "⏰ Timestamp",
+      "details": "📝 Details"
+    }
+  },
+  "8_smartspend_slack_logs": {
+    "baseId": "appCoAtCZdARb4A4F",
+    "tableName": "SmartSpend - Slack Logs",
+    "tableId": "tbl_slack_logs",
+    "fields": {
+      "message": "💬 Message",
+      "channel": "📺 Channel",
+      "timestamp": "⏰ Timestamp",
+      "user": "👤 User"
+    }
+  },
+  "9_support_settings": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableName": "Support Settings",
+    "tableId": "tbl_support_settings",
+    "fields": {
+      "setting_name": "⚙️ Setting Name",
+      "value": "🔢 Value",
+      "description": "📝 Description",
+      "active": "✅ Active"
+    }
+  },
+  "10_support_metrics_rollup": {
+    "baseId": "appe05t1B1tn1Kn5",
+    "tableName": "Support Metrics Rollup",
+    "tableId": "tbl_support_metrics_rollup",
+    "fields": {
+      "metric": "📊 Metric",
+      "value": "🔢 Value",
+      "period": "📅 Period",
+      "client": "👤 Client"
+    }
+  },
+  "11_command_center_metrics": {
     "baseId": "appRt8V3tH4g5Z51f",
     "tableName": "Command Center - Metrics Tracker",
-    "tableId": "tblMetricsTracker",
+    "tableId": "tbl_metrics_tracker",
     "fields": {
       "metric_name": "📊 Metric Name",
       "value": "🔢 Value",
@@ -54,10 +133,10 @@
       "client": "👤 Client"
     }
   },
-  "industry_templates": {
+  "12_industry_templates": {
     "baseId": "appRt8V3tH4g5Z51f",
     "tableName": "Industry Templates",
-    "tableId": "tblIndustryTemplates",
+    "tableId": "tbl_industry_templates",
     "fields": {
       "template_name": "🏭 Template Name",
       "industry": "🏢 Industry",
@@ -65,10 +144,10 @@
       "active": "✅ Active"
     }
   },
-  "client_intake": {
+  "13_client_intake": {
     "baseId": "appRt8V3tH4g5Z51f",
     "tableName": "Client Intake",
-    "tableId": "tblClientIntake",
+    "tableId": "tbl_client_intake",
     "fields": {
       "company_name": "🏢 Company Name",
       "contact_email": "📧 Contact Email",

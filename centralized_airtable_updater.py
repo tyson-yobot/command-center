@@ -61,7 +61,7 @@ def update_failed_records():
     
     try:
         # Use centralized configuration to get records
-        records = airtable.get_records('integration_test_log', view='❌ Fails Only')
+        records = airtable.get_records('1_integration_test_log', view='❌ Fails Only')
         print(f"Found {len(records)} records in Integration Test Log")
         
         updated_count = 0
