@@ -17,7 +17,7 @@ def run_comprehensive_test_suite():
     
     print("Comprehensive YoBot Test Suite")
     print("=" * 50)
-    print("Testing all 33 functions with automatic Airtable logging")
+    print("Testing all 38 functions with automatic Airtable logging")
     print()
     
     total_tests = 0

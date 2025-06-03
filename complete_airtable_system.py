@@ -519,6 +519,63 @@ def get_tests_missing_links(api_key):
     return [r for r in records if not r["fields"].get("📂 Related Scenario Link")]
 
 # ========================================
+# BATCH 6: Advanced Analytics Functions (26-30)
+# ========================================
+
+def get_latest_test_result(api_key, test_name):
+    """Get most recent test by name"""
+    records = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧩 Integration Name", test_name)
+    if not records.get("records"):
+        return None
+    sorted_records = sorted(
+        records["records"],
+        key=lambda r: r["fields"].get("📅 Test Date", ""),
+        reverse=True
+    )
+    return sorted_records[0] if sorted_records else None
+
+def get_tests_by_tester(api_key, tester_name):
+    """Filter tests by tester name"""
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {"filterByFormula": f"{{👤 QA Owner}} = '{tester_name}'"}
+    response = requests.get(url, headers=headers, params=params)
+    return response.json()
+
+def archive_test_result(api_key, test_name):
+    """Archive test results by setting a custom field"""
+    existing = find_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", api_key, "🧩 Integration Name", test_name)
+    if not existing.get("records"):
+        return {"error": "Test not found"}
+    record_id = existing["records"][0]["id"]
+    return update_airtable_record("appCoAtCZdARb4AM2", "tblRNjNnaGL5ICIf9", record_id, api_key, {
+        "📁 Record Created?": False  # Use existing field as archive flag
+    })
+
+def get_tests_by_tag(api_key, tag_keyword):
+    """Pull all test results with a specific tag"""
+    url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    params = {
+        "filterByFormula": f"FIND('{tag_keyword}', {{📝 Notes / Debug}})"
+    }
+    response = requests.get(url, headers=headers, params=params)
+    return response.json()
+
+def post_results_to_slack(test_summary, slack_webhook_url):
+    """Push full integration results to Slack"""
+    payload = {
+        "text": f"""🧪 *Test Summary Report*
+Total: {test_summary['total']}
+✅ Passed: {test_summary['passed']}
+❌ Failed: {test_summary['failed']}
+📊 Pass Rate: {test_summary['pass_rate']}%
+"""
+    }
+    response = requests.post(slack_webhook_url, json=payload)
+    return response.status_code == 200
+
+# ========================================
 # COMPREHENSIVE TESTING SYSTEM
 # ========================================
 
