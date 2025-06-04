@@ -81,6 +81,9 @@ export default function SystemControls() {
     stripePayments: 'live',
     quickbooks: 'failed',
     twilioSms: 'live',
+    missedCallResponder: 'live',
+    inboundCallWebhook: 'live',
+    callCompletionTracking: 'live',
     documentGeneration: 'live',
     pdfProcessor: 'warning',
     fileStorage: 'live',
@@ -175,6 +178,9 @@ export default function SystemControls() {
     stripePayments: false,
     quickbooks: false,
     twilioSms: true,
+    missedCallResponder: true,
+    inboundCallWebhook: true,
+    callCompletionTracking: true,
     
     // File Management
     documentGeneration: true,
@@ -306,6 +312,9 @@ export default function SystemControls() {
     stripePayments: { category: 'Integrations', name: 'Stripe Payments', visibleTo: ['admin'] },
     quickbooks: { category: 'Integrations', name: 'QuickBooks', visibleTo: ['admin'] },
     twilioSms: { category: 'Integrations', name: 'Twilio SMS', visibleTo: ['admin', 'support'] },
+    missedCallResponder: { category: 'Voice & Communication', name: 'Missed Call Responder', visibleTo: ['admin', 'support'] },
+    inboundCallWebhook: { category: 'Voice & Communication', name: 'Inbound Call Webhook', visibleTo: ['admin', 'support'] },
+    callCompletionTracking: { category: 'Voice & Communication', name: 'Call Completion Tracking', visibleTo: ['admin', 'support'] },
     
     // File Management
     documentGeneration: { category: 'File Management', name: 'Document Generation', visibleTo: ['admin', 'client'] },
