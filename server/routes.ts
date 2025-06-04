@@ -241,6 +241,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
   setupCentralizedWebhookRouter(app);
   console.log('✅ Centralized webhook router active - all automations route to main desktop command center');
 
+  // Webhook automation endpoint that returns JSON responses
+  app.post('/api/webhook/automation', async (req, res) => {
+    try {
+      const { type, data } = req.body;
+      console.log('Webhook automation triggered:', type, data);
+      
+      // Get WebSocket instance
+      const io = (global as any).io;
+      if (io) {
+        io.emit('automation_triggered', {
+          type,
+          data,
+          timestamp: new Date().toISOString(),
+          source: 'webhook'
+        });
+        console.log('Automation event broadcasted via WebSocket');
+      }
+      
+      res.json({
+        success: true,
+        message: 'Automation triggered successfully',
+        type,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Webhook automation error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
   // Main Desktop Command Center configuration endpoint
   app.get('/api/main-desktop-command-center/config/:client_id', (req, res) => {
     const { client_id } = req.params;
