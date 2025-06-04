@@ -493,7 +493,7 @@ export default function ClientDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">AI Responses</CardTitle>
               <Brain className="h-4 w-4 text-blue-400" />
@@ -506,7 +506,7 @@ export default function ClientDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Pipeline Value</CardTitle>
               <DollarSign className="h-4 w-4 text-emerald-400" />
@@ -519,7 +519,7 @@ export default function ClientDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">System Health</CardTitle>
               <Gauge className="h-4 w-4 text-amber-400" />
@@ -536,7 +536,7 @@ export default function ClientDashboard() {
         {/* Essential Business Modules */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
           {/* Bot Health Monitor */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-green-400" />
@@ -570,7 +570,7 @@ export default function ClientDashboard() {
           </Card>
 
           {/* Revenue Forecast */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <TrendingUp className="w-5 h-5 mr-2 text-blue-400" />
@@ -604,7 +604,7 @@ export default function ClientDashboard() {
           </Card>
 
           {/* Client Pulse Summary */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Users className="w-5 h-5 mr-2 text-purple-400" />
@@ -638,7 +638,7 @@ export default function ClientDashboard() {
           </Card>
 
           {/* Ops Metrics */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Gauge className="w-5 h-5 mr-2 text-yellow-400" />
@@ -675,7 +675,7 @@ export default function ClientDashboard() {
         {/* Main Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
           {/* Automation Engine */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Zap className="w-5 h-5 mr-2 text-yellow-400" />
