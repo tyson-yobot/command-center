@@ -1,0 +1,202 @@
+{
+  "test_summary": {
+    "total_tests": 25,
+    "passed_tests": 25,
+    "pass_rate": "100.0%",
+    "test_date": "2025-06-04T09:52:09.116268"
+  },
+  "trigger_performance": {
+    "auto_token_refresh": {
+      "total": 5,
+      "passed": 5
+    },
+    "sentiment_override": {
+      "total": 5,
+      "passed": 5
+    },
+    "high_severity_alert": {
+      "total": 5,
+      "passed": 5
+    },
+    "audit_logger": {
+      "total": 5,
+      "passed": 5
+    },
+    "rag_tag_evaluator": {
+      "total": 5,
+      "passed": 5
+    }
+  },
+  "detailed_results": [
+    {
+      "trigger": "auto_token_refresh",
+      "scenario": "Expired token with retry",
+      "status": "PASS",
+      "timestamp": "2025-06-04T09:52:09.110576"
+    },
+    {
+      "trigger": "auto_token_refresh",
+      "scenario": "Nearly expired token",
+      "status": "PASS",
+      "timestamp": "2025-06-04T09:52:09.110637"
+    },
+    {
+      "trigger": "auto_token_refresh",
+      "scenario": "Invalid token format",
+      "status": "PASS",
+      "timestamp": "2025-06-04T09:52:09.110686"
+    },
+    {
+      "trigger": "auto_token_refresh",
+      "scenario": "Network timeout during refresh",
+      "status": "PASS",
+      "timestamp": "2025-06-04T09:52:09.110729"
+    },
+    {
+      "trigger": "auto_token_refresh",
+      "scenario": "Multiple rapid refresh requests",
+      "status": "PASS",
+      "timestamp": "2025-06-04T09:52:09.110771"
+    },
+    {
+      "trigger": "sentiment_override",
+      "scenario": "extreme_negative",
+      "status": "PASS",
+      "sentiment_score": -0.9,
+      "timestamp": "2025-06-04T09:52:09.110924"
+    },
+    {
+      "trigger": "sentiment_override",
+      "scenario": "mild_negative",
+      "status": "PASS",
+      "sentiment_score": -0.3,
+      "timestamp": "2025-06-04T09:52:09.111089"
+    },
+    {
+      "trigger": "sentiment_override",
+      "scenario": "emoji_negative",
+      "status": "PASS",
+      "sentiment_score": -0.95,
+      "timestamp": "2025-06-04T09:52:09.111175"
+    },
+    {
+      "trigger": "sentiment_override",
+      "scenario": "empty_input",
+      "status": "PASS",
+      "sentiment_score": 0.0,
+      "timestamp": "2025-06-04T09:52:09.111317"
+    },
+    {
+      "trigger": "sentiment_override",
+      "scenario": "mixed_sentiment",
+      "status": "PASS",
+      "sentiment_score": -0.1,
+      "timestamp": "2025-06-04T09:52:09.111410"
+    },
+    {
+      "trigger": "high_severity_alert",
+      "scenario": "critical_payment_failure",
+      "status": "PASS",
+      "severity": "CRITICAL",
+      "timestamp": "2025-06-04T09:52:09.111680"
+    },
+    {
+      "trigger": "high_severity_alert",
+      "scenario": "voice_system_down",
+      "status": "PASS",
+      "severity": "HIGH",
+      "timestamp": "2025-06-04T09:52:09.111761"
+    },
+    {
+      "trigger": "high_severity_alert",
+      "scenario": "database_corruption",
+      "status": "PASS",
+      "severity": "EMERGENCY",
+      "timestamp": "2025-06-04T09:52:09.111873"
+    },
+    {
+      "trigger": "high_severity_alert",
+      "scenario": "mass_user_impact",
+      "status": "PASS",
+      "severity": "HIGH",
+      "timestamp": "2025-06-04T09:52:09.112005"
+    },
+    {
+      "trigger": "high_severity_alert",
+      "scenario": "security_breach",
+      "status": "PASS",
+      "severity": "CRITICAL",
+      "timestamp": "2025-06-04T09:52:09.112096"
+    },
+    {
+      "trigger": "audit_logger",
+      "scenario": "emergency_override",
+      "status": "PASS",
+      "override_type": "EMERGENCY_STOP",
+      "timestamp": "2025-06-04T09:52:09.112264"
+    },
+    {
+      "trigger": "audit_logger",
+      "scenario": "bulk_data_fix",
+      "status": "PASS",
+      "override_type": "DATA_CORRECTION",
+      "timestamp": "2025-06-04T09:52:09.112323"
+    },
+    {
+      "trigger": "audit_logger",
+      "scenario": "policy_exception",
+      "status": "PASS",
+      "override_type": "POLICY_BYPASS",
+      "timestamp": "2025-06-04T09:52:09.112434"
+    },
+    {
+      "trigger": "audit_logger",
+      "scenario": "maintenance_override",
+      "status": "PASS",
+      "override_type": "SYSTEM_MAINTENANCE",
+      "timestamp": "2025-06-04T09:52:09.112523"
+    },
+    {
+      "trigger": "audit_logger",
+      "scenario": "legal_compliance",
+      "status": "PASS",
+      "override_type": "COMPLIANCE_ADJUSTMENT",
+      "timestamp": "2025-06-04T09:52:09.112581"
+    },
+    {
+      "trigger": "rag_tag_evaluator",
+      "scenario": "billing_cancellation",
+      "status": "PASS",
+      "classification": "BILLING_SUPPORT",
+      "timestamp": "2025-06-04T09:52:09.112766"
+    },
+    {
+      "trigger": "rag_tag_evaluator",
+      "scenario": "urgent_technical_issue",
+      "status": "PASS",
+      "classification": "TECHNICAL_SUPPORT",
+      "timestamp": "2025-06-04T09:52:09.112840"
+    },
+    {
+      "trigger": "rag_tag_evaluator",
+      "scenario": "non_text_query",
+      "status": "PASS",
+      "classification": "NON_TEXT_QUERY",
+      "timestamp": "2025-06-04T09:52:09.112901"
+    },
+    {
+      "trigger": "rag_tag_evaluator",
+      "scenario": "philosophical_mixed",
+      "status": "PASS",
+      "classification": "COMPLEX_MIXED_QUERY",
+      "timestamp": "2025-06-04T09:52:09.113032"
+    },
+    {
+      "trigger": "rag_tag_evaluator",
+      "scenario": "empty_query",
+      "status": "PASS",
+      "classification": "EMPTY_QUERY",
+      "timestamp": "2025-06-04T09:52:09.113103"
+    }
+  ]
+}

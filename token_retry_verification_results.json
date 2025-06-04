@@ -1,0 +1,58 @@
+{
+  "verification_summary": {
+    "token_refresh_working": true,
+    "job_retry_working": false,
+    "auto_scheduling": true,
+    "system_resilience": true
+  },
+  "token_status": {
+    "openai_api": {
+      "expires_at": "2025-06-04T10:54:39.156555",
+      "valid": true
+    },
+    "stripe_api": {
+      "expires_at": "2025-06-04T10:54:45.158761",
+      "valid": true
+    },
+    "hubspot_api": {
+      "expires_at": "2025-06-04T10:54:45.158904",
+      "valid": true
+    },
+    "twilio_api": {
+      "expires_at": "2025-06-04T10:54:45.159091",
+      "valid": true
+    }
+  },
+  "job_statistics": {
+    "active_failed": 3,
+    "completed_retries": 0,
+    "permanent_failures": 0
+  },
+  "job_history": [
+    {
+      "action": "token_refresh",
+      "service": "openai_api",
+      "timestamp": "2025-06-04T09:54:39.156666",
+      "status": "success"
+    },
+    {
+      "action": "token_refresh",
+      "service": "stripe_api",
+      "timestamp": "2025-06-04T09:54:45.158833",
+      "status": "success"
+    },
+    {
+      "action": "token_refresh",
+      "service": "hubspot_api",
+      "timestamp": "2025-06-04T09:54:45.159049",
+      "status": "success"
+    },
+    {
+      "action": "token_refresh",
+      "service": "twilio_api",
+      "timestamp": "2025-06-04T09:54:45.159125",
+      "status": "success"
+    }
+  ],
+  "overall_status": "NEEDS_ATTENTION"
+}
