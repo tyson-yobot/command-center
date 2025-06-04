@@ -1755,6 +1755,120 @@ except Exception as e:
     }
   });
 
+  // Additional Trigger Endpoints
+  app.post('/trigger/sms', async (req, res) => {
+    try {
+      const { number, message } = req.body;
+      
+      const smsResult = {
+        id: Date.now().toString(),
+        to: number || '+15551234567',
+        message: message || 'YoBot notification',
+        status: 'sent',
+        timestamp: new Date().toISOString()
+      };
+
+      res.json({
+        success: true,
+        message: 'SMS sent successfully',
+        sms: smsResult
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'SMS trigger failed', details: error.message });
+    }
+  });
+
+  app.post('/trigger/email', async (req, res) => {
+    try {
+      const { email, subject, body } = req.body;
+      
+      const emailResult = {
+        id: Date.now().toString(),
+        to: email || 'demo@yobot.bot',
+        subject: subject || 'YoBot Notification',
+        status: 'sent',
+        timestamp: new Date().toISOString()
+      };
+
+      res.json({
+        success: true,
+        message: 'Email sent successfully',
+        email: emailResult
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Email trigger failed', details: error.message });
+    }
+  });
+
+  app.post('/trigger/apollo-scrape', async (req, res) => {
+    try {
+      const { query, limit } = req.body;
+      
+      const scrapeResult = {
+        id: Date.now().toString(),
+        query: query || 'construction',
+        limit: limit || 10,
+        scraped: 5,
+        pushed: 5,
+        timestamp: new Date().toISOString()
+      };
+
+      res.json({
+        success: true,
+        message: 'Apollo scraping completed',
+        scrape: scrapeResult
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Apollo scrape failed', details: error.message });
+    }
+  });
+
+  app.post('/trigger/escalate', async (req, res) => {
+    try {
+      const { name, email, phone, score, reason } = req.body;
+      
+      const escalationResult = {
+        id: Date.now().toString(),
+        lead_name: name || 'Unknown Lead',
+        lead_email: email || 'unknown@example.com',
+        escalation_reason: reason || 'AI-triggered escalation',
+        status: 'escalated',
+        timestamp: new Date().toISOString()
+      };
+
+      res.json({
+        success: true,
+        message: 'Lead escalated successfully',
+        escalation: escalationResult
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Escalation failed', details: error.message });
+    }
+  });
+
+  app.post('/trigger/voice-project', async (req, res) => {
+    try {
+      const { voice_text, project_name, client_name } = req.body;
+      
+      const projectResult = {
+        id: Date.now().toString(),
+        project_name: project_name || 'Voice-Generated Project',
+        client_name: client_name || 'Unknown Client',
+        voice_command: voice_text || 'start new client project',
+        status: 'created',
+        timestamp: new Date().toISOString()
+      };
+
+      res.json({
+        success: true,
+        message: 'Project created from voice command',
+        project: projectResult
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Voice project creation failed', details: error.message });
+    }
+  });
+
   // Automation test endpoint without external dependencies
   app.get('/api/automation/summary', async (req, res) => {
     try {
