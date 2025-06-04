@@ -82,6 +82,10 @@ app.post('/api/reports/pdf', async (req, res) => {
   const { registerBatch21Routes } = await import('./automationBatch21');
   registerBatch21Routes(app);
   
+  // Register Twilio SMS automation routes (Functions 301-310)
+  const twilioRoutes = await import('./twilioRoutes');
+  app.use('/api/automation-twilio', twilioRoutes.default);
+  
   // Start complete system automation
   console.log("🤖 Starting Complete System Automation...");
   completeAutomation.startCompleteAutomation();
