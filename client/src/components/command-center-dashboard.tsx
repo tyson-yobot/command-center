@@ -137,6 +137,73 @@ export default function CommandCenterDashboard() {
     }
   };
 
+  const executeLiveCommand = async (category: string) => {
+    setIsExecuting(true);
+    
+    try {
+      const payload = getLiveCommandPayload(category);
+      
+      const response = await apiRequest("POST", "/api/command-center/trigger", {
+        category,
+        payload
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "Command Executed",
+          description: `${category} completed successfully`
+        });
+
+        setExecutionResults(prev => [{
+          category,
+          result: result.result,
+          timestamp: new Date().toISOString(),
+          success: true
+        }, ...prev.slice(0, 4)]);
+      } else {
+        toast({
+          title: "Command Failed",
+          description: result.error || "Unknown error occurred",
+          variant: "destructive"
+        });
+
+        setExecutionResults(prev => [{
+          category,
+          result: { error: result.error },
+          timestamp: new Date().toISOString(),
+          success: false
+        }, ...prev.slice(0, 4)]);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Request Failed",
+        description: error.message || "Failed to execute command",
+        variant: "destructive"
+      });
+    } finally {
+      setIsExecuting(false);
+    }
+  };
+
+  const getLiveCommandPayload = (category: string) => {
+    switch (category) {
+      case "New Booking Sync":
+        return { action: "sync_latest_bookings" };
+      case "New Support Ticket":
+        return { action: "create_sample_ticket", priority: "high" };
+      case "Initiate Voice Call":
+        return { action: "test_call", number: "+15551234567" };
+      case "Run Lead Scrape":
+        return { query: "roofing contractor", limit: 10 };
+      case "Manual Follow-up":
+        return { lead_id: "manual_trigger", priority: "high" };
+      default:
+        return {};
+    }
+  };
+
   const sendEmergencyAlert = async () => {
     try {
       const message = prompt("Enter emergency alert message:");
@@ -355,6 +422,61 @@ export default function CommandCenterDashboard() {
           SEV-1 Alert
         </Button>
       </div>
+
+      {/* Live Command Center Buttons */}
+      <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+        <CardHeader>
+          <CardTitle className="text-white">Live Command Center</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <Button
+              onClick={() => executeLiveCommand("New Booking Sync")}
+              className="bg-blue-600 hover:bg-blue-700 text-white flex flex-col items-center p-4 h-auto"
+              disabled={isExecuting}
+            >
+              <span className="text-2xl mb-2">📆</span>
+              <span className="text-sm">New Booking Sync</span>
+            </Button>
+            
+            <Button
+              onClick={() => executeLiveCommand("New Support Ticket")}
+              className="bg-red-600 hover:bg-red-700 text-white flex flex-col items-center p-4 h-auto"
+              disabled={isExecuting}
+            >
+              <span className="text-2xl mb-2">🆘</span>
+              <span className="text-sm">New Support Ticket</span>
+            </Button>
+            
+            <Button
+              onClick={() => executeLiveCommand("Initiate Voice Call")}
+              className="bg-green-600 hover:bg-green-700 text-white flex flex-col items-center p-4 h-auto"
+              disabled={isExecuting}
+            >
+              <span className="text-2xl mb-2">📞</span>
+              <span className="text-sm">Initiate Voice Call</span>
+            </Button>
+            
+            <Button
+              onClick={() => executeLiveCommand("Run Lead Scrape")}
+              className="bg-purple-600 hover:bg-purple-700 text-white flex flex-col items-center p-4 h-auto"
+              disabled={isExecuting}
+            >
+              <span className="text-2xl mb-2">🧲</span>
+              <span className="text-sm">Run Lead Scrape</span>
+            </Button>
+            
+            <Button
+              onClick={() => executeLiveCommand("Manual Follow-up")}
+              className="bg-orange-600 hover:bg-orange-700 text-white flex flex-col items-center p-4 h-auto"
+              disabled={isExecuting}
+            >
+              <span className="text-2xl mb-2">🚀</span>
+              <span className="text-sm">Manual Follow-up</span>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Automation Trigger */}
