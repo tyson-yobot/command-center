@@ -1,0 +1,83 @@
+2. Final Replit File: trigger_pipeline_calls.py
+python
+Copy
+Edit
+import requests
+import os
+from datetime import datetime
+
+AIRTABLE_API_KEY = os.getenv("AIRTABLE_KEY")
+BASE_ID = os.getenv("AIRTABLE_BASE_ID")
+TABLE_NAME = os.getenv("TABLE_PIPELINE")
+SLACK_WEBHOOK_URL = os.getenv("SLACK_ALERT_URL")
+
+# Get leads from Airtable pipeline
+def get_pipeline_leads():
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
+    params = {
+        "filterByFormula": "AND({Status}='New', {Phone} != '')"
+    }
+    headers = {"Authorization": f"Bearer {AIRTABLE_API_KEY}"}
+    res = requests.get(url, headers=headers, params=params)
+    res.raise_for_status()
+    return res.json().get("records", [])
+
+# Trigger voice call
+def call_lead(phone_number):
+    requests.post("https://your-replit-url/initiate_call", json={"phone": phone_number})
+
+# Send Slack alert if hot or high score
+def send_slack_alert(lead):
+    fields = lead["fields"]
+    if fields.get("🔥 Hot Lead") or fields.get("📈 Lead Score", 0) >= 80:
+        msg = f"""🔥 *Hot Lead Alert*
+👤 {fields.get('Name', 'N/A')}
+📞 {fields.get('Phone')}
+📧 {fields.get('Email', 'N/A')}
+"""
+        requests.post(SLACK_WEBHOOK_URL, json={"text": msg})
+        return True
+    return False
+
+# Log back to Airtable
+def update_airtable(lead):
+    id = lead["id"]
+    fields = lead["fields"]
+    current_attempts = fields.get("# Call Attempts", 0)
+    new_attempts = current_attempts + 1
+
+    headers = {
+        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    updates = {
+        "📅 Last Called": datetime.utcnow().isoformat(),
+        "# Call Attempts": new_attempts,
+        "📞 Call Status": "Call Attempted"
+    }
+
+    if new_attempts >= 2 and not fields.get("🧠 Escalated"):
+        requests.post("https://your-replit-url/ai_followup", json={
+            "name": fields.get("Name", ""),
+            "email": fields.get("Email", ""),
+            "phone": fields.get("Phone", "")
+        })
+        updates["🧠 Escalated"] = True
+
+    if send_slack_alert(lead):
+        updates["🚨 Slack Alert Sent"] = True
+
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}/{id}"
+    requests.patch(url, json={"fields": updates}, headers=headers)
+
+# Main handler
+def handler(request):
+    leads = get_pipeline_leads()
+    for lead in leads:
+        phone = lead["fields"].get("Phone")
+        if not phone:
+            continue
+        call_lead(phone)
+        update_airtable(lead)
+    return {"calls_triggered": len(leads)}
