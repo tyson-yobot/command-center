@@ -150,6 +150,9 @@ function Router() {
             <InstallPrompt />
           </div>
         </Route>
+        <Route path="/control">
+          <ControlCenter />
+        </Route>
       </Switch>
     </div>
   );

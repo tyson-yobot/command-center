@@ -351,7 +351,7 @@ export default function ClientDashboard() {
         <div className="mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Core Automation */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
               <CardHeader>
                 <CardTitle className="text-white">Core Automation</CardTitle>
               </CardHeader>
@@ -393,7 +393,7 @@ export default function ClientDashboard() {
             </Card>
 
             {/* Voice & Communication */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
               <CardHeader>
                 <CardTitle className="text-white">Voice & Communication</CardTitle>
               </CardHeader>
@@ -435,7 +435,7 @@ export default function ClientDashboard() {
             </Card>
 
             {/* Data & Reports */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
               <CardHeader>
                 <CardTitle className="text-white">Data & Reports</CardTitle>
               </CardHeader>
@@ -480,7 +480,7 @@ export default function ClientDashboard() {
 
         {/* Key Performance Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Active Calls</CardTitle>
               <Phone className="h-4 w-4 text-green-400" />
