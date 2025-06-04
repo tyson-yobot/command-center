@@ -1,0 +1,83 @@
+Batch 16: Automations 151–160
+ts
+Copy
+Edit
+// 151 - VoiceBot: Detect Escalation Intent
+function detectEscalationIntent(transcript) {
+  const triggers = ["speak to a human", "escalate", "not working", "refund"];
+  return triggers.some(trigger => transcript.toLowerCase().includes(trigger));
+}
+
+// 152 - Auto-Categorize Integration Failures by Module
+function categorizeFailure(moduleName) {
+  if (/stripe|payment/i.test(moduleName)) return "Billing";
+  if (/hubspot|crm/i.test(moduleName)) return "CRM";
+  if (/voice|speech/i.test(moduleName)) return "VoiceBot";
+  return "General";
+}
+
+// 153 - Update System Health Metric (Live)
+async function updateSystemHealthMetric(key, status) {
+  return await airtableAPI.updateRecord("System Metrics", key, { value: status });
+}
+
+// 154 - Detect Broken Linked Records in Airtable
+function findBrokenLinks(record, linkedField) {
+  return !record[linkedField] || record[linkedField].length === 0;
+}
+
+// 155 - AI Expand Short Prompt into Full Script
+async function expandToScript(prompt) {
+  return await openAI.generate({
+    prompt: `Turn this short command into a full call script:\n"${prompt}"`,
+    temperature: 0.6,
+    max_tokens: 200,
+  });
+}
+
+// 156 - Trigger Backup Export to Google Drive
+async function triggerDriveBackup(data, fileName) {
+  return await fetch("/api/backup-to-drive", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ data, fileName }),
+  });
+}
+
+// 157 - Slack Notifier: New Lead Captured
+async function notifyNewLead(lead) {
+  const msg = `🆕 New Lead Captured: ${lead.name} (${lead.email})`;
+  return await sendSlackNotification(msg);
+}
+
+// 158 - Extract Domain from URL
+function getDomainFromUrl(url) {
+  try {
+    return new URL(url).hostname.replace("www.", "");
+  } catch (err) {
+    return "invalid";
+  }
+}
+
+// 159 - Auto-Mark Internal Task as Complete by Label
+async function autoCompleteTask(task) {
+  if (task.label === "autofinish") {
+    await airtableAPI.updateRecord("Internal Tasks", task.id, { status: "complete" });
+  }
+}
+
+// 160 - Create Test Snapshot Record
+async function createTestSnapshot(testName, details) {
+  return await airtableAPI.createRecord("Integration Test Log 2", {
+    "✅ Integration Name": testName,
+    "📝 Notes / Debug": details.notes,
+    "✅ Pass/Fail": details.status,
+    "📅 Test Date": new Date().toISOString(),
+    "👤 QA Owner": details.qaOwner,
+    "☑️ Output Data Populated?": details.output,
+    "🗂 Record Created?": details.record,
+    "🔁 Retry Attempted?": details.retry,
+    "⚙️ Module Type": details.module,
+    "📁 Related Scenario": details.scenario,
+  });
+}
