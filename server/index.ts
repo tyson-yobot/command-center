@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import orchestrator from "./systemAutomationOrchestrator";
+import completeAutomation from "./completeSystemAutomation";
 import documentRoutes from "./documentManager";
 import { setupVite, serveStatic, log } from "./vite";
 import { sendSlackAlert } from "./alerts";
@@ -76,6 +77,37 @@ app.post('/api/reports/pdf', async (req, res) => {
 
   // Register document management routes
   app.use('/api/documents', documentRoutes);
+  
+  // Register Batch 21 automation routes
+  const { registerBatch21Routes } = await import('./automationBatch21');
+  registerBatch21Routes(app);
+  
+  // Start complete system automation
+  console.log("🤖 Starting Complete System Automation...");
+  completeAutomation.startCompleteAutomation();
+  
+  // Add automation management endpoints
+  app.get('/api/automation/status', (req, res) => {
+    res.json({
+      metrics: completeAutomation.getSystemMetrics(),
+      functions: completeAutomation.getFunctionStatus(),
+      logs: completeAutomation.getExecutionLogs().slice(-50) // Last 50 logs
+    });
+  });
+  
+  app.post('/api/automation/stop', (req, res) => {
+    completeAutomation.stopCompleteAutomation();
+    res.json({ success: true, message: "System automation stopped" });
+  });
+  
+  app.post('/api/automation/start', (req, res) => {
+    completeAutomation.startCompleteAutomation();
+    res.json({ success: true, message: "System automation started" });
+  });
+  
+  console.log("✅ Complete system automation initialized");
+  console.log(`📊 Managing ${completeAutomation.getSystemMetrics().totalFunctions} automation functions`);
+  console.log("🚀 All automation systems operational");
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
