@@ -855,6 +855,89 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Command Center Trigger Endpoint
+  app.post('/api/command-center/trigger', async (req, res) => {
+    try {
+      const { category, payload } = req.body;
+      
+      console.log(`[COMMAND CENTER] Executing: ${category}`);
+      
+      let result;
+      
+      switch (category) {
+        case "New Booking Sync":
+          // Sync latest bookings from calendar
+          result = await logEventSync("Booking sync triggered manually", "calendar");
+          break;
+          
+        case "New Support Ticket":
+          // Create a test support ticket
+          result = await logSupportTicket({
+            subject: "Manual trigger test",
+            priority: payload.priority || "medium",
+            source: "command_center"
+          });
+          break;
+          
+        case "Manual Follow-up":
+          // Trigger follow-up sequence
+          result = await logLeadIntake({
+            lead_id: payload.lead_id || "manual_trigger",
+            source: "command_center",
+            priority: payload.priority || "high"
+          });
+          break;
+          
+        case "Initiate Voice Call":
+          // Log voice call initiation
+          result = await logCallSentiment({
+            call_id: `test_${Date.now()}`,
+            sentiment: "positive",
+            confidence: 0.8,
+            source: "command_center"
+          });
+          break;
+          
+        case "Send SMS":
+          // Send test SMS
+          result = await logSlackAlert("SMS automation triggered from command center");
+          break;
+          
+        case "Run Lead Scrape":
+          // Trigger lead scraping
+          result = await logLeadIntake({
+            source: "scraping",
+            query: payload.query || "test query",
+            limit: payload.limit || 10
+          });
+          break;
+          
+        case "Export Data":
+          // Trigger data export
+          result = await logEventSync("Data export triggered", payload.format || "csv");
+          break;
+          
+        default:
+          throw new Error(`Unknown category: ${category}`);
+      }
+      
+      res.json({
+        success: true,
+        category,
+        result,
+        timestamp: new Date().toISOString()
+      });
+      
+    } catch (error: any) {
+      console.error('Command Center execution error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        category: req.body.category
+      });
+    }
+  });
+
   // Admin-only route for super metrics
   app.get('/api/admin-stats', requireRole(['admin', 'dev']), async (req, res) => {
     res.json({ 

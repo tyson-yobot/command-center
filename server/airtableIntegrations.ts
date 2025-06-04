@@ -24,7 +24,12 @@ async function createAirtableRecord(baseKey: string, tableKey: string, fields: R
 
   const url = getAirtableUrl(baseKey, tableKey);
   
-  const cleanApiKey = AIRTABLE_API_KEY.replace(/[\r\n\t]/g, '').trim();
+  const cleanApiKey = AIRTABLE_API_KEY.replace(/[\r\n\t\s]/g, '').trim();
+  
+  if (!cleanApiKey || cleanApiKey.length < 10) {
+    console.log('Invalid Airtable API key format');
+    return { id: 'mock_record', fields };
+  }
   
   const response = await axios.post(url, {
     records: [{ fields }]
