@@ -50,12 +50,11 @@ export default function CommandCenterDashboard() {
   });
 
   const automationCategories = [
-    { value: "Apollo Scrape", label: "Scrape Apollo Leads", icon: <Zap className="w-4 h-4" /> },
-    { value: "Apify Maps", label: "Scrape Google Maps", icon: <Play className="w-4 h-4" /> },
-    { value: "Voice Call", label: "Initiate Bot Call", icon: <Phone className="w-4 h-4" /> },
-    { value: "Send SMS", label: "SMS Notification", icon: <MessageSquare className="w-4 h-4" /> },
-    { value: "Transcribe", label: "Voice Transcription", icon: <Mic className="w-4 h-4" /> },
-    { value: "Voice Generate", label: "Voice Generation", icon: <Phone className="w-4 h-4" /> }
+    { value: "New Booking Sync", label: "📆 New Booking Sync", icon: <Zap className="w-4 h-4" /> },
+    { value: "New Support Ticket", label: "🆘 New Support Ticket", icon: <AlertTriangle className="w-4 h-4" /> },
+    { value: "Initiate Voice Call", label: "📞 Initiate Voice Call", icon: <Phone className="w-4 h-4" /> },
+    { value: "Run Lead Scrape", label: "🧲 Run Lead Scrape", icon: <Play className="w-4 h-4" /> },
+    { value: "Manual Follow-up", label: "🚀 Manual Follow-up Now", icon: <MessageSquare className="w-4 h-4" /> }
   ];
 
   const executeAutomation = async () => {
@@ -75,23 +74,20 @@ export default function CommandCenterDashboard() {
 
       // Set payload based on selected category
       switch (selectedCategory) {
-        case "Apollo Scrape":
+        case "New Booking Sync":
+          payload = { action: "sync_latest_bookings" };
+          break;
+        case "New Support Ticket":
+          payload = { action: "create_support_ticket", priority: "Medium" };
+          break;
+        case "Initiate Voice Call":
+          payload = callParams;
+          break;
+        case "Run Lead Scrape":
           payload = apolloParams;
           break;
-        case "Apify Maps":
-          payload = apifyParams;
-          break;
-        case "Send SMS":
-          payload = smsParams;
-          break;
-        case "Transcribe":
-          payload = transcribeParams;
-          break;
-        case "Voice Generate":
-          payload = voiceParams;
-          break;
-        case "Voice Call":
-          payload = callParams;
+        case "Manual Follow-up":
+          payload = { action: "push_to_followup", immediate: true };
           break;
         default:
           payload = {};

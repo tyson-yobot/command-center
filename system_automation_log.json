@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-04T02:00:00.303Z",
-    "functionId": 158,
-    "functionName": "Domain Extraction",
-    "batch": 16,
-    "category": "Data Processing",
-    "status": "success",
-    "duration": 113,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-04T02:00:00.305Z",
     "functionId": 210,
     "functionName": "Integration Template Filler",
@@ -11219,6 +11208,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-04T11:00:07.621Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-04T11:04:02.800Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-04T11:04:02.445Z",
       "automationStatus": "running"
     }
   }

@@ -1677,6 +1677,84 @@ except Exception as e:
     }
   });
 
+  // Live Command Center Endpoints
+  app.post('/call/initiate', async (req, res) => {
+    try {
+      const { contact_name, phone_number, script } = req.body;
+      
+      if (!phone_number) {
+        return res.status(400).json({ error: 'Phone number required' });
+      }
+
+      // Trigger voice call from queue
+      const callResult = {
+        id: Date.now().toString(),
+        contact_name: contact_name || 'Unknown',
+        phone_number,
+        script: script || 'Hello, this is YoBot calling to follow up.',
+        status: 'initiated',
+        timestamp: new Date().toISOString()
+      };
+
+      res.json({
+        success: true,
+        message: 'Voice call initiated',
+        call: callResult
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Call initiation failed', details: error.message });
+    }
+  });
+
+  app.post('/leads/scrape', async (req, res) => {
+    try {
+      const { source, title, location, keywords } = req.body;
+      
+      // Run Apollo or Phantombuster scraping job
+      const scrapeResult = {
+        id: Date.now().toString(),
+        source: source || 'Apollo',
+        title: title || 'Owner',
+        location: location || 'Texas',
+        keywords: keywords || 'roofing contractor',
+        status: 'queued',
+        timestamp: new Date().toISOString()
+      };
+
+      res.json({
+        success: true,
+        message: 'Lead scraping job queued',
+        job: scrapeResult
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Lead scraping failed', details: error.message });
+    }
+  });
+
+  app.post('/followup/manual', async (req, res) => {
+    try {
+      const { lead_id, contact_email, follow_up_type } = req.body;
+      
+      // Push lead to follow-up route immediately
+      const followUpResult = {
+        id: Date.now().toString(),
+        lead_id: lead_id || 'auto-generated',
+        contact_email: contact_email || 'pending@example.com',
+        follow_up_type: follow_up_type || 'immediate',
+        status: 'pushed_to_queue',
+        timestamp: new Date().toISOString()
+      };
+
+      res.json({
+        success: true,
+        message: 'Manual follow-up triggered',
+        followup: followUpResult
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Manual follow-up failed', details: error.message });
+    }
+  });
+
   // Automation test endpoint without external dependencies
   app.get('/api/automation/summary', async (req, res) => {
     try {

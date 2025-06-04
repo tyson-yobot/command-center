@@ -107,6 +107,26 @@ class CommandCenterDispatcher:
             )
         elif category == "Health Ping":
             return self.log_system_health_ping()
+        elif category == "New Booking Sync":
+            return self.sync_latest_bookings()
+        elif category == "New Support Ticket":
+            return self.create_support_ticket(payload)
+        elif category == "Initiate Voice Call":
+            return self.trigger_voice_call(
+                api_url=payload.get("api_url", "https://your-voicebot-endpoint.com/api/call"),
+                contact_name=payload.get("contact_name"),
+                phone_number=payload.get("phone_number"),
+                script=payload.get("script")
+            )
+        elif category == "Run Lead Scrape":
+            return self.launch_apollo_scrape(
+                api_key=payload.get("api_key"),
+                title=payload.get("title", "Owner"),
+                location=payload.get("location", "Texas"),
+                company_keywords=payload.get("keywords", "roofing contractor")
+            )
+        elif category == "Manual Follow-up":
+            return self.trigger_manual_followup(payload)
         else:
             return {"error": f"Unknown category: {category}"}
     
