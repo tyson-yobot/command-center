@@ -181,25 +181,18 @@ export async function logEscalation(data: {
   timestamp: string;
   reason: string;
 }) {
-  try {
-    return await createAirtableRecord('SALES_AUTOMATION', 'ESCALATION_TRACKER', {
-      'Ticket ID': data.ticketId,
-      'Client Name': data.clientName,
-      'Escalation Type': data.escalationType,
-      'Priority': data.priority,
-      'Timestamp': data.timestamp,
-      'Reason': data.reason
-    });
-  } catch (error: any) {
-    // If the specific table doesn't exist, log to a fallback location
-    console.warn('Escalation table not found, using fallback logging');
-    return await createAirtableRecord('COMMAND_CENTER', 'INTEGRATION_TEST_LOG', {
-      'Test Name': `Escalation: ${data.escalationType}`,
-      'Status': 'Logged',
-      'Timestamp': data.timestamp,
-      'Details': `${data.reason} - Client: ${data.clientName}, Priority: ${data.priority}`
-    });
-  }
+  // Log directly to Integration Test Log 2 with proper field structure
+  return await createAirtableRecord('COMMAND_CENTER', 'INTEGRATION_TEST_LOG', {
+    '🧩 Integration Name': `Escalation: ${data.escalationType}`,
+    '✅ Pass/Fail': '✅ Pass',
+    '📝 Notes / Debug': `${data.reason} - Client: ${data.clientName}, Priority: ${data.priority}`,
+    '📅 Test Date': data.timestamp,
+    '👤 QA Owner': 'YoBot System',
+    '☑️ Output Data Populated?': 'Success',
+    '📁 Record Created?': true,
+    '⚙️ Module Type': 'System Operations (110-120)',
+    '📂 Related Scenario Link': `Escalation tracking for ${data.clientName}`
+  });
 }
 
 export async function logMissedCall(data: {
@@ -209,24 +202,18 @@ export async function logMissedCall(data: {
   duration: number;
   clientId: string;
 }) {
-  try {
-    return await createAirtableRecord('SALES_AUTOMATION', 'MISSED_CALL_LOG', {
-      'Caller Name': data.callerName,
-      'Phone Number': data.phoneNumber,
-      'Timestamp': data.timestamp,
-      'Duration': data.duration,
-      'Client ID': data.clientId
-    });
-  } catch (error: any) {
-    // If the specific table doesn't exist, log to a fallback location
-    console.warn('Missed call table not found, using fallback logging');
-    return await createAirtableRecord('COMMAND_CENTER', 'INTEGRATION_TEST_LOG', {
-      'Test Name': `Missed Call: ${data.callerName}`,
-      'Status': 'Logged',
-      'Timestamp': data.timestamp,
-      'Details': `Phone: ${data.phoneNumber}, Duration: ${data.duration}s, Client: ${data.clientId}`
-    });
-  }
+  // Log directly to Integration Test Log 2 with proper field structure
+  return await createAirtableRecord('COMMAND_CENTER', 'INTEGRATION_TEST_LOG', {
+    '🧩 Integration Name': `Missed Call: ${data.callerName}`,
+    '✅ Pass/Fail': '✅ Pass',
+    '📝 Notes / Debug': `Phone: ${data.phoneNumber}, Duration: ${data.duration}s, Client: ${data.clientId}`,
+    '📅 Test Date': data.timestamp,
+    '👤 QA Owner': 'YoBot System',
+    '☑️ Output Data Populated?': 'Success',
+    '📁 Record Created?': true,
+    '⚙️ Module Type': 'System Operations (110-120)',
+    '📂 Related Scenario Link': `Missed call tracking for ${data.callerName}`
+  });
 }
 
 export async function logABTest(data: {
