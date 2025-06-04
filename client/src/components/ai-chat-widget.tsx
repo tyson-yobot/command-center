@@ -186,29 +186,55 @@ export default function AIChatWidget({
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
 
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    // Extended configuration for longer recording
+    recognition.continuous = true;
+    recognition.interimResults = true;
     recognition.lang = 'en-US';
+    recognition.maxAlternatives = 1;
+
+    // Set timeout for longer recording session
+    let timeout: NodeJS.Timeout;
 
     recognition.onstart = () => {
       setIsListening(true);
+      // Auto-stop after 30 seconds instead of 2-3 seconds
+      timeout = setTimeout(() => {
+        recognition.stop();
+      }, 30000);
     };
 
     recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      sendMessage(transcript, true);
+      let finalTranscript = '';
+      
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+        }
+      }
+      
+      if (finalTranscript.trim()) {
+        clearTimeout(timeout);
+        recognition.stop();
+        sendMessage(finalTranscript, true);
+      }
     };
 
     recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error);
-      toast({
-        title: "Voice Recognition Error",
-        description: "Could not process voice input",
-        variant: "destructive"
-      });
+      clearTimeout(timeout);
+      setIsListening(false);
+      
+      if (event.error !== 'aborted') {
+        toast({
+          title: "Voice Recognition Error",
+          description: `Could not process voice input: ${event.error}`,
+          variant: "destructive"
+        });
+      }
     };
 
     recognition.onend = () => {
+      clearTimeout(timeout);
       setIsListening(false);
     };
 

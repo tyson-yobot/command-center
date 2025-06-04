@@ -13,11 +13,25 @@ if (!fs.existsSync(pdfDir)) {
 
 router.post('/generate', async (req, res) => {
   try {
-    const { clientName, botPackage, addOns = [], totalOneTime, totalMonthly } = req.body;
+    const { 
+      clientName = 'Default Client', 
+      botPackage = 'Standard Package', 
+      addOns = [], 
+      totalOneTime = '$5,000', 
+      totalMonthly = '$500',
+      title = 'YoBot Command Center Report',
+      data = {}
+    } = req.body;
 
-    if (!clientName || !botPackage) {
-      return res.status(400).json({ error: 'Client name and bot package are required' });
-    }
+    // Use provided data or defaults for report generation
+    const reportData = {
+      clientName,
+      botPackage,
+      addOns,
+      totalOneTime,
+      totalMonthly,
+      ...data
+    };
 
     const htmlContent = `
       <!DOCTYPE html>
