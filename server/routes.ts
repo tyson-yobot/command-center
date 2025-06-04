@@ -3510,6 +3510,104 @@ except Exception as e:
     }
   });
 
+  // Stripe Payment Webhook - matches your external webhook URL
+  app.post('/stripe-payment', async (req, res) => {
+    try {
+      const stripeEvent = req.body;
+      console.log("Stripe payment webhook received:", stripeEvent.type || 'unknown');
+
+      // Handle payment_intent.succeeded events
+      if (stripeEvent.type === 'payment_intent.succeeded') {
+        const paymentIntent = stripeEvent.data?.object;
+        const amount = paymentIntent?.amount ? (paymentIntent.amount / 100) : 0;
+        const customerEmail = paymentIntent?.receipt_email || paymentIntent?.customer_email || 'unknown';
+        const paymentId = paymentIntent?.id || `payment_${Date.now()}`;
+
+        // Log to Airtable if configured
+        if (process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID) {
+          try {
+            await logEventSync({
+              eventType: "stripe_payment_completed",
+              source: "Stripe Webhook",
+              destination: "Airtable",
+              status: "success",
+              timestamp: new Date().toISOString(),
+              recordCount: 1,
+              metadata: { customerEmail, amount, paymentId }
+            });
+          } catch (error) {
+            console.error("Failed to log to Airtable:", error);
+          }
+        }
+
+        // Send Slack notification if configured
+        if (process.env.SLACK_WEBHOOK_URL) {
+          try {
+            await axios.post(process.env.SLACK_WEBHOOK_URL, {
+              text: `💰 Payment received: ${customerEmail} - $${amount}`,
+              channel: '#payments'
+            });
+          } catch (error) {
+            console.error("Failed to send Slack notification:", error);
+          }
+        }
+
+        res.json({
+          status: "success",
+          message: "Payment processed successfully",
+          paymentId,
+          amount,
+          customerEmail
+        });
+
+      } else if (stripeEvent.type === 'checkout.session.completed') {
+        const session = stripeEvent.data?.object;
+        const amount = session?.amount_total ? (session.amount_total / 100) : 0;
+        const customerEmail = session?.customer_email || 'unknown';
+
+        // Log checkout completion
+        if (process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID) {
+          try {
+            await logEventSync({
+              eventType: "stripe_checkout_completed",
+              source: "Stripe Webhook",
+              destination: "Airtable", 
+              status: "success",
+              timestamp: new Date().toISOString(),
+              recordCount: 1,
+              metadata: { customerEmail, amount }
+            });
+          } catch (error) {
+            console.error("Failed to log checkout to Airtable:", error);
+          }
+        }
+
+        res.json({
+          status: "success",
+          message: "Checkout completed successfully",
+          amount,
+          customerEmail
+        });
+
+      } else {
+        // Handle other event types
+        res.json({
+          status: "received",
+          message: `Event ${stripeEvent.type} received but not processed`,
+          eventType: stripeEvent.type
+        });
+      }
+
+    } catch (error: any) {
+      console.error("Stripe webhook error:", error);
+      res.status(500).json({
+        status: "error",
+        message: "Webhook processing failed",
+        error: error.message
+      });
+    }
+  });
+
   // QuickBooks create customer
   app.post('/api/qbo/create-customer', async (req, res) => {
     try {
