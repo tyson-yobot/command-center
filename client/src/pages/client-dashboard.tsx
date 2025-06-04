@@ -206,6 +206,8 @@ export default function ClientDashboard() {
 
   const getLiveCommandPayload = (category: string) => {
     switch (category) {
+      case "Start Pipeline Calls":
+        return { action: "trigger_pipeline_calls", filter: "active" };
       case "New Booking Sync":
         return { action: "sync_latest_bookings" };
       case "New Support Ticket":
@@ -389,6 +391,14 @@ export default function ClientDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 gap-3">
+                  <Button
+                    onClick={() => executeLiveCommand("Start Pipeline Calls")}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">📞</span>
+                    <span>Start Pipeline Calls</span>
+                  </Button>
+                  
                   <Button
                     onClick={() => executeLiveCommand("Initiate Voice Call")}
                     className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"

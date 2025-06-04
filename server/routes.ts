@@ -877,6 +877,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let result;
       
       switch (category) {
+        case "Start Pipeline Calls":
+          if (await controlCenterConfig.isFeatureEnabled(client_id, 'call_engine_enabled')) {
+            // Execute pipeline calls functionality
+            const pipelineResult = await executePipelineCalls();
+            result = pipelineResult;
+            await controlCenterConfig.updateClientMetrics(client_id, { 
+              last_call: new Date().toISOString() 
+            });
+          } else {
+            throw new Error("Call engine is disabled");
+          }
+          break;
+          
         case "New Booking Sync":
           if (await controlCenterConfig.isFeatureEnabled(client_id, 'calendar_sync_enabled')) {
             result = await logEventSync("Booking sync triggered manually", "calendar");
