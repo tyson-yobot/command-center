@@ -1244,6 +1244,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Stripe to QuickBooks Integration
   app.use('/api/stripe', stripeToQboRouter);
 
+  // Twilio Inbound Call Webhook
+  app.post('/webhook_inbound_call', async (req, res) => {
+    try {
+      const fromNumber = req.body.From || "Unknown";
+      const toNumber = req.body.To || "Unknown";
+      const callSid = req.body.CallSid || "Unknown";
+      
+      console.log(`📞 Inbound call from ${fromNumber} to ${toNumber} (SID: ${callSid})`);
+      
+      // Check if inbound voice is enabled
+      const inboundEnabled = process.env.INBOUND_VOICE_ENABLED !== "false";
+      
+      if (!inboundEnabled) {
+        console.log("📞 Inbound call rejected - VoiceBot disabled");
+        const rejectTwiml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Reject/>
+</Response>`;
+        return res.type('text/xml').send(rejectTwiml);
+      }
+      
+      // Log to Airtable (optional - will fail silently if not configured)
+      try {
+        await logEventToAirtable("📥 Inbound Call Log", {
+          "📞 Caller Number": fromNumber,
+          "📅 Call Time": new Date().toISOString(),
+          "🎤 VoiceBot Engaged": true,
+          "Call SID": callSid
+        });
+      } catch (airtableError) {
+        console.log("Could not log to Airtable:", airtableError.message);
+      }
+      
+      // Generate TwiML response to engage VoiceBot
+      const twiml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say voice="Polly.Joanna">Welcome to YoBot. Please tell me how I can help you today.</Say>
+    <Pause length="1"/>
+    <Redirect>https://${req.get('host')}/api/voice/stream</Redirect>
+</Response>`;
+      
+      console.log(`✅ VoiceBot engaged for call from ${fromNumber}`);
+      res.type('text/xml').send(twiml);
+      
+    } catch (error: any) {
+      console.error('Inbound call webhook error:', error);
+      
+      // Send basic TwiML response even on error
+      const errorTwiml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say voice="Polly.Joanna">Thank you for calling. Please try again later.</Say>
+    <Hangup/>
+</Response>`;
+      res.type('text/xml').send(errorTwiml);
+    }
+  });
+
   // Chat Contact Capture
   app.post('/api/chat/capture', async (req, res) => {
     try {

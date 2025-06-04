@@ -386,7 +386,7 @@ export default function ClientDashboard() {
                     className="bg-gray-500 text-gray-300 flex items-center justify-start p-3 cursor-not-allowed"
                   >
                     <span className="text-xl mr-3">⚙️</span>
-                    <span>Available Soon</span>
+                    <span>Open</span>
                   </Button>
                 </div>
               </CardContent>
@@ -470,7 +470,7 @@ export default function ClientDashboard() {
                     className="bg-gray-500 text-gray-300 flex items-center justify-start p-3 cursor-not-allowed"
                   >
                     <span className="text-xl mr-3">📈</span>
-                    <span>Available Soon</span>
+                    <span>Open</span>
                   </Button>
                 </div>
               </CardContent>
