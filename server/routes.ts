@@ -276,6 +276,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await new Promise(resolve => setTimeout(resolve, 5000));
       return `Sorry, ${name.charAt(0).toUpperCase() + name.slice(1)} is currently unavailable. Would you like to leave a message for them?`;
     };
+
+    const logVoicemailAndAlert = async (messageText: string, callerNumber: string = "+1UNKNOWN"): Promise<boolean> => {
+      try {
+        // 1. Save to Airtable
+        const airtableUrl = `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.TABLE_ID}`;
+        const airtableHeaders = {
+          "Authorization": `Bearer ${process.env.AIRTABLE_KEY}`,
+          "Content-Type": "application/json"
+        };
+        const airtableData = {
+          "fields": {
+            "📄 Call Outcome": "📩 Voicemail",
+            "📞 Caller Phone": callerNumber,
+            "📝 Caller Message": messageText
+          }
+        };
+        
+        const airtableResponse = await fetch(airtableUrl, {
+          method: 'POST',
+          headers: airtableHeaders,
+          body: JSON.stringify(airtableData)
+        });
+        console.log(`📝 Airtable log: ${airtableResponse.status}`);
+        
+        // 2. Send SMS via Twilio
+        const smsUrl = `https://api.twilio.com/2010-04-01/Accounts/${process.env.TWILIO_SID}/Messages.json`;
+        const smsData = new URLSearchParams({
+          "To": process.env.ALERT_PHONE || "",
+          "From": process.env.TWILIO_FROM || "",
+          "Body": `📩 New message from ${callerNumber}:\n"${messageText}"`
+        });
+        
+        const smsResponse = await fetch(smsUrl, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Basic ${Buffer.from(`${process.env.TWILIO_SID}:${process.env.TWILIO_AUTH}`).toString('base64')}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: smsData
+        });
+        console.log(`📱 SMS alert sent: ${smsResponse.status}`);
+        
+        return true;
+        
+      } catch (error) {
+        console.error('❌ Voicemail logging error:', error);
+        return false;
+      }
+    };
+
+    const checkMessageResponse = (text: string): boolean => {
+      const messageIndicators = [
+        "yes", "sure", "please tell them", "let them know",
+        "tell him", "tell her", "my message is", "here's my message"
+      ];
+      
+      const textLower = text.toLowerCase();
+      for (const indicator of messageIndicators) {
+        if (textLower.includes(indicator)) return true;
+      }
+      
+      // If text is longer than a few words, likely a message
+      return text.split(' ').length > 5;
+    };
     
     ws.on('message', async (message) => {
       try {
@@ -299,9 +363,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           // Here you would integrate with OpenAI Whisper for transcription
           // const transcript = await transcribeAudio(audioData);
+          // const callerNumber = data.from || "+1UNKNOWN";
+          // 
           // if (transcript) {
           //   console.log('Caller:', transcript);
           //   conversationHistory.push({role: "user", content: transcript});
+          //   
+          //   // Check if this is a message response after transfer unavailable
+          //   const lastAssistantMessage = conversationHistory
+          //     .slice()
+          //     .reverse()
+          //     .find(msg => msg.role === "assistant");
+          //   
+          //   if (lastAssistantMessage && 
+          //       lastAssistantMessage.content.includes("Would you like to leave a message") &&
+          //       checkMessageResponse(transcript)) {
+          //     
+          //     console.log('📩 Capturing voicemail message');
+          //     await logVoicemailAndAlert(transcript, callerNumber);
+          //     
+          //     const confirmationReply = "Thank you for your message. I'll make sure they get it right away. Have a great day!";
+          //     conversationHistory.push({role: "assistant", content: confirmationReply});
+          //     // Send voice confirmation back to Twilio
+          //     return;
+          //   }
           //   
           //   // Check for transfer request
           //   const transferTarget = checkTransferCommand(transcript);

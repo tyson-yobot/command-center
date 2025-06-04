@@ -55,6 +55,71 @@ def handle_voice_transfer(conversation, reply):
     
     return False, conversation  # No transfer, proceed normally
 
+def log_voicemail_and_alert(message_text, caller_number="+1UNKNOWN"):
+    """
+    Logs voicemail message to Airtable and sends SMS alert
+    """
+    import os
+    import requests
+    
+    try:
+        # 1. Save to Airtable
+        airtable_url = f"https://api.airtable.com/v0/{os.getenv('AIRTABLE_BASE_ID')}/{os.getenv('TABLE_ID')}"
+        headers = {
+            "Authorization": f"Bearer {os.getenv('AIRTABLE_KEY')}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "fields": {
+                "📄 Call Outcome": "📩 Voicemail",
+                "📞 Caller Phone": caller_number,
+                "📝 Caller Message": message_text
+            }
+        }
+        
+        airtable_response = requests.post(airtable_url, headers=headers, json=data)
+        print(f"📝 Airtable log: {airtable_response.status_code}")
+        
+        # 2. Send SMS via Twilio
+        sms_payload = {
+            "To": os.getenv("ALERT_PHONE"),  # Alert phone number
+            "From": os.getenv("TWILIO_FROM"),
+            "Body": f"📩 New message from {caller_number}:\n\"{message_text}\""
+        }
+        
+        sms_response = requests.post(
+            f"https://api.twilio.com/2010-04-01/Accounts/{os.getenv('TWILIO_SID')}/Messages.json",
+            auth=(os.getenv("TWILIO_SID"), os.getenv("TWILIO_AUTH")),
+            data=sms_payload
+        )
+        print(f"📱 SMS alert sent: {sms_response.status_code}")
+        
+        return True
+        
+    except Exception as e:
+        print(f"❌ Voicemail logging error: {e}")
+        return False
+
+def check_message_response(text):
+    """
+    Checks if caller is providing a message after being asked
+    """
+    message_indicators = [
+        "yes", "sure", "please tell them", "let them know",
+        "tell him", "tell her", "my message is", "here's my message"
+    ]
+    
+    text_lower = text.lower()
+    for indicator in message_indicators:
+        if indicator in text_lower:
+            return True
+    
+    # If text is longer than a few words, likely a message
+    if len(text.split()) > 5:
+        return True
+        
+    return False
+
 def test_transfer_handler():
     """Test the transfer detection and handling"""
     test_phrases = [
