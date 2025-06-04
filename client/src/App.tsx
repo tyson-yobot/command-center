@@ -49,6 +49,9 @@ function Router() {
         <Route path="/admin">
           <AdminConsole />
         </Route>
+        <Route path="/control">
+          <ControlCenter />
+        </Route>
         <Route path="/lite">
           <ClientDashboard />
         </Route>
