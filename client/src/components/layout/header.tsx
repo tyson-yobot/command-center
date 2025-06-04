@@ -1,5 +1,5 @@
 import React from "react";
-import { Sun, Moon, Mic, Headphones } from "lucide-react";
+import { Sun, Moon, Mic, Headphones, Phone, Users, FileText, Zap, Settings } from "lucide-react";
 import { useWebSocket } from "@/hooks/use-websocket";
 import { useTheme } from "@/hooks/use-theme";
 import { Button } from "@/components/ui/button";
@@ -9,22 +9,38 @@ export default function Header() {
   const { isConnected } = useWebSocket();
   const { theme, setTheme } = useTheme();
 
+  const handleCallPipeline = () => {
+    console.log("Call Pipeline triggered");
+  };
+
+  const handleClientSync = () => {
+    console.log("Client Sync triggered");
+  };
+
+  const handleReportGen = () => {
+    console.log("Report Generation triggered");
+  };
+
+  const handleAutoFlow = () => {
+    console.log("Auto Flow triggered");
+  };
+
   return (
     <>
-      {/* Dark Header - 2 INCHES EXACTLY */}
+      {/* Dark Header - Professional Layout */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48 relative">
         
-        {/* YoBot Command Center - ABOVE BUTTONS */}
-        <div className="absolute top-2 left-8 z-[60]">
-          <div className="bg-white rounded-2xl px-8 py-4 shadow-2xl border-4 border-blue-300 flex items-center space-x-6">
+        {/* Centered YoBot Command Center Logo - Gradient Design */}
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[60]">
+          <div className="bg-gradient-to-r from-slate-800 via-slate-600 to-slate-400 rounded-2xl px-8 py-4 shadow-2xl border border-slate-500/50 flex items-center space-x-6">
             <img 
               src={yobotLogoPath} 
               alt="YoBot" 
-              className="h-20 w-auto"
+              className="h-16 w-auto"
             />
             <div className="flex items-center space-x-2">
-              <h1 className="text-3xl font-black text-slate-900 tracking-tight">COMMAND CENTER</h1>
-              <span className="text-sm text-slate-500 font-medium">®</span>
+              <h1 className="text-2xl font-black text-white tracking-tight">COMMAND CENTER</h1>
+              <span className="text-sm text-slate-300 font-medium">®</span>
             </div>
           </div>
         </div>
