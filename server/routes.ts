@@ -1642,6 +1642,105 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Test Lead Ingestion Endpoint
   app.post('/api/test-lead-ingestion', testLeadIngestion);
 
+  // Missed Call Responder Endpoint
+  app.post('/api/missed-call-responder', async (req, res) => {
+    try {
+      const { airtable_record_id, phone } = req.body;
+      
+      if (!phone) {
+        return res.status(400).json({
+          success: false,
+          message: "Phone number is required"
+        });
+      }
+
+      // Send SMS fallback using provided Twilio credentials
+      let smsResult = null;
+      const twilioSid = process.env.TWILIO_ACCOUNT_SID || process.env.TWILIO_SID || 'AC6463504e6a32a01c0acb185e16add065';
+      const twilioAuth = process.env.TWILIO_AUTH_TOKEN || process.env.TWILIO_AUTH || '0a305c9074eb5c87e02bbdbcf5b93c0a';
+      const twilioFrom = process.env.TWILIO_PHONE_NUMBER || process.env.TWILIO_FROM || '+16027803460';
+      
+      if (twilioSid && twilioAuth && twilioFrom) {
+        try {
+          const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${twilioSid}/Messages.json`;
+          const twilioAuthHeader = Buffer.from(`${twilioSid}:${twilioAuth}`).toString('base64');
+          
+          const twilioResponse = await axios.post(twilioUrl, new URLSearchParams({
+            To: phone,
+            From: twilioFrom,
+            Body: "Hi! We missed your call to YoBot. Reply here or schedule a callback at yobot.bot"
+          }), {
+            headers: {
+              'Authorization': `Basic ${twilioAuthHeader}`,
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          });
+          
+          smsResult = { success: true, sid: twilioResponse.data.sid };
+          console.log(`SMS fallback sent successfully to ${phone}`);
+        } catch (twilioError: any) {
+          console.error('Twilio SMS error:', twilioError.message);
+          smsResult = { success: false, error: twilioError.message };
+        }
+      } else {
+        smsResult = { success: false, error: 'Twilio credentials not configured' };
+      }
+
+      // Update Airtable record
+      let airtableResult = null;
+      if (airtable_record_id && process.env.AIRTABLE_KEY && process.env.AIRTABLE_BASE_ID && process.env.TABLE_ID) {
+        try {
+          const airtableUrl = `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.TABLE_ID}/${airtable_record_id}`;
+          
+          const airtableResponse = await axios.patch(airtableUrl, {
+            fields: {
+              "📄 Call Outcome": "🔕 Missed",
+              "📅 Follow-up Sent": new Date().toISOString(),
+              "📱 SMS Fallback": true
+            }
+          }, {
+            headers: {
+              'Authorization': `Bearer ${process.env.AIRTABLE_KEY}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          airtableResult = { success: true, record: airtableResponse.data };
+        } catch (airtableError: any) {
+          console.error('Airtable update error:', airtableError.message);
+          airtableResult = { success: false, error: airtableError.message };
+        }
+      }
+
+      // Log missed call
+      try {
+        await logMissedCall({
+          phone_number: phone,
+          timestamp: new Date().toISOString(),
+          sms_sent: smsResult?.success || false,
+          airtable_updated: airtableResult?.success || false
+        });
+      } catch (logError: any) {
+        console.error('Missed call logging error:', logError.message);
+      }
+
+      res.json({
+        success: true,
+        phone,
+        sms_result: smsResult,
+        airtable_result: airtableResult,
+        timestamp: new Date().toISOString()
+      });
+      
+    } catch (error: any) {
+      console.error('Missed call responder error:', error.message);
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  });
+
   // Comprehensive Airtable Integration Endpoints
   app.get('/api/airtable/test-connection', async (req, res) => {
     try {
