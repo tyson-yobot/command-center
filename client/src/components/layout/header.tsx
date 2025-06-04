@@ -36,15 +36,15 @@ export default function Header() {
             <img 
               src={yobotLogoPath} 
               alt="YoBot" 
-              className="h-12 w-auto filter brightness-0 invert"
+              className="h-16 w-auto"
             />
             <h2 className="text-2xl font-bold text-white tracking-wide">Command Center</h2>
           </div>
         </div>
 
-        <div className="h-full flex items-center justify-center px-8 pt-20">
+        <div className="h-full flex items-center justify-between px-8 pt-20">
           
-          {/* Centered Command Center Action Buttons */}
+          {/* Left Section - Command Center Action Buttons */}
           <div className="flex space-x-4">
             <Button
               onClick={handleCallPipeline}
