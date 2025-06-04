@@ -32,66 +32,14 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white px-4 space-y-6">
+    <div className="min-h-screen bg-slate-900 text-white p-4 space-y-4">
       <SearchBar />
       
-
-      
-      {/* Daily Totals Summary Banner - Desktop Styled */}
-      <Card className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl">
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-white font-semibold text-sm flex items-center">
-                <TrendingUp className="w-4 h-4 mr-2 text-blue-400" />
-                Today's Performance
-              </h3>
-              <div className="flex items-center space-x-4 text-xs text-slate-300 mt-2">
-                <span className="flex items-center">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full mr-1"></div>
-                  AI Tasks: 58
-                </span>
-                <span className="flex items-center">
-                  <div className="w-2 h-2 bg-green-400 rounded-full mr-1"></div>
-                  Conversations: 47
-                </span>
-                <span className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-1"></div>
-                  Automations: 182
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center text-white text-xs font-bold shadow-lg">
-                93%
-              </div>
-              <span className="text-xs text-green-300 mt-1 font-medium">Health</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-      
-      {/* System Alerts - Desktop Styled */}
-      <Card className="bg-gradient-to-r from-red-500/20 to-orange-500/20 backdrop-blur-lg border border-red-400/30 shadow-xl">
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center">
-                <AlertTriangle className="w-4 h-4 text-red-400" />
-              </div>
-              <div>
-                <h3 className="text-white font-semibold text-sm">System Alerts</h3>
-                <p className="text-red-200 text-xs">2 automation failures, 1 missed follow-up</p>
-              </div>
-            </div>
-            <Badge className="bg-red-600/80 text-white text-xs border-red-400/50">
-              High Priority
-            </Badge>
-          </div>
-        </CardContent>
-      </Card>
-
       <MetricsGrid />
+      <BotControls />
+      <LiveNotifications />
+      <ConversationLog />
+      <CrmSnapshot />
       
       {/* Essential Business Modules - Desktop Styled */}
       <div className="grid grid-cols-1 gap-4">
