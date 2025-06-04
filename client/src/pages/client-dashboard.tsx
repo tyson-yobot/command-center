@@ -718,21 +718,29 @@ export default function ClientDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
-                  <span className="text-green-400 font-bold">$42.80</span>
+                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
+                    <span className="text-green-400 font-bold">$42.80</span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
-                  <span className="text-green-400 font-bold">84.7%</span>
+                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
+                    <span className="text-green-400 font-bold">84.7%</span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300" title="Percentage of leads that become paying customers">Close Rate</span>
-                  <span className="text-green-400 font-bold">28.6%</span>
+                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300" title="Percentage of leads that become paying customers">Close Rate</span>
+                    <span className="text-green-400 font-bold">28.6%</span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300" title="Return on investment from automation">ROI</span>
-                  <span className="text-blue-400 font-bold">340%</span>
+                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300" title="Return on investment from automation">ROI</span>
+                    <span className="text-blue-400 font-bold">340%</span>
+                  </div>
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
@@ -755,24 +763,32 @@ export default function ClientDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Budget Utilization</span>
-                  <span className="text-green-400 font-bold">87.3%</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-green-400 font-bold">$4.20</span>
-                    <Badge className="bg-green-600 text-white text-xs">-18%</Badge>
+                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300">Budget Utilization</span>
+                    <span className="text-green-400 font-bold">87.3%</span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300" title="Time until positive return on investment">Payback Period</span>
-                  <span className="text-green-400 font-bold">21 days</span>
+                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-green-400 font-bold">$4.20</span>
+                      <Badge className="bg-green-600 text-white text-xs">-18%</Badge>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Automation Coverage</span>
-                  <span className="text-blue-400 font-bold">78% tasks</span>
+                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300" title="Time until positive return on investment">Payback Period</span>
+                    <span className="text-green-400 font-bold">21 days</span>
+                  </div>
+                </div>
+                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300">Automation Coverage</span>
+                    <span className="text-blue-400 font-bold">78% tasks</span>
+                  </div>
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Monthly Savings vs Manual</div>
