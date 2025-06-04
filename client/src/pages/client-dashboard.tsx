@@ -700,7 +700,7 @@ export default function ClientDashboard() {
                   <span className="text-slate-300">Avg Completion Time</span>
                   <span className="text-blue-400 font-bold">3.2 min</span>
                 </div>
-                <div className="bg-slate-800/50 rounded-lg p-3">
+                <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Next Automation</div>
                   <div className="text-white font-medium">Lead Follow-up in 5 min</div>
                 </div>
