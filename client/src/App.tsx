@@ -55,7 +55,7 @@ function Router() {
         </Route>
         <Route path="/command-center">
           <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-6">
-            <CommandCenterDashboard />
+            <DesktopCommandCenter />
           </div>
         </Route>
         <Route path="/knowledge">
