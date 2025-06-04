@@ -1532,12 +1532,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log("Could not log to Airtable:", airtableError.message);
       }
       
-      // Generate TwiML response to engage VoiceBot
+      // Generate TwiML response to engage VoiceBot with stream
       const twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say voice="Polly.Joanna">Welcome to YoBot. Please tell me how I can help you today.</Say>
+    <Say voice="Polly.Joanna">Hello! Welcome to YoBot. I'm connecting you now.</Say>
     <Pause length="1"/>
-    <Redirect>https://${req.get('host')}/api/voice/stream</Redirect>
+    <Start>
+        <Stream url="wss://${req.get('host')}/voicebot-stream" />
+    </Start>
+    <Say voice="Polly.Joanna">Please tell me how I can help you today.</Say>
+    <Pause length="30"/>
 </Response>`;
       
       console.log(`✅ VoiceBot engaged for call from ${fromNumber}`);
@@ -1964,21 +1968,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Webhook for inbound call handling
-  app.post('/webhook_inbound_call', async (req, res) => {
+  // Call status callback for missed call detection
+  app.post('/webhook/call-status', async (req, res) => {
     try {
       const { From: fromNumber, CallStatus: callStatus, CallDuration: callDuration } = req.body;
       
-      console.log(`Inbound call from ${fromNumber} with status: ${callStatus}`);
+      console.log(`Call status update from ${fromNumber}: ${callStatus} (Duration: ${callDuration}s)`);
       
-      // Check if call should trigger missed call fallback
-      const missedIndicators = ['no-answer', 'busy', 'failed', 'canceled'];
-      const isShortCall = callDuration && parseInt(callDuration) < 5;
-      
-      if (missedIndicators.includes(callStatus) || isShortCall) {
-        // Trigger missed call responder
+      // Only trigger missed call fallback for completed calls that were too short
+      if (callStatus === 'completed' && callDuration && parseInt(callDuration) < 5) {
+        console.log(`Short call detected (${callDuration}s) - triggering missed call fallback`);
+        
         try {
-          const missedCallResponse = await axios.post('http://localhost:5000/api/missed-call-responder', {
+          await axios.post(`${req.protocol}://${req.get('host')}/api/missed-call-responder`, {
             phone: fromNumber,
             airtable_record_id: `call_${Date.now()}`
           });
@@ -1987,26 +1989,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         } catch (fallbackError) {
           console.error('Failed to trigger missed call fallback:', fallbackError.message);
         }
-        
-        res.type('text/xml').send(`
-          <Response>
-            <Hangup/>
-          </Response>
-        `);
-      } else {
-        // Handle successful call
-        res.type('text/xml').send(`
-          <Response>
-            <Say voice="Polly.Joanna">Welcome to YoBot. Please tell me how I can help you.</Say>
-            <Pause length="2"/>
-            <Record timeout="30" transcribe="true" />
-            <Say voice="Polly.Joanna">Thank you for calling YoBot. Have a great day!</Say>
-          </Response>
-        `);
       }
+      
+      res.status(200).send('OK');
     } catch (error: any) {
-      console.error('Webhook error:', error.message);
-      res.type('text/xml').send('<Response><Hangup/></Response>');
+      console.error('Call status webhook error:', error.message);
+      res.status(200).send('OK');
     }
   });
 
