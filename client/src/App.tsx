@@ -11,7 +11,7 @@ import Reports from "@/pages/reports";
 import Scanner from "@/pages/scanner";
 import AdminConsole from "@/pages/admin";
 import ClientDashboard from "@/pages/client-dashboard";
-import MainCommandCenter from "@/pages/main-command-center";
+
 import DemoMode from "@/pages/demo";
 import { Knowledge } from "@/pages/Knowledge";
 import { RAGTester } from "@/pages/RAGTester";
