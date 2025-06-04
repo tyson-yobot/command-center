@@ -17,6 +17,7 @@ import DemoMode from "@/pages/demo";
 import { Knowledge } from "@/pages/Knowledge";
 import { RAGTester } from "@/pages/RAGTester";
 import AirtableTestPage from "@/pages/airtable-test";
+import DashboardDiscovery from "@/pages/dashboard-discovery";
 
 import SystemControls from "@/pages/system-controls";
 import AutomationStatus from "@/pages/AutomationStatus";
@@ -80,6 +81,9 @@ function Router() {
         </Route>
         <Route path="/demo">
           <DemoMode />
+        </Route>
+        <Route path="/discovery">
+          <DashboardDiscovery />
         </Route>
         <Route path="/mobile">
           <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">

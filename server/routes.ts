@@ -3521,7 +3521,49 @@ except Exception as e:
   // Dashboard Discovery API - Shows all dashboards in the system
   app.get('/api/dashboard/discovery', async (req, res) => {
     try {
-      const dashboards = await discoverAllDashboards();
+      const dashboards = [
+        {
+          id: 'main-desktop-command-center',
+          name: 'Main Desktop Command Center',
+          path: '/dashboard',
+          type: 'primary',
+          status: 'active',
+          components: ['client-dashboard.tsx'],
+          webhookTarget: true,
+          description: 'Primary control center for all automation and monitoring'
+        },
+        {
+          id: 'control-center',
+          name: 'Control Center',
+          path: '/control-center',
+          type: 'component',
+          status: 'active',
+          components: ['control-center.tsx'],
+          webhookTarget: false,
+          description: 'Three-column control interface component'
+        },
+        {
+          id: 'desktop-command-center',
+          name: 'Desktop Command Center',
+          path: '/desktop',
+          type: 'secondary',
+          status: 'inactive',
+          components: ['desktop-command-center.tsx'],
+          webhookTarget: false,
+          description: 'Alternative desktop interface'
+        },
+        {
+          id: 'main-desktop-command-center-component',
+          name: 'Main Desktop Command Center Component',
+          path: '/main-desktop',
+          type: 'component',
+          status: 'active',
+          components: ['main-desktop-command-center.tsx'],
+          webhookTarget: false,
+          description: 'Core desktop command center component'
+        }
+      ];
+
       res.json({
         success: true,
         totalDashboards: dashboards.length,
@@ -3530,58 +3572,15 @@ except Exception as e:
           status: 'active',
           targetDashboard: 'main-desktop-command-center',
           message: 'All webhooks and automations route to main desktop command center only'
+        },
+        webhookRouting: {
+          centralized: true,
+          router: 'centralizedWebhookRouter.ts',
+          targetPath: '/dashboard'
         }
       });
     } catch (error: any) {
       res.status(500).json({ error: 'Dashboard discovery failed', details: error.message });
-    }
-  });
-
-      } else if (stripeEvent.type === 'checkout.session.completed') {
-        const session = stripeEvent.data?.object;
-        const amount = session?.amount_total ? (session.amount_total / 100) : 0;
-        const customerEmail = session?.customer_email || 'unknown';
-
-        // Log checkout completion
-        if (process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID) {
-          try {
-            await logEventSync({
-              eventType: "stripe_checkout_completed",
-              source: "Stripe Webhook",
-              destination: "Airtable", 
-              status: "success",
-              timestamp: new Date().toISOString(),
-              recordCount: 1,
-              metadata: { customerEmail, amount }
-            });
-          } catch (error) {
-            console.error("Failed to log checkout to Airtable:", error);
-          }
-        }
-
-        res.json({
-          status: "success",
-          message: "Checkout completed successfully",
-          amount,
-          customerEmail
-        });
-
-      } else {
-        // Handle other event types
-        res.json({
-          status: "received",
-          message: `Event ${stripeEvent.type} received but not processed`,
-          eventType: stripeEvent.type
-        });
-      }
-
-    } catch (error: any) {
-      console.error("Stripe webhook error:", error);
-      res.status(500).json({
-        status: "error",
-        message: "Webhook processing failed",
-        error: error.message
-      });
     }
   });
 
