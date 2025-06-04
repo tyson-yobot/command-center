@@ -28,7 +28,7 @@ async function createAirtableRecord(baseKey: string, tableKey: string, fields: R
     records: [{ fields }]
   }, {
     headers: {
-      'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
+      'Authorization': `Bearer ${AIRTABLE_API_KEY.trim()}`,
       'Content-Type': 'application/json'
     }
   });

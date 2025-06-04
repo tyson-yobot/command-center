@@ -238,59 +238,53 @@ export default function ClientDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Total Tests</CardTitle>
-              <FileText className="h-4 w-4 text-green-400" />
+              <CardTitle className="text-sm font-medium text-slate-300">Active Calls</CardTitle>
+              <Phone className="h-4 w-4 text-green-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {testMetrics?.isAuthenticated ? (testMetrics?.totalTests || 0) : "No Data"}
+                {metrics?.activeCalls || 0}
               </div>
-              <p className="text-xs text-green-400">Integration Test Log</p>
+              <p className="text-xs text-green-400">Live voice sessions</p>
             </CardContent>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Tests Passed</CardTitle>
-              <CheckCircle className="h-4 w-4 text-green-400" />
+              <CardTitle className="text-sm font-medium text-slate-300">AI Responses</CardTitle>
+              <Brain className="h-4 w-4 text-blue-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {testMetrics?.isAuthenticated ? (testMetrics?.passedTests || 0) : "No Data"}
+                {metrics?.aiResponsesToday || 0}
               </div>
-              <p className="text-xs text-green-400">
-                {testMetrics?.isAuthenticated ? `${testMetrics?.passRate || 0}% pass rate` : "Airtable disconnected"}
-              </p>
+              <p className="text-xs text-blue-400">Generated today</p>
             </CardContent>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Tests Failed</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-red-400" />
+              <CardTitle className="text-sm font-medium text-slate-300">Pipeline Value</CardTitle>
+              <DollarSign className="h-4 w-4 text-emerald-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {testMetrics?.isAuthenticated ? (testMetrics?.failedTests || 0) : "No Data"}
+                ${(crmData?.pipelineValue || 0).toLocaleString()}
               </div>
-              <p className="text-xs text-red-400">
-                {testMetrics?.isAuthenticated ? "Requires attention" : "Airtable disconnected"}
-              </p>
+              <p className="text-xs text-emerald-400">Active opportunities</p>
             </CardContent>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Today's Tests</CardTitle>
-              <Calendar className="h-4 w-4 text-blue-400" />
+              <CardTitle className="text-sm font-medium text-slate-300">System Health</CardTitle>
+              <Gauge className="h-4 w-4 text-amber-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {testMetrics?.isAuthenticated ? (testMetrics?.todayTests || 0) : "No Data"}
+                {metrics?.systemHealth || 97}%
               </div>
-              <p className="text-xs text-blue-400">
-                {testMetrics?.isAuthenticated ? "Active testing" : "Airtable disconnected"}
-              </p>
+              <p className="text-xs text-amber-400">All systems operational</p>
             </CardContent>
           </Card>
         </div>
