@@ -85,6 +85,28 @@ def handler(request):
         airtable_updated = False
         if record_id:
             airtable_updated = log_outcome_to_airtable(record_id)
+            
+            # OPTIONAL: Schedule callback if missed call
+            callback_payload = {
+                "fields": {
+                    "📅 Callback Scheduled": datetime.utcnow().isoformat()
+                }
+            }
+            try:
+                callback_response = requests.patch(
+                    f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{TABLE_ID}/{record_id}",
+                    headers={
+                        "Authorization": f"Bearer {AIRTABLE_KEY}",
+                        "Content-Type": "application/json"
+                    },
+                    json=callback_payload
+                )
+                if callback_response.ok:
+                    print(f"✅ Callback scheduled for {phone_number}")
+                else:
+                    print(f"❌ Failed to schedule callback: {callback_response.status_code}")
+            except Exception as e:
+                print(f"❌ Error scheduling callback: {e}")
         
         print(f"📵 Missed call follow-up processed for {phone_number}")
         
