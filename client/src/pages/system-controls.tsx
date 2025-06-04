@@ -95,7 +95,24 @@ export default function SystemControls() {
     dataEncryption: 'live',
     gdprCompliance: 'live',
     accessLogging: 'live',
-    auditTrail: 'live'
+    auditTrail: 'live',
+    
+    // Advanced Automation Functions
+    apifyGoogleMapsScraping: 'live',
+    apolloLeadGeneration: 'live',
+    voiceTranscription: 'live',
+    pipelineCalls: 'live',
+    smsAutomation: 'live',
+    aiFollowup: 'live',
+    commandCenterDispatcher: 'live',
+    webhookInboundSMS: 'live',
+    triggerVoiceCall: 'live',
+    logCommandCenterEvent: 'live',
+    launchPhantombuster: 'live',
+    webhookCalendly: 'live',
+    voicebotSocket: 'live',
+    retryCallbackScheduler: 'live',
+    triggerPipelineCalls: 'live'
   });
 
   // Action log for troubleshooting
@@ -198,7 +215,24 @@ export default function SystemControls() {
     dataEncryption: true,
     gdprCompliance: false,
     accessLogging: true,
-    auditTrail: true
+    auditTrail: true,
+    
+    // Advanced Automation Functions
+    apifyGoogleMapsScraping: true,
+    apolloLeadGeneration: true,
+    voiceTranscription: true,
+    pipelineCalls: true,
+    smsAutomation: true,
+    aiFollowup: true,
+    commandCenterDispatcher: true,
+    webhookInboundSMS: true,
+    triggerVoiceCall: true,
+    logCommandCenterEvent: true,
+    launchPhantombuster: true,
+    webhookCalendly: true,
+    voicebotSocket: true,
+    retryCallbackScheduler: true,
+    triggerPipelineCalls: true
   });
 
   const handleLogin = () => {
@@ -332,7 +366,24 @@ export default function SystemControls() {
     dataEncryption: { category: 'Security & Compliance', name: 'Data Encryption', visibleTo: ['admin'] },
     gdprCompliance: { category: 'Security & Compliance', name: 'GDPR Compliance', visibleTo: ['admin'] },
     accessLogging: { category: 'Security & Compliance', name: 'Access Logging', visibleTo: ['admin'] },
-    auditTrail: { category: 'Security & Compliance', name: 'Audit Trail', visibleTo: ['admin'] }
+    auditTrail: { category: 'Security & Compliance', name: 'Audit Trail', visibleTo: ['admin'] },
+    
+    // Advanced Automation Functions
+    apifyGoogleMapsScraping: { category: 'Lead Generation', name: 'Apify Google Maps Scraping', visibleTo: ['admin', 'client'] },
+    apolloLeadGeneration: { category: 'Lead Generation', name: 'Apollo Lead Generation', visibleTo: ['admin', 'client'] },
+    voiceTranscription: { category: 'Voice & Communication', name: 'Voice Transcription', visibleTo: ['admin', 'client'] },
+    pipelineCalls: { category: 'Voice & Communication', name: 'Pipeline Calls', visibleTo: ['admin', 'support'] },
+    smsAutomation: { category: 'Voice & Communication', name: 'SMS Automation', visibleTo: ['admin', 'support'] },
+    aiFollowup: { category: 'Automation & AI', name: 'AI Follow-up System', visibleTo: ['admin', 'client'] },
+    commandCenterDispatcher: { category: 'Automation & AI', name: 'Command Center Dispatcher', visibleTo: ['admin'] },
+    webhookInboundSMS: { category: 'Webhook Management', name: 'Webhook Inbound SMS', visibleTo: ['admin', 'support'] },
+    triggerVoiceCall: { category: 'Voice & Communication', name: 'Trigger Voice Call', visibleTo: ['admin', 'support'] },
+    logCommandCenterEvent: { category: 'Analytics & Monitoring', name: 'Log Command Center Event', visibleTo: ['admin'] },
+    launchPhantombuster: { category: 'Lead Generation', name: 'Launch PhantomBuster', visibleTo: ['admin', 'client'] },
+    webhookCalendly: { category: 'Integrations', name: 'Webhook Calendly', visibleTo: ['admin', 'client'] },
+    voicebotSocket: { category: 'Voice & Communication', name: 'VoiceBot Socket', visibleTo: ['admin', 'support'] },
+    retryCallbackScheduler: { category: 'Voice & Communication', name: 'Retry Callback Scheduler', visibleTo: ['admin', 'support'] },
+    triggerPipelineCalls: { category: 'Voice & Communication', name: 'Trigger Pipeline Calls', visibleTo: ['admin', 'support'] }
   };
 
   // Filter modules based on search and role permissions

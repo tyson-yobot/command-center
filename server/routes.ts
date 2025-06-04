@@ -288,6 +288,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const qboRouter = await import("./qbo.js");
   app.use("/api/qbo", qboRouter.default);
 
+  // VoiceBot Stream Route - Returns Twilio Stream XML
+  app.post("/voicebot_stream", (req, res) => {
+    const response = `<?xml version="1.0" encoding="UTF-8"?>
+    <Response>
+        <Connect>
+            <Stream url="wss://${req.get('host')}/voicebot-stream"/>
+        </Connect>
+    </Response>`;
+    res.set('Content-Type', 'application/xml');
+    res.status(200).send(response);
+  });
+
+  app.get("/voicebot_stream", (req, res) => {
+    const response = `<?xml version="1.0" encoding="UTF-8"?>
+    <Response>
+        <Connect>
+            <Stream url="wss://${req.get('host')}/voicebot-stream"/>
+        </Connect>
+    </Response>`;
+    res.set('Content-Type', 'application/xml');
+    res.status(200).send(response);
+  });
+
   // Enhanced WebSocket server with Socket.IO for real-time updates
   setupWebSocket(httpServer);
 
