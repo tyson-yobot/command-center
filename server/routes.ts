@@ -1729,19 +1729,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${twilioSid}/Messages.json`;
           const twilioAuthHeader = Buffer.from(`${twilioSid}:${twilioAuth}`).toString('base64');
           
-          const twilioResponse = await axios.post(twilioUrl, new URLSearchParams({
-            To: phone,
-            From: twilioFrom,
-            Body: "Hi! We missed your call to YoBot. Reply here or schedule a callback at yobot.bot"
-          }), {
-            headers: {
-              'Authorization': `Basic ${twilioAuthHeader}`,
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          });
-          
-          smsResult = { success: true, sid: twilioResponse.data.sid };
-          console.log(`SMS fallback sent successfully to ${phone}`);
+          // Validate phone numbers are different
+          if (phone === twilioFrom) {
+            console.log(`Skipping SMS - cannot send from ${twilioFrom} to same number`);
+            smsResult = { success: false, error: 'Cannot send SMS to same number as sender' };
+          } else {
+            const twilioResponse = await axios.post(twilioUrl, new URLSearchParams({
+              To: phone,
+              From: twilioFrom,
+              Body: "Hi! We missed your call to YoBot. Reply here or schedule a callback at yobot.bot"
+            }), {
+              headers: {
+                'Authorization': `Basic ${twilioAuthHeader}`,
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
+            });
+            
+            smsResult = { success: true, sid: twilioResponse.data.sid };
+            console.log(`SMS fallback sent successfully to ${phone}`);
+          }
         } catch (twilioError: any) {
           console.error('Twilio SMS error:', twilioError.message);
           smsResult = { success: false, error: twilioError.message };
