@@ -3961,6 +3961,84 @@ except Exception as e:
   app.use('/api/chat-integration', chatIntegrationRouter);
   app.use('/api/phantombuster', phantombusterRouter);
 
+  // Gmail OAuth Email Automation Endpoint
+  app.post('/api/email/send-followup', async (req, res) => {
+    try {
+      const { recipient_email, subject, message_text } = req.body;
+      
+      if (!recipient_email || !subject || !message_text) {
+        return res.status(400).json({ 
+          error: 'Missing required fields: recipient_email, subject, message_text' 
+        });
+      }
+
+      const { exec } = await import('child_process');
+      const emailData = JSON.stringify({ recipient_email, subject, message_text }).replace(/"/g, '\\"');
+      
+      exec(`python3 oauth_gmail_send.py send-email "${emailData}"`, (err: any, stdout: any, stderr: any) => {
+        if (err) {
+          console.error("Gmail send error:", stderr);
+          return res.status(500).json({ 
+            error: 'Email send failed', 
+            details: stderr 
+          });
+        } else {
+          console.log("Gmail send result:", stdout);
+          try {
+            const result = JSON.parse(stdout);
+            return res.json({
+              success: true,
+              status: result.status,
+              messageId: result.id || null,
+              message: 'Email sent successfully'
+            });
+          } catch (parseError) {
+            return res.json({
+              success: true,
+              message: 'Email sent successfully',
+              output: stdout
+            });
+          }
+        }
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ 
+        error: 'Gmail automation failed', 
+        message: error.message 
+      });
+    }
+  });
+
+  // Gmail OAuth Setup Status
+  app.get('/api/email/oauth-status', async (req, res) => {
+    try {
+      const { exec } = await import('child_process');
+      
+      exec(`python3 oauth_gmail_send.py check-auth`, (err: any, stdout: any, stderr: any) => {
+        if (err) {
+          return res.json({ 
+            authenticated: false,
+            error: stderr,
+            message: 'Gmail OAuth not configured'
+          });
+        } else {
+          return res.json({
+            authenticated: true,
+            message: 'Gmail OAuth configured successfully',
+            details: stdout
+          });
+        }
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ 
+        error: 'OAuth status check failed', 
+        message: error.message 
+      });
+    }
+  });
+
   // Register new automation batch routes
   try {
     const batch14Module = await import("./automationBatch14");
