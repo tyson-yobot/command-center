@@ -1,0 +1,74 @@
+Batch 21: Automations 201–210
+ts
+Copy
+Edit
+// 201 - Auto-create Airtable Record from Log Object
+async function createLogRecord(log) {
+  return await airtableAPI.createRecord("Integration Test Log", {
+    "✅ Integration Name": log.name,
+    "✅ Pass/Fail": log.status,
+    "📝 Notes / Debug": log.notes,
+    "🕒 Timestamp": new Date().toISOString(),
+  });
+}
+
+// 202 - Strip HTML Tags from Text
+function stripHtml(text) {
+  return text.replace(/<[^>]*>/g, "");
+}
+
+// 203 - Send Integration Summary to Slack
+async function postIntegrationSummary(summary) {
+  const message = `📋 Integration Summary:\n${summary.map(item => `• ${item}`).join("\n")}`;
+  await sendSlackNotification(message);
+}
+
+// 204 - Detect Duplicate Records by Unique Field
+function isDuplicateRecord(existing, incoming, key) {
+  return existing.some(record => record[key] === incoming[key]);
+}
+
+// 205 - Normalize Phone Number (US Format)
+function normalizePhone(phone) {
+  return phone.replace(/\D/g, "").replace(/^1/, "").padStart(10, "0");
+}
+
+// 206 - Auto-populate Lead Score from Rules
+function calculateLeadScore(lead) {
+  let score = 0;
+  if (lead.source === "Phantombuster") score += 20;
+  if (lead.email && lead.email.includes(".com")) score += 10;
+  if (lead.interactionCount > 3) score += 15;
+  return score;
+}
+
+// 207 - Track Error Frequency by Module
+function getErrorFrequency(logs) {
+  const freq = {};
+  logs.forEach(log => {
+    const mod = log.module;
+    if (log.status !== "success") freq[mod] = (freq[mod] || 0) + 1;
+  });
+  return freq;
+}
+
+// 208 - VoiceBot: Flag Call for Manual Review
+function flagCallForReview(call, reason) {
+  return {
+    ...call,
+    flagged: true,
+    reason: reason || "Unspecified",
+    flaggedAt: new Date().toISOString(),
+  };
+}
+
+// 209 - Check if Date is a Weekend
+function isWeekend(dateStr) {
+  const day = new Date(dateStr).getDay();
+  return day === 0 || day === 6;
+}
+
+// 210 - Auto-fill Integration Template
+function fillIntegrationTemplate({ name, type, status }) {
+  return `Integration Name: ${name}\nType: ${type}\nStatus: ${status}\nDate: ${getTodayISO()}`;
+}
