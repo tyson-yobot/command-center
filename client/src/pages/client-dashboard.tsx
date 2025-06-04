@@ -536,7 +536,7 @@ export default function ClientDashboard() {
         {/* Essential Business Modules */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
           {/* Bot Health Monitor */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-green-400" />
@@ -570,7 +570,7 @@ export default function ClientDashboard() {
           </Card>
 
           {/* Revenue Forecast */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <TrendingUp className="w-5 h-5 mr-2 text-blue-400" />
