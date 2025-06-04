@@ -318,10 +318,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
         console.log(`📱 SMS alert sent: ${smsResponse.status}`);
         
+        // 3. Schedule callback for 1 hour later
+        await scheduleCallback(callerNumber);
+        
         return true;
         
       } catch (error) {
         console.error('❌ Voicemail logging error:', error);
+        return false;
+      }
+    };
+
+    const scheduleCallback = async (callerNumber: string): Promise<boolean> => {
+      try {
+        const callbackTime = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+
+        // Airtable setup
+        const airtableUrl = `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.TABLE_ID}`;
+        const airtableHeaders = {
+          "Authorization": `Bearer ${process.env.AIRTABLE_KEY}`,
+          "Content-Type": "application/json"
+        };
+
+        const callbackData = {
+          "fields": {
+            "📄 Call Outcome": "📩 Callback Needed",
+            "📞 Caller Phone": callerNumber,
+            "📅 Callback Scheduled": callbackTime
+          }
+        };
+
+        const response = await fetch(airtableUrl, {
+          method: 'POST',
+          headers: airtableHeaders,
+          body: JSON.stringify(callbackData)
+        });
+        
+        console.log(`📆 Callback scheduled for ${callerNumber} at ${callbackTime}`);
+        return response.ok;
+        
+      } catch (error) {
+        console.error('❌ Callback scheduling error:', error);
         return false;
       }
     };

@@ -94,10 +94,47 @@ def log_voicemail_and_alert(message_text, caller_number="+1UNKNOWN"):
         )
         print(f"📱 SMS alert sent: {sms_response.status_code}")
         
+        # 3. Schedule callback for 1 hour later
+        schedule_callback(caller_number)
+        
         return True
         
     except Exception as e:
         print(f"❌ Voicemail logging error: {e}")
+        return False
+
+def schedule_callback(caller_number):
+    """
+    Schedules a callback 1 hour after voicemail is received
+    """
+    import os
+    import requests
+    from datetime import datetime, timedelta
+    
+    try:
+        callback_time = (datetime.utcnow() + timedelta(hours=1)).isoformat()
+
+        # Airtable setup
+        airtable_url = f"https://api.airtable.com/v0/{os.getenv('AIRTABLE_BASE_ID')}/{os.getenv('TABLE_ID')}"
+        headers = {
+            "Authorization": f"Bearer {os.getenv('AIRTABLE_KEY')}",
+            "Content-Type": "application/json"
+        }
+
+        data = {
+            "fields": {
+                "📄 Call Outcome": "📩 Callback Needed",
+                "📞 Caller Phone": caller_number,
+                "📅 Callback Scheduled": callback_time
+            }
+        }
+
+        response = requests.post(airtable_url, headers=headers, json=data)
+        print(f"📆 Callback scheduled for {caller_number} at {callback_time}")
+        return response.status_code == 200
+        
+    except Exception as e:
+        print(f"❌ Callback scheduling error: {e}")
         return False
 
 def check_message_response(text):
