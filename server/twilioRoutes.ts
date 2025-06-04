@@ -24,7 +24,7 @@ router.post('/function-302', async (req, res) => {
     const { phoneNumber, appointment } = req.body;
     const result = await twilioAutomation.sendAppointmentReminder(phoneNumber, appointment);
     res.json({ success: true, functionId: 302, name: "SMS Appointment Reminder", result });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ success: false, functionId: 302, error: error.message });
   }
 });
@@ -35,7 +35,7 @@ router.post('/function-303', async (req, res) => {
     const { phoneNumber, followUpData } = req.body;
     const result = await twilioAutomation.sendFollowUpSMS(phoneNumber, followUpData);
     res.json({ success: true, functionId: 303, name: "SMS Follow-up Automation", result });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ success: false, functionId: 303, error: error.message });
   }
 });
@@ -46,7 +46,7 @@ router.post('/function-304', async (req, res) => {
     const { phoneNumber, paymentInfo } = req.body;
     const result = await twilioAutomation.sendPaymentReminder(phoneNumber, paymentInfo);
     res.json({ success: true, functionId: 304, name: "SMS Payment Reminder", result });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ success: false, functionId: 304, error: error.message });
   }
 });
@@ -57,7 +57,7 @@ router.post('/function-305', async (req, res) => {
     const { phoneNumber, ticketInfo } = req.body;
     const result = await twilioAutomation.sendSupportTicketAlert(phoneNumber, ticketInfo);
     res.json({ success: true, functionId: 305, name: "SMS Support Ticket Alert", result });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ success: false, functionId: 305, error: error.message });
   }
 });
@@ -68,7 +68,7 @@ router.post('/function-306', async (req, res) => {
     const { phoneNumber, surveyData } = req.body;
     const result = await twilioAutomation.sendSurveyRequest(phoneNumber, surveyData);
     res.json({ success: true, functionId: 306, name: "SMS Survey Request", result });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ success: false, functionId: 306, error: error.message });
   }
 });
@@ -79,7 +79,7 @@ router.post('/function-307', async (req, res) => {
     const { phoneNumber, bookingInfo } = req.body;
     const result = await twilioAutomation.sendBookingConfirmation(phoneNumber, bookingInfo);
     res.json({ success: true, functionId: 307, name: "SMS Booking Confirmation", result });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ success: false, functionId: 307, error: error.message });
   }
 });
@@ -90,7 +90,7 @@ router.post('/function-308', async (req, res) => {
     const { phoneNumber, statusInfo } = req.body;
     const result = await twilioAutomation.sendStatusUpdate(phoneNumber, statusInfo);
     res.json({ success: true, functionId: 308, name: "SMS Status Update", result });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ success: false, functionId: 308, error: error.message });
   }
 });
@@ -101,7 +101,7 @@ router.post('/function-309', async (req, res) => {
     const { phoneNumber, alertInfo } = req.body;
     const result = await twilioAutomation.sendEmergencyAlert(phoneNumber, alertInfo);
     res.json({ success: true, functionId: 309, name: "SMS Emergency Alert", result });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ success: false, functionId: 309, error: error.message });
   }
 });
@@ -112,7 +112,7 @@ router.post('/function-310', async (req, res) => {
     const { phoneNumbers, campaignData } = req.body;
     const result = await twilioAutomation.sendBulkCampaign(phoneNumbers, campaignData);
     res.json({ success: true, functionId: 310, name: "SMS Bulk Campaign", result });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ success: false, functionId: 310, error: error.message });
   }
 });
@@ -150,7 +150,7 @@ router.post('/execute-all', async (req, res) => {
         case 310: result = await twilioAutomation.sendBulkCampaign([testData.phoneNumber], testData.campaignData); break;
       }
       results.push({ functionId: i, success: true, result });
-    } catch (error) {
+    } catch (error: any) {
       results.push({ functionId: i, success: false, error: error.message });
     }
   }
