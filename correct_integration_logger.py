@@ -1275,14 +1275,14 @@ def log_response_volatility_injection_detection_functions():
     security_functions = [
         (701, "Flag Script for Response Volatility"),
         (702, "Detect Injection Attempts"),
-        (703, "Log Script Output Consistency Check"),
-        (704, "Track Script Performance Degradation"),
-        (705, "Record Script Security Alert"),
-        (706, "Flag Script for Anomalous Behavior"),
-        (707, "Log Script Rate Limiting Triggered"),
-        (708, "Track Script Resource Exhaustion"),
-        (709, "Record Script Emergency Shutdown"),
-        (710, "Flag Script for Phase 2 AI Trigger Ready"),
+        (703, "Track Repetition Density"),
+        (704, "Log Multilingual Token Ratio"),
+        (705, "Response Length Outlier Detector"),
+        (706, "Log AI Interruption Traces"),
+        (707, "Detect Output Staleness"),
+        (708, "Log Undefined Voice Artifacts"),
+        (709, "AI Prediction Drift Logger"),
+        (710, "Log Custom Token Trigger Usage"),
     ]
     
     success_count = 0
