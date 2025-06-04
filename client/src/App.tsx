@@ -15,7 +15,6 @@ import ClientDashboard from "@/pages/client-dashboard";
 
 import DemoMode from "@/pages/demo";
 import { Knowledge } from "@/pages/Knowledge";
-import { RAGTester } from "@/pages/RAGTester";
 import AirtableTestPage from "@/pages/airtable-test";
 import DashboardDiscovery from "@/pages/dashboard-discovery";
 
@@ -64,9 +63,7 @@ function Router() {
         <Route path="/knowledge">
           <Knowledge />
         </Route>
-        <Route path="/rag">
-          <RAGTester />
-        </Route>
+
         <Route path="/airtable-test">
           <AirtableTestPage />
         </Route>
