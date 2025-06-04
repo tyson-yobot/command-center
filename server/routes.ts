@@ -1746,6 +1746,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Fix missing escalation and missed call endpoints
+  app.post('/api/airtable/log-escalation', async (req, res) => {
+    try {
+      const escalationData = {
+        ticketId: req.body.ticketId || `ESCALATION-${Date.now()}`,
+        clientName: req.body.clientName || 'System Test',
+        escalationType: req.body.escalationType || 'System Alert',
+        priority: req.body.priority || 'High',
+        timestamp: new Date().toISOString(),
+        reason: req.body.reason || 'Automated escalation test'
+      };
+      
+      await logEscalation(escalationData);
+      res.json({ success: true, message: "Escalation logged successfully", data: escalationData });
+    } catch (error: any) {
+      console.error('Escalation logging error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  app.post('/api/airtable/log-missed-call', async (req, res) => {
+    try {
+      const missedCallData = {
+        callerName: req.body.callerName || 'System Test Caller',
+        phoneNumber: req.body.phoneNumber || '+1-555-TEST',
+        timestamp: new Date().toISOString(),
+        duration: req.body.duration || 30,
+        clientId: req.body.clientId || 'SYSTEM-TEST'
+      };
+      
+      await logMissedCall(missedCallData);
+      res.json({ success: true, message: "Missed call logged successfully", data: missedCallData });
+    } catch (error: any) {
+      console.error('Missed call logging error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
   // Complete automation system test endpoint
   app.post('/api/automation/run-complete-test', async (req, res) => {
     try {
