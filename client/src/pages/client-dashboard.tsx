@@ -774,7 +774,7 @@ export default function ClientDashboard() {
                   <span className="text-slate-300">Automation Coverage</span>
                   <span className="text-blue-400 font-bold">78% tasks</span>
                 </div>
-                <div className="bg-slate-800/50 rounded-lg p-3">
+                <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Monthly Savings vs Manual</div>
                   <div className="flex items-center justify-between">
                     <div className="text-white font-bold">$12,840</div>
@@ -944,7 +944,7 @@ export default function ClientDashboard() {
                   <span className="text-slate-300">Resolution Rate</span>
                   <span className="text-green-400 font-bold">91.5%</span>
                 </div>
-                <div className="bg-slate-800/50 rounded-lg p-3">
+                <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Top Intent</div>
                   <div className="text-white font-medium">Product Demo Request</div>
                 </div>
@@ -986,7 +986,7 @@ export default function ClientDashboard() {
                     </Button>
                   </div>
                 </div>
-                <div className="bg-slate-800/50 rounded-lg p-3">
+                <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Auto-scheduled today</div>
                   <div className="text-white font-bold">7 meetings</div>
                 </div>
@@ -1255,16 +1255,16 @@ export default function ClientDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="text-sm text-slate-300 bg-slate-800/50 p-2 rounded">
+                <div className="text-sm text-slate-300 bg-blue-900/60 p-2 rounded border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   📞 Call completed: Mike Rodriguez - 4m 32s
                 </div>
-                <div className="text-sm text-slate-300 bg-slate-800/50 p-2 rounded">
+                <div className="text-sm text-slate-300 bg-blue-900/60 p-2 rounded border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   ✅ Lead qualified: Sarah Chen - High Priority
                 </div>
-                <div className="text-sm text-slate-300 bg-slate-800/50 p-2 rounded">
+                <div className="text-sm text-slate-300 bg-blue-900/60 p-2 rounded border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   🤖 Bot training: Voice model updated +2.3%
                 </div>
-                <div className="text-sm text-slate-300 bg-slate-800/50 p-2 rounded">
+                <div className="text-sm text-slate-300 bg-blue-900/60 p-2 rounded border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   💰 Deal closed: TechCorp - $45,000
                 </div>
               </div>
