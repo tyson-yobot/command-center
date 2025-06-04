@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-04T10:10:00.186Z",
-    "functionId": 153,
-    "functionName": "System Health Metric Update",
-    "batch": 16,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 105,
-    "successCount": 3,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-04T10:10:00.192Z",
     "functionId": 206,
     "functionName": "Lead Score Calculator",
@@ -11348,6 +11337,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-04T19:55:34.959Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-04T19:57:42.685Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-04T19:57:42.420Z",
       "automationStatus": "running"
     }
   }

@@ -1,5 +1,4 @@
 import SearchBar from "@/components/search/search-bar";
-import ConversationSearch from "@/components/search/conversation-search";
 import MetricsGrid from "@/components/dashboard/metrics-grid";
 import BotControls from "@/components/dashboard/bot-controls";
 import LiveNotifications from "@/components/dashboard/live-notifications";
