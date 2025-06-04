@@ -1,0 +1,406 @@
+import React, { useState } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { AlertTriangle, Play, Zap, Phone, Mic, MessageSquare } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+
+export default function CommandCenterDashboard() {
+  const { toast } = useToast();
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [executionResults, setExecutionResults] = useState<any[]>([]);
+
+  // Form states for different automation types
+  const [apolloParams, setApolloParams] = useState({
+    title: "Owner",
+    location: "Texas",
+    keywords: "roofing contractor"
+  });
+
+  const [apifyParams, setApifyParams] = useState({
+    actor_id: "",
+    search: "roofing contractors",
+    location: "Texas"
+  });
+
+  const [smsParams, setSmsParams] = useState({
+    to: "",
+    message: "Follow-up message from YoBot"
+  });
+
+  const [transcribeParams, setTranscribeParams] = useState({
+    file_path: ""
+  });
+
+  const [voiceParams, setVoiceParams] = useState({
+    text: "Hello from YoBot",
+    voice_id: "21m00Tcm4TlvDq8ikWAM"
+  });
+
+  const automationCategories = [
+    { value: "Apollo Scrape", label: "Apollo Lead Search", icon: <Zap className="w-4 h-4" /> },
+    { value: "Apify Maps", label: "Google Maps Scraping", icon: <Play className="w-4 h-4" /> },
+    { value: "Send SMS", label: "SMS Notification", icon: <MessageSquare className="w-4 h-4" /> },
+    { value: "Transcribe", label: "Voice Transcription", icon: <Mic className="w-4 h-4" /> },
+    { value: "Voice Generate", label: "Voice Generation", icon: <Phone className="w-4 h-4" /> },
+    { value: "Start Call", label: "Outbound Call", icon: <Phone className="w-4 h-4" /> }
+  ];
+
+  const executeAutomation = async () => {
+    if (!selectedCategory) {
+      toast({
+        title: "Selection Required",
+        description: "Please select an automation category",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsExecuting(true);
+
+    try {
+      let payload = {};
+
+      // Set payload based on selected category
+      switch (selectedCategory) {
+        case "Apollo Scrape":
+          payload = apolloParams;
+          break;
+        case "Apify Maps":
+          payload = apifyParams;
+          break;
+        case "Send SMS":
+          payload = smsParams;
+          break;
+        case "Transcribe":
+          payload = transcribeParams;
+          break;
+        case "Voice Generate":
+          payload = voiceParams;
+          break;
+        default:
+          payload = {};
+      }
+
+      const response = await apiRequest("POST", "/api/command-center/trigger", {
+        category: selectedCategory,
+        payload
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "Automation Executed",
+          description: `${selectedCategory} completed successfully`
+        });
+
+        setExecutionResults(prev => [{
+          category: selectedCategory,
+          result: result.result,
+          timestamp: new Date().toISOString(),
+          success: true
+        }, ...prev.slice(0, 4)]);
+      } else {
+        toast({
+          title: "Execution Failed",
+          description: result.error || "Unknown error occurred",
+          variant: "destructive"
+        });
+
+        setExecutionResults(prev => [{
+          category: selectedCategory,
+          result: { error: result.error },
+          timestamp: new Date().toISOString(),
+          success: false
+        }, ...prev.slice(0, 4)]);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Request Failed",
+        description: error.message || "Failed to execute automation",
+        variant: "destructive"
+      });
+    } finally {
+      setIsExecuting(false);
+    }
+  };
+
+  const sendEmergencyAlert = async () => {
+    try {
+      const message = prompt("Enter emergency alert message:");
+      if (!message) return;
+
+      const response = await apiRequest("POST", "/api/command-center/sev1-alert", {
+        message
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "Emergency Alert Sent",
+          description: "SEV-1 alert delivered to Slack"
+        });
+      } else {
+        toast({
+          title: "Alert Failed",
+          description: result.error || "Failed to send alert",
+          variant: "destructive"
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Alert Error",
+        description: error.message || "Failed to send emergency alert",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const renderParameterForm = () => {
+    switch (selectedCategory) {
+      case "Apollo Scrape":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="apollo-title">Job Title</Label>
+              <Input
+                id="apollo-title"
+                value={apolloParams.title}
+                onChange={(e) => setApolloParams({...apolloParams, title: e.target.value})}
+                placeholder="Owner, Manager, etc."
+              />
+            </div>
+            <div>
+              <Label htmlFor="apollo-location">Location</Label>
+              <Input
+                id="apollo-location"
+                value={apolloParams.location}
+                onChange={(e) => setApolloParams({...apolloParams, location: e.target.value})}
+                placeholder="Texas, California, etc."
+              />
+            </div>
+            <div>
+              <Label htmlFor="apollo-keywords">Company Keywords</Label>
+              <Input
+                id="apollo-keywords"
+                value={apolloParams.keywords}
+                onChange={(e) => setApolloParams({...apolloParams, keywords: e.target.value})}
+                placeholder="roofing contractor, HVAC, etc."
+              />
+            </div>
+          </div>
+        );
+
+      case "Apify Maps":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="apify-actor">Actor ID</Label>
+              <Input
+                id="apify-actor"
+                value={apifyParams.actor_id}
+                onChange={(e) => setApifyParams({...apifyParams, actor_id: e.target.value})}
+                placeholder="Your Apify actor ID"
+              />
+            </div>
+            <div>
+              <Label htmlFor="apify-search">Search Term</Label>
+              <Input
+                id="apify-search"
+                value={apifyParams.search}
+                onChange={(e) => setApifyParams({...apifyParams, search: e.target.value})}
+                placeholder="roofing contractors"
+              />
+            </div>
+            <div>
+              <Label htmlFor="apify-location">Location</Label>
+              <Input
+                id="apify-location"
+                value={apifyParams.location}
+                onChange={(e) => setApifyParams({...apifyParams, location: e.target.value})}
+                placeholder="Texas"
+              />
+            </div>
+          </div>
+        );
+
+      case "Send SMS":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="sms-to">Phone Number</Label>
+              <Input
+                id="sms-to"
+                value={smsParams.to}
+                onChange={(e) => setSmsParams({...smsParams, to: e.target.value})}
+                placeholder="+1234567890"
+              />
+            </div>
+            <div>
+              <Label htmlFor="sms-message">Message</Label>
+              <Textarea
+                id="sms-message"
+                value={smsParams.message}
+                onChange={(e) => setSmsParams({...smsParams, message: e.target.value})}
+                placeholder="Your message here"
+                rows={3}
+              />
+            </div>
+          </div>
+        );
+
+      case "Transcribe":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="transcribe-file">Audio File Path</Label>
+              <Input
+                id="transcribe-file"
+                value={transcribeParams.file_path}
+                onChange={(e) => setTranscribeParams({...transcribeParams, file_path: e.target.value})}
+                placeholder="/path/to/audio/file.mp3"
+              />
+            </div>
+          </div>
+        );
+
+      case "Voice Generate":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="voice-text">Text to Speech</Label>
+              <Textarea
+                id="voice-text"
+                value={voiceParams.text}
+                onChange={(e) => setVoiceParams({...voiceParams, text: e.target.value})}
+                placeholder="Hello from YoBot"
+                rows={3}
+              />
+            </div>
+            <div>
+              <Label htmlFor="voice-id">Voice ID</Label>
+              <Input
+                id="voice-id"
+                value={voiceParams.voice_id}
+                onChange={(e) => setVoiceParams({...voiceParams, voice_id: e.target.value})}
+                placeholder="21m00Tcm4TlvDq8ikWAM"
+              />
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold text-white">Command Center</h2>
+        <Button
+          onClick={sendEmergencyAlert}
+          variant="destructive"
+          className="bg-red-600 hover:bg-red-700"
+        >
+          <AlertTriangle className="w-4 h-4 mr-2" />
+          SEV-1 Alert
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Automation Trigger */}
+        <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <CardHeader>
+            <CardTitle className="text-white">Automation Dispatcher</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="category-select" className="text-white">Select Automation</Label>
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="bg-black/20 border-white/30 text-white">
+                  <SelectValue placeholder="Choose automation type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {automationCategories.map((category) => (
+                    <SelectItem key={category.value} value={category.value}>
+                      <div className="flex items-center space-x-2">
+                        {category.icon}
+                        <span>{category.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {selectedCategory && (
+              <div className="space-y-4">
+                {renderParameterForm()}
+                <Button
+                  onClick={executeAutomation}
+                  disabled={isExecuting}
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                >
+                  {isExecuting ? "Executing..." : "Execute Automation"}
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Execution Results */}
+        <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <CardHeader>
+            <CardTitle className="text-white">Recent Executions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {executionResults.length === 0 ? (
+                <p className="text-slate-400 text-sm">No executions yet</p>
+              ) : (
+                executionResults.map((result, index) => (
+                  <div
+                    key={index}
+                    className={`p-3 rounded-lg border ${
+                      result.success
+                        ? 'bg-green-500/10 border-green-500/30'
+                        : 'bg-red-500/10 border-red-500/30'
+                    }`}
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="text-white font-medium">{result.category}</p>
+                        <p className="text-slate-300 text-xs">
+                          {new Date(result.timestamp).toLocaleTimeString()}
+                        </p>
+                      </div>
+                      <div className={`text-xs px-2 py-1 rounded ${
+                        result.success
+                          ? 'bg-green-600 text-white'
+                          : 'bg-red-600 text-white'
+                      }`}>
+                        {result.success ? 'Success' : 'Failed'}
+                      </div>
+                    </div>
+                    {result.result.error && (
+                      <p className="text-red-300 text-xs mt-2">{result.result.error}</p>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

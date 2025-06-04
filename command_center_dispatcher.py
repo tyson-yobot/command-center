@@ -78,6 +78,35 @@ class CommandCenterDispatcher:
                 from_number=payload.get("from_number"),
                 twiml_url=payload.get("twiml_url")
             )
+        elif category == "Voice Call":
+            return self.trigger_voice_call(
+                api_url=payload.get("api_url"),
+                contact_name=payload.get("contact_name"),
+                phone_number=payload.get("phone_number"),
+                script=payload.get("script")
+            )
+        elif category == "Scraping Task":
+            return self.dispatch_scraping_task(
+                source=payload.get("source"),
+                search_query=payload.get("search_query"),
+                location=payload.get("location"),
+                config=payload.get("config", {})
+            )
+        elif category == "Manual Review":
+            return self.flag_result_for_manual_review(
+                base_id=payload.get("base_id"),
+                table_name=payload.get("table_name"),
+                record_id=payload.get("record_id"),
+                reason=payload.get("reason")
+            )
+        elif category == "Production Toggle":
+            return self.finalize_production_toggle(
+                base_id=payload.get("base_id"),
+                table_name=payload.get("table_name"),
+                record_id=payload.get("record_id")
+            )
+        elif category == "Health Ping":
+            return self.log_system_health_ping()
         else:
             return {"error": f"Unknown category: {category}"}
     

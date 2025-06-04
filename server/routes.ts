@@ -1476,6 +1476,103 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // List All Integrations
   app.get('/api/airtable/list-integrations', listAllIntegrations);
 
+  // Command Center Dispatcher Routes
+  app.post('/api/command-center/trigger', async (req, res) => {
+    try {
+      const { category, payload } = req.body;
+      
+      if (!category) {
+        return res.status(400).json({ error: 'Category required' });
+      }
+
+      // Import dispatcher dynamically to avoid module loading issues
+      const { spawn } = require('child_process');
+      
+      // Execute dispatcher via Python subprocess to handle all integrations
+      const dispatcherScript = `
+import sys
+import json
+sys.path.append('.')
+from command_center_dispatcher import CommandCenterDispatcher
+
+dispatcher = CommandCenterDispatcher()
+result = dispatcher.route_command_center_trigger('${category}', ${JSON.stringify(payload || {})})
+print(json.dumps(result))
+`;
+
+      const python = spawn('python', ['-c', dispatcherScript]);
+      let output = '';
+      let error = '';
+
+      python.stdout.on('data', (data) => {
+        output += data.toString();
+      });
+
+      python.stderr.on('data', (data) => {
+        error += data.toString();
+      });
+
+      python.on('close', (code) => {
+        if (code === 0 && output) {
+          try {
+            const result = JSON.parse(output.trim());
+            res.json({ 
+              success: true, 
+              category, 
+              result,
+              timestamp: new Date().toISOString()
+            });
+          } catch (parseError) {
+            res.json({ 
+              success: false, 
+              error: 'Invalid response format',
+              output: output.trim()
+            });
+          }
+        } else {
+          res.status(500).json({ 
+            success: false, 
+            error: error || 'Dispatcher execution failed',
+            code 
+          });
+        }
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ 
+        success: false, 
+        error: 'Command center trigger failed',
+        details: error.message 
+      });
+    }
+  });
+
+  // Emergency alert endpoint
+  app.post('/api/command-center/sev1-alert', async (req, res) => {
+    try {
+      const { message } = req.body;
+      const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+      
+      if (!webhookUrl) {
+        return res.status(400).json({ error: 'Slack webhook not configured' });
+      }
+
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: `🚨 *SEV-1 Alert:* ${message}` })
+      });
+
+      res.json({ 
+        success: response.ok, 
+        status: response.status,
+        message: 'Emergency alert sent'
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Emergency alert failed', details: error.message });
+    }
+  });
+
   // Automation test endpoint without external dependencies
   app.get('/api/automation/summary', async (req, res) => {
     try {
