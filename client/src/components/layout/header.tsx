@@ -31,23 +31,20 @@ export default function Header() {
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48 relative">
         
         {/* Centered YoBot Command Center Logo */}
-        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-[60]">
-          <div className="flex flex-col items-center justify-center space-y-3">
-            <div className="flex items-center justify-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg border border-blue-400">
-                <span className="text-white text-lg font-bold">🤖</span>
-              </div>
-              <h1 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500 tracking-wider drop-shadow-lg">YoBot</h1>
-            </div>
-            <div className="flex justify-center">
-              <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 tracking-widest drop-shadow-2xl animate-pulse uppercase">Command Center</h2>
-            </div>
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[60] text-center">
+          <div className="flex flex-col items-center space-y-2">
+            <img 
+              src={yobotLogoPath} 
+              alt="YoBot" 
+              className="h-12 w-auto filter brightness-0 invert"
+            />
+            <h2 className="text-2xl font-bold text-white tracking-wide">Command Center</h2>
           </div>
         </div>
 
-        <div className="h-full flex items-center justify-between px-8 pt-20">
+        <div className="h-full flex items-center justify-center px-8 pt-20">
           
-          {/* Left Section - Command Center Action Buttons */}
+          {/* Centered Command Center Action Buttons */}
           <div className="flex space-x-4">
             <Button
               onClick={handleCallPipeline}
