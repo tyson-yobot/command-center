@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-04T02:15:00.321Z",
-    "functionId": 139,
-    "functionName": "Call Digest Poster",
-    "batch": 14,
-    "category": "Communication",
-    "status": "success",
-    "duration": 170,
-    "successCount": 5,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-04T02:15:00.333Z",
     "functionId": 148,
     "functionName": "ROI Summary Generator",
@@ -11244,6 +11233,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-04T11:25:41.946Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-04T11:27:52.162Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-04T11:27:51.825Z",
       "automationStatus": "running"
     }
   }

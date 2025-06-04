@@ -178,6 +178,53 @@ export default function ClientDashboard() {
     }
   };
 
+  // Live Command Execution Handler
+  const executeLiveCommand = async (category: string) => {
+    try {
+      const payload = getLiveCommandPayload(category);
+      
+      const response = await fetch('/api/command-center/trigger', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          category,
+          payload
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`✅ ${category} completed successfully`);
+      } else {
+        alert(`❌ ${category} failed: ${result.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      alert(`❌ Failed to execute ${category}`);
+    }
+  };
+
+  const getLiveCommandPayload = (category: string) => {
+    switch (category) {
+      case "New Booking Sync":
+        return { action: "sync_latest_bookings" };
+      case "New Support Ticket":
+        return { action: "create_sample_ticket", priority: "high" };
+      case "Manual Follow-up":
+        return { lead_id: "manual_trigger", priority: "high" };
+      case "Initiate Voice Call":
+        return { action: "test_call", number: "+15551234567" };
+      case "Send SMS":
+        return { action: "send_sms", to: "+15551234567", message: "Test message from YoBot" };
+      case "Run Lead Scrape":
+        return { query: "roofing contractor", limit: 10 };
+      case "Export Data":
+        return { action: "export_data", format: "csv", timeframe: "last_7_days" };
+      default:
+        return {};
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 pt-8 p-8">
       <div className="w-full">
@@ -295,6 +342,113 @@ export default function ClientDashboard() {
                 </span>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Live Command Center Buttons */}
+        <div className="mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Core Automation */}
+            <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+              <CardHeader>
+                <CardTitle className="text-white">Core Automation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 gap-3">
+                  <Button
+                    onClick={() => executeLiveCommand("New Booking Sync")}
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">📆</span>
+                    <span>New Booking Sync</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => executeLiveCommand("New Support Ticket")}
+                    className="bg-red-600 hover:bg-red-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">🆘</span>
+                    <span>New Support Ticket</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => executeLiveCommand("Manual Follow-up")}
+                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">🚀</span>
+                    <span>Manual Follow-up</span>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Voice & Communication */}
+            <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+              <CardHeader>
+                <CardTitle className="text-white">Voice & Communication</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 gap-3">
+                  <Button
+                    onClick={() => executeLiveCommand("Initiate Voice Call")}
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">📞</span>
+                    <span>Initiate Voice Call</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={handleVoiceToggle}
+                    className="bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-start p-3"
+                  >
+                    <Mic className="w-5 h-5 mr-3" />
+                    <span>Voice Input</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => executeLiveCommand("Send SMS")}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-start p-3"
+                  >
+                    <MessageSquare className="w-5 h-5 mr-3" />
+                    <span>Send SMS</span>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Data & Reports */}
+            <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+              <CardHeader>
+                <CardTitle className="text-white">Data & Reports</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 gap-3">
+                  <Button
+                    onClick={() => executeLiveCommand("Run Lead Scrape")}
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">🧲</span>
+                    <span>Run Lead Scrape</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={handleDownloadPDF}
+                    className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-start p-3"
+                  >
+                    <FileText className="w-5 h-5 mr-3" />
+                    <span>PDF Report</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => executeLiveCommand("Export Data")}
+                    className="bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">📊</span>
+                    <span>Export Data</span>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
