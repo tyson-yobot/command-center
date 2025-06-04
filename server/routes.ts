@@ -245,7 +245,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
   wss.on('connection', (ws, request) => {
     console.log('VoiceBot WebSocket connected');
     
-    let conversationHistory: any[] = [];
+    let conversationHistory: any[] = [{
+      role: "system", 
+      content: "You are a professional voice assistant for YoBot. Greet the caller and ask how you can help. You can transfer, schedule demos, or take messages."
+    }];
+    
+    const checkTransferCommand = (text: string): string | null => {
+      const textLower = text.toLowerCase();
+      const transferPatterns = [
+        /transfer me to (\w+)/,
+        /can i speak to (\w+)/,
+        /i need to talk to (\w+)/,
+        /put me through to (\w+)/,
+        /connect me to (\w+)/,
+        /i want to speak with (\w+)/,
+        /is (\w+) available/,
+        /can you get (\w+)/,
+        /let me talk to (\w+)/
+      ];
+      
+      for (const pattern of transferPatterns) {
+        const match = textLower.match(pattern);
+        if (match) return match[1];
+      }
+      return null;
+    };
+
+    const performFakeTransfer = async (name: string): Promise<string> => {
+      console.log(`⏳ Simulating transfer to ${name}...`);
+      await new Promise(resolve => setTimeout(resolve, 5000));
+      return `Sorry, ${name.charAt(0).toUpperCase() + name.slice(1)} is currently unavailable. Would you like to leave a message for them?`;
+    };
     
     ws.on('message', async (message) => {
       try {
@@ -257,12 +287,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
         } else if (data.event === 'start') {
           console.log('Audio stream started');
-          conversationHistory = [];
+          conversationHistory = [{
+            role: "system", 
+            content: "You are a professional voice assistant for YoBot. Greet the caller and ask how you can help. You can transfer, schedule demos, or take messages."
+          }];
           
         } else if (data.event === 'media' && data.media) {
           // Process audio data for transcription
           const audioData = Buffer.from(data.media.payload, 'base64');
           console.log('Processing audio chunk');
+          
+          // Here you would integrate with OpenAI Whisper for transcription
+          // const transcript = await transcribeAudio(audioData);
+          // if (transcript) {
+          //   console.log('Caller:', transcript);
+          //   conversationHistory.push({role: "user", content: transcript});
+          //   
+          //   // Check for transfer request
+          //   const transferTarget = checkTransferCommand(transcript);
+          //   if (transferTarget) {
+          //     console.log(`🎭 Faking transfer to ${transferTarget}`);
+          //     const fakeReply = await performFakeTransfer(transferTarget);
+          //     conversationHistory.push({role: "assistant", content: fakeReply});
+          //     // Send voice response back to Twilio
+          //     return;
+          //   }
+          //   
+          //   // Get GPT response for normal conversation
+          //   // const reply = await getGPTResponse(conversationHistory);
+          //   // conversationHistory.push({role: "assistant", content: reply});
+          //   // Send voice response back to Twilio
+          // }
           
         } else if (data.event === 'stop') {
           console.log('Call ended');
