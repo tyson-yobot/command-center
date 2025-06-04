@@ -1,17 +1,5 @@
 [
   {
-    "timestamp": "2025-06-04T09:00:00.606Z",
-    "functionId": 201,
-    "functionName": "Auto-create Airtable Record",
-    "batch": 21,
-    "category": "Data Creation",
-    "status": "error",
-    "duration": 348,
-    "error": "HTTP 500",
-    "successCount": 0,
-    "errorCount": 2
-  },
-  {
     "timestamp": "2025-06-04T09:00:00.617Z",
     "functionId": 148,
     "functionName": "ROI Summary Generator",
@@ -11310,6 +11298,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-04T15:11:02.368Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-04T15:14:39.140Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-04T15:14:38.876Z",
       "automationStatus": "running"
     }
   }
