@@ -112,6 +112,54 @@ class ApifyIntegration:
         
         return self.start_scraper_actor(actor_id, input_data)
     
+    def launch_apify_scrape(self, actor_id, search_term, location):
+        """Starts Google Maps scraping using your Apify actor"""
+        url = f"https://api.apify.com/v2/actor-tasks/{actor_id}/runs"
+        payload = {
+            "searchStringsArray": [f"{search_term} {location}"],
+            "maxCrawledPlaces": 50
+        }
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        try:
+            response = requests.post(url, headers=headers, json=payload, timeout=30)
+            if response.status_code in [200, 201]:
+                run_data = response.json()
+                print(f"Apify Google Maps scrape started for: {search_term} in {location}")
+                return {
+                    "success": True,
+                    "run_id": run_data["data"]["id"],
+                    "status": run_data["data"]["status"],
+                    "actor_id": actor_id
+                }
+            else:
+                return {"success": False, "error": f"HTTP {response.status_code}"}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    def fetch_apify_results(self, run_id):
+        """Pulls the scraped data after Apify finishes"""
+        url = f"https://api.apify.com/v2/datasets/{run_id}/items?format=json"
+        headers = {"Authorization": f"Bearer {self.api_key}"}
+        
+        try:
+            response = requests.get(url, headers=headers, timeout=30)
+            if response.status_code == 200:
+                results = response.json()
+                print(f"Retrieved {len(results)} Google Maps results from run {run_id}")
+                return {
+                    "success": True,
+                    "results": results,
+                    "count": len(results)
+                }
+            else:
+                return {"success": False, "error": f"HTTP {response.status_code}"}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
     def test_apify_connection(self):
         """Test Apify API connection and authentication"""
         url = f"{self.base_url}/users/me"
