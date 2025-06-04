@@ -45,59 +45,66 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="h-full flex items-center justify-between px-8">
+        <div className="h-full flex items-center justify-between px-8 pt-20">
           
-          {/* Left Section - Voice Controls */}
-          <div className="flex flex-col space-y-3">
-            <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
-              <div className="flex items-center space-x-2">
-                <Mic className="w-5 h-5 text-green-400" />
-                <span className="text-green-300 text-sm font-medium">Voice Input</span>
-              </div>
-            </div>
-            <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
-              <div className="flex items-center space-x-2">
-                <Headphones className="w-5 h-5 text-orange-400" />
-                <span className="text-orange-300 text-sm font-medium">Audio Control</span>
-              </div>
-            </div>
-            <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
-              <div className="flex items-center space-x-2">
-                <div className="w-5 h-5 bg-blue-400 rounded" />
-                <span className="text-blue-300 text-sm font-medium">Live Chat</span>
-              </div>
-            </div>
+          {/* Left Section - Command Center Action Buttons */}
+          <div className="flex space-x-4">
+            <Button
+              onClick={handleCallPipeline}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 shadow-lg"
+            >
+              <Phone className="w-4 h-4" />
+              <span className="text-sm font-medium">Call Pipeline</span>
+            </Button>
+            
+            <Button
+              onClick={handleClientSync}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 shadow-lg"
+            >
+              <Users className="w-4 h-4" />
+              <span className="text-sm font-medium">Client Sync</span>
+            </Button>
+
+            <Button
+              onClick={handleReportGen}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 shadow-lg"
+            >
+              <FileText className="w-4 h-4" />
+              <span className="text-sm font-medium">Report Gen</span>
+            </Button>
+
+            <Button
+              onClick={handleAutoFlow}
+              className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 shadow-lg"
+            >
+              <Zap className="w-4 h-4" />
+              <span className="text-sm font-medium">Auto Flow</span>
+            </Button>
           </div>
 
-          {/* Right Section - Admin Controls */}
-          <div className="flex flex-col space-y-3">
-            <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
+          {/* Right Section - Status Controls */}
+          <div className="flex items-center space-x-4">
+            <div className="bg-slate-800/70 rounded-lg px-4 py-2 border border-slate-600">
               <div className="flex items-center space-x-2">
-                <div className="w-5 h-5 bg-purple-400 rounded" />
-                <span className="text-purple-300 text-sm font-medium">System Status</span>
+                <Mic className="w-4 h-4 text-green-400" />
+                <span className="text-green-300 text-sm font-medium">Voice Ready</span>
               </div>
             </div>
-            <div className="bg-slate-800/50 rounded-lg px-4 py-3 border border-slate-700">
+            
+            <div className="bg-slate-800/70 rounded-lg px-4 py-2 border border-slate-600">
               <div className="flex items-center space-x-2">
-                <div className="w-5 h-5 bg-red-400 rounded" />
-                <span className="text-red-300 text-sm font-medium">Alert Monitor</span>
+                <Settings className="w-4 h-4 text-blue-400" />
+                <span className="text-blue-300 text-sm font-medium">System Status</span>
               </div>
             </div>
-            <div className="flex space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                className="bg-slate-800 border-slate-600 text-slate-300 hover:bg-slate-700"
-              >
-                {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-              </Button>
-              <div className={`flex items-center space-x-2 px-3 py-2 rounded text-sm ${
-                isConnected ? 'bg-green-900/30 text-green-300' : 'bg-red-900/30 text-red-300'
-              }`}>
-                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'}`} />
-                <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
-              </div>
+
+            <div className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm border ${
+              isConnected 
+                ? 'bg-green-900/30 text-green-300 border-green-600/50' 
+                : 'bg-red-900/30 text-red-300 border-red-600/50'
+            }`}>
+              <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'}`} />
+              <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
             </div>
           </div>
         </div>
