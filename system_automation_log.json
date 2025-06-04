@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-04T10:00:00.984Z",
-    "functionId": 207,
-    "functionName": "Error Frequency Tracker",
-    "batch": 21,
-    "category": "Analytics",
-    "status": "success",
-    "duration": 711,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-04T10:00:01.025Z",
     "functionId": 208,
     "functionName": "Call Review Flagging",
@@ -11317,6 +11306,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-04T19:45:43.635Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-04T19:47:03.749Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-04T19:47:03.512Z",
       "automationStatus": "running"
     }
   }
