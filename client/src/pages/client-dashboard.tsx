@@ -709,7 +709,7 @@ export default function ClientDashboard() {
           </Card>
 
           {/* Botalytics™ */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-slate-900/90 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <BarChart3 className="w-5 h-5 mr-2 text-blue-400" />
@@ -754,7 +754,7 @@ export default function ClientDashboard() {
           </Card>
 
           {/* SmartSpend™ */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-slate-900/90 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <PieChart className="w-5 h-5 mr-2 text-green-400" />
@@ -986,7 +986,7 @@ export default function ClientDashboard() {
                       <p className="text-green-400 font-medium">Demo Call</p>
                       <p className="text-slate-300 text-sm">Sarah Chen - 2:00 PM</p>
                     </div>
-                    <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 min-w-[80px]">
+                    <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 min-w-[90px]">
                       Join
                     </Button>
                   </div>
@@ -997,7 +997,7 @@ export default function ClientDashboard() {
                       <p className="text-blue-400 font-medium">Follow-up Call</p>
                       <p className="text-slate-300 text-sm">Mike Wilson - 3:30 PM</p>
                     </div>
-                    <Button size="sm" variant="outline" className="border-blue-400 text-blue-400 px-4 py-2 min-w-[80px]">
+                    <Button size="sm" variant="outline" className="border-blue-400 text-blue-400 px-4 py-2 min-w-[90px]">
                       Prepare
                     </Button>
                   </div>
