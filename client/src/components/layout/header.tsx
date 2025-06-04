@@ -31,14 +31,18 @@ export default function Header() {
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48 relative">
         
         {/* Centered YoBot Command Center Logo */}
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[60] text-center">
-          <div className="flex flex-col items-center space-y-2">
-            <img 
-              src={yobotLogoPath} 
-              alt="YoBot" 
-              className="h-16 w-auto"
-            />
-            <h2 className="text-2xl font-bold text-white tracking-wide">Command Center</h2>
+        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-[60]">
+          <div className="flex flex-col items-center justify-center space-y-2">
+            <div className="flex justify-center">
+              <img 
+                src={yobotLogoPath} 
+                alt="YoBot" 
+                className="h-10 w-auto"
+              />
+            </div>
+            <div className="flex justify-center">
+              <h2 className="text-lg font-bold text-white tracking-wide text-center">Command Center</h2>
+            </div>
           </div>
         </div>
 
