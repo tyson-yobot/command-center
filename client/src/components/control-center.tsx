@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { 
   Bot as BotIcon,
   Brain,
@@ -75,6 +76,10 @@ export default function ControlCenter() {
   const [activeConnections, setActiveConnections] = useState(0);
   const [emergencyMode, setEmergencyMode] = useState(false);
   const [showConfirmShutdown, setShowConfirmShutdown] = useState(false);
+  
+  // RAG Knowledge Base State
+  const [ragQuery, setRagQuery] = useState('');
+  const [ragResponse, setRagResponse] = useState('');
 
   // Helper functions
   const updateToggle = async (toggleName, value) => {
@@ -152,8 +157,8 @@ export default function ControlCenter() {
           )}
         </div>
 
-        {/* Three Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Four Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           
           {/* Left Column - Module Toggles */}
           <div className="space-y-6">
@@ -695,6 +700,93 @@ export default function ControlCenter() {
                   <Download className="w-4 h-4 mr-2" />
                   📊 Export Configuration
                 </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Fourth Column - RAG Knowledge Base */}
+          <div className="space-y-6">
+            {/* Knowledge Query Interface */}
+            <Card className="bg-slate-800/50 border-purple-500/30">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Brain className="w-5 h-5" />
+                  RAG Knowledge Base
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Database className="w-4 h-4 text-purple-400" />
+                    <span className="text-white text-sm">🧠 Knowledge System</span>
+                  </div>
+                  <Switch 
+                    checked={ragKnowledgeEnabled} 
+                    onCheckedChange={setRagKnowledgeEnabled}
+                  />
+                </div>
+                
+                {ragKnowledgeEnabled && (
+                  <div className="space-y-4">
+                    <Textarea
+                      placeholder="Ask the knowledge base anything..."
+                      value={ragQuery}
+                      onChange={(e) => setRagQuery(e.target.value)}
+                      className="bg-white/10 border-white/20 text-white placeholder-white/50"
+                      rows={4}
+                    />
+                    <Button 
+                      className="w-full bg-purple-600 hover:bg-purple-700"
+                      onClick={async () => {
+                        if (!ragQuery.trim()) return;
+                        try {
+                          const response = await fetch('/api/rag/query', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ query: ragQuery })
+                          });
+                          const data = await response.json();
+                          setRagResponse(data.enhancedReply || "No response received");
+                        } catch (error) {
+                          setRagResponse("Error querying knowledge base");
+                        }
+                      }}
+                    >
+                      <Search className="w-4 h-4 mr-2" />
+                      Query Knowledge Base
+                    </Button>
+                    {ragResponse && (
+                      <div className="bg-purple-500/10 border border-purple-500/20 rounded-lg p-4">
+                        <h4 className="text-purple-300 font-medium mb-2">Response:</h4>
+                        <p className="text-white text-sm">{ragResponse}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Knowledge Base Status */}
+            <Card className="bg-slate-800/50 border-purple-500/30">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Database className="w-5 h-5" />
+                  Knowledge Status
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-white text-sm">Vector Database</span>
+                  <Badge className="bg-green-600 text-white">Online</Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-white text-sm">Document Index</span>
+                  <Badge className="bg-green-600 text-white">Ready</Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-white text-sm">Query Processing</span>
+                  <Badge className="bg-green-600 text-white">Active</Badge>
+                </div>
               </CardContent>
             </Card>
           </div>
