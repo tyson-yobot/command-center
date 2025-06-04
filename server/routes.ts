@@ -47,6 +47,7 @@ import {
   testAirtableConnection
 } from "./airtableIntegrations";
 import { runComprehensiveSystemTest, listAllIntegrations } from "./comprehensiveSystemTest";
+import { setupCentralizedWebhookRouter } from "./centralizedWebhookRouter";
 import { 
   testQBOConnection, 
   createQBOCustomer, 
@@ -235,6 +236,10 @@ async function triggerMakeScenario(data: any) {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
+
+  // Setup centralized webhook router - ensures ALL webhooks route to main desktop command center ONLY
+  setupCentralizedWebhookRouter(app);
+  console.log('✅ Centralized webhook router active - all automations route to main desktop command center');
 
   // Add VoiceBot WebSocket server for real-time voice conversations
   const wss = new WebSocketServer({ 
@@ -3510,55 +3515,27 @@ except Exception as e:
     }
   });
 
-  // Stripe Payment Webhook - matches your external webhook URL
-  app.post('/stripe-payment', async (req, res) => {
+  // NOTE: Stripe webhook now handled by centralized webhook router
+  // All webhooks route to main desktop command center only
+
+  // Dashboard Discovery API - Shows all dashboards in the system
+  app.get('/api/dashboard/discovery', async (req, res) => {
     try {
-      const stripeEvent = req.body;
-      console.log("Stripe payment webhook received:", stripeEvent.type || 'unknown');
-
-      // Handle payment_intent.succeeded events
-      if (stripeEvent.type === 'payment_intent.succeeded') {
-        const paymentIntent = stripeEvent.data?.object;
-        const amount = paymentIntent?.amount ? (paymentIntent.amount / 100) : 0;
-        const customerEmail = paymentIntent?.receipt_email || paymentIntent?.customer_email || 'unknown';
-        const paymentId = paymentIntent?.id || `payment_${Date.now()}`;
-
-        // Log to Airtable if configured
-        if (process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID) {
-          try {
-            await logEventSync({
-              eventType: "stripe_payment_completed",
-              source: "Stripe Webhook",
-              destination: "Airtable",
-              status: "success",
-              timestamp: new Date().toISOString(),
-              recordCount: 1,
-              metadata: { customerEmail, amount, paymentId }
-            });
-          } catch (error) {
-            console.error("Failed to log to Airtable:", error);
-          }
+      const dashboards = await discoverAllDashboards();
+      res.json({
+        success: true,
+        totalDashboards: dashboards.length,
+        dashboards,
+        centralizedRouting: {
+          status: 'active',
+          targetDashboard: 'main-desktop-command-center',
+          message: 'All webhooks and automations route to main desktop command center only'
         }
-
-        // Send Slack notification if configured
-        if (process.env.SLACK_WEBHOOK_URL) {
-          try {
-            await axios.post(process.env.SLACK_WEBHOOK_URL, {
-              text: `💰 Payment received: ${customerEmail} - $${amount}`,
-              channel: '#payments'
-            });
-          } catch (error) {
-            console.error("Failed to send Slack notification:", error);
-          }
-        }
-
-        res.json({
-          status: "success",
-          message: "Payment processed successfully",
-          paymentId,
-          amount,
-          customerEmail
-        });
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Dashboard discovery failed', details: error.message });
+    }
+  });
 
       } else if (stripeEvent.type === 'checkout.session.completed') {
         const session = stripeEvent.data?.object;
