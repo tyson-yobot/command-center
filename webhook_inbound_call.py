@@ -30,7 +30,8 @@ def log_to_airtable(phone_number):
     fields = {
         "📞 Caller Number": phone_number,
         "📅 Call Time": datetime.utcnow().isoformat(),
-        "🎤 VoiceBot Engaged": True
+        "🎤 VoiceBot Engaged": True,
+        "📄 Call Outcome": "Resolved"  # default for now
     }
     
     try:
