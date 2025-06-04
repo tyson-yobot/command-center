@@ -1897,6 +1897,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Test Lead Ingestion Endpoint
   app.post('/api/test-lead-ingestion', testLeadIngestion);
 
+  // Webhook for inbound SMS handling
+  app.post('/webhook/sms/inbound', async (req, res) => {
+    try {
+      const { Body: messageBody, From: fromNumber, To: toNumber, MessageSid: messageSid } = req.body;
+      
+      console.log(`📩 Inbound SMS from ${fromNumber}: ${messageBody}`);
+      
+      // Log to Airtable
+      if (process.env.AIRTABLE_KEY && process.env.AIRTABLE_BASE_ID && process.env.TABLE_ID) {
+        try {
+          const airtableUrl = `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.TABLE_ID}`;
+          await axios.post(airtableUrl, {
+            fields: {
+              "📄 Call Outcome": "📩 Inbound SMS",
+              "📞 Caller Phone": fromNumber,
+              "📝 Caller Message": messageBody,
+              "📞 Call SID": messageSid
+            }
+          }, {
+            headers: {
+              "Authorization": `Bearer ${process.env.AIRTABLE_KEY}`,
+              "Content-Type": "application/json"
+            }
+          });
+        } catch (airtableError) {
+          console.error('Airtable logging failed:', airtableError.message);
+        }
+      }
+      
+      // Check for urgent keywords
+      const urgentKeywords = ['urgent', 'emergency', 'help', 'problem', 'issue', 'broken', 'down'];
+      const isUrgent = urgentKeywords.some(keyword => 
+        messageBody.toLowerCase().includes(keyword)
+      );
+      
+      // Send Slack alert for urgent messages
+      if (isUrgent) {
+        try {
+          await sendSlackAlert(`🚨 Urgent SMS from ${fromNumber}: ${messageBody}`);
+        } catch (slackError) {
+          console.error('Slack alert failed:', slackError.message);
+        }
+      }
+      
+      // Auto-respond with TwiML
+      let responseMessage = "Thanks for texting YoBot! We'll get back to you soon.";
+      
+      if (messageBody.toLowerCase().includes('stop')) {
+        responseMessage = "You've been unsubscribed from YoBot messages.";
+      } else if (messageBody.toLowerCase().includes('demo')) {
+        responseMessage = "Great! Schedule a demo at yobot.bot or call us back.";
+      } else if (isUrgent) {
+        responseMessage = "We see this is urgent. Someone will contact you within 30 minutes.";
+      }
+      
+      res.type('text/xml').send(`
+        <Response>
+          <Message>${responseMessage}</Message>
+        </Response>
+      `);
+      
+    } catch (error: any) {
+      console.error('SMS webhook error:', error.message);
+      res.type('text/xml').send('<Response></Response>');
+    }
+  });
+
   // Webhook for inbound call handling
   app.post('/webhook_inbound_call', async (req, res) => {
     try {
