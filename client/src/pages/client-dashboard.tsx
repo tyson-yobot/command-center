@@ -970,7 +970,7 @@ export default function ClientDashboard() {
                       <p className="text-green-400 font-medium">Demo Call</p>
                       <p className="text-slate-300 text-sm">Sarah Chen - 2:00 PM</p>
                     </div>
-                    <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
+                    <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 min-w-[80px]">
                       Join
                     </Button>
                   </div>
@@ -981,7 +981,7 @@ export default function ClientDashboard() {
                       <p className="text-blue-400 font-medium">Follow-up Call</p>
                       <p className="text-slate-300 text-sm">Mike Wilson - 3:30 PM</p>
                     </div>
-                    <Button size="sm" variant="outline" className="border-blue-400 text-blue-400">
+                    <Button size="sm" variant="outline" className="border-blue-400 text-blue-400 px-4 py-2 min-w-[80px]">
                       Prepare
                     </Button>
                   </div>
