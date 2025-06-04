@@ -1485,22 +1485,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'Category required' });
       }
 
-      // Import dispatcher dynamically to avoid module loading issues
-      const { spawn } = require('child_process');
+      // Execute dispatcher via Python subprocess
+      const { spawn } = await import('child_process');
+      
+      // Create a safe payload string for Python
+      const payloadStr = JSON.stringify(payload || {}).replace(/"/g, '\\"');
       
       // Execute dispatcher via Python subprocess to handle all integrations
       const dispatcherScript = `
 import sys
 import json
 sys.path.append('.')
-from command_center_dispatcher import CommandCenterDispatcher
-
-dispatcher = CommandCenterDispatcher()
-result = dispatcher.route_command_center_trigger('${category}', ${JSON.stringify(payload || {})})
-print(json.dumps(result))
+try:
+    from command_center_dispatcher import CommandCenterDispatcher
+    dispatcher = CommandCenterDispatcher()
+    result = dispatcher.route_command_center_trigger("${category}", json.loads("${payloadStr}"))
+    print(json.dumps(result))
+except Exception as e:
+    print(json.dumps({"error": str(e), "category": "${category}"}))
 `;
 
-      const python = spawn('python', ['-c', dispatcherScript]);
+      const python = spawn('python3', ['-c', dispatcherScript]);
       let output = '';
       let error = '';
 

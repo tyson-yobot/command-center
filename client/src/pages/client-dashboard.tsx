@@ -45,9 +45,41 @@ export default function ClientDashboard() {
   const [isAdminAuthenticated, setIsAdminAuthenticated] = React.useState(false);
 
   const handleVoiceToggle = () => {
-    setIsListening(!isListening);
     if (!isListening) {
-      setTimeout(() => setIsListening(false), 3000);
+      // Start voice recording
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+        
+        recognition.onstart = () => {
+          setIsListening(true);
+        };
+        
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          setVoiceCommand(transcript);
+          setIsListening(false);
+        };
+        
+        recognition.onerror = () => {
+          setIsListening(false);
+          alert('Voice recognition failed. Please try again.');
+        };
+        
+        recognition.onend = () => {
+          setIsListening(false);
+        };
+        
+        recognition.start();
+      } else {
+        alert('Voice recognition not supported in this browser');
+      }
+    } else {
+      setIsListening(false);
     }
   };
 

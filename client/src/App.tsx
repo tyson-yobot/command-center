@@ -18,6 +18,7 @@ import { RAGTester } from "@/pages/RAGTester";
 import AirtableTestPage from "@/pages/airtable-test";
 import DesktopCommandCenter from "@/components/desktop-command-center";
 import LiteCommandCenter from "@/components/lite-command-center";
+import CommandCenterDashboard from "@/components/command-center-dashboard";
 import SystemControls from "@/pages/system-controls";
 import AutomationStatus from "@/pages/AutomationStatus";
 import Header from "@/components/layout/header";
@@ -41,6 +42,11 @@ function Router() {
         </Route>
         <Route path="/lite">
           <ClientDashboard />
+        </Route>
+        <Route path="/command-center">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-6">
+            <CommandCenterDashboard />
+          </div>
         </Route>
         <Route path="/knowledge">
           <Knowledge />
