@@ -7,7 +7,7 @@ import os
 import requests
 from datetime import datetime
 
-AIRTABLE_KEY = os.getenv("AIRTABLE_KEY")
+AIRTABLE_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = os.getenv("AIRTABLE_BASE_ID")
 TABLE_NAME = "📥 Inbound Call Log"
 

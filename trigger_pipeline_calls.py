@@ -6,7 +6,7 @@ import requests
 import os
 from datetime import datetime
 
-AIRTABLE_API_KEY = os.getenv("AIRTABLE_KEY")
+AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = os.getenv("AIRTABLE_BASE_ID")
 TABLE_NAME = os.getenv("TABLE_PIPELINE")
 SLACK_WEBHOOK_URL = os.getenv("SLACK_ALERT_URL")
