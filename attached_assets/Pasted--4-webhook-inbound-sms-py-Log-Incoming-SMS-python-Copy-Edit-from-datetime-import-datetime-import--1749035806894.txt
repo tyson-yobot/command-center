@@ -1,0 +1,72 @@
+ 4. webhook_inbound_sms.py — Log Incoming SMS
+python
+Copy
+Edit
+from datetime import datetime
+import os
+import requests
+
+def log_command_center_event(msg):
+    print(f"[{datetime.now()}] {msg}")
+
+def handler(request):
+    body = request.form.get('Body')
+    from_number = request.form.get('From')
+
+    log_command_center_event(f"📥 Inbound SMS from {from_number}: {body}")
+
+    # Optional auto-reply
+    return {
+        "message": "✅ Thanks for your message. A team member will follow up shortly."
+    }
+📌 Add Twilio webhook: POST to your Replit URL for this file (e.g. https://your-replit-url/webhook_inbound_sms)
+
+✅ 5. webhook_calendly_event.py — Replace Zapier
+python
+Copy
+Edit
+import os
+import requests
+from datetime import datetime
+
+AIRTABLE_KEY = os.getenv("AIRTABLE_KEY")
+BASE_ID = os.getenv("AIRTABLE_BASE_ID")
+TABLE_NAME = "🗓️ Calendly Event Log"
+SLACK_ALERT_URL = os.getenv("SLACK_ALERT_URL")
+
+def handler(request):
+    event = request.json
+    name = event.get("invitee", {}).get("name", "Unknown")
+    email = event.get("invitee", {}).get("email", "")
+    event_type = event.get("event_type", {}).get("name", "Unknown Event")
+    start_time = event.get("event", {}).get("start_time", "")
+
+    # Log to Airtable
+    headers = {"Authorization": f"Bearer {AIRTABLE_KEY}", "Content-Type": "application/json"}
+    airtable_data = {
+        "fields": {
+            "👤 Name": name,
+            "📧 Email": email,
+            "📅 Event Type": event_type,
+            "⏰ Start Time": start_time,
+            "🔁 Source": "Calendly Webhook"
+        }
+    }
+    requests.post(f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}", json=airtable_data, headers=headers)
+
+    # Slack alert
+    alert_msg = f"📆 New Calendly booking:\n👤 {name}\n📧 {email}\n🗓️ {event_type}\n⏰ {start_time}"
+    requests.post(SLACK_ALERT_URL, json={"text": alert_msg})
+
+    return {"status": "logged"}
+✅ 6. Fallback Kill Switch Patch (for voice_commands.py or rag_query.py)
+python
+Copy
+Edit
+ENABLE_MANUAL_OVERRIDE = False
+
+def handle_voice_fallback():
+    if not ENABLE_MANUAL_OVERRIDE:
+        log_command_center_event("❌ Fallback blocked — override disabled")
+        return {"error": "Manual fallback disabled"}
+    # else: do fallback logic here (legacy testing only)

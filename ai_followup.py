@@ -11,9 +11,10 @@ from slack_alerts import alert_system
 
 class AIFollowupSystem:
     def __init__(self):
-        self.slack_webhook_url = os.getenv("SLACK_WEBHOOK_URL")
-        self.airtable_api_key = os.getenv("AIRTABLE_API_KEY")
+        self.slack_webhook_url = os.getenv("SLACK_ALERT_URL", os.getenv("SLACK_WEBHOOK_URL"))
+        self.airtable_api_key = os.getenv("AIRTABLE_KEY", os.getenv("AIRTABLE_API_KEY"))
         self.airtable_base_id = os.getenv("AIRTABLE_BASE_ID")
+        self.table_escalation = os.getenv("TABLE_ESCALATION", "🛑 Escalation Tracker Table")
         self.dispatcher = CommandCenterDispatcher()
         
     def escalate_to_rep(self, lead_info):

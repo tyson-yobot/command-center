@@ -24,11 +24,13 @@ async function createAirtableRecord(baseKey: string, tableKey: string, fields: R
 
   const url = getAirtableUrl(baseKey, tableKey);
   
+  const cleanApiKey = AIRTABLE_API_KEY.replace(/[\r\n\t]/g, '').trim();
+  
   const response = await axios.post(url, {
     records: [{ fields }]
   }, {
     headers: {
-      'Authorization': `Bearer ${AIRTABLE_API_KEY.trim()}`,
+      'Authorization': `Bearer ${cleanApiKey}`,
       'Content-Type': 'application/json'
     }
   });
