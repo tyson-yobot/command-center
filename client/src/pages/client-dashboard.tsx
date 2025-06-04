@@ -367,7 +367,7 @@ export default function ClientDashboard() {
                   
                   <Button
                     onClick={() => executeLiveCommand("New Support Ticket")}
-                    className="bg-red-600 hover:bg-red-700 text-white flex items-center justify-start p-3"
+                    className="bg-rose-600 hover:bg-rose-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">🆘</span>
                     <span>New Support Ticket</span>
@@ -375,7 +375,7 @@ export default function ClientDashboard() {
                   
                   <Button
                     onClick={() => executeLiveCommand("Manual Follow-up")}
-                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
+                    className="bg-amber-600 hover:bg-amber-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">🚀</span>
                     <span>Manual Follow-up</span>
@@ -393,7 +393,7 @@ export default function ClientDashboard() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={() => executeLiveCommand("Start Pipeline Calls")}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-start p-3"
+                    className="bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📞</span>
                     <span>Start Pipeline Calls</span>
@@ -401,7 +401,7 @@ export default function ClientDashboard() {
                   
                   <Button
                     onClick={() => executeLiveCommand("Initiate Voice Call")}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📞</span>
                     <span>Initiate Voice Call</span>
@@ -409,7 +409,7 @@ export default function ClientDashboard() {
                   
                   <Button
                     onClick={handleVoiceToggle}
-                    className="bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-start p-3"
+                    className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-start p-3"
                   >
                     <Mic className="w-5 h-5 mr-3" />
                     <span>Voice Input</span>
@@ -417,7 +417,7 @@ export default function ClientDashboard() {
                   
                   <Button
                     onClick={() => executeLiveCommand("Send SMS")}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-start p-3"
+                    className="bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-start p-3"
                   >
                     <MessageSquare className="w-5 h-5 mr-3" />
                     <span>Send SMS</span>
@@ -435,7 +435,7 @@ export default function ClientDashboard() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={() => executeLiveCommand("Run Lead Scrape")}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">🧲</span>
                     <span>Run Lead Scrape</span>
@@ -443,7 +443,7 @@ export default function ClientDashboard() {
                   
                   <Button
                     onClick={handleDownloadPDF}
-                    className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-start p-3"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-start p-3"
                   >
                     <FileText className="w-5 h-5 mr-3" />
                     <span>PDF Report</span>
@@ -451,7 +451,7 @@ export default function ClientDashboard() {
                   
                   <Button
                     onClick={() => executeLiveCommand("Export Data")}
-                    className="bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-start p-3"
+                    className="bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📊</span>
                     <span>Export Data</span>
