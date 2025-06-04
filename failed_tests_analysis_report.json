@@ -1,0 +1,67 @@
+{
+  "timestamp": "2025-06-04T07:43:36.189Z",
+  "summary": {
+    "totalTests": 142,
+    "resolved": 0,
+    "remaining": 27,
+    "credentialsNeeded": [
+      "Valid Airtable API token with write permissions to Integration Test Log table",
+      "PhantomBuster API key for lead generation automation",
+      "Voice Tone System API credentials",
+      "Botalytics API credentials for analytics tracking",
+      "Valid voice training endpoint URLs",
+      "Valid Stripe webhook endpoint URLs",
+      "Valid health monitoring endpoint URLs"
+    ],
+    "categories": {
+      "Airtable Authentication": 5,
+      "Voice System": 8,
+      "Analytics": 4,
+      "Payment Processing": 3,
+      "Health Monitoring": 3,
+      "Lead Generation": 1,
+      "Other": 3
+    }
+  },
+  "detailedResults": {
+    "fixed": [],
+    "stillFailing": [
+      "Airtable integration - Invalid permissions, or the requested model was not found. Check that both your user and your token have the required permissions, and that the model names and/or ids are correct.",
+      "PhantomBuster Agents - Missing API key",
+      "Dynamic Tone Retrieval Test 1 - HTTP 403 authentication error",
+      "Dynamic Tone Retrieval Test 2 - HTTP 403 authentication error",
+      "Dynamic Tone Retrieval Test 3 - HTTP 403 authentication error",
+      "Dynamic Tone Retrieval Test 4 - HTTP 403 authentication error",
+      "Dynamic Tone Retrieval Test 5 - HTTP 403 authentication error",
+      "Dynamic Tone Retrieval Test 6 - HTTP 403 authentication error",
+      "Dynamic Tone Retrieval Test 7 - HTTP 403 authentication error",
+      "Dynamic Tone Retrieval Test 8 - HTTP 403 authentication error",
+      "Botalytics Conversion Rate logging - Analytics API not configured",
+      "Botalytics Bot Calls logging - Analytics API not configured",
+      "Botalytics Response Time logging - Analytics API not configured",
+      "Botalytics Satisfaction Score logging - Analytics API not configured",
+      "Bot Training Error 1 - Invalid endpoint 'your-voice-endpoint.com'",
+      "Bot Training Error 2 - Invalid endpoint 'your-voice-endpoint.com'",
+      "Bot Training Error 3 - Invalid endpoint 'your-voice-endpoint.com'",
+      "Payment Retry Error 1 - Invalid endpoint 'your-stripe-endpoint.com'",
+      "Payment Retry Error 2 - Invalid endpoint 'your-stripe-endpoint.com'",
+      "Payment Retry Error 3 - Invalid endpoint 'your-stripe-endpoint.com'",
+      "Bot Health Check - Cannot resolve 'your-voicebot-endpoint.com'",
+      "Bot Health Check - Cannot resolve 'api.yobot.com'",
+      "Bot Health Check - Cannot resolve 'db.yobot.com'",
+      "Referral Tracked Test 1 - Airtable write permissions required",
+      "Referral Tracked Test 2 - Airtable write permissions required",
+      "Referral Tracked Test 3 - Airtable write permissions required",
+      "Demo Booking Logged - Airtable write permissions required"
+    ],
+    "needsCredentials": [
+      "Valid Airtable API token with write permissions to Integration Test Log table",
+      "PhantomBuster API key for lead generation automation",
+      "Voice Tone System API credentials",
+      "Botalytics API credentials for analytics tracking",
+      "Valid voice training endpoint URLs",
+      "Valid Stripe webhook endpoint URLs",
+      "Valid health monitoring endpoint URLs"
+    ]
+  }
+}
