@@ -87,7 +87,38 @@ export default function ClientDashboard() {
     }
   };
 
-  // PDF Download Handler
+  // Support Ticket Handler
+  const handleSubmitTicket = async () => {
+    const subject = prompt('Enter ticket subject:');
+    const description = prompt('Describe your issue:');
+    
+    if (!subject) return;
+    
+    try {
+      const response = await fetch('/api/support/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'Command Center User',
+          email: 'user@company.com',
+          subject,
+          description: description || '',
+          priority: 'Medium'
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('✅ Support ticket created: #' + data.ticket.id);
+      } else {
+        alert('❌ Error: ' + data.error);
+      }
+    } catch (error) {
+      alert('❌ Failed to submit ticket');
+    }
+  };
+
+  // PDF Download Handler - generates comprehensive system report
   const handleDownloadPDF = async () => {
     try {
       const response = await fetch('/api/pdf/generate', {
@@ -216,6 +247,7 @@ export default function ClientDashboard() {
                   Admin
                 </Button>
                 <Button 
+                  onClick={handleSubmitTicket}
                   size="sm"
                   variant="outline"
                   className="bg-white/10 border-white/20 text-white hover:bg-white/20"

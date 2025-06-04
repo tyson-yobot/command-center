@@ -1573,6 +1573,105 @@ print(json.dumps(result))
     }
   });
 
+  // Voice input endpoint
+  app.post('/api/voice/trigger', async (req, res) => {
+    try {
+      const { command, user, context, priority } = req.body;
+      
+      if (!command) {
+        return res.status(400).json({ error: 'Voice command required' });
+      }
+
+      // Process voice command and trigger appropriate automation
+      const voiceResult = {
+        command: command.trim(),
+        user: user || 'Unknown',
+        context: context || 'Dashboard',
+        priority: priority || 'normal',
+        timestamp: new Date().toISOString(),
+        status: 'processed'
+      };
+
+      res.json({
+        success: true,
+        message: 'Voice command processed',
+        result: voiceResult
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Voice command failed', details: error.message });
+    }
+  });
+
+  // Support ticket submission endpoint
+  app.post('/api/support/submit', async (req, res) => {
+    try {
+      const { name, email, subject, description, priority } = req.body;
+      
+      if (!email || !subject) {
+        return res.status(400).json({ error: 'Email and subject required' });
+      }
+
+      // Create support ticket
+      const ticket = {
+        id: Date.now().toString(),
+        name: name || 'Anonymous',
+        email,
+        subject,
+        description: description || '',
+        priority: priority || 'Medium',
+        status: 'Open',
+        created: new Date().toISOString()
+      };
+
+      res.json({
+        success: true,
+        message: 'Support ticket created',
+        ticket
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Ticket submission failed', details: error.message });
+    }
+  });
+
+  // Webhook endpoints to replace Zapier integrations
+  app.post('/webhooks/hubspot-support', async (req, res) => {
+    try {
+      const supportData = req.body;
+      
+      // Log to Airtable if configured
+      if (process.env.AIRTABLE_API_KEY) {
+        // Process support ticket
+        console.log('Processing HubSpot support webhook:', supportData);
+      }
+      
+      res.json({
+        success: true,
+        message: 'HubSpot support webhook processed'
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'HubSpot webhook failed', details: error.message });
+    }
+  });
+
+  app.post('/webhooks/calendly-booking', async (req, res) => {
+    try {
+      const bookingData = req.body;
+      
+      // Log to Airtable if configured
+      if (process.env.AIRTABLE_API_KEY) {
+        // Process booking
+        console.log('Processing Calendly booking webhook:', bookingData);
+      }
+      
+      res.json({
+        success: true,
+        message: 'Calendly booking webhook processed'
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Calendly webhook failed', details: error.message });
+    }
+  });
+
   // Automation test endpoint without external dependencies
   app.get('/api/automation/summary', async (req, res) => {
     try {

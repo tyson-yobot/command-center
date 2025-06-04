@@ -42,13 +42,20 @@ export default function CommandCenterDashboard() {
     voice_id: "21m00Tcm4TlvDq8ikWAM"
   });
 
+  const [callParams, setCallParams] = useState({
+    api_url: "https://your-voicebot-endpoint.com/api/call",
+    contact_name: "",
+    phone_number: "",
+    script: "Hello, this is YoBot calling to follow up on your inquiry."
+  });
+
   const automationCategories = [
-    { value: "Apollo Scrape", label: "Apollo Lead Search", icon: <Zap className="w-4 h-4" /> },
-    { value: "Apify Maps", label: "Google Maps Scraping", icon: <Play className="w-4 h-4" /> },
+    { value: "Apollo Scrape", label: "Scrape Apollo Leads", icon: <Zap className="w-4 h-4" /> },
+    { value: "Apify Maps", label: "Scrape Google Maps", icon: <Play className="w-4 h-4" /> },
+    { value: "Voice Call", label: "Initiate Bot Call", icon: <Phone className="w-4 h-4" /> },
     { value: "Send SMS", label: "SMS Notification", icon: <MessageSquare className="w-4 h-4" /> },
     { value: "Transcribe", label: "Voice Transcription", icon: <Mic className="w-4 h-4" /> },
-    { value: "Voice Generate", label: "Voice Generation", icon: <Phone className="w-4 h-4" /> },
-    { value: "Start Call", label: "Outbound Call", icon: <Phone className="w-4 h-4" /> }
+    { value: "Voice Generate", label: "Voice Generation", icon: <Phone className="w-4 h-4" /> }
   ];
 
   const executeAutomation = async () => {
@@ -82,6 +89,9 @@ export default function CommandCenterDashboard() {
           break;
         case "Voice Generate":
           payload = voiceParams;
+          break;
+        case "Voice Call":
+          payload = callParams;
           break;
         default:
           payload = {};
@@ -291,6 +301,40 @@ export default function CommandCenterDashboard() {
                 value={voiceParams.voice_id}
                 onChange={(e) => setVoiceParams({...voiceParams, voice_id: e.target.value})}
                 placeholder="21m00Tcm4TlvDq8ikWAM"
+              />
+            </div>
+          </div>
+        );
+
+      case "Voice Call":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="call-name">Contact Name</Label>
+              <Input
+                id="call-name"
+                value={callParams.contact_name}
+                onChange={(e) => setCallParams({...callParams, contact_name: e.target.value})}
+                placeholder="John Smith"
+              />
+            </div>
+            <div>
+              <Label htmlFor="call-phone">Phone Number</Label>
+              <Input
+                id="call-phone"
+                value={callParams.phone_number}
+                onChange={(e) => setCallParams({...callParams, phone_number: e.target.value})}
+                placeholder="+1234567890"
+              />
+            </div>
+            <div>
+              <Label htmlFor="call-script">Call Script</Label>
+              <Textarea
+                id="call-script"
+                value={callParams.script}
+                onChange={(e) => setCallParams({...callParams, script: e.target.value})}
+                placeholder="Hello, this is YoBot calling to follow up..."
+                rows={3}
               />
             </div>
           </div>
