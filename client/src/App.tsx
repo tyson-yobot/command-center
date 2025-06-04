@@ -16,7 +16,7 @@ import DemoMode from "@/pages/demo";
 import { Knowledge } from "@/pages/Knowledge";
 import { RAGTester } from "@/pages/RAGTester";
 import AirtableTestPage from "@/pages/airtable-test";
-import DesktopCommandCenter from "@/components/desktop-command-center";
+
 import LiteCommandCenter from "@/components/lite-command-center";
 import CommandCenterDashboard from "@/components/command-center-dashboard";
 import SystemControls from "@/pages/system-controls";
