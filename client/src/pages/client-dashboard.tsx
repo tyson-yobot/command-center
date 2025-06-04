@@ -409,7 +409,7 @@ export default function ClientDashboard() {
                   
                   <Button
                     onClick={handleVoiceToggle}
-                    className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-start p-3"
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
                   >
                     <Mic className="w-5 h-5 mr-3" />
                     <span>Voice Input</span>
@@ -443,7 +443,7 @@ export default function ClientDashboard() {
                   
                   <Button
                     onClick={handleDownloadPDF}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-start p-3"
+                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
                   >
                     <FileText className="w-5 h-5 mr-3" />
                     <span>PDF Report</span>
@@ -451,7 +451,7 @@ export default function ClientDashboard() {
                   
                   <Button
                     onClick={() => executeLiveCommand("Export Data")}
-                    className="bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-start p-3"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📊</span>
                     <span>Export Data</span>
