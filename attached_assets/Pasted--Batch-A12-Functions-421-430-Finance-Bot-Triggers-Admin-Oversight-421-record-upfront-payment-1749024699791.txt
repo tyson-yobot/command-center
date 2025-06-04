@@ -1,0 +1,62 @@
+🔧 Batch A12 (Functions 421–430): Finance, Bot Triggers, Admin Oversight
+421. record_upfront_payment_received(client_name, amount)
+python
+Copy
+Edit
+def record_upfront_payment_received(client_name, amount):
+    log_command_center_event("💵 Payment Received", f"{client_name} paid ${amount} upfront")
+422. log_bot_personality_pack_assigned(bot_id, pack_name)
+python
+Copy
+Edit
+def log_bot_personality_pack_assigned(bot_id, pack_name):
+    log_command_center_event("🎭 Personality Assigned", f"{bot_id} → {pack_name}")
+423. flag_admin_intervention_required(context)
+python
+Copy
+Edit
+def flag_admin_intervention_required(context):
+    trigger_slack_cc_alert("🧯 Manual Review Needed", context)
+    log_command_center_event("🧯 Admin Flag", context)
+424. voicebot_custom_trigger_fired(bot_id, trigger_label)
+python
+Copy
+Edit
+def voicebot_custom_trigger_fired(bot_id, trigger_label):
+    log_command_center_event("🔔 Custom Trigger", f"{bot_id} activated: {trigger_label}")
+425. track_auto_quote_generated(quote_id, client)
+python
+Copy
+Edit
+def track_auto_quote_generated(quote_id, client):
+    log_command_center_event("📄 Quote Auto-Generated", f"Quote {quote_id} → {client}")
+426. notify_of_script_discrepancy(script_id, detected_by)
+python
+Copy
+Edit
+def notify_of_script_discrepancy(script_id, detected_by):
+    log_command_center_event("⚠️ Script Mismatch", f"{script_id} flagged by {detected_by}")
+427. record_internal_settings_change(setting_name, old_val, new_val)
+python
+Copy
+Edit
+def record_internal_settings_change(setting_name, old_val, new_val):
+    log_command_center_event("🧩 Settings Update", f"{setting_name}: {old_val} → {new_val}")
+428. log_contact_created_in_crm(contact_email, source)
+python
+Copy
+Edit
+def log_contact_created_in_crm(contact_email, source):
+    log_command_center_event("👤 CRM Contact Added", f"{contact_email} via {source}")
+429. report_manual_invoice_modification(invoice_id, changed_by)
+python
+Copy
+Edit
+def report_manual_invoice_modification(invoice_id, changed_by):
+    log_command_center_event("📝 Invoice Edited", f"Invoice {invoice_id} manually changed by {changed_by}")
+430. log_support_feedback_rating(ticket_id, rating)
+python
+Copy
+Edit
+def log_support_feedback_rating(ticket_id, rating):
+    log_command_center_event("⭐ Support Feedback", f"Ticket {ticket_id} rated: {rating}/5")
