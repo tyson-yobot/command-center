@@ -30,13 +30,16 @@ export default function Header() {
       {/* Dark Header - Professional Layout */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48 relative">
         
-        {/* Clean YoBot Command Center Logo */}
-        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-[60]">
-          <div className="flex items-center space-x-2">
-            <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center shadow-lg">
-              <span className="text-white text-xl font-bold">🤖</span>
+        {/* Centered YoBot Command Center Logo */}
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[60] text-center">
+          <div className="flex flex-col items-center space-y-1">
+            <div className="flex items-center space-x-2">
+              <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center shadow-lg">
+                <span className="text-white text-xl font-bold">🤖</span>
+              </div>
+              <h1 className="text-3xl font-black text-white tracking-tight">YoBot®</h1>
             </div>
-            <h1 className="text-3xl font-black text-white tracking-tight">YoBot® COMMAND CENTER</h1>
+            <h2 className="text-2xl font-bold text-white tracking-wide">Command Center</h2>
           </div>
         </div>
 
