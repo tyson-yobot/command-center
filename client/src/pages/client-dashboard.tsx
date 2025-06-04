@@ -709,7 +709,7 @@ export default function ClientDashboard() {
           </Card>
 
           {/* Botalytics™ */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <BarChart3 className="w-5 h-5 mr-2 text-blue-400" />
@@ -746,7 +746,7 @@ export default function ClientDashboard() {
           </Card>
 
           {/* SmartSpend™ */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <PieChart className="w-5 h-5 mr-2 text-green-400" />
@@ -789,7 +789,7 @@ export default function ClientDashboard() {
         {/* Second Row - Bot Intelligence & System Monitor */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Bot Intelligence */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Brain className="w-5 h-5 mr-2 text-purple-400" />
@@ -823,7 +823,7 @@ export default function ClientDashboard() {
           </Card>
 
           {/* System Monitor */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Monitor className="w-5 h-5 mr-2 text-cyan-400" />
@@ -862,7 +862,7 @@ export default function ClientDashboard() {
 
         {/* Customer Success Milestones */}
         <div className="mb-8">
-          <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 backdrop-blur-sm border border-green-500/30">
+          <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-2">
@@ -890,7 +890,7 @@ export default function ClientDashboard() {
 
         {/* Voice & Conversation Analytics */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Mic className="w-5 h-5 mr-2" />
@@ -923,7 +923,7 @@ export default function ClientDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <MessageSquare className="w-5 h-5 mr-2 text-blue-400" />

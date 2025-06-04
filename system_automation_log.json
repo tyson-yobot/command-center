@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-04T12:50:00.245Z",
-    "functionId": 151,
-    "functionName": "VoiceBot Escalation Detection",
-    "batch": 16,
-    "category": "Voice",
-    "status": "success",
-    "duration": 160,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-04T12:50:00.250Z",
     "functionId": 206,
     "functionName": "Lead Score Calculator",
@@ -11384,6 +11373,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-04T23:07:19.031Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-04T23:09:28.776Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-04T23:09:28.534Z",
       "automationStatus": "running"
     }
   }
