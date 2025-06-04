@@ -31,10 +31,10 @@ interface SystemMetrics {
 export default function AutomationStatus() {
   const { toast } = useToast();
   const [metrics, setMetrics] = useState<SystemMetrics>({
-    totalAutomations: 110,
-    completedAutomations: 110,
-    activeCalls: 13,
-    aiResponses: 37,
+    totalAutomations: 130,
+    completedAutomations: 119,
+    activeCalls: 7,
+    aiResponses: 28,
     systemHealth: 97,
     uptime: "100%",
     responseTime: "180ms"
@@ -268,6 +268,49 @@ export default function AutomationStatus() {
         "Custom Field Merger for CRM",
         "Contract Record Creation",
         "Multi-Page PDF Report Generation"
+      ],
+      completedCount: 10,
+      totalCount: 10
+    },
+    {
+      id: 12,
+      name: "System Operations & Monitoring",
+      range: "110-120",
+      description: "Escalation tracking, OCR processing, voice synthesis, payment processing",
+      status: "TESTING",
+      automations: [
+        "Escalation Tracker",
+        "Client Touchpoint Log",
+        "Missed Call Logger",
+        "Business Card OCR",
+        "Voice Synthesis",
+        "Stripe Payment Processing",
+        "Lead Validation Engine",
+        "ROI Calculator",
+        "System Uptime Monitor",
+        "High Value Deal Flagging",
+        "Environment Check"
+      ],
+      completedCount: 9,
+      totalCount: 11
+    },
+    {
+      id: 13,
+      name: "Final Management & Analytics",
+      range: "121-130",
+      description: "Trial management, CRM audit, sentiment analysis, business classification",
+      status: "COMPLETE",
+      automations: [
+        "Deactivate Expired Trials",
+        "CRM Data Audit",
+        "Slack Ticket Creation",
+        "Meeting Agenda Generator",
+        "Sentiment Analysis Engine",
+        "Lead Count Updates",
+        "Phantombuster Event Processing",
+        "Admin Alert System",
+        "Business Classification",
+        "Log Archive Management"
       ],
       completedCount: 10,
       totalCount: 10

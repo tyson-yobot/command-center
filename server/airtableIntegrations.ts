@@ -105,11 +105,16 @@ export async function logIntegrationTest(data: {
   errorMessage?: string;
 }) {
   return await createAirtableRecord('COMMAND_CENTER', 'INTEGRATION_TEST_LOG', {
-    'Test Name': data.testName,
-    'Status': data.status,
-    'Timestamp': data.timestamp,
-    'Details': data.details || '',
-    'Error Message': data.errorMessage || ''
+    '✅ Integration Name': data.testName,
+    '✅ Pass/Fail': data.status,
+    '📝 Notes / Debug': data.details || data.errorMessage || '',
+    '📅 Test Date': data.timestamp,
+    '👤 QA Owner': 'YoBot System',
+    '☑️ Output Data Populated?': data.status === 'PASS',
+    '🗂 Record Created?': data.status === 'PASS',
+    '🔁 Retry Attempted?': false,
+    '⚙️ Module Type': 'Automation Function',
+    '📁 Related Scenario': ''
   });
 }
 

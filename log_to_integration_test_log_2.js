@@ -14,16 +14,16 @@ async function logToIntegrationTestLog2(data) {
     
     const response = await axios.post(url, {
       fields: {
-        "Integration Name": data.integrationName,
-        "Pass/Fail": data.status,
-        "Notes / Debug": data.notes,
-        "Test Date": new Date().toISOString(),
-        "QA Owner": data.qaOwner || "YoBot System",
-        "Output Data Populated?": data.outputPopulated || false,
-        "Record Created?": data.recordCreated || false,
-        "Retry Attempted?": data.retryAttempted || false,
-        "Module Type": data.moduleType || "Automation Function",
-        "Related Scenario": data.relatedScenario || ""
+        "✅ Integration Name": data.integrationName,
+        "✅ Pass/Fail": data.status,
+        "📝 Notes / Debug": data.notes,
+        "📅 Test Date": new Date().toISOString(),
+        "👤 QA Owner": data.qaOwner || "YoBot System",
+        "☑️ Output Data Populated?": data.outputPopulated || false,
+        "🗂 Record Created?": data.recordCreated || false,
+        "🔁 Retry Attempted?": data.retryAttempted || false,
+        "⚙️ Module Type": data.moduleType || "Automation Function",
+        "📁 Related Scenario": data.relatedScenario || ""
       }
     }, {
       headers: {
