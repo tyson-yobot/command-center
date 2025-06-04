@@ -94,7 +94,7 @@ def handler(request):
             }
             try:
                 callback_response = requests.patch(
-                    f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{TABLE_ID}/{record_id}",
+                    f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_ID}/{record_id}",
                     headers={
                         "Authorization": f"Bearer {AIRTABLE_KEY}",
                         "Content-Type": "application/json"

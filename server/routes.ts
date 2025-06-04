@@ -1817,6 +1817,128 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Outbound Call Routes for Callback Retry System
+  app.post('/api/start-outbound-call', async (req, res) => {
+    try {
+      const { phone, airtable_record_id, retry } = req.body;
+      
+      if (!phone) {
+        return res.status(400).json({ error: 'Missing phone number' });
+      }
+
+      const twilioSid = process.env.TWILIO_SID;
+      const twilioAuth = process.env.TWILIO_AUTH;
+      const twilioFrom = process.env.TWILIO_FROM;
+
+      if (!twilioSid || !twilioAuth || !twilioFrom) {
+        return res.status(400).json({ error: 'Missing Twilio credentials' });
+      }
+
+      // Create outbound call using Twilio
+      const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${twilioSid}/Calls.json`;
+      const twilioAuthHeader = Buffer.from(`${twilioSid}:${twilioAuth}`).toString('base64');
+      
+      const callData = new URLSearchParams({
+        To: phone,
+        From: twilioFrom,
+        Url: `${req.protocol}://${req.get('host')}/api/voicebot-greeting`,
+        StatusCallback: `${req.protocol}://${req.get('host')}/api/call-completed`
+      });
+
+      const callResponse = await axios.post(twilioUrl, callData, {
+        headers: {
+          'Authorization': `Basic ${twilioAuthHeader}`,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+
+      const callSid = callResponse.data.sid;
+      console.log(`Outbound call initiated: ${phone} → SID: ${callSid}`);
+
+      res.json({
+        success: true,
+        sid: callSid,
+        phone,
+        retry,
+        timestamp: new Date().toISOString()
+      });
+
+    } catch (error: any) {
+      console.error('Outbound call error:', error.message);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // VoiceBot Greeting TwiML
+  app.all('/api/voicebot-greeting', (req, res) => {
+    const twiml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say voice="Polly.Joanna">Hello! This is YoBot calling you back. We noticed you tried to reach us earlier. How can I help you today?</Say>
+    <Pause length="2"/>
+    <Record timeout="30" transcribe="true" recordingStatusCallback="${req.protocol}://${req.get('host')}/api/call-completed" />
+    <Say voice="Polly.Joanna">Thank you for your response. We'll follow up with you shortly. Have a great day!</Say>
+</Response>`;
+    
+    res.set('Content-Type', 'text/xml');
+    res.send(twiml);
+  });
+
+  // Retry Callback Scheduler
+  app.post('/api/retry-callbacks', async (req, res) => {
+    try {
+      const airtableKey = process.env.AIRTABLE_KEY;
+      const baseId = process.env.AIRTABLE_BASE_ID;
+      const tableId = process.env.TABLE_ID;
+
+      if (!airtableKey || !baseId || !tableId) {
+        return res.status(400).json({ error: 'Missing Airtable configuration' });
+      }
+
+      // Get missed calls that need retry
+      const airtableUrl = `https://api.airtable.com/v0/${baseId}/${tableId}`;
+      const response = await axios.get(airtableUrl, {
+        headers: {
+          'Authorization': `Bearer ${airtableKey}`
+        },
+        params: {
+          filterByFormula: "AND({📄 Call Outcome} = '🔕 Missed', NOT({📅 Callback Scheduled} = ''))"
+        }
+      });
+
+      const records = response.data.records || [];
+      let retryCount = 0;
+
+      for (const record of records) {
+        const phone = record.fields['📞 Caller Number'];
+        if (phone) {
+          // Trigger retry call
+          await axios.post(`${req.protocol}://${req.get('host')}/api/start-outbound-call`, {
+            phone,
+            airtable_record_id: record.id,
+            retry: true
+          });
+          retryCount++;
+        }
+      }
+
+      res.json({
+        success: true,
+        retries_processed: retryCount,
+        total_found: records.length
+      });
+
+    } catch (error: any) {
+      console.error('Retry callback error:', error.message);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
   // Comprehensive Airtable Integration Endpoints
   app.get('/api/airtable/test-connection', async (req, res) => {
     try {
