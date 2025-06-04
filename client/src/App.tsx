@@ -17,7 +17,7 @@ import { Knowledge } from "@/pages/Knowledge";
 import { RAGTester } from "@/pages/RAGTester";
 import AirtableTestPage from "@/pages/airtable-test";
 
-import LiteCommandCenter from "@/components/lite-command-center";
+import DesktopCommandCenter from "@/components/desktop-command-center";
 
 import SystemControls from "@/pages/system-controls";
 import AutomationStatus from "@/pages/AutomationStatus";
@@ -35,7 +35,7 @@ function Router() {
     <div className="min-h-screen bg-background">
       <Switch>
         <Route path="/">
-          <LiteCommandCenter />
+          <DesktopCommandCenter />
         </Route>
         <Route path="/mobile">
           <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
