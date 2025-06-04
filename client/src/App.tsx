@@ -4,7 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Dashboard from "@/pages/dashboard";
-import ControlCenter from "@/components/control-center";
+
 import Conversations from "@/pages/conversations";
 import Controls from "@/pages/controls";
 import CRM from "@/pages/crm";
@@ -49,9 +49,7 @@ function Router() {
         <Route path="/admin">
           <AdminConsole />
         </Route>
-        <Route path="/control">
-          <ControlCenter />
-        </Route>
+
         <Route path="/lite">
           <ClientDashboard />
         </Route>
