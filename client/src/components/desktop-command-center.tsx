@@ -47,7 +47,7 @@ import {
 import type { Metrics, Bot, Notification, CrmData } from "@shared/schema";
 import robotHeadPath from "@assets/A_flat_vector_illustration_features_a_robot_face_i.png";
 
-export default function DesktopCommandCenter() {
+export default function DesktopCommandCenter_DoNotUse() {
   const [automationMode, setAutomationMode] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [voiceActive, setVoiceActive] = useState(false);
