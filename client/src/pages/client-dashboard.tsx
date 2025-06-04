@@ -393,7 +393,7 @@ export default function ClientDashboard() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={() => executeLiveCommand("Start Pipeline Calls")}
-                    className="bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-start p-3"
+                    className="bg-lime-500 hover:bg-lime-600 text-black flex items-center justify-start p-3 font-semibold"
                   >
                     <span className="text-xl mr-3">📞</span>
                     <span>Start Pipeline Calls</span>
