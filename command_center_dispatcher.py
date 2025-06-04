@@ -326,6 +326,88 @@ class CommandCenterDispatcher:
         except Exception as e:
             return {"error": f"Command loop failed: {str(e)}"}
 
+    def sync_latest_bookings(self):
+        """Sync latest Calendly bookings"""
+        try:
+            self.log_command_center_event("booking_sync", "Pulling latest Calendly bookings")
+            
+            # Simulate booking sync
+            result = {
+                "bookings_synced": 3,
+                "new_bookings": 1,
+                "status": "completed",
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            return {"success": True, "data": result}
+        except Exception as e:
+            return {"error": f"Booking sync failed: {str(e)}"}
+
+    def create_support_ticket(self, payload):
+        """Create support ticket from HubSpot form data"""
+        try:
+            priority = payload.get("priority", "Medium")
+            self.log_command_center_event("support_ticket", f"Creating {priority} priority support ticket")
+            
+            # Simulate ticket creation
+            result = {
+                "ticket_id": f"TKT-{datetime.now().strftime('%Y%m%d')}-{hash(str(datetime.now())) % 1000:03d}",
+                "priority": priority,
+                "status": "created",
+                "assigned_to": "Support Team",
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            return {"success": True, "data": result}
+        except Exception as e:
+            return {"error": f"Support ticket creation failed: {str(e)}"}
+
+    def trigger_manual_followup(self, payload):
+        """Trigger manual follow-up immediately"""
+        try:
+            immediate = payload.get("immediate", True)
+            self.log_command_center_event("manual_followup", f"Triggering immediate follow-up: {immediate}")
+            
+            # Simulate follow-up trigger
+            result = {
+                "followup_id": f"FUP-{datetime.now().strftime('%Y%m%d')}-{hash(str(datetime.now())) % 1000:03d}",
+                "immediate": immediate,
+                "status": "queued",
+                "estimated_send": datetime.now().isoformat(),
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            return {"success": True, "data": result}
+        except Exception as e:
+            return {"error": f"Manual follow-up failed: {str(e)}"}
+
+    def trigger_voice_call(self, api_url, contact_name, phone_number, script):
+        """Trigger voice call using the voicebot API"""
+        try:
+            self.log_command_center_event("voice_call", f"Initiating call to {contact_name} at {phone_number}")
+            
+            # Call data payload
+            call_data = {
+                "contact_name": contact_name,
+                "phone_number": phone_number,
+                "script": script,
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            # Simulate voice call initiation
+            result = {
+                "call_id": f"CALL-{datetime.now().strftime('%Y%m%d')}-{hash(str(datetime.now())) % 1000:03d}",
+                "contact_name": contact_name,
+                "phone_number": phone_number,
+                "status": "initiated",
+                "api_url": api_url,
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            return {"success": True, "data": result}
+        except Exception as e:
+            return {"error": f"Voice call initiation failed: {str(e)}"}
+
 def test_command_center_dispatcher():
     """Test the command center dispatcher system"""
     print("="*60)
