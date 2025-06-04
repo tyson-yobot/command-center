@@ -30,18 +30,15 @@ export default function Header() {
       {/* Dark Header - Professional Layout */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950 border-b border-slate-800 shadow-lg h-48 relative">
         
-        {/* Centered YoBot Command Center Logo - Gradient Design */}
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[60]">
-          <div className="bg-gradient-to-r from-slate-800 via-slate-600 to-slate-400 rounded-2xl px-8 py-4 shadow-2xl border border-slate-500/50 flex items-center space-x-6">
+        {/* Clean YoBot Command Center Logo */}
+        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-[60]">
+          <div className="flex items-center space-x-4">
             <img 
               src={yobotLogoPath} 
               alt="YoBot" 
-              className="h-16 w-auto"
+              className="h-12 w-auto"
             />
-            <div className="flex items-center space-x-2">
-              <h1 className="text-2xl font-black text-white tracking-tight">COMMAND CENTER</h1>
-              <span className="text-sm text-slate-300 font-medium">®</span>
-            </div>
+            <h1 className="text-3xl font-black text-white tracking-tight">COMMAND CENTER</h1>
           </div>
         </div>
 
