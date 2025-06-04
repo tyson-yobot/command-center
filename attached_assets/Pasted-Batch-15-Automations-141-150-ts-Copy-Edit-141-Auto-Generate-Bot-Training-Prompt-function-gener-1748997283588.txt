@@ -1,0 +1,70 @@
+Batch 15: Automations 141–150
+ts
+Copy
+Edit
+// 141 - Auto-Generate Bot Training Prompt
+function generateTrainingPrompt(qaList) {
+  return `Train this bot with the following QA pairs:\n\n` +
+    qaList.map((qa, i) => `${i + 1}. Q: ${qa.q}\n   A: ${qa.a}`).join("\n\n");
+}
+
+// 142 - System Cold Start Logger
+async function logColdStartEvent(source = "Replit") {
+  return await airtableAPI.createRecord("Event Sync Log", {
+    event_type: "Cold Start",
+    source,
+    timestamp: new Date().toISOString(),
+  });
+}
+
+// 143 - Convert Internal Notes to Markdown
+function convertToMarkdown(notes) {
+  return notes.replace(/\*\*(.*?)\*\*/g, "**$1**").replace(/\n/g, "\n\n");
+}
+
+// 144 - QuickBooks Invoice Summary Parser
+function summarizeQBOInvoice(invoice) {
+  return `🧾 ${invoice.customer} | $${invoice.amount} | ${formatDateISO(invoice.date)}`;
+}
+
+// 145 - Auto-Populate Contact Role Based on Email Domain
+function assignRoleByDomain(email) {
+  if (email.endsWith("@lawfirm.com")) return "Attorney";
+  if (email.endsWith("@clinic.org")) return "Medical Director";
+  return "General Contact";
+}
+
+// 146 - Reconcile Airtable + Stripe Customer Records
+async function reconcileStripeCustomers(airtableCustomers, stripeCustomers) {
+  const unmatched = airtableCustomers.filter(ac =>
+    !stripeCustomers.find(sc => sc.email === ac.email));
+  return unmatched;
+}
+
+// 147 - Trigger System-wide API Health Check
+async function runFullApiCheck() {
+  const endpoints = ["/api/uptime", "/api/system-health", "/api/test-lead-ingestion"];
+  const results = await Promise.all(endpoints.map(url => fetch(url).then(r => r.status)));
+  return results;
+}
+
+// 148 - Generate Summary of Client ROI Record
+function summarizeROI(record) {
+  return `📈 Leads: ${record.leads}, Close Rate: ${record.conversion}%, Revenue: $${record.revenue}`;
+}
+
+// 149 - Log Manual Override in Command Center
+async function logManualOverride(user, reason) {
+  return await airtableAPI.createRecord("Command Center Events", {
+    event_type: "Manual Override",
+    user,
+    reason,
+    timestamp: new Date().toISOString(),
+  });
+}
+
+// 150 - Format Slack Message with Emoji Tags
+function formatSlackMsg(content, status = "info") {
+  const emoji = status === "error" ? "❌" : status === "success" ? "✅" : "ℹ️";
+  return `${emoji} ${content}`;
+}
