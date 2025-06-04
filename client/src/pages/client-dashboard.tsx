@@ -380,6 +380,14 @@ export default function ClientDashboard() {
                     <span className="text-xl mr-3">🚀</span>
                     <span>Manual Follow-up</span>
                   </Button>
+                  
+                  <Button
+                    disabled
+                    className="bg-gray-500 text-gray-300 flex items-center justify-start p-3 cursor-not-allowed"
+                  >
+                    <span className="text-xl mr-3">⚙️</span>
+                    <span>Available Soon</span>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -455,6 +463,14 @@ export default function ClientDashboard() {
                   >
                     <span className="text-xl mr-3">📊</span>
                     <span>Export Data</span>
+                  </Button>
+                  
+                  <Button
+                    disabled
+                    className="bg-gray-500 text-gray-300 flex items-center justify-start p-3 cursor-not-allowed"
+                  >
+                    <span className="text-xl mr-3">📈</span>
+                    <span>Available Soon</span>
                   </Button>
                 </div>
               </CardContent>

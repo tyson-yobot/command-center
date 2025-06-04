@@ -1,0 +1,78 @@
+FILE 1: webhook_inbound_call.py
+Handles the incoming Twilio call and starts the VoiceBot.
+
+python
+Copy
+Edit
+from flask import request, Response
+import os
+import requests
+from datetime import datetime
+
+AIRTABLE_KEY = os.getenv("AIRTABLE_KEY")
+BASE_ID = os.getenv("AIRTABLE_BASE_ID")
+TABLE_NAME = "📥 Inbound Call Log"
+
+def log_command_center_event(msg):
+    print(f"[{datetime.now()}] {msg}")
+
+def log_to_airtable(phone_number):
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
+    headers = {
+        "Authorization": f"Bearer {AIRTABLE_KEY}",
+        "Content-Type": "application/json"
+    }
+    fields = {
+        "📞 Caller Number": phone_number,
+        "📅 Call Time": datetime.utcnow().isoformat(),
+        "🎤 VoiceBot Engaged": True
+    }
+    requests.post(url, json={"fields": fields}, headers=headers)
+
+def handler(request):
+    from_number = request.form.get("From")
+    log_command_center_event(f"📞 Inbound call from {from_number}")
+    log_to_airtable(from_number)
+
+    twiml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say voice="Polly.Joanna">Welcome to YoBot. Please tell me how I can help you.</Say>
+    <Pause length="1"/>
+    <Redirect>https://your-replit-url/voicebot_stream</Redirect>
+</Response>
+"""
+    return Response(twiml, mimetype="text/xml")
+✅ FILE 2: Airtable Table Setup — 📥 Inbound Call Log
+Field Name	Type	Notes
+📞 Caller Number	Phone/Text	Auto-logged from Twilio
+📅 Call Time	Date/Time	UTC timestamp
+🎤 VoiceBot Engaged	Checkbox	Always TRUE if it reached the bot
+🧠 Transcription	Long text	Optional – fill in if using transcript
+📄 Call Outcome	Single select (Resolved, Escalated, Missed)	Optional later
+
+✅ Create this table in your YoBot Command Center (Live Ops) base.
+
+✅ TWILIO SETUP
+Go to your Twilio console:
+
+Phone Numbers > [Your Number] > Voice & Fax
+
+Under “A Call Comes In” → Webhook:
+Set to: https://your-replit-url/webhook_inbound_call
+
+✅ Set HTTP Method: POST
+
+✅ CONTROL CENTER TOGGLE (optional)
+Add to your backend toggles schema:
+
+json
+Copy
+Edit
+"inbound_voicebot_enabled": true
+Then gate the handler with:
+
+python
+Copy
+Edit
+if not os.getenv("INBOUND_VOICE_ENABLED", "true").lower() == "true":
+    return Response("<Response><Reject/></Response>", mimetype="text/xml")
