@@ -1,0 +1,18 @@
+{
+  "table_info": {
+    "base_id": "appCoAtCZdARb4AM2",
+    "table_id": "tblRNjNnaGL5ICIf9",
+    "record_count": 3
+  },
+  "field_schema": {
+    "\ud83e\udde9 Integration Name": "Sentiment Analysis Logging - log_call_sentiment",
+    "\u2705 Pass/Fail": "\u274c Fail",
+    "\ud83d\udcdd Notes / Debug": "AUTH REQUIRED - Test sentiment analysis logging",
+    "\ud83d\udcc5 Test Date": "2025-06-03T20:39:32.777Z",
+    "\ud83d\udc64 QA Owner": "Automated Test System",
+    "\u2611\ufe0f Output Data Populated?": "Test failed",
+    "\ud83d\udcc1 Record Created?": true,
+    "\u2699\ufe0f Module Type": "Complete Airtable System",
+    "\ud83d\udcc2 Related Scenario Link": "https://yobot-complete-system.enterprise"
+  }
+}

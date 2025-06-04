@@ -1,0 +1,75 @@
+🔧 Batch A04 (Functions 341–350): Alerts, Monitoring, Usage Audits
+341. log_twilio_usage(minutes, sms_sent)
+python
+Copy
+Edit
+def log_twilio_usage(minutes, sms_sent):
+    log_command_center_event(
+        "📞 Twilio Usage",
+        f"Voice Minutes: {minutes}, SMS Sent: {sms_sent}"
+    )
+342. record_openai_tokens_used(session_id, tokens_used)
+python
+Copy
+Edit
+def record_openai_tokens_used(session_id, tokens_used):
+    log_command_center_event(
+        "🧠 OpenAI Usage",
+        f"Session {session_id} used {tokens_used} tokens"
+    )
+343. log_quickbooks_invoice_created(invoice_id, amount)
+python
+Copy
+Edit
+def log_quickbooks_invoice_created(invoice_id, amount):
+    log_command_center_event(
+        "💰 QBO Invoice",
+        f"Invoice {invoice_id} generated for ${amount}"
+    )
+344. track_ai_suggestion_feedback(message_id, liked)
+python
+Copy
+Edit
+def track_ai_suggestion_feedback(message_id, liked):
+    log_command_center_event(
+        "👍 AI Feedback",
+        f"Message {message_id} → {'Liked' if liked else 'Disliked'}"
+    )
+345. record_command_center_login(user)
+python
+Copy
+Edit
+def record_command_center_login(user):
+    log_command_center_event("🔐 Login", f"{user} accessed the Command Center.")
+346. trigger_ai_retraining_request(module_name)
+python
+Copy
+Edit
+def trigger_ai_retraining_request(module_name):
+    log_command_center_event("📚 Retraining Requested", f"Module: {module_name}")
+    return "Retraining request logged"
+347. report_webhook_failure(webhook_name, error_text)
+python
+Copy
+Edit
+def report_webhook_failure(webhook_name, error_text):
+    log_command_center_event("❌ Webhook Failure", f"{webhook_name} → {error_text}")
+348. log_recurring_invoice_sent(invoice_id)
+python
+Copy
+Edit
+def log_recurring_invoice_sent(invoice_id):
+    log_command_center_event("📤 Recurring Invoice Sent", f"Invoice ID: {invoice_id}")
+349. notify_admin_high_latency(source, ms)
+python
+Copy
+Edit
+def notify_admin_high_latency(source, ms):
+    if ms > 300:
+        trigger_slack_cc_alert("🚨 High Latency Alert", f"{source} at {ms}ms")
+350. record_dashboard_export(user_email)
+python
+Copy
+Edit
+def record_dashboard_export(user_email):
+    log_command_center_event("📊 Dashboard Export", f"User: {user_email}")
