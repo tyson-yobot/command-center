@@ -32,7 +32,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white p-4 space-y-4">
+    <div className="min-h-screen bg-slate-950 text-white p-4 space-y-4">
       <SearchBar />
       
       <MetricsGrid />
