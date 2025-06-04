@@ -241,6 +241,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
   setupCentralizedWebhookRouter(app);
   console.log('✅ Centralized webhook router active - all automations route to main desktop command center');
 
+  // Main Desktop Command Center configuration endpoint
+  app.get('/api/main-desktop-command-center/config/:client_id', (req, res) => {
+    const { client_id } = req.params;
+    
+    res.json({
+      client_id,
+      dashboard_type: 'main-desktop-command-center',
+      features: {
+        automation_functions: true,
+        real_time_monitoring: true,
+        webhook_processing: true,
+        system_health: true,
+        pipeline_management: true
+      },
+      automation_endpoints: [
+        '/api/automation-trigger',
+        '/webhook/central-router',
+        '/stripe-payment',
+        '/sales-order',
+        '/webhook/calendly',
+        '/webhook/hubspot'
+      ]
+    });
+  });
+
+  // Command Center automation function router
+  app.post('/api/command-center/function/:function_id', async (req, res) => {
+    try {
+      const { function_id } = req.params;
+      const payload = req.body;
+      
+      // Route automation function to main desktop command center
+      const io = (global as any).io;
+      if (io) {
+        io.emit('automation_triggered', {
+          function_id: parseInt(function_id),
+          data: payload,
+          timestamp: new Date().toISOString(),
+          target: 'main-desktop-command-center',
+          source: 'command_center'
+        });
+      }
+      
+      console.log(`[COMMAND-CENTER] Function ${function_id} triggered and routed to main desktop`);
+      
+      res.json({
+        success: true,
+        function_id: parseInt(function_id),
+        routed_to: 'main-desktop-command-center',
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error(`Command center function ${req.params.function_id} error:`, error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Add VoiceBot WebSocket server for real-time voice conversations
   const wss = new WebSocketServer({ 
     server: httpServer, 

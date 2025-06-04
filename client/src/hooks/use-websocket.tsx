@@ -57,6 +57,10 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
       handleWebSocketMessage({ type: 'command_processing', data });
     });
 
+    ws.on('automation_triggered', (data) => {
+      handleWebSocketMessage({ type: 'automation_triggered', data });
+    });
+
     return () => {
       ws.disconnect();
     };
@@ -79,6 +83,16 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
           title: "Bot Status Changed",
           description: `Bot is now ${data.status}`,
         });
+        break;
+      case "automation_triggered":
+        console.log("Automation function triggered:", data);
+        // Show notification for automation triggers
+        if (data.data?.target === 'main-desktop-command-center') {
+          toast({
+            title: "Automation Triggered",
+            description: `Function ${data.data.function_id} executed successfully`,
+          });
+        }
         break;
       default:
         console.log("Unknown WebSocket message type:", data.type);
