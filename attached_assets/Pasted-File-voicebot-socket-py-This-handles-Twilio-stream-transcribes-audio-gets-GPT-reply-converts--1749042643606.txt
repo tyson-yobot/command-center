@@ -1,0 +1,114 @@
+File: voicebot_socket.py
+This handles Twilio stream → transcribes audio → gets GPT reply → converts to ElevenLabs voice → streams back.
+
+python
+Copy
+Edit
+import asyncio
+import websockets
+import json
+import base64
+import os
+import openai
+import requests
+
+# Config
+ELEVENLABS_VOICE_ID = "cjVigY5qzO86Huf0OWal"
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# Optional prompt memory
+conversation_history = []
+
+async def handle_stream(websocket, path):
+    global conversation_history
+
+    print("🔌 VoiceBot WebSocket connected")
+
+    try:
+        async for message in websocket:
+            data = json.loads(message)
+
+            if "media" in data:
+                audio_data = base64.b64decode(data["media"]["payload"])
+
+                # Send to transcription (OpenAI Whisper)
+                transcript = transcribe_audio(audio_data)
+
+                if transcript:
+                    print("🗣️ User said:", transcript)
+                    conversation_history.append({"role": "user", "content": transcript})
+
+                    # GPT response
+                    reply = get_gpt_response(conversation_history)
+                    print("🤖 Bot:", reply)
+                    conversation_history.append({"role": "assistant", "content": reply})
+
+                    # Speak with ElevenLabs
+                    speak_with_elevenlabs(reply)
+
+    except websockets.exceptions.ConnectionClosed:
+        print("❌ Call ended")
+        conversation_history = []
+
+# 🔤 Transcribe
+def transcribe_audio(audio_bytes):
+    headers = {
+        "Authorization": f"Bearer {OPENAI_API_KEY}"
+    }
+    files = {
+        'file': ("audio.wav", audio_bytes, 'audio/wav')
+    }
+    data = {
+        "model": "whisper-1"
+    }
+    r = requests.post("https://api.openai.com/v1/audio/transcriptions", headers=headers, files=files, data=data)
+    if r.status_code == 200:
+        return r.json().get("text")
+    return None
+
+# 🧠 GPT Reply
+def get_gpt_response(history):
+    headers = {"Authorization": f"Bearer {OPENAI_API_KEY}"}
+    json_data = {
+        "model": "gpt-4",
+        "messages": history
+    }
+    r = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=json_data)
+    return r.json()['choices'][0]['message']['content']
+
+# 🗣️ ElevenLabs Voice
+def speak_with_elevenlabs(text):
+    headers = {
+        "xi-api-key": ELEVENLABS_API_KEY,
+        "Content-Type": "application/json"
+    }
+    body = {
+        "text": text,
+        "voice_settings": {
+            "stability": 0.4,
+            "similarity_boost": 0.75
+        }
+    }
+
+    url = f"https://api.elevenlabs.io/v1/text-to-speech/{ELEVENLABS_VOICE_ID}/stream"
+    response = requests.post(url, headers=headers, json=body, stream=True)
+
+    with open("/tmp/reply.mp3", "wb") as f:
+        for chunk in response.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+
+    # TODO: send /tmp/reply.mp3 back to caller (stream or inject to Twilio)
+
+# 🚀 Start server
+start_server = websockets.serve(handle_stream, "0.0.0.0", 8765)
+
+asyncio.get_event_loop().run_until_complete(start_server)
+asyncio.get_event_loop().run_forever()
+✅ Next Steps
+🔌 Point /voicebot_stream to wss://.../voicebot_socket
+
+📤 Stream reply.mp3 back to Twilio (optional — will generate next)
+
+🛠 Add error handling + connection state (phase 2)

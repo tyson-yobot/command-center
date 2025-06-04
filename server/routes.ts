@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import { WebSocketServer } from "ws";
 import { storage } from "./storage";
 import { generateQuotePDF, generateROIPDF } from "./pdfGenerator";
 import { z } from "zod";
@@ -234,6 +235,54 @@ async function triggerMakeScenario(data: any) {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
+
+  // Add VoiceBot WebSocket server for real-time voice conversations
+  const wss = new WebSocketServer({ 
+    server: httpServer, 
+    path: '/voicebot-stream' 
+  });
+
+  wss.on('connection', (ws, request) => {
+    console.log('VoiceBot WebSocket connected');
+    
+    let conversationHistory: any[] = [];
+    
+    ws.on('message', async (message) => {
+      try {
+        const data = JSON.parse(message.toString());
+        
+        // Handle Twilio WebSocket events
+        if (data.event === 'connected') {
+          console.log('Twilio stream connected');
+          
+        } else if (data.event === 'start') {
+          console.log('Audio stream started');
+          conversationHistory = [];
+          
+        } else if (data.event === 'media' && data.media) {
+          // Process audio data for transcription
+          const audioData = Buffer.from(data.media.payload, 'base64');
+          console.log('Processing audio chunk');
+          
+        } else if (data.event === 'stop') {
+          console.log('Call ended');
+          conversationHistory = [];
+        }
+        
+      } catch (error) {
+        console.error('WebSocket message error:', error);
+      }
+    });
+
+    ws.on('close', () => {
+      console.log('VoiceBot WebSocket disconnected');
+      conversationHistory = [];
+    });
+
+    ws.on('error', (error) => {
+      console.error('VoiceBot WebSocket error:', error);
+    });
+  });
 
   // Mount QuickBooks OAuth router
   const qboRouter = await import("./qbo.js");
