@@ -955,7 +955,7 @@ export default function ClientDashboard() {
 
         {/* Smart Calendar & Live Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Calendar className="w-5 h-5 mr-2 text-purple-400" />
@@ -994,7 +994,7 @@ export default function ClientDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-orange-400" />
@@ -1025,7 +1025,7 @@ export default function ClientDashboard() {
         {/* Advanced Intelligence & Analytics Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
           {/* Smart Calendar */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Calendar className="w-5 h-5 mr-2 text-blue-400" />
@@ -1051,7 +1051,7 @@ export default function ClientDashboard() {
           </Card>
 
           {/* Voice Command Center */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Headphones className="w-5 h-5 mr-2 text-purple-400" />
@@ -1077,7 +1077,7 @@ export default function ClientDashboard() {
           </Card>
 
           {/* Sentiment Analysis */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Brain className="w-5 h-5 mr-2 text-green-400" />
@@ -1246,7 +1246,7 @@ export default function ClientDashboard() {
         {/* Live Activity & System Monitoring */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Live Activity Feed */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-green-400" />
