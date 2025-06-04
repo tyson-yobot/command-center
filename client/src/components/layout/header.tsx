@@ -38,7 +38,7 @@ export default function Header() {
               alt="YoBot" 
               className="h-16 w-auto"
             />
-            <h2 className="text-2xl font-bold text-white tracking-wide">Command Center</h2>
+            <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-300 to-purple-400 tracking-widest drop-shadow-2xl uppercase">Command Center</h2>
           </div>
         </div>
 

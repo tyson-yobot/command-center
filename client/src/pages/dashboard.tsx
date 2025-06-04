@@ -35,7 +35,8 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white px-4 space-y-6">
       <SearchBar />
-      <ConversationSearch />
+      
+
       
       {/* Daily Totals Summary Banner - Desktop Styled */}
       <Card className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl">
