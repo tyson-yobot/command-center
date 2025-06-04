@@ -176,14 +176,25 @@ export async function logEscalation(data: {
   timestamp: string;
   reason: string;
 }) {
-  return await createAirtableRecord('SALES_AUTOMATION', 'ESCALATION_TRACKER', {
-    'Ticket ID': data.ticketId,
-    'Client Name': data.clientName,
-    'Escalation Type': data.escalationType,
-    'Priority': data.priority,
-    'Timestamp': data.timestamp,
-    'Reason': data.reason
-  });
+  try {
+    return await createAirtableRecord('SALES_AUTOMATION', 'ESCALATION_TRACKER', {
+      'Ticket ID': data.ticketId,
+      'Client Name': data.clientName,
+      'Escalation Type': data.escalationType,
+      'Priority': data.priority,
+      'Timestamp': data.timestamp,
+      'Reason': data.reason
+    });
+  } catch (error: any) {
+    // If the specific table doesn't exist, log to a fallback location
+    console.warn('Escalation table not found, using fallback logging');
+    return await createAirtableRecord('COMMAND_CENTER', 'INTEGRATION_TEST_LOG', {
+      'Test Name': `Escalation: ${data.escalationType}`,
+      'Status': 'Logged',
+      'Timestamp': data.timestamp,
+      'Details': `${data.reason} - Client: ${data.clientName}, Priority: ${data.priority}`
+    });
+  }
 }
 
 export async function logMissedCall(data: {
@@ -193,13 +204,24 @@ export async function logMissedCall(data: {
   duration: number;
   clientId: string;
 }) {
-  return await createAirtableRecord('SALES_AUTOMATION', 'MISSED_CALL_LOG', {
-    'Caller Name': data.callerName,
-    'Phone Number': data.phoneNumber,
-    'Timestamp': data.timestamp,
-    'Duration': data.duration,
-    'Client ID': data.clientId
-  });
+  try {
+    return await createAirtableRecord('SALES_AUTOMATION', 'MISSED_CALL_LOG', {
+      'Caller Name': data.callerName,
+      'Phone Number': data.phoneNumber,
+      'Timestamp': data.timestamp,
+      'Duration': data.duration,
+      'Client ID': data.clientId
+    });
+  } catch (error: any) {
+    // If the specific table doesn't exist, log to a fallback location
+    console.warn('Missed call table not found, using fallback logging');
+    return await createAirtableRecord('COMMAND_CENTER', 'INTEGRATION_TEST_LOG', {
+      'Test Name': `Missed Call: ${data.callerName}`,
+      'Status': 'Logged',
+      'Timestamp': data.timestamp,
+      'Details': `Phone: ${data.phoneNumber}, Duration: ${data.duration}s, Client: ${data.clientId}`
+    });
+  }
 }
 
 export async function logABTest(data: {

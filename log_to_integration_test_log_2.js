@@ -4,7 +4,7 @@
 import axios from 'axios';
 
 const BASE_URL = 'http://localhost:5000';
-const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+const AIRTABLE_API_KEY = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY;
 const BASE_ID = 'appCoAtCZdARb4AM2';
 const TABLE_NAME = 'Integration Test Log 2';
 
