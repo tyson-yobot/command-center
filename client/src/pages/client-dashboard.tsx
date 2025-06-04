@@ -734,7 +734,7 @@ export default function ClientDashboard() {
                   <span className="text-slate-300" title="Return on investment from automation">ROI</span>
                   <span className="text-blue-400 font-bold">340%</span>
                 </div>
-                <div className="bg-slate-800/50 rounded-lg p-3">
+                <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
                   <div className="flex items-center justify-between">
                     <div className="text-white font-bold">$986</div>
