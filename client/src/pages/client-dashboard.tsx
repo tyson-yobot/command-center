@@ -1115,7 +1115,7 @@ export default function ClientDashboard() {
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
               {/* Cost Per Lead */}
-              <div className="bg-slate-800/50 rounded-lg p-4">
+              <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
                   <div className="text-2xl font-black text-cyan-400 mb-1">$47</div>
                   <div className="text-cyan-300 text-sm">Cost Per Lead</div>
@@ -1131,7 +1131,7 @@ export default function ClientDashboard() {
               </div>
 
               {/* Interaction Quality */}
-              <div className="bg-slate-800/50 rounded-lg p-4">
+              <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
                   <div className="text-2xl font-black text-green-400 mb-1">96.2%</div>
                   <div className="text-green-300 text-sm">Accuracy Rate</div>
@@ -1147,7 +1147,7 @@ export default function ClientDashboard() {
               </div>
 
               {/* Learning Rate */}
-              <div className="bg-slate-800/50 rounded-lg p-4">
+              <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
                   <div className="text-2xl font-black text-blue-400 mb-1">+12%</div>
                   <div className="text-blue-300 text-sm">Learning Rate</div>
@@ -1163,7 +1163,7 @@ export default function ClientDashboard() {
               </div>
 
               {/* Total Interactions */}
-              <div className="bg-slate-800/50 rounded-lg p-4">
+              <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
                   <div className="text-2xl font-black text-purple-400 mb-1">1,247</div>
                   <div className="text-purple-300 text-sm">Interactions</div>
@@ -1179,7 +1179,7 @@ export default function ClientDashboard() {
               </div>
 
               {/* Conversion Rate */}
-              <div className="bg-slate-800/50 rounded-lg p-4">
+              <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
                   <div className="text-2xl font-black text-yellow-400 mb-1">31.2%</div>
                   <div className="text-yellow-300 text-sm">Close Rate</div>
