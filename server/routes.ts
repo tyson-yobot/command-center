@@ -2540,13 +2540,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/api/phantombuster', phantombusterRouter);
 
   // Register new automation batch routes
-  const { registerBatch14Routes } = await import("./automationBatch14");
-  const { registerBatch15Routes } = await import("./automationBatch15");
-  const { registerBatch16Routes } = await import("./automationBatch16");
-  
-  registerBatch14Routes(app);
-  registerBatch15Routes(app);
-  registerBatch16Routes(app);
+  try {
+    const batch14Module = await import("./automationBatch14");
+    const batch15Module = await import("./automationBatch15");
+    const batch16Module = await import("./automationBatch16");
+    
+    batch14Module.registerBatch14Routes(app);
+    batch15Module.registerBatch15Routes(app);
+    batch16Module.registerBatch16Routes(app);
+    
+    console.log("✅ Registered automation batches 14-16 successfully");
+  } catch (error) {
+    console.error("❌ Failed to register automation batches:", error);
+  }
 
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
