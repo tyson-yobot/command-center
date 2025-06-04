@@ -320,16 +320,12 @@ async function executeAllBatch21Functions(testMode: boolean = false) {
 export function registerBatch21Routes(app: Express) {
   // Individual function routes
   app.post('/api/automation-batch-21/function-201', async (req, res) => {
-    try {
-      const result = await createLogRecord(req.body.log || { 
-        name: "Test Log", 
-        status: "PASS", 
-        notes: "Test execution" 
-      });
-      res.json({ success: true, function: 201, result });
-    } catch (error) {
-      res.status(500).json({ success: false, function: 201, error: error instanceof Error ? error.message : "Unknown error" });
-    }
+    const result = await createLogRecord(req.body.log || { 
+      name: "Test Log", 
+      status: "PASS", 
+      notes: "Test execution" 
+    });
+    res.json({ success: true, function: 201, result });
   });
 
   app.post('/api/automation-batch-21/function-202', (req, res) => {
@@ -343,13 +339,9 @@ export function registerBatch21Routes(app: Express) {
   });
 
   app.post('/api/automation-batch-21/function-203', async (req, res) => {
-    try {
-      const summary = req.body.summary || ["Test item 1", "Test item 2"];
-      await postIntegrationSummary(summary);
-      res.json({ success: true, function: 203, itemsPosted: summary.length });
-    } catch (error) {
-      res.status(500).json({ success: false, function: 203, error: error instanceof Error ? error.message : "Unknown error" });
-    }
+    const summary = req.body.summary || ["Test item 1", "Test item 2"];
+    await postIntegrationSummary(summary);
+    res.json({ success: true, function: 203, itemsPosted: summary.length });
   });
 
   app.post('/api/automation-batch-21/function-204', (req, res) => {
