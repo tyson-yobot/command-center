@@ -19,6 +19,7 @@ import AirtableTestPage from "@/pages/airtable-test";
 import DesktopCommandCenter from "@/components/desktop-command-center";
 import LiteCommandCenter from "@/components/lite-command-center";
 import SystemControls from "@/pages/system-controls";
+import AutomationStatus from "@/pages/AutomationStatus";
 import Header from "@/components/layout/header";
 import BottomNav from "@/components/layout/bottom-nav";
 import InstallPrompt from "@/components/pwa/install-prompt";
@@ -52,6 +53,9 @@ function Router() {
         </Route>
         <Route path="/system-controls">
           <SystemControls />
+        </Route>
+        <Route path="/automation-status">
+          <AutomationStatus />
         </Route>
         <Route path="/dashboard">
           <ClientDashboard />

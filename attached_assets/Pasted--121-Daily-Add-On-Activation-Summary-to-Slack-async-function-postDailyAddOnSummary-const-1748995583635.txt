@@ -1,0 +1,76 @@
+// 121 - Daily Add-On Activation Summary to Slack
+async function postDailyAddOnSummary() {
+  const today = new Date().toISOString().slice(0, 10);
+  const records = await airtableAPI.findRecords("Add-On Logs", { date: today });
+  const summary = records.map(r => `• ${r.addon} for ${r.client}`).join("\n");
+  await sendSlackNotification(`📦 Add-Ons Activated Today:\n${summary}`);
+}
+
+// 122 - Convert Booking Time to Client Timezone
+function convertToClientTimezone(utcTime, timezone) {
+  return new Date(utcTime).toLocaleString("en-US", { timeZone: timezone });
+}
+
+// 123 - Auto-Detect Form Spam via Heuristics
+function isSpamForm(intake) {
+  return (
+    /viagra|bitcoin|crypto/i.test(intake.comments) ||
+    intake.name === "" ||
+    intake.email.endsWith("@spamdomain.com")
+  );
+}
+
+// 124 - Push Internal Note to Airtable Log
+async function pushInternalNote(logType, content) {
+  return await airtableAPI.createRecord("Internal Notes", {
+    type: logType,
+    note: content,
+    created_at: new Date().toISOString(),
+  });
+}
+
+// 125 - Weekly Cleanup of Orphaned Records
+async function cleanOrphans() {
+  const orphans = await airtableAPI.findRecords("Client CRM", { instance_id: "" });
+  for (const orphan of orphans) {
+    await airtableAPI.updateRecord("Client CRM", orphan.id, { archived: true });
+  }
+}
+
+// 126 - Auto-Fill Company Size Estimate from Data
+function estimateCompanySize(employeeCount) {
+  if (employeeCount < 5) return "Solo/Small";
+  if (employeeCount < 20) return "Startup";
+  if (employeeCount < 100) return "Growing";
+  return "Enterprise";
+}
+
+// 127 - Email Reminder to Submit Weekly ROI Update
+async function remindROIUpdate(client) {
+  await emailAPI.send({
+    to: client.email,
+    subject: "📈 Weekly ROI Update Needed",
+    html: `Hi ${client.name},<br>Please complete your ROI tracker for the week.`,
+  });
+}
+
+// 128 - Generate Internal Report for Team Review
+async function generateTeamReport(data) {
+  return await fetch("/api/internal-report", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+}
+
+// 129 - Slack Command to Trigger Integration Test
+app.post("/api/slack/test-integration", async (req, res) => {
+  const { module } = req.body;
+  await runTestForModule(module);
+  res.status(200).send(`✅ Test triggered for: ${module}`);
+});
+
+// 130 - VoiceBot Language Detection (Input-Based)
+async function detectLanguage(inputText) {
+  return await openAI.detectLanguage({ input: inputText });
+}
