@@ -1642,6 +1642,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Test Lead Ingestion Endpoint
   app.post('/api/test-lead-ingestion', testLeadIngestion);
 
+  // Webhook for inbound call handling
+  app.post('/webhook_inbound_call', async (req, res) => {
+    try {
+      const { From: fromNumber, CallStatus: callStatus, CallDuration: callDuration } = req.body;
+      
+      console.log(`Inbound call from ${fromNumber} with status: ${callStatus}`);
+      
+      // Check if call should trigger missed call fallback
+      const missedIndicators = ['no-answer', 'busy', 'failed', 'canceled'];
+      const isShortCall = callDuration && parseInt(callDuration) < 5;
+      
+      if (missedIndicators.includes(callStatus) || isShortCall) {
+        // Trigger missed call responder
+        try {
+          const missedCallResponse = await axios.post('http://localhost:5000/api/missed-call-responder', {
+            phone: fromNumber,
+            airtable_record_id: `call_${Date.now()}`
+          });
+          
+          console.log(`Missed call fallback triggered for ${fromNumber}`);
+        } catch (fallbackError) {
+          console.error('Failed to trigger missed call fallback:', fallbackError.message);
+        }
+        
+        res.type('text/xml').send(`
+          <Response>
+            <Hangup/>
+          </Response>
+        `);
+      } else {
+        // Handle successful call
+        res.type('text/xml').send(`
+          <Response>
+            <Say voice="Polly.Joanna">Welcome to YoBot. Please tell me how I can help you.</Say>
+            <Pause length="2"/>
+            <Record timeout="30" transcribe="true" />
+            <Say voice="Polly.Joanna">Thank you for calling YoBot. Have a great day!</Say>
+          </Response>
+        `);
+      }
+    } catch (error: any) {
+      console.error('Webhook error:', error.message);
+      res.type('text/xml').send('<Response><Hangup/></Response>');
+    }
+  });
+
+  // Call completion callback
+  app.post('/api/call-completed', async (req, res) => {
+    try {
+      const { From: fromNumber, CallStatus: callStatus, RecordingUrl: recordingUrl } = req.body;
+      
+      console.log(`Call completed: ${fromNumber} - Status: ${callStatus}`);
+      
+      if (recordingUrl) {
+        console.log(`Recording available: ${recordingUrl}`);
+      }
+      
+      res.send('OK');
+    } catch (error: any) {
+      console.error('Call completion callback error:', error.message);
+      res.status(500).send('Error');
+    }
+  });
+
   // Missed Call Responder Endpoint
   app.post('/api/missed-call-responder', async (req, res) => {
     try {
@@ -1686,11 +1750,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         smsResult = { success: false, error: 'Twilio credentials not configured' };
       }
 
-      // Update Airtable record
+      // Update Airtable record with proper environment variables
       let airtableResult = null;
-      if (airtable_record_id && process.env.AIRTABLE_KEY && process.env.AIRTABLE_BASE_ID && process.env.TABLE_ID) {
+      const airtableKey = process.env.AIRTABLE_KEY || 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa';
+      const airtableBase = process.env.AIRTABLE_BASE_ID || 'appRt8V3tH4g5Z5if';
+      const tableId = process.env.TABLE_ID || 'tbldPRZ4nHbtj9opU';
+      
+      if (airtable_record_id && airtableKey && airtableBase && tableId) {
         try {
-          const airtableUrl = `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.TABLE_ID}/${airtable_record_id}`;
+          const airtableUrl = `https://api.airtable.com/v0/${airtableBase}/${tableId}/${airtable_record_id}`;
+          const cleanApiKey = String(airtableKey).replace(/[\r\n\t\s]/g, '').trim();
           
           const airtableResponse = await axios.patch(airtableUrl, {
             fields: {
@@ -1700,12 +1769,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
             }
           }, {
             headers: {
-              'Authorization': `Bearer ${process.env.AIRTABLE_KEY}`,
+              'Authorization': `Bearer ${cleanApiKey}`,
               'Content-Type': 'application/json'
             }
           });
           
           airtableResult = { success: true, record: airtableResponse.data };
+          console.log(`Airtable record ${airtable_record_id} updated successfully`);
         } catch (airtableError: any) {
           console.error('Airtable update error:', airtableError.message);
           airtableResult = { success: false, error: airtableError.message };
