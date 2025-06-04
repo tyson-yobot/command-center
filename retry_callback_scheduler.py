@@ -56,6 +56,12 @@ def process_retry_callbacks():
                     print(f"✅ Retry call triggered for {phone}")
                     retry_count += 1
                     
+                    # Send Slack alert for retry attempt
+                    send_retry_alert(
+                        phone=phone,
+                        callback_time=datetime.utcnow().isoformat()
+                    )
+                    
                     # Optional: log that a retry was attempted
                     update_payload = {
                         "fields": {
