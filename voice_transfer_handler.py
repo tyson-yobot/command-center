@@ -82,14 +82,14 @@ def log_voicemail_and_alert(message_text, caller_number="+1UNKNOWN"):
         
         # 2. Send SMS via Twilio
         sms_payload = {
-            "To": os.getenv("ALERT_PHONE"),  # Alert phone number
-            "From": os.getenv("TWILIO_FROM"),
+            "To": "+17013718391",  # Alert phone number
+            "From": os.getenv("TWILIO_PHONE_NUMBER"),
             "Body": f"📩 New message from {caller_number}:\n\"{message_text}\""
         }
         
         sms_response = requests.post(
-            f"https://api.twilio.com/2010-04-01/Accounts/{os.getenv('TWILIO_SID')}/Messages.json",
-            auth=(os.getenv("TWILIO_SID"), os.getenv("TWILIO_AUTH")),
+            f"https://api.twilio.com/2010-04-01/Accounts/{os.getenv('TWILIO_ACCOUNT_SID')}/Messages.json",
+            auth=(os.getenv("TWILIO_ACCOUNT_SID"), os.getenv("TWILIO_AUTH_TOKEN")),
             data=sms_payload
         )
         print(f"📱 SMS alert sent: {sms_response.status_code}")
