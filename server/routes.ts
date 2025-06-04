@@ -301,17 +301,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log(`📝 Airtable log: ${airtableResponse.status}`);
         
         // 2. Send SMS via Twilio
-        const smsUrl = `https://api.twilio.com/2010-04-01/Accounts/${process.env.TWILIO_ACCOUNT_SID}/Messages.json`;
+        const smsUrl = `https://api.twilio.com/2010-04-01/Accounts/${process.env.TWILIO_SID}/Messages.json`;
         const smsData = new URLSearchParams({
           "To": "+17013718391",
-          "From": process.env.TWILIO_PHONE_NUMBER || "",
+          "From": process.env.TWILIO_FROM || "",
           "Body": `📩 New message from ${callerNumber}:\n"${messageText}"`
         });
         
         const smsResponse = await fetch(smsUrl, {
           method: 'POST',
           headers: {
-            'Authorization': `Basic ${Buffer.from(`${process.env.TWILIO_ACCOUNT_SID}:${process.env.TWILIO_AUTH_TOKEN}`).toString('base64')}`,
+            'Authorization': `Basic ${Buffer.from(`${process.env.TWILIO_SID}:${process.env.TWILIO_AUTH}`).toString('base64')}`,
             'Content-Type': 'application/x-www-form-urlencoded'
           },
           body: smsData

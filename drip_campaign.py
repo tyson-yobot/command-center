@@ -5,9 +5,9 @@ from datetime import datetime, timedelta
 AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID")
 TABLE_ID = os.getenv("TABLE_ID")
 AIRTABLE_KEY = os.getenv("AIRTABLE_KEY")
-TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
-TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
-TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")
+TWILIO_SID = os.getenv("TWILIO_SID")
+TWILIO_AUTH = os.getenv("TWILIO_AUTH")
+TWILIO_FROM = os.getenv("TWILIO_FROM")
 
 DRIP_TEMPLATE = {
     1: "👋 Just checking in! Would you like to finish booking with YoBot?",
@@ -17,9 +17,9 @@ DRIP_TEMPLATE = {
 
 def send_sms(to, body):
     requests.post(
-        f"https://api.twilio.com/2010-04-01/Accounts/{TWILIO_ACCOUNT_SID}/Messages.json",
-        auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN),
-        data={"To": to, "From": TWILIO_PHONE_NUMBER, "Body": body}
+        f"https://api.twilio.com/2010-04-01/Accounts/{TWILIO_SID}/Messages.json",
+        auth=(TWILIO_SID, TWILIO_AUTH),
+        data={"To": to, "From": TWILIO_FROM, "Body": body}
     )
 
 def run_drip():

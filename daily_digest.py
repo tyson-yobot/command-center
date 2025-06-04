@@ -5,9 +5,9 @@ from datetime import datetime
 AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID")
 TABLE_ID = os.getenv("TABLE_ID")
 AIRTABLE_KEY = os.getenv("AIRTABLE_KEY")
-TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
-TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
-TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")
+TWILIO_SID = os.getenv("TWILIO_SID")
+TWILIO_AUTH = os.getenv("TWILIO_AUTH")
+TWILIO_FROM = os.getenv("TWILIO_FROM")
 ALERT_PHONE = "+17013718391"
 
 def send_digest():
@@ -22,9 +22,9 @@ def send_digest():
     summary = f"📊 YoBot Daily Digest:\n- {missed} missed calls\n- {callbacks} callbacks due\n- {messages} messages left"
 
     requests.post(
-        f"https://api.twilio.com/2010-04-01/Accounts/{TWILIO_ACCOUNT_SID}/Messages.json",
-        auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN),
-        data={"To": ALERT_PHONE, "From": TWILIO_PHONE_NUMBER, "Body": summary}
+        f"https://api.twilio.com/2010-04-01/Accounts/{TWILIO_SID}/Messages.json",
+        auth=(TWILIO_SID, TWILIO_AUTH),
+        data={"To": ALERT_PHONE, "From": TWILIO_FROM, "Body": summary}
     )
 
 if __name__ == "__main__":
