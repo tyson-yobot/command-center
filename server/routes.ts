@@ -21,6 +21,7 @@ import voiceControlRouter from "./voiceControl";
 import { qboDataRouter } from "./qboDataRetrieval";
 import { invoiceRouter } from "./invoiceAutomation";
 import { qboTokenRouter } from "./qboTokenExchange";
+import { configManager as controlCenterConfig } from "./controlCenterConfig";
 import { ingestLead, testLeadIngestion } from "./leadIngestion";
 import { 
   logCommandCenterMetrics, 
@@ -859,19 +860,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/command-center/trigger', async (req, res) => {
     try {
       const { category, payload } = req.body;
+      const client_id = req.body.client_id || "client_001";
       
       console.log(`[COMMAND CENTER] Executing: ${category}`);
+      
+      // Check if feature is enabled for this client
+      const isEnabled = await controlCenterConfig.isFeatureEnabled(client_id, 'voicebot_enabled');
+      if (!isEnabled && category.includes('Voice')) {
+        return res.status(403).json({
+          success: false,
+          error: "Voice features are disabled for this client",
+          category
+        });
+      }
       
       let result;
       
       switch (category) {
         case "New Booking Sync":
-          // Sync latest bookings from calendar
-          result = await logEventSync("Booking sync triggered manually", "calendar");
+          if (await controlCenterConfig.isFeatureEnabled(client_id, 'calendar_sync_enabled')) {
+            result = await logEventSync("Booking sync triggered manually", "calendar");
+            await controlCenterConfig.updateClientMetrics(client_id, { 
+              last_webhook: new Date().toISOString() 
+            });
+          } else {
+            throw new Error("Calendar sync is disabled");
+          }
           break;
           
         case "New Support Ticket":
-          // Create a test support ticket
           result = await logSupportTicket({
             subject: "Manual trigger test",
             priority: payload.priority || "medium",
@@ -880,31 +897,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
           break;
           
         case "Manual Follow-up":
-          // Trigger follow-up sequence
-          result = await logLeadIntake({
-            lead_id: payload.lead_id || "manual_trigger",
-            source: "command_center",
-            priority: payload.priority || "high"
-          });
+          if (await controlCenterConfig.isFeatureEnabled(client_id, 'ai_followup_enabled')) {
+            result = await logLeadIntake({
+              lead_id: payload.lead_id || "manual_trigger",
+              source: "command_center",
+              priority: payload.priority || "high"
+            });
+          } else {
+            throw new Error("AI followup is disabled");
+          }
           break;
           
         case "Initiate Voice Call":
-          // Log voice call initiation
-          result = await logCallSentiment({
-            call_id: `test_${Date.now()}`,
-            sentiment: "positive",
-            confidence: 0.8,
-            source: "command_center"
-          });
+          if (await controlCenterConfig.isFeatureEnabled(client_id, 'call_engine_enabled')) {
+            result = await logCallSentiment({
+              call_id: `test_${Date.now()}`,
+              sentiment: "positive",
+              confidence: 0.8,
+              source: "command_center"
+            });
+            await controlCenterConfig.updateClientMetrics(client_id, { 
+              last_call: new Date().toISOString() 
+            });
+          } else {
+            throw new Error("Call engine is disabled");
+          }
           break;
           
         case "Send SMS":
-          // Send test SMS
-          result = await logSlackAlert("SMS automation triggered from command center");
+          if (await controlCenterConfig.isFeatureEnabled(client_id, 'sms_engine_enabled')) {
+            result = await logSlackAlert("SMS automation triggered from command center");
+            await controlCenterConfig.updateClientMetrics(client_id, { 
+              last_sms: new Date().toISOString() 
+            });
+          } else {
+            throw new Error("SMS engine is disabled");
+          }
           break;
           
         case "Run Lead Scrape":
-          // Trigger lead scraping
+          const apolloEnabled = await controlCenterConfig.isFeatureEnabled(client_id, 'scraping_apollo_enabled');
+          const phantomEnabled = await controlCenterConfig.isFeatureEnabled(client_id, 'scraping_phantombuster_enabled');
+          
+          if (!apolloEnabled && !phantomEnabled) {
+            throw new Error("All scraping engines are disabled");
+          }
+          
           result = await logLeadIntake({
             source: "scraping",
             query: payload.query || "test query",
@@ -913,7 +951,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
           break;
           
         case "Export Data":
-          // Trigger data export
           result = await logEventSync("Data export triggered", payload.format || "csv");
           break;
           
@@ -935,6 +972,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
         error: error.message,
         category: req.body.category
       });
+    }
+  });
+
+  // Control Center Configuration Routes
+  app.get('/api/control-center/config/:client_id', async (req, res) => {
+    try {
+      const { client_id } = req.params;
+      const config = await controlCenterConfig.getClientConfig(client_id);
+      res.json(config);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.put('/api/control-center/config/:client_id/toggle', async (req, res) => {
+    try {
+      const { client_id } = req.params;
+      const { toggleKey, value } = req.body;
+      
+      await controlCenterConfig.updateClientToggle(client_id, toggleKey, value);
+      res.json({ success: true, toggleKey, value });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get('/api/control-center/global-config', async (req, res) => {
+    try {
+      const config = await controlCenterConfig.getGlobalConfig();
+      res.json(config);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get('/api/control-center/export', async (req, res) => {
+    try {
+      const configJson = await controlCenterConfig.exportConfigsAsJSON();
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Disposition', 'attachment; filename=control-center-config.json');
+      res.send(configJson);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
     }
   });
 
