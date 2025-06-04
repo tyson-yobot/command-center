@@ -10,25 +10,25 @@
   --critical-red: 0 84% 60%; /* #ef4444 */
   --revenue-gold: 45 93% 58%; /* #fbbf24 */
   --accent-blue: 217 91% 60%; /* #3b82f6 */
-  --background-navy: 220 26% 14%; /* #1a2332 */
-  --card-background: 210 22% 22%; /* #2d3748 */
+  --background-navy: 220 26% 8%; /* #0f1419 - Darker Navy */
+  --card-background: 210 22% 12%; /* #1a202c - Darker Cards */
   --text-primary: 0 0% 100%; /* #ffffff */
   --text-secondary: 218 11% 65%; /* #a0aec0 */
   
   /* Legacy shadcn variables for compatibility */
-  --background: 220 26% 14%; /* #1a2332 - Navy Background */
+  --background: 220 26% 8%; /* #0f1419 - Darker Navy Background */
   --foreground: 0 0% 100%; /* #ffffff - White Text */
-  --muted: 210 22% 22%; /* #2d3748 - Card Background */
+  --muted: 210 22% 12%; /* #1a202c - Darker Card Background */
   --muted-foreground: 218 11% 65%; /* #a0aec0 - Secondary Text */
-  --popover: 210 22% 22%; /* #2d3748 */
+  --popover: 210 22% 12%; /* #1a202c */
   --popover-foreground: 0 0% 100%; /* #ffffff */
-  --card: 210 22% 22%; /* #2d3748 - Card Background */
+  --card: 210 22% 12%; /* #1a202c - Darker Card Background */
   --card-foreground: 0 0% 100%; /* #ffffff - White Text on Cards */
-  --border: 220 13% 91%; /* #e2e8f0 - Light borders */
-  --input: 210 22% 22%; /* #2d3748 */
+  --border: 220 13% 25%; /* #374151 - Darker borders */
+  --input: 210 22% 12%; /* #1a202c - Darker inputs */
   --primary: 217 91% 60%; /* #3b82f6 - Accent Blue */
   --primary-foreground: 0 0% 100%; /* #ffffff */
-  --secondary: 210 22% 22%; /* #2d3748 */
+  --secondary: 210 22% 12%; /* #1a202c - Darker secondary */
   --secondary-foreground: 0 0% 100%; /* #ffffff */
   --accent: 217 91% 60%; /* #3b82f6 */
   --accent-foreground: 0 0% 100%; /* #ffffff */
