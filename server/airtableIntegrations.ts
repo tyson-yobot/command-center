@@ -24,7 +24,13 @@ async function createAirtableRecord(baseKey: string, tableKey: string, fields: R
 
   const url = getAirtableUrl(baseKey, tableKey);
   
-  const cleanApiKey = String(AIRTABLE_API_KEY || '').replace(/[\r\n\t\s\[\]"]/g, '').trim();
+  let cleanApiKey = String(AIRTABLE_API_KEY || '').trim();
+  
+  // Remove any surrounding brackets or quotes
+  cleanApiKey = cleanApiKey.replace(/^[\[\]"']+|[\[\]"']+$/g, '');
+  
+  // Remove any internal whitespace or special characters
+  cleanApiKey = cleanApiKey.replace(/[\r\n\t\s]/g, '');
   
   if (!cleanApiKey || cleanApiKey.length < 10) {
     console.log('Invalid Airtable API key format - operation skipped');

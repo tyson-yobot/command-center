@@ -5,6 +5,7 @@ Handles missed calls with automatic SMS fallback and Airtable logging
 import os
 import requests
 from datetime import datetime
+from missed_call_slack_alert import send_missed_call_alert
 
 AIRTABLE_KEY = os.getenv("AIRTABLE_KEY")
 BASE_ID = os.getenv("AIRTABLE_BASE_ID")
@@ -107,6 +108,12 @@ def handler(request):
                     print(f"❌ Failed to schedule callback: {callback_response.status_code}")
             except Exception as e:
                 print(f"❌ Error scheduling callback: {e}")
+        
+        # Send Slack alert for missed call
+        send_missed_call_alert(
+            phone=phone_number,
+            call_time=datetime.utcnow().isoformat()
+        )
         
         print(f"📵 Missed call follow-up processed for {phone_number}")
         

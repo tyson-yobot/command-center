@@ -5,6 +5,7 @@ Runs on schedule (every 10 minutes) to re-attempt missed calls
 import requests
 import os
 from datetime import datetime
+from missed_call_slack_alert import send_retry_alert
 
 AIRTABLE_KEY = os.getenv("AIRTABLE_KEY", "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa")
 AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID", "appRt8V3tH4g5Z5if")
