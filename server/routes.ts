@@ -23,6 +23,7 @@ import { invoiceRouter } from "./invoiceAutomation";
 import { qboTokenRouter } from "./qboTokenExchange";
 import { configManager as controlCenterConfig } from "./controlCenterConfig";
 import { ingestLead, testLeadIngestion } from "./leadIngestion";
+import axios from "axios";
 import { 
   logCommandCenterMetrics, 
   logIntegrationTest, 
@@ -81,6 +82,118 @@ import missedCallHandlerRouter from "./missedCallHandler";
 import voiceBotCallbackRouter from "./voiceBotCallback";
 import chatIntegrationRouter from "./chatIntegration";
 import phantombusterRouter from "./phantombuster";
+
+// Pipeline calls execution with hot lead detection
+async function executePipelineCalls() {
+  console.log('🚀 Starting pipeline calls...');
+  
+  const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+  const BASE_ID = process.env.AIRTABLE_BASE_ID;
+  const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
+  const TABLE_NAME = "🧠 Lead Engine";
+  
+  if (!AIRTABLE_API_KEY || !BASE_ID) {
+    console.log('❌ Missing Airtable credentials');
+    return { success: false, error: 'Missing Airtable credentials' };
+  }
+  
+  try {
+    // Get active leads with phone numbers from Airtable
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?filterByFormula=AND({Stage}='Active',{Phone}!='')`;
+    const headers = { "Authorization": `Bearer ${AIRTABLE_API_KEY}` };
+    
+    const response = await axios.get(url, { headers });
+    const leads = response.data.records || [];
+    
+    if (leads.length === 0) {
+      console.log('No active leads found in pipeline');
+      return { success: false, message: 'No active leads found' };
+    }
+    
+    console.log(`Found ${leads.length} active leads to call`);
+    
+    let successfulCalls = 0;
+    let hotLeadsAlerted = 0;
+    
+    for (const lead of leads) {
+      const fields = lead.fields || {};
+      const phone = fields.Phone || '';
+      const name = fields.Name || 'Unknown Lead';
+      const hotLead = fields['🔥 Hot Lead'] || false;
+      const leadScore = fields['📈 Lead Score'] || 0;
+      const callOutcome = fields['📞 Call Outcome'] || '';
+      
+      if (phone) {
+        console.log(`Calling ${name} at ${phone}`);
+        
+        // Trigger call using existing voice call endpoint
+        try {
+          await axios.post('http://localhost:5000/api/voice/initiate-call', {
+            phone: phone,
+            lead_name: name,
+            source: 'pipeline_calls'
+          });
+          successfulCalls++;
+        } catch (callError) {
+          console.log(`Failed to call ${name}: ${callError.message}`);
+        }
+        
+        // Check if this lead triggers Slack alert
+        const shouldAlert = hotLead || 
+                           leadScore > 80 || 
+                           callOutcome === 'Interested' || 
+                           callOutcome === 'Needs Quote';
+        
+        if (shouldAlert && SLACK_WEBHOOK_URL) {
+          try {
+            const alertMessage = {
+              text: `🔥 *Hot Lead Detected*\nName: ${name}\nPhone: ${phone}\nScore: ${leadScore}\nHot Lead: ${hotLead ? 'Yes' : 'No'}\nCall Outcome: ${callOutcome || 'N/A'}`
+            };
+            
+            await axios.post(SLACK_WEBHOOK_URL, alertMessage);
+            hotLeadsAlerted++;
+            console.log(`Slack alert sent for hot lead: ${name}`);
+          } catch (slackError) {
+            console.log(`Failed to send Slack alert for ${name}: ${slackError.message}`);
+          }
+        }
+      }
+    }
+    
+    // Log the session to Airtable
+    try {
+      const logUrl = `https://api.airtable.com/v0/${BASE_ID}/📞 Call Log`;
+      await axios.post(logUrl, {
+        records: [{
+          fields: {
+            Type: "Pipeline Batch",
+            "Total Calls": leads.length,
+            Successful: successfulCalls,
+            Timestamp: new Date().toISOString(),
+            Source: "Command Center",
+            "Hot Leads Alerted": hotLeadsAlerted
+          }
+        }]
+      }, { headers });
+    } catch (logError) {
+      console.log('Failed to log session to Airtable:', logError.message);
+    }
+    
+    console.log(`✅ Pipeline calls complete: ${successfulCalls}/${leads.length} successful, ${hotLeadsAlerted} hot leads alerted`);
+    
+    return {
+      success: true,
+      calls_triggered: leads.length,
+      successful_calls: successfulCalls,
+      hot_leads_alerted: hotLeadsAlerted,
+      message: `Called ${successfulCalls} out of ${leads.length} leads, ${hotLeadsAlerted} hot leads alerted`
+    };
+    
+  } catch (error) {
+    console.log('❌ Error executing pipeline calls:', error.message);
+    return { success: false, error: error.message };
+  }
+}
 
 // Make.com webhook integration
 async function triggerMakeScenario(data: any) {
