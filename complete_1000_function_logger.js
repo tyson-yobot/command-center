@@ -3,7 +3,7 @@
  * Logs ALL automation functions across the entire ecosystem
  */
 
-const axios = require('axios');
+import axios from 'axios';
 
 // New API key provided
 const AIRTABLE_API_KEY = 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa';
