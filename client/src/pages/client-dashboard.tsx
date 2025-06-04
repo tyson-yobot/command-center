@@ -480,7 +480,7 @@ export default function ClientDashboard() {
 
         {/* Key Performance Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Active Calls</CardTitle>
               <Phone className="h-4 w-4 text-green-400" />
@@ -493,7 +493,7 @@ export default function ClientDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">AI Responses</CardTitle>
               <Brain className="h-4 w-4 text-blue-400" />
@@ -506,7 +506,7 @@ export default function ClientDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Pipeline Value</CardTitle>
               <DollarSign className="h-4 w-4 text-emerald-400" />
@@ -519,7 +519,7 @@ export default function ClientDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">System Health</CardTitle>
               <Gauge className="h-4 w-4 text-amber-400" />
