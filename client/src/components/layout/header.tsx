@@ -33,12 +33,11 @@ export default function Header() {
         {/* Centered YoBot Command Center Logo */}
         <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-[60]">
           <div className="flex flex-col items-center justify-center space-y-2">
-            <div className="flex justify-center">
-              <img 
-                src={yobotLogoPath} 
-                alt="YoBot" 
-                className="h-10 w-auto"
-              />
+            <div className="flex items-center justify-center space-x-2">
+              <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                <span className="text-white text-sm font-bold">🤖</span>
+              </div>
+              <h1 className="text-xl font-bold text-white tracking-wide">YoBot</h1>
             </div>
             <div className="flex justify-center">
               <h2 className="text-lg font-bold text-white tracking-wide text-center">Command Center</h2>
