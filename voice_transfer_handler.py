@@ -112,9 +112,8 @@ def schedule_callback(caller_number):
     from datetime import datetime, timedelta
     
     try:
-        callback_time = (datetime.utcnow() + timedelta(hours=1)).isoformat()
+        callback_time = (datetime.utcnow() + timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%S.000Z")
 
-        # Airtable setup
         airtable_url = f"https://api.airtable.com/v0/{os.getenv('AIRTABLE_BASE_ID')}/{os.getenv('TABLE_ID')}"
         headers = {
             "Authorization": f"Bearer {os.getenv('AIRTABLE_KEY')}",
@@ -130,7 +129,7 @@ def schedule_callback(caller_number):
         }
 
         response = requests.post(airtable_url, headers=headers, json=data)
-        print(f"📆 Callback scheduled for {caller_number} at {callback_time}")
+        print("✅ Callback record created:", response.json())
         return response.status_code == 200
         
     except Exception as e:

@@ -331,9 +331,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     const scheduleCallback = async (callerNumber: string): Promise<boolean> => {
       try {
-        const callbackTime = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+        const callbackDate = new Date(Date.now() + 60 * 60 * 1000);
+        const callbackTime = callbackDate.getUTCFullYear() + '-' + 
+          String(callbackDate.getUTCMonth() + 1).padStart(2, '0') + '-' +
+          String(callbackDate.getUTCDate()).padStart(2, '0') + 'T' +
+          String(callbackDate.getUTCHours()).padStart(2, '0') + ':' +
+          String(callbackDate.getUTCMinutes()).padStart(2, '0') + ':' +
+          String(callbackDate.getUTCSeconds()).padStart(2, '0') + '.000Z';
 
-        // Airtable setup
         const airtableUrl = `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.TABLE_ID}`;
         const airtableHeaders = {
           "Authorization": `Bearer ${process.env.AIRTABLE_KEY}`,
@@ -354,7 +359,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           body: JSON.stringify(callbackData)
         });
         
-        console.log(`📆 Callback scheduled for ${callerNumber} at ${callbackTime}`);
+        const result = await response.json();
+        console.log('✅ Callback record created:', result);
         return response.ok;
         
       } catch (error) {
