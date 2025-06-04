@@ -3,7 +3,7 @@ import { Sun, Moon, Mic, Headphones, Phone, Users, FileText, Zap, Settings } fro
 import { useWebSocket } from "@/hooks/use-websocket";
 import { useTheme } from "@/hooks/use-theme";
 import { Button } from "@/components/ui/button";
-import yobotLogoPath from "@assets/Engage Smarter Logo Transparent.png";
+import yobotLogoPath from "@assets/A_flat_vector_illustration_features_a_robot_face_i.png";
 
 export default function Header() {
   const { isConnected } = useWebSocket();
@@ -32,13 +32,12 @@ export default function Header() {
         
         {/* Centered YoBot Command Center Logo */}
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[60] text-center">
-          <div className="flex flex-col items-center space-y-1">
-            <div className="flex items-center space-x-2">
-              <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center shadow-lg">
-                <span className="text-white text-xl font-bold">🤖</span>
-              </div>
-              <h1 className="text-3xl font-black text-white tracking-tight">YoBot®</h1>
-            </div>
+          <div className="flex flex-col items-center space-y-2">
+            <img 
+              src={yobotLogoPath} 
+              alt="YoBot" 
+              className="h-16 w-auto"
+            />
             <h2 className="text-2xl font-bold text-white tracking-wide">Command Center</h2>
           </div>
         </div>
