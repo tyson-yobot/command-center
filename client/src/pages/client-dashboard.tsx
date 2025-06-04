@@ -604,7 +604,7 @@ export default function ClientDashboard() {
           </Card>
 
           {/* Client Pulse Summary */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Users className="w-5 h-5 mr-2 text-purple-400" />
@@ -638,7 +638,7 @@ export default function ClientDashboard() {
           </Card>
 
           {/* Ops Metrics */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Gauge className="w-5 h-5 mr-2 text-yellow-400" />
@@ -675,7 +675,7 @@ export default function ClientDashboard() {
         {/* Main Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
           {/* Automation Engine */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Zap className="w-5 h-5 mr-2 text-yellow-400" />
@@ -1208,7 +1208,7 @@ export default function ClientDashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              <div className="bg-gradient-to-br from-green-600/20 to-green-800/20 border border-green-500/30 rounded-lg p-4">
+              <div className="bg-gradient-to-br from-green-600/20 to-green-800/20 border border-cyan-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
                 <div className="text-center">
                   <div className="text-3xl font-black text-green-400 mb-2">$127K</div>
                   <div className="text-green-300 text-sm">Monthly Savings</div>
@@ -1216,7 +1216,7 @@ export default function ClientDashboard() {
                 </div>
               </div>
               
-              <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-500/30 rounded-lg p-4">
+              <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-cyan-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
                 <div className="text-center">
                   <div className="text-3xl font-black text-blue-400 mb-2">47%</div>
                   <div className="text-blue-300 text-sm">Cost Reduction</div>
@@ -1224,7 +1224,7 @@ export default function ClientDashboard() {
                 </div>
               </div>
               
-              <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30 rounded-lg p-4">
+              <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-cyan-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
                 <div className="text-center">
                   <div className="text-3xl font-black text-purple-400 mb-2">340%</div>
                   <div className="text-purple-300 text-sm">ROI</div>
@@ -1232,7 +1232,7 @@ export default function ClientDashboard() {
                 </div>
               </div>
               
-              <div className="bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 border border-yellow-500/30 rounded-lg p-4">
+              <div className="bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 border border-cyan-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
                 <div className="text-center">
                   <div className="text-3xl font-black text-yellow-400 mb-2">21</div>
                   <div className="text-yellow-300 text-sm">Payback Days</div>
