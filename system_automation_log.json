@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-04T10:25:00.278Z",
-    "functionId": 156,
-    "functionName": "Google Drive Backup",
-    "batch": 16,
-    "category": "Backup",
-    "status": "success",
-    "duration": 201,
-    "successCount": 6,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-04T10:25:00.286Z",
     "functionId": 206,
     "functionName": "Lead Score Calculator",
@@ -11362,6 +11351,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-04T20:06:41.065Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-04T20:07:45.937Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-04T20:07:45.676Z",
       "automationStatus": "running"
     }
   }

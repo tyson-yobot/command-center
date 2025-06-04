@@ -35,18 +35,6 @@ export default function Dashboard() {
     <div className="min-h-screen bg-slate-950 text-white p-4 space-y-4">
       <SearchBar />
       
-      {/* Desktop Command Center Access */}
-      <div className="bg-blue-900/30 border border-blue-500/50 rounded-lg p-4">
-        <h3 className="text-white font-bold mb-2">Desktop Command Center</h3>
-        <p className="text-gray-300 text-sm mb-3">Access the full desktop command center interface</p>
-        <Button 
-          onClick={() => window.location.href = '/command-center'}
-          className="bg-blue-600 hover:bg-blue-700 text-white w-full"
-        >
-          Go to Command Center
-        </Button>
-      </div>
-      
       <MetricsGrid />
       <BotControls />
       <LiveNotifications />
