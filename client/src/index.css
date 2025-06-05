@@ -10,13 +10,13 @@
   --critical-red: 0 84% 60%; /* #ef4444 */
   --revenue-gold: 45 93% 58%; /* #fbbf24 */
   --accent-blue: 217 91% 60%; /* #3b82f6 */
-  --background-navy: 220 26% 4%; /* #0a0e13 - Much Darker Navy */
-  --card-background: 210 22% 6%; /* #0f1419 - Much Darker Cards */
+  --background-navy: 220 30% 8%; /* #141a24 - Darker Navy Blue */
+  --card-background: 210 25% 10%; /* #1a2332 - Darker Blue Cards */
   --text-primary: 0 0% 100%; /* #ffffff */
   --text-secondary: 218 11% 65%; /* #a0aec0 */
   
   /* Legacy shadcn variables for compatibility */
-  --background: 220 26% 4%; /* #0a0e13 - Much Darker Navy Background */
+  --background: 220 30% 8%; /* #141a24 - Darker Navy Blue Background */
   --foreground: 0 0% 100%; /* #ffffff - White Text */
   --muted: 210 22% 6%; /* #0f1419 - Much Darker Card Background */
   --muted-foreground: 218 11% 65%; /* #a0aec0 - Secondary Text */
