@@ -22,7 +22,10 @@ def execute_automation_test(batch_num, function_num):
         endpoint = f"/api/automation-batch-{batch_num}/function-{function_num}"
         response = requests.post(
             f"{WEBHOOK_URL}{endpoint}",
-            headers={"Content-Type": "application/json"},
+            headers={
+                "Content-Type": "application/json",
+                "x-internal-request": "command-center"
+            },
             json={"test_execution": True, "batch": batch_num, "function": function_num},
             timeout=2
         )

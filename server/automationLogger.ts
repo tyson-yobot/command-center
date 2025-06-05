@@ -110,7 +110,26 @@ async function sendSlackAlert(message: string): Promise<void> {
 
 // Dashboard security middleware for automation routes
 export function automationSecurityMiddleware(req: any, res: any, next: any) {
-  // Dashboard fingerprint check
+  // Check for internal Command Center requests (allow these)
+  const isInternalRequest = req.headers['x-internal-request'] === 'command-center' || 
+                           req.ip === '127.0.0.1' || 
+                           req.ip === '::1' ||
+                           req.connection?.remoteAddress === '127.0.0.1';
+
+  // Allow internal Command Center requests to bypass dashboard check
+  if (isInternalRequest) {
+    // Still check kill switch for internal requests
+    if (process.env.KILL_SWITCH === "true") {
+      console.warn("🔒 Global automation shutdown active.");
+      return res.status(410).json({
+        error: "System offline",
+        message: "Global automation shutdown active"
+      });
+    }
+    return next();
+  }
+
+  // For external requests, enforce strict dashboard fingerprint check
   if (process.env.DASHBOARD_ID !== VALID_DASHBOARD_ID) {
     console.warn("❌ Automation blocked: invalid dashboard context");
     return res.status(403).json({

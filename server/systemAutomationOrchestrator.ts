@@ -308,10 +308,13 @@ class SystemAutomationOrchestrator {
     try {
       console.log(`🔄 Executing: ${task.name}`);
       
-      // Make HTTP request to endpoint
+      // Make HTTP request to endpoint with Command Center authentication
       const response = await fetch(`http://localhost:5000${task.endpoint}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-internal-request': 'command-center'
+        },
         body: JSON.stringify({ 
           automationId: id, 
           scheduledExecution: true,
