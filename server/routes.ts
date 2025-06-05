@@ -2293,8 +2293,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       let pdfResults = null;
       try {
-        // Import the PDF generator module
-        const { generateQuotePDF } = await import('../generate_quote_pdf.js');
+        // Use the reliable PDF generation script
+        const { execSync } = await import('child_process');
         
         const orderData = {
           customer_name,
@@ -2303,8 +2303,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
           amount,
           order_id
         };
-
-        pdfResults = generateQuotePDF(orderData);
+        
+        // Generate PDF using the new script with proper JSON escaping
+        const orderDataJson = JSON.stringify(orderData);
+        const result = execSync(`python3 generate_pdf_quote.py '${orderDataJson}'`, { 
+          cwd: process.cwd(),
+          encoding: 'utf8'
+        });
+        
+        // Parse the result
+        pdfResults = JSON.parse(result.trim());
         
         if (pdfResults.success) {
           console.log(`PDF generated: ${pdfResults.filename} (${pdfResults.size} bytes)`);
