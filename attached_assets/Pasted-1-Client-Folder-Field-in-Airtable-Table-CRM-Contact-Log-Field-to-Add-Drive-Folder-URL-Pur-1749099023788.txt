@@ -1,0 +1,147 @@
+1. Client Folder Field in Airtable
+Table: CRM Contact Log
+
+Field to Add:
+
+📁 Drive Folder (URL)
+
+Purpose: Displays and links to the auto-created Google Drive folder once routing works.
+
+✅ 2. Quote PDF Field in Airtable
+Same Table: CRM Contact Log or 📄 PDF Quote Log
+
+Field to Add:
+
+📄 Quote PDF (URL)
+
+Holds the link to the most recent PDF quote — even before email.
+
+✅ 3. Metrics Tracker: 📈 Leads + Sales Widgets
+Table: 📊 Command Center · Metrics Tracker
+
+Add/update fields:
+
+📈 MTD Leads
+
+💰 MTD Sales
+
+📊 Active Quotes
+
+📉 Error Rate
+
+🔥 Quotes Sent Today
+
+Ensure all have:
+
+Number format
+
+Default value = 0
+
+Auto-linked to webhook triggers
+
+✅ 4. SmartSpend Tracker → ROI % Field
+Table: 📈 SmartSpend Tracker
+
+Add:
+
+📊 ROI % (Formula):
+
+pgsql
+Copy
+Edit
+((Monthly Savings - Monthly Cost) / Monthly Cost) * 100
+✅ 5. 📞 Voice Call Log: Outcome Override Dropdown
+Field: 🎯 Outcome (Manual Override)
+
+Options:
+
+Lead Booked
+
+Escalation
+
+Voicemail
+
+Disconnected
+
+Non-Qualified
+
+Use view filtering to prioritize records with overrides.
+
+✅ 6. Slack Message Review Tracker → Flag Type Field
+Field: 🚨 Flagged Type (Single select)
+
+Options:
+
+Billing
+
+Legal
+
+Refund
+
+Complaint
+
+AI Confusion
+
+Escalation
+
+Other
+
+Auto-filled from GPT keyword match or manual dropdown.
+
+✅ 7. Add-On Usage Tracker
+New Table: 🧩 Add-On Usage Log
+
+Fields:
+
+🧩 Add-On Name (Link to Add-On table)
+
+🔁 Used On (Date)
+
+🧾 Client (Link to CRM)
+
+💬 Notes (Long text)
+
+Use for usage history + auto-flagging unused add-ons.
+
+✅ 8. Quote Serial Counter Tracker
+New Table: 📋 Quote Serial Tracker
+
+Fields:
+
+📅 Date
+
+🏢 Client
+
+🔢 Serial #
+
+Linked to quote log. Optional: formula to auto-generate PDF filename preview.
+
+✅ 9. Follow-Up Reminder Tracker: Contact Link
+Add:
+
+📇 CRM Contact (Linked field to CRM Contact Log)
+
+🔁 Follow-Up Type (Select: Missed Call, Quote, Custom)
+
+🗓 Due Date
+
+Helps you automate all follow-up tracking directly.
+
+✅ 10. Smart Dashboard Switch in Command Center UI
+Toggle:
+
+html
+Copy
+Edit
+<label>
+  <input type="checkbox" id="metricsToggle"> Show Smart Metrics
+</label>
+JS to switch views:
+
+js
+Copy
+Edit
+document.getElementById('metricsToggle').addEventListener('change', (e) => {
+  const enabled = e.target.checked;
+  document.querySelector('.smart-metrics').style.display = enabled ? 'block' : 'none';
+});
