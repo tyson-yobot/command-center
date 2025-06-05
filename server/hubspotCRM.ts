@@ -902,30 +902,29 @@ export async function scheduleFollowUpTask(contact: Contact) {
 
 export async function logEventToAirtable(event_type: string, source: string, contact: string, status: string, details: string) {
   try {
-    const airtable_url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblREPLACE_THIS";
+    // Using the API key you provided - need the actual table ID
+    const airtable_url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblEventLog"; // Replace with actual table ID
     const headers = {
       "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
       "Content-Type": "application/json"
     };
     
     const payload = {
-      "records": [{
-        "fields": {
-          "📅 Timestamp": new Date().toISOString(),
-          "📌 Event Type": event_type,
-          "🌿 Source Module": source,
-          "👤 Contact": contact,
-          "📍 Status": status,
-          "🧾 Details": details
-        }
-      }]
+      "fields": {
+        "📅 Timestamp": new Date().toISOString() + "Z",
+        "📌 Event Type": event_type,
+        "🌿 Source Module": source,
+        "👤 Contact": contact,
+        "📍 Status": status,
+        "🧾 Details": details
+      }
     };
     
     const response = await axios.post(airtable_url, payload, { headers });
-    console.log('Event logged to Airtable:', event_type);
+    console.log('📡 Event logged to Airtable:', event_type);
     return { status: response.status, data: response.data };
   } catch (error: any) {
-    console.error('Failed to log event to Airtable:', error.message);
+    console.error('❌ Failed to log event to Airtable:', error.message);
     return { status: 500, error: error.message };
   }
 }
