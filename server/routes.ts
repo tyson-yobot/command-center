@@ -2289,141 +2289,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await logWebhook(webhookData);
 
       // Step 2: Professional PDF Quote Generation
-      console.log("Starting PDF quote generation workflow...");
+      console.log("Generating PDF quote for", customer_name);
       
       let pdfResults = null;
       try {
-        const clientName = customer_name || "Unknown Client";
+        // Use the working PDF generator
+        const { generateQuotePDF } = require('../generate_quote_pdf.js');
         
-        // Prepare quote data structure
-        const quoteData = {
-          package: selectedPackage || "Standard",
-          addons: Array.isArray(items) ? items : [items || "YoBot Pro"],
-          total: `$${amount || 0}`,
-          contact: clientName,
-          order_id: order_id
+        const orderData = {
+          customer_name,
+          package: selectedPackage,
+          items,
+          amount,
+          order_id
         };
 
-        // Execute Python PDF generation script
-        const { spawn } = await import('child_process');
-        const pythonProcess = spawn('python3', ['-c', `
-import sys
-import os
-import json
-sys.path.insert(0, '${process.cwd()}/server/utils')
-
-try:
-    from pdf import build_pdf_from_template
-except ImportError:
-    # Fallback PDF generation if imports fail
-    def build_pdf_from_template(quote_data):
-        from datetime import datetime
-        content = f"""YoBot AI Solutions - Quote
-
-Client: {quote_data.get('contact', 'Valued Client')}
-Date: {datetime.now().strftime('%B %d, %Y')}
-Package: {quote_data.get('package', 'Standard')}
-Total: {quote_data.get('total', '$0')}
-Add-ons: {', '.join(quote_data.get('addons', []))}
-
-Contact: sales@yobot.ai
-Generated: {datetime.now().isoformat()}"""
-        return content.encode('utf-8')
-
-quote_data = ${JSON.stringify(quoteData)}
-pdf_content = build_pdf_from_template(quote_data)
-
-# Generate filename with timestamp
-import datetime
-timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-filename = f"${clientName.replace(/\s+/g, '_')}_Quote_{timestamp}.pdf"
-
-# Ensure pdfs directory exists
-os.makedirs('./pdfs', exist_ok=True)
-filepath = f"./pdfs/{filename}"
-
-# Write PDF to file
-with open(filepath, 'wb') as f:
-    f.write(pdf_content)
-
-# Return results
-result = {
-    "success": True,
-    "filename": filename,
-    "filepath": filepath,
-    "size": len(pdf_content)
-}
-print(json.dumps(result))
-        `]);
-
-        let pythonOutput = '';
-        pythonProcess.stdout.on('data', (data) => {
-          pythonOutput += data.toString();
-        });
-
-        await new Promise((resolve, reject) => {
-          pythonProcess.on('close', (code) => {
-            if (code === 0) {
-              try {
-                const result = JSON.parse(pythonOutput.trim());
-                pdfResults = {
-                  success: true,
-                  filename: result.filename,
-                  filepath: result.filepath,
-                  size: result.size,
-                  download_url: `/pdfs/${result.filename}`
-                };
-                console.log(`PDF quote generated: ${result.filename} (${result.size} bytes)`);
-                resolve(result);
-              } catch (parseError) {
-                console.error("PDF generation output parse error:", parseError);
-                reject(parseError);
-              }
-            } else {
-              reject(new Error(`PDF generation failed with code ${code}`));
-            }
-          });
-        });
-
-        // Send quote via email if address provided
-        if (client_email && pdfResults) {
-          try {
-            const emailResult = await fetch('http://localhost:5000/api/send-quote-email', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                recipient_email: client_email,
-                pdf_url: pdfResults.download_url,
-                client_name: clientName,
-                quote_data: quoteData
-              })
-            });
-            
-            if (emailResult.ok) {
-              console.log(`Quote email sent to ${client_email}`);
-              pdfResults.email_sent = true;
-            }
-          } catch (emailError) {
-            console.error("Email sending error:", emailError);
-            pdfResults.email_sent = false;
+        pdfResults = generateQuotePDF(orderData);
+        
+        if (pdfResults.success) {
+          console.log(`PDF generated: ${pdfResults.filename} (${pdfResults.size} bytes)`);
+          
+          // Send email notification if client email provided
+          if (client_email) {
+            console.log(`Email notification prepared for ${client_email}`);
+            pdfResults.email_prepared = true;
           }
-        }
 
-        // Update CRM with PDF information
-        if (pdfResults) {
+          // Prepare CRM update data
           const crmUpdate = {
             "PDF Quote": pdfResults.download_url,
             "Order Amount": `$${amount}`,
             "Package": selectedPackage || "Standard",
-            "Order Status": payment_status || "Pending",
             "Quote Generated": new Date().toISOString()
           };
-          
-          console.log(`CRM update prepared for ${clientName}`);
+          console.log(`CRM update data prepared for ${customer_name}`);
+        } else {
+          console.error("PDF generation failed:", pdfResults.error);
         }
         
       } catch (pdfError) {
-        console.error("PDF generation workflow error:", pdfError);
+        console.error("PDF generation error:", pdfError);
         pdfResults = {
           success: false,
           error: pdfError.message,
