@@ -3,9 +3,9 @@
  * Simple PDF generation wrapper for sales orders
  */
 
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+import { execSync } from 'child_process';
+import fs from 'fs';
+import path from 'path';
 
 function generateQuotePDF(orderData) {
   try {
@@ -145,10 +145,10 @@ print("SUCCESS")
 }
 
 // If called directly from command line
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   const orderData = JSON.parse(process.argv[2] || '{}');
   const result = generateQuotePDF(orderData);
   console.log(JSON.stringify(result));
 }
 
-module.exports = { generateQuotePDF };
+export { generateQuotePDF };

@@ -2293,8 +2293,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       let pdfResults = null;
       try {
-        // Use the working PDF generator
-        const { generateQuotePDF } = require('../generate_quote_pdf.js');
+        // Import the PDF generator module
+        const { generateQuotePDF } = await import('../generate_quote_pdf.js');
         
         const orderData = {
           customer_name,
