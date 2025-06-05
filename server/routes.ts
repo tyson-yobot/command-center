@@ -9,6 +9,7 @@ import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertC
 import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
 import { sendLeadAlert, sendPlatinumFormAlert, sendAutomationFailureAlert } from "./slackAlerts";
+import { performanceAuditor, trackAutomationPerformance } from "./performanceAudit";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
 import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe, sendNDAEmail, autoTagContactType, sendVoicebotWebhookResponse, syncToQuickBooks, alertSlackFailure, sendHubSpotFallback, pushToQuoteDashboard, scheduleFollowUpTask, logEventToAirtable, triggerToneVariant, generateFallbackAudio, triggerPDFReceipt, handleStripeRetry, logToneMatch, logVoiceTranscript, assignCRMOwner, logVoiceEscalationEvent, dispatchCallSummary, pushToMetricsTracker, logCRMVoiceMatch, updateContractStatus, logIntentAndEntities, pushCommandSuggestions, logScenarioLoop, logABScriptTest, sendWebhookResponse, sendErrorSlackAlert, pushToProposalDashboard, assignLeadScore, logToSmartSpend, markContactComplete, logToCommandCenter } from "./hubspotCRM";
@@ -402,6 +403,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Performance Monitoring Endpoints
+  app.get('/api/performance/report', (req, res) => {
+    try {
+      const report = performanceAuditor.generatePerformanceReport();
+      res.json({
+        success: true,
+        data: report,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  app.get('/api/performance/slow-functions', (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 10;
+      const slowFunctions = performanceAuditor.getTopSlowFunctions(limit);
+      res.json({
+        success: true,
+        data: slowFunctions,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  app.get('/api/performance/failures', (req, res) => {
+    try {
+      const failureAnalysis = performanceAuditor.getFailureAnalysis();
+      res.json({
+        success: true,
+        data: failureAnalysis,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // Test Lead Source Mapping Endpoint
+  app.post('/api/test/lead-source', async (req, res) => {
+    try {
+      const testData = {
+        full_name: "Test User",
+        email: "test@example.com",
+        phone: "555-0123",
+        company: "Test Company",
+        form_type: "Test Form"
+      };
+      
+      const leadSource = req.query.source || "Test Source";
+      
+      res.json({
+        success: true,
+        message: 'Lead source mapping test successful',
+        capturedData: {
+          ...testData,
+          leadSource,
+          timestamp: new Date().toISOString()
+        }
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
   // Main Desktop Command Center configuration endpoint
   app.get('/api/main-desktop-command-center/config/:client_id', (req, res) => {
     const { client_id } = req.params;
@@ -425,7 +506,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         '/webhook/calendly',
         '/webhook/hubspot',
         '/api/form/lead-capture',
-        '/api/form/platinum'
+        '/api/form/platinum',
+        '/api/performance/report',
+        '/api/performance/slow-functions',
+        '/api/performance/failures'
       ]
     });
   });
