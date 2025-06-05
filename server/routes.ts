@@ -6848,6 +6848,76 @@ ${transcript}`;
     }
   }
 
+  // Log escalation to tracker
+  async function logEscalationToTracker(callId: string, agent: string, issueText: string, timestamp: string): Promise<void> {
+    try {
+      const payload = {
+        fields: {
+          "📞 Call ID": callId,
+          "👤 Agent": agent,
+          "🚨 Escalation Reason": issueText,
+          "🕓 Timestamp": timestamp,
+          "🟡 Escalation Status": "Pending Review"
+        }
+      };
+
+      const response = await postToAirtable('tblEscalationTracker', payload,
+        process.env.AIRTABLE_BASE_ID || '',
+        process.env.AIRTABLE_API_KEY || '');
+      
+      console.log(`Escalation logged for call ${callId}: ${issueText}`);
+    } catch (error: any) {
+      console.error('Escalation logging failed:', error.message);
+    }
+  }
+
+  // Generate QA summary digest
+  function compileQADigest(records: any[]): string {
+    const summary = records.map(r => 
+      `• ${r.agent_name} scored ${r.qa_score}/10 — Tags: ${r.tags ? r.tags.join(', ') : 'None'}`
+    );
+    return summary.join('\n');
+  }
+
+  // Retag with fallback keywords
+  function retagWithFallbackKeywords(transcript: string): string[] {
+    const fallbackTags: string[] = [];
+    const keywordMap: {[key: string]: string[]} = {
+      "💰 Refund Request": ["money back", "return policy", "get my money"],
+      "🚫 Cancel Service": ["stop service", "terminate", "cancel subscription"],
+      "😡 Angry Customer": ["yelling", "mad", "frustrated", "angry"]
+    };
+
+    for (const [tag, triggers] of Object.entries(keywordMap)) {
+      for (const trigger of triggers) {
+        if (transcript.toLowerCase().includes(trigger)) {
+          fallbackTags.push(tag);
+        }
+      }
+    }
+    return [...new Set(fallbackTags)]; // Remove duplicates
+  }
+
+  // Save QA digest entry
+  async function saveQADigestEntry(digest: string, timestamp: string): Promise<void> {
+    try {
+      const payload = {
+        fields: {
+          "🧾 Digest Summary": digest,
+          "📅 Date": timestamp
+        }
+      };
+
+      await postToAirtable('tblQACallReviewLog', payload,
+        process.env.AIRTABLE_BASE_ID || '',
+        process.env.AIRTABLE_API_KEY || '');
+      
+      console.log('QA digest entry saved');
+    } catch (error: any) {
+      console.error('QA digest save failed:', error.message);
+    }
+  }
+
   // Complete QA Review Pipeline
   async function runQAReviewPipeline(data: any): Promise<any> {
     try {
