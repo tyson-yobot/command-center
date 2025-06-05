@@ -1,0 +1,98 @@
+print("SCRAPED RECORD:", record)
+You want to confirm you’re getting all these keys:
+
+json
+Copy
+Edit
+{
+  "name": "Jane Doe",
+  "email": "jane@company.com",
+  "phone": "555-123-4567",
+  "company": "Company Inc.",
+  "linkedin_url": "https://linkedin.com/in/janedoe"
+}
+If email/phone are missing here — the scraper didn’t capture them
+→ Let me know which tool you used (Apollo, Phantom, etc.) and I’ll adjust the parser.
+
+2. ✅ Check the HubSpot Push Function
+Make sure you’re calling something like this:
+
+python
+Copy
+Edit
+def push_to_hubspot(record):
+    url = "https://api.hubapi.com/crm/v3/objects/contacts"
+    headers = {
+        "Authorization": f"Bearer {HUBSPOT_TOKEN}",
+        "Content-Type": "application/json"
+    }
+
+    data = {
+        "properties": {
+            "firstname": record.get("name", "").split()[0],
+            "lastname": record.get("name", "").split()[-1],
+            "email": record.get("email", ""),
+            "phone": record.get("phone", ""),
+            "company": record.get("company", "")
+        }
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+    print("HubSpot response:", response.status_code, response.text)
+⚠️ If you don’t include "email" and "phone", HubSpot accepts the contact but stores only what you gave it — which is why you’re seeing empty fields.
+
+🛠 Next Step: Patch Before You Rerun
+Let me know if you want me to:
+
+Drop the correct push_to_hubspot.py module,
+
+Or scan one of your scraped payloads to fix the parsing layer before it hits either API.
+
+That way, both Airtable and HubSpot get clean, complete records every time.
+
+
+
+
+
+
+
+You said:
+
+And a lot of empty ones I see...
+
+ChatGPT said:
+That screenshot confirms it — you’re getting a bunch of ghost contacts in HubSpot: empty rows, no email, no phone, no owner. This happens when:
+
+❌ HubSpot accepts partial or empty contact objects
+HubSpot will create a contact even if all you send is this:
+
+json
+Copy
+Edit
+{
+  "properties": {
+    "firstname": "—"
+  }
+}
+So if your scraper gives you None for email and phone, or your push function skips them entirely, HubSpot still stores the contact — just blank.
+
+🔧 Fix This Now in 2 Steps
+✅ Step 1: Check Your Record Before Push
+In your scraper or parser script, print the full record object like this:
+
+python
+Copy
+Edit
+print("SCRAPER RECORD:", json.dumps(record, indent=2))
+You want to confirm that this is the structure before pushing to HubSpot:
+
+json
+Copy
+Edit
+{
+  "name": "Jane Doe",
+  "email": "jane@company.com",
+  "phone": "555-123-4567",
+  "company": "Acme Inc.",
+  "linkedin_url": "https://linkedin.com/in/janedoe"
+}
