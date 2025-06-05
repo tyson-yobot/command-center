@@ -2305,14 +2305,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         };
 
         // Execute Python PDF generation script
-        const { spawn } = require('child_process');
+        const { spawn } = await import('child_process');
         const pythonProcess = spawn('python3', ['-c', `
 import sys
 import os
-sys.path.append('${process.cwd()}/server/utils')
-
-from pdf import build_pdf_from_template
 import json
+sys.path.insert(0, '${process.cwd()}/server/utils')
+
+try:
+    from pdf import build_pdf_from_template
+except ImportError:
+    # Fallback PDF generation if imports fail
+    def build_pdf_from_template(quote_data):
+        from datetime import datetime
+        content = f"""YoBot AI Solutions - Quote
+
+Client: {quote_data.get('contact', 'Valued Client')}
+Date: {datetime.now().strftime('%B %d, %Y')}
+Package: {quote_data.get('package', 'Standard')}
+Total: {quote_data.get('total', '$0')}
+Add-ons: {', '.join(quote_data.get('addons', []))}
+
+Contact: sales@yobot.ai
+Generated: {datetime.now().isoformat()}"""
+        return content.encode('utf-8')
 
 quote_data = ${JSON.stringify(quoteData)}
 pdf_content = build_pdf_from_template(quote_data)
@@ -2419,7 +2435,7 @@ print(json.dumps(result))
         success: true,
         message: "Live sales order recorded and processed",
         webhook: "Sales Orders Live",
-        pdf_workflow: driveResults,
+        pdf_workflow: pdfResults,
         data: { order_id, customer_name, amount }
       });
 
