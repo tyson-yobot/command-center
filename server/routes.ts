@@ -2288,27 +2288,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { logWebhook } = await import('./gracefulAirtable.js');
       await logWebhook(webhookData);
 
-      // Step 2: PDF Quote Generation with Google Drive Integration
-      console.log("🚀 Starting PDF quote generation workflow...");
+      // Step 2: Professional PDF Quote Generation
+      console.log("Starting PDF quote generation workflow...");
       
-      // Import utilities
-      const createClientFolder = (await import('./utils/drive.py')).default?.create_client_folder;
-      const generateQuotePDF = (await import('./utils/pdf.py')).default?.generate_quote_pdf;
-      const sendQuoteEmail = (await import('./utils/email.py')).default?.send_quote_email;
-      const updateCrmRecord = (await import('./utils/email.py')).default?.update_crm_record;
-
-      // Create Google Drive folder for client
-      let driveResults = null;
+      let pdfResults = null;
       try {
-        // For now, create structured response ready for Drive integration
         const clientName = customer_name || "Unknown Client";
-        const folderMeta = {
-          id: `folder_${clientName.replace(/\s+/g, '_').toLowerCase()}_${Date.now()}`,
-          name: clientName,
-          webViewLink: `https://drive.google.com/drive/folders/pending_${clientName.replace(/\s+/g, '_')}`
-        };
         
-        // Generate PDF quote data
+        // Prepare quote data structure
         const quoteData = {
           package: selectedPackage || "Standard",
           addons: Array.isArray(items) ? items : [items || "YoBot Pro"],
@@ -2316,39 +2303,116 @@ export async function registerRoutes(app: Express): Promise<Server> {
           contact: clientName,
           order_id: order_id
         };
-        
-        // Generate PDF URL (ready for actual PDF generation)
-        const pdfUrl = `https://drive.google.com/file/d/quote_${order_id}_${Date.now()}`;
-        const filename = `${clientName} - Q-${new Date().toISOString().slice(0,10).replace(/-/g,'')}-001.pdf`;
-        
-        driveResults = {
-          folder_url: folderMeta.webViewLink,
-          pdf_url: pdfUrl,
-          filename: filename
-        };
 
-        console.log(`📁 Drive folder created for ${clientName}: ${folderMeta.id}`);
-        console.log(`📄 PDF quote generated: ${filename}`);
-        
-        // Send quote via email
-        if (client_email) {
-          console.log(`📧 Sending quote email to ${client_email}`);
-          // Email sending ready for integration
+        // Execute Python PDF generation script
+        const { spawn } = require('child_process');
+        const pythonProcess = spawn('python3', ['-c', `
+import sys
+import os
+sys.path.append('${process.cwd()}/server/utils')
+
+from pdf import build_pdf_from_template
+import json
+
+quote_data = ${JSON.stringify(quoteData)}
+pdf_content = build_pdf_from_template(quote_data)
+
+# Generate filename with timestamp
+import datetime
+timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+filename = f"${clientName.replace(/\s+/g, '_')}_Quote_{timestamp}.pdf"
+
+# Ensure pdfs directory exists
+os.makedirs('./pdfs', exist_ok=True)
+filepath = f"./pdfs/{filename}"
+
+# Write PDF to file
+with open(filepath, 'wb') as f:
+    f.write(pdf_content)
+
+# Return results
+result = {
+    "success": True,
+    "filename": filename,
+    "filepath": filepath,
+    "size": len(pdf_content)
+}
+print(json.dumps(result))
+        `]);
+
+        let pythonOutput = '';
+        pythonProcess.stdout.on('data', (data) => {
+          pythonOutput += data.toString();
+        });
+
+        await new Promise((resolve, reject) => {
+          pythonProcess.on('close', (code) => {
+            if (code === 0) {
+              try {
+                const result = JSON.parse(pythonOutput.trim());
+                pdfResults = {
+                  success: true,
+                  filename: result.filename,
+                  filepath: result.filepath,
+                  size: result.size,
+                  download_url: `/pdfs/${result.filename}`
+                };
+                console.log(`PDF quote generated: ${result.filename} (${result.size} bytes)`);
+                resolve(result);
+              } catch (parseError) {
+                console.error("PDF generation output parse error:", parseError);
+                reject(parseError);
+              }
+            } else {
+              reject(new Error(`PDF generation failed with code ${code}`));
+            }
+          });
+        });
+
+        // Send quote via email if address provided
+        if (client_email && pdfResults) {
+          try {
+            const emailResult = await fetch('http://localhost:5000/api/send-quote-email', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                recipient_email: client_email,
+                pdf_url: pdfResults.download_url,
+                client_name: clientName,
+                quote_data: quoteData
+              })
+            });
+            
+            if (emailResult.ok) {
+              console.log(`Quote email sent to ${client_email}`);
+              pdfResults.email_sent = true;
+            }
+          } catch (emailError) {
+            console.error("Email sending error:", emailError);
+            pdfResults.email_sent = false;
+          }
+        }
+
+        // Update CRM with PDF information
+        if (pdfResults) {
+          const crmUpdate = {
+            "PDF Quote": pdfResults.download_url,
+            "Order Amount": `$${amount}`,
+            "Package": selectedPackage || "Standard",
+            "Order Status": payment_status || "Pending",
+            "Quote Generated": new Date().toISOString()
+          };
+          
+          console.log(`CRM update prepared for ${clientName}`);
         }
         
-        // Update CRM record
-        const crmData = {
-          "📁 Drive Folder": folderMeta.webViewLink,
-          "📄 PDF Quote": pdfUrl,
-          "💰 Order Amount": `$${amount}`,
-          "📦 Package": selectedPackage || "Standard",
-          "🎯 Order Status": payment_status || "Pending"
+      } catch (pdfError) {
+        console.error("PDF generation workflow error:", pdfError);
+        pdfResults = {
+          success: false,
+          error: pdfError.message,
+          filename: null
         };
-        
-        console.log(`📊 CRM record prepared for update: ${Object.keys(crmData).join(', ')}`);
-        
-      } catch (driveError) {
-        console.error("Drive integration error:", driveError);
       }
 
       res.json({

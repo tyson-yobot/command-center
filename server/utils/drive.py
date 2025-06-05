@@ -9,38 +9,55 @@ from datetime import datetime
 
 def create_client_folder(client_name):
     """
-    Create a dedicated folder for client in Google Drive
+    Create a dedicated folder for client in Google Drive using Google APIs
     Returns folder metadata with ID and web view link
     """
+    import requests
+    
     try:
-        # Check for Google Drive credentials
-        if not os.getenv('GOOGLE_DRIVE_CREDENTIALS'):
-            print(f"📁 Local folder created for {client_name}")
-            return {
-                'id': f"folder_{client_name.replace(' ', '_').lower()}_{int(datetime.now().timestamp())}",
-                'name': client_name,
-                'webViewLink': f"https://drive.google.com/drive/folders/pending_auth"
-            }
+        # Use existing Google API infrastructure
+        api_key = os.getenv('GOOGLE_API_KEY') or os.getenv('GOOGLEAPIS_API_KEY')
         
-        # Google Drive integration would go here with proper credentials
-        # For now, return structured response for integration
-        folder_id = f"drive_{client_name.replace(' ', '_').lower()}_{int(datetime.now().timestamp())}"
+        if not api_key:
+            # Request Google API key for Drive integration
+            print(f"Google API key required for Drive folder creation")
+            return None
         
-        print(f"✅ Drive folder ready for {client_name}: {folder_id}")
-        
-        return {
-            'id': folder_id,
-            'name': client_name,
-            'webViewLink': f"https://drive.google.com/drive/folders/{folder_id}"
+        # Create folder using Google Drive API
+        headers = {
+            'Authorization': f'Bearer {api_key}',
+            'Content-Type': 'application/json'
         }
+        
+        folder_metadata = {
+            'name': client_name,
+            'mimeType': 'application/vnd.google-apps.folder'
+        }
+        
+        response = requests.post(
+            'https://www.googleapis.com/drive/v3/files',
+            headers=headers,
+            json=folder_metadata
+        )
+        
+        if response.status_code == 200:
+            folder_data = response.json()
+            folder_id = folder_data['id']
+            
+            print(f"✅ Drive folder created for {client_name}: {folder_id}")
+            
+            return {
+                'id': folder_id,
+                'name': client_name,
+                'webViewLink': f"https://drive.google.com/drive/folders/{folder_id}"
+            }
+        else:
+            print(f"Drive API error: {response.status_code}")
+            return None
         
     except Exception as e:
         print(f"❌ Drive folder creation error: {e}")
-        return {
-            'id': f"folder_{client_name.replace(' ', '_').lower()}",
-            'name': client_name,
-            'webViewLink': f"https://drive.google.com/drive/folders/fallback"
-        }
+        return None
 
 def upload_file_to_folder(filename, file_content, folder_id, mime_type='application/pdf'):
     """

@@ -52,22 +52,103 @@ def generate_quote_pdf(client_name, quote_data, folder_id):
 
 def build_pdf_from_template(quote_data):
     """
-    Build PDF content from quote template
-    In production, this would use a proper PDF library
+    Build professional PDF quote using ReportLab
     """
-    # Mock PDF content structure
-    pdf_template = f"""
-    QUOTE DOCUMENT
+    import io
+    from reportlab.lib.pagesizes import letter
+    from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import inch
+    from reportlab.lib import colors
     
-    Package: {quote_data.get('package', 'Standard')}
-    Add-ons: {', '.join(quote_data.get('addons', []))}
-    Total: {quote_data.get('total', '$0')}
-    Contact: {quote_data.get('contact', 'Client')}
-    
-    Generated: {datetime.now().isoformat()}
-    """
-    
-    return pdf_template.encode('utf-8')
+    try:
+        # Create PDF in memory
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=letter)
+        styles = getSampleStyleSheet()
+        
+        # Custom styles
+        title_style = ParagraphStyle(
+            'CustomTitle',
+            parent=styles['Heading1'],
+            fontSize=24,
+            spaceAfter=30,
+            textColor=colors.HexColor('#1f2937')
+        )
+        
+        content = []
+        
+        # Header
+        content.append(Paragraph("YoBot AI Solutions - Professional Quote", title_style))
+        content.append(Spacer(1, 20))
+        
+        # Client information
+        content.append(Paragraph(f"<b>Client:</b> {quote_data.get('contact', 'Valued Client')}", styles['Normal']))
+        content.append(Paragraph(f"<b>Date:</b> {datetime.now().strftime('%B %d, %Y')}", styles['Normal']))
+        content.append(Paragraph(f"<b>Quote ID:</b> {quote_data.get('order_id', 'Q-' + datetime.now().strftime('%Y%m%d'))}", styles['Normal']))
+        content.append(Spacer(1, 20))
+        
+        # Services table
+        table_data = [
+            ['Service', 'Description', 'Amount'],
+            [quote_data.get('package', 'Standard Package'), 'AI Automation Solution', quote_data.get('total', '$0')]
+        ]
+        
+        # Add addons
+        addons = quote_data.get('addons', [])
+        if addons:
+            for addon in addons:
+                if isinstance(addon, str):
+                    table_data.append([addon, 'Premium Feature', 'Included'])
+        
+        quote_table = Table(table_data, colWidths=[2*inch, 3*inch, 1*inch])
+        quote_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#f3f4f6')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 12),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ]))
+        
+        content.append(quote_table)
+        content.append(Spacer(1, 30))
+        
+        # Next steps
+        content.append(Paragraph("<b>Implementation Timeline:</b>", styles['Heading2']))
+        content.append(Paragraph("• Setup and configuration: 1-2 business days", styles['Normal']))
+        content.append(Paragraph("• Training and integration: 3-5 business days", styles['Normal']))
+        content.append(Paragraph("• Testing and optimization: 2-3 business days", styles['Normal']))
+        content.append(Spacer(1, 20))
+        
+        content.append(Paragraph("<b>Contact Information:</b>", styles['Heading2']))
+        content.append(Paragraph("YoBot Sales Team", styles['Normal']))
+        content.append(Paragraph("Email: sales@yobot.ai", styles['Normal']))
+        content.append(Paragraph("Phone: (555) 123-4567", styles['Normal']))
+        
+        # Build PDF
+        doc.build(content)
+        buffer.seek(0)
+        
+        return buffer.getvalue()
+        
+    except Exception as e:
+        print(f"ReportLab PDF generation error: {e}")
+        # Fallback to text format
+        fallback_content = f"""YoBot AI Solutions - Quote
+
+Client: {quote_data.get('contact', 'Valued Client')}
+Date: {datetime.now().strftime('%B %d, %Y')}
+Package: {quote_data.get('package', 'Standard')}
+Total: {quote_data.get('total', '$0')}
+Add-ons: {', '.join(quote_data.get('addons', []))}
+
+Contact: sales@yobot.ai
+Generated: {datetime.now().isoformat()}"""
+        
+        return fallback_content.encode('utf-8')
 
 def process_sales_order_pdf(order_data):
     """

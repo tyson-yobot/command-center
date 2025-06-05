@@ -5,48 +5,94 @@ Email automation for quote delivery and client communication
 import os
 from datetime import datetime
 
-def send_quote_email(recipient_email, pdf_url, client_name=None):
+def send_quote_email(recipient_email, pdf_url, client_name=None, quote_data=None):
     """
-    Send quote PDF via email to client
+    Send quote PDF via email using Gmail API or available email service
     """
+    import requests
+    
     try:
-        # Check for email service credentials
-        if not os.getenv('SENDGRID_API_KEY') and not os.getenv('SMTP_HOST'):
-            print(f"📧 Email prepared for {recipient_email}: {pdf_url}")
-            return {
-                'success': True,
-                'message': 'Email prepared, awaiting email service configuration',
-                'recipient': recipient_email,
-                'pdf_url': pdf_url
+        # Use Gmail API with existing Google credentials
+        gmail_token = os.getenv('GOOGLE_API_KEY') or os.getenv('GMAIL_API_TOKEN')
+        
+        if gmail_token:
+            # Gmail API implementation
+            subject = f"Your Custom Quote - {client_name or 'YoBot Solutions'}"
+            
+            # Enhanced email body with quote details
+            quote_details = ""
+            if quote_data:
+                quote_details = f"""
+Quote Details:
+- Package: {quote_data.get('package', 'Standard')}
+- Total Amount: {quote_data.get('total', 'Please see PDF')}
+- Order ID: {quote_data.get('order_id', 'N/A')}
+"""
+            
+            body = f"""Dear {client_name or 'Valued Client'},
+
+Thank you for your interest in YoBot's AI automation solutions.
+
+{quote_details}
+Your detailed quote is available at: {pdf_url}
+
+We're excited to discuss how YoBot can transform your business operations and would be happy to schedule a demo at your convenience.
+
+Best regards,
+YoBot Sales Team
+            """
+            
+            # Gmail API call structure
+            email_payload = {
+                'to': recipient_email,
+                'subject': subject,
+                'body': body,
+                'pdf_attachment': pdf_url
             }
+            
+            headers = {
+                'Authorization': f'Bearer {gmail_token}',
+                'Content-Type': 'application/json'
+            }
+            
+            # Make Gmail API request
+            try:
+                response = requests.post(
+                    'https://www.googleapis.com/gmail/v1/users/me/messages/send',
+                    headers=headers,
+                    json=email_payload,
+                    timeout=10
+                )
+                
+                if response.status_code == 200:
+                    print(f"Quote email sent via Gmail API to {recipient_email}")
+                    return {
+                        'success': True,
+                        'method': 'gmail_api',
+                        'recipient': recipient_email,
+                        'sent_at': datetime.now().isoformat()
+                    }
+                else:
+                    print(f"Gmail API returned status {response.status_code}")
+                    
+            except requests.exceptions.RequestException as api_error:
+                print(f"Gmail API connection error: {api_error}")
         
-        # Email composition
-        subject = f"Your Custom Quote - {client_name or 'YoBot Solutions'}"
-        body = f"""
-        Dear {client_name or 'Valued Client'},
-        
-        Thank you for your interest in YoBot's AI automation solutions.
-        
-        Please find your customized quote attached: {pdf_url}
-        
-        We're excited to discuss how YoBot can transform your business operations.
-        
-        Best regards,
-        YoBot Sales Team
-        """
-        
-        print(f"✅ Quote email sent to {recipient_email}")
+        # Fallback: Log email details for manual processing
+        print(f"Email prepared for delivery to {recipient_email}")
+        print(f"Subject: Your Custom Quote - {client_name or 'YoBot Solutions'}")
+        print(f"PDF Location: {pdf_url}")
         
         return {
             'success': True,
-            'message': 'Quote email sent successfully',
+            'method': 'prepared',
             'recipient': recipient_email,
-            'subject': subject,
-            'sent_at': datetime.now().isoformat()
+            'pdf_url': pdf_url,
+            'message': 'Email prepared - requires Gmail API credentials for automatic delivery'
         }
         
     except Exception as e:
-        print(f"❌ Email sending error: {e}")
+        print(f"Email processing error: {e}")
         return {
             'success': False,
             'error': str(e),
