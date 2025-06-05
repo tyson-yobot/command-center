@@ -40,6 +40,7 @@ import {
 } from "lucide-react";
 import robotHeadPath from "@assets/A_flat_vector_illustration_features_a_robot_face_i.png";
 import { apiRequest } from "@/lib/queryClient";
+import LeadScrapingPanel from "./lead-scraping-panel";
 
 export default function ControlCenter() {
   // Core Module Toggles
@@ -674,6 +675,12 @@ export default function ControlCenter() {
                 </Button>
               </CardContent>
             </Card>
+
+            {/* Lead Generation Panel */}
+            <LeadScrapingPanel onResults={(results) => {
+              console.log('Lead scraping results:', results);
+              // Handle results display or further processing
+            }} />
 
             {/* Export & Backup */}
             <Card className="bg-slate-800/50 border-cyan-500/30">
