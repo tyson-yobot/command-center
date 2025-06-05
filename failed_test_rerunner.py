@@ -54,7 +54,7 @@ def get_failed_tests():
         return []
 
 def re_run_automation_test(test_record):
-    """Re-run individual automation test"""
+    """Re-run individual automation test with proper dashboard authentication"""
     if not validate_dashboard_access():
         return False
     
