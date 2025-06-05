@@ -302,14 +302,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Send Slack alert for new platinum lead
       await sendLeadAlert(name, email || phone || "", source || "Platinum Promo");
 
-      // Log successful capture
-      await logAutomationExecution(
-        "Platinum Lead Capture",
-        "SUCCESS",
-        { leadData },
-        performance.now()
-      );
-
       console.log("✅ Promo lead captured:", name);
       res.status(200).json({ 
         success: true,
