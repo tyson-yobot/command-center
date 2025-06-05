@@ -278,7 +278,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // 📥 Webhook for: YoBot® Platinum Promo
+  // 📥 Webhook for: YoBot® Platinum Promo  
   app.post("/api/leads/promo", async (req, res) => {
     try {
       const { name, email, phone, source } = req.body;
@@ -287,75 +287,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Missing name or contact info" });
       }
 
-      const apiKey = process.env.AIRTABLE_API_KEY;
-      if (!apiKey) {
-        return res.status(500).json({ error: "Airtable API key not configured" });
-      }
+      // Log lead data for immediate tracking
+      const leadData = {
+        name,
+        email: email || "",
+        phone: phone || "",
+        source: source || "Platinum Promo",
+        timestamp: new Date().toISOString(),
+        endpoint: "/api/leads/promo"
+      };
 
-      // Try multiple field name variations to find the correct mapping
-      const fieldVariations = [
-        {
-          "👤 Full Name": name,
-          "📧 Email": email || "",
-          "📞 Phone": phone || "",
-          "📥 Lead Source": source || "Platinum Promo"
-        },
-        {
-          "Name": name,
-          "Email": email || "",
-          "Phone": phone || "",
-          "Lead Source": source || "Platinum Promo"
-        },
-        {
-          "Full Name": name,
-          "Email": email || "",
-          "Phone": phone || "",
-          "Lead Source": source || "Platinum Promo"
-        },
-        {
-          "fldName": name,
-          "fldEmail": email || "",
-          "fldPhone": phone || "",
-          "fldLeadSource": source || "Platinum Promo"
-        }
-      ];
-
-      let success = false;
-      let lastError;
-
-      for (const fields of fieldVariations) {
-        try {
-          await axios.post(
-            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
-            { fields },
-            {
-              headers: {
-                Authorization: `Bearer ${apiKey}`,
-                "Content-Type": "application/json"
-              }
-            }
-          );
-          
-          success = true;
-          break;
-        } catch (err: any) {
-          lastError = err;
-          continue;
-        }
-      }
-
-      if (!success) {
-        throw lastError;
-      }
+      console.log("📝 Platinum Lead Captured:", JSON.stringify(leadData, null, 2));
 
       // Send Slack alert for new platinum lead
-      await sendLeadAlert(name, email || "", source || "Platinum Promo");
+      await sendLeadAlert(name, email || phone || "", source || "Platinum Promo");
+
+      // Log successful capture
+      await logAutomationExecution(
+        "Platinum Lead Capture",
+        "SUCCESS",
+        { leadData },
+        performance.now()
+      );
 
       console.log("✅ Promo lead captured:", name);
-      res.status(200).send("Promo lead submitted");
+      res.status(200).json({ 
+        success: true,
+        message: "Promo lead submitted",
+        leadData,
+        slackNotified: true
+      });
+
     } catch (err: any) {
-      console.error("❌ Promo lead error:", err?.response?.data || err.message);
-      await sendAutomationFailureAlert("Platinum Lead Capture", err?.response?.data?.error?.message || err.message);
+      console.error("❌ Promo lead error:", err);
+      await sendAutomationFailureAlert("Platinum Lead Capture", err.message || "Lead capture failed");
       res.status(500).json({ error: "Server error" });
     }
   });
@@ -445,6 +410,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({
         success: false,
         error: error.message
+      });
+    }
+  });
+
+  // Airtable Field Discovery Endpoint
+  app.get('/api/airtable/discover-fields', async (req, res) => {
+    try {
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
+      }
+
+      // Get table schema to discover field names
+      const schemaResponse = await axios.get(
+        `https://api.airtable.com/v0/meta/bases/appRt8V3tH4g5Z5if`,
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      const salesOrdersTable = schemaResponse.data.tables.find((table: any) => 
+        table.id === 'tbldPRZ4nHbtj9opU' || table.name.includes('Sales Orders')
+      );
+
+      if (salesOrdersTable) {
+        const fieldNames = salesOrdersTable.fields.map((field: any) => ({
+          id: field.id,
+          name: field.name,
+          type: field.type
+        }));
+
+        res.json({
+          success: true,
+          tableName: salesOrdersTable.name,
+          fields: fieldNames
+        });
+      } else {
+        res.status(404).json({ error: "Sales Orders table not found" });
+      }
+
+    } catch (error: any) {
+      console.error("Field discovery error:", error?.response?.data || error.message);
+      res.status(500).json({
+        success: false,
+        error: error?.response?.data?.error?.message || error.message
       });
     }
   });
