@@ -44,6 +44,72 @@ export async function logWithFallback(baseId: string, tableName: string, fields:
 }
 
 /**
+ * Update CRM Contact Log with Drive folder and PDF quote links
+ */
+export async function updateCRMContactLog(customerName: string, updates: any) {
+  const fields = {
+    'Client Name': customerName,
+    'Drive Folder': updates.drive_folder_url || '',
+    'Quote PDF': updates.quote_pdf_url || '',
+    'Last Updated': new Date().toISOString(),
+    'Order ID': updates.order_id || '',
+    'Package': updates.package || '',
+    'Amount': updates.amount || ''
+  };
+  
+  return logWithFallback('appRt8V3tH4g5Z5if', 'CRM Contact Log', fields, 'CRM Update');
+}
+
+/**
+ * Log quote serial tracking
+ */
+export async function logQuoteSerial(customerName: string, serialNumber: string, filename: string) {
+  const fields = {
+    'Date': new Date().toISOString().split('T')[0],
+    'Client': customerName,
+    'Serial #': serialNumber,
+    'PDF Filename': filename,
+    'Generated At': new Date().toISOString()
+  };
+  
+  return logWithFallback('appRt8V3tH4g5Z5if', 'Quote Serial Tracker', fields, 'Quote Serial');
+}
+
+/**
+ * Update metrics tracker with enhanced fields
+ */
+export async function updateMetricsTracker(updates: any) {
+  const today = new Date().toISOString().split('T')[0];
+  
+  const fields = {
+    'Date': today,
+    'MTD Leads': updates.mtd_leads || 0,
+    'MTD Sales': updates.mtd_sales || 0,
+    'Active Quotes': updates.active_quotes || 0,
+    'Error Rate': updates.error_rate || 0,
+    'Quotes Sent Today': updates.quotes_sent_today || 0,
+    'Last Updated': new Date().toISOString()
+  };
+  
+  return logWithFallback('appRt8V3tH4g5Z5if', 'Command Center - Metrics Tracker', fields, 'Enhanced Metrics');
+}
+
+/**
+ * Log add-on usage tracking
+ */
+export async function logAddOnUsage(addOnName: string, clientName: string, notes: string = '') {
+  const fields = {
+    'Add-On Name': addOnName,
+    'Used On': new Date().toISOString().split('T')[0],
+    'Client': clientName,
+    'Notes': notes,
+    'Timestamp': new Date().toISOString()
+  };
+  
+  return logWithFallback('appRt8V3tH4g5Z5if', 'Add-On Usage Log', fields, 'Add-On Usage');
+}
+
+/**
  * Graceful metric logging
  */
 export async function logMetric(fields: any) {

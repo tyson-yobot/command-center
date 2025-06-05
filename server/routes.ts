@@ -2380,31 +2380,46 @@ print(json.dumps(result))
             };
           }
           
-          // Step 5: CRM Record Update
+          // Step 5: Enhanced CRM and Metrics Updates
           try {
-            const { execSync: execCRM } = await import('child_process');
-            const crmCommand = `python3 -c "
-import sys
-sys.path.append('server')
-from utils.email import update_crm_record
-import json
-result = update_crm_record(
-    '${customer_name.replace(/'/g, "\\'")}',
-    {
-        'Drive_Folder': '${pdfResults.drive_folder?.webViewLink || ''}',
-        'Quote_PDF': '${pdfResults.download_url}',
-        'Order_ID': '${order_id}',
-        'Amount': '$${amount}',
-        'Package': '${selectedPackage}'
-    }
-)
-print(json.dumps(result))
-"`;
+            const { updateCRMContactLog, logQuoteSerial, updateMetricsTracker, logAddOnUsage } = await import('./gracefulAirtable');
             
-            const crmResult = execCRM(crmCommand, { encoding: 'utf8' });
-            const crmData = JSON.parse(crmResult.trim());
-            pdfResults.crm_update = crmData;
-            console.log(`CRM update completed for ${customer_name}`);
+            // Update CRM Contact Log with Drive folder and PDF links
+            const crmUpdateData = {
+              drive_folder_url: pdfResults.drive_folder?.webViewLink || '',
+              quote_pdf_url: pdfResults.download_url || '',
+              order_id: order_id,
+              package: selectedPackage || 'Standard',
+              amount: `$${amount}`
+            };
+            
+            const crmResult = await updateCRMContactLog(customer_name, crmUpdateData);
+            pdfResults.crm_update = crmResult;
+            
+            // Extract serial number from filename for tracking
+            const serialMatch = pdfResults.filename?.match(/_(\d{3})\.pdf$/);
+            const serialNumber = serialMatch ? serialMatch[1] : '001';
+            
+            // Log quote serial tracking
+            await logQuoteSerial(customer_name, serialNumber, pdfResults.filename || 'quote.pdf');
+            
+            // Update metrics tracker
+            await updateMetricsTracker({
+              quotes_sent_today: 1,
+              mtd_sales: amount,
+              active_quotes: 1
+            });
+            
+            // Log add-on usage if present
+            if (items && Array.isArray(items)) {
+              for (const addon of items) {
+                if (typeof addon === 'string') {
+                  await logAddOnUsage(addon, customer_name, `Included in ${selectedPackage} package`);
+                }
+              }
+            }
+            
+            console.log(`Enhanced CRM tracking completed for ${customer_name}`);
           } catch (crmError) {
             console.log("CRM update prepared for manual processing");
             pdfResults.crm_update = {

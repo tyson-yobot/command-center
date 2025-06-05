@@ -48,6 +48,9 @@ export default function ControlCenter() {
   const [smsEngineEnabled, setSmsEngineEnabled] = useState(true);
   const [emailEngineEnabled, setEmailEngineEnabled] = useState(true);
   const [aiEscalationEnabled, setAiEscalationEnabled] = useState(true);
+  
+  // Smart Dashboard Toggle
+  const [smartMetricsEnabled, setSmartMetricsEnabled] = useState(true);
   const [crmIntegrationEnabled, setCrmIntegrationEnabled] = useState(true);
   const [calendlySyncEnabled, setCalendlySyncEnabled] = useState(true);
   const [scraperEngineEnabled, setScraperEngineEnabled] = useState(true);
