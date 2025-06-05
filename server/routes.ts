@@ -2457,6 +2457,79 @@ print(json.dumps(result))
     }
   });
 
+  // 📥 Apollo Lead Generation Endpoint
+  app.post('/api/apollo/scrape-leads', async (req, res) => {
+    try {
+      const { title, location, company_keywords, page = 1, per_page = 25 } = req.body;
+      
+      if (!title || !location || !company_keywords) {
+        return res.status(400).json({ error: "Missing required fields: title, location, company_keywords" });
+      }
+
+      const { execSync } = await import('child_process');
+      const apolloCommand = `python3 -c "
+import sys
+sys.path.append('.')
+from apollo_lead_generation import ApolloLeadGeneration
+import json
+import os
+
+apollo = ApolloLeadGeneration('${process.env.APOLLO_API_KEY}')
+results = apollo.launch_apollo_scrape(
+    title='${title.replace(/'/g, "\\'")}',
+    location='${location.replace(/'/g, "\\'")}',
+    company_keywords='${company_keywords.replace(/'/g, "\\'")}',
+    page=${page},
+    per_page=${per_page}
+)
+print(json.dumps(results))
+"`;
+
+      const apolloResult = execSync(apolloCommand, { 
+        encoding: 'utf8',
+        timeout: 30000
+      });
+      
+      const leadData = JSON.parse(apolloResult.trim());
+      
+      if (leadData.error) {
+        return res.status(400).json(leadData);
+      }
+
+      // Log to Airtable if available
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (apiKey && leadData.people) {
+        try {
+          const webhookData = {
+            "Search Query": `${title} in ${location} at ${company_keywords}`,
+            "Results Count": leadData.people.length,
+            "Data": JSON.stringify(leadData),
+            "Timestamp": new Date().toISOString()
+          };
+
+          await axios.post(
+            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+            { fields: webhookData },
+            { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
+          );
+        } catch (airtableError) {
+          console.log("Apollo results logged locally:", leadData);
+        }
+      }
+
+      res.json({
+        success: true,
+        message: `Apollo lead scrape completed - found ${leadData.people?.length || 0} leads`,
+        data: leadData,
+        search_params: { title, location, company_keywords, page, per_page }
+      });
+
+    } catch (err: any) {
+      console.error("Apollo scrape error:", err);
+      res.status(500).json({ error: "Apollo scrape failed", details: err.message });
+    }
+  });
+
   // 📥 Webhook for: Sales Orders Test
   app.post('/api/sales/orders/test', async (req, res) => {
     try {
@@ -6027,7 +6100,83 @@ except Exception as e:
     try {
       const { source, title, location, keywords } = req.body;
       
-      // Run Apollo or Phantombuster scraping job
+      if (source === 'Apollo' || !source) {
+        // Use Apollo API with your key
+        const { execSync } = await import('child_process');
+        const apolloCommand = `python3 -c "
+import sys
+sys.path.append('.')
+from apollo_lead_generation import ApolloLeadGeneration
+import json
+
+apollo = ApolloLeadGeneration('${process.env.APOLLO_API_KEY}')
+results = apollo.launch_apollo_scrape(
+    title='${(title || 'Owner').replace(/'/g, "\\'")}',
+    location='${(location || 'United States').replace(/'/g, "\\'")}',
+    company_keywords='${(keywords || 'construction').replace(/'/g, "\\'")}',
+    page=1,
+    per_page=25
+)
+print(json.dumps(results))
+"`;
+
+        try {
+          const apolloResult = execSync(apolloCommand, { 
+            encoding: 'utf8',
+            timeout: 30000
+          });
+          
+          const leadData = JSON.parse(apolloResult.trim());
+          
+          if (leadData.error) {
+            return res.status(400).json({ 
+              success: false, 
+              error: leadData.error,
+              source: 'Apollo'
+            });
+          }
+
+          // Log to Airtable
+          const apiKey = process.env.AIRTABLE_API_KEY;
+          if (apiKey && leadData.people) {
+            try {
+              const webhookData = {
+                "Search Query": `${title || 'Owner'} in ${location || 'United States'} - ${keywords || 'construction'}`,
+                "Results Count": leadData.people.length,
+                "Source": "Apollo",
+                "Data": JSON.stringify(leadData),
+                "Timestamp": new Date().toISOString()
+              };
+
+              await axios.post(
+                `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+                { fields: webhookData },
+                { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
+              );
+            } catch (airtableError) {
+              console.log("Apollo results logged locally");
+            }
+          }
+
+          return res.json({
+            success: true,
+            message: `Apollo scrape completed - found ${leadData.people?.length || 0} leads`,
+            data: leadData,
+            source: 'Apollo',
+            search_params: { title, location, keywords }
+          });
+
+        } catch (apolloError) {
+          return res.status(500).json({ 
+            success: false, 
+            error: 'Apollo scrape failed',
+            details: apolloError.message,
+            source: 'Apollo'
+          });
+        }
+      }
+      
+      // Fallback for other sources
       const scrapeResult = {
         id: Date.now().toString(),
         source: source || 'Apollo',
