@@ -266,7 +266,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { enabled } = req.body;
       
       // Log the status change
-      const { logMetric } = await import('./airtableUtils.js');
+      const { logMetric } = await import('./gracefulAirtable.js');
       await logMetric({
         '🧠 Function Name': 'VoiceBot Status Toggle',
         '📝 Source Form': 'Command Center',
