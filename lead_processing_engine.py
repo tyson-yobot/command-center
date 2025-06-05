@@ -48,18 +48,195 @@ class LeadProcessor:
     
     def clean_lead_data(self, lead):
         """Clean and standardize lead data"""
-        cleaned = {
-            'first_name': lead.get('first_name', '').strip(),
-            'last_name': lead.get('last_name', '').strip(),
-            'email': lead.get('email', '').strip().lower(),
+        return {
+            'name': lead.get('name', f"{lead.get('first_name', '')} {lead.get('last_name', '')}").strip(),
+            'email': lead.get('email', '').lower().strip(),
             'phone': lead.get('phone', '').strip(),
-            'company': lead.get('company', '').strip(),
-            'title': lead.get('title', '').strip(),
-            'location': lead.get('location', '').strip(),
-            'source': lead.get('source', 'Unknown').strip(),
-            'linkedin_url': lead.get('linkedin_url', '').strip(),
-            'company_website': lead.get('company_website', '').strip(),
-            'industry': lead.get('industry', '').strip(),
+            'company': lead.get('company', lead.get('organization', {}).get('name', '')).strip(),
+            'title': lead.get('title', lead.get('job_title', '')).strip(),
+            'source': lead.get('source', 'Unknown'),
+            'timestamp': datetime.now().isoformat()
+        }
+
+# Standalone functions for backward compatibility
+def validate_lead(lead):
+    """Validate lead has required email or phone"""
+    processor = LeadProcessor()
+    return processor.validate_lead(lead)
+
+def check_duplicate(lead):
+    """Check if lead is duplicate"""
+    processor = LeadProcessor()
+    return processor.is_duplicate(lead)
+
+def process_apollo_leads(data, source='Apollo'):
+    """Process Apollo lead data"""
+    processor = LeadProcessor()
+    results = {
+        'total_leads': 0,
+        'processed': 0,
+        'skipped_invalid': 0,
+        'skipped_duplicate': 0,
+        'airtable_success': 0,
+        'hubspot_success': 0,
+        'errors': []
+    }
+    
+    people = data.get('people', [])
+    results['total_leads'] = len(people)
+    
+    for person in people:
+        # Clean the lead data
+        lead = {
+            'name': f"{person.get('first_name', '')} {person.get('last_name', '')}".strip(),
+            'email': person.get('email', ''),
+            'phone': person.get('phone', ''),
+            'company': person.get('organization', {}).get('name', ''),
+            'title': person.get('title', ''),
+            'source': source
+        }
+        
+        # Validate lead
+        if not processor.validate_lead(lead):
+            results['skipped_invalid'] += 1
+            continue
+            
+        # Check for duplicates
+        if processor.is_duplicate(lead):
+            results['skipped_duplicate'] += 1
+            continue
+            
+        results['processed'] += 1
+        
+        # Try to send to Airtable
+        try:
+            airtable_result = processor.send_to_airtable(lead)
+            if airtable_result.get('success'):
+                results['airtable_success'] += 1
+        except Exception as e:
+            results['errors'].append(f"Airtable: {str(e)}")
+            
+        # Try to send to HubSpot
+        try:
+            hubspot_result = processor.send_to_hubspot(lead)
+            if hubspot_result.get('success'):
+                results['hubspot_success'] += 1
+        except Exception as e:
+            results['errors'].append(f"HubSpot: {str(e)}")
+    
+    return results
+
+def process_phantombuster_leads(data, source='PhantomBuster'):
+    """Process PhantomBuster lead data"""
+    processor = LeadProcessor()
+    results = {
+        'total_leads': 0,
+        'processed': 0,
+        'skipped_invalid': 0,
+        'skipped_duplicate': 0,
+        'airtable_success': 0,
+        'hubspot_success': 0,
+        'errors': []
+    }
+    
+    phantom_results = data.get('results', [])
+    results['total_leads'] = len(phantom_results)
+    
+    for result in phantom_results:
+        # Clean the lead data
+        lead = {
+            'name': f"{result.get('firstName', '')} {result.get('lastName', '')}".strip(),
+            'email': result.get('email', ''),
+            'phone': result.get('phone', ''),
+            'company': result.get('companyName', ''),
+            'title': result.get('currentJobTitle', ''),
+            'source': source
+        }
+        
+        # Validate lead
+        if not processor.validate_lead(lead):
+            results['skipped_invalid'] += 1
+            continue
+            
+        # Check for duplicates
+        if processor.is_duplicate(lead):
+            results['skipped_duplicate'] += 1
+            continue
+            
+        results['processed'] += 1
+        
+        # Try to send to platforms
+        try:
+            airtable_result = processor.send_to_airtable(lead)
+            if airtable_result.get('success'):
+                results['airtable_success'] += 1
+        except Exception as e:
+            results['errors'].append(f"Airtable: {str(e)}")
+            
+        try:
+            hubspot_result = processor.send_to_hubspot(lead)
+            if hubspot_result.get('success'):
+                results['hubspot_success'] += 1
+        except Exception as e:
+            results['errors'].append(f"HubSpot: {str(e)}")
+    
+    return results
+
+def process_apify_leads(data, source='Apify'):
+    """Process Apify lead data"""
+    processor = LeadProcessor()
+    results = {
+        'total_leads': 0,
+        'processed': 0,
+        'skipped_invalid': 0,
+        'skipped_duplicate': 0,
+        'airtable_success': 0,
+        'hubspot_success': 0,
+        'errors': []
+    }
+    
+    apify_results = data.get('results', [])
+    results['total_leads'] = len(apify_results)
+    
+    for result in apify_results:
+        # Clean the lead data
+        lead = {
+            'name': f"{result.get('firstName', '')} {result.get('lastName', '')}".strip(),
+            'email': result.get('email', ''),
+            'phone': result.get('phone', ''),
+            'company': result.get('company', ''),
+            'title': result.get('title', ''),
+            'source': source
+        }
+        
+        # Validate lead
+        if not processor.validate_lead(lead):
+            results['skipped_invalid'] += 1
+            continue
+            
+        # Check for duplicates
+        if processor.is_duplicate(lead):
+            results['skipped_duplicate'] += 1
+            continue
+            
+        results['processed'] += 1
+        
+        # Try to send to platforms
+        try:
+            airtable_result = processor.send_to_airtable(lead)
+            if airtable_result.get('success'):
+                results['airtable_success'] += 1
+        except Exception as e:
+            results['errors'].append(f"Airtable: {str(e)}")
+            
+        try:
+            hubspot_result = processor.send_to_hubspot(lead)
+            if hubspot_result.get('success'):
+                results['hubspot_success'] += 1
+        except Exception as e:
+            results['errors'].append(f"HubSpot: {str(e)}")
+    
+    return results
             'company_size': lead.get('company_size', '').strip(),
             'timestamp': datetime.now().isoformat()
         }

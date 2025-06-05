@@ -6,7 +6,7 @@ import requests
 import os
 from datetime import datetime
 
-class ApolloLeadGeneration:
+class ApolloScraper:
     def __init__(self, api_key=None):
         self.api_key = api_key or os.getenv("APOLLO_API_KEY")
         self.base_url = "https://api.apollo.io/v1"
