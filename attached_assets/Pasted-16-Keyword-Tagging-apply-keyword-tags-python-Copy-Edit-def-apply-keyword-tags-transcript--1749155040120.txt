@@ -1,0 +1,84 @@
+16. Keyword Tagging – apply_keyword_tags()
+python
+Copy
+Edit
+def apply_keyword_tags(transcript):
+    tags = []
+    if "manager" in transcript.lower():
+        tags.append("🔁 Escalation")
+    if "cancel" in transcript.lower() or "refund" in transcript.lower():
+        tags.append("⚠️ Churn Risk")
+    if "thank you" in transcript.lower():
+        tags.append("🙏 Positive Tone")
+    if "why didn't" in transcript.lower():
+        tags.append("🛑 Tone Issue")
+    return tags
+📎 17. QA PDF Generator – generate_qa_pdf()
+python
+Copy
+Edit
+def generate_qa_pdf(data):
+    content = f"""
+    YoBot® QA Review Summary
+
+    Call ID: {data['call_id']}
+    Agent: {data['agent_name']}
+    Score: {data['qa_score']}
+    Date: {data['timestamp']}
+    Tags: {", ".join(data['tags'])}
+    Comments: {data['qa_comments']}
+
+    Transcript:
+    {data['transcript']}
+    """
+    filename = f"{data['call_id']}_QA.pdf"
+    with open(f"/mnt/data/{filename}", "w") as f:
+        f.write(content)
+    return filename
+📤 18. Upload QA PDF to Drive – upload_qa_pdf_to_drive()
+python
+Copy
+Edit
+def upload_qa_pdf_to_drive(filename):
+    files = {
+        'file': (filename, open(f"/mnt/data/{filename}", 'rb')),
+    }
+    headers = {
+        "Authorization": f"Bearer {GOOGLE_DRIVE_API_KEY}"
+    }
+    params = {
+        "name": filename,
+        "parents": [QA_DRIVE_FOLDER_ID]
+    }
+    response = requests.post(
+        "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
+        headers=headers,
+        files=files,
+        params=params
+    )
+    file_id = response.json().get("id")
+    return f"https://drive.google.com/file/d/{file_id}/view"
+📣 19. Slack QA Alert – send_qa_slack_alert()
+python
+Copy
+Edit
+def send_qa_slack_alert(data):
+    message = f"""
+🧪 *New QA Review Logged*
+• Call ID: `{data['call_id']}`
+• Agent: {data['agent_name']}
+• Score: *{data['qa_score']}*
+• Tags: {", ".join(data['tags'])}
+• [📎 PDF Review]({data['pdf_link']})
+"""
+    payload = {"text": message}
+    requests.post(SLACK_QA_ALERT_WEBHOOK, json=payload)
+🔄 20. Master QA Pipeline – run_qa_review_pipeline()
+python
+Copy
+Edit
+def run_qa_review_pipeline(data):
+    data["tags"] = apply_keyword_tags(data["transcript"])
+    filename = generate_qa_pdf(data)
+    data["pdf_link"] = upload_qa_pdf_to_drive(filename)
+    send_qa_slack_alert(data)

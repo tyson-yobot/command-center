@@ -1,0 +1,81 @@
+11. GPT-Powered QA Scoring – gpt_auto_score()
+python
+Copy
+Edit
+def gpt_auto_score(transcript):
+    prompt = (
+        "You are a QA evaluator. Score this call transcript from 0 to 100 "
+        "based on tone, script accuracy, and professionalism. Output only a number.\n\n"
+        f"Transcript:\n{transcript}"
+    )
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.2,
+    )
+    score = int(response.choices[0].message["content"].strip())
+    return score
+🔁 12. Airtable QA Sync – sync_to_qa_log()
+python
+Copy
+Edit
+def sync_to_qa_log(data):
+    headers = {
+        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "fields": {
+            "🎙 Call ID": data["call_id"],
+            "👤 Agent Name": data["agent_name"],
+            "📅 Date": data["timestamp"],
+            "🧪 QA Score": data["qa_score"],
+            "📝 Comments": data["qa_comments"],
+            "🏷 Tags": ", ".join(data["tags"]),
+            "📎 PDF Link": data.get("pdf_link", ""),
+        }
+    }
+    url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/QA%20Call%20Review%20Log"
+    requests.post(url, headers=headers, json=payload)
+🔐 13. Red Flag Escalation Trigger – trigger_escalation()
+python
+Copy
+Edit
+def trigger_escalation(data):
+    if data["qa_score"] < 70 or "🛑 Tone Issue" in data["tags"]:
+        payload = {
+            "call_id": data["call_id"],
+            "agent": data["agent_name"],
+            "issue": "Red Flag Triggered",
+            "notes": data["qa_comments"]
+        }
+        requests.post(ESCALATION_ENDPOINT, json=payload)
+🧾 14. Audit Trail Writer – write_audit_log()
+python
+Copy
+Edit
+def write_audit_log(event_type, data):
+    payload = {
+        "event_type": event_type,
+        "record_id": data["call_id"],
+        "timestamp": datetime.now().isoformat(),
+        "details": str(data)
+    }
+    requests.post(AUDIT_LOG_WEBHOOK, json=payload)
+🚦 15. QA Control Panel Endpoint – @app.route('/qa-review', methods=['POST'])
+python
+Copy
+Edit
+@app.route('/qa-review', methods=['POST'])
+def qa_review_endpoint():
+    data = request.json
+    transcript = data.get("transcript", "")
+    data["qa_score"] = gpt_auto_score(transcript)
+    data["timestamp"] = datetime.now().isoformat()
+
+    run_qa_review_pipeline(data)
+    sync_to_qa_log(data)
+    trigger_escalation(data)
+    write_audit_log("QA Review Completed", data)
+
+    return jsonify({"status": "QA review completed", "call_id": data["call_id"]})
