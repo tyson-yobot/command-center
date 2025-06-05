@@ -88,6 +88,7 @@ import missedCallHandlerRouter from "./missedCallHandler";
 import voiceBotCallbackRouter from "./voiceBotCallback";
 import chatIntegrationRouter from "./chatIntegration";
 import phantombusterRouter from "./phantombuster";
+import { dashboardAutomation } from "./dashboardAutomation";
 
 // Pipeline calls execution with hot lead detection
 async function executePipelineCalls() {
