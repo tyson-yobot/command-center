@@ -1,0 +1,163 @@
+75. SMS Re-Engagement Flow (Dormant Leads)
+Trigger: Lead has:
+
+No activity in 14+ days
+
+Not marked “Lost”
+
+Action:
+
+Auto-SMS:
+
+“Still interested in automating your sales or support? YoBot® can follow up or even close for you. Want to pick up where we left off?”
+
+Log to: 📱 SMS Follow-Up Log
+
+✅ 76. RAG Prompt Re-Ranking Engine
+Trigger: Bot uses same prompt multiple times with low success
+
+Action:
+
+Track prompt + outcome
+
+Re-rank lower performing prompts in:
+
+🧠 Bot Personality Pack Tracker
+
+📚 Industry Templates
+
+GPT Suggests alternative rewording if score < threshold
+
+✅ 77. API Usage Logger
+Trigger: Any outbound call to:
+
+GPT-4
+
+ElevenLabs
+
+Twilio
+
+Stripe
+
+QBO
+
+HubSpot
+
+Action:
+
+Log to: 📊 Metrics Tracker (view = “API Usage”)
+
+📡 Service
+
+📦 Payload Type
+
+🕒 Timestamp
+
+🧮 Cost Estimate (if available)
+
+✅ 78. Licensing Expiration Alert
+Trigger: Contracted bot license nearing renewal (e.g. 30 days out)
+
+Action:
+
+Slack + Email alert:
+
+“YoBot® license expiring soon for {{client_name}}. Current plan: {{package}}. Monthly: {{amount}}.”
+
+Option to trigger Stripe subscription renewal auto-flow
+
+✅ 79. ROI Tracking Over Time (Client History)
+Trigger: Repeat ROI Snapshot Form submitted (same client)
+
+Action:
+
+Auto-link to previous records
+
+Log delta:
+
+📈 Revenue Increase
+
+📉 Cost Reduction
+
+📊 ROI Change %
+
+Push graph update to:
+
+📈 VoiceBot Performance Dashboard Log
+
+✅ 80. Smart Attachment Review (Uploaded Docs)
+Trigger: File uploaded via /api/uploads/file
+
+Action:
+
+Auto-detect type (contract, spec, doc, image)
+
+GPT-4 parses and summarizes in 📁 File Upload Tracker
+
+🧠 Key Insights (3 bullets)
+
+⚠️ Red Flags (if any)
+
+✅ 81. Add-On Feature Usage Monitor
+Trigger: Add-On purchased = ✅
+
+Action:
+
+Track usage:
+
+Slack Alerts
+
+SmartSpend dashboard logins
+
+PDF quote runs
+
+If unused > 30 days:
+
+Flag in 🧩 Add-On Modules → 🟠 Usage Status: Inactive
+
+✅ 82. Auto-Downgrade Alert for Low Use
+Trigger: 60+ days of inactivity + plan = Enterprise or Platinum
+
+Action:
+
+Slack alert:
+
+“Client {{name}} on {{plan}} shows low usage — suggest downgrade or proactive call.”
+
+Option to auto-log to ✅ Follow-Up Reminder Tracker
+
+✅ 83. Bot Drift Detection Logic
+Trigger: New VoiceBot script deployed
+
+Action:
+
+Compare:
+
+Outcome rate (bookings, hangs, sales)
+
+Sentiment delta
+
+If dip > threshold:
+
+Revert to previous script
+
+Log to 📋 VoiceBot Script Tracker
+
+✅ 84. GPT Self-Training Task Logger
+Trigger: Any GPT action that rewrites, summarizes, or ranks
+
+Action:
+
+Log task in:
+
+🧠 GPT Action Log
+
+📝 Action Type
+
+📥 Input Snippet
+
+📤 Output Result
+
+📊 Confidence/Score (if returned)
+
+Use to improve long-term prompt design.

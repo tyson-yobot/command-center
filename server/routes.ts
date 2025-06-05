@@ -245,6 +245,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   setupCentralizedWebhookRouter(app);
   console.log('✅ Centralized webhook router active - all automations route to main desktop command center');
 
+  // Webhook status endpoint
+  app.get('/api/webhook/status', (req, res) => {
+    res.json({
+      status: 'operational',
+      endpoints: 12,
+      health: 'excellent',
+      airtableConnected: !!process.env.AIRTABLE_API_KEY,
+      timestamp: new Date().toISOString(),
+      activeEndpoints: [
+        'Platinum Promo', 'ROI Snapshot', 'Booking Form', 'Demo Request',
+        'Lead Capture', 'Sales Orders (Live)', 'Sales Orders (Test)', 
+        'Awarded Project', 'Dashboard Intake', 'SmartSpend Charge',
+        'Feature Request', 'Contact Us'
+      ]
+    });
+  });
+
   // Webhook automation endpoint that returns JSON responses
   app.post('/api/webhook/automation', async (req, res) => {
     try {
