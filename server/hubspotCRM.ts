@@ -900,10 +900,30 @@ export async function scheduleFollowUpTask(contact: Contact) {
   }
 }
 
+async function sendSlackAlert(event_type: string, source: string, status: string, details: string) {
+  try {
+    const slack_url = process.env.SLACK_WEBHOOK_URL;
+    if (!slack_url) {
+      console.log('Slack webhook URL not configured, skipping alert');
+      return { status: 200, message: 'Skipped - no webhook URL' };
+    }
+    
+    const slack_payload = {
+      "text": `📡 *${event_type}* from *${source}*\nStatus: *${status}*\n🧾 ${details}`
+    };
+    
+    const response = await axios.post(slack_url, slack_payload);
+    return { status: response.status, data: response.data };
+  } catch (error: any) {
+    console.error('Failed to send Slack alert:', error.message);
+    return { status: 500, error: error.message };
+  }
+}
+
 export async function logEventToAirtable(event_type: string, source: string, contact: string, status: string, details: string) {
   try {
-    // Using the API key you provided - need the actual table ID
-    const airtable_url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblEventLog"; // Replace with actual table ID
+    // Using the correct Base ID and Table ID you provided
+    const airtable_url = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRfeIho29IKqqCQ";
     const headers = {
       "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
       "Content-Type": "application/json"
@@ -922,6 +942,10 @@ export async function logEventToAirtable(event_type: string, source: string, con
     
     const response = await axios.post(airtable_url, payload, { headers });
     console.log('📡 Event logged to Airtable:', event_type);
+    
+    // Optional: Send Slack alert after successful Airtable logging
+    await sendSlackAlert(event_type, source, status, details);
+    
     return { status: response.status, data: response.data };
   } catch (error: any) {
     console.error('❌ Failed to log event to Airtable:', error.message);

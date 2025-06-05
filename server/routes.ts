@@ -7925,6 +7925,32 @@ print(json.dumps(results))
     }
   });
 
+  // Test the updated logEventToAirtable function
+  app.post('/api/test-airtable-logging', async (req, res) => {
+    try {
+      const result = await logEventToAirtable(
+        'System Test',
+        'Dashboard Test Suite', 
+        'Test Contact',
+        'SUCCESS',
+        'Testing updated Airtable logging with correct Base ID and Table ID'
+      );
+      
+      res.json({
+        success: true,
+        message: 'Airtable logging test completed',
+        result: result,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      res.status(500).json({ 
+        success: false, 
+        error: 'Airtable logging test failed', 
+        details: error.message 
+      });
+    }
+  });
+
   // Middleware to simulate logged-in admin user for demo
   app.use((req, res, next) => {
     if (!req.user) {

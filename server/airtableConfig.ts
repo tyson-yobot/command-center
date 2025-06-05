@@ -2,7 +2,7 @@
 export const AIRTABLE_BASES = {
   // YoBot Command Center (Live Ops)
   COMMAND_CENTER: {
-    baseId: 'appRt8V3tH4g5Z5if',
+    baseId: 'appCoAtCZdARb4AM2',
     tables: {
       METRICS_TRACKER: 'Command Center - Metrics Tracker Table',
       INTEGRATION_QA_TRACKER: 'Integration QA Tracker Table', 
