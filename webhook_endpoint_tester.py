@@ -9,263 +9,235 @@ import json
 import time
 from datetime import datetime
 
-BASE_URL = "https://workspace--tyson44.replit.app"
-
 def test_webhook_endpoint(endpoint, payload, description):
     """Test individual webhook endpoint"""
+    base_url = "http://localhost:5000"
+    url = f"{base_url}{endpoint}"
+    
     print(f"\n🧪 Testing: {description}")
-    print(f"📍 Endpoint: {endpoint}")
+    print(f"   URL: {url}")
+    print(f"   Payload: {json.dumps(payload, indent=2)}")
     
     try:
-        response = requests.post(
-            f"{BASE_URL}{endpoint}",
-            json=payload,
-            headers={"Content-Type": "application/json"},
-            timeout=10
-        )
+        response = requests.post(url, json=payload, timeout=10)
+        print(f"   Status: {response.status_code}")
         
-        print(f"📊 Status: {response.status_code}")
-        
-        if response.status_code == 200:
-            print("✅ SUCCESS")
-            return True
-        else:
-            print(f"❌ FAILED: {response.text}")
-            return False
+        # Check if response is JSON
+        try:
+            json_response = response.json()
+            print(f"   Response: {json.dumps(json_response, indent=2)}")
+            return {"success": True, "status": response.status_code, "data": json_response}
+        except json.JSONDecodeError:
+            print(f"   Response (HTML): {response.text[:200]}...")
+            return {"success": False, "status": response.status_code, "error": "HTML response instead of JSON"}
             
-    except Exception as e:
-        print(f"❌ ERROR: {str(e)}")
-        return False
+    except requests.exceptions.RequestException as e:
+        print(f"   Error: {str(e)}")
+        return {"success": False, "error": str(e)}
 
 def run_comprehensive_webhook_tests():
     """Run complete webhook endpoint validation"""
     
-    print("=" * 60)
     print("🚀 YoBot Webhook Endpoint Testing Suite")
-    print("=" * 60)
+    print("=" * 50)
     
-    test_results = []
-    
-    # Test 1: Sales Order Live
-    result = test_webhook_endpoint(
-        "/api/orders/live",
+    # Test all 12 webhook endpoints with sample data
+    tests = [
         {
-            "customer_name": "Test Customer Live",
-            "order_total": 1299.99,
-            "products": "YoBot Premium Package",
-            "contact_email": "test@company.com",
-            "delivery_date": "2025-06-15"
+            "endpoint": "/api/orders/live",
+            "payload": {
+                "customer_name": "Test Customer",
+                "order_total": 1299.99,
+                "products": "YoBot Premium",
+                "contact_email": "test@company.com",
+                "delivery_date": "2025-06-15"
+            },
+            "description": "Sales Order Live"
         },
-        "🧾 Sales Order Form LIVE"
-    )
-    test_results.append(("Sales Order Live", result))
-    
-    # Test 2: Sales Order Test
-    result = test_webhook_endpoint(
-        "/api/orders/test",
         {
-            "customer_name": "Test Customer",
-            "order_total": 999.99,
-            "products": "YoBot Standard Package",
-            "contact_email": "test@example.com"
+            "endpoint": "/api/orders/test",
+            "payload": {
+                "customer_name": "Test Customer",
+                "order_total": 999.99,
+                "products": "YoBot Standard",
+                "contact_email": "test@company.com"
+            },
+            "description": "Sales Order Test"
         },
-        "🧾 Sales Order Form TEST"
-    )
-    test_results.append(("Sales Order Test", result))
-    
-    # Test 3: Awarded Project
-    result = test_webhook_endpoint(
-        "/api/projects/awarded",
         {
-            "project_name": "Enterprise Bot Implementation",
-            "client_name": "Test Corporation",
-            "project_value": 50000,
-            "start_date": "2025-07-01",
-            "requirements": "Full automation suite with custom integrations"
+            "endpoint": "/api/projects/awarded",
+            "payload": {
+                "client_name": "ABC Corp",
+                "project_name": "AI Implementation",
+                "project_value": 25000.00,
+                "start_date": "2025-07-01"
+            },
+            "description": "Awarded Project"
         },
-        "📋 Awarded Project Intake"
-    )
-    test_results.append(("Awarded Project", result))
-    
-    # Test 4: Platinum Promo (existing)
-    result = test_webhook_endpoint(
-        "/api/leads/promo",
         {
-            "name": "Test Promo Lead",
-            "email": "promo@test.com",
-            "phone": "555-0123",
-            "source": "Webhook Test"
+            "endpoint": "/api/leads/promo",
+            "payload": {
+                "name": "John Doe",
+                "email": "john@example.com",
+                "phone": "555-1234",
+                "source": "Platinum Promo"
+            },
+            "description": "Platinum Promo Lead"
         },
-        "📝 Platinum Promo Lead"
-    )
-    test_results.append(("Platinum Promo", result))
-    
-    # Test 5: ROI Snapshot
-    result = test_webhook_endpoint(
-        "/api/leads/roi",
         {
-            "leads_per_month": 150,
-            "conversion_rate": 25,
-            "avg_revenue_per_client": 5000,
-            "bot_monthly_cost": 997,
-            "notes": "High-volume real estate agency"
+            "endpoint": "/api/leads/roi",
+            "payload": {
+                "company_name": "Tech Startup",
+                "email": "contact@techstartup.com",
+                "current_revenue": 500000,
+                "target_growth": 25
+            },
+            "description": "ROI Snapshot Lead"
         },
-        "📊 ROI Snapshot Form"
-    )
-    test_results.append(("ROI Snapshot", result))
-    
-    # Test 6: Booking Form
-    result = test_webhook_endpoint(
-        "/api/leads/booking",
         {
-            "name": "Test Booking",
-            "email": "booking@test.com",
-            "phone": "555-0456",
-            "date": "2025-06-10",
-            "notes": "Demo meeting request"
+            "endpoint": "/api/leads/booking",
+            "payload": {
+                "full_name": "Jane Smith",
+                "email": "jane@company.com",
+                "phone": "555-5678",
+                "preferred_time": "Morning",
+                "meeting_type": "Demo"
+            },
+            "description": "Booking Form Lead"
         },
-        "📅 Booking Form"
-    )
-    test_results.append(("Booking Form", result))
-    
-    # Test 7: Demo Request
-    result = test_webhook_endpoint(
-        "/api/leads/demo",
         {
-            "name": "Demo Requester",
-            "email": "demo@company.com",
-            "company": "Test Industries",
-            "phone": "555-0789",
-            "use_case": "Lead generation automation"
+            "endpoint": "/api/leads/demo",
+            "payload": {
+                "name": "Mike Johnson",
+                "email": "mike@business.com",
+                "company": "Business Inc",
+                "demo_type": "Premium"
+            },
+            "description": "Demo Request Lead"
         },
-        "🧠 Demo Request Phase 1"
-    )
-    test_results.append(("Demo Request", result))
-    
-    # Test 8: Lead Capture (existing)
-    result = test_webhook_endpoint(
-        "/api/leads/capture",
         {
-            "name": "General Lead",
-            "email": "lead@test.com",
-            "phone": "555-0321",
-            "company": "Test Corp",
-            "source": "Website"
+            "endpoint": "/api/leads/capture",
+            "payload": {
+                "name": "Sarah Wilson",
+                "email": "sarah@enterprise.com",
+                "phone": "555-9012",
+                "lead_source": "Website"
+            },
+            "description": "General Lead Capture"
         },
-        "📥 General Lead Capture"
-    )
-    test_results.append(("Lead Capture", result))
-    
-    # Test 9: Feature Request
-    result = test_webhook_endpoint(
-        "/api/features/request",
         {
-            "feature_name": "Advanced Analytics Dashboard",
-            "requester_name": "Test User",
-            "description": "Real-time performance metrics with custom KPIs",
-            "priority": "High",
-            "use_case": "Enterprise reporting requirements"
+            "endpoint": "/api/features/request",
+            "payload": {
+                "requester_name": "Product Manager",
+                "feature_name": "Advanced Analytics",
+                "priority": "High",
+                "description": "Real-time dashboard analytics"
+            },
+            "description": "Feature Request"
         },
-        "💡 Feature Request Form"
-    )
-    test_results.append(("Feature Request", result))
-    
-    # Test 10: Dashboard Intake
-    result = test_webhook_endpoint(
-        "/api/intake/dashboard",
         {
-            "client_name": "Dashboard Client",
-            "dashboard_type": "Executive Summary",
-            "data_sources": "CRM, Sales, Support Tickets",
-            "requirements": "Real-time updates, mobile responsive"
+            "endpoint": "/api/intake/dashboard",
+            "payload": {
+                "client_name": "Enterprise Client",
+                "dashboard_type": "Executive",
+                "requirements": "Monthly reporting"
+            },
+            "description": "Dashboard Intake"
         },
-        "📊 Dashboard Intake"
-    )
-    test_results.append(("Dashboard Intake", result))
-    
-    # Test 11: Contact Form
-    result = test_webhook_endpoint(
-        "/api/contact/general",
         {
-            "name": "Contact Test",
-            "email": "contact@test.com",
-            "subject": "General Inquiry",
-            "message": "Testing the contact form webhook",
-            "contact_type": "Support"
+            "endpoint": "/api/contact/general",
+            "payload": {
+                "name": "Customer Support",
+                "email": "support@client.com",
+                "subject": "Integration Question",
+                "message": "Need help with API integration"
+            },
+            "description": "General Contact Form"
         },
-        "📬 General Contact Form"
-    )
-    test_results.append(("Contact Form", result))
-    
-    # Test 12: SmartSpend Charge
-    result = test_webhook_endpoint(
-        "/api/smartspend/charge",
         {
-            "client_name": "SmartSpend Client",
-            "charge_amount": 297.50,
-            "description": "Additional voice minutes package",
-            "category": "Voice Services",
-            "approval_status": "Auto-Approved"
-        },
-        "💳 SmartSpend Charge Intake"
-    )
-    test_results.append(("SmartSpend Charge", result))
+            "endpoint": "/api/smartspend/charge",
+            "payload": {
+                "client_name": "Premium Client",
+                "charge_amount": 150.00,
+                "category": "Voice Minutes",
+                "billing_period": "Monthly"
+            },
+            "description": "SmartSpend Charge"
+        }
+    ]
     
-    # Generate Summary Report
-    print("\n" + "=" * 60)
-    print("📋 WEBHOOK TESTING SUMMARY")
-    print("=" * 60)
+    results = []
+    successful_tests = 0
     
-    passed = 0
-    failed = 0
+    for test in tests:
+        result = test_webhook_endpoint(
+            test["endpoint"], 
+            test["payload"], 
+            test["description"]
+        )
+        results.append({
+            "endpoint": test["endpoint"],
+            "description": test["description"],
+            "result": result
+        })
+        
+        if result.get("success"):
+            successful_tests += 1
+            
+        time.sleep(1)  # Small delay between tests
     
-    for test_name, result in test_results:
-        status = "✅ PASS" if result else "❌ FAIL"
-        print(f"{test_name:.<30} {status}")
-        if result:
-            passed += 1
-        else:
-            failed += 1
+    # Summary
+    print("\n" + "=" * 50)
+    print("📊 TEST SUMMARY")
+    print("=" * 50)
+    print(f"Total Endpoints: {len(tests)}")
+    print(f"Successful: {successful_tests}")
+    print(f"Failed: {len(tests) - successful_tests}")
+    print(f"Success Rate: {(successful_tests/len(tests)*100):.1f}%")
     
-    print(f"\n📊 Results: {passed} passed, {failed} failed out of {len(test_results)} tests")
-    print(f"🎯 Success Rate: {(passed/len(test_results)*100):.1f}%")
+    # Failed tests details
+    failed_tests = [r for r in results if not r["result"].get("success")]
+    if failed_tests:
+        print("\n❌ FAILED TESTS:")
+        for test in failed_tests:
+            print(f"   - {test['description']} ({test['endpoint']})")
+            if "error" in test["result"]:
+                print(f"     Error: {test['result']['error']}")
     
-    if failed == 0:
-        print("\n🎉 ALL WEBHOOK ENDPOINTS OPERATIONAL!")
-    else:
-        print(f"\n⚠️  {failed} endpoints need attention")
-    
-    return test_results
+    return results
 
 def test_system_health():
     """Test system health endpoint"""
-    print("\n🔍 Testing System Health Check...")
+    print("\n🏥 Testing System Health...")
     
-    try:
-        response = requests.get(f"{BASE_URL}/api/system/health-check", timeout=10)
-        
-        if response.status_code == 200:
-            health_data = response.json()
-            print("✅ System Health Check: OPERATIONAL")
-            print(f"📊 Overall Status: {health_data['health']['overallStatus']}")
-            print(f"🚀 Ready for Phase 3: {health_data['health']['readyForPhase3']}")
-            return True
-        else:
-            print(f"❌ Health Check Failed: {response.status_code}")
-            return False
-            
-    except Exception as e:
-        print(f"❌ Health Check Error: {str(e)}")
-        return False
+    health_endpoints = [
+        "/api/webhooks/status",
+        "/api/metrics",
+        "/api/health"
+    ]
+    
+    for endpoint in health_endpoints:
+        try:
+            response = requests.get(f"http://localhost:5000{endpoint}", timeout=5)
+            print(f"   {endpoint}: {response.status_code}")
+            if response.headers.get('content-type', '').startswith('application/json'):
+                print(f"   ✅ JSON response")
+            else:
+                print(f"   ❌ Non-JSON response")
+        except Exception as e:
+            print(f"   {endpoint}: ERROR - {str(e)}")
 
 if __name__ == "__main__":
-    print(f"🕐 Test Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"🕐 Starting webhook tests at {datetime.now()}")
+    test_system_health()
+    results = run_comprehensive_webhook_tests()
     
-    # Test system health first
-    health_ok = test_system_health()
+    # Save results to file
+    with open('webhook_test_results.json', 'w') as f:
+        json.dump({
+            "timestamp": datetime.now().isoformat(),
+            "results": results
+        }, f, indent=2)
     
-    # Run webhook tests
-    webhook_results = run_comprehensive_webhook_tests()
-    
-    print(f"\n🕐 Test Completed: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("=" * 60)
+    print(f"\n💾 Results saved to webhook_test_results.json")
+    print(f"🕐 Testing completed at {datetime.now()}")

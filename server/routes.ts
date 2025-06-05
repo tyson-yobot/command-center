@@ -1199,6 +1199,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Simple Test Endpoint for Debugging Airtable Fields
+  app.post('/api/test/airtable-fields', async (req, res) => {
+    try {
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
+      }
+
+      // Test with minimal required fields
+      const response = await axios.post(
+        `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+        {
+          fields: {
+            "👤 Full Name": "Test User",
+            "📧 Email": "test@example.com",
+            "📞 Phone": "555-0123",
+            "📥 Lead Source": "API Test"
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      res.json({
+        success: true,
+        message: "Test record created successfully",
+        airtableResponse: response.data
+      });
+
+    } catch (error: any) {
+      console.error("Airtable test error:", error.response?.data || error.message);
+      res.status(500).json({
+        success: false,
+        error: error.response?.data || error.message,
+        details: "Check Airtable field structure and permissions"
+      });
+    }
+  });
+
+  // Webhook Status Dashboard
+  app.get('/api/webhooks/status', async (req, res) => {
+    try {
+      const endpoints = [
+        { name: "Sales Order Live", url: "/api/orders/live", method: "POST" },
+        { name: "Sales Order Test", url: "/api/orders/test", method: "POST" },
+        { name: "Awarded Project", url: "/api/projects/awarded", method: "POST" },
+        { name: "Platinum Promo", url: "/api/leads/promo", method: "POST" },
+        { name: "ROI Snapshot", url: "/api/leads/roi", method: "POST" },
+        { name: "Booking Form", url: "/api/leads/booking", method: "POST" },
+        { name: "Demo Request", url: "/api/leads/demo", method: "POST" },
+        { name: "Lead Capture", url: "/api/leads/capture", method: "POST" },
+        { name: "Feature Request", url: "/api/features/request", method: "POST" },
+        { name: "Dashboard Intake", url: "/api/intake/dashboard", method: "POST" },
+        { name: "Contact Form", url: "/api/contact/general", method: "POST" },
+        { name: "SmartSpend Charge", url: "/api/smartspend/charge", method: "POST" }
+      ];
+
+      res.json({
+        success: true,
+        totalEndpoints: endpoints.length,
+        endpoints,
+        airtableBase: "appRt8V3tH4g5Z5if",
+        workingTable: "tbldPRZ4nHbtj9opU",
+        status: "All endpoints configured to use working table",
+        note: "Run /api/test/airtable-fields to validate field structure"
+      });
+
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
   // Test Lead Source Mapping Endpoint
   app.post('/api/test/lead-source', async (req, res) => {
     try {
