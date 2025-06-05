@@ -900,6 +900,49 @@ export async function scheduleFollowUpTask(contact: Contact) {
   }
 }
 
+async function enrichWithApollo(firstName: string, lastName: string, companyDomain: string) {
+  try {
+    const apolloKey = process.env.APOLLO_API_KEY;
+    if (!apolloKey) {
+      console.log('Apollo API key not configured, skipping enrichment');
+      return null;
+    }
+
+    const url = "https://api.apollo.io/v1/mixed_people/search";
+    const headers = {
+      "Cache-Control": "no-cache",
+      "Content-Type": "application/json"
+    };
+    
+    const payload = {
+      api_key: apolloKey,
+      q_organization_domains: [companyDomain],
+      person_titles: [],
+      page: 1,
+      person_names: [`${firstName} ${lastName}`]
+    };
+
+    const response = await axios.post(url, payload, { headers });
+    
+    if (response.status === 200) {
+      const data = response.data;
+      if (data.people && data.people.length > 0) {
+        const enriched = data.people[0];
+        return {
+          email: enriched.email,
+          phone: enriched.phone,
+          job_title: enriched.title,
+          linkedin_url: enriched.linkedin_url
+        };
+      }
+    }
+    return null;
+  } catch (error: any) {
+    console.error('Apollo enrichment failed:', error.message);
+    return null;
+  }
+}
+
 async function sendSlackAlert(event_type: string, source: string, status: string, details: string) {
   try {
     const slack_url = process.env.SLACK_WEBHOOK_URL;
