@@ -900,32 +900,33 @@ export async function scheduleFollowUpTask(contact: Contact) {
   }
 }
 
-export async function logEventToAirtable(contact: Contact) {
+export async function logEventToAirtable(event_type: string, source: string, contact: string, status: string, details: string) {
   try {
-    const eventLogUrl = process.env.EVENT_LOG_WEBHOOK_URL || "https://hook.us2.make.com/ed0s19v7wlzr1jbqgk6v2k";
+    const airtable_url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblREPLACE_THIS";
+    const headers = {
+      "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+      "Content-Type": "application/json"
+    };
     
-    const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email;
-    const contactType = await autoTagContactType(contact);
-
-    await axios.post(eventLogUrl, {
-      full_name: fullName,
-      email: contact.email,
-      company: contact.company,
-      event_type: "Business Card Automation Flow",
-      status: "Complete",
-      contact_type: contactType,
-      source: 'Business Card Scanner',
-      timestamp: new Date().toISOString()
-    }, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      timeout: 10000
-    });
-
-    console.log('📡 Event logged to Airtable for', fullName);
+    const payload = {
+      "records": [{
+        "fields": {
+          "📅 Timestamp": new Date().toISOString(),
+          "📌 Event Type": event_type,
+          "🌿 Source Module": source,
+          "👤 Contact": contact,
+          "📍 Status": status,
+          "🧾 Details": details
+        }
+      }]
+    };
+    
+    const response = await axios.post(airtable_url, payload, { headers });
+    console.log('Event logged to Airtable:', event_type);
+    return { status: response.status, data: response.data };
   } catch (error: any) {
     console.error('Failed to log event to Airtable:', error.message);
+    return { status: 500, error: error.message };
   }
 }
 
