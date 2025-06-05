@@ -6136,25 +6136,52 @@ print(json.dumps(results))
             });
           }
 
-          // Log to Airtable
-          const apiKey = process.env.AIRTABLE_API_KEY;
-          if (apiKey && leadData.people) {
+          // Process leads through validation and dual platform integration
+          let processingResults = null;
+          if (leadData.people && leadData.people.length > 0) {
             try {
-              const webhookData = {
-                "Search Query": `${title || 'Owner'} in ${location || 'United States'} - ${keywords || 'construction'}`,
-                "Results Count": leadData.people.length,
-                "Source": "Apollo",
-                "Data": JSON.stringify(leadData),
-                "Timestamp": new Date().toISOString()
-              };
+              const { execSync } = await import('child_process');
+              const processCommand = `python3 -c "
+import sys
+sys.path.append('.')
+from lead_processing_engine import process_apollo_leads
+import json
 
-              await axios.post(
-                `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
-                { fields: webhookData },
-                { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
-              );
-            } catch (airtableError) {
-              console.log("Apollo results logged locally");
+lead_data = ${JSON.stringify(leadData).replace(/"/g, '\\"')}
+results = process_apollo_leads(lead_data, 'Apollo')
+print(json.dumps(results))
+"`;
+
+              const processResult = execSync(processCommand, { 
+                encoding: 'utf8',
+                timeout: 30000
+              });
+              
+              processingResults = JSON.parse(processResult.trim());
+            } catch (processError) {
+              console.log("Lead processing failed, logging raw data");
+              
+              // Fallback to basic Airtable logging
+              const apiKey = process.env.AIRTABLE_API_KEY;
+              if (apiKey) {
+                try {
+                  const webhookData = {
+                    "Search Query": `${title || 'Owner'} in ${location || 'United States'} - ${keywords || 'construction'}`,
+                    "Results Count": leadData.people.length,
+                    "Source": "Apollo",
+                    "Data": JSON.stringify(leadData),
+                    "Timestamp": new Date().toISOString()
+                  };
+
+                  await axios.post(
+                    `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+                    { fields: webhookData },
+                    { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
+                  );
+                } catch (fallbackError) {
+                  console.log("Fallback logging also failed");
+                }
+              }
             }
           }
 
@@ -6162,6 +6189,7 @@ print(json.dumps(results))
             success: true,
             message: `Apollo scrape completed - found ${leadData.people?.length || 0} leads`,
             data: leadData,
+            processingResults: processingResults,
             source: 'Apollo',
             search_params: { title, location, keywords }
           });
@@ -6200,10 +6228,37 @@ print(json.dumps(results))
           
           const leadData = JSON.parse(phantomResult.trim());
           
+          // Process leads through validation and dual platform integration
+          let processingResults = null;
+          if (leadData.results && leadData.results.length > 0) {
+            try {
+              const processCommand = `python3 -c "
+import sys
+sys.path.append('.')
+from lead_processing_engine import process_phantombuster_leads
+import json
+
+lead_data = ${JSON.stringify(leadData).replace(/"/g, '\\"')}
+results = process_phantombuster_leads(lead_data, 'PhantomBuster')
+print(json.dumps(results))
+"`;
+
+              const processResult = execSync(processCommand, { 
+                encoding: 'utf8',
+                timeout: 30000
+              });
+              
+              processingResults = JSON.parse(processResult.trim());
+            } catch (processError) {
+              console.log("PhantomBuster lead processing failed, logging raw data");
+            }
+          }
+          
           return res.json({
             success: true,
             message: `PhantomBuster scrape completed`,
             data: leadData,
+            processingResults: processingResults,
             source: 'PhantomBuster',
             search_params: { title, location, keywords }
           });
@@ -6242,10 +6297,37 @@ print(json.dumps(results))
           
           const leadData = JSON.parse(apifyResult.trim());
           
+          // Process leads through validation and dual platform integration
+          let processingResults = null;
+          if (leadData.results && leadData.results.length > 0) {
+            try {
+              const processCommand = `python3 -c "
+import sys
+sys.path.append('.')
+from lead_processing_engine import process_apify_leads
+import json
+
+lead_data = ${JSON.stringify(leadData).replace(/"/g, '\\"')}
+results = process_apify_leads(lead_data, 'Apify')
+print(json.dumps(results))
+"`;
+
+              const processResult = execSync(processCommand, { 
+                encoding: 'utf8',
+                timeout: 30000
+              });
+              
+              processingResults = JSON.parse(processResult.trim());
+            } catch (processError) {
+              console.log("Apify lead processing failed, logging raw data");
+            }
+          }
+          
           return res.json({
             success: true,
             message: `Apify scrape completed`,
             data: leadData,
+            processingResults: processingResults,
             source: 'Apify',
             search_params: { title, location, keywords }
           });
