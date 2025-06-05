@@ -454,12 +454,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const airtablePayload = {
           fields: {
             "🧩 Integration Name": `Lead Processing - ${leadData.source || 'Scraped'}`,
-            "✅ Pass/Fail": "✅",
+            "✅ Pass/Fail": "✅ Pass",
             "📝 Notes / Debug": `Lead captured: ${leadData.name} from ${leadData.company || 'Unknown Company'} via ${leadData.source || 'Scraped'}`,
-            "📅 Test Date": new Date().toISOString().split('T')[0],
+            "📅 Test Date": new Date().toISOString(),
             "👤 QA Owner": "System",
-            "☑️ Output Data Populated?": "Yes",
-            "📁 Record Created?": "Yes", 
+            "☑️ Output Data Populated?": "Yes - Operational",
+            "📁 Record Created?": true, 
             "⚙️ Module Type": "Lead Processing",
             "📂 Related Scenario Link": "https://replit.com/@YoBot/CommandCenter"
           }
@@ -469,8 +469,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         // Make actual Airtable API call with correct format
         const airtableUrl = `https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9`;
+        const token = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa";
         const airtableHeaders = {
-          "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
         };
         
