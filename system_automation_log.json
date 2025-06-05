@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-04T13:40:00.166Z",
-    "functionId": 204,
-    "functionName": "Duplicate Record Detection",
-    "batch": 21,
-    "category": "Data Validation",
-    "status": "success",
-    "duration": 93,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-04T13:40:00.181Z",
     "functionId": 206,
     "functionName": "Lead Score Calculator",
@@ -11388,6 +11377,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-05T00:02:41.983Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-05T00:03:45.364Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-05T00:03:45.117Z",
       "automationStatus": "running"
     }
   }

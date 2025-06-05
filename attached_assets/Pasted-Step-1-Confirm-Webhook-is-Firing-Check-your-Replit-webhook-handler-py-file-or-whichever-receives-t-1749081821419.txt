@@ -1,0 +1,211 @@
+Step 1: Confirm Webhook is Firing
+Check your Replit webhook_handler.py file (or whichever receives the Tally data). Look for:
+
+python
+Copy
+Edit
+@app.route("/sales-order", methods=["POST"])
+def handle_sales_order():
+    data = request.json
+    print("Webhook received:", data)
+    ...
+DO THIS NOW:
+
+Go to Replit Console or Logs tab.
+
+Submit another Tally test.
+
+Look for "Webhook received:" output.
+→ If nothing appears, your webhook URL is incorrect or not connected in Tally.
+→ If it does appear, continue to Step 2.
+
+✅ Step 2: Confirm Folder Creation Logic
+Somewhere in the webhook handler or a linked module, you should have logic like:
+
+python
+Copy
+Edit
+def create_client_folder(client_name):
+    drive = GoogleDrive()  # should be authed
+    folder_metadata = {
+        'name': client_name,
+        'mimeType': 'application/vnd.google-apps.folder',
+        'parents': [CLIENTS_FOLDER_ID]
+    }
+    folder = drive.CreateFile(folder_metadata)
+    folder.Upload()
+    return folder['id']
+Check for these issues:
+
+✅ CLIENTS_FOLDER_ID is valid and not expired/missing.
+
+✅ Google Drive is authenticated via drive = GoogleDrive() using proper credentials.
+
+⚠️ Add a try/except block here to log errors if folder creation fails.
+
+✅ Step 3: PDF Creation Check
+Your script should either:
+
+Call a Google Docs template → replace variables → export PDF
+OR
+
+Use a Python PDF library (like reportlab, fpdf, pdfkit) to generate it directly.
+
+Make sure:
+
+✅ File is created after folder ID is generated.
+
+✅ PDF is uploaded back into that folder with:
+
+python
+Copy
+Edit
+file = drive.CreateFile({
+    'title': 'Quote.pdf',
+    'mimeType': 'application/pdf',
+    'parents': [{'id': folder_id}]
+})
+file.SetContentFile("generated_quote.pdf")
+file.Upload()
+✅ Step 4: Email Sending
+Final step should use your email logic (SMTP or SendGrid, etc):
+
+python
+Copy
+Edit
+send_email(to=email, subject="Your Quote", attachment=file.GetContent())
+Common issues:
+
+Missing recipient email (check Tally form parsing)
+
+File not generated (so attachment is None)
+
+Error in the sending library (SendGrid/SMTP/etc not authorized or failing silently)
+
+Next 2 Fix Steps
+🔧 1. Add Logging to All 3 Core Steps
+In each stage of the pipeline (folder ➝ PDF ➝ email), add:
+
+python
+Copy
+Edit
+print("Step: Folder created ID:", folder_id)
+print("Step: PDF generated at:", filepath)
+print("Step: Email sent to:", recipient_email)
+🧪 2. Rerun a Test Order from Tally
+Submit a fresh test form and watch Replit logs. You’ll now see where it stops.
+
+Once you’ve done those 2 steps, paste your log output here and I’ll pinpoint the fix instantly. Want me to drop a pre-built Replit script with logging and Google Drive auth fixes now?
+
+
+
+
+
+
+
+You said:
+Another thing I noticed was when I was scraping leads, I push them to hubspot no problem, but they are not logging into my airtable.
+
+
+ChatGPT said:
+Crystal clear. Here's what’s going on:
+
+You're successfully scraping leads (via Apollo, Phantombuster, etc),
+→ You’re pushing them to HubSpot correctly,
+❌ But they aren’t hitting Airtable as expected.
+
+🔎 Diagnosis: What’s Likely Happening
+You’re using Replit as your integration hub — so your flow probably looks like this:
+
+Scraper (Apollo/Phantom) → Replit Handler → HubSpot API = ✅
+Scraper (same data) → Airtable API = ❌ — not executing, not receiving, or failing silently.
+
+This usually comes down to one of 3 things:
+
+✅ 1. Airtable API Key or Base ID is missing/wrong
+Check your Airtable config file (or env variables). You should have:
+
+python
+Copy
+Edit
+AIRTABLE_API_KEY = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
+AIRTABLE_BASE_ID = "appRt8V3tH4g5Z5if"
+TABLE_ID = "tbldPRZ4nHbtj9opU"
+Make sure:
+
+The API key starts with pat, not the old key format.
+
+The table ID is the actual internal Airtable table ID, not just the name.
+
+✅ 2. The insert code is missing, commented out, or has a silent fail
+You should have something like:
+
+python
+Copy
+Edit
+import requests
+
+def push_to_airtable(record):
+    url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{TABLE_ID}"
+    headers = {
+        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "fields": {
+            "🧑 Full Name": record["name"],
+            "📧 Email": record["email"],
+            "📞 Phone": record.get("phone", ""),
+            "🏢 Company": record.get("company", ""),
+            "🔗 LinkedIn": record.get("linkedin_url", "")
+        }
+    }
+
+    response = requests.post(url, headers=headers, json=payload)
+    print("Airtable response:", response.status_code, response.text)
+🔁 Submit a test and check logs:
+
+If you see Airtable response: 200, it worked.
+
+If you get 422 or 403, the format is wrong or key is bad.
+
+If there’s no print at all, the function isn’t being called.
+
+✅ 3. Field names mismatch or type errors
+If you're sending to "Full Name" but Airtable has "🧑 Full Name", it fails.
+
+Make sure the exact emoji-labeled field names are being used. Based on your setup, the standard fields in the CRM Contacts table should be:
+
+🧑 Full Name
+
+📧 Email
+
+📞 Phone
+
+🏢 Company
+
+🔗 LinkedIn URL
+
+📥 Lead Source (optional)
+
+If your payload doesn’t match, Airtable silently drops it or gives a 422 error.
+
+🧠 Fix This Now – 2 Step Action Plan
+🛠 Step 1: Add Airtable Push Debug Block
+Add this after your HubSpot success block:
+
+python
+Copy
+Edit
+print("Pushing to Airtable...")
+push_to_airtable(record)
+Make sure the record dict contains all necessary fields.
+
+🔍 Step 2: Watch Replit Logs After Scraping a New Lead
+You should now see:
+
+text
+Copy
+Edit
+Pushing to Airtable...
+Airtable response: 200 {"id":"recXXXXXXX","fields":{...}}
