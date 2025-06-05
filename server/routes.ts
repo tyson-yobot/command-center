@@ -8,6 +8,7 @@ import { z } from "zod";
 import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertCrmDataSchema, insertScannedContactSchema, insertKnowledgeBaseSchema } from "@shared/schema";
 import { createWorker } from 'tesseract.js';
 import { sendSlackAlert } from "./alerts";
+import { sendLeadAlert, sendPlatinumFormAlert, sendAutomationFailureAlert } from "./slackAlerts";
 import { generatePDFReport } from "./pdfReport";
 import { sendSMSAlert, sendEmergencyEscalation } from "./sms";
 import { pushToCRM, contactExistsInHubSpot, notifySlack, createFollowUpTask, tagContactSource, enrollInWorkflow, createDealForContact, exportToGoogleSheet, enrichContactWithClearbit, enrichContactWithApollo, sendSlackScanAlert, logToSupabase, triggerQuotePDF, addToCalendar, pushToStripe, sendNDAEmail, autoTagContactType, sendVoicebotWebhookResponse, syncToQuickBooks, alertSlackFailure, sendHubSpotFallback, pushToQuoteDashboard, scheduleFollowUpTask, logEventToAirtable, triggerToneVariant, generateFallbackAudio, triggerPDFReceipt, handleStripeRetry, logToneMatch, logVoiceTranscript, assignCRMOwner, logVoiceEscalationEvent, dispatchCallSummary, pushToMetricsTracker, logCRMVoiceMatch, updateContractStatus, logIntentAndEntities, pushCommandSuggestions, logScenarioLoop, logABScriptTest, sendWebhookResponse, sendErrorSlackAlert, pushToProposalDashboard, assignLeadScore, logToSmartSpend, markContactComplete, logToCommandCenter } from "./hubspotCRM";
@@ -276,6 +277,131 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Lead Source Mapping and Form Processing
+  app.post('/api/form/lead-capture', async (req, res) => {
+    try {
+      const formData = req.body;
+      const leadSource = req.query.source || formData.lead_source || formData['Lead Source'] || 'Unknown';
+      
+      // Extract form data with lead source mapping
+      const leadRecord = {
+        'Full Name': formData.full_name || formData['🧑 Full Name'] || '',
+        'Email': formData.email || formData['📧 Email'] || '',
+        'Phone': formData.phone || formData['📱 Phone'] || '',
+        'Company': formData.company || formData['🏢 Company'] || '',
+        'Lead Source': leadSource,
+        'Form Type': formData.form_type || 'General Lead',
+        'Timestamp': new Date().toISOString(),
+        'Status': 'New'
+      };
+
+      // Log to Airtable Sales Orders table
+      const airtableKey = process.env.AIRTABLE_API_KEY;
+      const baseId = process.env.AIRTABLE_BASE_ID;
+      
+      if (!airtableKey || !baseId) {
+        return res.status(500).json({
+          success: false,
+          error: 'Airtable configuration missing'
+        });
+      }
+
+      const url = `https://api.airtable.com/v0/${baseId}/📋 Sales Orders`;
+      const headers = {
+        "Authorization": `Bearer ${airtableKey}`,
+        "Content-Type": "application/json"
+      };
+
+      const payload = {
+        "records": [{
+          "fields": {
+            "🧑 Full Name": leadRecord['Full Name'],
+            "📧 Email": leadRecord['Email'],
+            "📱 Phone": leadRecord['Phone'],
+            "🏢 Company": leadRecord['Company'],
+            "📥 Lead Source": leadRecord['Lead Source'],
+            "📝 Form Type": leadRecord['Form Type'],
+            "📅 Timestamp": leadRecord['Timestamp'],
+            "🔄 Status": leadRecord['Status']
+          }
+        }]
+      };
+
+      const airtableResponse = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload)
+      });
+
+      if (airtableResponse.ok) {
+        const result = await airtableResponse.json();
+        console.log(`✅ Lead captured: ${leadRecord['Full Name']} from ${leadRecord['Lead Source']}`);
+        
+        // Send Slack alert for new lead
+        await sendLeadAlert(
+          leadRecord['Full Name'],
+          leadRecord['Email'],
+          leadRecord['Lead Source']
+        );
+        
+        res.json({
+          success: true,
+          message: 'Lead captured successfully',
+          leadSource: leadRecord['Lead Source'],
+          recordId: result.records[0].id
+        });
+      } else {
+        throw new Error(`Airtable error: ${airtableResponse.status}`);
+      }
+
+    } catch (error: any) {
+      console.error('Lead capture error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // Platinum Form Specific Handler
+  app.post('/api/form/platinum', async (req, res) => {
+    try {
+      const formData = req.body;
+      const leadSource = req.query.source || 'Platinum Form';
+      
+      const leadRecord = {
+        'Full Name': formData.full_name || formData['🧑 Full Name'] || '',
+        'Email': formData.email || formData['📧 Email'] || '',
+        'Phone': formData.phone || formData['📱 Phone'] || '',
+        'Company': formData.company || formData['🏢 Company'] || '',
+        'Lead Source': leadSource,
+        'Form Type': 'Platinum Bot Claim',
+        'Timestamp': new Date().toISOString(),
+        'Status': 'High Priority'
+      };
+
+      // Send Slack alert for Platinum submissions
+      await sendPlatinumFormAlert(
+        leadRecord['Full Name'],
+        leadRecord['Email'],
+        leadRecord['Company']
+      );
+
+      res.json({
+        success: true,
+        message: 'Platinum form submitted successfully',
+        leadSource: leadRecord['Lead Source']
+      });
+
+    } catch (error: any) {
+      console.error('Platinum form error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
   // Main Desktop Command Center configuration endpoint
   app.get('/api/main-desktop-command-center/config/:client_id', (req, res) => {
     const { client_id } = req.params;
@@ -288,7 +414,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         real_time_monitoring: true,
         webhook_processing: true,
         system_health: true,
-        pipeline_management: true
+        pipeline_management: true,
+        lead_source_mapping: true
       },
       automation_endpoints: [
         '/api/automation-trigger',
@@ -296,7 +423,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         '/stripe-payment',
         '/sales-order',
         '/webhook/calendly',
-        '/webhook/hubspot'
+        '/webhook/hubspot',
+        '/api/form/lead-capture',
+        '/api/form/platinum'
       ]
     });
   });
