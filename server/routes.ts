@@ -454,7 +454,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const airtablePayload = {
           fields: {
             "🧩 Integration Name": `Lead Processing - ${leadData.source || 'Scraped'}`,
-            "✅ Pass/Fail": "✅",
+            "✅ Pass/Fail": "✅ Pass",
             "📝 Notes / Debug": `Lead captured: ${leadData.name} from ${leadData.company || 'Unknown Company'} via ${leadData.source || 'Scraped'}`,
             "📅 Test Date": new Date().toISOString(),
             "👤 QA Owner": "System",
