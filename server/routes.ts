@@ -287,7 +287,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Missing name or contact info" });
       }
 
-      // Log lead data for immediate tracking
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
+      }
+
+      // Save to Airtable with correct field names
+      await axios.post(
+        `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+        {
+          fields: {
+            "👤 Full Name": name,
+            "📧 Email": email || "",
+            "📞 Phone": phone || "",
+            "📥 Lead Source": source || "Platinum Promo"
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      // Log lead data for tracking
       const leadData = {
         name,
         email: email || "",
@@ -307,6 +331,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: true,
         message: "Promo lead submitted",
         leadData,
+        airtableRecorded: true,
         slackNotified: true
       });
 
@@ -403,6 +428,124 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: false,
         error: error.message
       });
+    }
+  });
+
+  // 📥 Webhook for: ROI Snapshot Form
+  app.post("/api/leads/roi", async (req, res) => {
+    try {
+      const {
+        leads_per_month,
+        conversion_rate,
+        avg_revenue_per_client,
+        bot_monthly_cost,
+        notes
+      } = req.body;
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
+      }
+
+      await axios.post(
+        `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/REPLACE_ROI_TABLE_ID`,
+        {
+          fields: {
+            "📈 Leads per Month": leads_per_month,
+            "📊 Conversion Rate": conversion_rate,
+            "💵 Avg Revenue/Client": avg_revenue_per_client,
+            "🤖 Bot Monthly Cost": bot_monthly_cost,
+            "📝 Notes": notes || "",
+            "📅 Date Submitted": new Date().toISOString()
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      console.log("✅ ROI snapshot logged");
+      res.status(200).send("ROI submitted");
+    } catch (err: any) {
+      console.error("❌ ROI error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 📥 Webhook for: Booking Form
+  app.post("/api/leads/booking", async (req, res) => {
+    try {
+      const { name, email, phone, date, notes } = req.body;
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
+      }
+
+      await axios.post(
+        `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblBookingTableID`,
+        {
+          fields: {
+            "👤 Name": name,
+            "📧 Email": email,
+            "📞 Phone": phone,
+            "📅 Booking Date": date,
+            "📝 Notes": notes || ""
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      console.log("✅ Booking captured:", name);
+      res.status(200).send("Booking submitted");
+    } catch (err: any) {
+      console.error("❌ Booking error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 📥 Webhook for: Demo Request – Phase 1
+  app.post("/api/leads/demo", async (req, res) => {
+    try {
+      const { name, email, company, phone, use_case } = req.body;
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
+      }
+
+      await axios.post(
+        `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblDemoRequestID`,
+        {
+          fields: {
+            "👤 Name": name,
+            "📧 Email": email,
+            "🏢 Company": company,
+            "📞 Phone": phone,
+            "🎯 Use Case": use_case || ""
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      console.log("✅ Demo request submitted:", name);
+      res.status(200).send("Demo submitted");
+    } catch (err: any) {
+      console.error("❌ Demo request error:", err);
+      res.status(500).json({ error: "Server error" });
     }
   });
 
