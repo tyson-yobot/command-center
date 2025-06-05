@@ -6918,6 +6918,110 @@ ${transcript}`;
     }
   }
 
+  // Final QA verdict logic
+  function assignFinalVerdict(score: number, escalation: boolean, flaggedKeywords: string[]): string {
+    if (escalation || score < 5 || flaggedKeywords.some(k => k.toLowerCase().includes("angry"))) {
+      return "⚠️ Needs Escalation";
+    } else if (score >= 8) {
+      return "✅ Pass";
+    } else {
+      return "🟡 Needs Review";
+    }
+  }
+
+  // Update rep scorecard
+  async function pushToScorecard(repName: string, callId: string, score: number, verdict: string): Promise<void> {
+    try {
+      const payload = {
+        fields: {
+          "👤 Rep": repName,
+          "📞 Call ID": callId,
+          "🎯 QA Score": score,
+          "🧾 Verdict": verdict
+        }
+      };
+
+      await postToAirtable('tblRepScorecardLog', payload,
+        process.env.AIRTABLE_BASE_ID || '',
+        process.env.AIRTABLE_API_KEY || '');
+      
+      console.log(`Rep scorecard updated for ${repName}: ${verdict}`);
+    } catch (error: any) {
+      console.error('Rep scorecard update failed:', error.message);
+    }
+  }
+
+  // QA AI suggestions engine
+  async function getImprovementSuggestions(transcript: string, tags: string[]): Promise<string> {
+    try {
+      const openaiApiKey = process.env.OPENAI_API_KEY;
+      if (!openaiApiKey) {
+        return "OpenAI API key not configured for improvement suggestions";
+      }
+
+      const prompt = `Review this support call and suggest 3 specific improvements for the representative.
+
+Transcript:
+${transcript}
+
+QA Tags: ${tags.join(', ')}
+
+Provide 3 actionable suggestions in bullet points.`;
+
+      const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+        model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.3,
+        max_tokens: 250
+      }, {
+        headers: {
+          'Authorization': `Bearer ${openaiApiKey}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response.data.choices[0].message.content.trim();
+    } catch (error: any) {
+      console.error('QA suggestions failed:', error.message);
+      return "Failed to generate improvement suggestions";
+    }
+  }
+
+  // Slack QA flag alert
+  async function sendSlackQAFlag(callId: string, verdict: string, repName: string, score: number): Promise<void> {
+    try {
+      const slackUrl = process.env.SLACK_WEBHOOK_URL;
+      if (!slackUrl) {
+        console.log('Slack webhook not configured - skipping QA flag alert');
+        return;
+      }
+
+      const message = `⚠️ *QA Flag Alert* – \`${repName}\` scored *${score}/10* on Call ID \`${callId}\` → *${verdict}*`;
+      
+      await axios.post(slackUrl, { text: message });
+      console.log(`QA flag alert sent to Slack for ${repName}`);
+    } catch (error: any) {
+      console.error('Slack QA flag alert failed:', error.message);
+    }
+  }
+
+  // Insert QA review into RAG memory
+  async function indexToRAG(callId: string, summary: string, score: number, agent: string): Promise<void> {
+    try {
+      const ragPayload = {
+        doc_id: `qa-${callId}`,
+        title: `QA Review – ${agent}`,
+        content: `${summary}\nScore: ${score}/10`,
+        tags: ["qa_review", "voicebot", "call_analysis"]
+      };
+
+      // For now, log to console - implement RAG endpoint when available
+      console.log('[RAG INDEX]', JSON.stringify(ragPayload, null, 2));
+    } catch (error: any) {
+      console.error('RAG indexing failed:', error.message);
+    }
+  }
+
   // Complete QA Review Pipeline
   async function runQAReviewPipeline(data: any): Promise<any> {
     try {
