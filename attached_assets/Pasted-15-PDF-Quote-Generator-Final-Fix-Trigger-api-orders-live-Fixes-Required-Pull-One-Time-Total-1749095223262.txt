@@ -1,0 +1,156 @@
+15. PDF Quote Generator Final Fix
+Trigger: /api/orders/live
+
+Fixes Required:
+
+Pull 💰 One-Time Total, 💳 Monthly Total, and 🧾 Final Quote Total
+
+Inject into Google Doc via template
+
+Save PDF to Drive folder /YoBot Quotes
+
+Log event to 📄 PDF Quote Log
+
+Use:
+
+python
+Copy
+Edit
+generate_pdf_quote(parsed_order_data)
+upload_to_drive(pdf_file)
+✅ 16. Recurring Payment Sync → Stripe
+Trigger: Any form with monthly add-ons or packages
+
+Action:
+
+Create Stripe Subscription via API
+
+Use Parsed Email as customer identifier
+
+Item list:
+
+$999/mo Bot Package
+
+$149/mo SmartSpend™ (etc.)
+
+Webhook: /api/stripe/subscription/create
+
+✅ 17. VoiceBot → 📞 Call Log Sync
+Trigger: On VoiceBot call completion
+
+Action:
+
+Log to: 📞 Voice Call Log
+
+Fields:
+
+📞 Phone Number
+
+🗣️ VoiceBot Response
+
+🧠 Detected Intent
+
+🎯 Outcome (Lead / Demo Booked / Hung Up / Escalation)
+
+🕒 Duration
+
+📅 Timestamp
+
+✅ 18. VoiceBot → 🧪 QA Call Review Log
+Trigger: If flag = “Review Needed”
+
+Action:
+
+Create record in 🧪 QA Call Review Log
+
+Include transcript, sentiment score, and rep tag (if any)
+
+✅ 19. Slack Alert on Lead Capture
+Trigger: On /api/leads/capture POST
+
+Action:
+
+Send Slack message to #yobot-leads:
+
+yaml
+Copy
+Edit
+🚨 New Lead Captured!
+👤 Name: {{name}}
+📞 Phone: {{phone}}
+📨 Email: {{email}}
+🏷 Source: Lead Capture Form
+Use: slack.send_message(channel, message_block)
+
+✅ 20. Slack Alert on Missed Call
+Trigger: 📥 Inbound Call Log row created with status “missed”
+
+Action:
+
+Slack DM to Daniel:
+
+csharp
+Copy
+Edit
+❌ Missed Call from {{phone}}
+Logged in: 📥 Inbound Call Log
+Auto-reply sent ✔
+✅ 21. 🔐 Webhook Log Table Setup
+Create Table: ✨ 🔐 Webhook Log
+
+Fields:
+
+📮 Endpoint Name (e.g., /api/leads/roi)
+
+📥 Payload Summary
+
+✅ Success? (Yes/No)
+
+🧠 Handler Module (e.g., promo.py)
+
+🕒 Timestamp
+
+Every POST should log an entry
+
+✅ 22. Auto-Ingest RAG Content on Project Intake
+Trigger: /api/projects/awarded
+
+Action:
+
+Parse project documents (SOW, Notes)
+
+Push to RAG index via OpenAI file upload endpoint
+
+Assign vector index ID to project record
+
+✅ 23. VoiceBot Call Outcome Reclassification
+Trigger: If no intent is detected
+
+Action:
+
+Run fallback classification using OpenAI:
+
+python
+Copy
+Edit
+classify_transcript(transcript_text)
+Auto-fill 🎯 Outcome with fallback guess (e.g. "Unclear Lead", "Voicemail")
+
+✅ 24. Lead Enrichment via Clearbit
+Trigger: Lead email submitted via any form
+
+Action:
+
+Hit Clearbit Enrichment API
+
+Pull:
+
+Company Name
+
+Industry
+
+LinkedIn URL
+
+Location
+
+Update CRM Contact Log automatically

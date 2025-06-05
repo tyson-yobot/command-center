@@ -1,0 +1,151 @@
+25. Auto-Tag Add-Ons in CRM
+Trigger: Sales Order submission
+
+Action:
+
+Extract selected Add-Ons from form/webhook
+
+Push comma-separated list to:
+
+CRM Contact Log → ➕ Add-Ons Purchased
+
+📄 PDF Quote Log → ➕ Add-Ons
+
+✅ 26. QA Questions Auto-Fill by Industry
+Trigger: On new CRM Contact creation
+
+Logic:
+
+Use 🏢 Industry field
+
+Auto-insert 3–5 industry-specific QA questions into:
+
+🧪 QA Call Review Log
+
+📋 VoiceBot Script Tracker if VoiceBot is used
+
+Source: From 📚 Industry Templates table
+
+✅ 27. Slack Review Trigger for Bad Sentiment
+Trigger: 📊 Call Sentiment Log entry with score < 0.4
+
+Action:
+
+Post to Slack #qa-review:
+
+yaml
+Copy
+Edit
+⚠️ Low Sentiment Detected:
+📞 Call from: {{phone}}
+😡 Score: {{score}}
+🎙️ Transcript: (snippet)
+Link to QA Review Record
+✅ 28. SmartSpend™ ROI Auto-Log
+Trigger: On SmartSpend™ intake submission
+
+Action:
+
+Calculate ROI delta:
+
+python
+Copy
+Edit
+roi = (monthly_savings - monthly_cost) / monthly_cost
+Log in 📈 VoiceBot Performance Dashboard Log under "SmartSpend™ ROI"
+
+Push alert to Slack if ROI > 5.0
+
+✅ 29. Auto-Escalation Tagging in Call Logs
+Trigger: Transcript includes keywords like:
+
+“cancel”, “lawsuit”, “fraud”, “chargeback”
+
+Action:
+
+Tag 🚨 Escalation Flag = ✅ in:
+
+📞 Voice Call Log
+
+📋 VoiceBot Script Tracker
+
+Auto-create task in 🚨 Escalation Tracker
+
+✅ 30. Stripe Fallback & Retry Logic
+Trigger: Stripe charge failure
+
+Action:
+
+Retry in 3 hours (max 3 attempts)
+
+If all fail:
+
+Slack alert
+
+Log in 📛 Failed Charges Log
+
+Mark CRM Contact with 💳 Payment Status = Failed
+
+✅ 31. VoiceBot → 🎙️ Tone Variant Selection
+Trigger: Industry + Mood Tag combo
+
+Action:
+
+Pull correct voice tone from 🗣️ Tone Response Variant Library
+
+Inject into:
+
+VoiceBot Config record
+
+ElevenLabs API voice selection
+
+✅ 32. Command Center Hooks → Real-Time Logging
+Action:
+
+Every user interaction in frontend (button press, dashboard nav) sends:
+
+/api/metrics/command-center
+
+Log to 📊 Metrics Tracker with:
+
+🖥️ Event Type
+
+👤 User
+
+🕒 Timestamp
+
+📍 Page / Feature Used
+
+✅ 33. Command Center → Role-Based Field Unlocking
+Trigger: Login session (based on user ID or role)
+
+Action:
+
+Show/hide controls:
+
+Admin: All toggles visible
+
+Sales: Only Contact/Booking modules
+
+Support: VoiceBot, Call Logs only
+
+Apply filter logic directly in frontend JS or via Replit route control
+
+✅ 34. Follow-Up Tracker → Daily Digest Email
+Trigger: 9am daily
+
+Action:
+
+Compile all tasks in ✅ Follow-Up Reminder Tracker where:
+
+📅 Due Date = today
+
+✅ Status = Not Done
+
+Send HTML summary via SendGrid:
+
+mathematica
+Copy
+Edit
+Subject: 🔔 Today’s Follow-Up Tasks
+Body: Table of Contact + Task + Notes

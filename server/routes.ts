@@ -281,64 +281,170 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // 📥 Webhook for: YoBot® Platinum Promo  
   app.post("/api/leads/promo", async (req, res) => {
     try {
-      const { name, email, phone, source } = req.body;
+      const { name, email, phone, company, source } = req.body;
 
       if (!name || (!email && !phone)) {
         return res.status(400).json({ error: "Missing name or contact info" });
       }
 
-      const apiKey = process.env.AIRTABLE_API_KEY;
-      if (!apiKey) {
-        return res.status(500).json({ error: "Airtable API key not configured" });
-      }
+      // Import Airtable utilities
+      const { logMetric, logLead, logWebhook, sendSlackAlert } = await import('./airtableUtils');
 
-      // Save to Airtable with correct field names
-      await axios.post(
-        `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
-        {
-          fields: {
-            "👤 Full Name": name,
-            "📧 Email": email || "",
-            "📞 Phone": phone || "",
-            "📥 Lead Source": source || "Platinum Promo"
-          }
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${apiKey}`,
-            "Content-Type": "application/json"
-          }
-        }
-      );
-
-      // Log lead data for tracking
-      const leadData = {
-        name,
-        email: email || "",
-        phone: phone || "",
-        source: source || "Platinum Promo",
-        timestamp: new Date().toISOString(),
-        endpoint: "/api/leads/promo"
-      };
-
-      console.log("📝 Platinum Lead Captured:", JSON.stringify(leadData, null, 2));
-
-      // Send Slack alert for new platinum lead
-      await sendLeadAlert(name, email || phone || "", source || "Platinum Promo");
-
-      console.log("✅ Promo lead captured:", name);
-      res.status(200).json({ 
-        success: true,
-        message: "Promo lead submitted",
-        leadData,
-        airtableRecorded: true,
-        slackNotified: true
+      // Log lead to CRM
+      await logLead({
+        '👤 Name': name,
+        '📧 Email': email || '',
+        '📞 Phone': phone || '',
+        '🏢 Company': company || '',
+        '📣 Lead Source': 'Platinum Promo',
+        '🗒 Internal Notes': `Lead from YoBot® Platinum Promo • Interested in premium package`,
+        '📅 Date Added': new Date().toISOString()
       });
 
-    } catch (err: any) {
-      console.error("❌ Promo lead error:", err);
-      await sendAutomationFailureAlert("Platinum Lead Capture", err.message || "Lead capture failed");
-      res.status(500).json({ error: "Server error" });
+      // Log metric for tracking
+      await logMetric({
+        '🧠 Function Name': 'Capture Promo Lead',
+        '📝 Source Form': 'YoBot® Platinum Promo',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'Lead Engine'
+      });
+
+      // Log webhook activity
+      await logWebhook({
+        '📮 Endpoint Name': '/api/leads/promo',
+        '📥 Payload Summary': `Lead: ${name} - ${email || phone}`,
+        '✅ Success?': 'Yes',
+        '🧠 Handler Module': 'promo.ts',
+        '🕒 Timestamp': new Date().toISOString()
+      });
+
+      // Send Slack alert for new lead
+      await sendSlackAlert('#yobot-leads', 
+        `🚨 New Lead Captured!\n👤 Name: ${name}\n📞 Phone: ${phone || 'N/A'}\n📨 Email: ${email || 'N/A'}\n🏷 Source: Platinum Promo Form`
+      );
+
+      // WebSocket notification to connected dashboards
+      const io = (global as any).io;
+      if (io) {
+        io.emit('new_lead', {
+          event: 'new_lead',
+          name: name,
+          source: 'Platinum Promo',
+          timestamp: new Date().toISOString()
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "Platinum Promo lead captured successfully",
+        leadId: name,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Platinum Promo webhook error:', error);
+      
+      // Log error to metrics
+      try {
+        const { logMetric } = await import('./airtableUtils');
+        await logMetric({
+          '🧠 Function Name': 'Capture Promo Lead',
+          '📝 Source Form': 'YoBot® Platinum Promo',
+          '📅 Timestamp': new Date().toISOString(),
+          '📊 Dashboard Name': 'Lead Engine',
+          '📕 Error Type': error.constructor.name,
+          '📛 Error Message': error.message
+        });
+      } catch (logError) {
+        console.error('Failed to log error:', logError);
+      }
+
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // 📊 Webhook for: ROI Snapshot Form
+  app.post("/api/leads/roi", async (req, res) => {
+    try {
+      const { name, email, phone, company, currentCosts, goalROI } = req.body;
+
+      if (!name || !email) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      const { logMetric, logLead, logWebhook, sendSlackAlert } = await import('./airtableUtils');
+
+      // Log lead with ROI context
+      await logLead({
+        '👤 Name': name,
+        '📧 Email': email,
+        '📞 Phone': phone || '',
+        '🏢 Company': company || '',
+        '📣 Lead Source': 'ROI Snapshot',
+        '🗒 Internal Notes': `ROI lead • Current costs: $${currentCosts || 'N/A'} • Goal ROI: ${goalROI || 'N/A'}x`,
+        '📅 Date Added': new Date().toISOString()
+      });
+
+      await logMetric({
+        '🧠 Function Name': 'ROI Snapshot Lead',
+        '📝 Source Form': 'ROI Calculator',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'Lead Engine'
+      });
+
+      await logWebhook({
+        '📮 Endpoint Name': '/api/leads/roi',
+        '📥 Payload Summary': `ROI Lead: ${name} - ${email}`,
+        '✅ Success?': 'Yes',
+        '🧠 Handler Module': 'roi.ts',
+        '🕒 Timestamp': new Date().toISOString()
+      });
+
+      // Send Slack alert
+      await sendSlackAlert('#yobot-leads', 
+        `📊 ROI Snapshot Lead!\n👤 Name: ${name}\n📧 Email: ${email}\n🏢 Company: ${company || 'N/A'}\n💰 Current Costs: $${currentCosts || 'N/A'}\n🎯 Goal ROI: ${goalROI || 'N/A'}x`
+      );
+
+      // WebSocket notification
+      const io = (global as any).io;
+      if (io) {
+        io.emit('new_lead', {
+          event: 'new_lead',
+          name: name,
+          source: 'ROI Snapshot',
+          timestamp: new Date().toISOString()
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "ROI snapshot lead captured successfully",
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('ROI lead webhook error:', error);
+      
+      // Log error to metrics
+      try {
+        const { logMetric } = await import('./airtableUtils');
+        await logMetric({
+          '🧠 Function Name': 'ROI Snapshot Lead',
+          '📝 Source Form': 'ROI Calculator',
+          '📅 Timestamp': new Date().toISOString(),
+          '📊 Dashboard Name': 'Lead Engine',
+          '📕 Error Type': error.constructor.name,
+          '📛 Error Message': error.message
+        });
+      } catch (logError) {
+        console.error('Failed to log error:', logError);
+      }
+
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
     }
   });
 
