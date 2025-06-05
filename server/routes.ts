@@ -464,14 +464,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         console.log('Airtable payload:', JSON.stringify(airtablePayload, null, 2));
         
-        // Make actual Airtable API call
+        // Make actual Airtable API call with correct format
         const airtableUrl = `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU`;
         const airtableHeaders = {
-          "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN}`,
+          "Authorization": `Bearer ${process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY}`,
           "Content-Type": "application/json"
         };
         
-        const airtableResponse = await axios.post(airtableUrl, airtablePayload, { headers: airtableHeaders });
+        // Wrap payload in records array for Airtable API
+        const airtableRequestBody = {
+          records: [airtablePayload]
+        };
+        
+        const airtableResponse = await axios.post(airtableUrl, airtableRequestBody, { headers: airtableHeaders });
         
         if (airtableResponse.status === 200 || airtableResponse.status === 201) {
           airtableSuccess = true;
@@ -481,6 +486,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       } catch (airtableError: any) {
         console.error('Airtable push failed:', airtableError.message);
+        console.error('Airtable error details:', airtableError.response?.data);
+        console.error('Airtable status:', airtableError.response?.status);
         console.log('Falling back to simulation mode for testing');
         airtableSuccess = true; // Set to true for testing purposes
       }
