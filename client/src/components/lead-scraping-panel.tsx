@@ -44,9 +44,9 @@ export default function LeadScrapingPanel({ onResults }: LeadScrapingPanelProps)
   const scrapingTools = [
     { value: 'apollo', label: 'Apollo.io', description: 'Professional contact database' },
     { value: 'phantombuster', label: 'PhantomBuster', description: 'Social media scraping' },
+    { value: 'apify', label: 'Apify', description: 'Web scraping automation' },
     { value: 'linkedin', label: 'LinkedIn Sales Navigator', description: 'LinkedIn lead generation' },
-    { value: 'google', label: 'Google Maps', description: 'Local business scraping' },
-    { value: 'yellow-pages', label: 'Yellow Pages', description: 'Directory scraping' }
+    { value: 'google', label: 'Google Maps', description: 'Local business scraping' }
   ];
 
   const handleScrape = async () => {

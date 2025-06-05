@@ -20,7 +20,7 @@ class ApolloLeadGeneration:
         headers = {
             "Cache-Control": "no-cache",
             "Content-Type": "application/json",
-            "x-api-key": self.api_key
+            "X-Api-Key": self.api_key
         }
         payload = {
             "q_organization_keywords": company_keywords,

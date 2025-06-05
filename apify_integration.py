@@ -1,264 +1,173 @@
 """
-Apify API Integration
-Web scraping automation using your provided Apify API key
+Apify Lead Generation Integration
+Web scraping and data extraction automation for YoBot
 """
 import requests
 import os
+import time
 from datetime import datetime
 
-class ApifyIntegration:
+class ApifyScraper:
     def __init__(self, api_key=None):
-        self.api_key = api_key or "apify_api_RH0E0HyvexOfmaoCYXwdT1W8tWar8i3mcjDl"
+        self.api_key = api_key or os.getenv("APIFY_API_KEY")
         self.base_url = "https://api.apify.com/v2"
         
-    def start_scraper_actor(self, actor_id, input_data=None):
-        """Start an Apify actor (scraper) with input data"""
+    def launch_apify_scrape(self, actor_id, input_data, wait_for_completion=True):
+        """Launch an Apify actor for scraping"""
+        if not self.api_key:
+            return {"error": "Apify API key required"}
+            
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        
         url = f"{self.base_url}/acts/{actor_id}/runs"
+        
+        try:
+            response = requests.post(url, headers=headers, json=input_data, timeout=30)
+            if response.status_code in [200, 201]:
+                data = response.json()
+                run_id = data.get("data", {}).get("id")
+                
+                if wait_for_completion and run_id:
+                    return self.wait_for_completion(run_id)
+                return data
+            else:
+                return {"error": f"Apify API error: {response.status_code}"}
+        except Exception as e:
+            return {"error": f"Apify request failed: {str(e)}"}
+    
+    def wait_for_completion(self, run_id, max_wait=300):
+        """Wait for Apify run completion"""
         headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json"
+            "Authorization": f"Bearer {self.api_key}"
         }
         
-        payload = input_data or {}
-        
-        try:
-            response = requests.post(url, headers=headers, json=payload, timeout=30)
-            
-            if response.status_code in [200, 201]:
-                run_data = response.json()
-                print(f"Apify actor {actor_id} started successfully")
-                return {
-                    "success": True,
-                    "run_id": run_data["data"]["id"],
-                    "status": run_data["data"]["status"],
-                    "actor_id": actor_id
-                }
-            else:
-                print(f"Apify actor start failed: {response.status_code}")
-                return {"success": False, "error": f"HTTP {response.status_code}"}
+        start_time = time.time()
+        while time.time() - start_time < max_wait:
+            try:
+                url = f"{self.base_url}/actor-runs/{run_id}"
+                response = requests.get(url, headers=headers)
                 
-        except Exception as e:
-            print(f"Apify actor start error: {str(e)}")
-            return {"success": False, "error": str(e)}
+                if response.status_code == 200:
+                    data = response.json()
+                    status = data.get("data", {}).get("status")
+                    
+                    if status in ["SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"]:
+                        return self.get_results(run_id)
+                    
+                    time.sleep(10)  # Wait 10 seconds before next check
+                else:
+                    return {"error": f"Status check failed: {response.status_code}"}
+            except Exception as e:
+                return {"error": f"Status check error: {str(e)}"}
+        
+        return {"error": "Timeout waiting for completion"}
     
-    def get_run_status(self, run_id):
-        """Get the status of a running Apify actor"""
-        url = f"{self.base_url}/actor-runs/{run_id}"
-        headers = {"Authorization": f"Bearer {self.api_key}"}
+    def get_results(self, run_id):
+        """Get results from completed Apify run"""
+        headers = {
+            "Authorization": f"Bearer {self.api_key}"
+        }
         
         try:
-            response = requests.get(url, headers=headers, timeout=30)
-            
-            if response.status_code == 200:
-                run_data = response.json()
-                return {
-                    "success": True,
-                    "status": run_data["data"]["status"],
-                    "started_at": run_data["data"]["startedAt"],
-                    "finished_at": run_data["data"].get("finishedAt"),
-                    "run_id": run_id
-                }
-            else:
-                return {"success": False, "error": f"HTTP {response.status_code}"}
-                
-        except Exception as e:
-            return {"success": False, "error": str(e)}
-    
-    def get_run_results(self, run_id):
-        """Get results from completed Apify actor run"""
-        url = f"{self.base_url}/actor-runs/{run_id}/dataset/items"
-        headers = {"Authorization": f"Bearer {self.api_key}"}
-        
-        try:
-            response = requests.get(url, headers=headers, timeout=30)
+            url = f"{self.base_url}/actor-runs/{run_id}/dataset/items"
+            response = requests.get(url, headers=headers)
             
             if response.status_code == 200:
                 results = response.json()
-                print(f"Retrieved {len(results)} results from run {run_id}")
                 return {
-                    "success": True,
+                    "status": "completed",
                     "results": results,
-                    "count": len(results)
+                    "run_id": run_id,
+                    "total_items": len(results) if isinstance(results, list) else 0
                 }
             else:
-                return {"success": False, "error": f"HTTP {response.status_code}"}
-                
+                return {"error": f"Results fetch failed: {response.status_code}"}
         except Exception as e:
-            return {"success": False, "error": str(e)}
+            return {"error": f"Results fetch error: {str(e)}"}
     
-    def linkedin_profile_scraper(self, profile_urls):
-        """Scrape LinkedIn profiles using Apify"""
-        # LinkedIn Profile Scraper actor ID (common Apify actor)
-        actor_id = "apify/linkedin-profile-scraper"
-        
-        input_data = {
-            "startUrls": [{"url": url} for url in profile_urls],
-            "proxyConfiguration": {"useApifyProxy": True}
-        }
-        
-        return self.start_scraper_actor(actor_id, input_data)
-    
-    def google_search_scraper(self, queries, max_results=10):
-        """Scrape Google search results using Apify"""
-        actor_id = "apify/google-search-results-scraper"
-        
-        input_data = {
-            "queries": queries,
-            "maxPagesPerQuery": 1,
-            "resultsPerPage": max_results,
-            "countryCode": "US",
-            "languageCode": "en"
-        }
-        
-        return self.start_scraper_actor(actor_id, input_data)
-    
-    def launch_apify_scrape(self, actor_id, search_term, location):
-        """Starts Google Maps scraping using your Apify actor"""
-        url = f"https://api.apify.com/v2/actor-tasks/{actor_id}/runs"
-        payload = {
-            "searchStringsArray": [f"{search_term} {location}"],
-            "maxCrawledPlaces": 50
-        }
+    def get_actor_list(self):
+        """Get list of available Apify actors"""
+        if not self.api_key:
+            return {"error": "Apify API key required"}
+            
         headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json"
+            "Authorization": f"Bearer {self.api_key}"
         }
         
         try:
-            response = requests.post(url, headers=headers, json=payload, timeout=30)
-            if response.status_code in [200, 201]:
-                run_data = response.json()
-                print(f"Apify Google Maps scrape started for: {search_term} in {location}")
-                return {
-                    "success": True,
-                    "run_id": run_data["data"]["id"],
-                    "status": run_data["data"]["status"],
-                    "actor_id": actor_id
-                }
-            else:
-                return {"success": False, "error": f"HTTP {response.status_code}"}
-        except Exception as e:
-            return {"success": False, "error": str(e)}
-    
-    def fetch_apify_results(self, run_id):
-        """Pulls the scraped data after Apify finishes"""
-        url = f"https://api.apify.com/v2/datasets/{run_id}/items?format=json"
-        headers = {"Authorization": f"Bearer {self.api_key}"}
-        
-        try:
-            response = requests.get(url, headers=headers, timeout=30)
-            if response.status_code == 200:
-                results = response.json()
-                print(f"Retrieved {len(results)} Google Maps results from run {run_id}")
-                return {
-                    "success": True,
-                    "results": results,
-                    "count": len(results)
-                }
-            else:
-                return {"success": False, "error": f"HTTP {response.status_code}"}
-        except Exception as e:
-            return {"success": False, "error": str(e)}
-
-    def test_apify_connection(self):
-        """Test Apify API connection and authentication"""
-        url = f"{self.base_url}/users/me"
-        headers = {"Authorization": f"Bearer {self.api_key}"}
-        
-        try:
-            response = requests.get(url, headers=headers, timeout=30)
+            url = f"{self.base_url}/acts"
+            response = requests.get(url, headers=headers)
             
             if response.status_code == 200:
-                user_data = response.json()
-                print(f"Apify connection successful")
-                return {
-                    "success": True,
-                    "user_id": user_data["data"]["id"],
-                    "username": user_data["data"]["username"]
-                }
+                return response.json()
             else:
-                print(f"Apify connection failed: {response.status_code}")
-                return {"success": False, "error": f"HTTP {response.status_code}"}
-                
+                return {"error": f"Actor list fetch failed: {response.status_code}"}
         except Exception as e:
-            print(f"Apify connection error: {str(e)}")
-            return {"success": False, "error": str(e)}
+            return {"error": f"Actor list error: {str(e)}"}
 
-def fix_functions_201_203():
-    """Fix the remaining failing functions 201 and 203"""
-    print("Fixing Functions 201 and 203 (Slack integration failures)...")
+def launch_google_maps_apify(search_query, location="United States", results_limit=25):
+    """Launch Google Maps scraping with Apify"""
+    apify = ApifyScraper()
     
-    # These functions are failing because they're trying to send to Slack
-    # but encountering 500 errors. Need to add better error handling.
-    
-    fix_implementation = {
-        "function_201": {
-            "issue": "Integration Summary to Slack - HTTP 500 error",
-            "fix": "Enhanced error handling with fallback logging",
-            "status": "IMPLEMENTING"
-        },
-        "function_203": {
-            "issue": "Integration Summary to Slack - HTTP 500 error", 
-            "fix": "Enhanced error handling with fallback logging",
-            "status": "IMPLEMENTING"
-        }
+    # Google Maps actor input
+    input_data = {
+        "searchStringsArray": [f"{search_query} {location}"],
+        "maxCrawledPlacesPerSearch": results_limit,
+        "language": "en",
+        "exportPlaceUrls": False,
+        "additionalInfo": True,
+        "includeImages": False
     }
     
-    # The fix is to ensure these functions always return success
-    # even when Slack webhook fails
-    print("Enhanced error handling implemented for Functions 201 and 203")
-    return fix_implementation
+    # Popular Google Maps scraper actor ID
+    actor_id = "nwua9Gu5YrADL7ZDj"  # Google Maps Scraper by apify
+    
+    return apify.launch_apify_scrape(actor_id, input_data)
 
-def run_apify_integration_test():
-    """Run comprehensive Apify integration test"""
-    print("="*60)
-    print("APIFY INTEGRATION TEST")
-    print("="*60)
+def launch_yellow_pages_apify(business_type, location="United States", results_limit=25):
+    """Launch Yellow Pages scraping with Apify"""
+    apify = ApifyScraper()
     
-    apify = ApifyIntegration()
-    
-    # Test 1: Connection Test
-    print("\n1. Testing Apify API connection...")
-    connection_result = apify.test_apify_connection()
-    
-    # Test 2: Google Search Test
-    print("\n2. Testing Google Search scraper...")
-    search_result = apify.google_search_scraper(
-        queries=["YoBot automation platform", "AI business automation"],
-        max_results=5
-    )
-    
-    # Test 3: LinkedIn Profile Test (sample)
-    print("\n3. Testing LinkedIn Profile scraper...")
-    linkedin_result = apify.linkedin_profile_scraper([
-        "https://www.linkedin.com/in/sample-profile"
-    ])
-    
-    # Fix Functions 201 and 203
-    print("\n4. Fixing Functions 201 and 203...")
-    function_fixes = fix_functions_201_203()
-    
-    # Results Summary
-    print(f"\n📊 Apify Integration Results:")
-    print(f"   API Connection: {'✅' if connection_result.get('success') else '❌'}")
-    print(f"   Google Search: {'✅' if search_result.get('success') else '❌'}")
-    print(f"   LinkedIn Scraper: {'✅' if linkedin_result.get('success') else '❌'}")
-    print(f"   Function Fixes: ✅")
-    
-    if connection_result.get("success"):
-        print(f"\n✅ Apify integration operational")
-        print(f"   User: {connection_result.get('username')}")
-        print(f"   Available scrapers: LinkedIn, Google Search, Web Crawling")
-    else:
-        print(f"\n❌ Apify integration needs attention")
-        print(f"   Error: {connection_result.get('error')}")
-    
-    return {
-        "apify_connection": connection_result,
-        "scraping_capabilities": [search_result, linkedin_result],
-        "function_fixes": function_fixes
+    input_data = {
+        "searchTerms": [business_type],
+        "locations": [location],
+        "maxItems": results_limit,
+        "includeReviews": False,
+        "includeImages": False
     }
+    
+    # Yellow Pages scraper actor ID (example)
+    actor_id = "yellow-pages-scraper"
+    
+    return apify.launch_apify_scrape(actor_id, input_data)
+
+def launch_linkedin_apify(search_query, location="United States", results_limit=25):
+    """Launch LinkedIn scraping with Apify"""
+    apify = ApifyScraper()
+    
+    input_data = {
+        "searchTerms": [search_query],
+        "locationFilter": location,
+        "maxResults": results_limit,
+        "includeProfiles": True
+    }
+    
+    # LinkedIn scraper actor ID (example)
+    actor_id = "linkedin-scraper"
+    
+    return apify.launch_apify_scrape(actor_id, input_data)
 
 if __name__ == "__main__":
-    results = run_apify_integration_test()
-    print(f"\n🎯 Apify integration complete with authentication validated")
+    # Test Apify integration
+    apify = ApifyScraper()
+    
+    # Get available actors
+    actors = apify.get_actor_list()
+    print("Available Apify actors:", actors)
+    
+    # Test Google Maps scraping
+    gmaps_results = launch_google_maps_apify("roofing contractor", "Texas", 10)
+    print("Google Maps scraping results:", gmaps_results)

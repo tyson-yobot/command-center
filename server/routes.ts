@@ -6176,6 +6176,90 @@ print(json.dumps(results))
         }
       }
       
+      if (source === 'PhantomBuster') {
+        // Use PhantomBuster API
+        const { execSync } = await import('child_process');
+        const phantomCommand = `python3 -c "
+import sys
+sys.path.append('.')
+from phantombuster_integration import launch_linkedin_scraper, launch_google_maps_scraper
+import json
+
+if '${keywords}'.lower().find('linkedin') >= 0 or '${title}'.lower().find('linkedin') >= 0:
+    results = launch_linkedin_scraper('${(keywords || 'business owner').replace(/'/g, "\\'")}', '${(location || 'United States').replace(/'/g, "\\'")}', ${resultsLimit})
+else:
+    results = launch_google_maps_scraper('${(keywords || 'construction').replace(/'/g, "\\'")}', '${(location || 'United States').replace(/'/g, "\\'")}', ${resultsLimit})
+print(json.dumps(results))
+"`;
+
+        try {
+          const phantomResult = execSync(phantomCommand, { 
+            encoding: 'utf8',
+            timeout: 30000
+          });
+          
+          const leadData = JSON.parse(phantomResult.trim());
+          
+          return res.json({
+            success: true,
+            message: `PhantomBuster scrape completed`,
+            data: leadData,
+            source: 'PhantomBuster',
+            search_params: { title, location, keywords }
+          });
+
+        } catch (phantomError) {
+          return res.status(500).json({ 
+            success: false, 
+            error: 'PhantomBuster scrape failed',
+            details: phantomError.message,
+            source: 'PhantomBuster'
+          });
+        }
+      }
+      
+      if (source === 'Apify') {
+        // Use Apify API
+        const { execSync } = await import('child_process');
+        const apifyCommand = `python3 -c "
+import sys
+sys.path.append('.')
+from apify_integration import launch_google_maps_apify, launch_linkedin_apify
+import json
+
+if '${keywords}'.lower().find('linkedin') >= 0:
+    results = launch_linkedin_apify('${(keywords || 'business owner').replace(/'/g, "\\'")}', '${(location || 'United States').replace(/'/g, "\\'")}', ${resultsLimit})
+else:
+    results = launch_google_maps_apify('${(keywords || 'construction').replace(/'/g, "\\'")}', '${(location || 'United States').replace(/'/g, "\\'")}', ${resultsLimit})
+print(json.dumps(results))
+"`;
+
+        try {
+          const apifyResult = execSync(apifyCommand, { 
+            encoding: 'utf8',
+            timeout: 30000
+          });
+          
+          const leadData = JSON.parse(apifyResult.trim());
+          
+          return res.json({
+            success: true,
+            message: `Apify scrape completed`,
+            data: leadData,
+            source: 'Apify',
+            search_params: { title, location, keywords }
+          });
+
+        } catch (apifyError) {
+          return res.status(500).json({ 
+            success: false, 
+            error: 'Apify scrape failed',
+            details: apifyError.message,
+            source: 'Apify'
+          });
+        }
+      }
+      
       // Fallback for other sources
       const scrapeResult = {
         id: Date.now().toString(),
