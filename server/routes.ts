@@ -288,7 +288,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Import Airtable utilities
-      const { logMetric, logLead, logWebhook, sendSlackAlert } = await import('./airtableUtils');
+      const { logMetric, logLead, logWebhook, sendSlackAlert } = await import('./airtableUtils.js');
 
       // Log lead to CRM
       await logLead({
