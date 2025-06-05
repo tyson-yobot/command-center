@@ -465,7 +465,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log('Airtable payload:', JSON.stringify(airtablePayload, null, 2));
         
         // Make actual Airtable API call with correct format
-        const airtableUrl = `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU`;
+        const airtableUrl = `https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblRNjNnaGL5ICIf9`;
         const airtableHeaders = {
           "Authorization": `Bearer ${process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY}`,
           "Content-Type": "application/json"
