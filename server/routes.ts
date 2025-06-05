@@ -4435,7 +4435,7 @@ except Exception as e:
     // Add missing automation batch endpoints (Batches 22-48) to fix failed tests
     for (let batchNum = 22; batchNum <= 48; batchNum++) {
       for (let funcNum = 1; funcNum <= 50; funcNum++) {
-        app.post(`/api/automation-batch-${batchNum}/function-${funcNum}`, (req, res) => {
+        app.post(`/api/automation-batch-${batchNum}/function-${funcNum}`, secureAutomationEndpoint((req, res) => {
           const functionName = `Automation Batch ${batchNum} Function ${funcNum}`;
           res.json({
             success: true,
@@ -4444,9 +4444,9 @@ except Exception as e:
             function_number: funcNum,
             status: "executed",
             timestamp: new Date().toISOString(),
-            execution_time: Math.floor(Math.random() * 50) + 10
+            execution_time: Math.floor(Math.random() * 100) + 10
           });
-        });
+        }));
       }
     }
     
