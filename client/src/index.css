@@ -6,17 +6,20 @@
   /* Updated YoBot Command Center Color Palette */
   --primary-blue: 230 100% 47%; /* #1e3a8a */
   --success-green: 156 70% 40%; /* #10b981 */
+  --lime-green: 84 81% 44%; /* #65a30d - Bright lime green for outlines */
   --warning-amber: 43 96% 56%; /* #f59e0b */
   --critical-red: 0 84% 60%; /* #ef4444 */
   --revenue-gold: 45 93% 58%; /* #fbbf24 */
   --accent-blue: 217 91% 60%; /* #3b82f6 */
-  --background-navy: 220 30% 8%; /* #141a24 - Darker Navy Blue */
-  --card-background: 210 25% 10%; /* #1a2332 - Darker Blue Cards */
+  --teal-accent: 174 71% 48%; /* #14b8a6 - Better than brown for payback */
+  --prepare-bg: 220 15% 20%; /* #2d3748 - Better than black for prepare button */
+  --background-navy: 220 35% 6%; /* #0f1419 - Even Darker Navy Blue */
+  --card-background: 210 30% 8%; /* #141a24 - Darker Blue Cards - Uniform for all */
   --text-primary: 0 0% 100%; /* #ffffff */
   --text-secondary: 218 11% 65%; /* #a0aec0 */
   
   /* Legacy shadcn variables for compatibility */
-  --background: 220 30% 8%; /* #141a24 - Darker Navy Blue Background */
+  --background: 220 35% 6%; /* #0f1419 - Even Darker Navy Blue Background */
   --foreground: 0 0% 100%; /* #ffffff - White Text */
   --muted: 210 22% 6%; /* #0f1419 - Much Darker Card Background */
   --muted-foreground: 218 11% 65%; /* #a0aec0 - Secondary Text */
@@ -40,16 +43,78 @@
   --radius: 0.75rem;
 }
 
-/* Enhanced card system with shadows and color coding */
+/* Enhanced card system with uniform styling */
 .card {
+  background: hsl(var(--card-background));
+  border: 1px solid rgba(59, 130, 246, 0.2);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
   transition: all 0.3s ease;
+  color: hsl(var(--text-primary));
 }
 
 .card:hover {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   transform: translateY(-2px);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+/* Voice command field outlines */
+.voice-command-field {
+  border: 2px solid hsl(var(--lime-green));
+  border-radius: 8px;
+  background: hsl(var(--card-background));
+  color: hsl(var(--text-primary));
+}
+
+/* Live activity outlines */
+.live-activity-item {
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  background: hsl(var(--card-background));
+  color: hsl(var(--text-primary));
+}
+
+/* Better meter colors for visibility */
+.meter-bar {
+  background: linear-gradient(90deg, hsl(var(--success-green)), hsl(var(--accent-blue)));
+}
+
+/* Prepare button styling */
+.prepare-button {
+  background: hsl(var(--prepare-bg));
+  color: hsl(var(--text-primary));
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Payback days with teal instead of brown */
+.payback-metric {
+  color: hsl(var(--teal-accent));
+}
+
+/* Consistent button sizing */
+.action-button {
+  min-width: 120px;
+  height: 40px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Uniform text styling - all white except specific metrics */
+body, .card, .card-content, .card-header, .card-title, .card-description {
+  color: hsl(var(--text-primary)) !important;
+}
+
+/* Keep metric numbers colored but make labels white */
+.metric-label {
+  color: hsl(var(--text-primary)) !important;
+}
+
+/* Review button with better background */
+.review-button {
+  background: hsl(var(--accent-blue));
+  color: hsl(var(--text-primary));
+  border: none;
 }
 
 /* Color-coded metric cards */
