@@ -6388,6 +6388,188 @@ print(json.dumps(results))
     }
   });
 
+  // Lead Scraping Pipeline Endpoints
+  app.post('/api/scraping/process-lead', async (req, res) => {
+    try {
+      const { processScrapedLead } = await import('./scrapingPipeline');
+      const result = await processScrapedLead(req.body);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  });
+
+  app.post('/api/scraping/batch-process', async (req, res) => {
+    try {
+      const { processBatchLeads } = await import('./scrapingPipeline');
+      const { leads } = req.body;
+      const result = await processBatchLeads(leads || []);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  });
+
+  app.post('/api/apollo/enrich', async (req, res) => {
+    try {
+      const { firstName, lastName, domain } = req.body;
+      
+      if (!process.env.APOLLO_API_KEY) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Apollo API key not configured' 
+        });
+      }
+
+      const apolloKey = process.env.APOLLO_API_KEY;
+      const url = "https://api.apollo.io/v1/mixed_people/search";
+      const headers = {
+        "Cache-Control": "no-cache",
+        "Content-Type": "application/json"
+      };
+      
+      const payload = {
+        api_key: apolloKey,
+        q_organization_domains: [domain],
+        person_titles: [],
+        page: 1,
+        person_names: [`${firstName} ${lastName}`]
+      };
+
+      const response = await axios.post(url, payload, { headers, timeout: 10000 });
+      
+      if (response.status === 200 && response.data.people?.length > 0) {
+        const enriched = response.data.people[0];
+        res.json({
+          success: true,
+          data: {
+            email: enriched.email,
+            phone: enriched.phone,
+            job_title: enriched.title,
+            linkedin_url: enriched.linkedin_url
+          }
+        });
+      } else {
+        res.json({ success: false, message: 'No enrichment data found' });
+      }
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  });
+
+  app.get('/api/scraping/leads', async (req, res) => {
+    try {
+      const airtableBaseId = "appRt8V3tH4g5Z5if";
+      const airtableTableId = "tblPRZ4nHbtj9opU";
+      const airtableToken = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa";
+      
+      const url = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableId}`;
+      const headers = {
+        "Authorization": `Bearer ${airtableToken}`
+      };
+
+      const response = await axios.get(url, {
+        headers,
+        params: {
+          maxRecords: 100,
+          sort: [{ field: "📅 Timestamp", direction: "desc" }]
+        }
+      });
+
+      res.json({
+        success: true,
+        leads: response.data.records.map((record: any) => ({
+          id: record.id,
+          name: record.fields["🧑 Name"],
+          email: record.fields["📧 Email"],
+          phone: record.fields["📱 Phone"],
+          company: record.fields["🏢 Company"],
+          website: record.fields["🌐 Website"],
+          source: record.fields["🏷 Source Tool"],
+          timestamp: record.fields["📅 Timestamp"],
+          synced: record.fields["🔁 Synced to HubSpot?"],
+          isDuplicate: record.fields["⚠️ Duplicates Found"]
+        }))
+      });
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  });
+
+  // VoiceBot Call Logging Endpoint
+  app.post('/api/voicebot/calllog', async (req, res) => {
+    try {
+      const data = req.body;
+      const airtableBaseId = "appCoAtCZdARb4AM2"; // Voice Call Log base
+      const voiceLogTableId = "tblVoiceCallLog"; // 📞 Voice Call Log table
+      const airtableToken = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa";
+      
+      const record = {
+        "fields": {
+          "🧑 Caller Name": data.caller_name || "Unknown",
+          "📞 Phone Number": data.phone || "",
+          "🧠 Bot Name": data.bot_name || "YoBot",
+          "🕒 Call Timestamp": data.timestamp || new Date().toISOString(),
+          "📄 Transcript": data.transcript || "",
+          "🧭 Outcome": data.outcome || "Completed",
+          "🚨 Escalated?": data.escalated || false,
+          "🧪 QA Score": data.qa_score || 0,
+          "🗂 Source": "VoiceBot",
+          "🔗 Related Deal": data.related_deal || "",
+          "📍 Location": data.location || ""
+        }
+      };
+
+      const airtableUrl = `https://api.airtable.com/v0/${airtableBaseId}/${voiceLogTableId}`;
+      const headers = {
+        "Authorization": `Bearer ${airtableToken}`,
+        "Content-Type": "application/json"
+      };
+
+      const airtableResponse = await axios.post(airtableUrl, record, { headers });
+
+      // Send escalation alert if needed
+      if (data.escalated) {
+        await sendEscalationSlack(data.caller_name, data.phone, data.transcript);
+      }
+
+      res.json({
+        success: true,
+        message: "Call logged successfully",
+        airtable_response: airtableResponse.status,
+        escalation_sent: data.escalated || false
+      });
+
+    } catch (error: any) {
+      console.error('Voice call logging failed:', error.message);
+      res.status(500).json({ 
+        success: false, 
+        message: error.message,
+        airtable_response: 500
+      });
+    }
+  });
+
+  // Escalation Slack Alert Function
+  async function sendEscalationSlack(callerName: string, phone: string, issue: string): Promise<void> {
+    try {
+      const slackUrl = process.env.SLACK_WEBHOOK_URL;
+      if (!slackUrl) {
+        console.log('Slack webhook URL not configured for escalations');
+        return;
+      }
+
+      const payload = {
+        "text": `🚨 *Escalation Triggered from VoiceBot*\n• Caller: ${callerName}\n• Phone: ${phone}\n• Issue: ${issue}\n• Time: ${new Date().toLocaleString()}`
+      };
+
+      await axios.post(slackUrl, payload);
+      console.log('Escalation alert sent to Slack');
+    } catch (error: any) {
+      console.error('Failed to send escalation alert:', error.message);
+    }
+  }
+
   // Additional Trigger Endpoints
   app.post('/trigger/sms', async (req, res) => {
     try {
