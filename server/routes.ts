@@ -8761,5 +8761,70 @@ Provide 3 actionable suggestions in bullet points.`;
     next();
   });
 
+  // System status and health check endpoint
+  app.post('/api/test/system-status', async (req, res) => {
+    try {
+      const { runCompleteSystemTest, generateSystemStatusReport } = require('./automationSystemTest');
+      const report = await generateSystemStatusReport();
+      res.json(report);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: `System status test failed: ${error.message}`
+      });
+    }
+  });
+
+  // Voice callback trigger endpoint
+  app.post('/api/voice/trigger-callback', async (req, res) => {
+    try {
+      const { phone_number, call_id } = req.body;
+      if (!phone_number || !call_id) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Phone number and call ID are required' 
+        });
+      }
+
+      const { triggerVoiceCallback } = require('./voiceCallbackSystem');
+      const result = await triggerVoiceCallback(phone_number, call_id);
+      
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: `Voice callback failed: ${error.message}`
+      });
+    }
+  });
+
+  // Follow-up status monitoring endpoint
+  app.get('/api/followup/status', async (req, res) => {
+    try {
+      const { statusMonitor } = require('./voiceCallbackSystem');
+      const result = await statusMonitor();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: `Status monitoring failed: ${error.message}`
+      });
+    }
+  });
+
+  // Daily summary endpoint
+  app.post('/api/followup/daily-summary', async (req, res) => {
+    try {
+      const { dailySummaryPush } = require('./voiceCallbackSystem');
+      const result = await dailySummaryPush();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: `Daily summary failed: ${error.message}`
+      });
+    }
+  });
+
   return httpServer;
 }
