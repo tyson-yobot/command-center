@@ -942,6 +942,263 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // 🧾 YoBot® Sales Order Form LIVE
+  app.post('/api/orders/live', async (req, res) => {
+    try {
+      const { customer_name, order_total, products, contact_email, delivery_date } = req.body;
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
+      }
+
+      await axios.post(
+        `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+        {
+          fields: {
+            "👤 Full Name": customer_name,
+            "📧 Email": contact_email,
+            "📞 Phone": "Sales Order",
+            "📥 Lead Source": `Sales Order Live - ${products} - $${order_total}`
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      console.log("✅ Live sales order captured:", customer_name);
+      res.status(200).send("Sales order submitted");
+    } catch (err: any) {
+      console.error("❌ Sales order error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 🧾 YoBot® Sales Order Form TEST
+  app.post('/api/orders/test', async (req, res) => {
+    try {
+      const { customer_name, order_total, products, contact_email } = req.body;
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
+      }
+
+      await axios.post(
+        `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+        {
+          fields: {
+            "👤 Full Name": customer_name,
+            "📧 Email": contact_email,
+            "📞 Phone": "Test Order",
+            "📥 Lead Source": `Sales Order Test - ${products} - $${order_total}`
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      console.log("✅ Test sales order captured:", customer_name);
+      res.status(200).send("Test order submitted");
+    } catch (err: any) {
+      console.error("❌ Test order error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 📋 Awarded Project – Intake Form
+  app.post('/api/projects/awarded', async (req, res) => {
+    try {
+      const { project_name, client_name, project_value, start_date, requirements } = req.body;
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
+      }
+
+      await axios.post(
+        `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblAwardedProjects`,
+        {
+          fields: {
+            "📋 Project Name": project_name,
+            "👤 Client Name": client_name,
+            "💰 Project Value": project_value,
+            "📅 Start Date": start_date,
+            "📝 Requirements": requirements,
+            "🎯 Status": "Awarded"
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      console.log("✅ Awarded project captured:", project_name);
+      res.status(200).send("Project submitted");
+    } catch (err: any) {
+      console.error("❌ Project error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 💡 YoBot® Feature Request Form
+  app.post('/api/features/request', async (req, res) => {
+    try {
+      const { feature_name, requester_name, description, priority, use_case } = req.body;
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
+      }
+
+      await axios.post(
+        `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblFeatureRequests`,
+        {
+          fields: {
+            "💡 Feature Name": feature_name,
+            "👤 Requester": requester_name,
+            "📝 Description": description,
+            "⭐ Priority": priority,
+            "🎯 Use Case": use_case
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      console.log("✅ Feature request captured:", feature_name);
+      res.status(200).send("Feature request submitted");
+    } catch (err: any) {
+      console.error("❌ Feature request error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 📊 Dashboard Intake
+  app.post('/api/intake/dashboard', async (req, res) => {
+    try {
+      const { client_name, dashboard_type, data_sources, requirements } = req.body;
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
+      }
+
+      await axios.post(
+        `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblDashboardIntake`,
+        {
+          fields: {
+            "👤 Client Name": client_name,
+            "📊 Dashboard Type": dashboard_type,
+            "🔗 Data Sources": data_sources,
+            "📝 Requirements": requirements
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      console.log("✅ Dashboard intake captured:", client_name);
+      res.status(200).send("Dashboard intake submitted");
+    } catch (err: any) {
+      console.error("❌ Dashboard intake error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 📬 YoBot Contact Us Form
+  app.post('/api/contact/general', async (req, res) => {
+    try {
+      const { name, email, subject, message, contact_type } = req.body;
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
+      }
+
+      await axios.post(
+        `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblContactForms`,
+        {
+          fields: {
+            "👤 Name": name,
+            "📧 Email": email,
+            "📋 Subject": subject,
+            "📝 Message": message,
+            "🏷️ Contact Type": contact_type || "General Inquiry"
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      console.log("✅ Contact form captured:", name);
+      res.status(200).send("Contact form submitted");
+    } catch (err: any) {
+      console.error("❌ Contact form error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 💳 SmartSpend™ Charge Intake Form
+  app.post('/api/smartspend/charge', async (req, res) => {
+    try {
+      const { client_name, charge_amount, description, category, approval_status } = req.body;
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
+      }
+
+      await axios.post(
+        `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblSmartSpendCharges`,
+        {
+          fields: {
+            "👤 Client Name": client_name,
+            "💳 Charge Amount": charge_amount,
+            "📝 Description": description,
+            "🏷️ Category": category,
+            "✅ Approval Status": approval_status || "Pending"
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      console.log("✅ SmartSpend charge captured:", client_name);
+      res.status(200).send("SmartSpend charge submitted");
+    } catch (err: any) {
+      console.error("❌ SmartSpend charge error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
   // Test Lead Source Mapping Endpoint
   app.post('/api/test/lead-source', async (req, res) => {
     try {
