@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer } from "ws";
 import { storage } from "./storage";
+import { dashboardSecurityMiddleware, secureAutomationEndpoint } from "./security";
 import { generateQuotePDF, generateROIPDF } from "./pdfGenerator";
 import { z } from "zod";
 import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertCrmDataSchema, insertScannedContactSchema, insertKnowledgeBaseSchema } from "@shared/schema";
