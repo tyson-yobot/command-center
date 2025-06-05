@@ -9,7 +9,7 @@ from datetime import datetime
 
 class ApifyScraper:
     def __init__(self, api_key=None):
-        self.api_key = api_key or os.getenv("APIFY_API_KEY")
+        self.api_key = api_key or os.getenv("APIFY_API_KEY") or "apify_api_RH0E0HyvexOfmaoCYXwdT1W8tWar8i3mcjDl"
         self.base_url = "https://api.apify.com/v2"
         
     def launch_apify_scrape(self, actor_id, input_data, wait_for_completion=True):
