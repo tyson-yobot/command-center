@@ -5,7 +5,7 @@ export async function logFollowupEvent(callId: string, method: string, outcome: 
   try {
     const url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📞 Follow-Up Reminder Tracker";
     const headers = {
-      "Authorization": `Bearer ${process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY}`,
+      "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`,
       "Content-Type": "application/json"
     };
     
@@ -73,7 +73,7 @@ export async function getLastCallInfo(callId: string): Promise<any> {
   try {
     const url = `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📥 Inbound Call Log?filterByFormula={🔑 Call ID}='${callId}'`;
     const headers = {
-      "Authorization": `Bearer ${process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY}`
+      "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`
     };
     
     const response = await axios.get(url, { headers });
