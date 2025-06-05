@@ -1,0 +1,80 @@
+log_followup_event.py
+Logs follow-up attempt to Airtable.
+
+python
+Copy
+Edit
+import requests
+from datetime import datetime
+
+def log_followup_event(call_id, method, outcome):
+    url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📞 Follow-Up Reminder Tracker"
+    headers = {
+        "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "fields": {
+            "📞 Call ID": call_id,
+            "📅 Follow-Up Date": datetime.utcnow().isoformat(),
+            "📨 Method": method,
+            "📊 Outcome": outcome,
+            "✅ Completed": True
+        }
+    }
+    return requests.post(url, json=data, headers=headers).json()
+2. send_followup_sms.py
+Sends SMS using Twilio after a missed call.
+
+python
+Copy
+Edit
+from twilio.rest import Client
+
+def send_followup_sms(to_number, message_body):
+    client = Client("ACXXXXXXXXXXXXXXXXXXXXXXXXX", "your_twilio_auth_token")
+    message = client.messages.create(
+        body=message_body,
+        from_="+15551234567",  # your Twilio number
+        to=to_number
+    )
+    return message.sid
+3. should_follow_up.py
+Checks if a follow-up is required (based on call status).
+
+python
+Copy
+Edit
+def should_follow_up(call_record):
+    if call_record.get("📞 Call Status") in ["Missed", "Declined"]:
+        return True
+    return False
+4. get_last_call_info.py
+Fetches call info from the Airtable log.
+
+python
+Copy
+Edit
+import requests
+
+def get_last_call_info(call_id):
+    url = f"https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📥 Inbound Call Log?filterByFormula={{🔑 Call ID}}='{call_id}'"
+    headers = {
+        "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
+    }
+    response = requests.get(url, headers=headers)
+    records = response.json().get("records", [])
+    return records[0]["fields"] if records else {}
+5. compose_followup_message.py
+Creates dynamic message text based on client name or status.
+
+python
+Copy
+Edit
+def compose_followup_message(name, status):
+    if status == "Missed":
+        return f"Hi {name}, sorry we missed your call. Would you like to schedule a time to chat?"
+    elif status == "Completed":
+        return f"Hi {name}, thanks for chatting with us! Let us know if you have any follow-up questions."
+    else:
+        return f"Hi {name}, this is a quick check-in from the YoBot® team."

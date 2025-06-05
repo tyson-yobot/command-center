@@ -1,0 +1,99 @@
+trigger_voice_callback.py
+Auto-initiates a voice follow-up using the VoiceBot if SMS goes unanswered.
+
+python
+Copy
+Edit
+import requests
+
+def trigger_voice_callback(phone_number, call_id):
+    url = "https://replit.yobot.bot/trigger-voicebot-callback"
+    data = {
+        "phone": phone_number,
+        "call_id": call_id,
+        "intent": "followup_callback"
+    }
+    headers = {"Authorization": "Bearer YOUR_INTERNAL_API_KEY"}
+    return requests.post(url, json=data, headers=headers).json()
+7. followup_webhook_handler.py
+Handles incoming webhook to trigger the full follow-up sequence.
+
+python
+Copy
+Edit
+from flask import Flask, request, jsonify
+from your_module import (
+    get_last_call_info, should_follow_up, compose_followup_message,
+    send_followup_sms, log_followup_event
+)
+
+app = Flask(__name__)
+
+@app.route('/followup-webhook', methods=['POST'])
+def handle_followup():
+    data = request.json
+    call_id = data.get("call_id")
+    phone = data.get("phone")
+
+    call_info = get_last_call_info(call_id)
+    if should_follow_up(call_info):
+        msg = compose_followup_message(call_info.get("👤 Name", "there"), call_info["📞 Call Status"])
+        sms_id = send_followup_sms(phone, msg)
+        log_followup_event(call_id, "SMS", "Sent")
+        return jsonify({"status": "sent", "sid": sms_id})
+    
+    return jsonify({"status": "no follow-up needed"})
+8. retry_followup_logic.py
+Handles retry attempts if no response is received within 24 hours.
+
+python
+Copy
+Edit
+import time
+from datetime import datetime, timedelta
+
+def retry_followup(call_id, phone, attempts=2, interval_hrs=24):
+    for i in range(attempts):
+        response = send_followup_sms(phone, "Just checking back — is now a good time to talk?")
+        log_followup_event(call_id, "SMS Retry", f"Attempt {i+1}")
+        time.sleep(interval_hrs * 3600)
+9. log_alert_to_slack.py
+Pushes a follow-up failure or retry notice to Slack for manual backup.
+
+python
+Copy
+Edit
+import requests
+
+def log_alert_to_slack(message):
+    url = "https://hooks.slack.com/services/TXXX/BYYY/ZZZZ"
+    payload = {
+        "text": f"📟 Follow-Up Alert:\n{message}"
+    }
+    return requests.post(url, json=payload).status_code
+10. close_out_followup.py
+Automatically marks a follow-up task as resolved after confirmation or no contact.
+
+python
+Copy
+Edit
+import requests
+
+def close_out_followup(call_id):
+    url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📞 Follow-Up Reminder Tracker"
+    headers = {
+        "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "records": [
+            {
+                "fields": {
+                    "🔑 Call ID": call_id,
+                    "✅ Completed": True,
+                    "📅 Follow-Up Date": datetime.utcnow().isoformat()
+                }
+            }
+        ]
+    }
+    return requests.patch(url, json=data, headers=headers).json()
