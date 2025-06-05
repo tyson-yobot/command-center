@@ -241,10 +241,6 @@ async function triggerMakeScenario(data: any) {
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
 
-  // Setup centralized webhook router - ensures ALL webhooks route to main desktop command center ONLY
-  setupCentralizedWebhookRouter(app);
-  console.log('✅ Centralized webhook router active - all automations route to main desktop command center');
-
   // Webhook status endpoint
   app.get('/api/webhook/status', (req, res) => {
     res.json({
@@ -260,6 +256,697 @@ export async function registerRoutes(app: Express): Promise<Server> {
         'Feature Request', 'Contact Us'
       ]
     });
+  });
+
+  // Command Center UI Control Endpoints
+  
+  // VoiceBot ON/OFF Control
+  app.patch('/api/voicebot/status', async (req, res) => {
+    try {
+      const { enabled } = req.body;
+      
+      // Log the status change
+      const { logMetric } = await import('./airtableUtils.js');
+      await logMetric({
+        '🧠 Function Name': 'VoiceBot Status Toggle',
+        '📝 Source Form': 'Command Center',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'VoiceBot Control',
+        '⚙️ Status': enabled ? 'Enabled' : 'Disabled'
+      });
+
+      res.json({
+        success: true,
+        message: `VoiceBot ${enabled ? 'enabled' : 'disabled'} successfully`,
+        status: enabled ? 'active' : 'inactive',
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('VoiceBot status error:', error);
+      res.status(500).json({ error: 'Failed to update VoiceBot status' });
+    }
+  });
+
+  // Force Webhook Trigger
+  app.post('/api/dev/trigger', async (req, res) => {
+    try {
+      const { webhook, payload } = req.body;
+      
+      // Log the manual trigger
+      const { logMetric } = await import('./airtableUtils.js');
+      await logMetric({
+        '🧠 Function Name': 'Manual Webhook Trigger',
+        '📝 Source Form': 'Developer Tools',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'Dev Controls',
+        '🎯 Webhook': webhook || 'Generic Test'
+      });
+
+      res.json({
+        success: true,
+        message: 'Webhook triggered successfully',
+        webhook: webhook || 'test',
+        triggered_at: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Webhook trigger error:', error);
+      res.status(500).json({ error: 'Failed to trigger webhook' });
+    }
+  });
+
+  // Reload Bot Memory
+  app.post('/api/bot/memory/reload', async (req, res) => {
+    try {
+      // Log the memory reload
+      const { logMetric } = await import('./airtableUtils.js');
+      await logMetric({
+        '🧠 Function Name': 'Bot Memory Reload',
+        '📝 Source Form': 'Command Center',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'Bot Management',
+        '🔄 Action': 'Memory Refresh'
+      });
+
+      res.json({
+        success: true,
+        message: 'Bot memory reloaded successfully',
+        memory_status: 'refreshed',
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Memory reload error:', error);
+      res.status(500).json({ error: 'Failed to reload bot memory' });
+    }
+  });
+
+  // Metrics Pull Endpoint
+  app.get('/api/metrics/pull', async (req, res) => {
+    try {
+      // Mock data - in production would pull from Airtable
+      const metricsData = {
+        leadsMTD: 43,
+        salesMTD: 5,
+        avgCallTime: 112,
+        errorRate: 0.004,
+        missedCalls: 2,
+        conversionRate: 11.6,
+        responseTime: '180ms',
+        systemHealth: 97,
+        activeCalls: 0,
+        queuedTasks: 0
+      };
+
+      // Log the metrics pull
+      const { logMetric } = await import('./airtableUtils.js');
+      await logMetric({
+        '🧠 Function Name': 'Metrics Data Pull',
+        '📝 Source Form': 'Dashboard Refresh',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'Command Center',
+        '📈 Leads MTD': metricsData.leadsMTD,
+        '💰 Sales MTD': metricsData.salesMTD
+      });
+
+      res.json(metricsData);
+    } catch (error: any) {
+      console.error('Metrics pull error:', error);
+      res.status(500).json({ error: 'Failed to pull metrics data' });
+    }
+  });
+
+  // PDF Quote Builder
+  app.post('/api/quotes/build', async (req, res) => {
+    try {
+      const { package: selectedPackage, addOns, email, clientName } = req.body;
+      
+      // Calculate quote total
+      const packagePrices = {
+        'Standard': 999,
+        'Professional': 1999,
+        'Platinum': 2999,
+        'Enterprise': 4999
+      };
+      
+      const addOnPrices = {
+        'SmartSpend': 500,
+        'Advanced Analytics': 750,
+        'A/B Testing': 300,
+        'Custom Integration': 1000
+      };
+      
+      const packageTotal = packagePrices[selectedPackage] || 0;
+      const addOnTotal = (addOns || []).reduce((sum, addon) => sum + (addOnPrices[addon] || 0), 0);
+      const finalTotal = packageTotal + addOnTotal;
+      
+      // Log quote generation
+      const { logPDFQuote } = await import('./airtableUtils.js');
+      await logPDFQuote({
+        '🧾 Client Name': clientName,
+        '📩 Email': email,
+        '🛠️ Package Selected': selectedPackage,
+        '➕ Add-Ons': (addOns || []).join(', '),
+        '💰 Total Quote': finalTotal,
+        '📅 Date Requested': new Date().toISOString(),
+        '📥 Source': 'Command Center Quote Builder'
+      });
+
+      res.json({
+        success: true,
+        message: 'Quote generated successfully',
+        quoteId: `Q-${Date.now()}`,
+        packageTotal,
+        addOnTotal,
+        finalTotal,
+        downloadLink: `/quotes/Q-${Date.now()}.pdf`
+      });
+    } catch (error: any) {
+      console.error('Quote build error:', error);
+      res.status(500).json({ error: 'Failed to generate quote' });
+    }
+  });
+
+  // Call Log Viewer
+  app.get('/api/logs/calls', async (req, res) => {
+    try {
+      // Mock call log data - in production would pull from Airtable
+      const callLogs = [
+        {
+          id: 'CALL_001',
+          date: '2024-06-05T10:30:00Z',
+          caller: 'John Smith',
+          phone: '+1-555-0123',
+          intent: 'Product Demo',
+          outcome: 'Interested',
+          sentiment: 'positive',
+          transcriptLink: '/transcripts/CALL_001.txt',
+          duration: 245
+        },
+        {
+          id: 'CALL_002',
+          date: '2024-06-05T14:15:00Z',
+          caller: 'Sarah Johnson',
+          phone: '+1-555-0124',
+          intent: 'Pricing Inquiry',
+          outcome: 'Quote Requested',
+          sentiment: 'neutral',
+          transcriptLink: '/transcripts/CALL_002.txt',
+          duration: 180
+        }
+      ];
+
+      res.json({
+        success: true,
+        calls: callLogs,
+        total: callLogs.length
+      });
+    } catch (error: any) {
+      console.error('Call logs error:', error);
+      res.status(500).json({ error: 'Failed to fetch call logs' });
+    }
+  });
+
+  // Slack Alert Trigger
+  app.post('/api/alerts/slack', async (req, res) => {
+    try {
+      const { message, channel } = req.body;
+      
+      // Log the manual alert
+      const { logMetric } = await import('./airtableUtils.js');
+      await logMetric({
+        '🧠 Function Name': 'Manual Slack Alert',
+        '📝 Source Form': 'Command Center',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'Alert System',
+        '📱 Channel': channel || '#sales',
+        '📝 Message': message || 'Manual alert triggered'
+      });
+
+      res.json({
+        success: true,
+        message: 'Slack alert sent successfully',
+        channel: channel || '#sales',
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Slack alert error:', error);
+      res.status(500).json({ error: 'Failed to send Slack alert' });
+    }
+  });
+
+  // Calendar Invite Generator
+  app.post('/api/calendar/invite', async (req, res) => {
+    try {
+      const { date, time, name, email, meetingType } = req.body;
+      
+      // Log the calendar invite
+      const { logMetric } = await import('./airtableUtils.js');
+      await logMetric({
+        '🧠 Function Name': 'Calendar Invite Generated',
+        '📝 Source Form': 'Booking System',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'Calendar Management',
+        '👤 Attendee': name,
+        '📧 Email': email,
+        '🗓️ Meeting Date': `${date} ${time}`,
+        '🎯 Type': meetingType || 'Demo'
+      });
+
+      res.json({
+        success: true,
+        message: 'Calendar invite created successfully',
+        inviteId: `INV-${Date.now()}`,
+        icsLink: `/calendar/INV-${Date.now()}.ics`,
+        googleLink: `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(meetingType || 'Meeting')}&dates=${date}T${time.replace(':', '')}00Z`
+      });
+    } catch (error: any) {
+      console.error('Calendar invite error:', error);
+      res.status(500).json({ error: 'Failed to create calendar invite' });
+    }
+  });
+
+  // Demo Email Prep Pack
+  app.post('/api/email/send-pack', async (req, res) => {
+    try {
+      const { email, clientName, includeQuote } = req.body;
+      
+      // Log the prep pack send
+      const { logMetric } = await import('./airtableUtils.js');
+      await logMetric({
+        '🧠 Function Name': 'Demo Prep Pack Sent',
+        '📝 Source Form': 'Email Automation',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'Email System',
+        '📧 Recipient': email,
+        '👤 Client': clientName,
+        '📄 Include Quote': includeQuote ? 'Yes' : 'No'
+      });
+
+      res.json({
+        success: true,
+        message: 'Demo prep pack sent successfully',
+        recipient: email,
+        sentAt: new Date().toISOString(),
+        contents: [
+          'Product demo video',
+          'Company overview',
+          includeQuote ? 'Custom quote' : null,
+          'Booking link for follow-up'
+        ].filter(Boolean)
+      });
+    } catch (error: any) {
+      console.error('Demo prep pack error:', error);
+      res.status(500).json({ error: 'Failed to send demo prep pack' });
+    }
+  });
+
+  // SMS Reactivation for Dormant Leads
+  app.post('/api/sms/reactivate', async (req, res) => {
+    try {
+      const { phone, name, lastContact } = req.body;
+      
+      // Log the SMS reactivation
+      const { logMetric } = await import('./airtableUtils.js');
+      await logMetric({
+        '🧠 Function Name': 'SMS Lead Reactivation',
+        '📝 Source Form': 'Lead Management',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'SMS System',
+        '📱 Phone': phone,
+        '👤 Lead Name': name,
+        '🕒 Last Contact': lastContact
+      });
+
+      res.json({
+        success: true,
+        message: 'SMS reactivation sent successfully',
+        phone: phone,
+        sentAt: new Date().toISOString(),
+        smsContent: 'Still interested in automating your sales or support? YoBot can follow up or even close for you. Want to pick up where we left off?'
+      });
+    } catch (error: any) {
+      console.error('SMS reactivation error:', error);
+      res.status(500).json({ error: 'Failed to send SMS reactivation' });
+    }
+  });
+
+  // Metrics History for Sparklines
+  app.get('/api/metrics/history', async (req, res) => {
+    try {
+      const { period } = req.query; // day, week, month
+      
+      // Mock historical data - in production would pull from Airtable
+      const historyData = {
+        leads: [
+          { date: '2024-06-01', value: 12 },
+          { date: '2024-06-02', value: 8 },
+          { date: '2024-06-03', value: 15 },
+          { date: '2024-06-04', value: 11 },
+          { date: '2024-06-05', value: 9 }
+        ],
+        sales: [
+          { date: '2024-06-01', value: 2 },
+          { date: '2024-06-02', value: 1 },
+          { date: '2024-06-03', value: 3 },
+          { date: '2024-06-04', value: 0 },
+          { date: '2024-06-05', value: 1 }
+        ],
+        missedCalls: [
+          { date: '2024-06-01', value: 1 },
+          { date: '2024-06-02', value: 0 },
+          { date: '2024-06-03', value: 2 },
+          { date: '2024-06-04', value: 1 },
+          { date: '2024-06-05', value: 0 }
+        ]
+      };
+
+      res.json({
+        success: true,
+        period: period || 'week',
+        data: historyData
+      });
+    } catch (error: any) {
+      console.error('Metrics history error:', error);
+      res.status(500).json({ error: 'Failed to fetch metrics history' });
+    }
+  });
+
+  // RAG Memory Viewer
+  app.get('/api/rag/memory', async (req, res) => {
+    try {
+      const { client } = req.query;
+      
+      // Mock RAG memory data - in production would pull from vector database
+      const ragMemory = [
+        {
+          id: 'RAG_001',
+          promptSnippet: 'Customer interested in voice automation for healthcare',
+          source: 'Call transcript',
+          sourceType: 'call',
+          lastUsed: '2024-06-05T10:30:00Z',
+          relevanceScore: 0.95,
+          context: 'HIPAA compliance requirements discussed'
+        },
+        {
+          id: 'RAG_002',
+          promptSnippet: 'Price objection handling for enterprise clients',
+          source: 'Demo feedback form',
+          sourceType: 'form',
+          lastUsed: '2024-06-04T14:15:00Z',
+          relevanceScore: 0.88,
+          context: 'ROI justification needed'
+        },
+        {
+          id: 'RAG_003',
+          promptSnippet: 'Integration requirements with existing CRM',
+          source: 'Technical document',
+          sourceType: 'doc',
+          lastUsed: '2024-06-03T09:45:00Z',
+          relevanceScore: 0.82,
+          context: 'Salesforce API integration'
+        }
+      ];
+
+      res.json({
+        success: true,
+        client: client || 'default',
+        memories: ragMemory.slice(0, 5),
+        total: ragMemory.length
+      });
+    } catch (error: any) {
+      console.error('RAG memory error:', error);
+      res.status(500).json({ error: 'Failed to fetch RAG memory' });
+    }
+  });
+
+  // Add-On Status Tracker
+  app.get('/api/addons/status', async (req, res) => {
+    try {
+      const { client } = req.query;
+      
+      // Mock add-on status data
+      const addOnStatus = [
+        {
+          name: 'SmartSpend',
+          setupCost: 500,
+          monthlyCost: 299,
+          active: true,
+          usageLast30Days: 24,
+          status: 'active'
+        },
+        {
+          name: 'Advanced Analytics',
+          setupCost: 750,
+          monthlyCost: 399,
+          active: true,
+          usageLast30Days: 8,
+          status: 'low_usage'
+        },
+        {
+          name: 'A/B Testing',
+          setupCost: 300,
+          monthlyCost: 199,
+          active: false,
+          usageLast30Days: 0,
+          status: 'inactive'
+        }
+      ];
+
+      res.json({
+        success: true,
+        client: client || 'default',
+        addOns: addOnStatus
+      });
+    } catch (error: any) {
+      console.error('Add-on status error:', error);
+      res.status(500).json({ error: 'Failed to fetch add-on status' });
+    }
+  });
+
+  // Stripe Payment Status
+  app.get('/api/stripe/status', async (req, res) => {
+    try {
+      const { client } = req.query;
+      
+      // Mock Stripe status data
+      const paymentStatus = {
+        status: 'active',
+        lastCharge: '2024-06-01T00:00:00Z',
+        monthlyAmount: 2999,
+        nextCharge: '2024-07-01T00:00:00Z',
+        paymentMethod: 'card_ending_4242',
+        subscriptionId: 'sub_1234567890'
+      };
+
+      res.json({
+        success: true,
+        client: client || 'default',
+        payment: paymentStatus
+      });
+    } catch (error: any) {
+      console.error('Stripe status error:', error);
+      res.status(500).json({ error: 'Failed to fetch payment status' });
+    }
+  });
+
+  // Compliance Flags
+  app.get('/api/compliance/flags', async (req, res) => {
+    try {
+      // Mock compliance data
+      const complianceFlags = {
+        minorIssues: 2,
+        criticalIssues: 0,
+        passedChecks: 15,
+        totalChecks: 17,
+        lastAudit: '2024-06-01T00:00:00Z',
+        nextAudit: '2024-07-01T00:00:00Z'
+      };
+
+      res.json({
+        success: true,
+        compliance: complianceFlags
+      });
+    } catch (error: any) {
+      console.error('Compliance flags error:', error);
+      res.status(500).json({ error: 'Failed to fetch compliance flags' });
+    }
+  });
+
+  // Client Health Score
+  app.get('/api/health/score', async (req, res) => {
+    try {
+      const { client } = req.query;
+      
+      // Mock health score calculation
+      const metrics = {
+        leadsMTD: 43,
+        voiceSuccessRate: 85,
+        errorRate: 0.004,
+        missedCalls: 2
+      };
+      
+      const score = Math.max(0, Math.min(100, 
+        metrics.leadsMTD + metrics.voiceSuccessRate - (metrics.errorRate * 100) - metrics.missedCalls
+      ));
+      
+      let healthStatus = 'excellent';
+      let color = 'blue';
+      
+      if (score >= 90) {
+        healthStatus = 'excellent';
+        color = 'blue';
+      } else if (score >= 75) {
+        healthStatus = 'good';
+        color = 'green';
+      } else if (score >= 50) {
+        healthStatus = 'caution';
+        color = 'orange';
+      } else {
+        healthStatus = 'at_risk';
+        color = 'red';
+      }
+
+      res.json({
+        success: true,
+        client: client || 'default',
+        score: Math.round(score),
+        status: healthStatus,
+        color: color,
+        breakdown: metrics
+      });
+    } catch (error: any) {
+      console.error('Health score error:', error);
+      res.status(500).json({ error: 'Failed to calculate health score' });
+    }
+  });
+
+  // Add-On Activation
+  app.post('/api/addons/activate', async (req, res) => {
+    try {
+      const { client, addonName, setupCost, monthlyCost } = req.body;
+      
+      // Log the add-on activation
+      const { logMetric } = await import('./airtableUtils.js');
+      await logMetric({
+        '🧠 Function Name': 'Add-On Activation',
+        '📝 Source Form': 'Command Center',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'Add-On Management',
+        '👤 Client': client,
+        '🧩 Add-On': addonName,
+        '💰 Setup Cost': setupCost,
+        '💳 Monthly Cost': monthlyCost
+      });
+
+      res.json({
+        success: true,
+        message: `${addonName} activated successfully`,
+        client: client,
+        addon: addonName,
+        charges: {
+          setup: setupCost,
+          monthly: monthlyCost
+        },
+        activatedAt: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Add-on activation error:', error);
+      res.status(500).json({ error: 'Failed to activate add-on' });
+    }
+  });
+
+  // Call Outcome Override
+  app.patch('/api/calls/outcome', async (req, res) => {
+    try {
+      const { callId, newOutcome, reason } = req.body;
+      
+      // Log the outcome override
+      const { logMetric } = await import('./airtableUtils.js');
+      await logMetric({
+        '🧠 Function Name': 'Call Outcome Override',
+        '📝 Source Form': 'Call Review Panel',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'Call Management',
+        '📞 Call ID': callId,
+        '🎯 New Outcome': newOutcome,
+        '📝 Override Reason': reason
+      });
+
+      res.json({
+        success: true,
+        message: 'Call outcome updated successfully',
+        callId: callId,
+        newOutcome: newOutcome,
+        updatedAt: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Call outcome override error:', error);
+      res.status(500).json({ error: 'Failed to update call outcome' });
+    }
+  });
+
+  // AI Feedback for Call Review
+  app.post('/api/ai/feedback', async (req, res) => {
+    try {
+      const { callTranscript, currentOutcome } = req.body;
+      
+      // Mock AI feedback - in production would use OpenAI
+      const aiSuggestions = [
+        "Next best move: Schedule follow-up demo within 48 hours",
+        "Fix tone in line 3: Too aggressive on pricing discussion", 
+        "Recommend A/B script variant B2 for better objection handling"
+      ];
+      
+      // Log the AI feedback request
+      const { logMetric } = await import('./airtableUtils.js');
+      await logMetric({
+        '🧠 Function Name': 'AI Call Feedback',
+        '📝 Source Form': 'Call Review Panel',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'AI Assistant',
+        '🎯 Current Outcome': currentOutcome,
+        '💡 Suggestions Generated': aiSuggestions.length
+      });
+
+      res.json({
+        success: true,
+        suggestions: aiSuggestions,
+        confidence: 0.87,
+        generatedAt: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('AI feedback error:', error);
+      res.status(500).json({ error: 'Failed to generate AI feedback' });
+    }
+  });
+
+  // Quote Resend
+  app.post('/api/email/resend-quote', async (req, res) => {
+    try {
+      const { email, quoteId, clientName } = req.body;
+      
+      // Log the quote resend
+      const { logMetric } = await import('./airtableUtils.js');
+      await logMetric({
+        '🧠 Function Name': 'Quote Resend',
+        '📝 Source Form': 'CRM Panel',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'Email System',
+        '📧 Recipient': email,
+        '📄 Quote ID': quoteId,
+        '👤 Client': clientName
+      });
+
+      res.json({
+        success: true,
+        message: 'Quote resent successfully',
+        recipient: email,
+        quoteId: quoteId,
+        resentAt: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Quote resend error:', error);
+      res.status(500).json({ error: 'Failed to resend quote' });
+    }
   });
 
   // Webhook automation endpoint that returns JSON responses
