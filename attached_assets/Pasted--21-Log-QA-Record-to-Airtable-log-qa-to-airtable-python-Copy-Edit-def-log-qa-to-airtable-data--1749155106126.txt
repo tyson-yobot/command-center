@@ -1,0 +1,74 @@
+ 21. Log QA Record to Airtable – log_qa_to_airtable()
+python
+Copy
+Edit
+def log_qa_to_airtable(data):
+    record = {
+        "fields": {
+            "📞 Call ID": data["call_id"],
+            "🧪 QA Score": data["qa_score"],
+            "🧠 Tags": ", ".join(data["tags"]),
+            "👤 Agent Name": data["agent_name"],
+            "📄 QA PDF": data["pdf_link"],
+            "📝 Comments": data["qa_comments"],
+            "🕓 Reviewed At": data["timestamp"]
+        }
+    }
+    response = requests.post(
+        f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{QA_TABLE_NAME}",
+        json=record,
+        headers={
+            "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+            "Content-Type": "application/json"
+        }
+    )
+    return response.status_code == 200
+🧩 22. Parse Call Metadata – parse_call_metadata()
+python
+Copy
+Edit
+def parse_call_metadata(raw_json):
+    return {
+        "call_id": raw_json.get("call_id"),
+        "agent_name": raw_json.get("agent", "Unknown"),
+        "timestamp": raw_json.get("timestamp", datetime.utcnow().isoformat()),
+        "transcript": raw_json.get("transcript", ""),
+        "qa_score": raw_json.get("qa_score", 0),
+        "qa_comments": raw_json.get("qa_comments", "")
+    }
+🎯 23. Score Grading Logic – grade_qa_response()
+python
+Copy
+Edit
+def grade_qa_response(transcript):
+    score = 0
+    if "greet" in transcript.lower():
+        score += 2
+    if "solution" in transcript.lower():
+        score += 3
+    if "summary" in transcript.lower():
+        score += 2
+    if "thank you" in transcript.lower():
+        score += 3
+    return min(score, 10)
+🧪 24. Auto QA Trigger – trigger_qa_if_needed()
+python
+Copy
+Edit
+def trigger_qa_if_needed(call_data):
+    if "escalated" in call_data.get("flags", []):
+        run_qa_review_pipeline(call_data)
+    elif call_data.get("duration", 0) > 180:
+        run_qa_review_pipeline(call_data)
+🔄 25. Unified QA Orchestrator – qa_orchestrator()
+python
+Copy
+Edit
+def qa_orchestrator(raw_json):
+    data = parse_call_metadata(raw_json)
+    data["qa_score"] = grade_qa_response(data["transcript"])
+    data["tags"] = apply_keyword_tags(data["transcript"])
+    filename = generate_qa_pdf(data)
+    data["pdf_link"] = upload_qa_pdf_to_drive(filename)
+    send_qa_slack_alert(data)
+    log_qa_to_airtable(data)

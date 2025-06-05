@@ -6628,6 +6628,38 @@ print(json.dumps(results))
     return response.data;
   }
 
+  // Advanced Keyword Tagging from Transcript
+  function applyKeywordTags(transcript: string): string[] {
+    const tags = [];
+    const lowerTranscript = transcript.toLowerCase();
+    
+    if (lowerTranscript.includes("manager")) {
+      tags.push("🔁 Escalation");
+    }
+    if (lowerTranscript.includes("cancel") || lowerTranscript.includes("refund")) {
+      tags.push("⚠️ Churn Risk");
+    }
+    if (lowerTranscript.includes("thank you")) {
+      tags.push("🙏 Positive Tone");
+    }
+    if (lowerTranscript.includes("why didn't")) {
+      tags.push("🛑 Tone Issue");
+    }
+    if (lowerTranscript.includes("excellent") || lowerTranscript.includes("amazing")) {
+      tags.push("⭐ Exceptional");
+    }
+    if (lowerTranscript.includes("confused") || lowerTranscript.includes("don't understand")) {
+      tags.push("📚 Training Needed");
+    }
+    if (lowerTranscript.includes("billing") || lowerTranscript.includes("payment")) {
+      tags.push("💳 Billing Issue");
+    }
+    if (lowerTranscript.includes("technical") || lowerTranscript.includes("not working")) {
+      tags.push("🔧 Technical Issue");
+    }
+    return tags;
+  }
+
   // QA Review Smart Tagging
   function autoTagQA(score: number, comments: string): string[] {
     const tags = [];
@@ -6831,8 +6863,17 @@ ${transcript}`;
         console.log(`GPT Auto-scored call ${data.call_id}: ${data.qa_score}%`);
       }
 
+      // Apply keyword tags from transcript
+      let keywordTags = [];
+      if (data.transcript) {
+        keywordTags = applyKeywordTags(data.transcript);
+      }
+
       // Auto-tag based on score and comments
-      data.tags = autoTagQA(data.qa_score || 0, data.qa_comments || '');
+      const scoreTags = autoTagQA(data.qa_score || 0, data.qa_comments || '');
+      
+      // Combine all tags
+      data.tags = [...keywordTags, ...scoreTags];
 
       // Generate PDF report
       const pdfPath = generateQAReport(data);
