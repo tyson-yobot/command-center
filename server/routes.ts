@@ -396,7 +396,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/leads/scraped', async (req, res) => {
     try {
       const leadData = req.body;
-      console.log('Scraped lead received:', leadData);
+      console.log('SCRAPED RECORD:', JSON.stringify(leadData, null, 2));
       
       let hubspotSuccess = false;
       let airtableSuccess = false;
@@ -410,27 +410,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
           "Content-Type": "application/json"
         };
 
+        // Split full name into first and last
+        const nameParts = (leadData.name || "No Name").split();
+        const firstname = nameParts[0] || "";
+        const lastname = nameParts.length > 1 ? nameParts.slice(-1)[0] : "";
+
         const hubspotData = {
           "properties": {
-            "firstname": leadData.name ? leadData.name.split()[0] : "",
-            "lastname": leadData.name ? leadData.name.split().slice(-1)[0] : "",
+            "firstname": firstname,
+            "lastname": lastname,
             "email": leadData.email || "",
             "phone": leadData.phone || "",
             "company": leadData.company || ""
           }
         };
 
-        console.log('HubSpot payload:', JSON.stringify(hubspotData, null, 2));
-        
-        if (process.env.HUBSPOT_API_KEY) {
-          const hubspotResponse = await axios.post(hubspotUrl, hubspotData, { headers: hubspotHeaders });
-          if (hubspotResponse.status === 200 || hubspotResponse.status === 201) {
-            hubspotSuccess = true;
-            console.log('HubSpot push: SUCCESS - Contact ID:', hubspotResponse.data.id);
-          }
+        // Skip if no email or phone to prevent empty contacts
+        if (!hubspotData.properties.email && !hubspotData.properties.phone) {
+          console.log('❌ Skipped HubSpot push: no email or phone');
+          hubspotSuccess = false;
         } else {
-          console.log('HubSpot API key not configured, using simulation mode');
-          hubspotSuccess = true;
+          console.log('HubSpot payload:', JSON.stringify(hubspotData, null, 2));
+        
+          if (process.env.HUBSPOT_API_KEY) {
+            const hubspotResponse = await axios.post(hubspotUrl, hubspotData, { headers: hubspotHeaders });
+            if (hubspotResponse.status === 200 || hubspotResponse.status === 201) {
+              hubspotSuccess = true;
+              console.log('HubSpot push: SUCCESS - Contact ID:', hubspotResponse.data.id);
+            }
+          } else {
+            console.log('HubSpot API key not configured, using simulation mode');
+            hubspotSuccess = true;
+          }
         }
       } catch (hubspotError: any) {
         console.error('HubSpot push failed:', hubspotError.message);
