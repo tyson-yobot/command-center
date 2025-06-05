@@ -237,17 +237,131 @@ def process_apify_leads(data, source='Apify'):
             results['errors'].append(f"HubSpot: {str(e)}")
     
     return results
-            'company_size': lead.get('company_size', '').strip(),
-            'timestamp': datetime.now().isoformat()
+    
+    def send_to_airtable(self, lead):
+        """Send validated lead to Airtable"""
+        if not self.airtable_api_key:
+            return {"success": False, "error": "Airtable API key not configured"}
+        
+        headers = {
+            "Authorization": f"Bearer {self.airtable_api_key}",
+            "Content-Type": "application/json"
         }
         
-        # Ensure we have at least a name
-        if not cleaned['first_name'] and not cleaned['last_name']:
-            name_parts = lead.get('name', '').split(' ', 1)
-            cleaned['first_name'] = name_parts[0] if name_parts else ''
-            cleaned['last_name'] = name_parts[1] if len(name_parts) > 1 else ''
+        # Map to Airtable field names
+        airtable_fields = {
+            "👤 Full Name": lead.get('name', ''),
+            "📧 Email": lead.get('email', ''),
+            "📱 Phone": lead.get('phone', ''),
+            "🏢 Company": lead.get('company', ''),
+            "💼 Title": lead.get('title', ''),
+            "🔗 Source": lead.get('source', 'Unknown'),
+            "📅 Date Added": datetime.now().isoformat(),
+            "✅ Status": "New Lead"
+        }
         
-        return cleaned
+        # Remove empty fields
+        airtable_fields = {k: v for k, v in airtable_fields.items() if v}
+        
+        try:
+            url = f"https://api.airtable.com/v0/{self.airtable_base_id}/{self.leads_table}"
+            response = requests.post(
+                url,
+                headers=headers,
+                json={"fields": airtable_fields},
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                return {"success": True, "airtable_id": response.json().get("id")}
+            else:
+                return {"success": False, "error": f"Airtable error: {response.status_code}"}
+        except Exception as e:
+            return {"success": False, "error": f"Airtable request failed: {str(e)}"}
+    
+    def send_to_hubspot(self, lead):
+        """Send validated lead to HubSpot"""
+        if not self.hubspot_api_key:
+            return {"success": False, "error": "HubSpot API key not configured"}
+        
+        headers = {
+            "Authorization": f"Bearer {self.hubspot_api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        # Map to HubSpot properties
+        hubspot_properties = {
+            "email": lead.get('email', ''),
+            "firstname": lead.get('name', '').split(' ')[0] if lead.get('name') else '',
+            "lastname": ' '.join(lead.get('name', '').split(' ')[1:]) if lead.get('name') and len(lead.get('name', '').split(' ')) > 1 else '',
+            "phone": lead.get('phone', ''),
+            "company": lead.get('company', ''),
+            "jobtitle": lead.get('title', ''),
+            "lead_source": lead.get('source', 'Unknown')
+        }
+        
+        # Remove empty properties
+        hubspot_properties = {k: v for k, v in hubspot_properties.items() if v}
+        
+        try:
+            url = "https://api.hubapi.com/crm/v3/objects/contacts"
+            response = requests.post(
+                url,
+                headers=headers,
+                json={"properties": hubspot_properties},
+                timeout=30
+            )
+            
+            if response.status_code == 201:
+                return {"success": True, "hubspot_id": response.json().get("id")}
+            else:
+                return {"success": False, "error": f"HubSpot error: {response.status_code}"}
+        except Exception as e:
+            return {"success": False, "error": f"HubSpot request failed: {str(e)}"}
+    
+    def process_leads_batch(self, leads, source="Unknown"):
+        """Process batch of leads with validation and deduplication"""
+        results = {
+            'total_leads': len(leads),
+            'processed': 0,
+            'skipped_invalid': 0,
+            'skipped_duplicate': 0,
+            'airtable_success': 0,
+            'hubspot_success': 0,
+            'errors': []
+        }
+        
+        for lead in leads:
+            # Clean the lead data
+            cleaned_lead = self.clean_lead_data({**lead, 'source': source})
+            
+            # Validate lead
+            if not self.validate_lead(cleaned_lead):
+                results['skipped_invalid'] += 1
+                continue
+                
+            # Check for duplicates
+            if self.is_duplicate(cleaned_lead):
+                results['skipped_duplicate'] += 1
+                continue
+                
+            results['processed'] += 1
+            
+            # Try to send to Airtable
+            airtable_result = self.send_to_airtable(cleaned_lead)
+            if airtable_result.get('success'):
+                results['airtable_success'] += 1
+            else:
+                results['errors'].append(f"Airtable: {airtable_result.get('error')}")
+                
+            # Try to send to HubSpot
+            hubspot_result = self.send_to_hubspot(cleaned_lead)
+            if hubspot_result.get('success'):
+                results['hubspot_success'] += 1
+            else:
+                results['errors'].append(f"HubSpot: {hubspot_result.get('error')}")
+        
+        return results
     
     def send_to_airtable(self, lead):
         """Send validated lead to Airtable"""
