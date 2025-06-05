@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-04T15:15:00.502Z",
-    "functionId": 145,
-    "functionName": "Role Assignment by Domain",
-    "batch": 15,
-    "category": "User Management",
-    "status": "success",
-    "duration": 311,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-04T15:15:00.508Z",
     "functionId": 148,
     "functionName": "ROI Summary Generator",
@@ -11396,6 +11385,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-05T00:26:07.322Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-05T00:26:45.805Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-05T00:26:45.567Z",
       "automationStatus": "running"
     }
   }
