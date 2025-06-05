@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-05T00:00:00.910Z",
-    "functionId": 155,
-    "functionName": "AI Script Expansion",
-    "batch": 16,
-    "category": "AI",
-    "status": "success",
-    "duration": 632,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-05T00:00:00.917Z",
     "functionId": 208,
     "functionName": "Call Review Flagging",
@@ -11658,6 +11647,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-05T06:47:41.325Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-05T06:48:48.630Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-05T06:48:48.313Z",
       "automationStatus": "running"
     }
   }

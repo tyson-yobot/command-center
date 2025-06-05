@@ -268,26 +268,73 @@ export default function LeadScrapingPanel({ onResults }: LeadScrapingPanelProps)
         )}
 
         {results && (
-          <div className="p-4 bg-green-900/20 border border-green-500/30 rounded-lg">
-            <div className="flex items-center gap-2 text-green-400 mb-2">
-              <CheckCircle className="w-4 h-4" />
-              <span>Scraping Complete</span>
+          <div className="space-y-4">
+            <div className="p-4 bg-green-900/20 border border-green-500/30 rounded-lg">
+              <div className="flex items-center gap-2 text-green-400 mb-2">
+                <CheckCircle className="w-4 h-4" />
+                <span>Scraping Complete</span>
+              </div>
+              <div className="space-y-2">
+                {results.data?.people && (
+                  <Badge variant="secondary" className="bg-blue-600/20 text-blue-300">
+                    Found {results.data.people.length} leads
+                  </Badge>
+                )}
+                {results.message && (
+                  <p className="text-green-300 text-sm">{results.message}</p>
+                )}
+                {results.search_params && (
+                  <div className="text-xs text-slate-400">
+                    Search: {results.search_params.title} in {results.search_params.location}
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="space-y-2">
-              {results.data?.people && (
-                <Badge variant="secondary" className="bg-blue-600/20 text-blue-300">
-                  Found {results.data.people.length} leads
-                </Badge>
-              )}
-              {results.message && (
-                <p className="text-green-300 text-sm">{results.message}</p>
-              )}
-              {results.search_params && (
-                <div className="text-xs text-slate-400">
-                  Search: {results.search_params.title} in {results.search_params.location}
+
+            {/* Processing Results */}
+            {results.processingResults && (
+              <div className="p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+                <div className="flex items-center gap-2 text-blue-400 mb-3">
+                  <Database className="w-4 h-4" />
+                  <span>Lead Processing Results</span>
                 </div>
-              )}
-            </div>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-slate-300">Total Leads:</span>
+                      <span className="text-white font-medium">{results.processingResults.total_leads}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-green-300">Processed:</span>
+                      <span className="text-green-400 font-medium">{results.processingResults.processed}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-yellow-300">Invalid:</span>
+                      <span className="text-yellow-400 font-medium">{results.processingResults.skipped_invalid}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-orange-300">Duplicates:</span>
+                      <span className="text-orange-400 font-medium">{results.processingResults.skipped_duplicate}</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-slate-300">Airtable:</span>
+                      <span className="text-blue-400 font-medium">{results.processingResults.airtable_success}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-300">HubSpot:</span>
+                      <span className="text-purple-400 font-medium">{results.processingResults.hubspot_success}</span>
+                    </div>
+                    {results.processingResults.errors && results.processingResults.errors.length > 0 && (
+                      <div className="text-xs text-red-400 mt-2">
+                        {results.processingResults.errors.slice(0, 2).join(', ')}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </CardContent>
