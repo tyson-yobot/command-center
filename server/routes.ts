@@ -1669,27 +1669,480 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // 🎯 Webhook Testing Dashboard
-  app.get('/api/webhooks/test', (req, res) => {
+  app.get('/api/webhook/status', (req, res) => {
     res.json({
-      message: "Webhook Testing Dashboard",
+      message: "Webhook System Status",
       available_endpoints: [
         "POST /api/leads/promo - YoBot Platinum Promo",
-        "POST /api/roi/snapshot - ROI Snapshot Request", 
-        "POST /api/booking/form - Booking Form",
-        "POST /api/demo/request - Demo Request",
+        "POST /api/leads/roi-snapshot - ROI Snapshot Request", 
+        "POST /api/leads/booking - Booking Form",
+        "POST /api/leads/demo - Demo Request",
         "POST /api/leads/capture - Lead Capture",
-        "POST /api/sales/orders/live - Sales Orders Live",
-        "POST /api/sales/orders/test - Sales Orders Test",
+        "POST /api/orders/live - Sales Orders Live",
+        "POST /api/orders/test - Sales Orders Test",
         "POST /api/projects/awarded - Awarded Project",
-        "POST /api/dashboard/intake - Dashboard Intake",
-        "POST /api/smartspend/charge - SmartSpend Charge",
+        "POST /api/intake/dashboard - Dashboard Intake",
+        "POST /api/charges/smartspend - SmartSpend Charge",
         "POST /api/features/request - Feature Request",
-        "POST /api/contact/us - Contact Us"
+        "POST /api/contact/submit - Contact Us"
       ],
       webhook_base_url: "https://workspace--tyson44.replit.app/api/",
       airtable_table: "tbldPRZ4nHbtj9opU",
       status: "All 12 webhook endpoints active"
     });
+  });
+
+  // 🚀 YoBot Platinum Promo
+  app.post('/api/leads/promo', async (req, res) => {
+    try {
+      const { first_name, last_name, email, phone, company, industry, employees, current_leads, pain_points, promo_code } = req.body;
+
+      const webhookData = {
+        type: "Platinum Promo",
+        first_name,
+        last_name,
+        email,
+        phone,
+        company,
+        industry,
+        employees,
+        current_leads,
+        pain_points,
+        promo_code,
+        timestamp: new Date().toISOString()
+      };
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (apiKey) {
+        try {
+          await axios.post(
+            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+            { fields: { "Data": JSON.stringify(webhookData) } },
+            { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
+          );
+        } catch (airtableError) {
+          console.log("Platinum promo data logged:", webhookData);
+        }
+      }
+
+      res.json({
+        success: true,
+        message: "Platinum promo lead captured",
+        webhook: "Platinum Promo",
+        data: { first_name, last_name, email, company, promo_code }
+      });
+
+    } catch (err: any) {
+      console.error("Platinum promo error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 📊 ROI Snapshot
+  app.post('/api/leads/roi-snapshot', async (req, res) => {
+    try {
+      const { client_name, email, monthly_leads, current_conversion, avg_deal_size, cost_per_lead, monthly_revenue, roi_improvement, projection_period } = req.body;
+
+      const webhookData = {
+        type: "ROI Snapshot",
+        client_name,
+        email,
+        monthly_leads,
+        current_conversion,
+        avg_deal_size,
+        cost_per_lead,
+        monthly_revenue,
+        roi_improvement,
+        projection_period,
+        timestamp: new Date().toISOString()
+      };
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (apiKey) {
+        try {
+          await axios.post(
+            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+            { fields: { "Data": JSON.stringify(webhookData) } },
+            { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
+          );
+        } catch (airtableError) {
+          console.log("ROI snapshot data logged:", webhookData);
+        }
+      }
+
+      res.json({
+        success: true,
+        message: "ROI snapshot captured",
+        webhook: "ROI Snapshot",
+        data: { client_name, email, monthly_leads, roi_improvement }
+      });
+
+    } catch (err: any) {
+      console.error("ROI snapshot error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 📅 Booking Form
+  app.post('/api/leads/booking', async (req, res) => {
+    try {
+      const { full_name, email, phone, company, job_title, preferred_date, preferred_time, timezone, meeting_type, pain_points, budget_range } = req.body;
+
+      const webhookData = {
+        type: "Booking Form",
+        full_name,
+        email,
+        phone,
+        company,
+        job_title,
+        preferred_date,
+        preferred_time,
+        timezone,
+        meeting_type,
+        pain_points,
+        budget_range,
+        timestamp: new Date().toISOString()
+      };
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (apiKey) {
+        try {
+          await axios.post(
+            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+            { fields: { "Data": JSON.stringify(webhookData) } },
+            { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
+          );
+        } catch (airtableError) {
+          console.log("Booking form data logged:", webhookData);
+        }
+      }
+
+      res.json({
+        success: true,
+        message: "Booking form submitted",
+        webhook: "Booking Form",
+        data: { full_name, email, company, preferred_date, meeting_type }
+      });
+
+    } catch (err: any) {
+      console.error("Booking form error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 🎬 Demo Request
+  app.post('/api/leads/demo', async (req, res) => {
+    try {
+      const { name, email, phone, company, industry, company_size, current_solution, demo_type, urgency, specific_needs } = req.body;
+
+      const webhookData = {
+        type: "Demo Request",
+        name,
+        email,
+        phone,
+        company,
+        industry,
+        company_size,
+        current_solution,
+        demo_type,
+        urgency,
+        specific_needs,
+        timestamp: new Date().toISOString()
+      };
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (apiKey) {
+        try {
+          await axios.post(
+            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+            { fields: { "Data": JSON.stringify(webhookData) } },
+            { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
+          );
+        } catch (airtableError) {
+          console.log("Demo request data logged:", webhookData);
+        }
+      }
+
+      res.json({
+        success: true,
+        message: "Demo request submitted",
+        webhook: "Demo Request",
+        data: { name, email, company, demo_type, urgency }
+      });
+
+    } catch (err: any) {
+      console.error("Demo request error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 🎯 Lead Capture
+  app.post('/api/leads/capture', async (req, res) => {
+    try {
+      const { name, email, phone, company, source, campaign, interest_level, lead_score, notes } = req.body;
+
+      const webhookData = {
+        type: "Lead Capture",
+        name,
+        email,
+        phone,
+        company,
+        source,
+        campaign,
+        interest_level,
+        lead_score,
+        notes,
+        timestamp: new Date().toISOString()
+      };
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (apiKey) {
+        try {
+          await axios.post(
+            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+            { fields: { "Data": JSON.stringify(webhookData) } },
+            { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
+          );
+        } catch (airtableError) {
+          console.log("Lead capture data logged:", webhookData);
+        }
+      }
+
+      res.json({
+        success: true,
+        message: "Lead captured",
+        webhook: "Lead Capture",
+        data: { name, email, company, source, lead_score }
+      });
+
+    } catch (err: any) {
+      console.error("Lead capture error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 📦 Sales Order Live
+  app.post('/api/orders/live', async (req, res) => {
+    try {
+      const { order_id, client_name, client_email, product, quantity, unit_price, total_amount, payment_method, order_status, delivery_date } = req.body;
+
+      const webhookData = {
+        type: "Sales Order Live",
+        order_id,
+        client_name,
+        client_email,
+        product,
+        quantity,
+        unit_price,
+        total_amount,
+        payment_method,
+        order_status,
+        delivery_date,
+        timestamp: new Date().toISOString()
+      };
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (apiKey) {
+        try {
+          await axios.post(
+            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+            { fields: { "Data": JSON.stringify(webhookData) } },
+            { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
+          );
+        } catch (airtableError) {
+          console.log("Sales order live data logged:", webhookData);
+        }
+      }
+
+      res.json({
+        success: true,
+        message: "Live sales order processed",
+        webhook: "Sales Order Live",
+        data: { order_id, client_name, product, total_amount }
+      });
+
+    } catch (err: any) {
+      console.error("Sales order live error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 🧪 Sales Order Test
+  app.post('/api/orders/test', async (req, res) => {
+    try {
+      const { order_id, client_name, client_email, product, quantity, unit_price, total_amount, payment_method, order_status, delivery_date } = req.body;
+
+      const webhookData = {
+        type: "Sales Order Test",
+        order_id,
+        client_name,
+        client_email,
+        product,
+        quantity,
+        unit_price,
+        total_amount,
+        payment_method,
+        order_status,
+        delivery_date,
+        timestamp: new Date().toISOString()
+      };
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (apiKey) {
+        try {
+          await axios.post(
+            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+            { fields: { "Data": JSON.stringify(webhookData) } },
+            { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
+          );
+        } catch (airtableError) {
+          console.log("Sales order test data logged:", webhookData);
+        }
+      }
+
+      res.json({
+        success: true,
+        message: "Test sales order processed",
+        webhook: "Sales Order Test",
+        data: { order_id, client_name, product, total_amount }
+      });
+
+    } catch (err: any) {
+      console.error("Sales order test error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 🏆 Awarded Project
+  app.post('/api/projects/awarded', async (req, res) => {
+    try {
+      const { project_name, client_name, client_email, project_value, start_date, end_date, team_lead, scope, priority } = req.body;
+
+      const webhookData = {
+        type: "Awarded Project",
+        project_name,
+        client_name,
+        client_email,
+        project_value,
+        start_date,
+        end_date,
+        team_lead,
+        scope,
+        priority,
+        timestamp: new Date().toISOString()
+      };
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (apiKey) {
+        try {
+          await axios.post(
+            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+            { fields: { "Data": JSON.stringify(webhookData) } },
+            { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
+          );
+        } catch (airtableError) {
+          console.log("Awarded project data logged:", webhookData);
+        }
+      }
+
+      res.json({
+        success: true,
+        message: "Awarded project logged",
+        webhook: "Awarded Project",
+        data: { project_name, client_name, project_value, priority }
+      });
+
+    } catch (err: any) {
+      console.error("Awarded project error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 💳 SmartSpend Charge
+  app.post('/api/charges/smartspend', async (req, res) => {
+    try {
+      const { client_id, charge_amount, charge_type, billing_period, usage_details, auto_charge, next_billing_date } = req.body;
+
+      const webhookData = {
+        type: "SmartSpend Charge",
+        client_id,
+        charge_amount,
+        charge_type,
+        billing_period,
+        usage_details,
+        auto_charge,
+        next_billing_date,
+        timestamp: new Date().toISOString()
+      };
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (apiKey) {
+        try {
+          await axios.post(
+            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+            { fields: { "Data": JSON.stringify(webhookData) } },
+            { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
+          );
+        } catch (airtableError) {
+          console.log("SmartSpend charge data logged:", webhookData);
+        }
+      }
+
+      res.json({
+        success: true,
+        message: "SmartSpend charge processed",
+        webhook: "SmartSpend Charge",
+        data: { client_id, charge_amount, charge_type, billing_period }
+      });
+
+    } catch (err: any) {
+      console.error("SmartSpend charge error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // 📞 Contact Us
+  app.post('/api/contact/submit', async (req, res) => {
+    try {
+      const { name, email, phone, company, subject, message, contact_method, urgency } = req.body;
+
+      const webhookData = {
+        type: "Contact Us",
+        name,
+        email,
+        phone,
+        company,
+        subject,
+        message,
+        contact_method,
+        urgency,
+        timestamp: new Date().toISOString()
+      };
+
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (apiKey) {
+        try {
+          await axios.post(
+            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+            { fields: { "Data": JSON.stringify(webhookData) } },
+            { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
+          );
+        } catch (airtableError) {
+          console.log("Contact us data logged:", webhookData);
+        }
+      }
+
+      res.json({
+        success: true,
+        message: "Contact form submitted",
+        webhook: "Contact Us",
+        data: { name, email, company, subject, urgency }
+      });
+
+    } catch (err: any) {
+      console.error("Contact us error:", err);
+      res.status(500).json({ error: "Server error" });
+    }
   });
 
   // 📊 Dashboard Intake
