@@ -1,0 +1,73 @@
+// 📥 Webhook for: YoBot® Platinum Promo
+router.post("/api/leads/promo", async (req, res) => {
+  try {
+    const { name, email, phone, source } = req.body;
+
+    if (!name || (!email && !phone)) {
+      return res.status(400).json({ error: "Missing name or contact info" });
+    }
+
+    await axios.post(
+      `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+      {
+        fields: {
+          "👤 Full Name": name,
+          "📧 Email": email || "",
+          "📞 Phone": phone || "",
+          "📥 Lead Source": source || "Platinum Promo"
+        }
+      },
+      {
+        headers: {
+          Authorization: `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    console.log("✅ Promo lead captured:", name);
+    res.status(200).send("Promo lead submitted");
+  } catch (err) {
+    console.error("❌ Promo lead error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// 📥 Webhook for: ROI Snapshot Form
+router.post("/api/leads/roi", async (req, res) => {
+  try {
+    const {
+      leads_per_month,
+      conversion_rate,
+      avg_revenue_per_client,
+      bot_monthly_cost,
+      notes
+    } = req.body;
+
+    await axios.post(
+      `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/REPLACE_ROI_TABLE_ID`,
+      {
+        fields: {
+          "📈 Leads per Month": leads_per_month,
+          "📊 Conversion Rate": conversion_rate,
+          "💵 Avg Revenue/Client": avg_revenue_per_client,
+          "🤖 Bot Monthly Cost": bot_monthly_cost,
+          "📝 Notes": notes || "",
+          "📅 Date Submitted": new Date().toISOString()
+        }
+      },
+      {
+        headers: {
+          Authorization: `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    console.log("✅ ROI snapshot logged");
+    res.status(200).send("ROI submitted");
+  } catch (err) {
+    console.error("❌ ROI error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});

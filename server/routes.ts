@@ -278,89 +278,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Lead Source Mapping and Form Processing
-  app.post('/api/form/lead-capture', async (req, res) => {
+  // 📥 Webhook for: YoBot® Platinum Promo
+  app.post("/api/leads/promo", async (req, res) => {
     try {
-      const formData = req.body;
-      const leadSource = req.query.source || formData.lead_source || formData['Lead Source'] || 'Unknown';
-      
-      // Extract form data with lead source mapping
-      const leadRecord = {
-        'Full Name': formData.full_name || formData['🧑 Full Name'] || '',
-        'Email': formData.email || formData['📧 Email'] || '',
-        'Phone': formData.phone || formData['📱 Phone'] || '',
-        'Company': formData.company || formData['🏢 Company'] || '',
-        'Lead Source': leadSource,
-        'Form Type': formData.form_type || 'General Lead',
-        'Timestamp': new Date().toISOString(),
-        'Status': 'New'
-      };
+      const { name, email, phone, source } = req.body;
 
-      // Log to Airtable Sales Orders table
-      const airtableKey = process.env.AIRTABLE_API_KEY;
-      const baseId = process.env.AIRTABLE_BASE_ID;
-      
-      if (!airtableKey || !baseId) {
-        return res.status(500).json({
-          success: false,
-          error: 'Airtable configuration missing'
-        });
+      if (!name || (!email && !phone)) {
+        return res.status(400).json({ error: "Missing name or contact info" });
       }
 
-      const url = `https://api.airtable.com/v0/${baseId}/📋 Sales Orders`;
-      const headers = {
-        "Authorization": `Bearer ${airtableKey}`,
-        "Content-Type": "application/json"
-      };
-
-      const payload = {
-        "records": [{
-          "fields": {
-            "🧑 Full Name": leadRecord['Full Name'],
-            "📧 Email": leadRecord['Email'],
-            "📱 Phone": leadRecord['Phone'],
-            "🏢 Company": leadRecord['Company'],
-            "📥 Lead Source": leadRecord['Lead Source'],
-            "📝 Form Type": leadRecord['Form Type'],
-            "📅 Timestamp": leadRecord['Timestamp'],
-            "🔄 Status": leadRecord['Status']
-          }
-        }]
-      };
-
-      const airtableResponse = await fetch(url, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(payload)
-      });
-
-      if (airtableResponse.ok) {
-        const result = await airtableResponse.json();
-        console.log(`✅ Lead captured: ${leadRecord['Full Name']} from ${leadRecord['Lead Source']}`);
-        
-        // Send Slack alert for new lead
-        await sendLeadAlert(
-          leadRecord['Full Name'],
-          leadRecord['Email'],
-          leadRecord['Lead Source']
-        );
-        
-        res.json({
-          success: true,
-          message: 'Lead captured successfully',
-          leadSource: leadRecord['Lead Source'],
-          recordId: result.records[0].id
-        });
-      } else {
-        throw new Error(`Airtable error: ${airtableResponse.status}`);
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "Airtable API key not configured" });
       }
 
-    } catch (error: any) {
-      console.error('Lead capture error:', error);
-      res.status(500).json({
-        success: false,
-        error: error.message
-      });
+      // Try multiple field name variations to find the correct mapping
+      const fieldVariations = [
+        {
+          "👤 Full Name": name,
+          "📧 Email": email || "",
+          "📞 Phone": phone || "",
+          "📥 Lead Source": source || "Platinum Promo"
+        },
+        {
+          "Name": name,
+          "Email": email || "",
+          "Phone": phone || "",
+          "Lead Source": source || "Platinum Promo"
+        },
+        {
+          "Full Name": name,
+          "Email": email || "",
+          "Phone": phone || "",
+          "Lead Source": source || "Platinum Promo"
+        },
+        {
+          "fldName": name,
+          "fldEmail": email || "",
+          "fldPhone": phone || "",
+          "fldLeadSource": source || "Platinum Promo"
+        }
+      ];
+
+      let success = false;
+      let lastError;
+
+      for (const fields of fieldVariations) {
+        try {
+          await axios.post(
+            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
+            { fields },
+            {
+              headers: {
+                Authorization: `Bearer ${apiKey}`,
+                "Content-Type": "application/json"
+              }
+            }
+          );
+          
+          success = true;
+          break;
+        } catch (err: any) {
+          lastError = err;
+          continue;
+        }
+      }
+
+      if (!success) {
+        throw lastError;
+      }
+
+      // Send Slack alert for new platinum lead
+      await sendLeadAlert(name, email || "", source || "Platinum Promo");
+
+      console.log("✅ Promo lead captured:", name);
+      res.status(200).send("Promo lead submitted");
+    } catch (err: any) {
+      console.error("❌ Promo lead error:", err?.response?.data || err.message);
+      await sendAutomationFailureAlert("Platinum Lead Capture", err?.response?.data?.error?.message || err.message);
+      res.status(500).json({ error: "Server error" });
     }
   });
 
