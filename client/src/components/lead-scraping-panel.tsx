@@ -23,7 +23,7 @@ interface Lead {
   isDuplicate: boolean;
 }
 
-export function LeadScrapingPanel() {
+export default function LeadScrapingPanel() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(false);
   const [batchProcessing, setBatchProcessing] = useState(false);

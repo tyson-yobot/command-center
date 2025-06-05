@@ -1,0 +1,76 @@
+6. PDF Report Generator – generate_qa_report()
+python
+Copy
+Edit
+from fpdf import FPDF
+
+def generate_qa_report(data):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    pdf.cell(200, 10, txt="YoBot® QA Review Summary", ln=True, align='C')
+    pdf.ln(10)
+
+    for key, value in data.items():
+        pdf.cell(200, 10, txt=f"{key}: {value}", ln=True)
+
+    filename = f"QA_Review_{data['call_id']}.pdf"
+    pdf.output(f"/mnt/data/{filename}")
+    return filename
+📤 7. Slack Notification – send_qa_slack_alert()
+python
+Copy
+Edit
+def send_qa_slack_alert(data):
+    message = f"""📋 *New QA Review Logged*
+🎙 *Call ID:* {data['call_id']}
+👤 *Agent:* {data['agent_name']}
+✅ *Score:* {data['qa_score']}%
+⚠️ *Flags:* {data.get('flags', 'None')}
+📝 *Comments:* {data.get('qa_comments', 'N/A')}
+"""
+    payload = {"text": message}
+    requests.post(SLACK_WEBHOOK_URL, json=payload)
+🧠 8. Auto Summary Tagging – auto_tag_qa()
+python
+Copy
+Edit
+def auto_tag_qa(score, comments):
+    tags = []
+    if score < 70:
+        tags.append("🔥 Critical")
+    elif score < 85:
+        tags.append("⚠️ Needs Improvement")
+    else:
+        tags.append("✅ Passed")
+
+    if "rude" in comments.lower():
+        tags.append("🛑 Tone Issue")
+    if "slow" in comments.lower():
+        tags.append("🐢 Slow Pace")
+    return tags
+🧬 9. Smart Deduplication Check – check_duplicate_review()
+python
+Copy
+Edit
+def check_duplicate_review(call_id):
+    url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/QA%20Call%20Review%20Log"
+    headers = {"Authorization": f"Bearer {AIRTABLE_API_KEY}"}
+    params = {"filterByFormula": f"{{🎙 Call ID}} = '{call_id}'"}
+    response = requests.get(url, headers=headers, params=params).json()
+    return len(response.get("records", [])) > 0
+🧪 10. QA Review Dispatcher – Final Integration
+python
+Copy
+Edit
+def run_qa_review_pipeline(data):
+    if check_duplicate_review(data["call_id"]):
+        log_event("Duplicate QA Review Skipped", data)
+        return
+
+    data["tags"] = auto_tag_qa(data["qa_score"], data.get("qa_comments", ""))
+    pdf_path = generate_qa_report(data)
+    process_qa_review(data)
+    send_qa_slack_alert(data)
+    log_event("QA Review Logged", {"pdf": pdf_path})
+Say “next” for code blocks 11–15 (if needed for QA escalation, G

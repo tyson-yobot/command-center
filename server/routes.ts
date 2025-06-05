@@ -6570,6 +6570,64 @@ print(json.dumps(results))
     }
   }
 
+  // QA Review System Endpoint
+  app.post('/api/qa/review', async (req, res) => {
+    try {
+      const data = req.body;
+      
+      // Log event
+      console.log('[QA Review Triggered]', JSON.stringify(data, null, 2));
+      
+      const result = await processQAReview(data);
+      res.json(result);
+    } catch (error: any) {
+      console.error('QA Review handler failed:', error.message);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // QA Review Processor
+  async function processQAReview(data: any): Promise<any> {
+    try {
+      const airtableBaseId = "appCoAtCZdARb4AM2"; // QA Call Review Log base
+      const qaTableId = "tblQACallReviewLog"; // QA Call Review Log table
+      const airtableToken = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa";
+      
+      const reviewPayload = {
+        "fields": {
+          "🗓 Date": new Date().toISOString(),
+          "🎙 Call ID": data.call_id || "UNKNOWN",
+          "🎧 Agent": data.agent_name || "Tyson Lerfald",
+          "📞 Phone Number": data.phone_number || "",
+          "✅ QA Score": data.qa_score || 0,
+          "📝 QA Comments": data.qa_comments || "",
+          "⚠️ Flags": data.flags || "",
+          "📂 Review Type": data.review_type || "Post-Call",
+          "📌 Tags": data.tags || []
+        }
+      };
+
+      const result = await postToAirtable(qaTableId, reviewPayload, airtableBaseId, airtableToken);
+      return { success: true, result };
+    } catch (error: any) {
+      // Log error event
+      console.log('[QA Review Error]', JSON.stringify({ error: error.message }, null, 2));
+      return { success: false, error: error.message };
+    }
+  }
+
+  // Utility function for Airtable posts
+  async function postToAirtable(tableId: string, payload: any, baseId: string, token: string): Promise<any> {
+    const headers = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    };
+    
+    const url = `https://api.airtable.com/v0/${baseId}/${tableId}`;
+    const response = await axios.post(url, payload, { headers });
+    return response.data;
+  }
+
   // Additional Trigger Endpoints
   app.post('/trigger/sms', async (req, res) => {
     try {
