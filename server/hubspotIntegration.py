@@ -39,6 +39,69 @@ def create_hubspot_contact(contact_name, email, company_name, phone, selected_pa
     except requests.exceptions.RequestException as e:
         raise Exception(f"HubSpot contact creation failed: {str(e)}")
 
+def push_to_hubspot(quote_data):
+    """Create HubSpot contact and deal from quote data"""
+    
+    if not HUBSPOT_API_KEY:
+        raise Exception("HubSpot API key not configured")
+    
+    hubspot_headers = {
+        "Authorization": f"Bearer {HUBSPOT_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    # Create contact
+    contact_payload = {
+        "properties": {
+            "email": quote_data["email"],
+            "firstname": quote_data["contact_name"].split()[0],
+            "lastname": quote_data["contact_name"].split()[-1],
+            "company": quote_data["company_name"]
+        }
+    }
+
+    contact_res = requests.post(
+        "https://api.hubapi.com/crm/v3/objects/contacts",
+        headers=hubspot_headers,
+        json=contact_payload
+    )
+    
+    if not contact_res.ok:
+        raise Exception(f"HubSpot contact creation failed: {contact_res.text}")
+
+    contact_id = contact_res.json()["id"]
+
+    # Create deal
+    deal_payload = {
+        "properties": {
+            "dealname": f"YoBot Quote – {quote_data['company_name']}",
+            "amount": quote_data["total"],
+            "dealstage": "presentationscheduled",
+            "pipeline": "default"
+        },
+        "associations": [
+            {
+                "to": {"id": contact_id},
+                "types": [{"associationCategory": "HUBSPOT_DEFINED", "associationTypeId": 3}]
+            }
+        ]
+    }
+
+    deal_res = requests.post(
+        "https://api.hubapi.com/crm/v3/objects/deals",
+        headers=hubspot_headers,
+        json=deal_payload
+    )
+    
+    if not deal_res.ok:
+        raise Exception(f"HubSpot deal creation failed: {deal_res.text}")
+
+    return {
+        "contact_id": contact_id,
+        "deal_id": deal_res.json()["id"],
+        "status": "success"
+    }
+
 def update_hubspot_contact(contact_id, updates):
     """Update existing HubSpot contact"""
     

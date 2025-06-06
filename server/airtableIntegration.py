@@ -2,8 +2,10 @@ import requests
 import os
 from datetime import datetime
 
-AIRTABLE_API_KEY = os.getenv('AIRTABLE_PERSONAL_ACCESS_TOKEN')
-BASE_ID = os.getenv('AIRTABLE_BASE_ID')
+# Using your confirmed Airtable credentials
+AIRTABLE_API_KEY = "paty41tSgNrAPUQZV"
+BASE_ID = "appRt8V3tH4g5Z5if"
+TABLE_ID = "tbldPRZ4nHbtj9opU"
 
 HEADERS = {
     "Authorization": f"Bearer {AIRTABLE_API_KEY}",
@@ -51,6 +53,33 @@ def push_task(task_title, company_name, assigned_to, due_date):
     }
     return create_airtable_record("📌 Project Roadmap Tracker", task_payload)
 
+def push_to_airtable(quote_data):
+    """Push quote data to specific Airtable table using your confirmed credentials"""
+    headers = {
+        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "fields": {
+            "🏷️ Quote Number": quote_data["quote_number"],
+            "🏢 Company Name": quote_data["company_name"],
+            "🧑 Contact Name": quote_data["contact_name"],
+            "📅 Date": quote_data["date"],
+            "🧾 Line Items": ", ".join([f"{i['name']} – ${i['price']:,}" for i in quote_data["line_items"]]),
+            "💳 Total": quote_data["total"],
+            "📝 Status": "Quote Sent"
+        }
+    }
+
+    response = requests.post(
+        f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_ID}",
+        headers=headers,
+        json=payload
+    )
+
+    return response.json()
+
 def create_complete_sales_order_integration(data):
     """Complete sales order integration with all Airtable tables"""
     try:
@@ -65,8 +94,25 @@ def create_complete_sales_order_integration(data):
         monthly_recurring = data.get('monthly_recurring')
         selected_addons = data.get('addons', [])
         bot_package = data.get('package')
+        grand_total = data.get('grand_total')
         
         results = {}
+        
+        # Create line items for quote
+        from pdfQuoteGenerator import create_line_items_from_package
+        line_items = create_line_items_from_package(bot_package, selected_addons)
+        
+        # Push to main quote table using your specific format
+        quote_data = {
+            "quote_number": quote_id,
+            "company_name": company_name,
+            "contact_name": contact_name,
+            "date": current_date,
+            "line_items": line_items,
+            "total": grand_total or sum(item['price'] for item in line_items)
+        }
+        
+        results['quote_record'] = push_to_airtable(quote_data)
         
         # Create CRM Contact
         results['crm_contact'] = create_crm_contact(contact_name, email, company_name, phone)

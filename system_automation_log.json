@@ -1,20 +1,5 @@
 [
   {
-    "timestamp": "2025-06-05T20:10:41.782Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "System automation started",
-    "metrics": {
-      "totalFunctions": 40,
-      "activeFunctions": 40,
-      "successfulExecutions": 0,
-      "failedExecutions": 0,
-      "systemUptime": 0,
-      "lastHealthCheck": "2025-06-05T20:10:41.372Z",
-      "automationStatus": "running"
-    }
-  },
-  {
     "timestamp": "2025-06-05T20:10:45.487Z",
     "type": "system_event",
     "level": "info",
@@ -11400,6 +11385,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-06T09:03:23.051Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-06T09:04:58.317Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T09:04:58.065Z",
       "automationStatus": "running"
     }
   }
