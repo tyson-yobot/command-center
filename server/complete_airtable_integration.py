@@ -23,21 +23,16 @@ HEADERS = {
 
 def log_integration_test(source, action, status, related_order_id=None, notes=None):
     """
-    Logs an integration test result to the Airtable log table using your credentials.
+    Logs an integration test result to the Airtable log table using your actual field structure.
     """
     data = {
         "fields": {
-            "Source": source,
-            "Action Performed": action,
-            "Status": status,
-            "Timestamp": datetime.datetime.utcnow().isoformat() + 'Z'
+            "🧩 Integration Name": f"{source}: {action}",
+            "📝 Notes / Debug": notes or f"Automation function executed: {action}",
+            "📅 Test Date": datetime.datetime.now().strftime("%Y-%m-%d"),
+            "👤 QA Owner": "YoBot System"
         }
     }
-
-    if related_order_id:
-        data["fields"]["Related Order ID"] = related_order_id
-    if notes:
-        data["fields"]["Notes"] = notes
 
     try:
         response = requests.post(AIRTABLE_URL, headers=HEADERS, json=data)
