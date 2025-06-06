@@ -51,11 +51,8 @@ import {
 import { runComprehensiveSystemTest, listAllIntegrations } from "./comprehensiveSystemTest";
 import { setupCentralizedWebhookRouter } from "./centralizedWebhookRouter";
 import { 
-  testQBOConnection, 
   createQBOCustomer, 
-  createQBOInvoice, 
-  listQBOCustomers,
-  exchangeCodeForToken 
+  createQBOInvoice
 } from "./qboIntegration";
 import { salesEventRouter } from "./salesEventTracker";
 import { zendeskSmartCloseRouter } from "./zendeskSmartClose";
@@ -72,7 +69,7 @@ import { dispatchSupportResponse } from "./supportDispatcher";
 import { captureChatContact, logChatInteraction } from "./chatContactCapture";
 import { syncKnowledgeBase, forceResyncKnowledgeBase } from "./ragKnowledgeSync";
 import { processVoiceBotWebhook } from "./voiceBotEscalation";
-import { getQBOAuthorizationUrl, exchangeCodeForToken, testQBOConnection, syncDealToQBOInvoice, listQBOCustomers, listQBOItems } from "./qboIntegration";
+import { getQBOAuthorizationUrl, syncDealToQBOInvoice, listQBOItems } from "./qboIntegration";
 import { extractLinkedInLeads, enrichCompanyData, extractInstagramProfiles, testPhantombusterConnection, scoreLeadData } from "./phantombusterIntegration";
 import pdfQuoteRouter from "./pdfQuote";
 import speakRouter from "./speak";

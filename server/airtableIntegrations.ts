@@ -28,11 +28,13 @@ async function createAirtableRecord(baseKey: string, tableKey: string, fields: R
     throw new Error('Airtable API key not configured');
   }
   
+  const cleanApiKey = AIRTABLE_API_KEY?.replace(/[^\w\.-]/g, '') || '';
+  
   const response = await axios.post(url, {
     records: [{ fields }]
   }, {
     headers: {
-      'Authorization': `Bearer ${AIRTABLE_API_KEY?.trim() || ''}`,
+      'Authorization': `Bearer ${cleanApiKey}`,
       'Content-Type': 'application/json'
     }
   });
