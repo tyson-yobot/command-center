@@ -100,15 +100,29 @@ app.post('/webhook/sales_order', async (req, res) => {
       const util = await import('util');
       const exec = util.promisify(childProcess.exec);
 
-      // Execute complete sales order automation
-      const automationResult = await exec(`cd /home/runner/workspace/server && python3 -c "
+      // Execute complete sales order automation using temporary file
+      const fs = await import('fs');
+      const path = await import('path');
+      
+      const tempScriptPath = path.join('/tmp', `automation_${Date.now()}.py`);
+      const scriptContent = `
 from completeSalesOrderAutomation import run_complete_sales_order_automation
 import json
+import sys
+import os
+sys.path.append('/home/runner/workspace/server')
 
 form_data = ${JSON.stringify(data)}
 result = run_complete_sales_order_automation(form_data)
 print(json.dumps(result))
-"`);
+`;
+      
+      fs.writeFileSync(tempScriptPath, scriptContent);
+      
+      const automationResult = await exec(`cd /home/runner/workspace/server && python3 ${tempScriptPath}`);
+      
+      // Clean up temporary file
+      fs.unlinkSync(tempScriptPath);
 
       console.log("PDF generation completed successfully");
 
