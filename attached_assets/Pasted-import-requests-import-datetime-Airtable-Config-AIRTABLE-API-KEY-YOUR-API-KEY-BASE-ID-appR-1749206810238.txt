@@ -1,0 +1,63 @@
+import requests
+import datetime
+
+# Airtable Config
+AIRTABLE_API_KEY = "YOUR_API_KEY"
+BASE_ID = "appRt8V3tH4g5Z5if"
+TASK_TEMPLATE_TABLE = "tblTaskTemplates"
+PROJECT_ROADMAP_TABLE = "📌 Project Roadmap Tracker"
+HEADERS = {
+    "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+    "Content-Type": "application/json"
+}
+
+# Utility: Fetch tasks based on bot package and add-ons
+def fetch_template_tasks(bot_package, add_ons):
+    matched_tasks = []
+
+    # Step 1: Fetch all templates
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{TASK_TEMPLATE_TABLE}"
+    response = requests.get(url, headers=HEADERS)
+    templates = response.json().get("records", [])
+
+    for record in templates:
+        fields = record.get("fields", {})
+        core_match = fields.get("Bot Package") == bot_package
+        add_on_match = fields.get("Add-On") in add_ons if fields.get("Add-On") else True
+
+        if core_match and add_on_match:
+            matched_tasks.append(fields)
+
+    return matched_tasks
+
+# Utility: Insert roadmap task
+def insert_roadmap_task(task, company_id, sales_order_id):
+    data = {
+        "fields": {
+            "📦 Bot Package": task.get("Bot Package"),
+            "🧩 Add-On": task.get("Add-On", ""),
+            "✅ Task Description": task.get("Task Description"),
+            "👤 Assigned To": task.get("Assigned To", "Unassigned"),
+            "📅 Due Date": datetime.datetime.now().strftime("%Y-%m-%d"),
+            "🔗 Related Sales Order": [sales_order_id],
+            "🏢 Company": [company_id],
+            "🚦 Status": "Not Started"
+        }
+    }
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{PROJECT_ROADMAP_TABLE}"
+    requests.post(url, headers=HEADERS, json=data)
+
+# Main Trigger Function
+def process_sales_order(company_id, sales_order_id, bot_package, selected_addons):
+    tasks = fetch_template_tasks(bot_package, selected_addons)
+    for task in tasks:
+        insert_roadmap_task(task, company_id, sales_order_id)
+
+# Example usage (hardcoded test)
+if __name__ == "__main__":
+    process_sales_order(
+        company_id="recABC123xyz",  # Replace with actual linked Company record ID
+        sales_order_id="recXYZ789abc",  # Replace with actual Sales Order record ID
+        bot_package="Pro",
+        selected_addons=["📊 SmartSpend™ Dashboard", "🔔 Slack Notifications"]
+    )
