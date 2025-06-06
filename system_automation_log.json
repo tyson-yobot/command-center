@@ -1,20 +1,5 @@
 [
   {
-    "timestamp": "2025-06-05T01:50:00.086Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "Health check: 25.0% healthy",
-    "metrics": {
-      "totalFunctions": 40,
-      "activeFunctions": 10,
-      "successfulExecutions": 0,
-      "failedExecutions": 214,
-      "systemUptime": 3245.340808119,
-      "lastHealthCheck": "2025-06-05T01:49:00.008Z",
-      "automationStatus": "running"
-    }
-  },
-  {
     "timestamp": "2025-06-05T01:50:00.113Z",
     "functionId": 146,
     "functionName": "Customer Reconciliation",
@@ -11470,5 +11455,20 @@
     "duration": 347,
     "successCount": 1,
     "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T01:46:20.908Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T01:46:20.655Z",
+      "automationStatus": "running"
+    }
   }
 ]
