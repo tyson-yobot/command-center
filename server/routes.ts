@@ -9304,7 +9304,7 @@ Provide 3 actionable suggestions in bullet points.`;
     }
   });
 
-  // Quote Generator endpoint
+  // Quote Generator endpoint with enhanced notifications
   app.post('/api/generate-quote', async (req, res) => {
     try {
       const formData = req.body;
@@ -9325,10 +9325,42 @@ Provide 3 actionable suggestions in bullet points.`;
         result += data.toString();
       });
       
-      python.on('close', (code: number) => {
+      python.on('close', async (code: number) => {
         if (code === 0) {
           try {
             const quoteResult = JSON.parse(result);
+            
+            if (quoteResult.success) {
+              // Send enhanced notifications
+              const notificationData = {
+                company_name: formData.company_name,
+                contact_name: formData.contact_name,
+                quote_id: quoteResult.quote_id,
+                total_amount: quoteResult.total_amount,
+                deposit_amount: quoteResult.deposit_amount,
+                pdf_path: quoteResult.pdf_path
+              };
+              
+              // Execute email and Slack notifications
+              const notifyPython = spawn('python3', [
+                'server/emailNotificationSystem.py'
+              ], {
+                stdio: ['pipe', 'pipe', 'pipe']
+              });
+              
+              notifyPython.stdin.write(JSON.stringify(notificationData));
+              notifyPython.stdin.end();
+              
+              let notificationResult = '';
+              notifyPython.stdout.on('data', (data: any) => {
+                notificationResult += data.toString();
+              });
+              
+              notifyPython.on('close', () => {
+                console.log('Notifications sent:', notificationResult);
+              });
+            }
+            
             res.json(quoteResult);
           } catch (parseError) {
             res.status(500).json({ 
