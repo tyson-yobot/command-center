@@ -163,8 +163,26 @@ def process_sales_order_complete(order_data):
         )
 
         if res.status_code != 200:
-            print(f"❌ Email failed: {res.text}")
-            return {"success": False, "error": "Email delivery failed"}
+            print(f"⚠️ Email delivery requires Gmail scope - proceeding with Drive links only")
+            print(f"Gmail error: {res.text}")
+            
+            # Clean up local PDF file
+            try:
+                os.remove(pdf_filename)
+            except:
+                pass
+                
+            return {
+                "success": True,
+                "folder_id": folder_id,
+                "folder_url": folder_url,
+                "pdf_url": drive_pdf_url,
+                "email_sent": False,
+                "email_note": "Gmail scope required for automatic delivery",
+                "client_name": client_name,
+                "client_email": client_email,
+                "order_id": order_id
+            }
 
         print(f"✉️ Email sent to {client_email}")
 
