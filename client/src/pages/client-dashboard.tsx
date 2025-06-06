@@ -1338,7 +1338,7 @@ export default function ClientDashboard() {
               <CardContent>
                 <div className="grid grid-cols-1 gap-3">
                   <Button
-                    onClick={() => executeLiveCommand("Run Lead Scrape")}
+                    onClick={() => setShowLeadScraping(true)}
                     className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">🧲</span>
@@ -3089,6 +3089,35 @@ export default function ClientDashboard() {
               >
                 Delete Knowledge
               </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Lead Scraping Interface Modal */}
+      {showLeadScraping && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-cyan-400/50">
+            <div className="sticky top-0 bg-slate-900 border-b border-cyan-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white">Lead Scraping Interface</h2>
+              <Button
+                onClick={() => setShowLeadScraping(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6">
+              <LeadScrapingInterface
+                onScrapingStart={() => {
+                  // Optional: Add any tracking or notifications when scraping starts
+                }}
+                onScrapingComplete={(results) => {
+                  // Optional: Handle results, maybe save to your CRM
+                  console.log('Scraping completed with results:', results);
+                }}
+              />
             </div>
           </div>
         </div>
