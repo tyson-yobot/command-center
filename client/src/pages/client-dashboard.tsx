@@ -924,9 +924,24 @@ export default function ClientDashboard() {
       if (response.ok) {
         const data = await response.json();
         setUploadedDocuments(data.documents || []);
+        setToast({
+          title: "Documents Loaded",
+          description: `Found ${data.documents?.length || 0} documents in knowledge base`,
+        });
+      } else {
+        setToast({
+          title: "Load Failed",
+          description: "Unable to load documents from knowledge base",
+          variant: "destructive"
+        });
       }
     } catch (error) {
       console.error('Failed to load documents:', error);
+      setToast({
+        title: "Load Error",
+        description: "Network error while loading documents",
+        variant: "destructive"
+      });
     } finally {
       setDocumentsLoading(false);
     }
@@ -1363,7 +1378,11 @@ export default function ClientDashboard() {
       case "Stop Pipeline Calls":
         return { action: "stop_pipeline_calls", terminate_all: true };
       case "New Booking Sync":
-        return { action: "sync_latest_bookings" };
+        return { 
+          action: "sync_latest_bookings",
+          source: "calendar_api",
+          sync_type: "incremental"
+        };
       case "New Support Ticket":
         return { action: "create_sample_ticket", priority: "high" };
       case "Manual Follow-up":
