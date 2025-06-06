@@ -91,7 +91,7 @@ def generate_sales_order_pdf(form_data):
     pdf.set_font("Arial", '', 10)
     pdf.ln(10)
     pdf.cell(200, 8, "**Terms & Conditions**", ln=1)
-    pdf.multi_cell(200, 6, "• Payment due within 30 days of invoice date.\n• Late payments subject to a 1.5% monthly late fee.\n• Please contact us with any questions regarding this quote.")
+    pdf.multi_cell(200, 6, "- Payment due within 30 days of invoice date.\n- Late payments subject to a 1.5% monthly late fee.\n- Please contact us with any questions regarding this quote.")
     
     # Output PDF
     os.makedirs(folder_name, exist_ok=True)
@@ -157,7 +157,7 @@ def process_sales_order_clean(order_data):
             },
             "Add-Ons": [
                 {
-                    "Name": "SmartSpend™ Dashboard",
+                    "Name": "SmartSpend Dashboard",
                     "Setup": 499,
                     "Monthly": 49,
                     "Description": "Track expenses, budget, and ROI directly inside your bot system"

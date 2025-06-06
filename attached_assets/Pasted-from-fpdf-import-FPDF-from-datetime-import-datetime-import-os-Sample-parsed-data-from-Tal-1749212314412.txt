@@ -1,0 +1,111 @@
+from fpdf import FPDF
+from datetime import datetime
+import os
+
+# === Sample parsed data from Tally webhook (Replace with actual payload data in production) ===
+form_data = {
+    "Contact Name": "John Smith",
+    "Company Name": "Acme Robotics",
+    "Phone": "555-123-4567",
+    "Email": "john@acmerobotics.com",
+    "Bot Package": {
+        "Name": "Enterprise Bot",
+        "Setup": 12500,
+        "Monthly": 1499,
+        "Description": "All Pro + Lead Scoring, Quoting Engine, Performance Dashboards, Multi-Platform Sync"
+    },
+    "Add-Ons": [
+        {
+            "Name": "SmartSpend™ Dashboard",
+            "Setup": 499,
+            "Monthly": 49,
+            "Description": "Track expenses, budget, and ROI directly inside your bot system"
+        },
+        {
+            "Name": "Live Transfer Routing",
+            "Setup": 399,
+            "Monthly": 39,
+            "Description": "Send leads directly to sales reps"
+        }
+    ]
+}
+
+# === Calculations ===
+today = datetime.now()
+quote_id = f"Q-{today.strftime('%Y%m%d')}-001"
+quote_date = today.strftime('%Y-%m-%d')
+folder_name = form_data["Company Name"]
+pdf_name = f"{folder_name} - {quote_id}.pdf"
+
+# Totals
+subtotal = form_data["Bot Package"]["Setup"] + sum(a["Setup"] for a in form_data["Add-Ons"])
+tax = round(subtotal * 0.063, 2)
+total = round(subtotal + tax, 2)
+deposit_due = round(total * 0.5, 2)
+
+# === PDF Creation ===
+pdf = FPDF()
+pdf.add_page()
+pdf.set_font("Arial", size=12)
+
+# Header
+pdf.cell(200, 10, txt="YoBot, Inc.", ln=1)
+pdf.cell(200, 10, txt="https://yobot.bot", ln=1)
+pdf.cell(200, 10, txt=f"Date: {quote_date}", ln=1)
+pdf.cell(200, 10, txt=f"Quote #: {quote_id}", ln=1)
+pdf.ln(5)
+
+# Client Info
+pdf.cell(200, 10, txt="Client Information", ln=1)
+pdf.cell(200, 8, txt=f"Client Name: {form_data['Company Name']}", ln=1)
+pdf.cell(200, 8, txt=f"Contact: {form_data['Contact Name']}", ln=1)
+pdf.cell(200, 8, txt=f"Email: {form_data['Email']}", ln=1)
+pdf.cell(200, 8, txt=f"Phone: {form_data['Phone']}", ln=1)
+pdf.ln(5)
+
+# Table Header
+pdf.set_font("Arial", 'B', 12)
+pdf.cell(100, 10, "Item Description", 1)
+pdf.cell(40, 10, "Quantity", 1)
+pdf.cell(40, 10, "Price", 1)
+pdf.ln()
+
+# Bot Package
+pdf.set_font("Arial", '', 11)
+pdf.cell(100, 10, f"{form_data['Bot Package']['Name']} – {form_data['Bot Package']['Description']}", 1)
+pdf.cell(40, 10, "1", 1)
+pdf.cell(40, 10, f"${form_data['Bot Package']['Setup']:.2f}", 1)
+pdf.ln()
+pdf.cell(100, 10, f"{form_data['Bot Package']['Name']} Monthly Service Fee", 1)
+pdf.cell(40, 10, "1", 1)
+pdf.cell(40, 10, f"${form_data['Bot Package']['Monthly']:.2f}", 1)
+pdf.ln()
+
+# Add-ons
+for addon in form_data["Add-Ons"]:
+    pdf.cell(100, 10, f"{addon['Name']} Setup Fee – {addon['Description']}", 1)
+    pdf.cell(40, 10, "1", 1)
+    pdf.cell(40, 10, f"${addon['Setup']:.2f}", 1)
+    pdf.ln()
+    pdf.cell(100, 10, f"{addon['Name']} Monthly Add-On Fee", 1)
+    pdf.cell(40, 10, "1", 1)
+    pdf.cell(40, 10, f"${addon['Monthly']:.2f}", 1)
+    pdf.ln()
+
+# Totals
+pdf.set_font("Arial", 'B', 12)
+pdf.cell(180, 10, f"Subtotal: ${subtotal:.2f}", ln=1)
+pdf.cell(180, 10, f"Tax (6.3%): ${tax:.2f}", ln=1)
+pdf.cell(180, 10, f"Total: ${total:.2f}", ln=1)
+pdf.cell(180, 10, f"✔■ 50% Payment Received – ${deposit_due:.2f}", ln=1)
+
+# Footer Terms
+pdf.set_font("Arial", '', 10)
+pdf.ln(10)
+pdf.cell(200, 8, txt="**Terms & Conditions**", ln=1)
+pdf.multi_cell(200, 6, "• Payment due within 30 days of invoice date.\n• Late payments subject to a 1.5% monthly late fee.\n• Please contact us with any questions regarding this quote.")
+
+# Output PDF
+os.makedirs(folder_name, exist_ok=True)
+pdf.output(os.path.join(folder_name, pdf_name))
+print(f"✅ PDF created at: {folder_name}/{pdf_name}")
