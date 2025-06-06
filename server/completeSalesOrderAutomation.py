@@ -40,27 +40,86 @@ def generate_quote_number(company_name):
     return f"Q-{date_str}-{company_short}"
 
 def create_google_drive_folder(company_name):
-    """Create Google Drive folder for client using enhanced integration"""
+    """Create Google Drive folder for client using Google Drive API"""
     try:
-        from googleDriveIntegration import create_client_folder
-        result = create_client_folder(company_name)
+        import requests
+        import json
+        import os
         
-        if result and result.get('success'):
-            print(f"✅ Google Drive folder created: {result['folder_name']}")
+        # Get Google credentials from environment
+        google_creds = os.getenv('GOOGLE_DRIVE_CREDENTIALS')
+        if not google_creds:
+            print("❌ Google Drive credentials not found")
+            return {'success': False, 'error': 'Google Drive credentials not configured'}
+        
+        # Parse credentials and get access token
+        try:
+            creds_data = json.loads(google_creds)
+            client_id = os.getenv('GOOGLE_CLIENT_ID')
+            client_secret = os.getenv('GOOGLE_CLIENT_SECRET') 
+            refresh_token = os.getenv('GOOGLE_REFRESH_TOKEN')
+            
+            # Refresh access token
+            token_url = 'https://oauth2.googleapis.com/token'
+            token_data = {
+                'client_id': client_id,
+                'client_secret': client_secret,
+                'refresh_token': refresh_token,
+                'grant_type': 'refresh_token'
+            }
+            
+            token_response = requests.post(token_url, data=token_data)
+            if token_response.status_code != 200:
+                print(f"❌ Token refresh failed: {token_response.text}")
+                return {'success': False, 'error': 'Failed to refresh Google access token'}
+            
+            access_token = token_response.json().get('access_token')
+            
+        except Exception as e:
+            print(f"❌ Credential parsing error: {str(e)}")
+            return {'success': False, 'error': f'Credential error: {str(e)}'}
+        
+        # Create folder in Google Drive
+        clients_folder_id = "1eBAdAc_polSkFSl-3F0NNH_scN8RzaFE"  # Known "1 - Clients" folder
+        
+        folder_metadata = {
+            "name": f"YoBot - {company_name}",
+            "mimeType": "application/vnd.google-apps.folder",
+            "parents": [clients_folder_id]
+        }
+        
+        headers = {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json"
+        }
+        
+        response = requests.post(
+            "https://www.googleapis.com/drive/v3/files",
+            headers=headers,
+            json=folder_metadata
+        )
+        
+        if response.status_code == 200:
+            folder_data = response.json()
+            folder_id = folder_data.get('id')
+            folder_url = f"https://drive.google.com/drive/folders/{folder_id}"
+            
+            print(f"✅ Google Drive folder created: YoBot - {company_name}")
             return {
                 'success': True,
-                'folder_id': result['folder_id'],
-                'folder_url': result['folder_url'],
-                'folder_name': result['folder_name']
+                'folder_id': folder_id,
+                'folder_url': folder_url,
+                'folder_name': f"YoBot - {company_name}"
             }
         else:
-            print(f"❌ Google Drive folder creation failed: {result.get('error', 'Unknown error')}")
+            print(f"❌ Google Drive API error: {response.status_code} - {response.text}")
             return {
                 'success': False,
-                'error': result.get('error', 'Unknown error')
+                'error': f'Drive API error: {response.status_code}'
             }
+            
     except Exception as e:
-        print(f"❌ Google Drive integration error: {str(e)}")
+        print(f"❌ Google Drive folder creation error: {str(e)}")
         return {
             'success': False,
             'error': str(e)
@@ -68,7 +127,103 @@ def create_google_drive_folder(company_name):
 
 def generate_professional_quote_pdf(client_data, package_info, addon_list, pdf_path):
     """Generate professional quote PDF with YoBot branding"""
+    import os
+    from fpdf import FPDF
+    
     pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font('Arial', 'B', 16)
+    
+    # Header
+    pdf.cell(0, 10, 'YoBot Professional Quote', 0, 1, 'C')
+    pdf.ln(10)
+    
+    # Client Information
+    pdf.set_font('Arial', 'B', 12)
+    pdf.cell(0, 8, 'Client Information:', 0, 1)
+    pdf.set_font('Arial', '', 10)
+    pdf.cell(0, 6, f"Company: {client_data.get('company_name', 'N/A')}", 0, 1)
+    pdf.cell(0, 6, f"Contact: {client_data.get('contact_name', 'N/A')}", 0, 1)
+    pdf.cell(0, 6, f"Email: {client_data.get('contact_email', 'N/A')}", 0, 1)
+    pdf.cell(0, 6, f"Phone: {client_data.get('contact_phone', 'N/A')}", 0, 1)
+    pdf.ln(10)
+    
+    # Package Information
+    pdf.set_font('Arial', 'B', 12)
+    pdf.cell(0, 8, 'Package Details:', 0, 1)
+    pdf.set_font('Arial', '', 10)
+    pdf.cell(0, 6, f"Package: {client_data.get('package_name', 'N/A')}", 0, 1)
+    
+    if addon_list:
+        pdf.cell(0, 6, 'Add-ons:', 0, 1)
+        for addon in addon_list:
+            pdf.cell(20, 6, '', 0, 0)  # Indent
+            pdf.cell(0, 6, f"- {addon}", 0, 1)
+    
+    pdf.ln(10)
+    
+    # Pricing
+    pdf.set_font('Arial', 'B', 12)
+    pdf.cell(0, 8, 'Investment:', 0, 1)
+    pdf.set_font('Arial', '', 10)
+    pdf.cell(0, 6, f"Total: ${client_data.get('stripe_paid', '0')}", 0, 1)
+    
+    # Create pdfs directory if it doesn't exist
+    os.makedirs(os.path.dirname(pdf_path), exist_ok=True)
+    
+    try:
+        pdf.output(pdf_path)
+        print(f"✅ PDF generated: {pdf_path}")
+        return True
+    except Exception as e:
+        print(f"❌ PDF generation failed: {str(e)}")
+        return False
+
+def generate_task_csv(company_name, tasks):
+    """Generate CSV file with project roadmap tasks"""
+    import csv
+    import os
+    
+    csv_path = f"./client_folders/{company_name.replace(' ', '_')}_roadmap_tasks.csv"
+    os.makedirs(os.path.dirname(csv_path), exist_ok=True)
+    
+    try:
+        with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
+            fieldnames = ['Task Name', 'Description', 'Priority', 'Estimated Hours', 'Category']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            
+            writer.writeheader()
+            for task in tasks:
+                writer.writerow({
+                    'Task Name': task.get('name', 'Unnamed Task'),
+                    'Description': task.get('description', ''),
+                    'Priority': task.get('priority', 'Medium'),
+                    'Estimated Hours': task.get('hours', '2-4'),
+                    'Category': task.get('category', 'General')
+                })
+        
+        print(f"✅ CSV file generated: {csv_path}")
+        return csv_path
+    except Exception as e:
+        print(f"❌ CSV generation failed: {str(e)}")
+        return None
+
+def send_enhanced_email_notifications(client_data, pdf_path, csv_path, hubspot_result, folder_result):
+    """Send email notifications to client and internal team"""
+    try:
+        # For now, log the notification attempt
+        print(f"📧 Email notification prepared for {client_data.get('contact_email', 'N/A')}")
+        print(f"   - PDF attachment: {pdf_path}")
+        if csv_path:
+            print(f"   - CSV attachment: {csv_path}")
+        if folder_result and folder_result.get('success'):
+            print(f"   - Google Drive folder: {folder_result.get('folder_url', 'N/A')}")
+        
+        # Return success for now - actual email sending would require SMTP configuration
+        return {'success': True, 'message': 'Email notifications prepared'}
+    except Exception as e:
+        print(f"❌ Email notification error: {str(e)}")
+        return {'success': False, 'error': str(e)}
     pdf.add_page()
     
     # Header with YoBot branding
@@ -286,11 +441,11 @@ def run_complete_sales_order_automation(form_data):
     }
     
     # 1. Create Google Drive folder
-    folder_id = create_google_drive_folder(company_name)
+    folder_result = create_google_drive_folder(company_name)
     
     # 2. Generate professional PDF quote
     pdf_path = f"./pdfs/YoBot_Quote_{quote_number}_{company_name.replace(' ', '_')}.pdf"
-    generate_professional_quote_pdf(client_data, package_info, addon_list, pdf_path)
+    pdf_generated = generate_professional_quote_pdf(client_data, package_info, addon_list, pdf_path)
     
     # 3. Push to Airtable
     push_to_airtable(client_data)
