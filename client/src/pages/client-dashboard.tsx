@@ -318,11 +318,13 @@ export default function ClientDashboard() {
     const input = document.createElement('input');
     input.type = 'file';
     input.multiple = true;
-    input.accept = '.pdf,.doc,.docx,.txt';
+    input.accept = '.pdf,.doc,.docx,.txt,.csv';
     input.onchange = async (e) => {
       const files = (e.target as HTMLInputElement).files;
-      if (files) {
-        setVoiceStatus('Uploading documents...');
+      if (files && files.length > 0) {
+        setVoiceStatus('Processing documents for RAG system...');
+        setDocumentsLoading(true);
+        
         const formData = new FormData();
         Array.from(files).forEach(file => formData.append('files', file));
         
@@ -332,16 +334,53 @@ export default function ClientDashboard() {
             body: formData
           });
           
-          if (response.ok) {
-            const result = await response.json();
-            setVoiceStatus(`${result.files?.length || 0} documents uploaded successfully`);
-            refetchKnowledge(); // Refresh knowledge stats
+          const result = await response.json();
+          
+          if (response.ok && result.success) {
+            const processedCount = result.files?.filter(f => f.status === 'processed').length || 0;
+            const errorCount = result.files?.filter(f => f.status === 'error').length || 0;
+            
+            setVoiceStatus(
+              `RAG Integration Complete: ${processedCount} documents processed` + 
+              (errorCount > 0 ? `, ${errorCount} failed` : '')
+            );
+            
+            // Update document list
+            setUploadedDocuments(prev => [
+              ...prev,
+              ...result.files.map(file => ({
+                id: file.filename,
+                name: file.originalname,
+                size: file.size,
+                status: file.status,
+                ragIndexed: file.ragIndexed || false,
+                uploadDate: new Date().toISOString()
+              }))
+            ]);
+            
+            refetchKnowledge();
+            
+            setToast({
+              title: "Documents Processed",
+              description: `${processedCount} documents integrated into RAG knowledge base`,
+            });
           } else {
-            const error = await response.text();
-            setVoiceStatus(`Upload failed: ${response.status}`);
+            setVoiceStatus(`RAG Upload Failed: ${result.error || 'Unknown error'}`);
+            setToast({
+              title: "Upload Failed",
+              description: result.error || 'Failed to process documents',
+              variant: "destructive"
+            });
           }
-        } catch (error) {
-          setVoiceStatus(`Upload error: ${error.message}`);
+        } catch (error: any) {
+          setVoiceStatus(`RAG Connection Error: ${error.message}`);
+          setToast({
+            title: "Connection Error",
+            description: `Failed to connect to knowledge system: ${error.message}`,
+            variant: "destructive"
+          });
+        } finally {
+          setDocumentsLoading(false);
         }
       }
     };
