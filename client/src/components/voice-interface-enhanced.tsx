@@ -32,6 +32,7 @@ export function VoiceInterfaceEnhanced() {
   const [selectedVoice, setSelectedVoice] = useState('21m00Tcm4TlvDq8ikWAM');
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const recognitionRef = useRef<any>(null);
   const { toast } = useToast();
 
   // Fetch available voices
@@ -213,14 +214,15 @@ export function VoiceInterfaceEnhanced() {
         });
       };
 
+      recognitionRef.current = recognition;
       recognition.start();
       setIsListening(true);
       console.log('Voice recognition started');
       
       // Stop recognition after 60 seconds maximum
       setTimeout(() => {
-        if (recognition && isListening) {
-          recognition.stop();
+        if (recognitionRef.current && isListening) {
+          recognitionRef.current.stop();
         }
       }, 60000);
       
@@ -239,10 +241,9 @@ export function VoiceInterfaceEnhanced() {
   };
 
   const stopListening = () => {
-    if (mediaRecorderRef.current && isListening) {
-      mediaRecorderRef.current.stop();
+    if (recognitionRef.current && isListening) {
+      recognitionRef.current.stop();
       setIsListening(false);
-      setIsProcessing(true);
     }
   };
 

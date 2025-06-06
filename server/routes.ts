@@ -11225,5 +11225,76 @@ print(json.dumps(result))
     }
   });
 
+  // Stop pipeline calls endpoint
+  app.post('/api/pipeline/stop', async (req, res) => {
+    try {
+      const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+      const BASE_ID = process.env.AIRTABLE_BASE_ID || "appCoAtCZdARb4AM2";
+      const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
+      const TABLE_NAME = "🧠 Lead Engine";
+      
+      if (!AIRTABLE_API_KEY) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing Airtable API key'
+        });
+      }
+
+      // Get all leads currently in "Called" status and reset them
+      const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?filterByFormula={🤖 Pipeline Status}='Called'`;
+      const headers = { "Authorization": `Bearer ${AIRTABLE_API_KEY}` };
+      
+      const response = await axios.get(url, { headers });
+      const activeCallLeads = response.data.records || [];
+      
+      let stoppedCalls = 0;
+      
+      for (const lead of activeCallLeads) {
+        try {
+          await axios.patch(
+            `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${lead.id}`,
+            {
+              fields: {
+                '🤖 Pipeline Status': 'Stopped',
+                '📞 Call Outcome': 'Pipeline Stopped',
+                '📅 Last Called': new Date().toISOString().split('T')[0]
+              }
+            },
+            { headers }
+          );
+          stoppedCalls++;
+        } catch (updateError) {
+          console.log(`Failed to update lead ${lead.id}:`, updateError.message);
+        }
+      }
+
+      // Send Slack notification if webhook is available
+      if (SLACK_WEBHOOK_URL) {
+        try {
+          await axios.post(SLACK_WEBHOOK_URL, {
+            text: `🛑 Pipeline calls stopped - ${stoppedCalls} active calls terminated`
+          });
+        } catch (slackError) {
+          console.log('Slack notification failed:', slackError.message);
+        }
+      }
+
+      console.log(`✅ Pipeline calls stopped: ${stoppedCalls} calls terminated`);
+      
+      res.json({
+        success: true,
+        stopped_calls: stoppedCalls,
+        message: `Stopped ${stoppedCalls} active pipeline calls`
+      });
+
+    } catch (error: any) {
+      console.log('❌ Error stopping pipeline calls:', error.message);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
   return httpServer;
 }
