@@ -1222,6 +1222,13 @@ export default function ClientDashboard() {
                 >
                   Submit Ticket
                 </Button>
+                <Button 
+                  onClick={() => executeLiveCommand("Critical Escalation")}
+                  size="sm"
+                  className="bg-red-600 hover:bg-red-700 text-white border border-red-400"
+                >
+                  Critical Escalation
+                </Button>
               </div>
               
               <div className="flex items-center space-x-3">
