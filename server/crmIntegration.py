@@ -247,6 +247,23 @@ def process_complete_crm_sales_order(order_data):
             result["qbo_success"] = False
             result["qbo_error"] = "Credentials not configured"
         
+        # Generate professional PDF quote and create local folders
+        pdf_success = False
+        pdf_path = None
+        folder_path = None
+        try:
+            pdf_path, folder_path = generate_professional_quote_pdf(
+                company_name, quote_number, package, total
+            )
+            result["pdf_path"] = pdf_path
+            result["folder_path"] = folder_path
+            result["pdf_success"] = True
+            pdf_success = True
+        except Exception as e:
+            result["pdf_success"] = False
+            result["pdf_error"] = str(e)
+            print(f"PDF Generation Error: {e}")
+
         # Google Drive Integration with corrected authentication
         try:
             # Create main client folder
