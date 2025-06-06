@@ -11047,10 +11047,6 @@ print(json.dumps(result))
       res.status(500).json({ success: false, error: error.message });
     }
   });
-    } catch (error: any) {
-      res.status(500).json({ success: false, error: error.message });
-    }
-  });
 
   app.post('/api/knowledge/reindex', async (req, res) => {
     try {
