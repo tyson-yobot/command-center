@@ -61,6 +61,8 @@ export default function ClientDashboard() {
   const [selectedPersona, setSelectedPersona] = useState('21m00Tcm4TlvDq8ikWAM');
   const [availableVoices, setAvailableVoices] = useState<any[]>([]);
   const [voicesLoading, setVoicesLoading] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
 
   // Voice recognition functions for RAG system
   const initializeVoiceRecognition = () => {
@@ -225,6 +227,22 @@ export default function ClientDashboard() {
       }
     } catch (error) {
       setVoiceStatus('Voice test failed');
+    }
+  };
+
+  // Handle clear knowledge with confirmation
+  const handleClearKnowledge = () => {
+    setShowClearConfirm(true);
+    setDeleteConfirmText('');
+  };
+
+  const confirmClearKnowledge = () => {
+    if (deleteConfirmText.toLowerCase() === 'delete') {
+      // Clear knowledge base
+      console.log('Clearing knowledge base...');
+      setShowClearConfirm(false);
+      setDeleteConfirmText('');
+      // Add actual clear knowledge logic here
     }
   };
 
@@ -2105,7 +2123,10 @@ export default function ClientDashboard() {
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Reindex Knowledge
                   </Button>
-                  <Button className="bg-red-600 hover:bg-red-700 text-white">
+                  <Button 
+                    onClick={handleClearKnowledge}
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                  >
                     <Trash2 className="w-4 h-4 mr-2" />
                     Clear Knowledge
                   </Button>
@@ -2141,6 +2162,54 @@ export default function ClientDashboard() {
         </div>
 
       </div>
+
+      {/* Clear Knowledge Confirmation Dialog */}
+      {showClearConfirm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-slate-800 border border-red-500/50 rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-xl font-semibold text-red-400 mb-4 flex items-center">
+              <Trash2 className="w-5 h-5 mr-2" />
+              Confirm Knowledge Deletion
+            </h3>
+            <p className="text-white mb-4">
+              This action will permanently delete all knowledge base data. This cannot be undone.
+            </p>
+            <p className="text-slate-300 mb-4">
+              Type "delete" to confirm:
+            </p>
+            <input
+              type="text"
+              value={deleteConfirmText}
+              onChange={(e) => setDeleteConfirmText(e.target.value)}
+              className="w-full p-3 bg-slate-700 border border-slate-600 rounded text-white mb-4"
+              placeholder="Type 'delete' to confirm"
+              autoFocus
+            />
+            <div className="flex gap-3">
+              <Button
+                onClick={() => {
+                  setShowClearConfirm(false);
+                  setDeleteConfirmText('');
+                }}
+                className="flex-1 bg-slate-600 hover:bg-slate-700 text-white"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={confirmClearKnowledge}
+                disabled={deleteConfirmText.toLowerCase() !== 'delete'}
+                className={`flex-1 ${
+                  deleteConfirmText.toLowerCase() === 'delete'
+                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                    : 'bg-slate-600 text-slate-400 cursor-not-allowed'
+                }`}
+              >
+                Delete Knowledge
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,71 +1,5 @@
 [
   {
-    "timestamp": "2025-06-05T20:30:00.524Z",
-    "functionId": 151,
-    "functionName": "VoiceBot Escalation Detection",
-    "batch": 16,
-    "category": "Voice",
-    "status": "success",
-    "duration": 347,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T20:30:00.540Z",
-    "functionId": 157,
-    "functionName": "New Lead Notification",
-    "batch": 16,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 361,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T20:30:00.572Z",
-    "functionId": 131,
-    "functionName": "CRM Script Generator",
-    "batch": 14,
-    "category": "CRM",
-    "status": "success",
-    "duration": 391,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T20:30:00.579Z",
-    "functionId": 133,
-    "functionName": "Silent Call Detector",
-    "batch": 14,
-    "category": "Voice",
-    "status": "success",
-    "duration": 397,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T20:30:00.592Z",
-    "functionId": 136,
-    "functionName": "Personality Assigner",
-    "batch": 14,
-    "category": "AI",
-    "status": "success",
-    "duration": 409,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T20:30:00.596Z",
-    "functionId": 137,
-    "functionName": "SmartSpend Entry Creator",
-    "batch": 14,
-    "category": "Financial",
-    "status": "success",
-    "duration": 412,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-05T20:30:00.601Z",
     "functionId": 139,
     "functionName": "Call Digest Poster",
@@ -11394,5 +11328,79 @@
     "duration": 407,
     "successCount": 1,
     "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T10:00:00.258Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: 100.0% healthy",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 12,
+      "failedExecutions": 0,
+      "systemUptime": 299.647974435,
+      "lastHealthCheck": "2025-06-06T09:59:00.007Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-06T10:00:00.386Z",
+    "functionId": 133,
+    "functionName": "Silent Call Detector",
+    "batch": 14,
+    "category": "Voice",
+    "status": "success",
+    "duration": 118,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T10:00:00.400Z",
+    "functionId": 131,
+    "functionName": "CRM Script Generator",
+    "batch": 14,
+    "category": "CRM",
+    "status": "success",
+    "duration": 132,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T10:00:00.435Z",
+    "functionId": 137,
+    "functionName": "SmartSpend Entry Creator",
+    "batch": 14,
+    "category": "Financial",
+    "status": "success",
+    "duration": 166,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T10:00:00.459Z",
+    "functionId": 139,
+    "functionName": "Call Digest Poster",
+    "batch": 14,
+    "category": "Communication",
+    "status": "success",
+    "duration": 189,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T10:03:10.779Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T10:03:10.532Z",
+      "automationStatus": "running"
+    }
   }
 ]
