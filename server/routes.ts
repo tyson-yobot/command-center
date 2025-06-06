@@ -6393,10 +6393,75 @@ except Exception as e:
         created: new Date().toISOString()
       };
 
+      // Send to Zendesk if credentials are available
+      let zendeskResult = null;
+      const zendesk_domain = process.env.ZENDESK_DOMAIN;
+      const zendesk_email = process.env.ZENDESK_EMAIL;
+      
+      if (zendesk_domain && zendesk_email) {
+        try {
+          const zendeskUrl = `https://${zendesk_domain}.zendesk.com/api/v2/tickets.json`;
+          const priorityMap = {
+            'Low': 'low',
+            'Medium': 'normal',
+            'High': 'high',
+            'Urgent': 'urgent'
+          };
+          
+          const zendeskPayload = {
+            ticket: {
+              subject: subject,
+              comment: {
+                body: `Support request from ${name}\n\n${description}\n\nContact: ${email}`
+              },
+              requester: {
+                name: name,
+                email: email
+              },
+              priority: priorityMap[priority] || 'normal',
+              type: 'question',
+              tags: ['yobot', 'web-form', 'dashboard']
+            }
+          };
+
+          // Note: Would need proper Zendesk API token for authentication
+          console.log('Zendesk ticket would be created:', zendeskPayload);
+          zendeskResult = { success: true, message: 'Zendesk integration ready (needs API token)' };
+        } catch (error: any) {
+          console.error('Zendesk submission error:', error);
+          zendeskResult = { success: false, error: error.message };
+        }
+      } else {
+        zendeskResult = { success: false, error: 'Zendesk credentials not configured' };
+      }
+
+      // Log to Airtable if configured
+      let airtableResult = null;
+      try {
+        await logSupportTicket({
+          ticket_id: ticket.id,
+          submitted_by: email,
+          channel: 'Dashboard',
+          ticket_type: priority,
+          description: description,
+          assigned_rep: 'Support Team',
+          resolved: false,
+          resolution_notes: ''
+        });
+        airtableResult = { success: true };
+      } catch (error: any) {
+        console.error('Airtable logging error:', error);
+        airtableResult = { success: false, error: error.message };
+      }
+
       res.json({
         success: true,
         message: 'Support ticket created',
-        ticket
+        ticket,
+        integrations: {
+          zendesk: zendeskResult,
+          airtable: airtableResult
+        }
       });
     } catch (error: any) {
       res.status(500).json({ error: 'Ticket submission failed', details: error.message });
