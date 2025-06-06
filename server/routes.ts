@@ -10011,5 +10011,162 @@ Provide 3 actionable suggestions in bullet points.`;
     }
   });
 
+  // Knowledge Base API Endpoints
+  app.post("/api/knowledge/query", async (req, res) => {
+    try {
+      const { query } = req.body;
+      
+      if (!query?.trim()) {
+        return res.status(400).json({ error: "Query is required" });
+      }
+
+      // Use RAG engine for knowledge search
+      const results = await ragEngine.search(query, {
+        maxResults: 10,
+        threshold: 0.7
+      });
+
+      res.json({
+        success: true,
+        query,
+        results: results || [],
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Knowledge query error:', error);
+      res.status(500).json({ error: "Failed to query knowledge base" });
+    }
+  });
+
+  app.post("/api/knowledge/smart-search", async (req, res) => {
+    try {
+      const { query } = req.body;
+      
+      if (!query?.trim()) {
+        return res.status(400).json({ error: "Query is required" });
+      }
+
+      // Enhanced AI-powered search
+      const results = await ragEngine.smartSearch(query, {
+        useSemanticSearch: true,
+        expandQuery: true,
+        maxResults: 15
+      });
+
+      res.json({
+        success: true,
+        query,
+        matches: results?.length || 0,
+        results: results || [],
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Smart search error:', error);
+      res.status(500).json({ error: "Failed to perform smart search" });
+    }
+  });
+
+  app.post("/api/knowledge/context-search", async (req, res) => {
+    try {
+      const { query } = req.body;
+      
+      if (!query?.trim()) {
+        return res.status(400).json({ error: "Query is required" });
+      }
+
+      // Context-aware search with surrounding content
+      const results = await ragEngine.contextSearch(query, {
+        includeContext: true,
+        contextWindow: 500,
+        maxResults: 8
+      });
+
+      res.json({
+        success: true,
+        query,
+        contextMatches: results?.length || 0,
+        results: results || [],
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Context search error:', error);
+      res.status(500).json({ error: "Failed to perform context search" });
+    }
+  });
+
+  app.post("/api/knowledge/reindex", async (req, res) => {
+    try {
+      await forceResyncKnowledgeBase();
+      
+      res.json({
+        success: true,
+        message: "Knowledge base reindexed successfully",
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Knowledge reindex error:', error);
+      res.status(500).json({ error: "Failed to reindex knowledge base" });
+    }
+  });
+
+  app.delete("/api/knowledge/clear", async (req, res) => {
+    try {
+      await ragEngine.clearAll();
+      
+      res.json({
+        success: true,
+        message: "Knowledge base cleared successfully",
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Knowledge clear error:', error);
+      res.status(500).json({ error: "Failed to clear knowledge base" });
+    }
+  });
+
+  app.get("/api/knowledge/sources", async (req, res) => {
+    try {
+      const sources = await ragEngine.getSources();
+      
+      res.json(sources || []);
+    } catch (error: any) {
+      console.error('Knowledge sources error:', error);
+      res.status(500).json({ error: "Failed to retrieve knowledge sources" });
+    }
+  });
+
+  // Voice Generation Endpoints
+  app.get("/api/voice/download-latest", async (req, res) => {
+    try {
+      // Check for latest generated audio file
+      const fs = require('fs');
+      const path = require('path');
+      const audioDir = './generated_audio';
+      
+      if (!fs.existsSync(audioDir)) {
+        return res.status(404).json({ error: "No audio files available" });
+      }
+
+      const files = fs.readdirSync(audioDir)
+        .filter((file: string) => file.endsWith('.mp3'))
+        .map((file: string) => ({
+          name: file,
+          path: path.join(audioDir, file),
+          mtime: fs.statSync(path.join(audioDir, file)).mtime
+        }))
+        .sort((a: any, b: any) => b.mtime - a.mtime);
+
+      if (files.length === 0) {
+        return res.status(404).json({ error: "No audio files found" });
+      }
+
+      const latestFile = files[0];
+      res.download(latestFile.path, latestFile.name);
+    } catch (error: any) {
+      console.error('Audio download error:', error);
+      res.status(500).json({ error: "Failed to download audio file" });
+    }
+  });
+
   return httpServer;
 }

@@ -647,6 +647,96 @@ export default function ClientDashboard() {
     }
   };
 
+  // Voice Generation Functions
+  const generateVoice = async () => {
+    const textArea = document.querySelector('textarea[placeholder="Enter text to convert to speech..."]') as HTMLTextAreaElement;
+    const text = textArea?.value || '';
+    
+    if (!text.trim()) {
+      setToast({
+        title: "Text Required",
+        description: "Please enter text to convert to speech",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      setVoiceStatus('Generating voice...');
+      const response = await fetch('/api/voice/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          text: text,
+          voice_id: selectedPersona || '21m00Tcm4TlvDq8ikWAM'
+        })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setVoiceStatus('Voice generated successfully');
+        setToast({
+          title: "Voice Generated",
+          description: "Audio file has been created successfully",
+        });
+      } else {
+        setVoiceStatus('Voice generation failed');
+        setToast({
+          title: "Generation Failed",
+          description: "Unable to generate voice audio",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      setVoiceStatus('Error during generation');
+      setToast({
+        title: "Generation Error",
+        description: "Network error during voice generation",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const downloadAudio = async () => {
+    try {
+      const response = await fetch('/api/voice/download-latest');
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'generated-voice.mp3';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        setToast({
+          title: "Download Started",
+          description: "Audio file download has begun",
+        });
+      } else {
+        setToast({
+          title: "Download Failed",
+          description: "No audio file available for download",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      setToast({
+        title: "Download Error",
+        description: "Network error during download",
+        variant: "destructive"
+      });
+    }
+  };
+
+
+
+
+
+
+
   // Voice Command Handler
   const sendVoiceCommand = async () => {
     if (!voiceCommand.trim()) {
