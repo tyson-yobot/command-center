@@ -2933,12 +2933,25 @@ print(json.dumps(results))
       const pythonScript = `
 import sys
 sys.path.append('/home/runner/workspace/server')
+from htmlQuoteEndpoint import process_sales_order_with_html_quote
 from crmIntegration import process_complete_crm_sales_order
 import json
 
 order_data = ${JSON.stringify(orderData)}
-result = process_complete_crm_sales_order(order_data)
-print(json.dumps(result))
+
+# Generate HTML quote first
+quote_result = process_sales_order_with_html_quote(order_data)
+
+# Process CRM integration
+crm_result = process_complete_crm_sales_order(order_data)
+
+# Combine results
+final_result = {
+    **quote_result,
+    **crm_result
+}
+
+print(json.dumps(final_result))
       `;
 
       try {

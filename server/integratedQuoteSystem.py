@@ -132,65 +132,27 @@ def generate_quote_with_html_template(company_name, quote_number, email, package
             temp_html_path = temp_file.name
         
         try:
-            # Use puppeteer through Node.js to generate PDF
-            node_script = f"""
-const puppeteer = require('puppeteer');
-const fs = require('fs');
-
-(async () => {{
-  const browser = await puppeteer.launch({{
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
-  }});
-  
-  const page = await browser.newPage();
-  await page.goto('file://{temp_html_path}', {{ waitUntil: 'networkidle0' }});
-  
-  await page.pdf({{
-    path: '{pdf_path}',
-    format: 'A4',
-    printBackground: true,
-    margin: {{
-      top: '0.75in',
-      right: '0.75in',
-      bottom: '0.75in',
-      left: '0.75in'
-    }}
-  }});
-  
-  await browser.close();
-  console.log('PDF generated successfully');
-}})();
-"""
+            # Use WeasyPrint to generate PDF from HTML
+            from weasyprint import HTML, CSS
+            from weasyprint.text.fonts import FontConfiguration
             
-            # Write Node.js script to temporary file
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as node_file:
-                node_file.write(node_script)
-                node_script_path = node_file.name
+            font_config = FontConfiguration()
+            html_doc = HTML(filename=temp_html_path)
+            html_doc.write_pdf(pdf_path, font_config=font_config)
             
-            # Execute Node.js script
-            result = subprocess.run(['node', node_script_path], capture_output=True, text=True)
+            # Clean up temporary files
+            os.unlink(temp_html_path)
             
-            if result.returncode == 0:
-                # Clean up temporary files
-                os.unlink(temp_html_path)
-                os.unlink(node_script_path)
-                
-                return {
-                    "success": True,
-                    "pdf_path": pdf_path,
-                    "filename": filename,
-                    "calculated_total": total_with_tax,
-                    "base_price": base_price,
-                    "tax_amount": tax_amount,
-                    "subtotal": subtotal,
-                    "quote_number": quote_number
-                }
-            else:
-                return {
-                    "success": False,
-                    "error": f"PDF generation failed: {result.stderr}"
-                }
+            return {
+                "success": True,
+                "pdf_path": pdf_path,
+                "filename": filename,
+                "calculated_total": total_with_tax,
+                "base_price": base_price,
+                "tax_amount": tax_amount,
+                "subtotal": subtotal,
+                "quote_number": quote_number
+            }
                 
         except Exception as e:
             return {
@@ -202,7 +164,6 @@ const fs = require('fs');
             # Clean up temporary files
             try:
                 os.unlink(temp_html_path)
-                os.unlink(node_script_path)
             except:
                 pass
         
