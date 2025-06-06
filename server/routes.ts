@@ -3044,6 +3044,97 @@ print(json.dumps(results))
     }
   });
 
+  // 📄 Complete Sales Order Processing with Google Integration
+  app.post('/api/orders/complete', async (req, res) => {
+    try {
+      const { customer_name, email, package: botPackage, addons, total, order_id } = req.body;
+
+      // Process order with Google Drive folder creation, PDF generation, and Gmail delivery
+      const { spawn } = require('child_process');
+      const python = spawn('python3', ['-c', `
+import sys
+sys.path.append('/home/runner/workspace/server')
+from googleIntegration import process_sales_order_complete
+import json
+
+order_data = ${JSON.stringify({
+        customer_name: customer_name || 'Valued Client',
+        email: email || 'customer@example.com',
+        package: botPackage || 'Standard',
+        addons: addons || [],
+        total: total || '$0',
+        order_id: order_id || new Date().toISOString().split('T')[0].replace(/-/g, '')
+      })}
+
+result = process_sales_order_complete(order_data)
+print(json.dumps(result))
+      `]);
+
+      let output = '';
+      let error = '';
+
+      python.stdout.on('data', (data) => {
+        output += data.toString();
+      });
+
+      python.stderr.on('data', (data) => {
+        error += data.toString();
+      });
+
+      python.on('close', (code) => {
+        try {
+          if (code === 0 && output.trim()) {
+            const result = JSON.parse(output.trim().split('\n').pop());
+            
+            if (result.success) {
+              res.json({
+                success: true,
+                message: "Complete sales order processed with Google integration",
+                data: {
+                  customer_name: result.client_name,
+                  order_id: result.order_id,
+                  folder_url: result.folder_url,
+                  pdf_url: result.pdf_url,
+                  email_sent: result.email_sent,
+                  processing_time: new Date().toISOString()
+                }
+              });
+            } else {
+              res.status(500).json({
+                success: false,
+                error: result.error || "Processing failed",
+                customer_name: customer_name,
+                order_id: order_id
+              });
+            }
+          } else {
+            console.error("Python processing error:", error);
+            res.status(500).json({
+              success: false,
+              error: "Google integration processing failed",
+              details: error
+            });
+          }
+        } catch (parseError) {
+          console.error("Response parsing error:", parseError);
+          res.status(500).json({
+            success: false,
+            error: "Response parsing failed",
+            raw_output: output
+          });
+        }
+      });
+
+    } catch (err: any) {
+      console.error("Complete sales order error:", err);
+      res.status(500).json({ 
+        success: false,
+        error: "Server error",
+        message: err.message 
+      });
+    }
+  });
+
   // 🏆 Awarded Project
   app.post('/api/projects/awarded', async (req, res) => {
     try {
