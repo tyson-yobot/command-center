@@ -40,10 +40,31 @@ def generate_quote_number(company_name):
     return f"Q-{date_str}-{company_short}"
 
 def create_google_drive_folder(company_name):
-    """Create Google Drive folder for client"""
-    print(f"Creating Google Drive folder for {company_name}")
-    # Placeholder - requires Google Drive API setup
-    return f"folder_id_{company_name.replace(' ', '_')}"
+    """Create Google Drive folder for client using enhanced integration"""
+    try:
+        from googleDriveIntegration import create_client_folder
+        result = create_client_folder(company_name)
+        
+        if result and result.get('success'):
+            print(f"✅ Google Drive folder created: {result['folder_name']}")
+            return {
+                'success': True,
+                'folder_id': result['folder_id'],
+                'folder_url': result['folder_url'],
+                'folder_name': result['folder_name']
+            }
+        else:
+            print(f"❌ Google Drive folder creation failed: {result.get('error', 'Unknown error')}")
+            return {
+                'success': False,
+                'error': result.get('error', 'Unknown error')
+            }
+    except Exception as e:
+        print(f"❌ Google Drive integration error: {str(e)}")
+        return {
+            'success': False,
+            'error': str(e)
+        }
 
 def generate_professional_quote_pdf(client_data, package_info, addon_list, pdf_path):
     """Generate professional quote PDF with YoBot branding"""
@@ -277,19 +298,35 @@ def run_complete_sales_order_automation(form_data):
     # 4. Create HubSpot contact
     create_hubspot_contact(client_data)
     
-    # 5. Send internal email notifications
-    send_internal_notifications(client_data, pdf_path)
+    # 5. Generate work order CSV with roadmap tasks
+    from crmIntegration import build_roadmap_for_client
+    roadmap_result = build_roadmap_for_client(bot_package, selected_addons)
     
-    # 6. Send Slack notification
+    csv_path = None
+    if roadmap_result.get('success'):
+        csv_path = generate_task_csv(company_name, roadmap_result['tasks'])
+        print(f"✅ Work order CSV generated with {len(roadmap_result['tasks'])} tasks")
+    
+    # 6. Send enhanced email notifications with all attachments
+    notification_result = send_enhanced_email_notifications(
+        client_data, pdf_path, csv_path, hubspot_result, folder_result
+    )
+    
+    # 7. Send Slack notification
     send_slack_notification(client_data)
     
-    print(f"Complete sales order automation finished for {company_name} - Quote: {quote_number}")
+    print(f"Complete enhanced sales order automation finished for {company_name} - Quote: {quote_number}")
     
     return {
         "success": True,
         "quote_number": quote_number,
         "pdf_path": pdf_path,
-        "folder_id": folder_id,
+        "csv_path": csv_path,
+        "folder_id": folder_id.get('folder_id') if folder_result else None,
+        "folder_url": folder_result.get('folder_url') if folder_result else None,
+        "hubspot_contact_id": hubspot_result.get('contact_id') if hubspot_result else None,
+        "tasks_created": roadmap_result.get('tasks_count', 0),
+        "notifications_sent": notification_result.get('success', False),
         "automation_complete": True
     }
 
