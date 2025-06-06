@@ -1,20 +1,5 @@
 [
   {
-    "timestamp": "2025-06-06T08:30:00.276Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "Health check: 100.0% healthy",
-    "metrics": {
-      "totalFunctions": 40,
-      "activeFunctions": 40,
-      "successfulExecutions": 12,
-      "failedExecutions": 0,
-      "systemUptime": 371.95143481,
-      "lastHealthCheck": "2025-06-06T08:30:00.270Z",
-      "automationStatus": "running"
-    }
-  },
-  {
     "timestamp": "2025-06-06T08:30:00.337Z",
     "functionId": 131,
     "functionName": "CRM Script Generator",
@@ -11415,6 +11400,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-06T14:11:13.327Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-06T14:12:57.546Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T14:12:57.295Z",
       "automationStatus": "running"
     }
   }

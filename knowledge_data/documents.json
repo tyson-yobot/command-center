@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "id": "doc_1749219135393_sk7sn9sh4",
+    "filename": "test_document.txt",
+    "content": "Test document content\n",
+    "uploadedAt": "2025-06-06T14:12:15.393Z",
+    "size": 22
+  }
+]

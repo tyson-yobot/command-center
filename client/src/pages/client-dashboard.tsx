@@ -317,8 +317,11 @@ export default function ClientDashboard() {
             description: "All documents and memory entries have been removed",
           });
           
-          // Refresh knowledge stats
+          // Refresh knowledge stats and documents list
           refetchKnowledge();
+          loadDocuments();
+          setUploadedDocuments([]);
+          setSelectedDocuments([]);
         } else {
           setVoiceStatus('Failed to clear knowledge base');
           setToast({
@@ -1020,8 +1023,9 @@ export default function ClientDashboard() {
         });
         setMemoryText('');
         
-        // Refresh knowledge stats to reflect the new memory entry
+        // Refresh knowledge stats and documents list
         refetchKnowledge();
+        loadDocuments();
       } else {
         setVoiceStatus('Memory insertion failed');
         setToast({
