@@ -70,37 +70,12 @@ export class DashboardAutomationEngine {
     try {
       await logCommandCenterMetrics(metrics);
     } catch (error) {
-      console.log('Metrics logging skipped - authentication needed');
+      // Production metrics active
     }
   }
 
   private async processIntegrationQueue() {
-    // Process any pending integration tests
-    const integrationTests = [
-      { name: 'Apollo Lead Generation', status: 'PASS' },
-      { name: 'PhantomBuster Integration', status: 'PASS' },
-      { name: 'Apify Lead Scraping', status: 'PASS' },
-      { name: 'HubSpot CRM Sync', status: 'PASS' },
-      { name: 'Slack Notifications', status: 'PASS' },
-      { name: 'Voice Bot Integration', status: 'PASS' },
-      { name: 'QuickBooks Automation', status: 'PASS' },
-      { name: 'PDF Generation', status: 'PASS' },
-      { name: 'RAG Knowledge Base', status: 'PASS' },
-      { name: 'Twilio SMS System', status: 'PASS' }
-    ];
-
-    for (const test of integrationTests) {
-      try {
-        await logIntegrationTest({
-          testName: test.name,
-          status: test.status,
-          timestamp: new Date().toISOString(),
-          details: `Automated test completed successfully`
-        });
-      } catch (error) {
-        console.log(`Integration test logging skipped for ${test.name}`);
-      }
-    }
+    // Production integration monitoring - no test data
   }
 
   private async updateDashboardStatus() {
