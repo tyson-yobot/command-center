@@ -10837,21 +10837,20 @@ print(json.dumps(result))
           // Create knowledge entry for RAG system
           const knowledgeEntry = {
             id: `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            filename: file.filename,
-            originalname: file.originalname,
-            content: content.substring(0, 5000), // Limit content length
-            size: file.size,
-            mimetype: file.mimetype,
-            uploadDate: new Date().toISOString(),
-            processed: true,
-            indexed: true
+            filename: file.originalname,
+            content: content,
+            uploadedAt: new Date().toISOString(),
+            size: file.size
           };
 
-          // Store in knowledge base (this would integrate with your actual RAG system)
-          console.log('Document processed for RAG system:', {
+          // Save to persistent knowledge storage
+          await knowledgeStorage.saveDocument(knowledgeEntry);
+          
+          console.log('Document saved to knowledge base:', {
             filename: file.originalname,
             size: file.size,
-            contentLength: content.length
+            contentLength: content.length,
+            id: knowledgeEntry.id
           });
 
           uploadResults.push({
@@ -10910,13 +10909,14 @@ print(json.dumps(result))
         source: 'manual_insertion'
       };
       
-      // Store in memory system (simulate for now)
-      console.log('Memory entry created:', memoryEntry);
+      // Save to persistent memory storage
+      await knowledgeStorage.saveMemoryEntry(memoryEntry);
+      console.log('Memory entry saved:', memoryEntry);
       
       res.json({
         success: true,
         message: 'Memory entry inserted successfully',
-        data: memoryEntry
+        entry: memoryEntry
       });
     } catch (error: any) {
       console.error('Memory insertion error:', error);
@@ -10924,66 +10924,129 @@ print(json.dumps(result))
     }
   });
 
-  // Document management endpoints
+  // Document management endpoints - Fixed to use actual storage
   app.get('/api/knowledge/documents', async (req, res) => {
     try {
-      // Return sample documents for now - would connect to actual document storage
-      const documents = [
-        {
-          id: 'doc_1',
-          filename: 'sales_training.pdf',
-          originalname: 'Sales Training Manual.pdf',
-          size: 2048576,
-          uploadDate: '2024-01-15T10:30:00Z',
-          category: 'training'
-        },
-        {
-          id: 'doc_2', 
-          filename: 'product_specs.docx',
-          originalname: 'Product Specifications.docx',
-          size: 1024000,
-          uploadDate: '2024-01-14T14:20:00Z',
-          category: 'product'
-        },
-        {
-          id: 'doc_3',
-          filename: 'client_contacts.txt',
-          originalname: 'Client Contact List.txt', 
-          size: 512000,
-          uploadDate: '2024-01-13T09:15:00Z',
-          category: 'clients'
-        }
-      ];
-      
+      const documents = knowledgeStorage.getDocuments();
       res.json({
         success: true,
         documents: documents,
-        total: documents.length
+        totalCount: documents.length
+      });
+    } catch (error: any) {
+      console.error('Knowledge documents error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Memory entries endpoint - Fixed to use actual storage
+  app.get('/api/memory/entries', async (req, res) => {
+    try {
+      const entries = knowledgeStorage.getMemoryEntries();
+      res.json({
+        success: true,
+        entries: entries,
+        totalCount: entries.length
+      });
+    } catch (error: any) {
+      console.error('Memory entries error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Delete knowledge document endpoint
+  app.delete('/api/knowledge/documents/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = await knowledgeStorage.deleteDocument(id);
+      
+      if (deleted) {
+        res.json({ success: true, message: 'Document deleted successfully' });
+      } else {
+        res.status(404).json({ success: false, error: 'Document not found' });
+      }
+    } catch (error: any) {
+      console.error('Delete document error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Delete memory entry endpoint
+  app.delete('/api/memory/entries/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = await knowledgeStorage.deleteMemoryEntry(id);
+      
+      if (deleted) {
+        res.json({ success: true, message: 'Memory entry deleted successfully' });
+      } else {
+        res.status(404).json({ success: false, error: 'Memory entry not found' });
+      }
+    } catch (error: any) {
+      console.error('Delete memory entry error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Enhanced knowledge base query endpoint
+  app.post('/api/knowledge/query', async (req, res) => {
+    try {
+      const { query, context } = req.body;
+      
+      if (!query) {
+        return res.status(400).json({
+          success: false,
+          error: 'Query text is required'
+        });
+      }
+
+      // Get all documents and memory entries for RAG processing
+      const documents = knowledgeStorage.getDocuments();
+      const memoryEntries = knowledgeStorage.getMemoryEntries();
+      
+      // Simple keyword matching for now - in production would use vector embeddings
+      const searchTerms = query.toLowerCase().split(' ');
+      const relevantDocs = documents.filter(doc => 
+        searchTerms.some(term => 
+          doc.content.toLowerCase().includes(term) ||
+          doc.filename.toLowerCase().includes(term)
+        )
+      );
+      
+      const relevantMemories = memoryEntries.filter(entry =>
+        searchTerms.some(term => entry.text.toLowerCase().includes(term))
+      );
+
+      res.json({
+        success: true,
+        query: query,
+        relevantDocuments: relevantDocs,
+        relevantMemories: relevantMemories,
+        totalResults: relevantDocs.length + relevantMemories.length
+      });
+      
+    } catch (error: any) {
+      console.error('Knowledge query error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+
+
+  // Knowledge base clear endpoint (already exists above)
+  
+  // Chat history endpoint
+  app.get('/api/chat/history', async (req, res) => {
+    try {
+      res.json({
+        success: true,
+        messages: [],
+        totalCount: 0
       });
     } catch (error: any) {
       res.status(500).json({ success: false, error: error.message });
     }
   });
-
-  app.post('/api/knowledge/delete', async (req, res) => {
-    try {
-      const { documentIds } = req.body;
-      
-      if (!documentIds || !Array.isArray(documentIds)) {
-        return res.status(400).json({
-          success: false,
-          error: 'Document IDs array is required'
-        });
-      }
-      
-      // Simulate document deletion
-      console.log('Deleting documents:', documentIds);
-      
-      res.json({
-        success: true,
-        message: `${documentIds.length} documents deleted successfully`,
-        deletedIds: documentIds
-      });
     } catch (error: any) {
       res.status(500).json({ success: false, error: error.message });
     }
