@@ -272,12 +272,41 @@ export function VoiceInterfaceEnhanced() {
             onChange={(e) => setSelectedVoice(e.target.value)}
             className="bg-background border rounded px-2 py-1 text-sm"
           >
-            {voicesData?.voices?.map((voice: any) => (
-              <option key={voice.voice_id} value={voice.voice_id}>
-                {voice.name}
-              </option>
-            ))}
+            {voicesData?.voices && voicesData.voices.length > 0 && (
+              <>
+                {/* My Voices (Custom) */}
+                {voicesData.voices.filter((voice: any) => voice.category !== 'premade').length > 0 && (
+                  <optgroup label="My Voices">
+                    {voicesData.voices
+                      .filter((voice: any) => voice.category !== 'premade')
+                      .map((voice: any) => (
+                        <option key={voice.voice_id} value={voice.voice_id}>
+                          {voice.name}
+                        </option>
+                      ))}
+                  </optgroup>
+                )}
+                
+                {/* Premade Voices */}
+                {voicesData.voices.filter((voice: any) => voice.category === 'premade').length > 0 && (
+                  <optgroup label="ElevenLabs Premade">
+                    {voicesData.voices
+                      .filter((voice: any) => voice.category === 'premade')
+                      .map((voice: any) => (
+                        <option key={voice.voice_id} value={voice.voice_id}>
+                          {voice.name}
+                        </option>
+                      ))}
+                  </optgroup>
+                )}
+              </>
+            )}
           </select>
+          {voicesData && (
+            <span className="text-xs text-muted-foreground">
+              {voicesData.customCount || 0} custom, {voicesData.premadeCount || 0} premade
+            </span>
+          )}
         </div>
 
         {/* Memory Status */}
