@@ -99,6 +99,7 @@ import systemAuditLogRouter, { auditLogger } from "./systemAuditLog";
 import ragUsageAnalyticsRouter from "./ragUsageAnalytics";
 import missedCallHandlerRouter from "./missedCallHandler";
 import { googleDriveIntegration } from "./googleDriveIntegration";
+import { knowledgeStorage } from "./knowledgeStorage";
 import voiceBotCallbackRouter from "./voiceBotCallback";
 import chatIntegrationRouter from "./chatIntegration";
 import phantombusterRouter from "./phantombuster";
@@ -331,6 +332,168 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({
         success: false,
         error: error.message
+      });
+    }
+  });
+
+  // Knowledge base statistics endpoint
+  app.get('/api/knowledge/stats', async (req, res) => {
+    try {
+      const stats = knowledgeStorage.getDocumentStats();
+      const memoryStats = knowledgeStorage.getMemoryStats();
+      
+      res.json({
+        success: true,
+        documents: stats,
+        memory: memoryStats,
+        lastUpdated: new Date().toISOString()
+      });
+    } catch (error: any) {
+      res.status(500).json({ 
+        error: 'Failed to fetch knowledge stats' 
+      });
+    }
+  });
+
+  // Knowledge base documents endpoint
+  app.get('/api/knowledge/documents', async (req, res) => {
+    try {
+      const documents = knowledgeStorage.getDocuments();
+      res.json({
+        success: true,
+        documents: documents
+      });
+    } catch (error: any) {
+      res.status(500).json({ 
+        error: 'Failed to fetch knowledge documents' 
+      });
+    }
+  });
+
+  // Clear knowledge base endpoint
+  app.post('/api/knowledge/clear', async (req, res) => {
+    try {
+      await knowledgeStorage.clearAllDocuments();
+      await knowledgeStorage.clearAllMemory();
+      
+      res.json({
+        success: true,
+        message: 'Knowledge base and memory cleared successfully'
+      });
+    } catch (error: any) {
+      res.status(500).json({ 
+        error: 'Failed to clear knowledge base' 
+      });
+    }
+  });
+
+  // Memory insertion endpoint with persistence
+  app.post('/api/memory/insert', async (req, res) => {
+    try {
+      const { text, category, priority } = req.body;
+      
+      if (!text) {
+        return res.status(400).json({
+          success: false,
+          error: 'Text content is required'
+        });
+      }
+      
+      const memoryEntry = {
+        id: `mem_${Date.now()}`,
+        text: text,
+        category: category || 'general',
+        priority: priority || 'normal',
+        timestamp: new Date().toISOString(),
+        source: 'manual_insertion'
+      };
+      
+      await knowledgeStorage.saveMemoryEntry(memoryEntry);
+      console.log('Memory entry created:', memoryEntry);
+      
+      res.json({
+        success: true,
+        message: 'Memory entry inserted successfully',
+        entry: memoryEntry
+      });
+      
+    } catch (error: any) {
+      console.error('Memory insertion error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // Support ticket endpoint
+  app.post('/api/support/ticket', async (req, res) => {
+    try {
+      const { subject, description, priority, clientName, email } = req.body;
+      
+      if (!subject || !description) {
+        return res.status(400).json({ 
+          error: 'Missing required fields', 
+          required: ['subject', 'description'] 
+        });
+      }
+
+      // Create ticket in Zendesk if credentials are available
+      if (process.env.ZENDESK_DOMAIN && process.env.ZENDESK_EMAIL && process.env.ZENDESK_API_TOKEN) {
+        const ticketData = {
+          ticket: {
+            subject: subject,
+            comment: {
+              body: description
+            },
+            priority: priority || 'normal',
+            requester: {
+              name: clientName || 'Dashboard User',
+              email: email || 'support@yourdomain.com'
+            }
+          }
+        };
+
+        const response = await global.fetch(`https://${process.env.ZENDESK_DOMAIN}.zendesk.com/api/v2/tickets.json`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Basic ${Buffer.from(`${process.env.ZENDESK_EMAIL}/token:${process.env.ZENDESK_API_TOKEN}`).toString('base64')}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(ticketData)
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          return res.json({ 
+            success: true, 
+            ticket_id: result.ticket.id,
+            message: 'Support ticket created successfully'
+          });
+        }
+      }
+
+      // Fallback: Log support request locally
+      console.log('Support ticket created locally:', {
+        subject,
+        description,
+        priority,
+        clientName,
+        email,
+        timestamp: new Date().toISOString()
+      });
+
+      res.json({ 
+        success: true, 
+        ticket_id: `local_${Date.now()}`,
+        message: 'Support request logged successfully'
+      });
+
+    } catch (error: any) {
+      console.error('Support ticket error:', error);
+      res.status(500).json({ 
+        error: 'Failed to create support ticket',
+        details: error.message 
       });
     }
   });
