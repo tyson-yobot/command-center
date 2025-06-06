@@ -1,0 +1,12 @@
+{
+  "client_name": "Complete System Test Company",
+  "quote_number": "Q-COM-20250606-001",
+  "email": "systemtest@company.com",
+  "package": "YoBot Enterprise Package",
+  "total": "25000",
+  "pdf_path": "/home/runner/workspace/client_folders/Complete_System_Test_Company_20250606_031305/quotes/Complete System Test Company_Q-COM-20250606-001.pdf",
+  "folder_path": "/home/runner/workspace/client_folders/Complete_System_Test_Company_20250606_031305",
+  "created_date": "2025-06-06T03:13:05.091096",
+  "order_id": "Q-COM-20250606-001",
+  "processing_method": "Local Folder System"
+}

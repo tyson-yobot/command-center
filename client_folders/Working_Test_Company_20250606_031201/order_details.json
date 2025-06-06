@@ -1,0 +1,12 @@
+{
+  "client_name": "Working Test Company",
+  "quote_number": "Q-WOR-20250606-001",
+  "email": "workingtest@company.com",
+  "package": "YoBot Enterprise Package",
+  "total": "5000",
+  "pdf_path": "/home/runner/workspace/client_folders/Working_Test_Company_20250606_031201/quotes/Working Test Company_Q-WOR-20250606-001.pdf",
+  "folder_path": "/home/runner/workspace/client_folders/Working_Test_Company_20250606_031201",
+  "created_date": "2025-06-06T03:12:01.567655",
+  "order_id": "Q-WOR-20250606-001",
+  "processing_method": "Local Folder System"
+}

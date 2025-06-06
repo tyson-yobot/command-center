@@ -2948,12 +2948,12 @@ print(json.dumps(result))
       try {
         const { stdout, stderr } = await exec(`python3 -c "${pythonScript.replace(/"/g, '\\"')}"`);
         
-        let googleResult = { success: false, error: "No output from Google script" };
+        let localResult = { success: false, error: "No output from local script" };
         
         if (stdout.trim()) {
           const lastLine = stdout.trim().split('\n').pop();
           if (lastLine) {
-            googleResult = JSON.parse(lastLine);
+            localResult = JSON.parse(lastLine);
           }
         }
 
@@ -2970,28 +2970,30 @@ print(json.dumps(result))
               "📧 Email": orderData.email,
               "💰 Total": orderData.total,
               "📦 Package": orderData.package,
-              "📁 Folder URL": googleResult.folder_url || "Pending Google credentials",
-              "📄 PDF URL": googleResult.pdf_url || "Pending Google credentials",
+              "📁 Folder Path": localResult.folder_path || "Processing",
+              "📄 PDF Path": localResult.pdf_path || "Processing",
               "🔗 Order ID": orderData.order_id,
-              "✉️ Email Sent": googleResult.email_sent ? "Yes" : "No",
-              "🎯 Status": googleResult.success ? "Complete" : "Google auth needed"
+              "✉️ Email Sent": localResult.email_sent ? "Yes" : "No",
+              "🎯 Status": localResult.success ? "Complete - Local Processing" : "Processing"
             });
           } catch (airtableError) {
             console.log("Airtable logging failed, but order processed");
           }
         }
 
-        if (googleResult.success) {
+        if (localResult.success) {
           res.json({
             success: true,
-            message: "Complete sales order processed with Google automation",
+            message: "Complete sales order processed with local folder automation",
             webhook: "Sales Order Live",
             data: {
-              order_id: googleResult.order_id,
-              client_name: googleResult.client_name,
-              folder_url: googleResult.folder_url,
-              pdf_url: googleResult.pdf_url,
-              email_sent: googleResult.email_sent
+              order_id: localResult.order_id,
+              client_name: localResult.client_name,
+              folder_path: localResult.folder_path,
+              pdf_path: localResult.pdf_path,
+              email_sent: localResult.email_sent,
+              folder_created: localResult.folder_created,
+              pdf_organized: localResult.pdf_organized
             }
           });
         } else {
