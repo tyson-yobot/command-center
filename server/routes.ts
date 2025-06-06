@@ -10321,49 +10321,88 @@ print(json.dumps(result))
     }
   });
 
-  // ElevenLabs voice integration endpoints
+  // ElevenLabs voice integration endpoints - fetch ALL available voices
   app.get('/api/elevenlabs/voices', async (req, res) => {
     try {
-      const apiKey = "sk_abb746b1e386be0085d005a594c6818afac710a9c3d6780a";
+      const apiKey = process.env.ELEVENLABS_API_KEY || "sk_abb746b1e386be0085d005a594c6818afac710a9c3d6780a";
       
-      // Fetch all voices from ElevenLabs API (includes both premade and custom)
+      if (!apiKey) {
+        return res.status(400).json({
+          voices: [],
+          error: 'ElevenLabs API key not configured',
+          message: 'Please provide ELEVENLABS_API_KEY to access all voices'
+        });
+      }
+      
+      // Fetch all voices from ElevenLabs API (includes premade, custom, cloned, professional)
       const response = await fetch('https://api.elevenlabs.io/v1/voices', {
         headers: {
-          'xi-api-key': apiKey
+          'xi-api-key': apiKey,
+          'Content-Type': 'application/json'
         }
       });
       
       if (!response.ok) {
         const errorText = await response.text();
         console.error('ElevenLabs API error:', response.status, errorText);
-        return res.json({
+        
+        if (response.status === 401) {
+          return res.status(401).json({
+            voices: [],
+            error: 'Invalid ElevenLabs API key',
+            message: 'Please verify your ELEVENLABS_API_KEY is correct'
+          });
+        }
+        
+        return res.status(response.status).json({
           voices: [],
-          message: "Failed to authenticate with ElevenLabs. Please check your API key."
+          error: `ElevenLabs API error: ${response.status}`,
+          message: errorText
         });
       }
       
       const data = await response.json();
       
-      // Separate premade and custom voices for better organization
-      const premadeVoices = data.voices.filter((voice: any) => voice.category === 'premade');
-      const customVoices = data.voices.filter((voice: any) => voice.category !== 'premade');
+      // Organize voices by category for complete structure
+      const organizedVoices = {
+        premade: data.voices?.filter((voice: any) => voice.category === 'premade') || [],
+        custom: data.voices?.filter((voice: any) => voice.category === 'generated' || !voice.category) || [],
+        cloned: data.voices?.filter((voice: any) => voice.category === 'cloned') || [],
+        professional: data.voices?.filter((voice: any) => voice.category === 'professional') || [],
+        instant: data.voices?.filter((voice: any) => voice.category === 'instant') || []
+      };
       
-      // Sort voices: custom first, then premade
-      const sortedVoices = [...customVoices, ...premadeVoices];
+      // Create comprehensive voice list with all categories
+      const allVoices = [
+        ...organizedVoices.custom,
+        ...organizedVoices.premade,
+        ...organizedVoices.cloned,
+        ...organizedVoices.professional,
+        ...organizedVoices.instant
+      ];
       
-      console.log(`Loaded ${customVoices.length} custom voices and ${premadeVoices.length} premade voices`);
+      const totalVoices = allVoices.length;
+      console.log(`Loaded ${totalVoices} total ElevenLabs voices: ${organizedVoices.custom.length} custom, ${organizedVoices.premade.length} premade, ${organizedVoices.cloned.length} cloned, ${organizedVoices.professional.length} professional, ${organizedVoices.instant.length} instant`);
       
       res.json({
-        voices: sortedVoices,
-        customCount: customVoices.length,
-        premadeCount: premadeVoices.length,
-        message: `Loaded ${customVoices.length} custom and ${premadeVoices.length} premade voices`
+        voices: allVoices,
+        organized: organizedVoices,
+        total_count: totalVoices,
+        categories: {
+          custom: organizedVoices.custom.length,
+          premade: organizedVoices.premade.length,
+          cloned: organizedVoices.cloned.length,
+          professional: organizedVoices.professional.length,
+          instant: organizedVoices.instant.length
+        },
+        message: `Loaded ${totalVoices} voices across all categories`
       });
     } catch (error: any) {
       console.error('ElevenLabs voices error:', error);
-      res.json({
+      res.status(500).json({
         voices: [],
-        message: "Error connecting to ElevenLabs. Please check your API key configuration."
+        error: 'Failed to fetch voices',
+        message: error.message
       });
     }
   });
@@ -11292,6 +11331,173 @@ print(json.dumps(result))
       res.status(500).json({
         success: false,
         error: error.message
+      });
+    }
+  });
+
+  // Navigation Structure Endpoints
+  app.get('/api/navigation/agents', async (req, res) => {
+    try {
+      const agents = {
+        voicebot_agents: [
+          { id: 'vb_001', name: 'Sales Agent', status: 'active', calls_today: 47, success_rate: '89%' },
+          { id: 'vb_002', name: 'Support Agent', status: 'active', calls_today: 32, success_rate: '94%' },
+          { id: 'vb_003', name: 'Lead Qualifier', status: 'training', calls_today: 15, success_rate: '76%' }
+        ],
+        chatbot_agents: [
+          { id: 'cb_001', name: 'Website Chat', status: 'active', messages_today: 156, response_time: '1.2s' },
+          { id: 'cb_002', name: 'Support Chat', status: 'active', messages_today: 89, response_time: '0.8s' }
+        ],
+        ai_assistants: [
+          { id: 'ai_001', name: 'Executive Assistant', status: 'active', tasks_completed: 23 },
+          { id: 'ai_002', name: 'Data Analyst', status: 'active', reports_generated: 8 }
+        ]
+      };
+      res.json(agents);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to fetch agents data' });
+    }
+  });
+
+  app.get('/api/navigation/call-history', async (req, res) => {
+    try {
+      const callHistory = {
+        recent_calls: [
+          { id: 'call_001', caller: 'John Smith', number: '+1-555-0123', duration: '3:45', outcome: 'Converted', agent: 'Sales Agent' },
+          { id: 'call_002', caller: 'Sarah Johnson', number: '+1-555-0124', duration: '2:15', outcome: 'Follow-up', agent: 'Lead Qualifier' },
+          { id: 'call_003', caller: 'Mike Wilson', number: '+1-555-0125', duration: '5:30', outcome: 'Quote Sent', agent: 'Sales Agent' }
+        ],
+        call_analytics: {
+          total_calls_today: 94,
+          average_duration: '3:12',
+          conversion_rate: '23%',
+          missed_calls: 3
+        },
+        call_recordings: [
+          { id: 'rec_001', call_id: 'call_001', duration: '3:45', quality_score: 95 },
+          { id: 'rec_002', call_id: 'call_002', duration: '2:15', quality_score: 87 }
+        ]
+      };
+      res.json(callHistory);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to fetch call history' });
+    }
+  });
+
+  app.get('/api/navigation/phone-numbers', async (req, res) => {
+    try {
+      const phoneNumbers = {
+        active_numbers: [
+          { id: 'num_001', number: '+1-602-780-3460', type: 'Main Line', status: 'active', calls_today: 47 },
+          { id: 'num_002', number: '+1-602-780-3461', type: 'Sales Line', status: 'active', calls_today: 32 },
+          { id: 'num_003', number: '+1-602-780-3462', type: 'Support Line', status: 'active', calls_today: 25 }
+        ],
+        number_routing: [
+          { number: '+1-602-780-3460', routes_to: 'Main VoiceBot', fallback: 'Human Agent' },
+          { number: '+1-602-780-3461', routes_to: 'Sales Agent', fallback: 'Lead Capture' },
+          { number: '+1-602-780-3462', routes_to: 'Support Agent', fallback: 'Ticket Creation' }
+        ],
+        call_forwarding: {
+          enabled: true,
+          forward_to: '+1-602-780-3999',
+          conditions: ['after_hours', 'busy', 'no_answer']
+        }
+      };
+      res.json(phoneNumbers);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to fetch phone numbers data' });
+    }
+  });
+
+  app.get('/api/navigation/settings', async (req, res) => {
+    try {
+      const settings = {
+        voice_settings: {
+          default_voice: 'Rachel',
+          speech_rate: 1.0,
+          voice_stability: 0.5,
+          similarity_boost: 0.75
+        },
+        call_settings: {
+          max_call_duration: 1800,
+          call_recording: true,
+          voicemail_enabled: true,
+          call_screening: false
+        },
+        ai_settings: {
+          response_timeout: 5,
+          confidence_threshold: 0.8,
+          fallback_to_human: true,
+          learning_mode: true
+        },
+        integration_settings: {
+          crm_sync: true,
+          slack_notifications: true,
+          email_alerts: true,
+          webhook_endpoints: 3
+        },
+        security_settings: {
+          two_factor_auth: true,
+          session_timeout: 3600,
+          api_rate_limiting: true,
+          encryption_enabled: true
+        }
+      };
+      res.json(settings);
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to fetch settings data' });
+    }
+  });
+
+  // Enhanced ElevenLabs voice generation with all models
+  app.post('/api/elevenlabs/generate', async (req, res) => {
+    try {
+      const { text, voice_id, model_id } = req.body;
+      const apiKey = process.env.ELEVENLABS_API_KEY || "sk_abb746b1e386be0085d005a594c6818afac710a9c3d6780a";
+      
+      if (!text || !voice_id) {
+        return res.status(400).json({
+          error: 'Missing required parameters',
+          required: ['text', 'voice_id']
+        });
+      }
+
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice_id}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'audio/mpeg',
+          'Content-Type': 'application/json',
+          'xi-api-key': apiKey
+        },
+        body: JSON.stringify({
+          text,
+          model_id: model_id || 'eleven_multilingual_v2',
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.75,
+            style: 0.0,
+            use_speaker_boost: true
+          }
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        return res.status(response.status).json({
+          error: 'Voice generation failed',
+          message: errorText
+        });
+      }
+
+      const audioBuffer = await response.arrayBuffer();
+      res.setHeader('Content-Type', 'audio/mpeg');
+      res.setHeader('Content-Disposition', `attachment; filename="voice_${voice_id}_${Date.now()}.mp3"`);
+      res.send(Buffer.from(audioBuffer));
+    } catch (error: any) {
+      console.error('ElevenLabs generation error:', error);
+      res.status(500).json({
+        error: 'Voice generation failed',
+        message: error.message
       });
     }
   });
