@@ -11634,15 +11634,75 @@ print(json.dumps(result))
 
   app.post('/api/support/ticket', async (req, res) => {
     try {
-      console.log('Creating support ticket...');
+      console.log('Creating support ticket in Zendesk...');
       
-      res.json({
-        success: true,
-        message: 'Support ticket created successfully',
-        ticket_id: `ticket_${Date.now()}`,
-        priority: 'high'
+      const { subject, description, priority, clientName, email } = req.body;
+      
+      const zendeskDomain = process.env.ZENDESK_DOMAIN;
+      const zendeskEmail = process.env.ZENDESK_EMAIL;
+      const zendeskToken = process.env.ZENDESK_API_TOKEN;
+      
+      if (!zendeskDomain || !zendeskEmail || !zendeskToken) {
+        return res.status(400).json({
+          success: false,
+          error: 'Zendesk credentials not configured',
+          message: 'Please configure ZENDESK_DOMAIN, ZENDESK_EMAIL, and ZENDESK_API_TOKEN'
+        });
+      }
+
+      // Create ticket in Zendesk
+      const zendeskUrl = `https://${zendeskDomain}.zendesk.com/api/v2/tickets.json`;
+      const auth = Buffer.from(`${zendeskEmail}/token:${zendeskToken}`).toString('base64');
+      
+      const ticketData = {
+        ticket: {
+          subject: subject || 'Support Request from YoBot Dashboard',
+          comment: {
+            body: description || 'Support ticket created from YoBot dashboard'
+          },
+          priority: (priority || 'normal').toLowerCase(),
+          status: 'new',
+          tags: ['yobot', 'dashboard', 'automated'],
+          requester: {
+            name: clientName || 'YoBot User',
+            email: email || 'support@yourdomain.com'
+          }
+        }
+      };
+
+      const zendeskResponse = await fetch(zendeskUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${auth}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(ticketData)
       });
+
+      if (zendeskResponse.ok) {
+        const result = await zendeskResponse.json();
+        console.log('Zendesk ticket created:', result.ticket.id);
+        
+        res.json({
+          success: true,
+          message: 'Support ticket created successfully in Zendesk',
+          ticket_id: result.ticket.id,
+          ticket_url: result.ticket.url,
+          priority: result.ticket.priority,
+          status: result.ticket.status
+        });
+      } else {
+        const errorText = await zendeskResponse.text();
+        console.error('Zendesk API error:', errorText);
+        
+        res.status(500).json({
+          success: false,
+          error: 'Failed to create ticket in Zendesk',
+          message: `Zendesk API returned ${zendeskResponse.status}: ${errorText}`
+        });
+      }
     } catch (error: any) {
+      console.error('Support ticket creation error:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to create support ticket',
