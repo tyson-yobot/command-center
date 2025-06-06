@@ -299,13 +299,45 @@ export default function ClientDashboard() {
     setDeleteConfirmText('');
   };
 
-  const confirmClearKnowledge = () => {
+  const confirmClearKnowledge = async () => {
     if (deleteConfirmText.toLowerCase() === 'delete') {
-      // Clear knowledge base
-      console.log('Clearing knowledge base...');
+      try {
+        setVoiceStatus('Clearing knowledge base...');
+        
+        const response = await fetch('/api/knowledge/clear', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          setVoiceStatus('Knowledge base cleared successfully');
+          setToast({
+            title: "Knowledge Cleared",
+            description: "All documents and memory entries have been removed",
+          });
+          
+          // Refresh knowledge stats
+          refetchKnowledge();
+        } else {
+          setVoiceStatus('Failed to clear knowledge base');
+          setToast({
+            title: "Clear Failed",
+            description: "Unable to clear knowledge base. Please try again.",
+            variant: "destructive"
+          });
+        }
+      } catch (error) {
+        setVoiceStatus('Error clearing knowledge base');
+        setToast({
+          title: "Error",
+          description: "Network error while clearing knowledge base",
+          variant: "destructive"
+        });
+      }
+      
       setShowClearConfirm(false);
       setDeleteConfirmText('');
-      // Add actual clear knowledge logic here
     }
   };
 
