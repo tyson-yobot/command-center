@@ -70,6 +70,7 @@ export default function ClientDashboard() {
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
   const [memoryText, setMemoryText] = useState('');
   const [memoryCategory, setMemoryCategory] = useState('general');
+  const [voiceGenerationText, setVoiceGenerationText] = useState('');
   const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
   const [showDocumentManager, setShowDocumentManager] = useState(false);
@@ -847,10 +848,7 @@ export default function ClientDashboard() {
 
   // Voice Generation Functions
   const generateVoice = async () => {
-    const textArea = document.querySelector('textarea[placeholder="Enter text to convert to speech..."]') as HTMLTextAreaElement;
-    const text = textArea?.value || '';
-    
-    if (!text.trim()) {
+    if (!voiceGenerationText.trim()) {
       setToast({
         title: "Text Required",
         description: "Please enter text to convert to speech",
@@ -865,7 +863,7 @@ export default function ClientDashboard() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          text: text,
+          text: voiceGenerationText,
           voice_id: selectedPersona || '21m00Tcm4TlvDq8ikWAM'
         })
       });
@@ -886,6 +884,7 @@ export default function ClientDashboard() {
           title: "Voice Generated",
           description: "Audio file has been downloaded successfully",
         });
+        setVoiceGenerationText(''); // Clear the text after successful generation
       } else {
         setVoiceStatus('Voice generation failed');
         setToast({
@@ -905,37 +904,18 @@ export default function ClientDashboard() {
   };
 
   const downloadAudio = async () => {
-    try {
-      const response = await fetch('/api/voice/download-latest');
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'generated-voice.mp3';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        setToast({
-          title: "Download Started",
-          description: "Audio file download has begun",
-        });
-      } else {
-        setToast({
-          title: "Download Failed",
-          description: "No audio file available for download",
-          variant: "destructive"
-        });
-      }
-    } catch (error) {
+    if (!voiceGenerationText.trim()) {
       setToast({
-        title: "Download Error",
-        description: "Network error during download",
+        title: "Text Required",
+        description: "Please enter text first, then generate voice before downloading",
         variant: "destructive"
       });
+      return;
     }
+    
+    // Generate and download in one step
+    await generateVoice();
+  };
   };
 
   const loadDocuments = async () => {
@@ -2900,6 +2880,8 @@ export default function ClientDashboard() {
                   </h3>
                   <div className="space-y-4">
                     <textarea
+                      value={voiceGenerationText}
+                      onChange={(e) => setVoiceGenerationText(e.target.value)}
                       placeholder="Enter text to convert to speech..."
                       className="w-full p-3 bg-blue-800/60 border border-cyan-400/50 rounded text-white placeholder-cyan-300"
                       rows={3}
