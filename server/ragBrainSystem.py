@@ -8,12 +8,16 @@ import requests
 import json
 from datetime import datetime
 import openai
-from elevenlabs import generate, set_api_key
+from elevenlabs.client import ElevenLabs
 
 # Set API keys
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# Initialize ElevenLabs client
 if os.getenv("ELEVENLABS_API_KEY"):
-    set_api_key(os.getenv("ELEVENLABS_API_KEY"))
+    elevenlabs_client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
+else:
+    elevenlabs_client = None
 
 class YoBotRAGBrain:
     def __init__(self):
@@ -82,11 +86,11 @@ Keep responses conversational but informative.
                     "error": "ElevenLabs API key not configured"
                 }
             
-            # Generate audio
-            audio = generate(
+            # Generate audio using text-to-speech
+            audio = elevenlabs_client.text_to_speech.convert(
+                voice_id=voice_id,
                 text=text,
-                voice=voice_id,
-                model="eleven_monolingual_v1"
+                model_id="eleven_monolingual_v1"
             )
             
             # Save audio file
@@ -96,7 +100,9 @@ Keep responses conversational but informative.
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             
             with open(filepath, "wb") as f:
-                f.write(audio)
+                for chunk in audio:
+                    if chunk:
+                        f.write(chunk)
             
             return {
                 "success": True,

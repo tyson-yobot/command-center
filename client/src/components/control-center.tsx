@@ -65,6 +65,11 @@ export default function ControlCenter() {
   const [customPersonalityEnabled, setCustomPersonalityEnabled] = useState(false);
   const [ragKnowledgeEnabled, setRagKnowledgeEnabled] = useState(true);
   const [quickbooksIntegrationEnabled, setQuickbooksIntegrationEnabled] = useState(false);
+  
+  // RAG and Voice state
+  const [ragQuery, setRagQuery] = useState("");
+  const [ragResponse, setRagResponse] = useState("");
+  const [callPhoneNumber, setCallPhoneNumber] = useState("");
   const [bookingAutomationsEnabled, setBookingAutomationsEnabled] = useState(true);
   const [whiteLabelEnabled, setWhiteLabelEnabled] = useState(false);
   const [botalyticsEnabled, setBotalyticsEnabled] = useState(false);
@@ -81,9 +86,7 @@ export default function ControlCenter() {
   const [emergencyMode, setEmergencyMode] = useState(false);
   const [showConfirmShutdown, setShowConfirmShutdown] = useState(false);
   
-  // RAG Knowledge Base State
-  const [ragQuery, setRagQuery] = useState('');
-  const [ragResponse, setRagResponse] = useState('');
+
 
   // Helper functions
   const updateToggle = async (toggleName, value) => {
