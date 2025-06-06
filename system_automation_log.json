@@ -1,20 +1,5 @@
 [
   {
-    "timestamp": "2025-06-05T20:50:00.083Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "Health check: 100.0% healthy",
-    "metrics": {
-      "totalFunctions": 40,
-      "activeFunctions": 40,
-      "successfulExecutions": 0,
-      "failedExecutions": 0,
-      "systemUptime": 46.985042432,
-      "lastHealthCheck": "2025-06-05T20:50:00.074Z",
-      "automationStatus": "running"
-    }
-  },
-  {
     "timestamp": "2025-06-05T20:50:00.153Z",
     "functionId": 140,
     "functionName": "Live Error Push",
@@ -11396,6 +11381,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-06T10:16:29.935Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-06T10:17:25.637Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T10:17:25.269Z",
       "automationStatus": "running"
     }
   }

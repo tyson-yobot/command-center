@@ -278,6 +278,7 @@ export default function ClientDashboard() {
     input.onchange = async (e) => {
       const files = (e.target as HTMLInputElement).files;
       if (files) {
+        setVoiceStatus('Uploading documents...');
         const formData = new FormData();
         Array.from(files).forEach(file => formData.append('files', file));
         
@@ -286,11 +287,17 @@ export default function ClientDashboard() {
             method: 'POST',
             body: formData
           });
+          
           if (response.ok) {
-            setVoiceStatus('Documents uploaded successfully');
+            const result = await response.json();
+            setVoiceStatus(`${result.files?.length || 0} documents uploaded successfully`);
+            refetchKnowledge(); // Refresh knowledge stats
+          } else {
+            const error = await response.text();
+            setVoiceStatus(`Upload failed: ${response.status}`);
           }
         } catch (error) {
-          setVoiceStatus('Upload failed');
+          setVoiceStatus(`Upload error: ${error.message}`);
         }
       }
     };
@@ -2335,8 +2342,13 @@ export default function ClientDashboard() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-400">1,247</div>
+                    <div className="text-2xl font-bold text-blue-400">
+                      {knowledgeStats?.documentCount || 0}
+                    </div>
                     <div className="text-white text-sm">Documents Indexed</div>
+                    <div className="text-xs text-slate-400 mt-1">
+                      {knowledgeStats?.totalSize || '0 MB'}
+                    </div>
                   </div>
                 </div>
                 
