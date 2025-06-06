@@ -1265,7 +1265,7 @@ export default function ClientDashboard() {
                   
                   <Button
                     onClick={() => executeLiveCommand("New Support Ticket")}
-                    className="bg-rose-600 hover:bg-rose-700 text-white flex items-center justify-start p-3"
+                    className="bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">🆘</span>
                     <span>New Support Ticket</span>
