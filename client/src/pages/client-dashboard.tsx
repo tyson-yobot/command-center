@@ -443,6 +443,36 @@ export default function ClientDashboard() {
     window.open('mailto:support@yobot.ai?subject=Support Request', '_blank');
   };
 
+  const testSalesOrderAutomation = async () => {
+    try {
+      setVoiceStatus('Testing sales order automation...');
+      const response = await fetch('/api/sales-order/test', { method: 'POST' });
+      const result = await response.json();
+      
+      if (result.success) {
+        setVoiceStatus('Sales order automation test passed');
+        setToast({
+          title: "Automation Test Successful",
+          description: "Sales order processing workflow is operational",
+        });
+      } else {
+        setVoiceStatus('Sales order automation test failed');
+        setToast({
+          title: "Automation Test Failed",
+          description: "Check Airtable API configuration",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      setVoiceStatus('Sales order test error');
+      setToast({
+        title: "Test Error",
+        description: "Network error during automation test",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleVoiceToggle = () => {
     if (!isListening) {
       // Start voice recording

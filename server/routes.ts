@@ -10168,5 +10168,107 @@ Provide 3 actionable suggestions in bullet points.`;
     }
   });
 
+  // Sales Order Automation Endpoint
+  app.post("/api/sales-order/process", async (req, res) => {
+    try {
+      const { company_id, sales_order_id, bot_package, selected_addons } = req.body;
+      
+      if (!company_id || !sales_order_id || !bot_package) {
+        return res.status(400).json({ 
+          error: "Missing required fields: company_id, sales_order_id, bot_package" 
+        });
+      }
+
+      // Execute Python sales order automation
+      const { spawn } = require('child_process');
+      const python = spawn('python3', ['-c', `
+import sys
+sys.path.append('server')
+from salesOrderAutomation import process_sales_order
+import json
+
+result = process_sales_order(
+    "${company_id}",
+    "${sales_order_id}", 
+    "${bot_package}",
+    ${JSON.stringify(selected_addons || [])}
+)
+print(json.dumps(result))
+`]);
+
+      let output = '';
+      let error = '';
+
+      python.stdout.on('data', (data: any) => {
+        output += data.toString();
+      });
+
+      python.stderr.on('data', (data: any) => {
+        error += data.toString();
+      });
+
+      python.on('close', (code: number) => {
+        if (code === 0) {
+          try {
+            const result = JSON.parse(output.trim());
+            res.json({
+              success: true,
+              automation_result: result,
+              timestamp: new Date().toISOString()
+            });
+          } catch (parseError) {
+            res.status(500).json({ 
+              error: "Failed to parse automation result",
+              raw_output: output 
+            });
+          }
+        } else {
+          res.status(500).json({ 
+            error: "Sales order automation failed",
+            stderr: error,
+            exit_code: code 
+          });
+        }
+      });
+
+    } catch (error: any) {
+      console.error('Sales order automation error:', error);
+      res.status(500).json({ error: "Failed to process sales order" });
+    }
+  });
+
+  // Test Sales Order Automation
+  app.post("/api/sales-order/test", async (req, res) => {
+    try {
+      const { spawn } = require('child_process');
+      const python = spawn('python3', ['server/salesOrderAutomation.py']);
+
+      let output = '';
+      let error = '';
+
+      python.stdout.on('data', (data: any) => {
+        output += data.toString();
+      });
+
+      python.stderr.on('data', (data: any) => {
+        error += data.toString();
+      });
+
+      python.on('close', (code: number) => {
+        res.json({
+          success: code === 0,
+          test_output: output,
+          errors: error || null,
+          exit_code: code,
+          timestamp: new Date().toISOString()
+        });
+      });
+
+    } catch (error: any) {
+      console.error('Sales order test error:', error);
+      res.status(500).json({ error: "Failed to test sales order automation" });
+    }
+  });
+
   return httpServer;
 }
