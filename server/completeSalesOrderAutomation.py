@@ -302,6 +302,30 @@ def run_complete_sales_order_automation(form_data):
     from crmIntegration import build_roadmap_for_client
     roadmap_result = build_roadmap_for_client(client_data.get('bot_package', 'YoBot Standard Package'), client_data.get('selected_addons', []))
     
+    # Insert roadmap tasks into project management system
+    try:
+        from Project_Roadmap_Insert_Tasks import insert_roadmap_tasks
+        
+        # Extract parsed data for roadmap insertion
+        company_name = client_data.get("company_name") or client_data.get("Parsed Company Name")
+        bot_package = client_data.get("bot_package") or client_data.get("Parsed Bot Package") 
+        add_ons = client_data.get("selected_addons") or client_data.get("Parsed Add-On List", [])
+        
+        # Trigger roadmap population
+        roadmap_insert_result = insert_roadmap_tasks(
+            company=company_name,
+            package=bot_package,
+            addons=add_ons
+        )
+        print(f"✅ Roadmap tasks inserted for {company_name}")
+        
+    except ImportError:
+        print("⚠️ Project_Roadmap_Insert_Tasks module not found - skipping roadmap insertion")
+        roadmap_insert_result = None
+    except Exception as e:
+        print(f"⚠️ Roadmap insertion failed: {str(e)}")
+        roadmap_insert_result = None
+    
     csv_path = None
     if roadmap_result and roadmap_result.get('success'):
         csv_path = generate_task_csv(company_name, roadmap_result['tasks'])
