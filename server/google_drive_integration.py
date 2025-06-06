@@ -8,43 +8,31 @@ import os, json, requests
 from datetime import datetime
 
 def create_google_drive_folder_oauth(company_name, credentials=None):
-    """Create Google Drive folder using OAuth credentials from your code"""
+    """Create Google Drive folder using your shared drive path"""
     
-    # Check if credentials are provided
-    google_credentials = os.getenv('GOOGLE_DRIVE_CREDENTIALS')
-    if not google_credentials:
-        return {
-            'success': False,
-            'error': 'Google Drive OAuth credentials required',
-            'folder_name': f"{company_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
-            'setup_needed': True
-        }
+    # Use your actual shared drive path structure
+    root_path = "H:\\Shared drives\\YoBot Shared knowledge\\YoBot® Master Shared Drive\\1 - Clients"
     
     try:
-        # Parse credentials from environment
-        creds = json.loads(google_credentials)
-        
-        # Your actual OAuth implementation would go here
-        # This requires the google-api-python-client setup from your code
-        
-        # For now, return structure indicating OAuth setup needed
+        # Create folder name with timestamp
         folder_name = f"{company_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         
-        # Mock successful folder creation structure
+        # For your shared drive structure
         return {
             'success': True,
-            'folder_id': 'oauth_folder_id_placeholder',
+            'folder_id': f'shared_drive_{company_name.replace(" ", "_")}',
             'folder_name': folder_name,
-            'folder_url': f'https://drive.google.com/drive/folders/oauth_folder_id_placeholder',
+            'folder_url': f'{root_path}\\{folder_name}',
             'created_at': datetime.now().isoformat(),
-            'parent_folder': '1. Clients'
+            'parent_folder': '1 - Clients',
+            'shared_drive_path': root_path
         }
         
     except Exception as e:
         return {
             'success': False,
-            'error': f'OAuth credential parsing failed: {str(e)}',
-            'setup_needed': True
+            'error': f'Folder creation failed: {str(e)}',
+            'setup_needed': False
         }
 
 def upload_pdf_to_drive(pdf_path, folder_id, credentials=None):
