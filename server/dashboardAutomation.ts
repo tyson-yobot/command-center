@@ -61,7 +61,7 @@ export class DashboardAutomationEngine {
       activeCalls: Math.floor(Math.random() * 15),
       aiResponses: Math.floor(Math.random() * 50) + 20,
       queuedJobs: Math.floor(Math.random() * 8),
-      systemHealth: 97 + Math.floor(Math.random() * 3),
+      systemHealth: 100,
       responseTime: `${150 + Math.floor(Math.random() * 100)}ms`,
       connectedClients: 1,
       processingTasks: Math.floor(Math.random() * 5)

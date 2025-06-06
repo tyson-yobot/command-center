@@ -9,7 +9,7 @@ let metrics = {
   aiResponsesToday: 0,
   queuedVoiceJobs: 0,
   uptime: '100%',
-  systemHealth: 97,
+  systemHealth: 100,
   responseTime: '180ms',
   connectedClients: 0,
   processingTasks: 0,
