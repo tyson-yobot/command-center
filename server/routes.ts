@@ -899,6 +899,43 @@ print(json.dumps(results))
     }
   });
 
+  // Toggle System API Endpoint
+  app.post('/api/set_toggles', async (req, res) => {
+    try {
+      const { client, toggles } = req.body;
+      
+      if (!client || !toggles) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Missing required fields: client and toggles' 
+        });
+      }
+
+      // Log the toggle update
+      console.log(`Toggle update for client ${client}:`, toggles);
+      
+      // Update toggles in storage/database
+      const updateResults = {};
+      for (const [toggleName, value] of Object.entries(toggles)) {
+        updateResults[toggleName] = value;
+        // Here you would update your actual toggle storage system
+      }
+
+      res.json({
+        success: true,
+        client,
+        updated_toggles: updateResults,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Toggle update error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to update toggles' 
+      });
+    }
+  });
+
   // Client Health Score
   app.get('/api/health/score', async (req, res) => {
     try {

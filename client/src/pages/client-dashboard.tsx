@@ -2059,7 +2059,10 @@ export default function ClientDashboard() {
                     
                     <div className="flex items-center justify-between p-2 bg-blue-900/40 rounded text-sm">
                       <span className="text-white">
-                        Voices Available: {availableVoices.length}
+                        {availableVoices.length > 0 
+                          ? `${availableVoices.length} ElevenLabs voices loaded`
+                          : 'ElevenLabs API key required'
+                        }
                       </span>
                       <Button 
                         size="sm" 
@@ -2067,7 +2070,7 @@ export default function ClientDashboard() {
                         className="bg-blue-700 hover:bg-blue-600 text-xs px-2 py-1"
                         disabled={voicesLoading}
                       >
-                        Refresh
+                        {voicesLoading ? 'Loading...' : 'Refresh'}
                       </Button>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
