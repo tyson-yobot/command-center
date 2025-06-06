@@ -9304,6 +9304,55 @@ Provide 3 actionable suggestions in bullet points.`;
     }
   });
 
+  // Quote Generator endpoint
+  app.post('/api/generate-quote', async (req, res) => {
+    try {
+      const formData = req.body;
+      
+      // Execute Python quote generator
+      const { spawn } = require('child_process');
+      const python = spawn('python3', [
+        'server/quoteGenerator.py'
+      ], {
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+      
+      python.stdin.write(JSON.stringify(formData));
+      python.stdin.end();
+      
+      let result = '';
+      python.stdout.on('data', (data: any) => {
+        result += data.toString();
+      });
+      
+      python.on('close', (code: number) => {
+        if (code === 0) {
+          try {
+            const quoteResult = JSON.parse(result);
+            res.json(quoteResult);
+          } catch (parseError) {
+            res.status(500).json({ 
+              success: false, 
+              error: 'Failed to parse quote generation result' 
+            });
+          }
+        } else {
+          res.status(500).json({ 
+            success: false, 
+            error: 'Quote generation failed' 
+          });
+        }
+      });
+      
+    } catch (error: any) {
+      console.error('Quote generation error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message 
+      });
+    }
+  });
+
   // ElevenLabs voice integration endpoints
   app.get('/api/elevenlabs/voices', async (req, res) => {
     try {
