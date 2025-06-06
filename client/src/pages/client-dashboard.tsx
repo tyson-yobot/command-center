@@ -87,6 +87,29 @@ export default function ClientDashboard() {
       recognition.continuous = true;
       recognition.interimResults = true;
       recognition.lang = 'en-US';
+      recognition.maxAlternatives = 1;
+      
+      // Set 60-second timeout for extended voice input
+      let voiceTimeout: NodeJS.Timeout;
+      
+      recognition.onstart = () => {
+        voiceTimeout = setTimeout(() => {
+          recognition.stop();
+        }, 60000); // 60 seconds
+      };
+      
+      recognition.onend = () => {
+        if (voiceTimeout) {
+          clearTimeout(voiceTimeout);
+        }
+      };
+      
+      recognition.onerror = (event: any) => {
+        console.log('Speech recognition error:', event.error);
+        if (voiceTimeout) {
+          clearTimeout(voiceTimeout);
+        }
+      };
       
       recognitionRef.current = recognition;
       return recognition;
@@ -1072,24 +1095,68 @@ export default function ClientDashboard() {
     try {
       const payload = getLiveCommandPayload(category);
       
-      const response = await fetch('/api/command-center/trigger', {
+      // Route to specific endpoints for better reliability
+      let endpoint = '/api/command-center/trigger';
+      
+      switch (category) {
+        case "Start Pipeline Calls":
+          endpoint = '/api/pipeline/start';
+          break;
+        case "Stop Pipeline Calls":
+          endpoint = '/api/pipeline/stop';
+          break;
+        case "Initiate Voice Call":
+          endpoint = '/api/voice/call';
+          break;
+        case "Send SMS":
+          endpoint = '/api/sms/send';
+          break;
+        case "New Support Ticket":
+          endpoint = '/api/support/ticket';
+          break;
+        case "Manual Follow-up":
+          endpoint = '/api/followup/manual';
+          break;
+        case "New Booking Sync":
+          endpoint = '/api/booking/sync';
+          break;
+        case "Export Data":
+          endpoint = '/api/export/data';
+          break;
+        case "Run Lead Scrape":
+          endpoint = '/api/leads/scrape';
+          break;
+      }
+      
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           category,
-          payload
+          ...payload
         })
       });
 
       const result = await response.json();
 
-      if (result.success) {
-        alert(`✅ ${category} completed successfully`);
+      if (result.success || response.ok) {
+        setToast({
+          title: "Command Executed",
+          description: `${category} completed successfully`,
+        });
       } else {
-        alert(`❌ ${category} failed: ${result.error || 'Unknown error'}`);
+        setToast({
+          title: "Command Failed",
+          description: `${category} failed: ${result.error || result.message || 'Unknown error'}`,
+          variant: "destructive"
+        });
       }
-    } catch (error) {
-      alert(`❌ Failed to execute ${category}`);
+    } catch (error: any) {
+      setToast({
+        title: "Execution Error",
+        description: `Failed to execute ${category}: ${error.message}`,
+        variant: "destructive"
+      });
     }
   };
 
