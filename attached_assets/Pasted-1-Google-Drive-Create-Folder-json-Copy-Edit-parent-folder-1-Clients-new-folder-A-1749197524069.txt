@@ -1,0 +1,95 @@
+1. Google Drive → Create Folder
+json
+Copy
+Edit
+{
+  "parent_folder": "1. Clients",
+  "new_folder": "Alpha Test Co"
+}
+📄 2. Save PDF Quote to Drive
+json
+Copy
+Edit
+{
+  "folder": "Alpha Test Co",
+  "file_name": "Alpha Test Co - Q-20250605-001.pdf",
+  "file_path": "/mnt/data/YoBot_Quote_AUTOMATION_READY.pdf"
+}
+📇 3. Airtable Contact Creation
+json
+Copy
+Edit
+{
+  "base_id": "appe0OSJtB1In1kn5",
+  "table_id": "tblakvT7m2dQOjlPC",
+  "fields": {
+    "🧑 Full Name": "Tyson Lerfald",
+    "📞 Phone": "701-371-8391",
+    "📧 Email": "tyson@yobot.bot",
+    "🏢 Company": "Alpha Test Co"
+  }
+}
+💼 4. HubSpot Contact
+json
+Copy
+Edit
+{
+  "email": "tyson@yobot.bot",
+  "firstname": "Tyson",
+  "lastname": "Lerfald",
+  "phone": "701-371-8391",
+  "company": "Alpha Test Co"
+}
+✅ 5. Airtable Task Injection – Task Table Template
+json
+Copy
+Edit
+{
+  "base_id": "appe0OSJtB1In1kn5",
+  "table_id": "tblakvT7m2dQOjlPC",
+  "records": [
+    {
+      "Task Name": "✅ SYSTEM – Generate quote and sales documents",
+      "Phase": "Setup",
+      "Owner Type": "✅ SYSTEM",
+      "Applies To": "All Packages",
+      "Automation Notes": "Trigger PDF generation endpoint + Drive upload"
+    },
+    {
+      "Task Name": "✅ SYSTEM – Create Slack alert to sales team",
+      "Phase": "Notifications",
+      "Owner Type": "✅ SYSTEM",
+      "Applies To": "All Packages",
+      "Automation Notes": "slack_webhook_post(sales_channel, quote_info)"
+    },
+    {
+      "Task Name": "🧑 HUMAN – Confirm contact details with client",
+      "Phase": "Validation",
+      "Owner Type": "🧑 HUMAN",
+      "Applies To": "All Packages",
+      "Automation Notes": "Fallback step if email/phone validation fails"
+    }
+  ]
+}
+📣 6. Slack Notification
+json
+Copy
+Edit
+{
+  "webhook_url": "YOUR_SLACK_WEBHOOK",
+  "text": ":money_with_wings: *New Sales Order!*\nClient: Alpha Test Co\nQuote #: Q-20250605-001\nBy: Tyson Lerfald"
+}
+✍️ 7. DocuSign Envelope
+json
+Copy
+Edit
+{
+  "template": "YoBot Sales Agreement",
+  "recipient_name": "Tyson Lerfald",
+  "recipient_email": "tyson@yobot.bot",
+  "fields": {
+    "Company": "Alpha Test Co",
+    "Quote Number": "Q-20250605-001",
+    "Today Date": "2025-06-05"
+  }
+}

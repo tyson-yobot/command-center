@@ -9195,5 +9195,114 @@ Provide 3 actionable suggestions in bullet points.`;
     }
   });
 
+  // PDF Generation Workflow API endpoint
+  app.post("/api/pdf-workflow", async (req, res) => {
+    try {
+      const { spawn } = require('child_process');
+      const orderData = req.body;
+
+      // Execute Python PDF workflow
+      const pythonProcess = spawn('python3', ['server/pdfGenerationWorkflow.py'], {
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+
+      // Send order data to Python script
+      pythonProcess.stdin.write(JSON.stringify(orderData));
+      pythonProcess.stdin.end();
+
+      let result = '';
+      pythonProcess.stdout.on('data', (data: Buffer) => {
+        result += data.toString();
+      });
+
+      pythonProcess.on('close', (code: number) => {
+        if (code === 0) {
+          try {
+            const workflowResult = JSON.parse(result);
+            res.json({
+              success: true,
+              message: "PDF workflow completed successfully",
+              data: workflowResult
+            });
+          } catch (parseError) {
+            res.status(500).json({
+              success: false,
+              message: "Error parsing workflow result",
+              error: parseError
+            });
+          }
+        } else {
+          res.status(500).json({
+            success: false,
+            message: "PDF workflow execution failed",
+            code: code
+          });
+        }
+      });
+
+      pythonProcess.stderr.on('data', (data: Buffer) => {
+        console.error('PDF Workflow Error:', data.toString());
+      });
+
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: "Error executing PDF workflow",
+        error: error.message
+      });
+    }
+  });
+
+  // Sales Order Processing with integrated PDF workflow
+  app.post("/api/sales-order", async (req, res) => {
+    try {
+      const orderData = req.body;
+      
+      // Trigger the complete PDF generation workflow
+      const { spawn } = require('child_process');
+      const pythonProcess = spawn('python3', ['server/pdfGenerationWorkflow.py'], {
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+
+      pythonProcess.stdin.write(JSON.stringify({
+        company: orderData.company || 'Unknown Company',
+        contact_name: orderData.contact_name || orderData.name || '',
+        email: orderData.email || '',
+        phone: orderData.phone || '',
+        order_details: orderData
+      }));
+      pythonProcess.stdin.end();
+
+      let workflowResult = '';
+      pythonProcess.stdout.on('data', (data: Buffer) => {
+        workflowResult += data.toString();
+      });
+
+      pythonProcess.on('close', (code: number) => {
+        if (code === 0) {
+          try {
+            const result = JSON.parse(workflowResult);
+            console.log('Sales Order Workflow Completed:', result);
+          } catch (e) {
+            console.error('Error parsing workflow result:', e);
+          }
+        }
+      });
+
+      res.json({
+        success: true,
+        message: "Sales order processing initiated",
+        workflow: "PDF generation and automation pipeline started"
+      });
+
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: "Error processing sales order",
+        error: error.message
+      });
+    }
+  });
+
   return httpServer;
 }
