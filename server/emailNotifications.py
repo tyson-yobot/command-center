@@ -51,17 +51,27 @@ def send_sales_order_notification(company_name, quote_number, email, package, to
     """
     Send sales order notification to daniel@yobot.bot and tyson@yobot.bot
     """
-    sender_email = os.getenv("GMAIL_USER")
-    app_password = os.getenv("GMAIL_APP_PASSWORD")
-    
-    if not sender_email or not app_password:
-        return {
-            "success": False,
-            "error": "Gmail credentials not configured"
+    # Gmail accounts with app passwords
+    gmail_accounts = [
+        {
+            "email": "daniel@yobot.bot",
+            "password": "pdsmlopbcchbcvpo"  # pdsm lbop cchb cvpo
+        },
+        {
+            "email": "tyson@yobot.bot", 
+            "password": "ewdwkwgbgunrhqid"  # ewdw kwgb gunr hqid
         }
+    ]
     
     recipients = ["daniel@yobot.bot", "tyson@yobot.bot"]
     subject = f"🚀 New Sales Order: {company_name} - {quote_number}"
+    
+    # Try each Gmail account until one works
+    for account in gmail_accounts:
+        sender_email = account["email"]
+        app_password = account["password"]
+        
+        try:
     
     body = f"""New Sales Order Received
 
