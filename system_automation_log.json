@@ -1,137 +1,5 @@
 [
   {
-    "timestamp": "2025-06-05T07:40:00.133Z",
-    "functionId": 134,
-    "functionName": "QA Failure Alert",
-    "batch": 14,
-    "category": "QA",
-    "status": "success",
-    "duration": 58,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T07:40:00.144Z",
-    "functionId": 157,
-    "functionName": "New Lead Notification",
-    "batch": 16,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 67,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T07:40:00.152Z",
-    "functionId": 140,
-    "functionName": "Live Error Push",
-    "batch": 14,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 75,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T07:40:00.159Z",
-    "functionId": 149,
-    "functionName": "Manual Override Logger",
-    "batch": 15,
-    "category": "Audit",
-    "status": "success",
-    "duration": 80,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T07:40:00.192Z",
-    "functionId": 132,
-    "functionName": "Intake Form Validator",
-    "batch": 14,
-    "category": "Forms",
-    "status": "success",
-    "duration": 111,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T07:40:00.213Z",
-    "functionId": 153,
-    "functionName": "System Health Metric Update",
-    "batch": 16,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 134,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T07:40:00.217Z",
-    "functionId": 204,
-    "functionName": "Duplicate Record Detection",
-    "batch": 21,
-    "category": "Data Validation",
-    "status": "success",
-    "duration": 128,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T07:40:00.226Z",
-    "functionId": 146,
-    "functionName": "Customer Reconciliation",
-    "batch": 15,
-    "category": "Data",
-    "status": "success",
-    "duration": 145,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T07:40:00.230Z",
-    "functionId": 206,
-    "functionName": "Lead Score Calculator",
-    "batch": 21,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 140,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T07:40:00.240Z",
-    "functionId": 147,
-    "functionName": "Full API Health Check",
-    "batch": 15,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 159,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T07:40:00.253Z",
-    "functionId": 151,
-    "functionName": "VoiceBot Escalation Detection",
-    "batch": 16,
-    "category": "Voice",
-    "status": "success",
-    "duration": 168,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T07:40:00.264Z",
-    "functionId": 156,
-    "functionName": "Google Drive Backup",
-    "batch": 16,
-    "category": "Backup",
-    "status": "success",
-    "duration": 176,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-05T07:45:00.194Z",
     "functionId": 205,
     "functionName": "Phone Number Normalizer",
@@ -11390,5 +11258,137 @@
       "lastHealthCheck": "2025-06-06T08:52:25.469Z",
       "automationStatus": "running"
     }
+  },
+  {
+    "timestamp": "2025-06-06T08:55:00.173Z",
+    "functionId": 206,
+    "functionName": "Lead Score Calculator",
+    "batch": 21,
+    "category": "Lead Management",
+    "status": "success",
+    "duration": 73,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T08:55:00.183Z",
+    "functionId": 149,
+    "functionName": "Manual Override Logger",
+    "batch": 15,
+    "category": "Audit",
+    "status": "success",
+    "duration": 95,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T08:55:00.191Z",
+    "functionId": 151,
+    "functionName": "VoiceBot Escalation Detection",
+    "batch": 16,
+    "category": "Voice",
+    "status": "success",
+    "duration": 101,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T08:55:00.228Z",
+    "functionId": 153,
+    "functionName": "System Health Metric Update",
+    "batch": 16,
+    "category": "Monitoring",
+    "status": "success",
+    "duration": 137,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T08:55:00.272Z",
+    "functionId": 156,
+    "functionName": "Google Drive Backup",
+    "batch": 16,
+    "category": "Backup",
+    "status": "success",
+    "duration": 179,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T08:55:00.276Z",
+    "functionId": 157,
+    "functionName": "New Lead Notification",
+    "batch": 16,
+    "category": "Lead Management",
+    "status": "success",
+    "duration": 178,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T08:55:00.296Z",
+    "functionId": 132,
+    "functionName": "Intake Form Validator",
+    "batch": 14,
+    "category": "Forms",
+    "status": "success",
+    "duration": 193,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T08:55:00.324Z",
+    "functionId": 134,
+    "functionName": "QA Failure Alert",
+    "batch": 14,
+    "category": "QA",
+    "status": "success",
+    "duration": 220,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T08:55:00.332Z",
+    "functionId": 204,
+    "functionName": "Duplicate Record Detection",
+    "batch": 21,
+    "category": "Data Validation",
+    "status": "success",
+    "duration": 221,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T08:55:00.369Z",
+    "functionId": 140,
+    "functionName": "Live Error Push",
+    "batch": 14,
+    "category": "Monitoring",
+    "status": "success",
+    "duration": 263,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T08:55:00.429Z",
+    "functionId": 147,
+    "functionName": "Full API Health Check",
+    "batch": 15,
+    "category": "Monitoring",
+    "status": "success",
+    "duration": 319,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T08:55:00.435Z",
+    "functionId": 146,
+    "functionName": "Customer Reconciliation",
+    "batch": 15,
+    "category": "Data",
+    "status": "success",
+    "duration": 328,
+    "successCount": 1,
+    "errorCount": 0
   }
 ]

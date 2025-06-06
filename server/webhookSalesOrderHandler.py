@@ -18,19 +18,23 @@ def handle_sales_order():
         
         fields = {item['label']: item['value'] for item in data.get('fieldsArray', [])}
 
-        # Extract core fields
+        # Extract core fields with improved Tally parsing
         company_name = fields.get('Company Name')
-        contact_name = fields.get('Contact Name')
-        email = fields.get('Email')
+        contact_name = fields.get('Full Name')
+        email = fields.get('Email Address')
         phone = fields.get('Phone Number')
-        bot_package = fields.get('🤖 Bot Package Selected')
+        website = fields.get('Website')
+        bot_package = fields.get('Which YoBot® Package would you like to start with?')
         selected_addons = [label for label, value in fields.items() if value is True and 'Add-On' in label]
+        custom_notes = fields.get('Custom Notes or Special Requests (Optional)')
+        requested_start_date = fields.get('Requested Start Date (Optional)')
+        payment_method = fields.get('Preferred Payment Method')
 
         # Timestamp & Quote ID
         current_date = datetime.now().strftime('%Y-%m-%d')
         quote_id = f"Q-{datetime.now().strftime('%Y%m%d')}-001"
 
-        # Log extracted info
+        # Log extracted info with enhanced data structure
         result = {
             "status": "success",
             "message": "Sales order processed successfully",
@@ -39,8 +43,12 @@ def handle_sales_order():
                 "contact": contact_name,
                 "email": email,
                 "phone": phone,
+                "website": website,
                 "package": bot_package,
                 "addons": selected_addons,
+                "custom_notes": custom_notes,
+                "requested_start_date": requested_start_date,
+                "payment_method": payment_method,
                 "date": current_date,
                 "quote_id": quote_id
             }

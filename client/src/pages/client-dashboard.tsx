@@ -232,32 +232,62 @@ export default function ClientDashboard() {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
         
-        recognition.continuous = false;
-        recognition.interimResults = false;
+        recognition.continuous = true;
+        recognition.interimResults = true;
         recognition.lang = 'en-US';
+        recognition.maxAlternatives = 1;
         
         recognition.onstart = () => {
           setIsListening(true);
+          console.log('Voice recognition started');
         };
         
         recognition.onresult = (event) => {
-          const transcript = event.results[0][0].transcript;
-          setVoiceCommand(transcript);
-          setIsListening(false);
+          let transcript = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            if (event.results[i].isFinal) {
+              transcript += event.results[i][0].transcript;
+            }
+          }
+          if (transcript) {
+            setVoiceCommand(transcript);
+          }
         };
         
-        recognition.onerror = () => {
+        recognition.onerror = (event) => {
+          console.error('Speech recognition error:', event.error);
           setIsListening(false);
-          alert('Voice recognition failed. Please try again.');
+          if (event.error !== 'aborted') {
+            setToast({
+              title: "Voice Recognition Error",
+              description: `Error: ${event.error}. Please check microphone permissions.`,
+              variant: "destructive"
+            });
+          }
         };
         
         recognition.onend = () => {
           setIsListening(false);
+          console.log('Voice recognition ended');
         };
         
-        recognition.start();
+        try {
+          recognition.start();
+        } catch (error) {
+          console.error('Failed to start recognition:', error);
+          setIsListening(false);
+          setToast({
+            title: "Microphone Access Required",
+            description: "Please allow microphone access for voice commands",
+            variant: "destructive"
+          });
+        }
       } else {
-        alert('Voice recognition not supported in this browser');
+        setToast({
+          title: "Voice Recognition Unavailable",
+          description: "Voice recognition not supported in this browser",
+          variant: "destructive"
+        });
       }
     } else {
       setIsListening(false);
