@@ -327,18 +327,12 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label htmlFor="apify-job-level">Job Level</Label>
-          <Select onValueChange={(value) => updateConfig('apify', 'job_level', value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select job level" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="entry">Entry Level</SelectItem>
-              <SelectItem value="mid">Mid Level</SelectItem>
-              <SelectItem value="senior">Senior Level</SelectItem>
-              <SelectItem value="director">Director</SelectItem>
-              <SelectItem value="executive">Executive</SelectItem>
-            </SelectContent>
-          </Select>
+          <Input
+            id="apify-job-level"
+            value={scrapingConfig.apify.job_level}
+            onChange={(e) => updateConfig('apify', 'job_level', e.target.value)}
+            placeholder="e.g., Senior, Director, Executive"
+          />
         </div>
         <div>
           <Label htmlFor="apify-max-profiles">Max Profiles</Label>
@@ -402,19 +396,12 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label htmlFor="apollo-employee-range">Employee Range</Label>
-          <Select onValueChange={(value) => updateConfig('apollo', 'employee_range', value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select employee range" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1-10">1-10</SelectItem>
-              <SelectItem value="11-50">11-50</SelectItem>
-              <SelectItem value="51-200">51-200</SelectItem>
-              <SelectItem value="201-1000">201-1,000</SelectItem>
-              <SelectItem value="1001-5000">1,001-5,000</SelectItem>
-              <SelectItem value="5000+">5,000+</SelectItem>
-            </SelectContent>
-          </Select>
+          <Input
+            id="apollo-employee-range"
+            value={scrapingConfig.apollo.employee_range}
+            onChange={(e) => updateConfig('apollo', 'employee_range', e.target.value)}
+            placeholder="e.g., 1-10, 51-200, 1000+"
+          />
         </div>
         <div>
           <Label htmlFor="apollo-job-titles">Job Titles</Label>
