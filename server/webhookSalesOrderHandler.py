@@ -29,12 +29,15 @@ def handle_sales_order():
         custom_notes = fields.get('Custom Notes or Special Requests (Optional)')
         requested_start_date = fields.get('Requested Start Date (Optional)')
         payment_method = fields.get('Preferred Payment Method')
+        one_time_payment = fields.get('💳 One-Time Payment Amount')
+        monthly_recurring = fields.get('📆 Monthly Recurring Cost')
+        grand_total = fields.get('💰 Final Quote Total')
 
         # Timestamp & Quote ID
         current_date = datetime.now().strftime('%Y-%m-%d')
         quote_id = f"Q-{datetime.now().strftime('%Y%m%d')}-001"
 
-        # Log extracted info with enhanced data structure
+        # Log extracted info with enhanced data structure including pricing
         result = {
             "status": "success",
             "message": "Sales order processed successfully",
@@ -49,6 +52,9 @@ def handle_sales_order():
                 "custom_notes": custom_notes,
                 "requested_start_date": requested_start_date,
                 "payment_method": payment_method,
+                "one_time_payment": one_time_payment,
+                "monthly_recurring": monthly_recurring,
+                "grand_total": grand_total,
                 "date": current_date,
                 "quote_id": quote_id
             }

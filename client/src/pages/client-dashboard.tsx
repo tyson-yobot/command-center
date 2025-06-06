@@ -2088,29 +2088,7 @@ export default function ClientDashboard() {
                   </div>
                 </div>
                 
-                {/* Quote Generator Test */}
-                <div className="mt-6 p-4 bg-blue-900/40 rounded-lg border border-blue-400/30">
-                  <h4 className="text-white text-sm font-semibold mb-3 flex items-center">
-                    <FileText className="w-4 h-4 mr-2" />
-                    Quote Generator Test
-                  </h4>
-                  <div className="grid grid-cols-2 gap-3">
-                    <Button 
-                      onClick={() => testQuoteGeneration()}
-                      className="bg-blue-600 hover:bg-blue-700 text-white text-xs"
-                    >
-                      <FileText className="w-3 h-3 mr-2" />
-                      Generate Test Quote
-                    </Button>
-                    <Button 
-                      onClick={() => testNotifications()}
-                      className="bg-green-600 hover:bg-green-700 text-white text-xs"
-                    >
-                      <Mail className="w-3 h-3 mr-2" />
-                      Test Notifications
-                    </Button>
-                  </div>
-                </div>
+
               </div>
             </CardContent>
           </Card>
