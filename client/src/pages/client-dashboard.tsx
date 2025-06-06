@@ -1775,14 +1775,14 @@ export default function ClientDashboard() {
               {/* Voice Programming Interface */}
               <div className="mb-8">
                 <h3 className="text-white text-lg font-semibold mb-4">Voice Programming Interface</h3>
-                <div className="bg-gradient-to-br from-green-900/60 to-emerald-900/60 rounded-lg p-6 border border-green-400/50">
+                <div className="bg-gradient-to-br from-blue-900/60 to-cyan-900/60 rounded-lg p-6 border border-blue-400/50">
                   <div className="space-y-4">
                     <div className="relative">
                       <textarea
                         value={programmingText}
                         onChange={(e) => setProgrammingText(e.target.value)}
                         placeholder="Program the RAG system with voice commands or type instructions..."
-                        className="w-full p-4 bg-green-800/60 border border-green-400/50 rounded-lg text-white placeholder-green-300 resize-none"
+                        className="w-full p-4 bg-blue-800/60 border border-blue-400/50 rounded-lg text-white placeholder-blue-300 resize-none"
                         rows={4}
                       />
                       <Button 
@@ -1793,17 +1793,17 @@ export default function ClientDashboard() {
                       </Button>
                     </div>
                     
-                    <div className="flex items-center justify-between p-3 bg-green-800/40 rounded border border-green-400/30">
+                    <div className="flex items-center justify-between p-3 bg-blue-800/40 rounded border border-blue-400/30">
                       <div className="flex items-center space-x-3">
-                        <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red-400 animate-pulse' : 'bg-green-400'}`}></div>
-                        <span className="text-green-300 text-sm">Voice Recognition Ready</span>
+                        <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red-400 animate-pulse' : 'bg-blue-400'}`}></div>
+                        <span className="text-blue-300 text-sm">Voice Recognition Ready</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className="text-green-400 text-xs">Status: {voiceStatus}</span>
+                        <span className="text-blue-400 text-xs">Status: {voiceStatus}</span>
                         <Button 
                           size="sm" 
                           onClick={stopVoiceRecognition}
-                          className="bg-green-600 hover:bg-green-700"
+                          className="bg-blue-600 hover:bg-blue-700"
                         >
                           <MicOff className="w-3 h-3" />
                         </Button>
@@ -1813,7 +1813,7 @@ export default function ClientDashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                       <Button 
                         onClick={isListening ? stopVoiceRecognition : startProgrammingVoiceRecognition}
-                        className={`${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} text-white`}
+                        className={`${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} text-white`}
                       >
                         <Mic className="w-4 h-4 mr-2" />
                         {isListening ? 'Stop Recording' : 'Start Recording'}
@@ -1826,19 +1826,19 @@ export default function ClientDashboard() {
                         <Brain className="w-4 h-4 mr-2" />
                         Process Voice
                       </Button>
-                      <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                         <Settings className="w-4 h-4 mr-2" />
                         Voice Settings
                       </Button>
-                      <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                         <Download className="w-4 h-4 mr-2" />
                         Export Program
                       </Button>
                     </div>
 
-                    <div className="bg-green-900/40 rounded p-3 border border-green-400/30">
-                      <h4 className="text-green-300 font-medium mb-2">Voice Commands:</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-green-200">
+                    <div className="bg-blue-900/40 rounded p-3 border border-blue-400/30">
+                      <h4 className="text-white font-medium mb-2">Voice Commands:</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-white">
                         <div>• "Add knowledge about [topic]"</div>
                         <div>• "Update behavior for [scenario]"</div>
                         <div>• "Create response template"</div>
@@ -1917,14 +1917,14 @@ export default function ClientDashboard() {
                       )}
                     </div>
                     
-                    <div className="flex items-center justify-between p-2 bg-purple-900/40 rounded text-sm">
-                      <span className="text-purple-300">
+                    <div className="flex items-center justify-between p-2 bg-blue-900/40 rounded text-sm">
+                      <span className="text-white">
                         Voices Available: {availableVoices.length}
                       </span>
                       <Button 
                         size="sm" 
                         onClick={fetchAvailableVoices}
-                        className="bg-purple-700 hover:bg-purple-600 text-xs px-2 py-1"
+                        className="bg-blue-700 hover:bg-blue-600 text-xs px-2 py-1"
                         disabled={voicesLoading}
                       >
                         Refresh
@@ -1933,12 +1933,12 @@ export default function ClientDashboard() {
                     <div className="grid grid-cols-2 gap-3">
                       <Button 
                         onClick={testVoicePersona}
-                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
                       >
                         <Headphones className="w-4 h-4 mr-2" />
                         Test Voice
                       </Button>
-                      <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                         <Settings className="w-4 h-4 mr-2" />
                         Apply Persona
                       </Button>
