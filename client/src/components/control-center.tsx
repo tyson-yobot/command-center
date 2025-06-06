@@ -938,6 +938,83 @@ export default function ControlCenter() {
           </div>
         </div>
 
+        {/* Voice Interface with Memory */}
+        <div className="mt-8 mb-8">
+          <Card className="bg-slate-800/50 border-purple-500/30">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center gap-2">
+                <Brain className="w-5 h-5" />
+                Voice Interface with Memory
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="bg-purple-900/30 rounded-lg p-4">
+                    <h3 className="text-white font-semibold mb-2">Voice Controls</h3>
+                    <div className="flex items-center gap-4">
+                      <Button
+                        size="lg"
+                        className="h-16 w-16 rounded-full bg-purple-600 hover:bg-purple-700"
+                      >
+                        <Headphones className="w-6 h-6" />
+                      </Button>
+                      <div className="text-white text-sm">
+                        <p>Voice Bot Status: Active</p>
+                        <p>Memory Context: 15 interactions</p>
+                        <p>Response Time: 180ms</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-purple-900/30 rounded-lg p-4">
+                    <h3 className="text-white font-semibold mb-2">Memory Status</h3>
+                    <div className="space-y-2 text-sm text-white/80">
+                      <div className="flex justify-between">
+                        <span>Conversation ID:</span>
+                        <span>CONV-2025-001</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Context Items:</span>
+                        <span>15/50</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Last Interaction:</span>
+                        <span>2 minutes ago</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="bg-purple-900/30 rounded-lg p-4">
+                    <h3 className="text-white font-semibold mb-2">Recent Interactions</h3>
+                    <div className="space-y-3 max-h-40 overflow-y-auto">
+                      <div className="bg-black/20 rounded p-2">
+                        <div className="text-xs text-purple-300">User (11:45 AM)</div>
+                        <div className="text-white text-sm">What is the status of my automation?</div>
+                      </div>
+                      <div className="bg-black/20 rounded p-2">
+                        <div className="text-xs text-green-300">Assistant (11:45 AM)</div>
+                        <div className="text-white text-sm">Your automation system is running 40 functions with 100% uptime.</div>
+                      </div>
+                      <div className="bg-black/20 rounded p-2">
+                        <div className="text-xs text-purple-300">User (11:44 AM)</div>
+                        <div className="text-white text-sm">Generate a report for this week</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Clear Memory
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Documents Tab */}
         <div className="mt-8 mb-8">
           <Card className="bg-slate-800/50 border-blue-500/30">
