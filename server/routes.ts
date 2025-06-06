@@ -2925,7 +2925,7 @@ print(json.dumps(results))
       const finalPackage = pkg || product || 'YoBot Package';
       const finalTotal = total || total_amount || '$0';
 
-      console.log("🚀 Live sales order received from Tally form:", { finalCustomerName, finalEmail, finalPackage, finalTotal });
+      console.log("🚀 Sales order received from Tally form:", { finalCustomerName, finalEmail, finalPackage, finalTotal });
 
       // Transform Tally form data for complete automation
       const orderData = {
@@ -3087,51 +3087,7 @@ print(json.dumps(final_result))
     }
   });
 
-  // 🧪 Sales Order Test
-  app.post('/api/orders/test', async (req, res) => {
-    try {
-      const { order_id, client_name, client_email, product, quantity, unit_price, total_amount, payment_method, order_status, delivery_date } = req.body;
 
-      const webhookData = {
-        type: "Sales Order Test",
-        order_id,
-        client_name,
-        client_email,
-        product,
-        quantity,
-        unit_price,
-        total_amount,
-        payment_method,
-        order_status,
-        delivery_date,
-        timestamp: new Date().toISOString()
-      };
-
-      const apiKey = process.env.AIRTABLE_API_KEY;
-      if (apiKey) {
-        try {
-          await axios.post(
-            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
-            { fields: { "Data": JSON.stringify(webhookData) } },
-            { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
-          );
-        } catch (airtableError) {
-          console.log("Sales order test data logged:", webhookData);
-        }
-      }
-
-      res.json({
-        success: true,
-        message: "Test sales order processed",
-        webhook: "Sales Order Test",
-        data: { order_id, client_name, product, total_amount }
-      });
-
-    } catch (err: any) {
-      console.error("Sales order test error:", err);
-      res.status(500).json({ error: "Server error" });
-    }
-  });
 
   // 📄 YoBot Complete Sales Order Processing (Your Working Script)
   app.post('/api/orders/complete-production', async (req, res) => {
