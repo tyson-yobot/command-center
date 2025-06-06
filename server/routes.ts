@@ -2937,11 +2937,11 @@ print(json.dumps(results))
       const pythonScript = `
 import sys
 sys.path.append('/home/runner/workspace/server')
-from localSalesOrderAutomation import process_complete_sales_order_local
+from googleDriveFolderSystem import process_complete_google_sales_order
 import json
 
 order_data = ${JSON.stringify(orderData)}
-result = process_complete_sales_order_local(order_data)
+result = process_complete_google_sales_order(order_data)
 print(json.dumps(result))
       `;
 
