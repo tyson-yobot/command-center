@@ -241,13 +241,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Serve PDF files for quotes
   app.get('/pdfs/:filename', (req, res) => {
     const filename = req.params.filename;
+    const fs = require('fs');
+    const path = require('path');
     const filePath = path.join(__dirname, '../pdfs', filename);
-    res.sendFile(filePath, (err) => {
-      if (err) {
-        console.error('PDF file not found:', filename);
-        res.status(404).json({ error: 'PDF not found' });
-      }
-    });
+    
+    if (fs.existsSync(filePath)) {
+      res.sendFile(filePath);
+    } else {
+      console.error('PDF file not found:', filename);
+      res.status(404).json({ error: 'PDF not found' });
+    }
   });
 
   // Webhook status endpoint
