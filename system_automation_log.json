@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-05T04:10:00.467Z",
-    "functionId": 156,
-    "functionName": "Google Drive Backup",
-    "batch": 16,
-    "category": "Backup",
-    "status": "success",
-    "duration": 346,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-05T04:10:00.484Z",
     "functionId": 157,
     "functionName": "New Lead Notification",
@@ -11438,5 +11427,20 @@
     "duration": 321,
     "successCount": 1,
     "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:13:42.380Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T06:13:42.085Z",
+      "automationStatus": "running"
+    }
   }
 ]
