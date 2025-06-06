@@ -100,29 +100,71 @@ app.post('/webhook/sales_order', async (req, res) => {
       const util = await import('util');
       const exec = util.promisify(childProcess.exec);
 
-      // Execute complete sales order automation using temporary file
+      // Execute complete sales order automation
       const fs = await import('fs');
       const path = await import('path');
       
-      const tempScriptPath = path.join('/tmp', `automation_${Date.now()}.py`);
+      const tempScriptPath = path.join('/home/runner/workspace/server', `temp_automation_${Date.now()}.py`);
       const scriptContent = `
-from completeSalesOrderAutomation import run_complete_sales_order_automation
-import json
 import sys
 import os
+import json
 sys.path.append('/home/runner/workspace/server')
 
-form_data = ${JSON.stringify(data)}
-result = run_complete_sales_order_automation(form_data)
-print(json.dumps(result))
+try:
+    from completeSalesOrderAutomation import run_complete_sales_order_automation
+    
+    form_data = ${JSON.stringify(data).replace(/'/g, "\\'")}
+    result = run_complete_sales_order_automation(form_data)
+    print(json.dumps(result))
+except Exception as e:
+    print(json.dumps({"success": False, "error": str(e), "message": "Automation error"}))
 `;
       
       fs.writeFileSync(tempScriptPath, scriptContent);
       
-      const automationResult = await exec(`cd /home/runner/workspace/server && python3 ${tempScriptPath}`);
-      
-      // Clean up temporary file
-      fs.unlinkSync(tempScriptPath);
+      try {
+        const automationResult = await exec(`cd /home/runner/workspace/server && python3 ${path.basename(tempScriptPath)}`);
+        
+        if (automationResult.stdout) {
+          const result = JSON.parse(automationResult.stdout.trim());
+          
+          // Clean up temporary file
+          fs.unlinkSync(tempScriptPath);
+          
+          if (result.success) {
+            console.log("✅ Complete sales order automation successful");
+            
+            res.json({
+              success: true,
+              message: "Complete sales order automation finished successfully",
+              webhook: "Enhanced Sales Order",
+              data: {
+                quote_number: result.quote_number,
+                company_name,
+                contact_email,
+                package_name,
+                total: stripe_paid,
+                pdf_path: result.pdf_path,
+                csv_path: result.csv_path,
+                folder_url: result.folder_url,
+                hubspot_contact_id: result.hubspot_contact_id,
+                tasks_created: result.tasks_created,
+                notifications_sent: result.notifications_sent,
+                automation_complete: result.automation_complete
+              }
+            });
+            return;
+          }
+        }
+      } catch (pythonError) {
+        console.error("Python automation execution error:", pythonError);
+        
+        // Clean up temporary file if it exists
+        if (fs.existsSync(tempScriptPath)) {
+          fs.unlinkSync(tempScriptPath);
+        }
+      }
 
       console.log("PDF generation completed successfully");
 

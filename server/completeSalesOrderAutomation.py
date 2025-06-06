@@ -300,7 +300,7 @@ def run_complete_sales_order_automation(form_data):
     
     # 5. Generate work order CSV with roadmap tasks
     from crmIntegration import build_roadmap_for_client
-    roadmap_result = build_roadmap_for_client(bot_package, selected_addons)
+    roadmap_result = build_roadmap_for_client(client_data.get('bot_package', 'YoBot Standard Package'), client_data.get('selected_addons', []))
     
     csv_path = None
     if roadmap_result.get('success'):
