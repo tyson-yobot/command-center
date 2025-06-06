@@ -2937,11 +2937,11 @@ print(json.dumps(results))
       const pythonScript = `
 import sys
 sys.path.append('/home/runner/workspace/server')
-from taskTemplateSystem import process_complete_sales_order_with_tasks
+from crmIntegration import process_complete_crm_sales_order
 import json
 
 order_data = ${JSON.stringify(orderData)}
-result = process_complete_sales_order_with_tasks(order_data)
+result = process_complete_crm_sales_order(order_data)
 print(json.dumps(result))
       `;
 

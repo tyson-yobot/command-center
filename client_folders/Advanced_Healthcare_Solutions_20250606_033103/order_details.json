@@ -1,0 +1,12 @@
+{
+  "client_name": "Advanced Healthcare Solutions",
+  "quote_number": "Q-ADV-20250606-001",
+  "email": "john.smith@advancedhealthcare.com",
+  "package": "YoBot Enterprise Package",
+  "total": ",000",
+  "pdf_path": "/home/runner/workspace/client_folders/Advanced_Healthcare_Solutions_20250606_033103/quotes/Advanced Healthcare Solutions_Q-ADV-20250606-001.pdf",
+  "folder_path": "/home/runner/workspace/client_folders/Advanced_Healthcare_Solutions_20250606_033103",
+  "created_date": "2025-06-06T03:31:03.740185",
+  "order_id": "ORD-20250606-610",
+  "processing_method": "Local Folder System"
+}
