@@ -3116,11 +3116,11 @@ print(json.dumps(results))
       const pythonScript = `
 import sys
 sys.path.append('/home/runner/workspace/server')
-from working_sales_order_automation import process_sales_order
+from complete_8day_automation import run_complete_8day_sales_order_automation
 import json
 
 order_data = ${JSON.stringify(orderData)}
-result = process_sales_order(order_data)
+result = run_complete_8day_sales_order_automation(order_data)
 print(json.dumps(result))
       `;
 
