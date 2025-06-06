@@ -1,0 +1,64 @@
+import os
+from fpdf import FPDF
+from datetime import datetime
+
+# === INPUTS (Replace with dynamic Tally webhook values or Make vars) ===
+company_name = "AMT66"
+bot_name = "YoBot® Enterprise"
+bot_monthly_fee = 1499
+bot_description = "Everything in Pro + Dedicated Instance + Compliance AI + White Label Mode"
+addons = [
+    {"name": "SmartSpend™ Dashboard", "monthly_fee": 149, "description": "• ROI Dashboard\n• Spend Analyzer\n• Cost Optimization"},
+    {"name": "Live Transfer", "monthly_fee": 99, "description": "• Human Escalation\n• Warm Handoff\n• CRM Log"}
+]
+
+# === CALCULATIONS ===
+today = datetime.now().strftime("%Y%m%d")
+quote_number = f"Q-{today}-001"
+pdf_filename = f"{company_name} - {quote_number}.pdf"
+folder_name = f"{company_name}"
+
+subtotal = bot_monthly_fee + sum([a['monthly_fee'] for a in addons])
+tax = round(subtotal * 0.063, 2)
+total_monthly = round(subtotal + tax, 2)
+deposit_due = round(total_monthly * 0.50, 2)
+
+# === PDF Generation ===
+pdf = FPDF()
+pdf.add_page()
+pdf.set_font("Arial", size=12)
+
+pdf.set_text_color(30, 30, 30)
+pdf.cell(200, 10, txt=f"Quote: {quote_number}", ln=1)
+pdf.cell(200, 10, txt=f"Company: {company_name}", ln=1)
+pdf.ln(5)
+
+pdf.set_font("Arial", 'B', 12)
+pdf.cell(200, 10, txt=f"🤖 Bot Package: {bot_name}", ln=1)
+pdf.set_font("Arial", '', 11)
+pdf.multi_cell(200, 8, txt=f"• ${bot_monthly_fee}/MO\n{bot_description}", ln=1)
+pdf.ln(3)
+
+if addons:
+    pdf.set_font("Arial", 'B', 12)
+    pdf.cell(200, 10, txt="🧩 Add-Ons:", ln=1)
+    for a in addons:
+        pdf.set_font("Arial", 'B', 11)
+        pdf.cell(200, 8, txt=f"{a['name']} – ${a['monthly_fee']}/MO", ln=1)
+        pdf.set_font("Arial", '', 10)
+        pdf.multi_cell(200, 7, txt=a["description"])
+        pdf.ln(1)
+
+# Totals
+pdf.set_font("Arial", 'B', 12)
+pdf.ln(5)
+pdf.cell(200, 10, txt=f"Subtotal: ${subtotal}", ln=1)
+pdf.cell(200, 10, txt=f"Tax (6.3%): ${tax}", ln=1)
+pdf.cell(200, 10, txt=f"Total Monthly: ${total_monthly}", ln=1)
+pdf.cell(200, 10, txt=f"💳 Deposit Due (50%): ${deposit_due}", ln=1)
+
+# Save PDF
+os.makedirs(folder_name, exist_ok=True)
+pdf.output(os.path.join(folder_name, pdf_filename))
+
+print(f"✅ Quote generated and saved to: {folder_name}/{pdf_filename}")
