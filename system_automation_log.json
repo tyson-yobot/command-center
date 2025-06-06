@@ -1,27 +1,5 @@
 [
   {
-    "timestamp": "2025-06-05T06:40:00.116Z",
-    "functionId": 206,
-    "functionName": "Lead Score Calculator",
-    "batch": 21,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 51,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T06:40:00.161Z",
-    "functionId": 153,
-    "functionName": "System Health Metric Update",
-    "batch": 16,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 99,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-05T06:40:00.166Z",
     "functionId": 132,
     "functionName": "Intake Form Validator",
@@ -11416,6 +11394,36 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-06T07:15:45.412Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-06T07:52:38.526Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T07:52:38.119Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-06T07:54:03.501Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T07:54:03.103Z",
       "automationStatus": "running"
     }
   }
