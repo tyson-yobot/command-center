@@ -9304,6 +9304,91 @@ Provide 3 actionable suggestions in bullet points.`;
     }
   });
 
+  // Webhook Sales Order Handler
+  app.post('/webhook/sales-order', async (req, res) => {
+    try {
+      const data = req.body;
+      
+      // Process webhook data using Python handler
+      const { spawn } = require('child_process');
+      const python = spawn('python3', [
+        'server/webhookSalesOrderHandler.py'
+      ], {
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+      
+      python.stdin.write(JSON.stringify(data));
+      python.stdin.end();
+      
+      let result = '';
+      python.stdout.on('data', (data: any) => {
+        result += data.toString();
+      });
+      
+      python.on('close', async (code: number) => {
+        if (code === 0) {
+          try {
+            const webhookResult = JSON.parse(result);
+            
+            if (webhookResult.status === 'success') {
+              // Trigger complete automation workflow
+              const quoteData = webhookResult.data;
+              
+              // Execute quote generation
+              const quoteGenerationData = {
+                company_name: quoteData.company,
+                contact_name: quoteData.contact,
+                client_email: quoteData.email,
+                client_phone: quoteData.phone,
+                bot_package: quoteData.package,
+                add_ons: quoteData.addons,
+                items: [
+                  {
+                    name: quoteData.package || "Enterprise Bot",
+                    desc: "Complete AI voice automation solution",
+                    qty: 1,
+                    price: 25000.00
+                  }
+                ]
+              };
+              
+              // Generate quote PDF
+              const quotePython = spawn('python3', [
+                'server/quoteGenerator.py'
+              ], {
+                stdio: ['pipe', 'pipe', 'pipe']
+              });
+              
+              quotePython.stdin.write(JSON.stringify(quoteGenerationData));
+              quotePython.stdin.end();
+              
+              console.log('📋 Sales order webhook processed, triggering complete automation...');
+            }
+            
+            res.json(webhookResult);
+          } catch (parseError) {
+            res.status(500).json({ 
+              status: 'error', 
+              message: 'Failed to parse webhook result' 
+            });
+          }
+        } else {
+          res.status(500).json({ 
+            status: 'error', 
+            message: 'Webhook processing failed' 
+          });
+        }
+      });
+      
+    } catch (error: any) {
+      console.error('Webhook error:', error);
+      res.status(500).json({ 
+        status: 'error', 
+        message: error.message 
+      });
+    }
+  });
+
   // Quote Generator endpoint with enhanced notifications
   app.post('/api/generate-quote', async (req, res) => {
     try {
@@ -9331,6 +9416,40 @@ Provide 3 actionable suggestions in bullet points.`;
             const quoteResult = JSON.parse(result);
             
             if (quoteResult.success) {
+              // Execute complete Airtable integration
+              const integrationData = {
+                company_name: formData.company_name,
+                contact_name: formData.contact_name,
+                email: formData.email || formData.client_email,
+                phone: formData.phone || formData.client_phone,
+                quote_number: quoteResult.quote_id,
+                quote_date: new Date().toISOString().split('T')[0],
+                bot_package: formData.bot_package || "🤖 Enterprise Bot Package",
+                monthly_total: formData.monthly_total || 0,
+                one_time_total: quoteResult.total_amount || 0,
+                add_ons: formData.add_ons || [],
+                deposit_received: true
+              };
+              
+              // Execute Airtable integration
+              const airtablePython = spawn('python3', [
+                'server/airtableIntegrationSystem.py'
+              ], {
+                stdio: ['pipe', 'pipe', 'pipe']
+              });
+              
+              airtablePython.stdin.write(JSON.stringify(integrationData));
+              airtablePython.stdin.end();
+              
+              let airtableResult = '';
+              airtablePython.stdout.on('data', (data: any) => {
+                airtableResult += data.toString();
+              });
+              
+              airtablePython.on('close', () => {
+                console.log('Airtable integration completed:', airtableResult);
+              });
+              
               // Send enhanced notifications
               const notificationData = {
                 company_name: formData.company_name,

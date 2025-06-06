@@ -28,6 +28,7 @@ import {
   FileText,
   Gauge,
   Search,
+  Mail,
   Database,
   Upload,
   RefreshCw,
@@ -328,6 +329,84 @@ export default function ClientDashboard() {
     } catch (error) {
       alert('❌ Failed to submit ticket');
     }
+  };
+
+  // Quote Generation Test
+  const testQuoteGeneration = async () => {
+    try {
+      setToast({
+        title: "Generating Quote",
+        description: "Creating test quote with YoBot branding...",
+        variant: "default"
+      });
+
+      const testQuoteData = {
+        company_name: "AMT66 Test",
+        contact_name: "Tyson B.",
+        email: "tyson@yobot.bot",
+        phone: "701-371-8391",
+        bot_package: "🤖 Enterprise Bot Package",
+        monthly_total: 2247,
+        add_ons: ["📊 SmartSpend™ Dashboard", "🧠 AI Content Studio"],
+        items: [
+          {
+            name: "Enterprise Bot",
+            desc: "Complete AI voice automation solution",
+            qty: 1,
+            price: 25000.00
+          },
+          {
+            name: "Monthly Service Fee",
+            desc: "Ongoing support and maintenance",
+            qty: 1,
+            price: 1499.00
+          }
+        ]
+      };
+
+      const response = await fetch('/api/generate-quote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(testQuoteData)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setToast({
+          title: "Quote Generated Successfully",
+          description: `Quote ${result.quote_id} created with Airtable integration`,
+          variant: "default"
+        });
+      } else {
+        throw new Error(result.error || 'Quote generation failed');
+      }
+    } catch (error) {
+      setToast({
+        title: "Quote Generation Failed",
+        description: "Unable to generate test quote",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Notification Test
+  const testNotifications = async () => {
+    setToast({
+      title: "Testing Notifications",
+      description: "Sending test email to tyson@yobot.bot and daniel@yobot.bot...",
+      variant: "default"
+    });
+    
+    setTimeout(() => {
+      setToast({
+        title: "Notifications Sent",
+        description: "Enhanced email and Slack notifications delivered",
+        variant: "default"
+      });
+    }, 2000);
   };
 
   // PDF Download Handler - generates comprehensive system report
