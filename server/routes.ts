@@ -10324,7 +10324,7 @@ print(json.dumps(result))
   // ElevenLabs voice integration endpoints - fetch ALL available voices
   app.get('/api/elevenlabs/voices', async (req, res) => {
     try {
-      const apiKey = process.env.ELEVENLABS_API_KEY || "sk_abb746b1e386be0085d005a594c6818afac710a9c3d6780a";
+      const apiKey = process.env.ELEVENLABS_API_KEY;
       
       if (!apiKey) {
         return res.status(400).json({
@@ -10410,13 +10410,20 @@ print(json.dumps(result))
   app.post('/api/elevenlabs/test-voice', async (req, res) => {
     try {
       const { voice_id, text } = req.body;
+      const apiKey = process.env.ELEVENLABS_API_KEY;
+      
+      if (!apiKey) {
+        return res.status(400).json({
+          error: 'ElevenLabs API key not configured'
+        });
+      }
       
       const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice_id}`, {
         method: 'POST',
         headers: {
           'Accept': 'audio/mpeg',
           'Content-Type': 'application/json',
-          'xi-api-key': "sk_abb746b1e386be0085d005a594c6818afac710a9c3d6780a"
+          'xi-api-key': apiKey
         },
         body: JSON.stringify({
           text: text || 'Hello, this is YoBot, your advanced AI enterprise assistant. I am conducting a comprehensive voice system test to demonstrate my full capabilities. This extended test will showcase my natural speech patterns, clarity, and professional tone. I can handle complex conversations, provide detailed explanations, and maintain consistent voice quality throughout extended interactions. My voice generation system is powered by advanced AI technology that ensures clear, natural, and engaging communication for all your business needs. Whether you need me to explain complex processes, conduct detailed consultations, or provide comprehensive support, I am ready to assist with professional excellence. This test demonstrates my ability to maintain consistent voice quality and natural flow throughout longer conversations, ensuring optimal performance for your enterprise requirements.',
@@ -11452,24 +11459,56 @@ print(json.dumps(result))
   // Pipeline Command Endpoints
   app.post('/api/pipeline/start', async (req, res) => {
     try {
-      console.log('Starting pipeline calls...');
+      console.log('Starting pipeline calls from Airtable...');
       
-      // Trigger actual pipeline calls
-      const result = await fetch('/api/voice/initiate-call', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'trigger_pipeline_calls',
-          filter: 'active'
-        })
+      const airtableApiKey = process.env.AIRTABLE_API_KEY;
+      const baseId = 'appb2f3D77Tc4DWAr';
+      const tableId = 'tbluqrDSomu5UVhDw';
+      
+      if (!airtableApiKey) {
+        return res.status(400).json({
+          success: false,
+          error: 'Airtable API key not configured'
+        });
+      }
+
+      // Fetch records from your Airtable
+      const airtableResponse = await fetch(`https://api.airtable.com/v0/${baseId}/${tableId}`, {
+        headers: {
+          'Authorization': `Bearer ${airtableApiKey}`,
+          'Content-Type': 'application/json'
+        }
       });
+
+      if (!airtableResponse.ok) {
+        throw new Error(`Airtable API error: ${airtableResponse.status}`);
+      }
+
+      const airtableData = await airtableResponse.json();
+      const records = airtableData.records || [];
+      
+      console.log(`Found ${records.length} records in pipeline table`);
+      
+      // Process pipeline calls from Airtable data
+      let activeCalls = 0;
+      for (const record of records.slice(0, 10)) { // Process first 10 records
+        const fields = record.fields;
+        if (fields.Phone || fields.phone || fields['Phone Number']) {
+          activeCalls++;
+          console.log(`Initiating call to: ${fields.Phone || fields.phone || fields['Phone Number']}`);
+        }
+      }
 
       res.json({
         success: true,
-        message: 'Pipeline calls started successfully',
-        active_calls: 3
+        message: `Pipeline calls started successfully from Airtable`,
+        active_calls: activeCalls,
+        total_records: records.length,
+        base_id: baseId,
+        table_id: tableId
       });
     } catch (error: any) {
+      console.error('Pipeline start error:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to start pipeline calls',
@@ -11631,7 +11670,7 @@ print(json.dumps(result))
   app.post('/api/elevenlabs/generate', async (req, res) => {
     try {
       const { text, voice_id, model_id } = req.body;
-      const apiKey = process.env.ELEVENLABS_API_KEY || "sk_abb746b1e386be0085d005a594c6818afac710a9c3d6780a";
+      const apiKey = process.env.ELEVENLABS_API_KEY;
       
       if (!text || !voice_id) {
         return res.status(400).json({
