@@ -2972,7 +2972,7 @@ print(json.dumps(results))
         monthly_fee: '$0'
       };
 
-      // Execute your complete Google automation script
+      // Execute complete sales order automation
       const childProcess = await import('child_process');
       const util = await import('util');
       const exec = util.promisify(childProcess.exec);
@@ -2980,11 +2980,11 @@ print(json.dumps(results))
       const pythonScript = `
 import sys
 sys.path.append('/home/runner/workspace/server')
-from salesOrderAutomation import process_complete_sales_order
+from localSalesOrderAutomation import process_complete_sales_order_local
 import json
 
 order_data = ${JSON.stringify(orderData)}
-result = process_complete_sales_order(order_data)
+result = process_complete_sales_order_local(order_data)
 print(json.dumps(result))
       `;
 
