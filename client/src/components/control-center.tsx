@@ -36,7 +36,9 @@ import {
   XCircle,
   PlayCircle,
   RefreshCw,
-  Download
+  Download,
+  Upload,
+  Trash2
 } from "lucide-react";
 import robotHeadPath from "@assets/A_flat_vector_illustration_features_a_robot_face_i.png";
 import { apiRequest } from "@/lib/queryClient";
