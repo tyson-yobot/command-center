@@ -6424,12 +6424,26 @@ except Exception as e:
             }
           };
 
-          // Note: Would need proper Zendesk API token for authentication
-          console.log('Zendesk ticket would be created:', zendeskPayload);
-          zendeskResult = { success: true, message: 'Zendesk integration ready (needs API token)' };
+          // Make actual API call to Zendesk
+          const zendeskResponse = await axios.post(zendeskUrl, zendeskPayload, {
+            auth: {
+              username: `${zendesk_email}/token`,
+              password: process.env.ZENDESK_API_TOKEN || ''
+            },
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          zendeskResult = { 
+            success: true, 
+            ticket_id: zendeskResponse.data.ticket.id,
+            url: zendeskResponse.data.ticket.url
+          };
+          console.log('✅ Zendesk ticket created:', zendeskResult);
         } catch (error: any) {
-          console.error('Zendesk submission error:', error);
-          zendeskResult = { success: false, error: error.message };
+          console.error('Zendesk submission error:', error.response?.data || error.message);
+          zendeskResult = { success: false, error: error.response?.data?.error || error.message };
         }
       } else {
         zendeskResult = { success: false, error: 'Zendesk credentials not configured' };
@@ -6465,6 +6479,52 @@ except Exception as e:
       });
     } catch (error: any) {
       res.status(500).json({ error: 'Ticket submission failed', details: error.message });
+    }
+  });
+
+  // Sales Order Webhook - Implementation from your provided code
+  app.post('/webhook/sales_order', async (req, res) => {
+    try {
+      const data = req.body;
+
+      // Extract parsed values from Tally
+      const company_name = data["Parsed Company Name"];
+      const contact_name = data["Parsed Contact Name"];
+      const contact_email = data["Parsed Contact Email"];
+      const contact_phone = data["Parsed Contact Phone"];
+      const package_name = data["Parsed Bot Package"];
+      const selected_addons = data["Parsed Add-On List"] || [];
+      const stripe_paid = parseFloat(data["Parsed Stripe Payment"]);
+      const industry = data["Parsed Industry"] || "";
+
+      // Generate quote number
+      const quote_number = `Q-${new Date().toISOString().slice(0,10).replace(/-/g, '')}-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+
+      // Import and run the complete sales order automation
+      const { run_complete_sales_order_automation } = await import('./actualSalesOrderAutomation.py');
+      
+      const result = await run_complete_sales_order_automation({
+        'Parsed Company Name': company_name,
+        'Parsed Contact Name': contact_name,
+        'Parsed Contact Email': contact_email,
+        'Parsed Contact Phone': contact_phone,
+        'Parsed Bot Package': package_name,
+        'Parsed Add-On List': selected_addons,
+        'Parsed Stripe Payment': stripe_paid.toString()
+      });
+
+      res.json({
+        status: "✅ Sales order processed",
+        quote: quote_number,
+        result: result
+      });
+
+    } catch (error: any) {
+      console.error('Sales order webhook error:', error);
+      res.status(500).json({
+        error: 'Sales order processing failed',
+        details: error.message
+      });
     }
   });
 
