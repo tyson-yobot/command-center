@@ -3050,7 +3050,7 @@ print(json.dumps(results))
       const { customer_name, email, package: botPackage, addons, total, order_id } = req.body;
 
       // Process order with Google Drive folder creation, PDF generation, and Gmail delivery
-      const { spawn } = require('child_process');
+      const spawn = (await import('child_process')).spawn;
       const python = spawn('python3', ['-c', `
 import sys
 sys.path.append('/home/runner/workspace/server')

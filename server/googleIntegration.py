@@ -10,7 +10,7 @@ from datetime import datetime
 # ----------------------------------
 # 🔐 OAUTH CREDENTIALS WITH REFRESH TOKEN
 # ----------------------------------
-CLIENT_ID = "685952645658-k8glf5nnpa4d2u1cafih1pbauudus3n.apps.googleusercontent.com"
+CLIENT_ID = "685952645658-k8glf5nnp4d2u1cafih1pbauudus3nc.apps.googleusercontent.com"
 CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "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")
 REFRESH_TOKEN = os.getenv("GOOGLE_REFRESH_TOKEN", "1//0g9GnAKVfRlM9CgYIARAAGBASNwF-L9IrBya2ZudqCC8oAaznpP3_Xd-JvwWc41WFlvT44G9UN3hiEtZWTyN2YfAmBtQdpTfdkA")
 
