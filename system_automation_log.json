@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-06T01:55:00.152Z",
-    "functionId": 147,
-    "functionName": "Full API Health Check",
-    "batch": 15,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 86,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-06T01:55:00.170Z",
     "functionId": 206,
     "functionName": "Lead Score Calculator",
@@ -11410,5 +11399,20 @@
     "duration": 252,
     "successCount": 1,
     "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T10:57:49.739Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T10:57:49.389Z",
+      "automationStatus": "running"
+    }
   }
 ]

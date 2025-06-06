@@ -64,6 +64,8 @@ export default function ClientDashboard() {
   const [voicesLoading, setVoicesLoading] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [memoryText, setMemoryText] = useState('');
+  const [memoryCategory, setMemoryCategory] = useState('general');
 
   // Voice recognition functions for RAG system
   const initializeVoiceRecognition = () => {
@@ -775,11 +777,53 @@ export default function ClientDashboard() {
     }
   };
 
+  const insertMemoryText = async () => {
+    if (!memoryText.trim()) {
+      setToast({
+        title: "Text Required",
+        description: "Please enter text to insert into memory",
+        variant: "destructive"
+      });
+      return;
+    }
 
+    try {
+      setVoiceStatus('Inserting memory text...');
+      const response = await fetch('/api/memory/insert', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          text: memoryText,
+          category: memoryCategory,
+          priority: 'high'
+        })
+      });
 
-
-
-
+      if (response.ok) {
+        const result = await response.json();
+        setVoiceStatus('Memory text inserted successfully');
+        setToast({
+          title: "Memory Updated",
+          description: `Text inserted into ${memoryCategory} memory category`,
+        });
+        setMemoryText('');
+      } else {
+        setVoiceStatus('Memory insertion failed');
+        setToast({
+          title: "Insertion Failed",
+          description: "Unable to insert text into memory system",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      setVoiceStatus('Error during memory insertion');
+      setToast({
+        title: "Memory Error",
+        description: "Network error during memory insertion",
+        variant: "destructive"
+      });
+    }
+  };
 
   // Voice Command Handler
   const sendVoiceCommand = async () => {
