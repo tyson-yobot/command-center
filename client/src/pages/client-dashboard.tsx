@@ -1389,6 +1389,32 @@ export default function ClientDashboard() {
             </CardContent>
           </Card>
 
+          {/* Bot Cloning Workflow */}
+          <Card className="bg-green-900/60 backdrop-blur-sm border border-green-400 shadow-lg shadow-green-400/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Settings className="w-5 h-5 mr-2 text-green-400" />
+                Bot Cloning Pipeline
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Active Clones:</span>
+                  <span className="text-white font-bold">3</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Deployed Today:</span>
+                  <span className="text-green-400 font-bold">7</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Success Rate:</span>
+                  <span className="text-green-400 font-bold">96%</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Sentiment Analysis */}
           <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
@@ -1927,7 +1953,7 @@ export default function ClientDashboard() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <Button 
                         onClick={isListening ? stopVoiceRecognition : startProgrammingVoiceRecognition}
                         className={`${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} text-white`}
@@ -1943,25 +1969,26 @@ export default function ClientDashboard() {
                         <Brain className="w-4 h-4 mr-2" />
                         Process Voice
                       </Button>
-                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                        <Settings className="w-4 h-4 mr-2" />
-                        Voice Settings
-                      </Button>
-                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                        <Download className="w-4 h-4 mr-2" />
-                        Export Program
+                      <Button 
+                        onClick={fetchAvailableVoices}
+                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                      >
+                        <RefreshCw className="w-4 h-4 mr-2" />
+                        Refresh Voices
                       </Button>
                     </div>
 
                     <div className="bg-blue-900/40 rounded p-3 border border-blue-400/30">
-                      <h4 className="text-white font-medium mb-2">Voice Commands:</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-white">
-                        <div>• "Add knowledge about [topic]"</div>
-                        <div>• "Update behavior for [scenario]"</div>
-                        <div>• "Create response template"</div>
-                        <div>• "Set priority for [function]"</div>
-                        <div>• "Configure automation rule"</div>
-                        <div>• "Enable voice training mode"</div>
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-white font-medium">Voice Status:</h4>
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${
+                          isListening ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
+                        }`}>
+                          {voiceStatus}
+                        </span>
+                      </div>
+                      <div className="mt-2 text-sm text-slate-300">
+                        Click "Start Recording" and speak your RAG programming commands naturally.
                       </div>
                     </div>
                   </div>
@@ -2020,11 +2047,7 @@ export default function ClientDashboard() {
                             </option>
                           ))
                         ) : (
-                          <>
-                            <option value="21m00Tcm4TlvDq8ikWAM">Rachel - Professional Female</option>
-                            <option value="2EiwWnXFnvU5JabPnv8n">Clyde - Confident Male</option>
-                            <option value="AZnzlk1XvdvUeBnXmlld">Domi - Warm Female</option>
-                          </>
+                          <option disabled>Configure ElevenLabs API key to load voices</option>
                         )}
                       </select>
                       {voicesLoading && (

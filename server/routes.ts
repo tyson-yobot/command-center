@@ -9603,6 +9603,107 @@ Provide 3 actionable suggestions in bullet points.`;
     }
   });
 
+  // Webhook endpoint for Tally sales orders with complete automation
+  app.post('/webhook/sales-order', async (req, res) => {
+    try {
+      const { spawn } = require('child_process');
+      
+      // Parse Tally webhook payload
+      const data = req.body;
+      const fields: Record<string, any> = {};
+      
+      if (data.fieldsArray) {
+        data.fieldsArray.forEach((item: any) => {
+          fields[item.label] = item.value;
+        });
+      }
+      
+      // Extract sales order data with pricing fields
+      const salesOrderData = {
+        company: fields['Company Name'],
+        contact: fields['Full Name'],
+        email: fields['Email Address'],
+        phone: fields['Phone Number'],
+        website: fields['Website'],
+        package: fields['Which YoBot® Package would you like to start with?'],
+        addons: Object.keys(fields).filter(key => fields[key] === true && key.includes('Add-On')),
+        custom_notes: fields['Custom Notes or Special Requests (Optional)'],
+        requested_start_date: fields['Requested Start Date (Optional)'],
+        payment_method: fields['Preferred Payment Method'],
+        one_time_payment: fields['💳 One-Time Payment Amount'],
+        monthly_recurring: fields['📆 Monthly Recurring Cost'],
+        grand_total: fields['💰 Final Quote Total'],
+        date: new Date().toISOString().split('T')[0],
+        quote_id: `Q-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-001`
+      };
+      
+      console.log('Sales order automation triggered:', salesOrderData);
+      
+      // Trigger complete automation pipeline
+      const pythonProcess = spawn('python3', ['server/completeSalesOrderAutomation.py'], {
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+      
+      pythonProcess.stdin.write(JSON.stringify(salesOrderData));
+      pythonProcess.stdin.end();
+      
+      pythonProcess.stdout.on('data', (data) => {
+        console.log('Automation output:', data.toString());
+      });
+      
+      pythonProcess.stderr.on('data', (data) => {
+        console.error('Automation error:', data.toString());
+      });
+      
+      res.json({ 
+        status: 'success', 
+        message: 'Complete sales order automation initiated',
+        quote_id: salesOrderData.quote_id,
+        company: salesOrderData.company
+      });
+      
+    } catch (error: any) {
+      console.error('Sales order webhook error:', error);
+      res.status(500).json({ status: 'error', message: error.message });
+    }
+  });
+
+  // Bot cloning workflow trigger endpoint
+  app.post('/api/bot-cloning/trigger', async (req, res) => {
+    try {
+      const { spawn } = require('child_process');
+      const clientData = req.body;
+      
+      console.log('Bot cloning workflow triggered for:', clientData.company_name);
+      
+      // Trigger bot cloning workflow
+      const pythonProcess = spawn('python3', ['server/botCloningWorkflow.py'], {
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+      
+      pythonProcess.stdin.write(JSON.stringify(clientData));
+      pythonProcess.stdin.end();
+      
+      pythonProcess.stdout.on('data', (data) => {
+        console.log('Bot cloning output:', data.toString());
+      });
+      
+      pythonProcess.stderr.on('data', (data) => {
+        console.error('Bot cloning error:', data.toString());
+      });
+      
+      res.json({
+        success: true,
+        message: 'Bot cloning workflow initiated',
+        company: clientData.company_name
+      });
+      
+    } catch (error: any) {
+      console.error('Bot cloning workflow error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   app.post('/api/rag/query', async (req, res) => {
     try {
       const { query, type } = req.body;
