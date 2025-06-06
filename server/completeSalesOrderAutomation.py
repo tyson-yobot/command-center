@@ -54,10 +54,20 @@ def create_google_drive_folder(company_name):
         
         # Parse credentials and get access token
         try:
-            creds_data = json.loads(google_creds)
+            # Handle the case where google_creds might not be valid JSON
+            try:
+                creds_data = json.loads(google_creds)
+            except json.JSONDecodeError:
+                # If it's not JSON, use direct environment variables
+                creds_data = None
+            
             client_id = os.getenv('GOOGLE_CLIENT_ID')
             client_secret = os.getenv('GOOGLE_CLIENT_SECRET') 
             refresh_token = os.getenv('GOOGLE_REFRESH_TOKEN')
+            
+            if not all([client_id, client_secret, refresh_token]):
+                print("❌ Missing required Google OAuth credentials")
+                return {'success': False, 'error': 'Missing Google OAuth credentials'}
             
             # Refresh access token
             token_url = 'https://oauth2.googleapis.com/token'
