@@ -1,0 +1,83 @@
+from fpdf import FPDF
+import datetime
+import os
+
+def generate_quote_pdf(company_name, quote_number, output_folder, items, total_paid):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+
+    # Header
+    pdf.cell(200, 10, txt=f"Quote: {quote_number}", ln=True, align="C")
+    pdf.cell(200, 10, txt=f"Company: {company_name}", ln=True, align="L")
+    pdf.cell(200, 10, txt=f"Date: {datetime.datetime.now().strftime('%Y-%m-%d')}", ln=True, align="L")
+    pdf.ln(10)
+
+    # Items
+    pdf.set_font("Arial", size=11)
+    pdf.cell(200, 10, txt="Quote Breakdown:", ln=True, align="L")
+    for item in items:
+        pdf.cell(200, 10, txt=f"- {item}", ln=True, align="L")
+    pdf.ln(10)
+
+    # Payment Summary
+    pdf.set_font("Arial", 'B', size=12)
+    pdf.cell(200, 10, txt=f"Total Paid (50%): ${total_paid:.2f}", ln=True, align="L")
+
+    # Save PDF
+    file_name = f"{company_name} - {quote_number}.pdf"
+    file_path = os.path.join(output_folder, file_name)
+    pdf.output(file_path)
+    return file_path
+✅ STEP 4: Email PDF to Client (Gmail SMTP)
+python
+Copy
+Edit
+import smtplib
+import ssl
+from email.message import EmailMessage
+
+def send_quote_email(sender_email, app_password, receiver_email, subject, body, pdf_path):
+    msg = EmailMessage()
+    msg['Subject'] = subject
+    msg['From'] = sender_email
+    msg['To'] = receiver_email
+    msg.set_content(body)
+
+    # Attach PDF
+    with open(pdf_path, 'rb') as f:
+        pdf_data = f.read()
+    msg.add_attachment(pdf_data, maintype='application', subtype='pdf', filename=os.path.basename(pdf_path))
+
+    # Send
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as server:
+        server.login(sender_email, app_password)
+        server.send_message(msg)
+🔧 Example Usage (Put This in Your Replit Handler)
+python
+Copy
+Edit
+company_name = "Acme Corp"
+quote_number = "Q-20250605-001"
+output_folder = "./quotes"
+os.makedirs(output_folder, exist_ok=True)
+
+items = [
+    "🤖 Pro Bot Package - $8,500",
+    "💬 Slack Alerts - $249 setup + $49/mo",
+    "📊 SmartSpend Dashboard - $999 setup + $149/mo"
+]
+total_paid = 4500 + 249 + 999  # 50% of bot package + one-time add-ons
+
+pdf_path = generate_quote_pdf(company_name, quote_number, output_folder, items, total_paid)
+
+send_quote_email(
+    sender_email="your_email@gmail.com",
+    app_password="your_app_password_here",
+    receiver_email="client@email.com",
+    subject=f"Your Quote {quote_number} from YoBot®",
+    body="Hi there! Please find attached your quote. Let us know if you have questions.\n\n— YoBot Team",
+    pdf_path=pdf_path
+)
+✅ What’s Next:

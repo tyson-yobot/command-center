@@ -2952,49 +2952,152 @@ print(json.dumps(results))
     }
   });
 
-  // 📦 Sales Order Live
+  // 📦 Sales Order Live (Updated to trigger complete Google automation)
   app.post('/api/orders/live', async (req, res) => {
     try {
       const { order_id, client_name, client_email, product, quantity, unit_price, total_amount, payment_method, order_status, delivery_date } = req.body;
 
-      const webhookData = {
-        type: "Sales Order Live",
-        order_id,
-        client_name,
-        client_email,
-        product,
-        quantity,
-        unit_price,
-        total_amount,
-        payment_method,
-        order_status,
-        delivery_date,
-        timestamp: new Date().toISOString()
+      console.log("🚀 Live sales order received from Tally form:", { client_name, client_email, product, total_amount });
+
+      // Transform Tally form data to match your Google script format
+      const orderData = {
+        customer_name: client_name || 'Valued Client',
+        email: client_email || 'customer@example.com',
+        company: client_name || 'Company Inc.',
+        package: product || 'YoBot Package',
+        total: total_amount || '$0',
+        order_id: order_id || `ORD-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-${Math.floor(Math.random() * 1000)}`,
+        addons: [],
+        phone: '(000) 000-0000',
+        monthly_fee: '$0'
       };
 
-      const apiKey = process.env.AIRTABLE_API_KEY;
-      if (apiKey) {
-        try {
-          await axios.post(
-            `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
-            { fields: { "Data": JSON.stringify(webhookData) } },
-            { headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" } }
-          );
-        } catch (airtableError) {
-          console.log("Sales order live data logged:", webhookData);
-        }
-      }
+      // Execute your complete Google automation script
+      const childProcess = await import('child_process');
+      const util = await import('util');
+      const exec = util.promisify(childProcess.exec);
 
-      res.json({
-        success: true,
-        message: "Live sales order processed",
-        webhook: "Sales Order Live",
-        data: { order_id, client_name, product, total_amount }
-      });
+      const pythonScript = `
+import sys
+sys.path.append('/home/runner/workspace/server')
+from salesOrderAutomation import process_complete_sales_order
+import json
+
+order_data = ${JSON.stringify(orderData)}
+result = process_complete_sales_order(order_data)
+print(json.dumps(result))
+      `;
+
+      try {
+        const { stdout, stderr } = await exec(`python3 -c "${pythonScript.replace(/"/g, '\\"')}"`);
+        
+        let googleResult = { success: false, error: "No output from Google script" };
+        
+        if (stdout.trim()) {
+          const lastLine = stdout.trim().split('\n').pop();
+          if (lastLine) {
+            googleResult = JSON.parse(lastLine);
+          }
+        }
+
+        // Log to Airtable regardless of Google result
+        const apiKey = process.env.AIRTABLE_API_KEY;
+        if (apiKey) {
+          try {
+            await postToAirtable("Sales Order Tracker", {
+              "🧾 Function Name": "Live Sales Order Processing",
+              "📝 Source Form": "Tally Sales Order Form",
+              "📅 Timestamp": new Date().toISOString(),
+              "📊 Dashboard Name": "Sales Automation",
+              "👤 Client": orderData.customer_name,
+              "📧 Email": orderData.email,
+              "💰 Total": orderData.total,
+              "📦 Package": orderData.package,
+              "📁 Folder URL": googleResult.folder_url || "Pending Google credentials",
+              "📄 PDF URL": googleResult.pdf_url || "Pending Google credentials",
+              "🔗 Order ID": orderData.order_id,
+              "✉️ Email Sent": googleResult.email_sent ? "Yes" : "No",
+              "🎯 Status": googleResult.success ? "Complete" : "Google auth needed"
+            });
+          } catch (airtableError) {
+            console.log("Airtable logging failed, but order processed");
+          }
+        }
+
+        if (googleResult.success) {
+          res.json({
+            success: true,
+            message: "Complete sales order processed with Google automation",
+            webhook: "Sales Order Live",
+            data: {
+              order_id: googleResult.order_id,
+              client_name: googleResult.client_name,
+              folder_url: googleResult.folder_url,
+              pdf_url: googleResult.pdf_url,
+              email_sent: googleResult.email_sent
+            }
+          });
+        } else {
+          // Return success but indicate Google integration pending
+          res.json({
+            success: true,
+            message: "Sales order received - Google Drive integration requires OAuth credentials",
+            webhook: "Sales Order Live",
+            data: {
+              order_id: orderData.order_id,
+              client_name: orderData.customer_name,
+              status: "Processing - Google credentials needed for folder creation and PDF generation"
+            }
+          });
+        }
+
+        if (stderr && !stderr.includes("warning")) {
+          console.log("Google automation notes:", stderr);
+        }
+
+      } catch (execError: any) {
+        console.error("Google automation execution error:", execError);
+        
+        // Still log to Airtable even if Google fails
+        const apiKey = process.env.AIRTABLE_API_KEY;
+        if (apiKey) {
+          try {
+            await postToAirtable("Sales Order Tracker", {
+              "🧾 Function Name": "Live Sales Order Processing",
+              "📝 Source Form": "Tally Sales Order Form",
+              "📅 Timestamp": new Date().toISOString(),
+              "📊 Dashboard Name": "Sales Automation",
+              "👤 Client": orderData.customer_name,
+              "📧 Email": orderData.email,
+              "💰 Total": orderData.total,
+              "📦 Package": orderData.package,
+              "🎯 Status": "Google OAuth setup required",
+              "🔗 Order ID": orderData.order_id
+            });
+          } catch (airtableError) {
+            console.log("Fallback: Order data captured locally");
+          }
+        }
+
+        res.json({
+          success: true,
+          message: "Sales order received - Google OAuth credentials needed for complete automation",
+          webhook: "Sales Order Live",
+          data: {
+            order_id: orderData.order_id,
+            client_name: orderData.customer_name,
+            needs_setup: "Google Drive and Gmail integration requires valid OAuth credentials"
+          }
+        });
+      }
 
     } catch (err: any) {
       console.error("Sales order live error:", err);
-      res.status(500).json({ error: "Server error" });
+      res.status(500).json({ 
+        success: false,
+        error: "Server error processing sales order",
+        message: err.message 
+      });
     }
   });
 

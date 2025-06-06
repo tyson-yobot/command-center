@@ -1,0 +1,74 @@
+import os
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+
+def create_client_folder(company_name):
+    gauth = GoogleAuth()
+    gauth.LocalWebserverAuth()
+    drive = GoogleDrive(gauth)
+
+    # Search for the "1. Clients" parent folder
+    folder_list = drive.ListFile({
+        'q': "'root' in parents and trashed=false"
+    }).GetList()
+    
+    parent_folder_id = None
+    for folder in folder_list:
+        if folder['title'] == '1. Clients':
+            parent_folder_id = folder['id']
+            break
+
+    if not parent_folder_id:
+        raise Exception("Folder '1. Clients' not found in Google Drive root")
+
+    # Check if company folder already exists
+    existing = drive.ListFile({
+        'q': f"'{parent_folder_id}' in parents and trashed=false and title='{company_name}'"
+    }).GetList()
+    
+    if existing:
+        return existing[0]['id']
+
+    # Create new folder for client
+    folder_metadata = {
+        'title': company_name,
+        'mimeType': 'application/vnd.google-apps.folder',
+        'parents': [{'id': parent_folder_id}]
+    }
+    new_folder = drive.CreateFile(folder_metadata)
+    new_folder.Upload()
+    return new_folder['id']
+✅ STEP 2: Quote Number Generator + PDF Name
+Goal: Dynamically assign unique Q-yyyymmdd-001 style quote number per company per day.
+
+🔧 Function: generate_quote_number.py
+python
+Copy
+Edit
+import datetime
+import os
+import json
+
+def generate_quote_number(company_name):
+    today = datetime.datetime.now().strftime("%Y%m%d")
+    file_path = f"./quote_history/{company_name}_{today}.json"
+
+    if not os.path.exists("./quote_history"):
+        os.makedirs("./quote_history")
+
+    # Load or initialize
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            history = json.load(f)
+    else:
+        history = {"count": 0}
+
+    # Increment
+    history["count"] += 1
+    quote_id = f"Q-{today}-{history['count']:03d}"
+
+    # Save update
+    with open(file_path, "w") as f:
+        json.dump(history, f)
+
+    return quote_id
