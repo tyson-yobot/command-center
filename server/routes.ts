@@ -5950,9 +5950,9 @@ print(json.dumps(result))
         return res.status(400).json({ error: 'Missing phone number' });
       }
 
-      const twilioSid = process.env.TWILIO_SID;
-      const twilioAuth = process.env.TWILIO_AUTH;
-      const twilioFrom = process.env.TWILIO_FROM;
+      const twilioSid = process.env.TWILIO_ACCOUNT_SID;
+      const twilioAuth = process.env.TWILIO_AUTH_TOKEN;
+      const twilioFrom = process.env.TWILIO_PHONE_NUMBER;
 
       if (!twilioSid || !twilioAuth || !twilioFrom) {
         return res.status(400).json({ error: 'Missing Twilio credentials' });
