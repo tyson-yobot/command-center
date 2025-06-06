@@ -9795,7 +9795,89 @@ Provide 3 actionable suggestions in bullet points.`;
     }
   });
 
-  // Webhook Sales Order Handler
+  // Complete Tally Webhook Handler from your 8-day code
+  app.post('/webhook/sales_order', async (req, res) => {
+    try {
+      const data = req.body;
+      
+      // Extract parsed values from Tally exactly as your code specifies
+      const salesOrderData = {
+        'Parsed Company Name': data['Parsed Company Name'] || data.company_name,
+        'Parsed Contact Name': data['Parsed Contact Name'] || data.contact_name,
+        'Parsed Contact Email': data['Parsed Contact Email'] || data.contact_email,
+        'Parsed Contact Phone': data['Parsed Contact Phone'] || data.contact_phone,
+        'Parsed Bot Package': data['Parsed Bot Package'] || data.package_name,
+        'Parsed Add-On List': data['Parsed Add-On List'] || data.selected_addons || [],
+        'Parsed Stripe Payment': data['Parsed Stripe Payment'] || data.stripe_paid || '0',
+        'Parsed Industry': data.get?.('Parsed Industry') || data.industry || ''
+      };
+
+      // Run complete 8-day automation with parsed data
+      const { spawn } = require('child_process');
+      const pythonScript = `
+import sys
+sys.path.append('/home/runner/workspace/server')
+from complete_8day_automation import run_complete_8day_sales_order_automation
+import json
+
+# Convert parsed data to expected format
+order_data = {
+    'customer_name': '${salesOrderData['Parsed Company Name']}',
+    'email': '${salesOrderData['Parsed Contact Email']}',
+    'name': '${salesOrderData['Parsed Contact Name']}',
+    'package': '${salesOrderData['Parsed Bot Package']}',
+    'addons': ${JSON.stringify(salesOrderData['Parsed Add-On List'])},
+    'phone': '${salesOrderData['Parsed Contact Phone']}',
+    'stripe_payment': '${salesOrderData['Parsed Stripe Payment']}'
+}
+
+result = run_complete_8day_sales_order_automation(order_data)
+print(json.dumps(result))
+      `;
+
+      const { exec } = require('child_process');
+      exec(`python3 -c "${pythonScript.replace(/"/g, '\\"')}"`, (error, stdout, stderr) => {
+        if (error) {
+          console.error('Webhook automation error:', error);
+          return res.status(500).json({
+            success: false,
+            error: 'Automation execution failed',
+            details: error.message
+          });
+        }
+
+        try {
+          const result = JSON.parse(stdout);
+          console.log('Complete webhook automation result:', result);
+          
+          res.json({
+            success: true,
+            message: 'Complete 8-day sales order automation executed',
+            webhook_type: 'Tally Sales Order',
+            quote_number: result.quote_number,
+            company_name: result.company_name,
+            automation_result: result
+          });
+        } catch (parseError) {
+          console.error('Result parsing error:', parseError);
+          res.status(500).json({
+            success: false,
+            error: 'Automation result parsing failed'
+          });
+        }
+      });
+
+    } catch (error: any) {
+      console.error('Webhook error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Webhook processing failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Original webhook handler
   app.post('/webhook/sales-order', async (req, res) => {
     try {
       const data = req.body;

@@ -203,14 +203,11 @@ def create_hubspot_contact(client_data):
     contact_data = {
         "properties": {
             "email": client_data['contact_email'],
-            "firstname": client_data.get('contact_name', '').split()[0] if client_data.get('contact_name') else 'Unknown',
-            "lastname": client_data.get('contact_name', '').split()[-1] if client_data.get('contact_name') and len(client_data.get('contact_name', '').split()) > 1 else 'Contact',
+            "firstname": client_data.get('contact_name', '').split()[0] if client_data.get('contact_name') else 'YoBot',
+            "lastname": client_data.get('contact_name', '').split()[-1] if client_data.get('contact_name') and len(client_data.get('contact_name', '').split()) > 1 else 'Customer',
             "company": client_data['company_name'],
             "phone": client_data.get('phone', ''),
-            "lifecyclestage": "customer",
-            "lead_source": "YoBot Sales Order",
-            "yobot_package": client_data.get('package_name', ''),
-            "quote_number": client_data.get('quote_number', '')
+            "lifecyclestage": "customer"
         }
     }
     
