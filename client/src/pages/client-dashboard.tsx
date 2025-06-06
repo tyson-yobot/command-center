@@ -1019,6 +1019,9 @@ export default function ClientDashboard() {
           description: `Text inserted into ${memoryCategory} memory category`,
         });
         setMemoryText('');
+        
+        // Refresh knowledge stats to reflect the new memory entry
+        refetchKnowledge();
       } else {
         setVoiceStatus('Memory insertion failed');
         setToast({
@@ -3159,11 +3162,11 @@ export default function ClientDashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                   <div className="text-center bg-blue-900/40 rounded-lg p-4 border border-purple-400 shadow-lg shadow-purple-400/20">
                     <div className="text-2xl font-bold text-blue-400">
-                      {knowledgeStats?.documentCount || 0}
+                      {knowledgeStats?.documents?.total || 0}
                     </div>
                     <div className="text-white text-sm">Documents Indexed</div>
                     <div className="text-xs text-slate-400 mt-1">
-                      {knowledgeStats?.totalSize || '0 MB'}
+                      {knowledgeStats?.memory?.total || 0} memory entries
                     </div>
                   </div>
                 </div>
