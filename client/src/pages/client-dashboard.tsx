@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -36,6 +36,7 @@ import {
   Download
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
 import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i.png';
 
 export default function ClientDashboard() {
@@ -49,7 +50,136 @@ export default function ClientDashboard() {
   const [selectedTier, setSelectedTier] = React.useState('All');
   const [voiceCommand, setVoiceCommand] = React.useState('');
   const [automationMode, setAutomationMode] = React.useState(true);
+  
+  // Voice recognition states for RAG programming
+  const [queryText, setQueryText] = useState('');
+  const [programmingText, setProgrammingText] = useState('');
+  const [voiceStatus, setVoiceStatus] = useState('Ready');
+  const recognitionRef = useRef<any>(null);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = React.useState(false);
+  const [selectedPersona, setSelectedPersona] = useState('21m00Tcm4TlvDq8ikWAM');
+
+  // Voice recognition functions for RAG system
+  const initializeVoiceRecognition = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+      
+      recognitionRef.current = recognition;
+      return recognition;
+    }
+    return null;
+  };
+
+  const startQueryVoiceRecognition = () => {
+    const recognition = initializeVoiceRecognition();
+    if (recognition) {
+      recognition.onresult = (event: any) => {
+        const lastResult = event.results[event.results.length - 1];
+        if (lastResult.isFinal) {
+          setQueryText(lastResult[0].transcript);
+          setVoiceStatus('Query captured');
+        }
+      };
+
+      recognition.onstart = () => {
+        setIsListening(true);
+        setVoiceStatus('Listening for query...');
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+        setVoiceStatus('Ready');
+      };
+
+      recognition.start();
+    }
+  };
+
+  const startProgrammingVoiceRecognition = () => {
+    const recognition = initializeVoiceRecognition();
+    if (recognition) {
+      recognition.onresult = (event: any) => {
+        const lastResult = event.results[event.results.length - 1];
+        if (lastResult.isFinal) {
+          setProgrammingText(prev => prev + ' ' + lastResult[0].transcript);
+          setVoiceStatus('Programming command captured');
+        }
+      };
+
+      recognition.onstart = () => {
+        setIsListening(true);
+        setVoiceStatus('Listening for programming...');
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+        setVoiceStatus('Ready');
+      };
+
+      recognition.start();
+    }
+  };
+
+  const stopVoiceRecognition = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+    setIsListening(false);
+    setVoiceStatus('Ready');
+  };
+
+  // Process voice commands for RAG programming
+  const processVoiceProgramming = async () => {
+    if (programmingText.trim()) {
+      try {
+        const response = await apiRequest('POST', '/api/rag/voice-programming', {
+          command: programmingText,
+          type: 'voice_programming',
+          persona: selectedPersona
+        });
+        
+        setVoiceStatus('Programming processed successfully');
+        setProgrammingText('');
+      } catch (error) {
+        setVoiceStatus('Error processing programming');
+      }
+    }
+  };
+
+  // Process knowledge queries
+  const processKnowledgeQuery = async () => {
+    if (queryText.trim()) {
+      try {
+        const response = await apiRequest('POST', '/api/rag/query', {
+          query: queryText,
+          type: 'knowledge_search'
+        });
+        
+        setVoiceStatus('Query processed successfully');
+        setQueryText('');
+      } catch (error) {
+        setVoiceStatus('Error processing query');
+      }
+    }
+  };
+
+  // Test voice persona with ElevenLabs
+  const testVoicePersona = async () => {
+    try {
+      const response = await apiRequest('POST', '/api/elevenlabs/test-voice', {
+        voice_id: selectedPersona,
+        text: 'Hello, this is a test of the voice persona system.'
+      });
+      setVoiceStatus('Voice test completed');
+    } catch (error) {
+      setVoiceStatus('Voice test failed');
+    }
+  };
 
   const handleVoiceToggle = () => {
     if (!isListening) {
@@ -1570,9 +1700,17 @@ export default function ClientDashboard() {
                     <Search className="absolute left-3 top-3 h-5 w-5 text-purple-400" />
                     <input
                       type="text"
+                      value={queryText}
+                      onChange={(e) => setQueryText(e.target.value)}
                       placeholder="Ask the knowledge base anything..."
-                      className="w-full pl-12 pr-4 py-3 bg-blue-900/60 border border-purple-400/50 rounded-lg text-white placeholder-purple-300 focus:border-purple-400 focus:outline-none"
+                      className="w-full pl-12 pr-20 py-3 bg-blue-900/60 border border-purple-400/50 rounded-lg text-white placeholder-purple-300 focus:border-purple-400 focus:outline-none"
                     />
+                    <Button 
+                      onClick={startQueryVoiceRecognition}
+                      className={`absolute right-2 top-2 p-2 ${isListening ? 'bg-red-500 animate-pulse' : 'bg-red-600 hover:bg-red-700'}`}
+                    >
+                      <Mic className="w-4 h-4" />
+                    </Button>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <Button className="bg-purple-600 hover:bg-purple-700 text-white">
@@ -1587,6 +1725,74 @@ export default function ClientDashboard() {
                       <FileText className="w-4 h-4 mr-2" />
                       Context Search
                     </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Voice Programming Interface */}
+              <div className="mb-8">
+                <h3 className="text-white text-lg font-semibold mb-4">Voice Programming Interface</h3>
+                <div className="bg-gradient-to-br from-green-900/60 to-emerald-900/60 rounded-lg p-6 border border-green-400/50">
+                  <div className="space-y-4">
+                    <div className="relative">
+                      <textarea
+                        value={programmingText}
+                        onChange={(e) => setProgrammingText(e.target.value)}
+                        placeholder="Program the RAG system with voice commands or type instructions..."
+                        className="w-full p-4 bg-green-800/60 border border-green-400/50 rounded-lg text-white placeholder-green-300 resize-none"
+                        rows={4}
+                      />
+                      <Button 
+                        onClick={startProgrammingVoiceRecognition}
+                        className={`absolute top-2 right-2 p-2 ${isListening ? 'bg-red-500 animate-pulse' : 'bg-red-600 hover:bg-red-700'}`}
+                      >
+                        <Mic className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-3 bg-green-800/40 rounded border border-green-400/30">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                        <span className="text-green-300 text-sm">Voice Recognition Ready</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-green-400 text-xs">Status: Listening</span>
+                        <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                          <MicOff className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                      <Button className="bg-green-600 hover:bg-green-700 text-white">
+                        <Mic className="w-4 h-4 mr-2" />
+                        Start Recording
+                      </Button>
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                        <Brain className="w-4 h-4 mr-2" />
+                        Process Voice
+                      </Button>
+                      <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                        <Settings className="w-4 h-4 mr-2" />
+                        Voice Settings
+                      </Button>
+                      <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+                        <Download className="w-4 h-4 mr-2" />
+                        Export Program
+                      </Button>
+                    </div>
+
+                    <div className="bg-green-900/40 rounded p-3 border border-green-400/30">
+                      <h4 className="text-green-300 font-medium mb-2">Voice Commands:</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-green-200">
+                        <div>• "Add knowledge about [topic]"</div>
+                        <div>• "Update behavior for [scenario]"</div>
+                        <div>• "Create response template"</div>
+                        <div>• "Set priority for [function]"</div>
+                        <div>• "Configure automation rule"</div>
+                        <div>• "Enable voice training mode"</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1618,26 +1824,33 @@ export default function ClientDashboard() {
                   </div>
                 </div>
 
-                {/* Phone Calling */}
-                <div className="bg-green-900/60 rounded-lg p-6 border border-green-400/50">
+                {/* ElevenLabs Persona Selector */}
+                <div className="bg-purple-900/60 rounded-lg p-6 border border-purple-400/50">
                   <h3 className="text-white text-lg font-semibold mb-4 flex items-center">
-                    <Phone className="w-5 h-5 mr-2 text-green-400" />
-                    Outbound Calling
+                    <Settings className="w-5 h-5 mr-2 text-purple-400" />
+                    Voice Persona Selection
                   </h3>
                   <div className="space-y-4">
-                    <input
-                      type="tel"
-                      placeholder="Enter phone number..."
-                      className="w-full p-3 bg-green-800/60 border border-green-400/50 rounded text-white placeholder-green-300"
-                    />
+                    <select className="w-full p-3 bg-purple-800/60 border border-purple-400/50 rounded text-white">
+                      <option value="21m00Tcm4TlvDq8ikWAM">Rachel - Professional Female</option>
+                      <option value="2EiwWnXFnvU5JabPnv8n">Clyde - Confident Male</option>
+                      <option value="AZnzlk1XvdvUeBnXmlld">Domi - Warm Female</option>
+                      <option value="EXAVITQu4vr4xnSDxMaL">Sarah - Friendly Female</option>
+                      <option value="FGY2WhTYpPnrIDTdsKH5">Laura - Business Female</option>
+                      <option value="IKne3meq5aSn9XLyUdCD">Charlie - British Male</option>
+                      <option value="JBFqnCBsd6RMkjVDRZzb">George - Deep Male</option>
+                      <option value="N2lVS1w4EtoT3dr4eOWO">Callum - Young Male</option>
+                      <option value="ODq5zmih8GrVes37Dizd">Patrick - Mature Male</option>
+                      <option value="SOYHLrjzK2X1ezoPC6cr">Harry - Energetic Male</option>
+                    </select>
                     <div className="grid grid-cols-2 gap-3">
-                      <Button className="bg-green-600 hover:bg-green-700 text-white">
-                        <Phone className="w-4 h-4 mr-2" />
-                        Start Call
+                      <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                        <Headphones className="w-4 h-4 mr-2" />
+                        Test Voice
                       </Button>
-                      <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                        <MessageSquare className="w-4 h-4 mr-2" />
-                        Voice Message
+                      <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                        <Settings className="w-4 h-4 mr-2" />
+                        Apply Persona
                       </Button>
                     </div>
                   </div>
@@ -1669,18 +1882,10 @@ export default function ClientDashboard() {
                   </Button>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-purple-400">1,247</div>
                     <div className="text-purple-300 text-sm">Documents Indexed</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-cyan-400">98.7%</div>
-                    <div className="text-cyan-300 text-sm">Query Accuracy</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-green-400">2.1s</div>
-                    <div className="text-green-300 text-sm">Avg Response Time</div>
                   </div>
                 </div>
               </div>
