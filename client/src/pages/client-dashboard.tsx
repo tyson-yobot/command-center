@@ -485,8 +485,20 @@ export default function ClientDashboard() {
         };
         
         recognition.onend = () => {
-          setIsListening(false);
           console.log('Voice recognition ended');
+          // Auto-restart if still supposed to be listening
+          if (isListening) {
+            setTimeout(() => {
+              try {
+                recognition.start();
+              } catch (error) {
+                console.error('Failed to restart recognition:', error);
+                setIsListening(false);
+              }
+            }, 100);
+          } else {
+            setIsListening(false);
+          }
         };
         
         try {
@@ -515,6 +527,124 @@ export default function ClientDashboard() {
   const testEscalation = () => {
     setShowEscalation(true);
     setTimeout(() => setShowEscalation(false), 5000);
+  };
+
+  // Knowledge Base Functions
+  const queryKnowledgeBase = async () => {
+    if (!queryText.trim()) {
+      setToast({
+        title: "Query Required",
+        description: "Please enter a query to search the knowledge base",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/knowledge/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: queryText })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setToast({
+          title: "Knowledge Query Complete",
+          description: `Found ${result.results?.length || 0} relevant documents`,
+        });
+      } else {
+        setToast({
+          title: "Query Failed",
+          description: "Unable to query knowledge base",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      setToast({
+        title: "Query Error",
+        description: "Network error during query",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const smartSearch = async () => {
+    if (!queryText.trim()) {
+      setToast({
+        title: "Search Required",
+        description: "Please enter text for smart search",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/knowledge/smart-search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: queryText, type: 'smart' })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setToast({
+          title: "Smart Search Complete",
+          description: `AI-powered search found ${result.matches || 0} relevant items`,
+        });
+      } else {
+        setToast({
+          title: "Smart Search Failed",
+          description: "Unable to perform smart search",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      setToast({
+        title: "Search Error",
+        description: "Network error during smart search",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const contextSearch = async () => {
+    if (!queryText.trim()) {
+      setToast({
+        title: "Context Required",
+        description: "Please enter text for context search",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/knowledge/context-search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: queryText, type: 'context' })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setToast({
+          title: "Context Search Complete",
+          description: `Context analysis found ${result.contextMatches || 0} relevant sections`,
+        });
+      } else {
+        setToast({
+          title: "Context Search Failed",
+          description: "Unable to perform context search",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      setToast({
+        title: "Context Error",
+        description: "Network error during context search",
+        variant: "destructive"
+      });
+    }
   };
 
   // Voice Command Handler
@@ -2109,15 +2239,24 @@ export default function ClientDashboard() {
                     </Button>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                    <Button 
+                      onClick={queryKnowledgeBase}
+                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                    >
                       <Search className="w-4 h-4 mr-2" />
                       Query Knowledge
                     </Button>
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                    <Button 
+                      onClick={smartSearch}
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                    >
                       <Brain className="w-4 h-4 mr-2" />
                       Smart Search
                     </Button>
-                    <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                    <Button 
+                      onClick={contextSearch}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                    >
                       <FileText className="w-4 h-4 mr-2" />
                       Context Search
                     </Button>
@@ -2220,11 +2359,17 @@ export default function ClientDashboard() {
                       rows={3}
                     />
                     <div className="grid grid-cols-2 gap-3">
-                      <Button className="bg-cyan-600 hover:bg-cyan-700 text-white">
+                      <Button 
+                        onClick={generateVoice}
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white"
+                      >
                         <Headphones className="w-4 h-4 mr-2" />
                         Generate Voice
                       </Button>
-                      <Button className="bg-teal-600 hover:bg-teal-700 text-white">
+                      <Button 
+                        onClick={downloadAudio}
+                        className="bg-teal-600 hover:bg-teal-700 text-white"
+                      >
                         <Download className="w-4 h-4 mr-2" />
                         Download Audio
                       </Button>
