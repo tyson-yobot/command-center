@@ -1097,6 +1097,8 @@ export default function ClientDashboard() {
     switch (category) {
       case "Start Pipeline Calls":
         return { action: "trigger_pipeline_calls", filter: "active" };
+      case "Stop Pipeline Calls":
+        return { action: "stop_pipeline_calls", terminate_all: true };
       case "New Booking Sync":
         return { action: "sync_latest_bookings" };
       case "New Support Ticket":
@@ -1304,6 +1306,14 @@ export default function ClientDashboard() {
                   </Button>
                   
                   <Button
+                    onClick={() => executeLiveCommand("Stop Pipeline Calls")}
+                    className="bg-red-500 hover:bg-red-600 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">⏹️</span>
+                    <span>Stop Pipeline Calls</span>
+                  </Button>
+                  
+                  <Button
                     onClick={() => executeLiveCommand("Initiate Voice Call")}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
@@ -1317,14 +1327,6 @@ export default function ClientDashboard() {
                   >
                     <Mic className="w-5 h-5 mr-3" />
                     <span>Voice Input</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => executeLiveCommand("Send SMS")}
-                    className="bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-start p-3"
-                  >
-                    <MessageSquare className="w-5 h-5 mr-3" />
-                    <span>Send SMS</span>
                   </Button>
                 </div>
               </CardContent>
@@ -1362,11 +1364,11 @@ export default function ClientDashboard() {
                   </Button>
                   
                   <Button
-                    disabled
-                    className="bg-gray-500 text-gray-300 flex items-center justify-start p-3 cursor-not-allowed"
+                    onClick={() => executeLiveCommand("Send SMS")}
+                    className="bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-start p-3"
                   >
-                    <span className="text-xl mr-3">📈</span>
-                    <span>Open</span>
+                    <MessageSquare className="w-5 h-5 mr-3" />
+                    <span>Send SMS</span>
                   </Button>
                 </div>
               </CardContent>
