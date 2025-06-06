@@ -9,8 +9,8 @@ from email.message import EmailMessage
 
 # Google OAuth credentials from environment
 CLIENT_ID = "685952645658-k8glf5nnp4d2u1cafih1pbauudus3nc.apps.googleusercontent.com"
-CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
-REFRESH_TOKEN = os.getenv("GOOGLE_REFRESH_TOKEN", "")
+CLIENT_SECRET = "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"
+REFRESH_TOKEN = "1//0g9GnAKVfRlM9CgYIARAAGBASNwF-L9IrBya2ZudqCC8oAaznpP3_Xd-JvwWc41WFlvT44G9UN3hiEtZWTyN2YfAmBtQdpTfdkA"
 
 def create_client_folder(company_name):
     """Create Google Drive folder for client"""
@@ -24,11 +24,13 @@ def create_client_folder(company_name):
         })
         
         if token_response.status_code != 200:
-            return {"success": False, "error": "OAuth token refresh failed"}
+            error_details = token_response.text if token_response.text else "Unknown error"
+            return {"success": False, "error": f"OAuth token refresh failed: {error_details}"}
             
-        access_token = token_response.json().get("access_token")
+        token_data = token_response.json()
+        access_token = token_data.get("access_token")
         if not access_token:
-            return {"success": False, "error": "No access token received"}
+            return {"success": False, "error": f"No access token received: {token_data}"}
 
         # Create folder
         folder_response = requests.post("https://www.googleapis.com/drive/v3/files", headers={

@@ -8,8 +8,8 @@ import os
 # 🔐 OAuth Credentials (From You)
 # ------------------------------
 CLIENT_ID = "685952645658-k8glf5nnp4d2u1cafih1pbauudus3nc.apps.googleusercontent.com"
-CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "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")
-REFRESH_TOKEN = os.getenv("GOOGLE_REFRESH_TOKEN", "1//0g9GnAKVfRlM9CgYIARAAGBASNwF-L9IrBya2ZudqCC8oAaznpP3_Xd-JvwWc41WFlvT44G9UN3hiEtZWTyN2YfAmBtQdpTfdkA")
+CLIENT_SECRET = "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"
+REFRESH_TOKEN = "1//0g9GnAKVfRlM9CgYIARAAGBASNwF-L9IrBya2ZudqCC8oAaznpP3_Xd-JvwWc41WFlvT44G9UN3hiEtZWTyN2YfAmBtQdpTfdkA"
 TEMPLATE_DOC_ID = "1MuPApi3WCiCkjLG4I78uPklP2aNk-PrlU5-R3CDbjbQ"
 
 def process_complete_sales_order(order_data):
