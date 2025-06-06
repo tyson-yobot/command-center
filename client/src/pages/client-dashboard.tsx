@@ -861,7 +861,7 @@ export default function ClientDashboard() {
 
     try {
       setVoiceStatus('Generating voice...');
-      const response = await fetch('/api/voice/generate', {
+      const response = await fetch('/api/elevenlabs/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -871,11 +871,20 @@ export default function ClientDashboard() {
       });
 
       if (response.ok) {
-        const result = await response.json();
-        setVoiceStatus('Voice generated successfully');
+        // Handle audio blob for download
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+        
+        // Create download link
+        const downloadLink = document.createElement('a');
+        downloadLink.href = audioUrl;
+        downloadLink.download = `voice_${Date.now()}.mp3`;
+        downloadLink.click();
+        
+        setVoiceStatus('Voice generated and downloaded');
         setToast({
           title: "Voice Generated",
-          description: "Audio file has been created successfully",
+          description: "Audio file has been downloaded successfully",
         });
       } else {
         setVoiceStatus('Voice generation failed');

@@ -12224,5 +12224,41 @@ print(json.dumps(result))
     }
   });
 
+  // SMS sending endpoint
+  app.post('/api/sms/send', async (req, res) => {
+    try {
+      const { to, message } = req.body;
+      
+      if (!to || !message) {
+        return res.status(400).json({
+          error: 'Missing required parameters',
+          required: ['to', 'message']
+        });
+      }
+
+      const result = await sendSMSAlert(to, message);
+      
+      if (result.success) {
+        res.json({
+          success: true,
+          message: 'SMS sent successfully',
+          messageId: result.messageId
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          error: result.error || 'Failed to send SMS'
+        });
+      }
+    } catch (error: any) {
+      console.error('SMS sending error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'SMS service error',
+        message: error.message
+      });
+    }
+  });
+
   return httpServer;
 }

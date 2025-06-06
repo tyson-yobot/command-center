@@ -1,18 +1,1 @@
-[
-  {
-    "id": "mem_1749218926271",
-    "text": "https:/yobot.bot\n",
-    "category": "general",
-    "priority": "high",
-    "timestamp": "2025-06-06T14:08:46.271Z",
-    "source": "manual_insertion"
-  },
-  {
-    "id": "mem_1749219124293",
-    "text": "https://yobot.bot",
-    "category": "general",
-    "priority": "high",
-    "timestamp": "2025-06-06T14:12:04.293Z",
-    "source": "manual_insertion"
-  }
-]
+[]
