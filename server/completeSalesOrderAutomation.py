@@ -296,14 +296,14 @@ def run_complete_sales_order_automation(form_data):
     push_to_airtable(client_data)
     
     # 4. Create HubSpot contact
-    create_hubspot_contact(client_data)
+    hubspot_result = create_hubspot_contact(client_data)
     
     # 5. Generate work order CSV with roadmap tasks
     from crmIntegration import build_roadmap_for_client
     roadmap_result = build_roadmap_for_client(client_data.get('bot_package', 'YoBot Standard Package'), client_data.get('selected_addons', []))
     
     csv_path = None
-    if roadmap_result.get('success'):
+    if roadmap_result and roadmap_result.get('success'):
         csv_path = generate_task_csv(company_name, roadmap_result['tasks'])
         print(f"✅ Work order CSV generated with {len(roadmap_result['tasks'])} tasks")
     
@@ -322,10 +322,10 @@ def run_complete_sales_order_automation(form_data):
         "quote_number": quote_number,
         "pdf_path": pdf_path,
         "csv_path": csv_path,
-        "folder_id": folder_id.get('folder_id') if folder_result else None,
+        "folder_id": folder_result.get('folder_id') if folder_result else None,
         "folder_url": folder_result.get('folder_url') if folder_result else None,
         "hubspot_contact_id": hubspot_result.get('contact_id') if hubspot_result else None,
-        "tasks_created": roadmap_result.get('tasks_count', 0),
+        "tasks_created": roadmap_result.get('tasks_count', 0) if roadmap_result else 0,
         "notifications_sent": notification_result.get('success', False),
         "automation_complete": True
     }
