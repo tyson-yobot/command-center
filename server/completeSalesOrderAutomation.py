@@ -18,6 +18,13 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 
+# Import Google Drive upload function
+try:
+    from googleDriveFolderSystem import upload_pdf_to_drive
+except ImportError:
+    def upload_pdf_to_drive(pdf_path, folder_id, client_name, quote_number):
+        return {"success": False, "error": "Google Drive upload function not available"}
+
 # === Package and Add-on Configuration ===
 PACKAGES = {
     "YoBot Standard Package": {"setup": 2500, "monthly": 150, "desc": "Essential bot automation with core features"},
@@ -456,6 +463,17 @@ def run_complete_sales_order_automation(form_data):
     # 2. Generate professional PDF quote
     pdf_path = f"./pdfs/YoBot_Quote_{quote_number}_{company_name.replace(' ', '_')}.pdf"
     pdf_generated = generate_professional_quote_pdf(client_data, package_info, addon_list, pdf_path)
+    
+    # 3. Upload PDF to Google Drive folder (if folder creation succeeded)
+    upload_result = None
+    if folder_result and folder_result.get('success') and folder_result.get('folder_id'):
+        upload_result = upload_pdf_to_drive(pdf_path, folder_result['folder_id'], company_name, quote_number)
+        if upload_result and upload_result.get('success'):
+            print(f"✅ PDF uploaded to Google Drive: {upload_result.get('file_url', 'N/A')}")
+        else:
+            print(f"❌ PDF upload failed: {upload_result.get('error', 'Unknown error') if upload_result else 'No upload attempted'}")
+    else:
+        print("❌ Skipping PDF upload - folder creation failed")
     
     # 3. Push to Airtable
     push_to_airtable(client_data)
