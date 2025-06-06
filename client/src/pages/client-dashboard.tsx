@@ -781,6 +781,69 @@ export default function ClientDashboard() {
     }
   };
 
+  const loadDocuments = async () => {
+    try {
+      setDocumentsLoading(true);
+      const response = await fetch('/api/knowledge/documents');
+      if (response.ok) {
+        const data = await response.json();
+        setUploadedDocuments(data.documents || []);
+      }
+    } catch (error) {
+      console.error('Failed to load documents:', error);
+    } finally {
+      setDocumentsLoading(false);
+    }
+  };
+
+  const toggleDocumentSelection = (docId: string) => {
+    setSelectedDocuments(prev => 
+      prev.includes(docId) 
+        ? prev.filter(id => id !== docId)
+        : [...prev, docId]
+    );
+  };
+
+  const deleteSelectedDocuments = async () => {
+    if (selectedDocuments.length === 0) {
+      setToast({
+        title: "No Selection",
+        description: "Please select documents to delete",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/knowledge/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ documentIds: selectedDocuments })
+      });
+
+      if (response.ok) {
+        setToast({
+          title: "Documents Deleted",
+          description: `${selectedDocuments.length} documents removed successfully`,
+        });
+        setSelectedDocuments([]);
+        loadDocuments();
+      } else {
+        setToast({
+          title: "Delete Failed",
+          description: "Unable to delete selected documents",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      setToast({
+        title: "Delete Error",
+        description: "Network error during deletion",
+        variant: "destructive"
+      });
+    }
+  };
+
   const insertMemoryText = async () => {
     if (!memoryText.trim()) {
       setToast({
@@ -1816,7 +1879,7 @@ export default function ClientDashboard() {
                       <p className="text-blue-400 font-medium">Follow-up Call</p>
                       <p className="text-slate-300 text-sm">Mike Wilson - 3:30 PM</p>
                     </div>
-                    <Button size="sm" variant="outline" className="border-blue-400 text-blue-400 px-4 py-2 min-w-[90px]">
+                    <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 min-w-[90px]">
                       Prepare
                     </Button>
                   </div>

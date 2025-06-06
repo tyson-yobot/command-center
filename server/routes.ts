@@ -9719,6 +9719,71 @@ Provide 3 actionable suggestions in bullet points.`;
     }
   });
 
+  // Document management endpoints
+  app.get('/api/knowledge/documents', async (req, res) => {
+    try {
+      // Return sample documents for now - would connect to actual document storage
+      const documents = [
+        {
+          id: 'doc_1',
+          filename: 'sales_training.pdf',
+          originalname: 'Sales Training Manual.pdf',
+          size: 2048576,
+          uploadDate: '2024-01-15T10:30:00Z',
+          category: 'training'
+        },
+        {
+          id: 'doc_2', 
+          filename: 'product_specs.docx',
+          originalname: 'Product Specifications.docx',
+          size: 1024000,
+          uploadDate: '2024-01-14T14:20:00Z',
+          category: 'product'
+        },
+        {
+          id: 'doc_3',
+          filename: 'client_contacts.txt',
+          originalname: 'Client Contact List.txt', 
+          size: 512000,
+          uploadDate: '2024-01-13T09:15:00Z',
+          category: 'clients'
+        }
+      ];
+      
+      res.json({
+        success: true,
+        documents: documents,
+        total: documents.length
+      });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  app.post('/api/knowledge/delete', async (req, res) => {
+    try {
+      const { documentIds } = req.body;
+      
+      if (!documentIds || !Array.isArray(documentIds)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Document IDs array is required'
+        });
+      }
+      
+      // Simulate document deletion
+      console.log('Deleting documents:', documentIds);
+      
+      res.json({
+        success: true,
+        message: `${documentIds.length} documents deleted successfully`,
+        deletedIds: documentIds
+      });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
   app.post('/api/knowledge/reindex', async (req, res) => {
     try {
       // Trigger knowledge base reindexing
