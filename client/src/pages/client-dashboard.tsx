@@ -175,19 +175,27 @@ export default function ClientDashboard() {
   const fetchAvailableVoices = async () => {
     setVoicesLoading(true);
     try {
-      const response = await apiRequest('GET', '/api/elevenlabs/voices');
+      const response = await fetch('/api/elevenlabs/voices');
       const data = await response.json();
-      setAvailableVoices(data.voices || []);
-      setVoiceStatus('Voices loaded successfully');
+      
+      if (data.voices && data.voices.length > 0) {
+        setAvailableVoices(data.voices);
+        setVoiceStatus('Voices loaded successfully');
+      } else {
+        setAvailableVoices([]);
+        if (data.message) {
+          setVoiceStatus(data.message);
+          setToast({
+            title: "ElevenLabs Configuration Required",
+            description: data.message,
+            variant: "default"
+          });
+        }
+      }
     } catch (error) {
       console.error('Failed to fetch voices:', error);
-      setVoiceStatus('Failed to load voices');
-      // Fallback to default voices if API fails
-      setAvailableVoices([
-        { voice_id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel', category: 'premade' },
-        { voice_id: '2EiwWnXFnvU5JabPnv8n', name: 'Clyde', category: 'premade' },
-        { voice_id: 'AZnzlk1XvdvUeBnXmlld', name: 'Domi', category: 'premade' }
-      ]);
+      setAvailableVoices([]);
+      setVoiceStatus('Error connecting to ElevenLabs');
     }
     setVoicesLoading(false);
   };

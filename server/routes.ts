@@ -9507,21 +9507,38 @@ Provide 3 actionable suggestions in bullet points.`;
   // ElevenLabs voice integration endpoints
   app.get('/api/elevenlabs/voices', async (req, res) => {
     try {
+      const apiKey = process.env.ELEVENLABS_API_KEY;
+      
+      if (!apiKey) {
+        return res.json({
+          voices: [],
+          message: "ElevenLabs API key not configured. Please provide your API key to access voice personas."
+        });
+      }
+      
       const response = await fetch('https://api.elevenlabs.io/v1/voices', {
         headers: {
-          'xi-api-key': process.env.ELEVENLABS_API_KEY || ''
+          'xi-api-key': apiKey
         }
       });
       
       if (!response.ok) {
-        throw new Error('Failed to fetch voices from ElevenLabs');
+        const errorText = await response.text();
+        console.error('ElevenLabs API error:', response.status, errorText);
+        return res.json({
+          voices: [],
+          message: "Failed to authenticate with ElevenLabs. Please check your API key."
+        });
       }
       
       const data = await response.json();
       res.json(data);
     } catch (error: any) {
       console.error('ElevenLabs voices error:', error);
-      res.status(500).json({ error: error.message });
+      res.json({
+        voices: [],
+        message: "Error connecting to ElevenLabs. Please check your API key configuration."
+      });
     }
   });
 
