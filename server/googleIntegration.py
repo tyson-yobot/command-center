@@ -7,9 +7,33 @@ import os
 from datetime import datetime
 
 # ----------------------------------
-# 🔐 AUTH: ACCESS TOKEN
+# 🔐 OAUTH CREDENTIALS WITH REFRESH TOKEN
 # ----------------------------------
-ACCESS_TOKEN = "ya29.a0AW4Xtxh3Ol7z5GXcB6jDg9zdaQzbrfJdKm1aklw4qsBJoS13GP0OQWassOF-6u_Att_H9uI0jH4VirY6k1RFWATG2UsdrGTFT4WrmZIy-NfmorqzrR9XY-HJntQkj1tAYr_rH-N3WJ1i_bOw7nL2HAHB2gdqSbTM-5RZsWn6aCgYKAewSARMSFQHGX2Mi2BigMOSRyvdyL4y2bNOt0Q0175"
+CLIENT_ID = "685952645658-k8glf5nnpa4d2u1cafih1pbauudus3nc.apps.googleusercontent.com"
+CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "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")
+REFRESH_TOKEN = os.getenv("GOOGLE_REFRESH_TOKEN", "1//0g9GnAKVfRlM9CgYIARAAGBASNwF-L9IrBya2ZudqCC8oAaznpP3_Xd-JvwWc41WFlvT44G9UN3hiEtZWTyN2YfAmBtQdpTfdkA")
+
+def get_fresh_access_token():
+    """Get a fresh access token using refresh token"""
+    try:
+        response = requests.post("https://oauth2.googleapis.com/token", data={
+            "client_id": CLIENT_ID,
+            "client_secret": CLIENT_SECRET,
+            "refresh_token": REFRESH_TOKEN,
+            "grant_type": "refresh_token"
+        })
+        
+        if response.status_code == 200:
+            access_token = response.json().get("access_token")
+            if access_token:
+                print("🔐 Access token refreshed successfully")
+                return access_token
+        
+        print(f"❌ Token refresh failed: {response.text}")
+        return None
+    except Exception as e:
+        print(f"❌ Token refresh error: {e}")
+        return None
 
 def process_sales_order_complete(order_data):
     """
@@ -17,6 +41,11 @@ def process_sales_order_complete(order_data):
     PDF generation, upload, and Gmail delivery
     """
     try:
+        # Get fresh access token using refresh token
+        ACCESS_TOKEN = get_fresh_access_token()
+        if not ACCESS_TOKEN:
+            return {"success": False, "error": "Failed to refresh access token"}
+
         # Extract order details
         client_name = order_data.get('customer_name', 'Valued Client')
         client_email = order_data.get('email', 'customer@example.com')
