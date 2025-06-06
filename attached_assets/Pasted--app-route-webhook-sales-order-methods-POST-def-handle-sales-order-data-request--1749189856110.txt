@@ -1,0 +1,60 @@
+@app.route('/webhook/sales_order', methods=['POST'])
+def handle_sales_order():
+    data = request.get_json()
+
+    # 1. Extract parsed values from Tally
+    company_name = data["Parsed Company Name"]
+    contact_name = data["Parsed Contact Name"]
+    contact_email = data["Parsed Contact Email"]
+    contact_phone = data["Parsed Contact Phone"]
+    package_name = data["Parsed Bot Package"]
+    selected_addons = data["Parsed Add-On List"]  # assumed list
+    quote_number = generate_quote_number(company_name)
+    stripe_paid = float(data["Parsed Stripe Payment"])
+    industry = data.get("Parsed Industry", "")
+
+    # 2. Create Google Drive Folder
+    folder_id = create_client_folder(company_name)
+
+    # 3. Generate Quote PDF and Save in Drive
+    pdf_path = f"./quotes/{company_name}_{quote_number}.pdf"
+    selected_package = get_package_object(package_name)
+    addon_objects = get_addon_objects(selected_addons)
+    setup_prices = get_setup_prices(package_name, addon_objects)
+    monthly_prices = get_monthly_prices(package_name, addon_objects)
+    client_data = {
+        "quote_number": quote_number,
+        "company_name": company_name,
+        "contact_name": contact_name,
+        "contact_email": contact_email,
+        "contact_phone": contact_phone
+    }
+    generate_quote_pdf(client_data, selected_package, addon_objects, setup_prices, monthly_prices, stripe_paid, pdf_path, "yobot_final_quote_template.html")
+    upload_to_drive(pdf_path, f"{company_name}_{quote_number}.pdf", folder_id)
+
+    # 4. Push to Airtable
+    push_sales_order_to_airtable(data, quote_number, company_name)
+    post_tasks_to_airtable(base_id=os.getenv("AIRTABLE_BASE_ID"), roadmap_table_name="📌 Project Roadmap Tracker",
+                           api_key=os.getenv("AIRTABLE_API_KEY"), filtered_tasks=filter_tasks_by_package_addons(package_name, addon_objects, industry),
+                           client_name=company_name, quote_number=quote_number)
+
+    # 5. Push to HubSpot
+    create_hubspot_contact(contact_email, contact_name.split()[0], contact_name.split()[-1], company_name, api_key=os.getenv("HUBSPOT_API_KEY"))
+
+    # 6. Work Order is part of Airtable task injection above
+
+    # 7. Email Internal Notification
+    send_quote_email(
+        receiver_email=["daniel@yobot.bot", "tyson@yobot.bot"],
+        subject=f"New Sales Order: {company_name} - {quote_number}",
+        body=f"Company: {company_name}\nEmail: {contact_email}\nPackage: {package_name}\nTotal: ${setup_prices['package'] + sum(a['setup'] for a in addon_objects)}\nQuote Number: {quote_number}\n\nTasks injected. Folder + PDF created.",
+        pdf_path=pdf_path
+    )
+
+    # 8. Send Slack Message
+    slack_notify(f"📦 *New Sales Order* from {company_name}\n• Quote: `{quote_number}`\n• Package: {package_name}\n• PDF & Airtable synced ✅")
+
+    # 9. Email DocuSign Link
+    send_docusign_request(contact_email, contact_name, company_name, quote_number)
+
+    return jsonify({"status": "✅ Sales order processed", "quote": quote_number})

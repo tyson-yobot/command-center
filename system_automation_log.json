@@ -1,240 +1,5 @@
 [
   {
-    "timestamp": "2025-06-05T04:00:00.392Z",
-    "functionId": 137,
-    "functionName": "SmartSpend Entry Creator",
-    "batch": 14,
-    "category": "Financial",
-    "status": "success",
-    "duration": 175,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.408Z",
-    "functionId": 139,
-    "functionName": "Call Digest Poster",
-    "batch": 14,
-    "category": "Communication",
-    "status": "success",
-    "duration": 190,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.417Z",
-    "functionId": 144,
-    "functionName": "QBO Invoice Summary",
-    "batch": 15,
-    "category": "Financial",
-    "status": "success",
-    "duration": 199,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.420Z",
-    "functionId": 148,
-    "functionName": "ROI Summary Generator",
-    "batch": 15,
-    "category": "Analytics",
-    "status": "success",
-    "duration": 201,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.443Z",
-    "functionId": 152,
-    "functionName": "Failure Categorization",
-    "batch": 16,
-    "category": "Error Handling",
-    "status": "success",
-    "duration": 223,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.469Z",
-    "functionId": 154,
-    "functionName": "Broken Link Detection",
-    "batch": 16,
-    "category": "Data Integrity",
-    "status": "success",
-    "duration": 248,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.475Z",
-    "functionId": 205,
-    "functionName": "Phone Number Normalizer",
-    "batch": 21,
-    "category": "Data Processing",
-    "status": "success",
-    "duration": 249,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.535Z",
-    "functionId": 155,
-    "functionName": "AI Script Expansion",
-    "batch": 16,
-    "category": "AI",
-    "status": "success",
-    "duration": 313,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.589Z",
-    "functionId": 159,
-    "functionName": "Auto-Complete Task",
-    "batch": 16,
-    "category": "Task Management",
-    "status": "success",
-    "duration": 366,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.599Z",
-    "functionId": 207,
-    "functionName": "Error Frequency Tracker",
-    "batch": 21,
-    "category": "Analytics",
-    "status": "success",
-    "duration": 372,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.612Z",
-    "functionId": 208,
-    "functionName": "Call Review Flagging",
-    "batch": 21,
-    "category": "Quality Control",
-    "status": "success",
-    "duration": 383,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.671Z",
-    "functionId": 135,
-    "functionName": "ISO Date Formatter",
-    "batch": 14,
-    "category": "Data",
-    "status": "success",
-    "duration": 442,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.680Z",
-    "functionId": 142,
-    "functionName": "Cold Start Logger",
-    "batch": 15,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 448,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.687Z",
-    "functionId": 202,
-    "functionName": "Strip HTML Tags",
-    "batch": 21,
-    "category": "Content Processing",
-    "status": "success",
-    "duration": 450,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.703Z",
-    "functionId": 150,
-    "functionName": "Slack Message Formatter",
-    "batch": 15,
-    "category": "Communication",
-    "status": "success",
-    "duration": 468,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.708Z",
-    "functionId": 209,
-    "functionName": "Weekend Date Checker",
-    "batch": 21,
-    "category": "Utilities",
-    "status": "success",
-    "duration": 470,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.737Z",
-    "functionId": 143,
-    "functionName": "Markdown Converter",
-    "batch": 15,
-    "category": "Content",
-    "status": "success",
-    "duration": 504,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.742Z",
-    "functionId": 158,
-    "functionName": "Domain Extraction",
-    "batch": 16,
-    "category": "Data Processing",
-    "status": "success",
-    "duration": 507,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.759Z",
-    "functionId": 210,
-    "functionName": "Integration Template Filler",
-    "batch": 21,
-    "category": "Templates",
-    "status": "success",
-    "duration": 520,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:00:00.810Z",
-    "functionId": 160,
-    "functionName": "Test Snapshot Creation",
-    "batch": 16,
-    "category": "Testing",
-    "status": "success",
-    "duration": 574,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-05T04:05:11.763Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "System automation started",
-    "metrics": {
-      "totalFunctions": 40,
-      "activeFunctions": 40,
-      "successfulExecutions": 0,
-      "failedExecutions": 0,
-      "systemUptime": 0,
-      "lastHealthCheck": "2025-06-05T04:05:11.461Z",
-      "automationStatus": "running"
-    }
-  },
-  {
     "timestamp": "2025-06-05T04:06:39.530Z",
     "type": "system_event",
     "level": "info",
@@ -11438,5 +11203,248 @@
     "duration": 204,
     "successCount": 1,
     "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.191Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: 100.0% healthy",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 12,
+      "failedExecutions": 0,
+      "systemUptime": 342.27608586,
+      "lastHealthCheck": "2025-06-06T05:59:00.008Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.269Z",
+    "functionId": 131,
+    "functionName": "CRM Script Generator",
+    "batch": 14,
+    "category": "CRM",
+    "status": "success",
+    "duration": 74,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.275Z",
+    "functionId": 133,
+    "functionName": "Silent Call Detector",
+    "batch": 14,
+    "category": "Voice",
+    "status": "success",
+    "duration": 79,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.293Z",
+    "functionId": 137,
+    "functionName": "SmartSpend Entry Creator",
+    "batch": 14,
+    "category": "Financial",
+    "status": "success",
+    "duration": 96,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.303Z",
+    "functionId": 145,
+    "functionName": "Role Assignment by Domain",
+    "batch": 15,
+    "category": "User Management",
+    "status": "success",
+    "duration": 105,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.351Z",
+    "functionId": 148,
+    "functionName": "ROI Summary Generator",
+    "batch": 15,
+    "category": "Analytics",
+    "status": "success",
+    "duration": 152,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.366Z",
+    "functionId": 152,
+    "functionName": "Failure Categorization",
+    "batch": 16,
+    "category": "Error Handling",
+    "status": "success",
+    "duration": 166,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.371Z",
+    "functionId": 154,
+    "functionName": "Broken Link Detection",
+    "batch": 16,
+    "category": "Data Integrity",
+    "status": "success",
+    "duration": 170,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.376Z",
+    "functionId": 208,
+    "functionName": "Call Review Flagging",
+    "batch": 21,
+    "category": "Quality Control",
+    "status": "success",
+    "duration": 172,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.410Z",
+    "functionId": 155,
+    "functionName": "AI Script Expansion",
+    "batch": 16,
+    "category": "AI",
+    "status": "success",
+    "duration": 208,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.441Z",
+    "functionId": 159,
+    "functionName": "Auto-Complete Task",
+    "batch": 16,
+    "category": "Task Management",
+    "status": "success",
+    "duration": 239,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.445Z",
+    "functionId": 202,
+    "functionName": "Strip HTML Tags",
+    "batch": 21,
+    "category": "Content Processing",
+    "status": "success",
+    "duration": 239,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.475Z",
+    "functionId": 158,
+    "functionName": "Domain Extraction",
+    "batch": 16,
+    "category": "Data Processing",
+    "status": "success",
+    "duration": 270,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.490Z",
+    "functionId": 160,
+    "functionName": "Test Snapshot Creation",
+    "batch": 16,
+    "category": "Testing",
+    "status": "success",
+    "duration": 285,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.516Z",
+    "functionId": 140,
+    "functionName": "Live Error Push",
+    "batch": 14,
+    "category": "Monitoring",
+    "status": "success",
+    "duration": 309,
+    "successCount": 2,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.532Z",
+    "functionId": 146,
+    "functionName": "Customer Reconciliation",
+    "batch": 15,
+    "category": "Data",
+    "status": "success",
+    "duration": 324,
+    "successCount": 2,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.536Z",
+    "functionId": 147,
+    "functionName": "Full API Health Check",
+    "batch": 15,
+    "category": "Monitoring",
+    "status": "success",
+    "duration": 327,
+    "successCount": 2,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.561Z",
+    "functionId": 149,
+    "functionName": "Manual Override Logger",
+    "batch": 15,
+    "category": "Audit",
+    "status": "success",
+    "duration": 351,
+    "successCount": 2,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:00:00.594Z",
+    "functionId": 132,
+    "functionName": "Intake Form Validator",
+    "batch": 14,
+    "category": "Forms",
+    "status": "success",
+    "duration": 380,
+    "successCount": 2,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-06T06:05:16.701Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T06:05:16.381Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-06T06:06:52.481Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T06:06:51.921Z",
+      "automationStatus": "running"
+    }
   }
 ]

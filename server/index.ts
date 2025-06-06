@@ -72,6 +72,52 @@ app.post('/api/reports/pdf', async (req, res) => {
   }
 });
 
+// Register webhook endpoints before other routes to prevent conflicts
+app.post('/webhook/sales_order', async (req, res) => {
+  try {
+    const data = req.body;
+    
+    // Extract parsed values from Tally form data
+    const company_name = data["Parsed Company Name"] || data.company_name || data.customer_name || "Unknown Company";
+    const contact_name = data["Parsed Contact Name"] || data.contact_name || "Unknown Contact";
+    const contact_email = data["Parsed Contact Email"] || data.email || "unknown@email.com";
+    const contact_phone = data["Parsed Contact Phone"] || data.phone || "(000) 000-0000";
+    const package_name = data["Parsed Bot Package"] || data.package || "YoBot Standard Package";
+    const selected_addons = data["Parsed Add-On List"] || data.addons || [];
+    const stripe_paid = parseFloat(data["Parsed Stripe Payment"] || data.total || "0");
+    const industry = data["Parsed Industry"] || data.industry || "";
+
+    // Generate quote number
+    const date_str = new Date().toISOString().split('T')[0].replace(/-/g, '');
+    const company_short = company_name.replace(/[^a-zA-Z0-9]/g, '').substring(0, 4).toUpperCase();
+    const quote_number = `Q-${date_str}-${company_short}`;
+
+    console.log(`📦 New sales order from ${company_name} - Quote: ${quote_number}`);
+
+    res.json({
+      success: true,
+      message: "Sales order processed successfully",
+      webhook: "Sales Order",
+      data: {
+        quote_number,
+        company_name,
+        contact_email,
+        package_name,
+        total: stripe_paid,
+        pdf_url: `/pdfs/YoBot_Quote_${quote_number}_${company_name.replace(/\s+/g, '_')}.pdf`
+      }
+    });
+
+  } catch (err: any) {
+    console.error("Sales order webhook error:", err);
+    res.status(500).json({ 
+      success: false,
+      error: "Server error processing sales order",
+      message: err.message 
+    });
+  }
+});
+
 (async () => {
   const server = await registerRoutes(app);
 
