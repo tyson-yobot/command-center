@@ -1,0 +1,74 @@
+Step 1: load_task_templates() – From Airtable
+python
+Copy
+Edit
+import requests
+
+def load_task_templates(base_id, table_name, api_key):
+    url = f"https://api.airtable.com/v0/{base_id}/{table_name}"
+    headers = {
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    all_records = []
+    offset = None
+
+    while True:
+        params = {"offset": offset} if offset else {}
+        response = requests.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        data = response.json()
+
+        for record in data["records"]:
+            fields = record.get("fields", {})
+            all_records.append({
+                "Task Name": fields.get("Task Name", ""),
+                "Applies To": fields.get("Applies To", []),
+                "Phase": fields.get("Phase", ""),
+                "Owner Type": fields.get("Owner Type", ""),
+                "Automation Notes": fields.get("Automation Notes", "")
+            })
+
+        offset = data.get("offset")
+        if not offset:
+            break
+
+    return all_records
+✅ Step 2: post_tasks_to_airtable() – Clone into 📌 Project Roadmap Tracker
+python
+Copy
+Edit
+def post_tasks_to_airtable(base_id, roadmap_table_name, api_key, filtered_tasks, client_name, quote_number):
+    url = f"https://api.airtable.com/v0/{base_id}/{roadmap_table_name}"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+
+    for task in filtered_tasks:
+        payload = {
+            "fields": {
+                "Task Name": task["Task Name"],
+                "Client": client_name,
+                "Quote #": quote_number,
+                "Phase": task.get("Phase", ""),
+                "Status": "To Do",
+                "Owner Type": task.get("Owner Type", ""),
+            }
+        }
+
+        response = requests.post(url, json=payload, headers=headers)
+        if not response.ok:
+            print(f"Error posting task: {task['Task Name']}", response.text)
+📌 Example Flow
+python
+Copy
+Edit
+# Load template
+template = load_task_templates(base_id="appRt8V3tH4g5Z5if", table_name="📑 Task Template Table", api_key="paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa")
+
+# Filter by package, addons, industry (from previous steps)
+filtered = filter_tasks(template, "Enterprise", ["SmartSpend™ Dashboard", "Voice Pattern Recognition & Analysis"], "Dental")
+
+# Push to roadmap
+post_tasks_to_airtable(base_id="appRt8V3tH4g5Z5if", roadmap_table_name="📌 Project Roadmap Tracker", api_key="paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa", filtered_tasks=filtered, client_name="Acme Corp", quote_number="Q-20250605-001")

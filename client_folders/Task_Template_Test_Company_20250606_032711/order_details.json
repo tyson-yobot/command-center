@@ -1,0 +1,12 @@
+{
+  "client_name": "Task Template Test Company",
+  "quote_number": "Q-TAS-20250606-001",
+  "email": "tasktest@company.com",
+  "package": "Enterprise",
+  "total": "5000",
+  "pdf_path": "/home/runner/workspace/client_folders/Task_Template_Test_Company_20250606_032711/quotes/Task Template Test Company_Q-TAS-20250606-001.pdf",
+  "folder_path": "/home/runner/workspace/client_folders/Task_Template_Test_Company_20250606_032711",
+  "created_date": "2025-06-06T03:27:11.737614",
+  "order_id": "Q-TAS-20250606-001",
+  "processing_method": "Local Folder System"
+}
