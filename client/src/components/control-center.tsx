@@ -908,13 +908,6 @@ export default function ControlCenter() {
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </div>
-                    )}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
 
             {/* Knowledge Base Status */}
             <Card className="bg-slate-800/50 border-purple-500/30">
