@@ -10083,7 +10083,7 @@ print(json.dumps(result))
   // PhantomBuster scraping endpoint
   app.post('/api/phantombuster/scrape', async (req, res) => {
     try {
-      const { search_query, location, industry, company_size, job_title, max_results, phantom_id, session_cookie } = req.body;
+      const { search_query, location, industries, company_sizes, job_titles, max_results, phantom_id, session_cookie } = req.body;
       
       const apiKey = process.env.PHANTOMBUSTER_API_KEY;
       if (!apiKey) {
@@ -10099,9 +10099,9 @@ print(json.dumps(result))
         argument: {
           search: search_query,
           location: location,
-          industry: industry,
-          companySize: company_size,
-          jobTitle: job_title,
+          industries: industries || [],
+          companySizes: company_sizes || [],
+          jobTitles: job_titles || [],
           numberOfProfiles: parseInt(max_results) || 100,
           sessionCookie: session_cookie
         }
@@ -10146,7 +10146,7 @@ print(json.dumps(result))
   // Apify scraping endpoint
   app.post('/api/apify/scrape', async (req, res) => {
     try {
-      const { search_terms, location_filter, industry_filter, company_filter, job_level, max_profiles, actor_id } = req.body;
+      const { search_terms, locations, industries, company_filters, job_levels, max_profiles, actor_id } = req.body;
       
       const apiKey = process.env.APIFY_API_KEY;
       if (!apiKey) {

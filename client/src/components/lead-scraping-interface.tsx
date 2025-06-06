@@ -25,6 +25,7 @@ import {
   Pause,
   RefreshCw
 } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -41,9 +42,9 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
     phantombuster: {
       search_query: '',
       location: '',
-      industry: '',
-      company_size: '',
-      job_title: '',
+      industries: [] as string[],
+      company_sizes: [] as string[],
+      job_titles: [] as string[],
       max_results: 100,
       phantom_id: '',
       session_cookie: ''
@@ -51,10 +52,10 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
     // Apify config
     apify: {
       search_terms: '',
-      location_filter: '',
-      industry_filter: '',
-      company_filter: '',
-      job_level: '',
+      locations: [] as string[],
+      industries: [] as string[],
+      company_filters: [] as string[],
+      job_levels: [] as string[],
       max_profiles: 50,
       actor_id: 'apify/linkedin-company-scraper'
     },
@@ -62,10 +63,10 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
     apollo: {
       company_name: '',
       domain: '',
-      industry: '',
-      location: '',
-      employee_range: '',
-      job_titles: '',
+      industries: [] as string[],
+      locations: [] as string[],
+      employee_ranges: [] as string[],
+      job_titles: [] as string[],
       max_contacts: 25
     }
   });
@@ -189,7 +190,7 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
     }
   };
 
-  const updateConfig = (tool: string, field: string, value: string) => {
+  const updateConfig = (tool: string, field: string, value: string | string[]) => {
     setScrapingConfig(prev => ({
       ...prev,
       [tool]: {
@@ -199,8 +200,55 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
     }));
   };
 
+  const toggleArrayValue = (tool: string, field: string, value: string) => {
+    setScrapingConfig(prev => {
+      const currentArray = prev[tool as keyof typeof prev][field] as string[];
+      const newArray = currentArray.includes(value)
+        ? currentArray.filter(item => item !== value)
+        : [...currentArray, value];
+      
+      return {
+        ...prev,
+        [tool]: {
+          ...prev[tool as keyof typeof prev],
+          [field]: newArray
+        }
+      };
+    });
+  };
+
+  // Filter options for each platform
+  const filterOptions = {
+    industries: [
+      'Technology', 'Healthcare', 'Finance', 'Education', 'Manufacturing',
+      'Retail', 'Real Estate', 'Construction', 'Legal', 'Marketing',
+      'Consulting', 'Non-profit', 'Government', 'Transportation', 'Energy'
+    ],
+    companySizes: [
+      '1-10 employees', '11-50 employees', '51-200 employees', 
+      '201-500 employees', '501-1000 employees', '1000+ employees'
+    ],
+    jobTitles: [
+      'CEO', 'CTO', 'CFO', 'COO', 'VP', 'Director', 'Manager', 
+      'Senior', 'Lead', 'Principal', 'Founder', 'Owner'
+    ],
+    locations: [
+      'United States', 'New York, NY', 'Los Angeles, CA', 'Chicago, IL',
+      'San Francisco, CA', 'Austin, TX', 'Seattle, WA', 'Boston, MA',
+      'Canada', 'United Kingdom', 'Germany', 'France', 'Australia'
+    ],
+    employeeRanges: [
+      '1-10', '11-50', '51-200', '201-500', '501-1000', 
+      '1001-5000', '5001-10000', '10000+'
+    ],
+    jobLevels: [
+      'Entry Level', 'Mid Level', 'Senior Level', 'Director', 
+      'VP Level', 'C-Level', 'Owner/Founder'
+    ]
+  };
+
   const renderPhantomBusterConfig = () => (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label htmlFor="pb-search">Search Query</Label>
@@ -212,7 +260,7 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
           />
         </div>
         <div>
-          <Label htmlFor="pb-location">Location</Label>
+          <Label htmlFor="pb-location">Primary Location</Label>
           <Input
             id="pb-location"
             value={scrapingConfig.phantombuster.location}
@@ -221,37 +269,55 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
           />
         </div>
       </div>
-      
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="pb-industry">Industry</Label>
-          <Select onValueChange={(value) => updateConfig('phantombuster', 'industry', value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select industry" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="technology">Technology</SelectItem>
-              <SelectItem value="finance">Finance</SelectItem>
-              <SelectItem value="healthcare">Healthcare</SelectItem>
-              <SelectItem value="retail">Retail</SelectItem>
-              <SelectItem value="manufacturing">Manufacturing</SelectItem>
-            </SelectContent>
-          </Select>
+
+      {/* Industries Filter */}
+      <div>
+        <Label className="text-base font-medium mb-3 block">Industries ({scrapingConfig.phantombuster.industries.length} selected)</Label>
+        <div className="grid grid-cols-3 gap-2 max-h-32 overflow-y-auto border rounded-lg p-3">
+          {filterOptions.industries.map((industry) => (
+            <div key={industry} className="flex items-center space-x-2">
+              <Checkbox
+                id={`pb-industry-${industry}`}
+                checked={scrapingConfig.phantombuster.industries.includes(industry)}
+                onCheckedChange={() => toggleArrayValue('phantombuster', 'industries', industry)}
+              />
+              <Label htmlFor={`pb-industry-${industry}`} className="text-sm">{industry}</Label>
+            </div>
+          ))}
         </div>
-        <div>
-          <Label htmlFor="pb-company-size">Company Size</Label>
-          <Select onValueChange={(value) => updateConfig('phantombuster', 'company_size', value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select company size" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1-10">1-10 employees</SelectItem>
-              <SelectItem value="11-50">11-50 employees</SelectItem>
-              <SelectItem value="51-200">51-200 employees</SelectItem>
-              <SelectItem value="201-500">201-500 employees</SelectItem>
-              <SelectItem value="500+">500+ employees</SelectItem>
-            </SelectContent>
-          </Select>
+      </div>
+
+      {/* Company Sizes Filter */}
+      <div>
+        <Label className="text-base font-medium mb-3 block">Company Sizes ({scrapingConfig.phantombuster.company_sizes.length} selected)</Label>
+        <div className="grid grid-cols-2 gap-2">
+          {filterOptions.companySizes.map((size) => (
+            <div key={size} className="flex items-center space-x-2">
+              <Checkbox
+                id={`pb-size-${size}`}
+                checked={scrapingConfig.phantombuster.company_sizes.includes(size)}
+                onCheckedChange={() => toggleArrayValue('phantombuster', 'company_sizes', size)}
+              />
+              <Label htmlFor={`pb-size-${size}`} className="text-sm">{size}</Label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Job Titles Filter */}
+      <div>
+        <Label className="text-base font-medium mb-3 block">Job Titles ({scrapingConfig.phantombuster.job_titles.length} selected)</Label>
+        <div className="grid grid-cols-4 gap-2">
+          {filterOptions.jobTitles.map((title) => (
+            <div key={title} className="flex items-center space-x-2">
+              <Checkbox
+                id={`pb-title-${title}`}
+                checked={scrapingConfig.phantombuster.job_titles.includes(title)}
+                onCheckedChange={() => toggleArrayValue('phantombuster', 'job_titles', title)}
+              />
+              <Label htmlFor={`pb-title-${title}`} className="text-sm">{title}</Label>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -281,7 +347,7 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
   );
 
   const renderApifyConfig = () => (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label htmlFor="apify-search">Search Terms</Label>
@@ -290,48 +356,6 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
             value={scrapingConfig.apify.search_terms}
             onChange={(e) => updateConfig('apify', 'search_terms', e.target.value)}
             placeholder="e.g., software engineer, data scientist"
-          />
-        </div>
-        <div>
-          <Label htmlFor="apify-location">Location Filter</Label>
-          <Input
-            id="apify-location"
-            value={scrapingConfig.apify.location_filter}
-            onChange={(e) => updateConfig('apify', 'location_filter', e.target.value)}
-            placeholder="e.g., San Francisco Bay Area"
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="apify-industry">Industry Filter</Label>
-          <Input
-            id="apify-industry"
-            value={scrapingConfig.apify.industry_filter}
-            onChange={(e) => updateConfig('apify', 'industry_filter', e.target.value)}
-            placeholder="e.g., Computer Software"
-          />
-        </div>
-        <div>
-          <Label htmlFor="apify-company">Company Filter</Label>
-          <Input
-            id="apify-company"
-            value={scrapingConfig.apify.company_filter}
-            onChange={(e) => updateConfig('apify', 'company_filter', e.target.value)}
-            placeholder="e.g., Google, Microsoft"
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="apify-job-level">Job Level</Label>
-          <Input
-            id="apify-job-level"
-            value={scrapingConfig.apify.job_level}
-            onChange={(e) => updateConfig('apify', 'job_level', e.target.value)}
-            placeholder="e.g., Senior, Director, Executive"
           />
         </div>
         <div>
@@ -346,11 +370,73 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
           />
         </div>
       </div>
+
+      {/* Locations Filter */}
+      <div>
+        <Label className="text-base font-medium mb-3 block">Locations ({scrapingConfig.apify.locations.length} selected)</Label>
+        <div className="grid grid-cols-3 gap-2 max-h-32 overflow-y-auto border rounded-lg p-3">
+          {filterOptions.locations.map((location) => (
+            <div key={location} className="flex items-center space-x-2">
+              <Checkbox
+                id={`apify-location-${location}`}
+                checked={scrapingConfig.apify.locations.includes(location)}
+                onCheckedChange={() => toggleArrayValue('apify', 'locations', location)}
+              />
+              <Label htmlFor={`apify-location-${location}`} className="text-sm">{location}</Label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Industries Filter */}
+      <div>
+        <Label className="text-base font-medium mb-3 block">Industries ({scrapingConfig.apify.industries.length} selected)</Label>
+        <div className="grid grid-cols-3 gap-2 max-h-32 overflow-y-auto border rounded-lg p-3">
+          {filterOptions.industries.map((industry) => (
+            <div key={industry} className="flex items-center space-x-2">
+              <Checkbox
+                id={`apify-industry-${industry}`}
+                checked={scrapingConfig.apify.industries.includes(industry)}
+                onCheckedChange={() => toggleArrayValue('apify', 'industries', industry)}
+              />
+              <Label htmlFor={`apify-industry-${industry}`} className="text-sm">{industry}</Label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Job Levels Filter */}
+      <div>
+        <Label className="text-base font-medium mb-3 block">Job Levels ({scrapingConfig.apify.job_levels.length} selected)</Label>
+        <div className="grid grid-cols-3 gap-2">
+          {filterOptions.jobLevels.map((level) => (
+            <div key={level} className="flex items-center space-x-2">
+              <Checkbox
+                id={`apify-level-${level}`}
+                checked={scrapingConfig.apify.job_levels.includes(level)}
+                onCheckedChange={() => toggleArrayValue('apify', 'job_levels', level)}
+              />
+              <Label htmlFor={`apify-level-${level}`} className="text-sm">{level}</Label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Company Filters */}
+      <div>
+        <Label htmlFor="apify-company">Company Keywords (comma-separated)</Label>
+        <Input
+          id="apify-company"
+          value={scrapingConfig.apify.company_filters.join(', ')}
+          onChange={(e) => updateConfig('apify', 'company_filters', e.target.value.split(',').map(s => s.trim()).filter(s => s))}
+          placeholder="e.g., Google, Microsoft, Amazon, Apple"
+        />
+      </div>
     </div>
   );
 
   const renderApolloConfig = () => (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label htmlFor="apollo-company">Company Name</Label>
@@ -372,45 +458,71 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="apollo-industry">Industry</Label>
-          <Input
-            id="apollo-industry"
-            value={scrapingConfig.apollo.industry}
-            onChange={(e) => updateConfig('apollo', 'industry', e.target.value)}
-            placeholder="e.g., Software Development"
-          />
-        </div>
-        <div>
-          <Label htmlFor="apollo-location">Location</Label>
-          <Input
-            id="apollo-location"
-            value={scrapingConfig.apollo.location}
-            onChange={(e) => updateConfig('apollo', 'location', e.target.value)}
-            placeholder="e.g., San Francisco, CA"
-          />
+      {/* Industries Filter */}
+      <div>
+        <Label className="text-base font-medium mb-3 block">Industries ({scrapingConfig.apollo.industries.length} selected)</Label>
+        <div className="grid grid-cols-3 gap-2 max-h-32 overflow-y-auto border rounded-lg p-3">
+          {filterOptions.industries.map((industry) => (
+            <div key={industry} className="flex items-center space-x-2">
+              <Checkbox
+                id={`apollo-industry-${industry}`}
+                checked={scrapingConfig.apollo.industries.includes(industry)}
+                onCheckedChange={() => toggleArrayValue('apollo', 'industries', industry)}
+              />
+              <Label htmlFor={`apollo-industry-${industry}`} className="text-sm">{industry}</Label>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="apollo-employee-range">Employee Range</Label>
-          <Input
-            id="apollo-employee-range"
-            value={scrapingConfig.apollo.employee_range}
-            onChange={(e) => updateConfig('apollo', 'employee_range', e.target.value)}
-            placeholder="e.g., 1-10, 51-200, 1000+"
-          />
+      {/* Locations Filter */}
+      <div>
+        <Label className="text-base font-medium mb-3 block">Locations ({scrapingConfig.apollo.locations.length} selected)</Label>
+        <div className="grid grid-cols-3 gap-2 max-h-32 overflow-y-auto border rounded-lg p-3">
+          {filterOptions.locations.map((location) => (
+            <div key={location} className="flex items-center space-x-2">
+              <Checkbox
+                id={`apollo-location-${location}`}
+                checked={scrapingConfig.apollo.locations.includes(location)}
+                onCheckedChange={() => toggleArrayValue('apollo', 'locations', location)}
+              />
+              <Label htmlFor={`apollo-location-${location}`} className="text-sm">{location}</Label>
+            </div>
+          ))}
         </div>
-        <div>
-          <Label htmlFor="apollo-job-titles">Job Titles</Label>
-          <Input
-            id="apollo-job-titles"
-            value={scrapingConfig.apollo.job_titles}
-            onChange={(e) => updateConfig('apollo', 'job_titles', e.target.value)}
-            placeholder="e.g., CEO, CTO, VP Engineering"
-          />
+      </div>
+
+      {/* Employee Ranges Filter */}
+      <div>
+        <Label className="text-base font-medium mb-3 block">Employee Ranges ({scrapingConfig.apollo.employee_ranges.length} selected)</Label>
+        <div className="grid grid-cols-4 gap-2">
+          {filterOptions.employeeRanges.map((range) => (
+            <div key={range} className="flex items-center space-x-2">
+              <Checkbox
+                id={`apollo-range-${range}`}
+                checked={scrapingConfig.apollo.employee_ranges.includes(range)}
+                onCheckedChange={() => toggleArrayValue('apollo', 'employee_ranges', range)}
+              />
+              <Label htmlFor={`apollo-range-${range}`} className="text-sm">{range}</Label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Job Titles Filter */}
+      <div>
+        <Label className="text-base font-medium mb-3 block">Job Titles ({scrapingConfig.apollo.job_titles.length} selected)</Label>
+        <div className="grid grid-cols-4 gap-2">
+          {filterOptions.jobTitles.map((title) => (
+            <div key={title} className="flex items-center space-x-2">
+              <Checkbox
+                id={`apollo-title-${title}`}
+                checked={scrapingConfig.apollo.job_titles.includes(title)}
+                onCheckedChange={() => toggleArrayValue('apollo', 'job_titles', title)}
+              />
+              <Label htmlFor={`apollo-title-${title}`} className="text-sm">{title}</Label>
+            </div>
+          ))}
         </div>
       </div>
 
