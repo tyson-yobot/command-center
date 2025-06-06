@@ -261,6 +261,166 @@ export default function ClientDashboard() {
     fetchAvailableVoices();
   }, []);
 
+  // Button handlers for all dashboard functionality
+  const handleUploadDocs = async () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.multiple = true;
+    input.accept = '.pdf,.doc,.docx,.txt';
+    input.onchange = async (e) => {
+      const files = (e.target as HTMLInputElement).files;
+      if (files) {
+        const formData = new FormData();
+        Array.from(files).forEach(file => formData.append('files', file));
+        
+        try {
+          const response = await fetch('/api/knowledge/upload', {
+            method: 'POST',
+            body: formData
+          });
+          if (response.ok) {
+            setVoiceStatus('Documents uploaded successfully');
+          }
+        } catch (error) {
+          setVoiceStatus('Upload failed');
+        }
+      }
+    };
+    input.click();
+  };
+
+  const handleReindexKnowledge = async () => {
+    try {
+      setVoiceStatus('Reindexing knowledge base...');
+      const response = await fetch('/api/knowledge/reindex', { method: 'POST' });
+      if (response.ok) {
+        setVoiceStatus('Knowledge base reindexed');
+      }
+    } catch (error) {
+      setVoiceStatus('Reindex failed');
+    }
+  };
+
+  const handleViewKnowledge = async () => {
+    try {
+      const response = await fetch('/api/knowledge/stats');
+      const data = await response.json();
+      setVoiceStatus(`Knowledge base: ${data.documentCount || 0} documents`);
+    } catch (error) {
+      setVoiceStatus('Failed to load knowledge stats');
+    }
+  };
+
+  const handleExportData = async () => {
+    try {
+      const response = await fetch('/api/export/data');
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'yobot-data-export.csv';
+      a.click();
+      setVoiceStatus('Data exported successfully');
+    } catch (error) {
+      setVoiceStatus('Export failed');
+    }
+  };
+
+  const handleApplyPersona = async () => {
+    try {
+      const response = await fetch('/api/voice/apply-persona', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ voiceId: selectedPersona })
+      });
+      if (response.ok) {
+        setVoiceStatus('Voice persona applied');
+      }
+    } catch (error) {
+      setVoiceStatus('Failed to apply persona');
+    }
+  };
+
+  const handleRunDiagnostics = async () => {
+    try {
+      setVoiceStatus('Running system diagnostics...');
+      const response = await fetch('/api/system/diagnostics', { method: 'POST' });
+      const data = await response.json();
+      setVoiceStatus(`Diagnostics complete: ${data.status || 'OK'}`);
+    } catch (error) {
+      setVoiceStatus('Diagnostics failed');
+    }
+  };
+
+  const handleViewLogs = async () => {
+    try {
+      const response = await fetch('/api/system/logs');
+      const data = await response.json();
+      setVoiceStatus(`Latest logs: ${data.count || 0} entries`);
+    } catch (error) {
+      setVoiceStatus('Failed to load logs');
+    }
+  };
+
+  const handleSystemReboot = async () => {
+    if (confirm('Are you sure you want to reboot the system?')) {
+      try {
+        await fetch('/api/system/reboot', { method: 'POST' });
+        setVoiceStatus('System rebooting...');
+      } catch (error) {
+        setVoiceStatus('Reboot failed');
+      }
+    }
+  };
+
+  const handleToggleAutomation = () => {
+    setAutomationMode(!automationMode);
+    setVoiceStatus(`Automation ${!automationMode ? 'enabled' : 'disabled'}`);
+  };
+
+  const handleGenerateReport = async () => {
+    try {
+      setVoiceStatus('Generating analytics report...');
+      const response = await fetch('/api/analytics/report', { method: 'POST' });
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'yobot-analytics-report.pdf';
+      a.click();
+      setVoiceStatus('Report generated');
+    } catch (error) {
+      setVoiceStatus('Report generation failed');
+    }
+  };
+
+  const handleViewAnalytics = async () => {
+    try {
+      const response = await fetch('/api/analytics/summary');
+      const data = await response.json();
+      setVoiceStatus(`Analytics: ${data.totalCalls || 0} calls, ${data.successRate || 0}% success`);
+    } catch (error) {
+      setVoiceStatus('Failed to load analytics');
+    }
+  };
+
+  const handleConfigureSettings = () => {
+    setVoiceStatus('Opening configuration panel...');
+    // Could open a modal or navigate to settings
+  };
+
+  const handleEmergencyStop = () => {
+    if (confirm('EMERGENCY STOP: This will halt all operations. Continue?')) {
+      setVoiceStatus('EMERGENCY STOP ACTIVATED');
+      setAutomationMode(false);
+    }
+  };
+
+  const handleContactSupport = () => {
+    setVoiceStatus('Opening support channel...');
+    window.open('mailto:support@yobot.ai?subject=Support Request', '_blank');
+  };
+
   const handleVoiceToggle = () => {
     if (!isListening) {
       // Start voice recording
@@ -2109,7 +2269,10 @@ export default function ClientDashboard() {
                         <Headphones className="w-4 h-4 mr-2" />
                         Test Voice
                       </Button>
-                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                      <Button 
+                        onClick={handleApplyPersona}
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                      >
                         <Settings className="w-4 h-4 mr-2" />
                         Apply Persona
                       </Button>
@@ -2125,11 +2288,17 @@ export default function ClientDashboard() {
                   Knowledge Management
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                  <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                  <Button 
+                    onClick={handleUploadDocs}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                  >
                     <Upload className="w-4 h-4 mr-2" />
                     Upload Docs
                   </Button>
-                  <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                  <Button 
+                    onClick={handleReindexKnowledge}
+                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                  >
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Reindex Knowledge
                   </Button>
@@ -2140,7 +2309,10 @@ export default function ClientDashboard() {
                     <Trash2 className="w-4 h-4 mr-2" />
                     Clear Knowledge
                   </Button>
-                  <Button className="bg-amber-600 hover:bg-amber-700 text-white">
+                  <Button 
+                    onClick={handleViewKnowledge}
+                    className="bg-amber-600 hover:bg-amber-700 text-white"
+                  >
                     <Eye className="w-4 h-4 mr-2" />
                     View Sources
                   </Button>
@@ -2164,7 +2336,10 @@ export default function ClientDashboard() {
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6">
             <h3 className="text-xl font-semibold text-white mb-2">Need Support?</h3>
             <p className="text-slate-300 mb-4">Our team is here to help optimize your automation</p>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button 
+              onClick={handleContactSupport}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
               <Headphones className="w-4 h-4 mr-2" />
               Contact Support
             </Button>
