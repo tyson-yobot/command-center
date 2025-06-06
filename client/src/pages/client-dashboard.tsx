@@ -916,7 +916,6 @@ export default function ClientDashboard() {
     // Generate and download in one step
     await generateVoice();
   };
-  };
 
   const loadDocuments = async () => {
     try {

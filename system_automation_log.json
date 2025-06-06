@@ -1,27 +1,5 @@
 [
   {
-    "timestamp": "2025-06-06T08:40:00.213Z",
-    "functionId": 146,
-    "functionName": "Customer Reconciliation",
-    "batch": 15,
-    "category": "Data",
-    "status": "success",
-    "duration": 119,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T08:40:00.221Z",
-    "functionId": 147,
-    "functionName": "Full API Health Check",
-    "batch": 15,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 125,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-06T08:40:00.257Z",
     "functionId": 149,
     "functionName": "Manual Override Logger",
@@ -11427,6 +11405,36 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-06T14:20:49.711Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-06T14:21:35.350Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T14:21:35.102Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-06T14:22:53.780Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T14:22:53.501Z",
       "automationStatus": "running"
     }
   }
