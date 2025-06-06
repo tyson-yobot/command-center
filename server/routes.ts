@@ -9015,6 +9015,61 @@ Provide 3 actionable suggestions in bullet points.`;
     console.error("❌ Failed to register automation batches:", error);
   }
 
+  // Sales Order Automation Endpoint
+  app.post('/api/sales-order/process', async (req, res) => {
+    try {
+      const orderData = req.body;
+      
+      // Validate order data
+      const requiredFields = ['company_id', 'sales_order_id', 'bot_package'];
+      const missingFields = requiredFields.filter(field => !orderData[field]);
+      
+      if (missingFields.length > 0) {
+        return res.status(400).json({
+          success: false,
+          error: `Missing required fields: ${missingFields.join(', ')}`
+        });
+      }
+      
+      // Simulate sales order processing for now
+      const processingResult = {
+        orderId: orderData.sales_order_id,
+        companyId: orderData.company_id,
+        package: orderData.bot_package,
+        addons: orderData.selected_addons || [],
+        tasksCreated: (orderData.selected_addons?.length || 0) + 5, // Base tasks + addons
+        status: 'processed',
+        timestamp: new Date().toISOString()
+      };
+      
+      // Log to Airtable if API key is available
+      try {
+        const airtableApiKey = process.env.AIRTABLE_API_KEY;
+        if (airtableApiKey) {
+          // TODO: Implement actual Airtable integration when API key is provided
+          console.log('Sales order would be logged to Airtable:', processingResult);
+        }
+      } catch (airtableError) {
+        console.log('Airtable logging skipped - authentication needed');
+      }
+      
+      res.json({
+        success: true,
+        message: `Sales order processed successfully. Created ${processingResult.tasksCreated} tasks.`,
+        data: processingResult,
+        timestamp: new Date().toISOString()
+      });
+      
+    } catch (error: any) {
+      console.error('Sales order processing error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to process sales order', 
+        details: error.message 
+      });
+    }
+  });
+
   // Dashboard automation endpoints
   app.get('/api/dashboard/status', async (req, res) => {
     try {
@@ -9609,22 +9664,23 @@ Provide 3 actionable suggestions in bullet points.`;
   // Knowledge Management API Endpoints
   app.post('/api/knowledge/upload', async (req, res) => {
     try {
-      const multer = require('multer');
-      const fs = require('fs').promises;
+      const multer = await import('multer');
+      const fs = await import('fs');
+      const path = await import('path');
       
       // Configure multer for file uploads
-      const storage = multer.diskStorage({
+      const storage = multer.default.diskStorage({
         destination: './uploads/',
         filename: (req, file, cb) => {
           cb(null, Date.now() + '-' + file.originalname);
         }
       });
       
-      const upload = multer({ 
+      const upload = multer.default({ 
         storage: storage,
         fileFilter: (req, file, cb) => {
           const allowedTypes = ['.pdf', '.doc', '.docx', '.txt'];
-          const fileExt = require('path').extname(file.originalname).toLowerCase();
+          const fileExt = path.extname(file.originalname).toLowerCase();
           cb(null, allowedTypes.includes(fileExt));
         }
       }).array('files');

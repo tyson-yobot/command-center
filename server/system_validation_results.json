@@ -1,0 +1,10 @@
+{
+  "voice_system": false,
+  "sales_automation": false,
+  "airtable_integration": true,
+  "dashboard_functionality": true,
+  "automation_functions": 250,
+  "total_tests": 5,
+  "passed_tests": 3,
+  "critical_errors": []
+}

@@ -445,8 +445,22 @@ export default function ClientDashboard() {
 
   const testSalesOrderAutomation = async () => {
     try {
-      setVoiceStatus('Testing sales order automation...');
-      const response = await fetch('/api/sales-order/test', { method: 'POST' });
+      setVoiceStatus('Processing sales order automation...');
+      
+      const orderData = {
+        company_id: "recTestCompany123",
+        sales_order_id: `rec${Date.now()}`,
+        bot_package: "Pro",
+        selected_addons: ["📊 SmartSpend™ Dashboard", "🔔 Slack Notifications", "📞 Voice Bot Premium"]
+      };
+      
+      const response = await fetch('/api/sales-order/process', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData)
+      });
       const result = await response.json();
       
       if (result.success) {
