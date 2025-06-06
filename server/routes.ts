@@ -295,6 +295,83 @@ async function triggerMakeScenario(data: any) {
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
 
+  // AI Chat Support endpoint
+  app.post('/api/ai/chat-support', async (req, res) => {
+    try {
+      const { message, context } = req.body;
+      
+      if (!message) {
+        return res.status(400).json({ error: 'Message is required' });
+      }
+
+      // Build conversation context
+      const conversationHistory = context?.map((msg: any) => ({
+        role: msg.isUser ? 'user' : 'assistant',
+        content: msg.text
+      })) || [];
+
+      // Add system prompt for YoBot support
+      const messages = [
+        {
+          role: 'system',
+          content: `You are YoBot's intelligent support assistant. Help users with:
+          - Voice automation and call management
+          - Lead generation and CRM integration
+          - Pipeline automation and workflows
+          - ElevenLabs voice integration
+          - Airtable data management
+          - System troubleshooting
+          
+          Be helpful, professional, and concise. If the issue requires human intervention or is complex, set needsEscalation to true.`
+        },
+        ...conversationHistory,
+        {
+          role: 'user',
+          content: message
+        }
+      ];
+
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          messages: messages,
+          max_tokens: 500,
+          temperature: 0.7
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`OpenAI API error: ${response.status}`);
+      }
+
+      const aiResult = await response.json();
+      const aiResponse = aiResult.choices[0].message.content;
+
+      // Determine if escalation is needed based on keywords
+      const escalationKeywords = ['human', 'speak to someone', 'escalate', 'urgent', 'critical', 'broken', 'not working'];
+      const needsEscalation = escalationKeywords.some(keyword => 
+        message.toLowerCase().includes(keyword) || aiResponse.toLowerCase().includes('escalat')
+      );
+
+      res.json({
+        response: aiResponse,
+        needsEscalation: needsEscalation
+      });
+
+    } catch (error) {
+      console.error('AI chat support error:', error);
+      res.status(500).json({ 
+        error: 'AI support temporarily unavailable',
+        response: 'I understand your request. Our support team will be with you shortly.'
+      });
+    }
+  });
+
   // RAG Brain System endpoints
   app.post('/api/rag/query', async (req, res) => {
     try {

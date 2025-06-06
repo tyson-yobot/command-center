@@ -50,34 +50,44 @@ export function ZendeskChatWidget({ zendeskDomain }: ZendeskChatWidgetProps) {
     setCurrentMessage('');
     setIsTyping(true);
 
-    // Create support ticket in Zendesk
+    // Get AI response first
     try {
-      const response = await fetch('/api/support/ticket', {
+      const aiResponse = await fetch('/api/ai/chat-support', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          subject: 'Live Chat Support Request',
-          description: currentMessage,
-          priority: 'normal',
-          clientName: 'Dashboard User',
-          email: 'support@yourdomain.com'
+          message: currentMessage,
+          context: messages.map(m => ({ text: m.text, isUser: m.isUser }))
         })
       });
 
-      const result = await response.json();
+      const aiResult = await aiResponse.json();
 
       setTimeout(() => {
         const botResponse: ChatMessage = {
           id: (Date.now() + 1).toString(),
-          text: result.success 
-            ? `I've created support ticket #${result.ticket_id} for your request. Our team will respond shortly.`
-            : 'I understand your request. Let me connect you with our support team.',
+          text: aiResult.response || 'I understand your request. How can I help you further?',
           isUser: false,
           timestamp: new Date()
         };
         
         setMessages(prev => [...prev, botResponse]);
         setIsTyping(false);
+
+        // If the request needs escalation, create a support ticket
+        if (aiResult.needsEscalation) {
+          fetch('/api/support/ticket', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              subject: 'Escalated Live Chat Support',
+              description: `Original message: ${currentMessage}\n\nAI Response: ${aiResult.response}`,
+              priority: 'high',
+              clientName: 'Dashboard User',
+              email: 'support@yourdomain.com'
+            })
+          });
+        }
       }, 1500);
     } catch (error) {
       setTimeout(() => {

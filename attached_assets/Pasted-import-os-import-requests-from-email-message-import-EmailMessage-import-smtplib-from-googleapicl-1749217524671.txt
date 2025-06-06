@@ -1,0 +1,95 @@
+import os
+import requests
+from email.message import EmailMessage
+import smtplib
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+
+# === SETUP ===
+pdf_path = f"{folder_name}/{pdf_name}"
+
+# === 1. UPLOAD TO GOOGLE DRIVE ===
+def upload_to_drive(pdf_path, company_name):
+    creds = Credentials(
+        token=None,
+        refresh_token="1//0g9GnAKVfRlM9CgYIARAAGBASNwF-L9IrBya2ZudqCC8oAaznpP3_Xd-JvwWc41WFlvT44G9UN3hiEtZWTyN2YfAmBtQdpTfdkA",
+        token_uri="https://oauth2.googleapis.com/token",
+        client_id="685952645658-k8glf5nnp4d2u1cafih1pbauudus3nc.apps.googleusercontent.com",
+        client_secret="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",
+        scopes=["https://www.googleapis.com/auth/drive"]
+    )
+    creds.refresh(Request())
+    service = build("drive", "v3", credentials=creds)
+
+    # Find or create client folder under "1. Clients"
+    parent_id = "your_clients_root_folder_id_here"
+    folders = service.files().list(q=f"mimeType='application/vnd.google-apps.folder' and name='{company_name}' and '{parent_id}' in parents").execute()
+    folder_id = folders["files"][0]["id"] if folders["files"] else None
+
+    if not folder_id:
+        folder = service.files().create(body={
+            "name": company_name,
+            "mimeType": "application/vnd.google-apps.folder",
+            "parents": [parent_id]
+        }, fields="id").execute()
+        folder_id = folder["id"]
+
+    media = MediaFileUpload(pdf_path, mimetype="application/pdf")
+    file = service.files().create(body={
+        "name": os.path.basename(pdf_path),
+        "parents": [folder_id]
+    }, media_body=media, fields="id,webViewLink").execute()
+
+    return file["webViewLink"]
+
+# === 2. SEND EMAIL ===
+def send_email(to_emails, subject, body, attachment_path):
+    msg = EmailMessage()
+    msg["Subject"] = subject
+    msg["From"] = "noreply@yobot.bot"
+    msg["To"] = ", ".join(to_emails)
+    msg.set_content(body)
+
+    with open(attachment_path, "rb") as f:
+        msg.add_attachment(f.read(), maintype="application", subtype="pdf", filename=os.path.basename(attachment_path))
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+        smtp.login("noreply@yobot.bot", "your_email_app_password")
+        smtp.send_message(msg)
+
+# === 3. SEND SLACK DM ===
+def send_slack_alert(company_name, quote_url):
+    webhook_url = "https://hooks.slack.com/services/xRYo7LD89mNz2EvZy3kOrFiv"
+    message = {
+        "text": f"📩 New Quote Generated for *{company_name}*\n📎 [View Quote]({quote_url})\n✅ Ready for signature."
+    }
+    requests.post(webhook_url, json=message)
+
+# === 4. SEND DOCUSIGN SIGNATURE REQUEST ===
+def send_docusign_signature(pdf_path, signer_email, signer_name):
+    print(f"📩 Sending DocuSign to {signer_name} <{signer_email}> with PDF: {pdf_path}")
+    # Placeholder for JWT or OAuth2 sendEnvelope logic
+
+# === RUN THE FULL FLOW ===
+if __name__ == "__main__":
+    quote_link = upload_to_drive(pdf_path, form_data["Company Name"])
+
+    send_email(
+        to_emails=["tyson@yobot.bot", "daniel@yobot.bot"],
+        subject=f"📎 Quote Ready – {form_data['Company Name']}",
+        body=f"The quote has been created for {form_data['Company Name']}.\n\nView: {quote_link}",
+        attachment_path=pdf_path
+    )
+
+    send_slack_alert(
+        company_name=form_data["Company Name"],
+        quote_url=quote_link
+    )
+
+    send_docusign_signature(
+        pdf_path=pdf_path,
+        signer_email=form_data["Email"],
+        signer_name=form_data["Contact Name"]
+    )
