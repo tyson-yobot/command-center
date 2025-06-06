@@ -1,0 +1,124 @@
+import requests, json
+from fpdf import FPDF
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import base64
+
+# ----------------------------
+# 🔐 Your Google OAuth Credentials
+# ----------------------------
+CLIENT_ID = "685952645658-k8glf5nnp4d2u1cafih1pbauudus3nc.apps.googleusercontent.com"
+CLIENT_SECRET = "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"
+REFRESH_TOKEN = "1//0g9GnAKVfRlM9CgYIARAAGBASNwF-L9IrBya2ZudqCC8oAaznpP3_Xd-JvwWc41WFlvT44G9UN3hiEtZWTyN2YfAmBtQdpTfdkA"
+
+# ----------------------------
+# 🧾 Client & Quote Data (Replace dynamically from Tally)
+# ----------------------------
+client_name = "Tyson Lerfald"
+client_email = "tyson@yobot.bot"  # Replace with field from Tally form
+bot_package = "Platinum"
+addons = ["SmartSpend™", "CRM Sync", "VoiceBot"]
+total_cost = "$25,000 setup + $1,999/mo"
+
+# ----------------------------
+# 🔁 1. Get access token from refresh
+# ----------------------------
+res = requests.post("https://oauth2.googleapis.com/token", data={
+    "client_id": CLIENT_ID,
+    "client_secret": CLIENT_SECRET,
+    "refresh_token": REFRESH_TOKEN,
+    "grant_type": "refresh_token"
+})
+access_token = res.json().get("access_token")
+assert access_token, f"❌ Failed to refresh token: {res.text}"
+print("🔐 Access token refreshed.")
+
+# ----------------------------
+# 📁 2. Create Folder in Drive
+# ----------------------------
+folder_res = requests.post(
+    "https://www.googleapis.com/drive/v3/files",
+    headers={
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "name": f"YoBot - {client_name}",
+        "mimeType": "application/vnd.google-apps.folder"
+    }
+)
+folder_id = folder_res.json().get("id")
+assert folder_id, f"❌ Folder creation failed: {folder_res.text}"
+print("📁 Folder created:", folder_id)
+
+# ----------------------------
+# 🧾 3. Generate PDF
+# ----------------------------
+pdf = FPDF()
+pdf.add_page()
+pdf.set_font("Arial", size=12)
+pdf.cell(200, 10, txt=f"YoBot Quote for {client_name}", ln=True)
+pdf.cell(200, 10, txt="", ln=True)
+pdf.cell(200, 10, txt=f"Bot Package: {bot_package}", ln=True)
+pdf.cell(200, 10, txt=f"Add-ons: {', '.join(addons)}", ln=True)
+pdf.cell(200, 10, txt=f"Total: {total_cost}", ln=True)
+pdf_path = "quote.pdf"
+pdf.output(pdf_path)
+print("🧾 PDF created.")
+
+# ----------------------------
+# 📤 4. Upload PDF to Folder
+# ----------------------------
+upload = requests.post(
+    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
+    headers={"Authorization": f"Bearer {access_token}"},
+    files={
+        "data": (
+            "metadata", 
+            json.dumps({
+                "name": "YoBot_Quote.pdf",
+                "parents": [folder_id]
+            }), 
+            "application/json"
+        ),
+        "file": open(pdf_path, "rb")
+    }
+)
+file_id = upload.json().get("id")
+assert file_id, f"❌ Upload failed: {upload.text}"
+print("📤 PDF uploaded:", file_id)
+
+# ----------------------------
+# ✉️ 5. Send Email to Client
+# ----------------------------
+drive_link = f"https://drive.google.com/file/d/{file_id}/view"
+message = MIMEMultipart("alternative")
+message["Subject"] = "Your YoBot Quote"
+message["To"] = client_email
+message["From"] = "me"
+
+html = f"""
+<html>
+  <body>
+    <p>Hi {client_name},<br><br>
+       Your quote is ready!<br>
+       <a href="{drive_link}">Click here to view your PDF</a><br><br>
+       Thank you,<br>
+       The YoBot Team
+    </p>
+  </body>
+</html>
+"""
+message.attach(MIMEText(html, "html"))
+encoded = base64.urlsafe_b64encode(message.as_bytes()).decode()
+
+email_send = requests.post(
+    "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
+    headers={
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
+    },
+    json={"raw": encoded}
+)
+assert email_send.status_code == 200, f"❌ Email failed: {email_send.text}"
+print("✉️ Email sent to", client_email)

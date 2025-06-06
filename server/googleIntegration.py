@@ -28,12 +28,21 @@ def process_sales_order_complete(order_data):
         print(f"🚀 Processing complete sales order for {client_name}")
 
         # ----------------------------------
-        # 📁 1. Create Google Drive Folder
+        # 📁 1. Create Google Drive Folder in 1.Clients directory
         # ----------------------------------
+        
+        # Use the known "1 - Clients" folder ID
+        clients_folder_id = "1eBAdAc_polSkFSl-3F0NNH_scN8RzaFE"
+        print(f"📂 Creating client folder in 1 - Clients directory: {clients_folder_id}")
+        
         folder_metadata = {
             "name": f"YoBot - {client_name}",
             "mimeType": "application/vnd.google-apps.folder"
         }
+        
+        # Add parent folder if 1.Clients exists
+        if clients_folder_id:
+            folder_metadata["parents"] = [clients_folder_id]
         res = requests.post(
             "https://www.googleapis.com/drive/v3/files",
             headers={
