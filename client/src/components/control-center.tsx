@@ -43,6 +43,7 @@ import {
 import robotHeadPath from "@assets/A_flat_vector_illustration_features_a_robot_face_i.png";
 import { apiRequest } from "@/lib/queryClient";
 import LeadScrapingPanel from "./lead-scraping-panel";
+import { DocumentUpload } from "./document-upload";
 
 export default function ControlCenter() {
   // Core Module Toggles
@@ -935,6 +936,21 @@ export default function ControlCenter() {
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        {/* Documents Tab */}
+        <div className="mt-8 mb-8">
+          <Card className="bg-slate-800/50 border-blue-500/30">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center gap-2">
+                <Upload className="w-5 h-5" />
+                Document Management
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <DocumentUpload />
+            </CardContent>
+          </Card>
         </div>
 
         {/* Need Support Section */}

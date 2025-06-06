@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-06T02:55:00.284Z",
-    "functionId": 157,
-    "functionName": "New Lead Notification",
-    "batch": 16,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 199,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-06T02:55:56.299Z",
     "type": "system_event",
     "level": "info",
@@ -11396,6 +11385,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-06T11:40:07.335Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-06T11:43:47.970Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T11:43:47.712Z",
       "automationStatus": "running"
     }
   }

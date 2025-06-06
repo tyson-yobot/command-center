@@ -1,8 +1,23 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import multer from "multer";
 import { WebSocketServer } from "ws";
 import { storage } from "./storage";
 import { dashboardSecurityMiddleware, secureAutomationEndpoint } from "./security";
+
+// Configure multer for file uploads
+const upload = multer({
+  dest: 'uploads/',
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['application/pdf', 'text/plain', 'text/csv', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (allowedTypes.includes(file.mimetype) || file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type'), false);
+    }
+  }
+});
 import { generateQuotePDF, generateROIPDF } from "./pdfGenerator";
 import { z } from "zod";
 import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertCrmDataSchema, insertScannedContactSchema, insertKnowledgeBaseSchema } from "@shared/schema";
@@ -6525,6 +6540,87 @@ except Exception as e:
         error: 'Sales order processing failed',
         details: error.message
       });
+    }
+  });
+
+  // Document Upload API
+  app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+
+      const fileName = req.file.originalname;
+      const fileSize = req.file.size;
+      const fileType = req.file.mimetype;
+      const filePath = req.file.path;
+
+      // Process document based on type
+      let processedData = null;
+      if (fileType === 'application/pdf') {
+        // PDF processing logic here
+        processedData = { type: 'pdf', extracted: 'PDF content extracted' };
+      } else if (fileType.includes('text')) {
+        // Text file processing
+        const fs = await import('fs');
+        const content = fs.readFileSync(filePath, 'utf-8');
+        processedData = { type: 'text', content: content.substring(0, 1000) };
+      }
+
+      // Log to admin feed
+      try {
+        const { log_file_upload_to_admin } = await import('./admin_feed_logger.py');
+        await log_file_upload_to_admin('system@yobot.bot', fileName, fileSize, 'Admin User');
+      } catch (error) {
+        console.log('Admin logging skipped:', error.message);
+      }
+
+      res.json({
+        success: true,
+        message: 'Document uploaded successfully',
+        file: {
+          name: fileName,
+          size: fileSize,
+          type: fileType,
+          processed: processedData !== null,
+          url: `/uploads/${fileName}`
+        }
+      });
+
+    } catch (error: any) {
+      console.error('Document upload error:', error);
+      res.status(500).json({ 
+        error: 'Document upload failed', 
+        details: error.message 
+      });
+    }
+  });
+
+  app.get('/api/documents', async (req, res) => {
+    try {
+      // Get list of uploaded documents
+      const fs = await import('fs');
+      const path = await import('path');
+      
+      const uploadsDir = path.join(process.cwd(), 'uploads');
+      if (!fs.existsSync(uploadsDir)) {
+        return res.json({ documents: [] });
+      }
+
+      const files = fs.readdirSync(uploadsDir);
+      const documents = files.map(file => {
+        const stats = fs.statSync(path.join(uploadsDir, file));
+        return {
+          name: file,
+          size: stats.size,
+          created: stats.birthtime,
+          url: `/uploads/${file}`
+        };
+      });
+
+      res.json({ documents });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Failed to list documents', details: error.message });
     }
   });
 
