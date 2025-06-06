@@ -7,7 +7,6 @@ import { generateQuotePDF, generateROIPDF } from "./pdfGenerator";
 import { z } from "zod";
 import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertCrmDataSchema, insertScannedContactSchema, insertKnowledgeBaseSchema } from "@shared/schema";
 import { createWorker } from 'tesseract.js';
-import { sendSlackAlert } from "./alerts";
 import { sendLeadAlert, sendPlatinumFormAlert, sendAutomationFailureAlert } from "./slackAlerts";
 import { performanceAuditor, trackAutomationPerformance } from "./performanceAudit";
 import { generatePDFReport } from "./pdfReport";
