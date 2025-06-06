@@ -66,6 +66,10 @@ export default function ClientDashboard() {
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
   const [memoryText, setMemoryText] = useState('');
   const [memoryCategory, setMemoryCategory] = useState('general');
+  const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
+  const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
+  const [showDocumentManager, setShowDocumentManager] = useState(false);
+  const [documentsLoading, setDocumentsLoading] = useState(false);
 
   // Voice recognition functions for RAG system
   const initializeVoiceRecognition = () => {
