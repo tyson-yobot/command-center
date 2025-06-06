@@ -3116,11 +3116,11 @@ print(json.dumps(results))
       const pythonScript = `
 import sys
 sys.path.append('/home/runner/workspace/server')
-from complete_8day_automation import run_complete_8day_sales_order_automation
+from clean_sales_order_automation import process_sales_order_clean
 import json
 
 order_data = ${JSON.stringify(orderData)}
-result = run_complete_8day_sales_order_automation(order_data)
+result = process_sales_order_clean(order_data)
 print(json.dumps(result))
       `;
 
@@ -9812,26 +9812,24 @@ Provide 3 actionable suggestions in bullet points.`;
         'Parsed Industry': data.get?.('Parsed Industry') || data.industry || ''
       };
 
-      // Run complete 8-day automation with parsed data
+      // Run clean sales order automation with parsed data
       const { spawn } = require('child_process');
       const pythonScript = `
 import sys
 sys.path.append('/home/runner/workspace/server')
-from complete_8day_automation import run_complete_8day_sales_order_automation
+from clean_sales_order_automation import process_sales_order_clean
 import json
 
 # Convert parsed data to expected format
 order_data = {
-    'customer_name': '${salesOrderData['Parsed Company Name']}',
+    'company_name': '${salesOrderData['Parsed Company Name']}',
+    'contact_name': '${salesOrderData['Parsed Contact Name']}',
     'email': '${salesOrderData['Parsed Contact Email']}',
-    'name': '${salesOrderData['Parsed Contact Name']}',
-    'package': '${salesOrderData['Parsed Bot Package']}',
-    'addons': ${JSON.stringify(salesOrderData['Parsed Add-On List'])},
     'phone': '${salesOrderData['Parsed Contact Phone']}',
-    'stripe_payment': '${salesOrderData['Parsed Stripe Payment']}'
+    'package': '${salesOrderData['Parsed Bot Package']}'
 }
 
-result = run_complete_8day_sales_order_automation(order_data)
+result = process_sales_order_clean(order_data)
 print(json.dumps(result))
       `;
 
@@ -9852,10 +9850,13 @@ print(json.dumps(result))
           
           res.json({
             success: true,
-            message: 'Complete 8-day sales order automation executed',
+            message: 'Clean sales order automation executed successfully',
             webhook_type: 'Tally Sales Order',
-            quote_number: result.quote_number,
+            quote_id: result.quote_id,
             company_name: result.company_name,
+            pdf_path: result.pdf_path,
+            total: result.total,
+            deposit_due: result.deposit_due,
             automation_result: result
           });
         } catch (parseError) {
