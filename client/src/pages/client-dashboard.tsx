@@ -2578,7 +2578,7 @@ export default function ClientDashboard() {
                       </Button>
                     </div>
 
-                    <div className="bg-blue-900/40 rounded p-3 border border-blue-400/30">
+                    <div className="bg-blue-900/40 rounded p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                       <div className="flex items-center justify-between">
                         <h4 className="text-white font-medium">Voice Status:</h4>
                         <span className={`px-2 py-1 rounded text-xs font-medium ${
@@ -2689,7 +2689,7 @@ export default function ClientDashboard() {
                       )}
                     </div>
                     
-                    <div className="flex items-center justify-between p-2 bg-blue-900/40 rounded text-sm">
+                    <div className="flex items-center justify-between p-2 bg-blue-900/40 rounded text-sm border border-purple-400 shadow-lg shadow-purple-400/20">
                       <span className="text-white">
                         {availableVoices.length > 0 
                           ? `${availableVoices.length} ElevenLabs voices loaded`
@@ -2805,8 +2805,8 @@ export default function ClientDashboard() {
                           key={recording.id}
                           className={`p-3 rounded border cursor-pointer transition-colors ${
                             selectedRecordings.includes(recording.id)
-                              ? 'bg-blue-600/30 border-blue-400'
-                              : 'bg-slate-700/60 border-slate-600 hover:border-blue-500'
+                              ? 'bg-blue-600/30 border-blue-400 shadow-lg shadow-blue-400/20'
+                              : 'bg-slate-700/60 border-blue-400/50 hover:border-blue-500 shadow-lg shadow-blue-400/10'
                           }`}
                           onClick={() => {
                             const newSelected = selectedRecordings.includes(recording.id)
@@ -2878,7 +2878,7 @@ export default function ClientDashboard() {
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-                  <div className="text-center">
+                  <div className="text-center bg-blue-900/40 rounded-lg p-4 border border-purple-400 shadow-lg shadow-purple-400/20">
                     <div className="text-2xl font-bold text-blue-400">
                       {knowledgeStats?.documentCount || 0}
                     </div>
@@ -2930,8 +2930,8 @@ export default function ClientDashboard() {
                       key={doc.id}
                       className={`p-3 rounded border cursor-pointer transition-colors ${
                         selectedDocuments.includes(doc.id)
-                          ? 'bg-blue-600/30 border-blue-400'
-                          : 'bg-slate-700/60 border-slate-600 hover:border-blue-500'
+                          ? 'bg-blue-600/30 border-blue-400 shadow-lg shadow-blue-400/20'
+                          : 'bg-slate-700/60 border-blue-400/50 hover:border-blue-500 shadow-lg shadow-blue-400/10'
                       }`}
                       onClick={() => toggleDocumentSelection(doc.id)}
                     >
@@ -2982,7 +2982,7 @@ export default function ClientDashboard() {
                     value={memoryText}
                     onChange={(e) => setMemoryText(e.target.value)}
                     placeholder="Enter text, URLs, or information to store in memory..."
-                    className="w-full h-24 p-3 bg-slate-700/60 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:border-purple-400 focus:outline-none resize-none"
+                    className="w-full h-24 p-3 bg-slate-700/60 border border-purple-400/50 rounded-lg text-white placeholder-slate-400 focus:border-purple-400 focus:outline-none resize-none shadow-lg shadow-purple-400/10"
                   />
                 </div>
                 
@@ -2993,7 +2993,7 @@ export default function ClientDashboard() {
                   <select
                     value={memoryCategory}
                     onChange={(e) => setMemoryCategory(e.target.value)}
-                    className="w-full p-3 bg-slate-700/60 border border-slate-600 rounded-lg text-white focus:border-purple-400 focus:outline-none"
+                    className="w-full p-3 bg-slate-700/60 border border-purple-400/50 rounded-lg text-white focus:border-purple-400 focus:outline-none shadow-lg shadow-purple-400/10"
                   >
                     <option value="general">General</option>
                     <option value="urls">URLs & Links</option>
