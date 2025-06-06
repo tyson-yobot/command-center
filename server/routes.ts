@@ -144,16 +144,56 @@ async function executePipelineCalls() {
       if (phone) {
         console.log(`Calling ${name} at ${phone}`);
         
-        // Trigger call using existing voice call endpoint
+        // Trigger actual Twilio call with proper authentication
+        const twilioSid = process.env.TWILIO_ACCOUNT_SID;
+        const twilioAuth = process.env.TWILIO_AUTH_TOKEN;
+        const twilioFrom = process.env.TWILIO_PHONE_NUMBER;
+        
+        if (!twilioSid || !twilioAuth || !twilioFrom) {
+          console.log('❌ Twilio credentials not configured');
+          continue;
+        }
+        
         try {
-          await axios.post('http://localhost:5000/api/voice/initiate-call', {
-            phone: phone,
-            lead_name: name,
-            source: 'pipeline_calls'
+          const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${twilioSid}/Calls.json`;
+          const twilioAuthHeader = Buffer.from(`${twilioSid}:${twilioAuth}`).toString('base64');
+          
+          const callResponse = await axios.post(twilioUrl, new URLSearchParams({
+            'To': phone,
+            'From': twilioFrom,
+            'Url': `https://${process.env.REPLIT_DOMAINS?.split(',')[0] || 'workspace--tyson44.replit.app'}/voicebot-webhook`,
+            'StatusCallback': `https://${process.env.REPLIT_DOMAINS?.split(',')[0] || 'workspace--tyson44.replit.app'}/webhook/call-status`,
+            'StatusCallbackEvent': 'initiated,answered,completed'
+          }), {
+            headers: {
+              'Authorization': `Basic ${twilioAuthHeader}`,
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
           });
-          successfulCalls++;
+          
+          if (callResponse.status === 201) {
+            successfulCalls++;
+            console.log(`✅ Call initiated to ${phone} (${name})`);
+            
+            // Update Airtable with call status
+            try {
+              await axios.patch(
+                `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${lead.id}`,
+                {
+                  fields: {
+                    '📞 Call Outcome': 'Initiated',
+                    '📅 Last Called': new Date().toISOString().split('T')[0],
+                    '🤖 Pipeline Status': 'Called'
+                  }
+                },
+                { headers }
+              );
+            } catch (updateError) {
+              console.log(`Failed to update Airtable for ${phone}:`, updateError.message);
+            }
+          }
         } catch (callError) {
-          console.log(`Failed to call ${name}: ${callError.message}`);
+          console.log(`❌ Failed to call ${phone}:`, callError.response?.data || callError.message);
         }
         
         // Check if this lead triggers Slack alert

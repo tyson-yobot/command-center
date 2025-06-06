@@ -312,23 +312,65 @@ export async function logCRMContact(data: {
 }
 
 export async function logSupportTicket(data: {
-  ticketId: string;
-  clientName: string;
+  ticketId?: string;
+  clientName?: string;
   subject: string;
   priority: string;
-  status: string;
-  timestamp: string;
+  status?: string;
+  timestamp?: string;
   assignedTo?: string;
+  source?: string;
 }) {
-  return await createAirtableRecord('CLIENT_CRM', 'SUPPORT_TICKET_SUMMARY', {
-    'Ticket ID': data.ticketId,
-    'Client Name': data.clientName,
+  const ticketData = {
+    'Ticket ID': data.ticketId || `TK-${Date.now()}`,
+    'Client Name': data.clientName || 'System',
     'Subject': data.subject,
     'Priority': data.priority,
-    'Status': data.status,
-    'Timestamp': data.timestamp,
-    'Assigned To': data.assignedTo || ''
-  });
+    'Status': data.status || 'Open',
+    'Timestamp': data.timestamp || new Date().toISOString(),
+    'Assigned To': data.assignedTo || 'Auto-assigned',
+    'Source': data.source || 'command_center'
+  };
+
+  // Create ticket in Zendesk if credentials are available
+  try {
+    const zendeskDomain = process.env.ZENDESK_DOMAIN;
+    const zendeskEmail = process.env.ZENDESK_EMAIL;
+    const zendeskToken = process.env.ZENDESK_API_TOKEN;
+
+    if (zendeskDomain && zendeskEmail && zendeskToken) {
+      const axios = require('axios');
+      const zendeskAuth = Buffer.from(`${zendeskEmail}/token:${zendeskToken}`).toString('base64');
+      
+      const zendeskTicket = await axios.post(
+        `https://${zendeskDomain}.zendesk.com/api/v2/tickets.json`,
+        {
+          ticket: {
+            subject: data.subject,
+            description: data.subject,
+            priority: data.priority.toLowerCase(),
+            status: 'new',
+            tags: ['yobot', 'automated', data.source || 'command_center']
+          }
+        },
+        {
+          headers: {
+            'Authorization': `Basic ${zendeskAuth}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      if (zendeskTicket.data?.ticket?.id) {
+        ticketData['Ticket ID'] = `ZD-${zendeskTicket.data.ticket.id}`;
+        ticketData['Status'] = 'Created in Zendesk';
+      }
+    }
+  } catch (zendeskError) {
+    console.error('Zendesk integration failed:', zendeskError.message);
+  }
+
+  return await createAirtableRecord('CLIENT_CRM', 'SUPPORT_TICKET_SUMMARY', ticketData);
 }
 
 export async function logQuoteGeneration(data: {

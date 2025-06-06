@@ -136,37 +136,91 @@ export function VoiceInterfaceEnhanced() {
 
   const startListening = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus'
-      });
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
+      // Use real speech recognition directly instead of MediaRecorder
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        toast({
+          title: "Speech Recognition Not Supported",
+          description: "Your browser doesn't support speech recognition",
+          variant: "destructive"
+        });
+        return;
+      }
 
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+      recognition.maxAlternatives = 1;
+
+      let finalTranscript = '';
+
+      recognition.onresult = (event: any) => {
+        let interimTranscript = '';
+        
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+        
+        console.log('Voice recognition result:', finalTranscript || interimTranscript);
+      };
+
+      recognition.onend = () => {
+        console.log('Voice recognition ended');
+        setIsListening(false);
+        setIsProcessing(true);
+        
+        if (finalTranscript.trim()) {
+          const userMessage: VoiceMessage = {
+            id: `msg_${Date.now()}_user`,
+            type: 'user',
+            text: finalTranscript.trim(),
+            timestamp: new Date()
+          };
+          
+          setMessages(prev => [...prev, userMessage]);
+          
+          // Process with AI including memory context
+          const context = voiceMemory?.context || [];
+          processAIMutation.mutate({
+            text: finalTranscript.trim(),
+            context
+          });
+        } else {
+          setIsProcessing(false);
+          toast({
+            title: "No Speech Detected",
+            description: "Please try speaking again",
+            variant: "destructive"
+          });
         }
       };
 
-      mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        await processAudioInput(audioBlob);
-        stream.getTracks().forEach(track => track.stop());
+      recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
+        setIsProcessing(false);
+        toast({
+          title: "Speech Recognition Error",
+          description: `Error: ${event.error}`,
+          variant: "destructive"
+        });
       };
 
-      // Start recording with 1-second chunks for real-time data
-      mediaRecorder.start(1000);
+      recognition.start();
       setIsListening(true);
+      console.log('Voice recognition started');
       
-      // Set maximum recording time to 60 seconds
+      // Stop recognition after 60 seconds maximum
       setTimeout(() => {
-        if (isListening && mediaRecorderRef.current?.state === 'recording') {
-          stopListening();
-          toast({
-            title: "Recording Complete",
-            description: "Maximum recording time (60 seconds) reached"
-          });
+        if (recognition && isListening) {
+          recognition.stop();
         }
       }, 60000);
       
@@ -175,10 +229,10 @@ export function VoiceInterfaceEnhanced() {
         description: "Recording started - up to 60 seconds. Click stop when finished."
       });
     } catch (error) {
-      console.error('Microphone error:', error);
+      console.error('Speech recognition error:', error);
       toast({
-        title: "Microphone Access Denied",
-        description: "Please enable microphone access to use voice features",
+        title: "Speech Recognition Failed",
+        description: "Could not start speech recognition",
         variant: "destructive"
       });
     }
