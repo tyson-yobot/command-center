@@ -791,7 +791,7 @@ export default function ControlCenter() {
                             body: JSON.stringify({ query: ragQuery })
                           });
                           const data = await response.json();
-                          setRagResponse(data.enhancedReply || "No response received");
+                          setRagResponse(data.response || "No response received");
                         } catch (error) {
                           setRagResponse("Error querying knowledge base");
                         }
@@ -804,6 +804,72 @@ export default function ControlCenter() {
                       <div className="bg-purple-500/10 border border-purple-500/20 rounded-lg p-4">
                         <h4 className="text-purple-300 font-medium mb-2">Response:</h4>
                         <p className="text-white text-sm">{ragResponse}</p>
+                        
+                        {/* Voice Generation Controls */}
+                        <div className="mt-4 space-y-2">
+                          <Button 
+                            className="w-full bg-blue-600 hover:bg-blue-700"
+                            onClick={async () => {
+                              try {
+                                const response = await fetch('/api/voice/generate', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ 
+                                    text: ragResponse,
+                                    voice_id: "21m00Tcm4TlvDq8ikWAM" 
+                                  })
+                                });
+                                const data = await response.json();
+                                if (data.success) {
+                                  console.log('Voice generated:', data.filename);
+                                  // You could play the audio here
+                                } else {
+                                  console.error('Voice generation failed:', data.error);
+                                }
+                              } catch (error) {
+                                console.error('Voice generation error:', error);
+                              }
+                            }}
+                          >
+                            <Phone className="w-4 h-4 mr-2" />
+                            Generate Voice Response
+                          </Button>
+                          
+                          <div className="flex gap-2">
+                            <Input
+                              placeholder="Phone number to call..."
+                              className="bg-white/10 border-white/20 text-white placeholder-white/50"
+                              value={callPhoneNumber}
+                              onChange={(e) => setCallPhoneNumber(e.target.value)}
+                            />
+                            <Button 
+                              className="bg-green-600 hover:bg-green-700"
+                              onClick={async () => {
+                                if (!callPhoneNumber.trim() || !ragResponse) return;
+                                try {
+                                  const response = await fetch('/api/call/initiate', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ 
+                                      phone_number: callPhoneNumber,
+                                      message: ragResponse 
+                                    })
+                                  });
+                                  const data = await response.json();
+                                  if (data.success) {
+                                    console.log('Call initiated:', data.call_sid);
+                                  } else {
+                                    console.error('Call failed:', data.error);
+                                  }
+                                } catch (error) {
+                                  console.error('Call error:', error);
+                                }
+                              }}
+                            >
+                              <Phone className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>

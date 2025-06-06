@@ -238,6 +238,120 @@ async function triggerMakeScenario(data: any) {
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
 
+  // RAG Brain System endpoints
+  app.post('/api/rag/query', async (req, res) => {
+    try {
+      const { query, context } = req.body;
+      
+      const childProcess = await import('child_process');
+      const util = await import('util');
+      const exec = util.promisify(childProcess.exec);
+
+      const result = await exec(`cd /home/runner/workspace/server && python3 -c "
+from ragBrainSystem import YoBotRAGBrain
+import json
+
+brain = YoBotRAGBrain()
+result = brain.process_query('${query.replace(/'/g, "\\'")}', '${(context || '').replace(/'/g, "\\'")}')
+print(json.dumps(result))
+"`);
+
+      const response = JSON.parse(result.stdout);
+      res.json(response);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        response: "I'm experiencing technical difficulties. Please contact our support team for assistance."
+      });
+    }
+  });
+
+  // Voice generation endpoint
+  app.post('/api/voice/generate', async (req, res) => {
+    try {
+      const { text, voice_id } = req.body;
+      
+      const childProcess = await import('child_process');
+      const util = await import('util');
+      const exec = util.promisify(childProcess.exec);
+
+      const result = await exec(`cd /home/runner/workspace/server && python3 -c "
+from ragBrainSystem import YoBotRAGBrain
+import json
+
+brain = YoBotRAGBrain()
+result = brain.generate_voice_response('${text.replace(/'/g, "\\'")}', '${voice_id || '21m00Tcm4TlvDq8ikWAM'}')
+print(json.dumps(result))
+"`);
+
+      const response = JSON.parse(result.stdout);
+      res.json(response);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // Call initiation endpoint
+  app.post('/api/call/initiate', async (req, res) => {
+    try {
+      const { phone_number, message } = req.body;
+      
+      const childProcess = await import('child_process');
+      const util = await import('util');
+      const exec = util.promisify(childProcess.exec);
+
+      const result = await exec(`cd /home/runner/workspace/server && python3 -c "
+from ragBrainSystem import YoBotRAGBrain
+import json
+
+brain = YoBotRAGBrain()
+result = brain.initiate_call('${phone_number}', '${message.replace(/'/g, "\\'")}')
+print(json.dumps(result))
+"`);
+
+      const response = JSON.parse(result.stdout);
+      res.json(response);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // RAG brain test endpoint
+  app.post('/api/rag/test', async (req, res) => {
+    try {
+      const childProcess = await import('child_process');
+      const util = await import('util');
+      const exec = util.promisify(childProcess.exec);
+
+      const result = await exec(`cd /home/runner/workspace/server && python3 -c "
+from ragBrainSystem import test_rag_brain_system
+import json
+
+results = test_rag_brain_system()
+print(json.dumps(results))
+"`);
+
+      const response = JSON.parse(result.stdout);
+      res.json({
+        success: true,
+        test_results: response,
+        message: "RAG brain system test completed"
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
   // Serve PDF files for quotes
   app.get('/pdfs/:filename', (req, res) => {
     const filename = req.params.filename;
