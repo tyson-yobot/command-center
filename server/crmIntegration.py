@@ -3,6 +3,8 @@ import json
 import requests
 import datetime
 from fpdf import FPDF
+import subprocess
+import sys
 
 def create_hubspot_contact(email, first_name, last_name, company_name, api_key):
     """Add Client to HubSpot CRM"""
@@ -285,6 +287,34 @@ def process_complete_crm_sales_order(order_data):
         except Exception as e:
             result["google_drive_success"] = False
             result["google_drive_error"] = str(e)
+        
+        # Send email notifications to daniel@yobot.bot and tyson@yobot.bot
+        try:
+            email_script = f"""
+import sys
+sys.path.append('/home/runner/workspace/server')
+from emailNotifications import send_sales_order_notification
+import json
+
+result = send_sales_order_notification(
+    company_name="{company_name}",
+    quote_number="{quote_number}",
+    email="{email}",
+    package="{package}",
+    total="{total}",
+    pdf_path="{result.get('pdf_path', '')}"
+)
+print(json.dumps(result))
+"""
+            email_result = subprocess.run([sys.executable, '-c', email_script], 
+                                        capture_output=True, text=True)
+            if email_result.returncode == 0 and email_result.stdout.strip():
+                email_response = json.loads(email_result.stdout.strip())
+                result["email_notifications"] = email_response
+            else:
+                result["email_notifications"] = {"success": False, "error": "Email notification failed"}
+        except Exception as email_error:
+            result["email_notifications"] = {"success": False, "error": str(email_error)}
         
         return result
         
