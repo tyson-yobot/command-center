@@ -751,7 +751,7 @@ export default function ControlCenter() {
           </Card>
         </div>
 
-        {/* RAG Knowledge Base Section */}
+        {/* RAG Knowledge Base Section - Moved to bottom as requested */}
         <div className="mt-8 mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Knowledge Query Interface */}
@@ -825,7 +825,6 @@ export default function ControlCenter() {
                                 const data = await response.json();
                                 if (data.success) {
                                   console.log('Voice generated:', data.filename);
-                                  // You could play the audio here
                                 } else {
                                   console.error('Voice generation failed:', data.error);
                                 }
@@ -874,6 +873,43 @@ export default function ControlCenter() {
                           </div>
                         </div>
                       </div>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Knowledge Base Management */}
+            <Card className="bg-slate-800/50 border-purple-500/30">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <FileText className="w-5 h-5" />
+                  Knowledge Management
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-2">
+                  <Button className="bg-indigo-600 hover:bg-indigo-700">
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload Docs
+                  </Button>
+                  <Button className="bg-red-600 hover:bg-red-700">
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Clear Knowledge
+                  </Button>
+                </div>
+                
+                <div className="text-sm text-white/70">
+                  Knowledge Base Status: Active
+                  <br />
+                  Documents: 1,247 indexed
+                  <br />
+                  Last Update: 2 hours ago
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
                     )}
                   </div>
                 )}

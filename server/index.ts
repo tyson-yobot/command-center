@@ -100,61 +100,81 @@ app.post('/webhook/sales_order', async (req, res) => {
       const util = await import('util');
       const exec = util.promisify(childProcess.exec);
 
-      // Execute complete sales order automation
+      // Use the provided sales order automation code directly
       const fs = await import('fs');
       const path = await import('path');
       
-      const tempScriptPath = path.join('/home/runner/workspace/server', `temp_automation_${Date.now()}.py`);
-      const scriptContent = `
+      const tempScriptPath = path.join('/home/runner/workspace/server', `automation_${Date.now()}.py`);
+      const automationScript = `
 import sys
-import os
 import json
 sys.path.append('/home/runner/workspace/server')
 
-try:
-    from completeSalesOrderAutomation import run_complete_sales_order_automation
-    
-    form_data = ${JSON.stringify(data).replace(/'/g, "\\'")}
-    result = run_complete_sales_order_automation(form_data)
-    print(json.dumps(result))
-except Exception as e:
-    print(json.dumps({"success": False, "error": str(e), "message": "Automation error"}))
+from workingSalesOrderAutomation import run_complete_sales_order_automation
+
+form_data = ${JSON.stringify(data)}
+result = run_complete_sales_order_automation(form_data)
+print(json.dumps(result))
 `;
       
-      fs.writeFileSync(tempScriptPath, scriptContent);
+      fs.writeFileSync(tempScriptPath, automationScript);
       
       try {
         const automationResult = await exec(`cd /home/runner/workspace/server && python3 ${path.basename(tempScriptPath)}`);
         
+        // Clean up temporary file
+        fs.unlinkSync(tempScriptPath);
+        
         if (automationResult.stdout) {
-          const result = JSON.parse(automationResult.stdout.trim());
+          const lines = automationResult.stdout.trim().split('\n');
           
-          // Clean up temporary file
-          fs.unlinkSync(tempScriptPath);
+          // Find the line that starts with FINAL_RESULT:
+          let jsonLine = null;
+          for (const line of lines) {
+            if (line.startsWith('FINAL_RESULT:')) {
+              jsonLine = line.replace('FINAL_RESULT:', '').trim();
+              break;
+            }
+          }
           
-          if (result.success) {
-            console.log("✅ Complete sales order automation successful");
+          // If no FINAL_RESULT found, try the last line
+          if (!jsonLine) {
+            jsonLine = lines[lines.length - 1];
+          }
+          
+          try {
+            const result = JSON.parse(jsonLine);
             
-            res.json({
-              success: true,
-              message: "Complete sales order automation finished successfully",
-              webhook: "Enhanced Sales Order",
-              data: {
-                quote_number: result.quote_number,
-                company_name,
-                contact_email,
-                package_name,
-                total: stripe_paid,
-                pdf_path: result.pdf_path,
-                csv_path: result.csv_path,
-                folder_url: result.folder_url,
-                hubspot_contact_id: result.hubspot_contact_id,
-                tasks_created: result.tasks_created,
-                notifications_sent: result.notifications_sent,
-                automation_complete: result.automation_complete
-              }
-            });
-            return;
+            if (result.success) {
+              console.log("✅ Complete sales order automation successful");
+              
+              res.json({
+                success: true,
+                message: "Complete sales order automation finished successfully",
+                webhook: "Enhanced Sales Order",
+                data: {
+                  quote_number: result.quote_number,
+                  company_name,
+                  contact_email,
+                  package_name,
+                  total: stripe_paid,
+                  pdf_path: result.pdf_path,
+                  csv_path: result.csv_path,
+                  hubspot_contact_id: result.hubspot_contact_id,
+                  tasks_created: result.tasks_created,
+                  notifications_sent: result.notifications_sent,
+                  slack_sent: result.slack_sent,
+                  automation_complete: result.automation_complete,
+                  results: result.results
+                }
+              });
+              return;
+            } else {
+              console.log("⚠️ Automation completed with warnings:", result.error);
+            }
+          } catch (parseError) {
+            console.error("Failed to parse automation result:", parseError);
+            console.log("Raw output:", automationResult.stdout);
           }
         }
       } catch (pythonError) {
