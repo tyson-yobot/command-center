@@ -202,7 +202,7 @@ export default function ClientDashboard() {
     setVoicesLoading(false);
   };
 
-  // Test voice persona with ElevenLabs
+  // Test voice persona with fallback to browser speech
   const testVoicePersona = async () => {
     try {
       const response = await fetch('/api/elevenlabs/test-voice', {
@@ -223,10 +223,20 @@ export default function ClientDashboard() {
         audio.play();
         setVoiceStatus('Voice test completed');
       } else {
-        setVoiceStatus('Voice test failed');
+        // Fallback to browser speech synthesis
+        const utterance = new SpeechSynthesisUtterance('Hello, this is a test of the voice persona system.');
+        const voices = speechSynthesis.getVoices();
+        if (voices.length > 0) {
+          utterance.voice = voices.find(v => v.name.includes('Female')) || voices[0];
+        }
+        speechSynthesis.speak(utterance);
+        setVoiceStatus('Using browser speech synthesis');
       }
     } catch (error) {
-      setVoiceStatus('Voice test failed');
+      // Fallback to browser speech synthesis
+      const utterance = new SpeechSynthesisUtterance('Hello, this is a test of the voice persona system.');
+      speechSynthesis.speak(utterance);
+      setVoiceStatus('Using browser speech synthesis');
     }
   };
 

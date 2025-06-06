@@ -139,7 +139,7 @@ export async function testElevenLabsConnection(): Promise<{ success: boolean; me
  * Get available voices from ElevenLabs
  */
 export async function getAvailableVoices(): Promise<any[]> {
-  const apiKey = process.env.ELEVENLABS_API_KEY || "sk_abb746b1e386be0085d005a594c6818afac710a9c3d6780a";
+  const apiKey = "sk_abb746b1e386be0085d005a594c6818afac710a9c3d6780a";
   
   if (!apiKey) {
     throw new Error('ElevenLabs API key not configured');
