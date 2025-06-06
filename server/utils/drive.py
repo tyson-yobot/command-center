@@ -15,17 +15,12 @@ def create_client_folder(client_name):
     import requests
     
     try:
-        # Use existing Google API infrastructure
-        api_key = os.getenv('GOOGLE_API_KEY') or os.getenv('GOOGLEAPIS_API_KEY')
-        
-        if not api_key:
-            # Request Google API key for Drive integration
-            print(f"Google API key required for Drive folder creation")
-            return None
+        # Use provided OAuth token for Google Drive API
+        oauth_token = "ya29.a0AW4Xtxh3Ol7z5GXcB6jDg9zdaQzbrfJdKm1aklw4qsBJoS13GP0OQWassOF-6u_Att_H9uI0jH4VirY6k1RFWATG2UsdrGTFT4WrmZIy-NfmorqzrR9XY-HJntQkj1tAYr_rH-N3WJ1i_bOw7nL2HAHB2gdqSbTM-5RZsWn6aCgYKAewSARMSFQHGX2Mi2BigMOSRyvdyL4y2bNOt0Q0175"
         
         # Create folder using Google Drive API
         headers = {
-            'Authorization': f'Bearer {api_key}',
+            'Authorization': f'Bearer {oauth_token}',
             'Content-Type': 'application/json'
         }
         

@@ -12,8 +12,8 @@ def send_quote_email(recipient_email, pdf_url, client_name=None, quote_data=None
     import requests
     
     try:
-        # Use Gmail API with existing Google credentials
-        gmail_token = os.getenv('GOOGLE_API_KEY') or os.getenv('GMAIL_API_TOKEN')
+        # Use provided OAuth token for Gmail API
+        gmail_token = "ya29.a0AW4Xtxh3Ol7z5GXcB6jDg9zdaQzbrfJdKm1aklw4qsBJoS13GP0OQWassOF-6u_Att_H9uI0jH4VirY6k1RFWATG2UsdrGTFT4WrmZIy-NfmorqzrR9XY-HJntQkj1tAYr_rH-N3WJ1i_bOw7nL2HAHB2gdqSbTM-5RZsWn6aCgYKAewSARMSFQHGX2Mi2BigMOSRyvdyL4y2bNOt0Q0175"
         
         if gmail_token:
             # Gmail API implementation
