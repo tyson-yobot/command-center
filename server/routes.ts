@@ -3044,6 +3044,91 @@ print(json.dumps(results))
     }
   });
 
+  // 📄 YoBot Complete Sales Order Processing (Your Working Script)
+  app.post('/api/orders/complete-production', async (req, res) => {
+    try {
+      const orderData = req.body;
+      console.log("🚀 Processing complete sales order with your Google script:", orderData);
+
+      const childProcess = await import('child_process');
+      const util = await import('util');
+      const exec = util.promisify(childProcess.exec);
+
+      const pythonScript = `
+import sys
+sys.path.append('/home/runner/workspace/server')
+from salesOrderAutomation import process_complete_sales_order
+import json
+
+order_data = ${JSON.stringify(orderData)}
+result = process_complete_sales_order(order_data)
+print(json.dumps(result))
+      `;
+
+      try {
+        const { stdout, stderr } = await exec(`python3 -c "${pythonScript.replace(/"/g, '\\"')}"`);
+        
+        if (stdout.trim()) {
+          const result = JSON.parse(stdout.trim().split('\n').pop() || '{}');
+          
+          if (result.success) {
+            // Log to Airtable
+            await logToAirtable("Sales Order Tracker", {
+              "🧾 Function Name": "Complete Sales Order Processing",
+              "📝 Source Form": "Production Sales Order API",
+              "📅 Timestamp": new Date().toISOString(),
+              "📊 Dashboard Name": "Sales Automation",
+              "👤 Client": result.client_name,
+              "📧 Email": orderData.email,
+              "💰 Total": orderData.total,
+              "📦 Package": orderData.package,
+              "📁 Folder URL": result.folder_url,
+              "📄 PDF URL": result.pdf_url,
+              "🔗 Order ID": result.order_id,
+              "✉️ Email Sent": result.email_sent ? "Yes" : "No"
+            });
+
+            res.json({
+              success: true,
+              message: "Complete sales order processed successfully",
+              data: result
+            });
+          } else {
+            res.status(500).json({
+              success: false,
+              error: result.error || "Processing failed"
+            });
+          }
+        } else {
+          res.status(500).json({
+            success: false,
+            error: "No output from processing script"
+          });
+        }
+
+        if (stderr && !stderr.includes("warning")) {
+          console.log("Processing notes:", stderr);
+        }
+
+      } catch (execError: any) {
+        console.error("Script execution error:", execError);
+        res.status(500).json({
+          success: false,
+          error: execError.message.includes("invalid_client") ? 
+            "Google OAuth credentials needed for Drive and Gmail integration" : 
+            "Script execution failed"
+        });
+      }
+
+    } catch (err: any) {
+      console.error("Sales order processing error:", err);
+      res.status(500).json({
+        success: false,
+        error: err.message || "Internal server error"
+      });
+    }
+  });
+
   // 📄 Complete Sales Order Processing with Google Integration
   app.post('/api/orders/complete', async (req, res) => {
     try {
