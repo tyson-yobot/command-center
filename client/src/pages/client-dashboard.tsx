@@ -1752,23 +1752,34 @@ export default function ClientDashboard() {
                     
                     <div className="flex items-center justify-between p-3 bg-green-800/40 rounded border border-green-400/30">
                       <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                        <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red-400 animate-pulse' : 'bg-green-400'}`}></div>
                         <span className="text-green-300 text-sm">Voice Recognition Ready</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className="text-green-400 text-xs">Status: Listening</span>
-                        <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                        <span className="text-green-400 text-xs">Status: {voiceStatus}</span>
+                        <Button 
+                          size="sm" 
+                          onClick={stopVoiceRecognition}
+                          className="bg-green-600 hover:bg-green-700"
+                        >
                           <MicOff className="w-3 h-3" />
                         </Button>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                      <Button className="bg-green-600 hover:bg-green-700 text-white">
+                      <Button 
+                        onClick={isListening ? stopVoiceRecognition : startProgrammingVoiceRecognition}
+                        className={`${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} text-white`}
+                      >
                         <Mic className="w-4 h-4 mr-2" />
-                        Start Recording
+                        {isListening ? 'Stop Recording' : 'Start Recording'}
                       </Button>
-                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                      <Button 
+                        onClick={processVoiceProgramming}
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        disabled={!programmingText.trim()}
+                      >
                         <Brain className="w-4 h-4 mr-2" />
                         Process Voice
                       </Button>
@@ -1831,7 +1842,11 @@ export default function ClientDashboard() {
                     Voice Persona Selection
                   </h3>
                   <div className="space-y-4">
-                    <select className="w-full p-3 bg-purple-800/60 border border-purple-400/50 rounded text-white">
+                    <select 
+                      value={selectedPersona}
+                      onChange={(e) => setSelectedPersona(e.target.value)}
+                      className="w-full p-3 bg-purple-800/60 border border-purple-400/50 rounded text-white"
+                    >
                       <option value="21m00Tcm4TlvDq8ikWAM">Rachel - Professional Female</option>
                       <option value="2EiwWnXFnvU5JabPnv8n">Clyde - Confident Male</option>
                       <option value="AZnzlk1XvdvUeBnXmlld">Domi - Warm Female</option>
@@ -1844,7 +1859,10 @@ export default function ClientDashboard() {
                       <option value="SOYHLrjzK2X1ezoPC6cr">Harry - Energetic Male</option>
                     </select>
                     <div className="grid grid-cols-2 gap-3">
-                      <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                      <Button 
+                        onClick={testVoicePersona}
+                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                      >
                         <Headphones className="w-4 h-4 mr-2" />
                         Test Voice
                       </Button>
