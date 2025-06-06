@@ -98,6 +98,7 @@ import conversionFunnelRouter from "./conversionFunnel";
 import systemAuditLogRouter, { auditLogger } from "./systemAuditLog";
 import ragUsageAnalyticsRouter from "./ragUsageAnalytics";
 import missedCallHandlerRouter from "./missedCallHandler";
+import { googleDriveIntegration } from "./googleDriveIntegration";
 import voiceBotCallbackRouter from "./voiceBotCallback";
 import chatIntegrationRouter from "./chatIntegration";
 import phantombusterRouter from "./phantombuster";
@@ -295,6 +296,45 @@ async function triggerMakeScenario(data: any) {
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
 
+  // Google Drive Quote Upload endpoint
+  app.post('/api/quotes/upload-to-drive', async (req, res) => {
+    try {
+      const { pdfPath, companyName, contactEmail } = req.body;
+      
+      if (!pdfPath || !companyName) {
+        return res.status(400).json({ 
+          error: 'Missing required fields: pdfPath and companyName' 
+        });
+      }
+
+      const result = await googleDriveIntegration.processQuoteWorkflow(
+        pdfPath, 
+        companyName, 
+        contactEmail
+      );
+
+      if (result.success) {
+        res.json({
+          success: true,
+          driveLink: result.driveLink,
+          message: `Quote uploaded successfully for ${companyName}`
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          error: 'Failed to process quote workflow'
+        });
+      }
+
+    } catch (error) {
+      console.error('Quote upload error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
   // AI Chat Support endpoint
   app.post('/api/ai/chat-support', async (req, res) => {
     try {
@@ -314,15 +354,89 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const messages = [
         {
           role: 'system',
-          content: `You are YoBot's intelligent support assistant. Help users with:
-          - Voice automation and call management
-          - Lead generation and CRM integration
-          - Pipeline automation and workflows
-          - ElevenLabs voice integration
-          - Airtable data management
-          - System troubleshooting
-          
-          Be helpful, professional, and concise. If the issue requires human intervention or is complex, set needsEscalation to true.`
+          content: `You are YoBot's intelligent support assistant with comprehensive knowledge about the platform.
+
+**YoBot Platform Overview:**
+YoBot is an enterprise automation platform specializing in voice AI, lead management, and workflow automation.
+
+**Core Features & Capabilities:**
+
+**Voice & Communication:**
+- ElevenLabs voice integration with 19+ professional voices
+- Real-time call monitoring and pipeline execution
+- VoiceBot escalation detection and management
+- Call sentiment analysis and logging
+- SMS alerts via Twilio integration
+- Voice command processing and response generation
+
+**Lead Management & CRM:**
+- HubSpot CRM integration for contact management
+- PhantomBuster lead scraping from Google Maps, LinkedIn, Instagram
+- Apollo lead enrichment and data enhancement
+- Lead scoring and qualification automation
+- Pipeline call execution with success tracking
+- Automated follow-up task creation
+
+**Data & Analytics:**
+- Airtable integration for centralized data management
+- Command Center metrics and performance tracking
+- Real-time dashboard with system health monitoring
+- ROI calculation and client performance analytics
+- Integration test logging and system diagnostics
+
+**Automation Workflows:**
+- 3000+ automation functions across multiple domains
+- QuickBooks Online integration for invoice management
+- Stripe payment processing and subscription handling
+- Google Drive document management and sharing
+- Zendesk support ticket creation and management
+- Slack notifications and team communication
+
+**Document & Knowledge Management:**
+- RAG (Retrieval Augmented Generation) knowledge base
+- PDF generation for quotes and reports
+- Document upload and processing system
+- Business card scanning and contact extraction
+- Knowledge base search and retrieval
+
+**Security & Access:**
+- Role-based access control
+- Admin authentication with secure password protection
+- API key management for external integrations
+- Audit logging and system monitoring
+
+**Available Integrations:**
+- ElevenLabs (Voice AI)
+- HubSpot (CRM)
+- Airtable (Database)
+- QuickBooks Online (Accounting)
+- Stripe (Payments)
+- Twilio (SMS)
+- Slack (Communication)
+- Google Drive (Storage)
+- Zendesk (Support)
+- PhantomBuster (Lead Scraping)
+- Apollo (Lead Enrichment)
+- OpenAI (AI Processing)
+
+**Common User Tasks:**
+1. Setting up voice automation campaigns
+2. Configuring lead scraping and enrichment
+3. Managing CRM integrations and data flow
+4. Troubleshooting API connections
+5. Monitoring system performance and health
+6. Creating and managing automation workflows
+7. Generating reports and analytics
+8. Managing user access and permissions
+
+**Troubleshooting Guidelines:**
+- For API connection issues, check credentials and rate limits
+- For voice problems, verify ElevenLabs API key and voice selection
+- For CRM sync issues, check HubSpot permissions and field mapping
+- For automation failures, review logs in Command Center
+- For performance issues, check system metrics and resource usage
+
+Provide specific, actionable guidance based on user questions. Escalate complex technical issues or requests requiring admin access to human support.`
         },
         ...conversationHistory,
         {
