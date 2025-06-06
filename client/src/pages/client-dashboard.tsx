@@ -42,6 +42,7 @@ import { apiRequest } from '@/lib/queryClient';
 import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i.png';
 import { LeadScrapingInterface } from '@/components/lead-scraping-interface';
 import { CallMonitoringPopup } from '@/components/call-monitoring-popup';
+import { ZendeskChatWidget } from '@/components/zendesk-chat-widget';
 
 export default function ClientDashboard() {
   const { data: metrics } = useQuery({ queryKey: ['/api/metrics'] });
@@ -3333,6 +3334,9 @@ export default function ClientDashboard() {
         totalRecords={totalRecords}
         completedCalls={completedCalls}
       />
+
+      {/* Zendesk Live Chat Widget */}
+      <ZendeskChatWidget />
     </div>
   );
 }
