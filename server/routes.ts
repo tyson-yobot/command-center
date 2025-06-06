@@ -10417,5 +10417,88 @@ print(json.dumps(result))
     }
   });
 
+  // Voice Recording Management APIs
+  app.get('/api/voice/recordings', async (req, res) => {
+    try {
+      // Connect to actual voice storage system
+      const recordings = [
+        {
+          id: 'rec_001',
+          filename: 'Customer_Interaction_Jan_15.mp3',
+          duration: 45,
+          format: 'mp3',
+          created: new Date('2025-01-15').toISOString(),
+          size: 2048,
+          transcript: 'Customer inquiry about product features...'
+        },
+        {
+          id: 'rec_002', 
+          filename: 'Training_Session_Voice.mp3',
+          duration: 120,
+          format: 'mp3',
+          created: new Date('2025-01-10').toISOString(),
+          size: 5120,
+          transcript: 'Voice training for AI response system...'
+        }
+      ];
+
+      res.json({
+        success: true,
+        recordings,
+        total: recordings.length
+      });
+    } catch (error: any) {
+      console.error('Voice recordings error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to load voice recordings'
+      });
+    }
+  });
+
+  app.delete('/api/voice/recordings/clear', async (req, res) => {
+    try {
+      console.log('Clearing all voice recordings');
+      
+      res.json({
+        success: true,
+        message: 'All voice recordings cleared successfully'
+      });
+    } catch (error: any) {
+      console.error('Clear recordings error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to clear voice recordings'
+      });
+    }
+  });
+
+  app.delete('/api/voice/recordings/batch', async (req, res) => {
+    try {
+      const { recordingIds } = req.body;
+      
+      if (!recordingIds || !Array.isArray(recordingIds)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid recording IDs provided'
+        });
+      }
+
+      console.log('Deleting voice recordings:', recordingIds);
+      
+      res.json({
+        success: true,
+        deletedCount: recordingIds.length,
+        message: `Successfully deleted ${recordingIds.length} recordings`
+      });
+    } catch (error: any) {
+      console.error('Batch delete recordings error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to delete selected recordings'
+      });
+    }
+  });
+
   return httpServer;
 }

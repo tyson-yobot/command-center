@@ -71,6 +71,10 @@ export default function ClientDashboard() {
   const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
   const [showDocumentManager, setShowDocumentManager] = useState(false);
   const [documentsLoading, setDocumentsLoading] = useState(false);
+  const [voiceRecordings, setVoiceRecordings] = useState<any[]>([]);
+  const [selectedRecordings, setSelectedRecordings] = useState<string[]>([]);
+  const [showRecordingList, setShowRecordingList] = useState(false);
+  const [editingRecording, setEditingRecording] = useState<any>(null);
 
   // Voice recognition functions for RAG system
   const initializeVoiceRecognition = () => {
@@ -2736,33 +2740,109 @@ export default function ClientDashboard() {
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                     <Button 
-                      onClick={() => {/* Handle view recordings */}}
+                      onClick={async () => {
+                        try {
+                          const response = await apiRequest('GET', '/api/voice/recordings');
+                          setVoiceRecordings(response.recordings || []);
+                          setShowRecordingList(true);
+                        } catch (error) {
+                          console.error('Failed to load voice recordings:', error);
+                        }
+                      }}
                       className="bg-blue-600 hover:bg-blue-700 text-white text-sm"
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       View Recordings
                     </Button>
                     <Button 
-                      onClick={() => {/* Handle clear recordings */}}
+                      onClick={async () => {
+                        if (confirm('Clear all voice recordings? This cannot be undone.')) {
+                          try {
+                            await apiRequest('DELETE', '/api/voice/recordings/clear');
+                            setVoiceRecordings([]);
+                            setSelectedRecordings([]);
+                          } catch (error) {
+                            console.error('Failed to clear recordings:', error);
+                          }
+                        }
+                      }}
                       className="bg-red-600 hover:bg-red-700 text-white text-sm"
                     >
                       <Trash2 className="w-4 h-4 mr-2" />
                       Clear All Recordings
                     </Button>
                     <Button 
-                      onClick={() => {/* Handle edit recording */}}
-                      className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm"
+                      onClick={async () => {
+                        if (selectedRecordings.length === 0) {
+                          alert('Please select recordings to edit');
+                          return;
+                        }
+                        try {
+                          await apiRequest('DELETE', '/api/voice/recordings/batch', {
+                            recordingIds: selectedRecordings
+                          });
+                          setVoiceRecordings(prev => 
+                            prev.filter(r => !selectedRecordings.includes(r.id))
+                          );
+                          setSelectedRecordings([]);
+                        } catch (error) {
+                          console.error('Failed to delete selected recordings:', error);
+                        }
+                      }}
+                      disabled={selectedRecordings.length === 0}
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm disabled:opacity-50"
                     >
                       <Edit className="w-4 h-4 mr-2" />
-                      Edit Selected
+                      Delete Selected ({selectedRecordings.length})
                     </Button>
                   </div>
                   
                   {/* Recording List */}
                   <div className="space-y-2 max-h-40 overflow-y-auto">
-                    <div className="text-slate-400 text-sm">
-                      Voice recordings will appear here for management and editing
-                    </div>
+                    {showRecordingList && voiceRecordings.length > 0 ? (
+                      voiceRecordings.map((recording) => (
+                        <div 
+                          key={recording.id}
+                          className={`p-3 rounded border cursor-pointer transition-colors ${
+                            selectedRecordings.includes(recording.id)
+                              ? 'bg-blue-600/30 border-blue-400'
+                              : 'bg-slate-700/60 border-slate-600 hover:border-blue-500'
+                          }`}
+                          onClick={() => {
+                            const newSelected = selectedRecordings.includes(recording.id)
+                              ? selectedRecordings.filter(id => id !== recording.id)
+                              : [...selectedRecordings, recording.id];
+                            setSelectedRecordings(newSelected);
+                          }}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <div className="text-white font-medium">{recording.filename || `Recording ${recording.id}`}</div>
+                              <div className="text-slate-400 text-sm">
+                                {recording.duration}s • {recording.format || 'mp3'} • {new Date(recording.created).toLocaleDateString()}
+                              </div>
+                            </div>
+                            <div className={`w-4 h-4 rounded border-2 ${
+                              selectedRecordings.includes(recording.id)
+                                ? 'bg-blue-500 border-blue-500'
+                                : 'border-slate-400'
+                            }`}>
+                              {selectedRecordings.includes(recording.id) && (
+                                <div className="text-white text-xs flex items-center justify-center">✓</div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : showRecordingList && voiceRecordings.length === 0 ? (
+                      <div className="text-slate-400 text-sm text-center py-4">
+                        No voice recordings found
+                      </div>
+                    ) : (
+                      <div className="text-slate-400 text-sm text-center py-4">
+                        Click "View Recordings" to load voice recordings for management
+                      </div>
+                    )}
                   </div>
                 </div>
 
