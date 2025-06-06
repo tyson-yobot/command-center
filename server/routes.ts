@@ -9304,5 +9304,112 @@ Provide 3 actionable suggestions in bullet points.`;
     }
   });
 
+  // ElevenLabs voice integration endpoints
+  app.get('/api/elevenlabs/voices', async (req, res) => {
+    try {
+      const response = await fetch('https://api.elevenlabs.io/v1/voices', {
+        headers: {
+          'xi-api-key': process.env.ELEVENLABS_API_KEY || ''
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch voices from ElevenLabs');
+      }
+      
+      const data = await response.json();
+      res.json(data);
+    } catch (error: any) {
+      console.error('ElevenLabs voices error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post('/api/elevenlabs/test-voice', async (req, res) => {
+    try {
+      const { voice_id, text } = req.body;
+      
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice_id}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'audio/mpeg',
+          'Content-Type': 'application/json',
+          'xi-api-key': process.env.ELEVENLABS_API_KEY || ''
+        },
+        body: JSON.stringify({
+          text: text || 'Hello, this is a test of the voice persona system.',
+          model_id: 'eleven_monolingual_v1',
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.5
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate voice from ElevenLabs');
+      }
+
+      const audioBuffer = await response.arrayBuffer();
+      res.setHeader('Content-Type', 'audio/mpeg');
+      res.send(Buffer.from(audioBuffer));
+    } catch (error: any) {
+      console.error('ElevenLabs voice test error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post('/api/rag/voice-programming', async (req, res) => {
+    try {
+      const { command, type, persona } = req.body;
+      
+      // Log voice programming command to Airtable
+      await logToAirtable('📄 Voice Programming Commands', {
+        '🧠 Function Name': 'Voice Programming Interface',
+        '📝 Source Form': 'RAG Voice System',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'YoBot Command Center',
+        '🎯 Command': command,
+        '🎭 Persona': persona,
+        '🔄 Type': type
+      });
+
+      res.json({ 
+        success: true, 
+        message: 'Voice programming command processed',
+        command: command,
+        persona: persona
+      });
+    } catch (error: any) {
+      console.error('Voice programming error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post('/api/rag/query', async (req, res) => {
+    try {
+      const { query, type } = req.body;
+      
+      // Log knowledge query to Airtable
+      await logToAirtable('📄 Knowledge Queries', {
+        '🧠 Function Name': 'RAG Knowledge Search',
+        '📝 Source Form': 'RAG Query System',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'YoBot Command Center',
+        '🔍 Query': query,
+        '🔄 Type': type
+      });
+
+      res.json({ 
+        success: true, 
+        message: 'Knowledge query processed',
+        query: query
+      });
+    } catch (error: any) {
+      console.error('Knowledge query error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   return httpServer;
 }

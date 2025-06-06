@@ -58,6 +58,8 @@ export default function ClientDashboard() {
   const recognitionRef = useRef<any>(null);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = React.useState(false);
   const [selectedPersona, setSelectedPersona] = useState('21m00Tcm4TlvDq8ikWAM');
+  const [availableVoices, setAvailableVoices] = useState<any[]>([]);
+  const [voicesLoading, setVoicesLoading] = useState(false);
 
   // Voice recognition functions for RAG system
   const initializeVoiceRecognition = () => {
@@ -168,18 +170,59 @@ export default function ClientDashboard() {
     }
   };
 
+  // Fetch available voices from ElevenLabs
+  const fetchAvailableVoices = async () => {
+    setVoicesLoading(true);
+    try {
+      const response = await apiRequest('GET', '/api/elevenlabs/voices');
+      const data = await response.json();
+      setAvailableVoices(data.voices || []);
+      setVoiceStatus('Voices loaded successfully');
+    } catch (error) {
+      console.error('Failed to fetch voices:', error);
+      setVoiceStatus('Failed to load voices');
+      // Fallback to default voices if API fails
+      setAvailableVoices([
+        { voice_id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel', category: 'premade' },
+        { voice_id: '2EiwWnXFnvU5JabPnv8n', name: 'Clyde', category: 'premade' },
+        { voice_id: 'AZnzlk1XvdvUeBnXmlld', name: 'Domi', category: 'premade' }
+      ]);
+    }
+    setVoicesLoading(false);
+  };
+
   // Test voice persona with ElevenLabs
   const testVoicePersona = async () => {
     try {
-      const response = await apiRequest('POST', '/api/elevenlabs/test-voice', {
-        voice_id: selectedPersona,
-        text: 'Hello, this is a test of the voice persona system.'
+      const response = await fetch('/api/elevenlabs/test-voice', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          voice_id: selectedPersona,
+          text: 'Hello, this is a test of the voice persona system.'
+        })
       });
-      setVoiceStatus('Voice test completed');
+
+      if (response.ok) {
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+        const audio = new Audio(audioUrl);
+        audio.play();
+        setVoiceStatus('Voice test completed');
+      } else {
+        setVoiceStatus('Voice test failed');
+      }
     } catch (error) {
       setVoiceStatus('Voice test failed');
     }
   };
+
+  // Load voices on component mount
+  React.useEffect(() => {
+    fetchAvailableVoices();
+  }, []);
 
   const handleVoiceToggle = () => {
     if (!isListening) {
@@ -1842,22 +1885,51 @@ export default function ClientDashboard() {
                     Voice Persona Selection
                   </h3>
                   <div className="space-y-4">
-                    <select 
-                      value={selectedPersona}
-                      onChange={(e) => setSelectedPersona(e.target.value)}
-                      className="w-full p-3 bg-purple-800/60 border border-purple-400/50 rounded text-white"
-                    >
-                      <option value="21m00Tcm4TlvDq8ikWAM">Rachel - Professional Female</option>
-                      <option value="2EiwWnXFnvU5JabPnv8n">Clyde - Confident Male</option>
-                      <option value="AZnzlk1XvdvUeBnXmlld">Domi - Warm Female</option>
-                      <option value="EXAVITQu4vr4xnSDxMaL">Sarah - Friendly Female</option>
-                      <option value="FGY2WhTYpPnrIDTdsKH5">Laura - Business Female</option>
-                      <option value="IKne3meq5aSn9XLyUdCD">Charlie - British Male</option>
-                      <option value="JBFqnCBsd6RMkjVDRZzb">George - Deep Male</option>
-                      <option value="N2lVS1w4EtoT3dr4eOWO">Callum - Young Male</option>
-                      <option value="ODq5zmih8GrVes37Dizd">Patrick - Mature Male</option>
-                      <option value="SOYHLrjzK2X1ezoPC6cr">Harry - Energetic Male</option>
-                    </select>
+                    <div className="relative">
+                      <select 
+                        value={selectedPersona}
+                        onChange={(e) => setSelectedPersona(e.target.value)}
+                        className="w-full p-3 bg-purple-800/60 border border-purple-400/50 rounded text-white"
+                        disabled={voicesLoading}
+                      >
+                        {voicesLoading ? (
+                          <option>Loading voices...</option>
+                        ) : availableVoices.length > 0 ? (
+                          availableVoices.map((voice) => (
+                            <option key={voice.voice_id} value={voice.voice_id}>
+                              {voice.name} - {voice.category === 'premade' ? 'Premade' : 'Custom'} 
+                              {voice.labels?.gender && ` (${voice.labels.gender})`}
+                              {voice.labels?.age && ` - ${voice.labels.age}`}
+                            </option>
+                          ))
+                        ) : (
+                          <>
+                            <option value="21m00Tcm4TlvDq8ikWAM">Rachel - Professional Female</option>
+                            <option value="2EiwWnXFnvU5JabPnv8n">Clyde - Confident Male</option>
+                            <option value="AZnzlk1XvdvUeBnXmlld">Domi - Warm Female</option>
+                          </>
+                        )}
+                      </select>
+                      {voicesLoading && (
+                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                          <div className="animate-spin w-4 h-4 border-2 border-purple-300 border-t-transparent rounded-full"></div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-2 bg-purple-900/40 rounded text-sm">
+                      <span className="text-purple-300">
+                        Voices Available: {availableVoices.length}
+                      </span>
+                      <Button 
+                        size="sm" 
+                        onClick={fetchAvailableVoices}
+                        className="bg-purple-700 hover:bg-purple-600 text-xs px-2 py-1"
+                        disabled={voicesLoading}
+                      >
+                        Refresh
+                      </Button>
+                    </div>
                     <div className="grid grid-cols-2 gap-3">
                       <Button 
                         onClick={testVoicePersona}
