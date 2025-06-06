@@ -100,36 +100,14 @@ app.post('/webhook/sales_order', async (req, res) => {
       const util = await import('util');
       const exec = util.promisify(childProcess.exec);
 
-      // Execute Python PDF generation
-      await exec(`cd /home/runner/workspace/server && python3 -c "
-from salesOrderWebhook import generate_quote_pdf, get_package_object, get_addon_objects, get_setup_prices, get_monthly_prices
+      // Execute complete sales order automation
+      const automationResult = await exec(`cd /home/runner/workspace/server && python3 -c "
+from completeSalesOrderAutomation import run_complete_sales_order_automation
 import json
 
-quote_number = '${quote_number}'
-company_name = '${company_name.replace(/'/g, "\\'")}'
-contact_name = '${contact_name.replace(/'/g, "\\'")}'
-contact_email = '${contact_email.replace(/'/g, "\\'")}'
-contact_phone = '${contact_phone.replace(/'/g, "\\'")}'
-package_name = '${package_name.replace(/'/g, "\\'")}'
-selected_addons = ${JSON.stringify(selected_addons)}
-stripe_paid = ${stripe_paid}
-
-pdf_path = f'./pdfs/YoBot_Quote_{quote_number}_{company_name.replace(\" \", \"_\")}.pdf'
-selected_package = get_package_object(package_name)
-addon_objects = get_addon_objects(selected_addons) if isinstance(selected_addons, list) else []
-setup_prices = get_setup_prices(package_name, addon_objects)
-monthly_prices = get_monthly_prices(package_name, addon_objects)
-
-client_data = {
-    'quote_number': quote_number,
-    'company_name': company_name,
-    'contact_name': contact_name,
-    'contact_email': contact_email,
-    'contact_phone': contact_phone
-}
-
-generate_quote_pdf(client_data, selected_package, addon_objects, setup_prices, monthly_prices, stripe_paid, pdf_path, 'quote_template.html')
-print('PDF generated successfully')
+form_data = ${JSON.stringify(data)}
+result = run_complete_sales_order_automation(form_data)
+print(json.dumps(result))
 "`);
 
       console.log("PDF generation completed successfully");
