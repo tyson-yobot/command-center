@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-06T07:05:00.366Z",
-    "functionId": 151,
-    "functionName": "VoiceBot Escalation Detection",
-    "batch": 16,
-    "category": "Voice",
-    "status": "success",
-    "duration": 262,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-06T07:05:00.424Z",
     "functionId": 153,
     "functionName": "System Health Metric Update",
@@ -11419,6 +11408,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-06T13:35:45.426Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-06T13:36:24.845Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-06T13:36:24.479Z",
       "automationStatus": "running"
     }
   }

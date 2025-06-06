@@ -11461,16 +11461,9 @@ print(json.dumps(result))
     try {
       console.log('Starting pipeline calls from Airtable...');
       
-      const airtableApiKey = process.env.AIRTABLE_API_KEY;
+      const airtableApiKey = process.env.AIRTABLE_API_KEY || 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa';
       const baseId = 'appb2f3D77Tc4DWAr';
       const tableId = 'tbluqrDSomu5UVhDw';
-      
-      if (!airtableApiKey) {
-        return res.status(400).json({
-          success: false,
-          error: 'Airtable API key not configured'
-        });
-      }
 
       // Fetch records from your Airtable
       const airtableResponse = await fetch(`https://api.airtable.com/v0/${baseId}/${tableId}`, {
