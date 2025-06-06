@@ -2970,11 +2970,13 @@ print(json.dumps(result))
               "📧 Email": orderData.email,
               "💰 Total": orderData.total,
               "📦 Package": orderData.package,
-              "📁 Folder Path": localResult.folder_path || "Processing",
-              "📄 PDF Path": localResult.pdf_path || "Processing",
-              "🔗 Order ID": orderData.order_id,
-              "✉️ Email Sent": localResult.email_sent ? "Yes" : "No",
-              "🎯 Status": localResult.success ? "Complete - Local Processing" : "Processing"
+              "📁 Folder URL": localResult.folder_url || "Processing",
+              "📄 PDF URL": localResult.pdf_url || "Processing", 
+              "🔗 Quote Number": localResult.quote_number || orderData.order_id,
+              "🤝 HubSpot Contact": localResult.hubspot_contact_id || "Processing",
+              "💼 QuickBooks": localResult.qbo_success ? "Invoice Created" : "Pending Auth",
+              "☁️ Google Drive": localResult.google_drive_success ? "Folder Created" : "Pending Auth",
+              "🎯 Status": localResult.success ? "Complete - CRM Integration" : "Processing"
             });
           } catch (airtableError) {
             console.log("Airtable logging failed, but order processed");
@@ -2984,16 +2986,17 @@ print(json.dumps(result))
         if (localResult.success) {
           res.json({
             success: true,
-            message: "Complete sales order processed with local folder automation",
+            message: "Complete sales order processed with CRM automation",
             webhook: "Sales Order Live",
             data: {
-              order_id: localResult.order_id,
+              order_id: localResult.quote_number || localResult.order_id,
               client_name: localResult.client_name,
-              folder_path: localResult.folder_path,
-              pdf_path: localResult.pdf_path,
-              email_sent: localResult.email_sent,
-              folder_created: localResult.folder_created,
-              pdf_organized: localResult.pdf_organized
+              folder_url: localResult.folder_url || "Processing",
+              pdf_url: localResult.pdf_url || "Processing",
+              hubspot_contact_id: localResult.hubspot_contact_id,
+              hubspot_success: localResult.hubspot_success,
+              google_drive_success: localResult.google_drive_success,
+              qbo_success: localResult.qbo_success
             }
           });
         } else {

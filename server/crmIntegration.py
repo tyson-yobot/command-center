@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import datetime
+from fpdf import FPDF
 
 def create_hubspot_contact(email, first_name, last_name, company_name, api_key):
     """Add Client to HubSpot CRM"""
@@ -112,6 +113,59 @@ def create_google_drive_folder(folder_name, parent_folder_id=None):
         raise Exception(f"Folder creation failed: {response.text}")
     
     return response.json()["id"]
+
+def generate_professional_quote_pdf(company_name, quote_number, package, total, addons=None):
+    """Generate professional quote PDF with real data"""
+    pdf = FPDF()
+    pdf.add_page()
+    
+    # Header
+    pdf.set_font('Arial', 'B', 20)
+    pdf.cell(0, 15, 'YoBot Enterprise Solutions', 0, 1, 'C')
+    pdf.set_font('Arial', '', 12)
+    pdf.cell(0, 10, 'Intelligent Automation & AI Systems', 0, 1, 'C')
+    pdf.ln(10)
+    
+    # Quote details
+    pdf.set_font('Arial', 'B', 16)
+    pdf.cell(0, 10, f'Quote #{quote_number}', 0, 1)
+    pdf.set_font('Arial', '', 12)
+    pdf.cell(0, 8, f'Date: {datetime.datetime.now().strftime("%B %d, %Y")}', 0, 1)
+    pdf.cell(0, 8, f'Company: {company_name}', 0, 1)
+    pdf.ln(5)
+    
+    # Package details
+    pdf.set_font('Arial', 'B', 14)
+    pdf.cell(0, 10, 'Package Details:', 0, 1)
+    pdf.set_font('Arial', '', 12)
+    pdf.cell(0, 8, f'Selected Package: {package}', 0, 1)
+    
+    if addons:
+        pdf.cell(0, 8, 'Add-ons:', 0, 1)
+        for addon in addons:
+            pdf.cell(0, 6, f'  • {addon}', 0, 1)
+    
+    pdf.ln(10)
+    
+    # Pricing
+    pdf.set_font('Arial', 'B', 14)
+    pdf.cell(0, 10, f'Total Investment: {total}', 0, 1)
+    
+    # Create local folder structure
+    folder_name = f"{company_name.replace(' ', '_')}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    folder_path = f"/home/runner/workspace/client_folders/{folder_name}"
+    
+    # Create directories
+    os.makedirs(f"{folder_path}/quotes", exist_ok=True)
+    os.makedirs(f"{folder_path}/contracts", exist_ok=True)
+    os.makedirs(f"{folder_path}/communications", exist_ok=True)
+    
+    # Save PDF
+    pdf_filename = f"{company_name}_{quote_number}.pdf"
+    pdf_path = f"{folder_path}/quotes/{pdf_filename}"
+    pdf.output(pdf_path)
+    
+    return pdf_path, folder_path
 
 def process_complete_crm_sales_order(order_data):
     """Complete CRM integration for sales order processing"""
