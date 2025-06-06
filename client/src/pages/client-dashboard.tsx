@@ -34,7 +34,8 @@ import {
   RefreshCw,
   Trash2,
   Eye,
-  Download
+  Download,
+  Edit
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -1885,8 +1886,9 @@ export default function ClientDashboard() {
                   </div>
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
-                  <div className="text-slate-300 text-sm mb-1">Auto-scheduled today</div>
-                  <div className="text-white font-bold">7 meetings</div>
+                  <div className="text-slate-300 text-sm mb-1">Today's Schedule</div>
+                  <div className="text-white font-bold">12 total meetings</div>
+                  <div className="text-cyan-400 text-xs">8 remaining today</div>
                 </div>
               </div>
             </CardContent>
@@ -2639,13 +2641,39 @@ export default function ClientDashboard() {
                         {voicesLoading ? (
                           <option>Loading voices...</option>
                         ) : availableVoices.length > 0 ? (
-                          availableVoices.map((voice) => (
-                            <option key={voice.voice_id} value={voice.voice_id}>
-                              {voice.name} - {voice.category === 'premade' ? 'Premade' : 'Custom'} 
-                              {voice.labels?.gender && ` (${voice.labels.gender})`}
-                              {voice.labels?.age && ` - ${voice.labels.age}`}
-                            </option>
-                          ))
+                          <>
+                            {/* Custom Voices First */}
+                            {availableVoices.filter(voice => voice.category !== 'premade').length > 0 && (
+                              <>
+                                <option disabled style={{fontWeight: 'bold', color: '#10B981'}}>🎯 Your Custom Voices</option>
+                                {availableVoices
+                                  .filter(voice => voice.category !== 'premade')
+                                  .map((voice) => (
+                                    <option key={voice.voice_id} value={voice.voice_id}>
+                                      ✨ {voice.name}
+                                      {voice.labels?.gender && ` (${voice.labels.gender})`}
+                                      {voice.labels?.age && ` - ${voice.labels.age}`}
+                                    </option>
+                                  ))}
+                              </>
+                            )}
+                            
+                            {/* Premade Voices */}
+                            {availableVoices.filter(voice => voice.category === 'premade').length > 0 && (
+                              <>
+                                <option disabled style={{fontWeight: 'bold', color: '#6366F1'}}>🏪 ElevenLabs Premade</option>
+                                {availableVoices
+                                  .filter(voice => voice.category === 'premade')
+                                  .map((voice) => (
+                                    <option key={voice.voice_id} value={voice.voice_id}>
+                                      {voice.name}
+                                      {voice.labels?.gender && ` (${voice.labels.gender})`}
+                                      {voice.labels?.age && ` - ${voice.labels.age}`}
+                                    </option>
+                                  ))}
+                              </>
+                            )}
+                          </>
                         ) : (
                           <option disabled>Configure ElevenLabs API key to load voices</option>
                         )}
@@ -2699,6 +2727,45 @@ export default function ClientDashboard() {
                   <Database className="w-5 h-5 mr-2 text-purple-400" />
                   Knowledge Management
                 </h3>
+                
+                {/* Voice Recording Management */}
+                <div className="bg-slate-700/40 rounded-lg p-4 mb-6 border border-blue-400/30">
+                  <h4 className="text-white text-md font-medium mb-3 flex items-center">
+                    <Mic className="w-4 h-4 mr-2 text-blue-400" />
+                    Voice Recording Management
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                    <Button 
+                      onClick={() => {/* Handle view recordings */}}
+                      className="bg-blue-600 hover:bg-blue-700 text-white text-sm"
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Recordings
+                    </Button>
+                    <Button 
+                      onClick={() => {/* Handle clear recordings */}}
+                      className="bg-red-600 hover:bg-red-700 text-white text-sm"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Clear All Recordings
+                    </Button>
+                    <Button 
+                      onClick={() => {/* Handle edit recording */}}
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm"
+                    >
+                      <Edit className="w-4 h-4 mr-2" />
+                      Edit Selected
+                    </Button>
+                  </div>
+                  
+                  {/* Recording List */}
+                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                    <div className="text-slate-400 text-sm">
+                      Voice recordings will appear here for management and editing
+                    </div>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                   <Button 
                     onClick={handleUploadDocs}
@@ -2743,6 +2810,131 @@ export default function ClientDashboard() {
                 </div>
                 
 
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Document Management & Memory Insertion */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          {/* Document Manager */}
+          <Card className="bg-slate-800/80 backdrop-blur-sm border border-blue-500/50">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Database className="w-5 h-5 mr-2 text-blue-400" />
+                Document Manager
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex gap-3">
+                  <Button 
+                    onClick={loadDocuments}
+                    disabled={documentsLoading}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    {documentsLoading ? 'Loading...' : 'Load Documents'}
+                  </Button>
+                  <Button 
+                    onClick={deleteSelectedDocuments}
+                    disabled={selectedDocuments.length === 0}
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    Delete Selected ({selectedDocuments.length})
+                  </Button>
+                </div>
+                
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {uploadedDocuments.map((doc) => (
+                    <div 
+                      key={doc.id}
+                      className={`p-3 rounded border cursor-pointer transition-colors ${
+                        selectedDocuments.includes(doc.id)
+                          ? 'bg-blue-600/30 border-blue-400'
+                          : 'bg-slate-700/60 border-slate-600 hover:border-blue-500'
+                      }`}
+                      onClick={() => toggleDocumentSelection(doc.id)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="text-white font-medium">{doc.originalname}</div>
+                          <div className="text-slate-400 text-sm">
+                            {(doc.size / 1024).toFixed(1)} KB • {doc.category}
+                          </div>
+                        </div>
+                        <div className={`w-4 h-4 rounded border-2 ${
+                          selectedDocuments.includes(doc.id)
+                            ? 'bg-blue-500 border-blue-500'
+                            : 'border-slate-400'
+                        }`}>
+                          {selectedDocuments.includes(doc.id) && (
+                            <div className="text-white text-xs flex items-center justify-center">✓</div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {uploadedDocuments.length === 0 && (
+                    <div className="text-slate-400 text-center py-4">
+                      Click "Load Documents" to view uploaded files
+                    </div>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Memory Text Insertion */}
+          <Card className="bg-slate-800/80 backdrop-blur-sm border border-purple-500/50">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Brain className="w-5 h-5 mr-2 text-purple-400" />
+                Memory Text Insertion
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-white text-sm font-medium mb-2 block">
+                    Text to Insert (e.g. https://yobot.bot)
+                  </label>
+                  <textarea
+                    value={memoryText}
+                    onChange={(e) => setMemoryText(e.target.value)}
+                    placeholder="Enter text, URLs, or information to store in memory..."
+                    className="w-full h-24 p-3 bg-slate-700/60 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:border-purple-400 focus:outline-none resize-none"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-white text-sm font-medium mb-2 block">
+                    Memory Category
+                  </label>
+                  <select
+                    value={memoryCategory}
+                    onChange={(e) => setMemoryCategory(e.target.value)}
+                    className="w-full p-3 bg-slate-700/60 border border-slate-600 rounded-lg text-white focus:border-purple-400 focus:outline-none"
+                  >
+                    <option value="general">General</option>
+                    <option value="urls">URLs & Links</option>
+                    <option value="contacts">Contacts</option>
+                    <option value="instructions">Instructions</option>
+                    <option value="reference">Reference</option>
+                  </select>
+                </div>
+                
+                <Button 
+                  onClick={insertMemoryText}
+                  disabled={!memoryText.trim()}
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                >
+                  <Brain className="w-4 h-4 mr-2" />
+                  Insert into Memory
+                </Button>
+                
+                <div className="text-slate-400 text-xs">
+                  Memory entries are stored with high priority and can be retrieved during conversations.
+                </div>
               </div>
             </CardContent>
           </Card>

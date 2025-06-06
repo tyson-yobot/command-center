@@ -9601,6 +9601,7 @@ Provide 3 actionable suggestions in bullet points.`;
     try {
       const apiKey = "sk_abb746b1e386be0085d005a594c6818afac710a9c3d6780a";
       
+      // Fetch all voices from ElevenLabs API (includes both premade and custom)
       const response = await fetch('https://api.elevenlabs.io/v1/voices', {
         headers: {
           'xi-api-key': apiKey
@@ -9617,7 +9618,22 @@ Provide 3 actionable suggestions in bullet points.`;
       }
       
       const data = await response.json();
-      res.json(data);
+      
+      // Separate premade and custom voices for better organization
+      const premadeVoices = data.voices.filter((voice: any) => voice.category === 'premade');
+      const customVoices = data.voices.filter((voice: any) => voice.category !== 'premade');
+      
+      // Sort voices: custom first, then premade
+      const sortedVoices = [...customVoices, ...premadeVoices];
+      
+      console.log(`Loaded ${customVoices.length} custom voices and ${premadeVoices.length} premade voices`);
+      
+      res.json({
+        voices: sortedVoices,
+        customCount: customVoices.length,
+        premadeCount: premadeVoices.length,
+        message: `Loaded ${customVoices.length} custom and ${premadeVoices.length} premade voices`
+      });
     } catch (error: any) {
       console.error('ElevenLabs voices error:', error);
       res.json({
