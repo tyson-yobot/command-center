@@ -238,6 +238,18 @@ async function triggerMakeScenario(data: any) {
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
 
+  // Serve PDF files for quotes
+  app.get('/pdfs/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname, '../pdfs', filename);
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        console.error('PDF file not found:', filename);
+        res.status(404).json({ error: 'PDF not found' });
+      }
+    });
+  });
+
   // Webhook status endpoint
   app.get('/api/webhook/status', (req, res) => {
     res.json({
