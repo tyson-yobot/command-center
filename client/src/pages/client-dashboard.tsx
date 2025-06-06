@@ -229,7 +229,11 @@ export default function ClientDashboard() {
       
       if (data.voices && data.voices.length > 0) {
         setAvailableVoices(data.voices);
-        setVoiceStatus('Voices loaded successfully');
+        setVoiceStatus(`${data.voices.length} voices loaded successfully`);
+        setToast({
+          title: "ElevenLabs Voices Loaded",
+          description: `Successfully loaded ${data.voices.length} available voices`,
+        });
       } else {
         setAvailableVoices([]);
         if (data.message) {
@@ -245,6 +249,11 @@ export default function ClientDashboard() {
       console.error('Failed to fetch voices:', error);
       setAvailableVoices([]);
       setVoiceStatus('Error connecting to ElevenLabs');
+      setToast({
+        title: "Voice Loading Error",
+        description: "Unable to connect to ElevenLabs service",
+        variant: "destructive"
+      });
     }
     setVoicesLoading(false);
   };
@@ -1384,7 +1393,13 @@ export default function ClientDashboard() {
           sync_type: "incremental"
         };
       case "New Support Ticket":
-        return { action: "create_sample_ticket", priority: "high" };
+        return { 
+          subject: "Dashboard Support Request",
+          description: "Test support ticket from Command Center",
+          priority: "normal",
+          clientName: "Command Center User",
+          email: "user@company.com"
+        };
       case "Manual Follow-up":
         return { lead_id: "manual_trigger", priority: "high" };
       case "Initiate Voice Call":
