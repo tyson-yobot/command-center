@@ -10078,6 +10078,209 @@ print(json.dumps(result))
     }
   });
 
+  // Lead Scraping API Endpoints
+  
+  // PhantomBuster scraping endpoint
+  app.post('/api/phantombuster/scrape', async (req, res) => {
+    try {
+      const { search_query, location, industry, company_size, job_title, max_results, phantom_id, session_cookie } = req.body;
+      
+      const apiKey = process.env.PHANTOMBUSTER_API_KEY;
+      if (!apiKey) {
+        return res.status(400).json({ 
+          error: "PhantomBuster API key required",
+          message: "Please configure PHANTOMBUSTER_API_KEY to use this feature"
+        });
+      }
+
+      // Configure PhantomBuster scraping parameters
+      const scrapingConfig = {
+        phantomId: phantom_id || "default-phantom-id",
+        argument: {
+          search: search_query,
+          location: location,
+          industry: industry,
+          companySize: company_size,
+          jobTitle: job_title,
+          numberOfProfiles: parseInt(max_results) || 100,
+          sessionCookie: session_cookie
+        }
+      };
+
+      // Start PhantomBuster automation
+      const phantomResponse = await fetch('https://api.phantombuster.com/api/v2/agents/launch', {
+        method: 'POST',
+        headers: {
+          'X-Phantombuster-Key': apiKey,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(scrapingConfig)
+      });
+
+      if (!phantomResponse.ok) {
+        return res.status(phantomResponse.status).json({
+          error: "PhantomBuster API error",
+          message: "Failed to start PhantomBuster scraping. Please check your API key and phantom configuration."
+        });
+      }
+
+      const data = await phantomResponse.json();
+      
+      res.json({
+        success: true,
+        tool: "PhantomBuster",
+        status: "started",
+        job_id: data.containerId,
+        estimated_time: "2-5 minutes",
+        results: data.data || []
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ 
+        error: "PhantomBuster scraping failed", 
+        message: error.message 
+      });
+    }
+  });
+
+  // Apify scraping endpoint
+  app.post('/api/apify/scrape', async (req, res) => {
+    try {
+      const { search_terms, location_filter, industry_filter, company_filter, job_level, max_profiles, actor_id } = req.body;
+      
+      const apiKey = process.env.APIFY_API_KEY;
+      if (!apiKey) {
+        return res.status(400).json({ 
+          error: "Apify API key required",
+          message: "Please configure APIFY_API_KEY to use this feature"
+        });
+      }
+
+      // Configure Apify actor parameters
+      const actorInput = {
+        searchTerms: search_terms,
+        locationFilter: location_filter,
+        industryFilter: industry_filter,
+        companyFilter: company_filter,
+        jobLevel: job_level,
+        maxProfiles: parseInt(max_profiles) || 50,
+        outputFormat: "json"
+      };
+
+      // Start Apify actor
+      const apifyResponse = await fetch(`https://api.apify.com/v2/acts/${actor_id || 'apify/linkedin-company-scraper'}/runs`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ input: actorInput })
+      });
+
+      if (!apifyResponse.ok) {
+        return res.status(apifyResponse.status).json({
+          error: "Apify API error", 
+          message: "Failed to start Apify scraping. Please check your API key and actor configuration."
+        });
+      }
+
+      const data = await apifyResponse.json();
+      
+      res.json({
+        success: true,
+        tool: "Apify",
+        status: "started",
+        job_id: data.id,
+        estimated_time: "3-10 minutes",
+        results: data.defaultDatasetItems || []
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ 
+        error: "Apify scraping failed", 
+        message: error.message 
+      });
+    }
+  });
+
+  // Apollo.io scraping endpoint
+  app.post('/api/apollo/scrape', async (req, res) => {
+    try {
+      const { company_name, domain, industry, location, employee_range, job_titles, max_contacts } = req.body;
+      
+      const apiKey = process.env.APOLLO_API_KEY;
+      if (!apiKey) {
+        return res.status(400).json({ 
+          error: "Apollo API key required",
+          message: "Please configure APOLLO_API_KEY to use this feature"
+        });
+      }
+
+      // Configure Apollo search parameters
+      const searchParams = {
+        q_organization_name: company_name,
+        organization_domains: domain ? [domain] : undefined,
+        q_organization_industry_tag_names: industry ? [industry] : undefined,
+        q_organization_locations: location ? [location] : undefined,
+        organization_num_employees_ranges: employee_range ? [employee_range] : undefined,
+        person_titles: job_titles ? job_titles.split(',').map((t: string) => t.trim()) : undefined,
+        page: 1,
+        per_page: Math.min(parseInt(max_contacts) || 25, 100)
+      };
+
+      // Remove undefined values
+      Object.keys(searchParams).forEach(key => 
+        searchParams[key as keyof typeof searchParams] === undefined && delete searchParams[key as keyof typeof searchParams]
+      );
+
+      // Search Apollo.io
+      const apolloResponse = await fetch('https://api.apollo.io/v1/mixed_people/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+          'X-Api-Key': apiKey
+        },
+        body: JSON.stringify(searchParams)
+      });
+
+      if (!apolloResponse.ok) {
+        return res.status(apolloResponse.status).json({
+          error: "Apollo API error",
+          message: "Failed to search Apollo.io. Please check your API key and search parameters."
+        });
+      }
+
+      const data = await apolloResponse.json();
+      
+      // Format results consistently
+      const formattedResults = (data.people || []).map((person: any) => ({
+        name: `${person.first_name || ''} ${person.last_name || ''}`.trim(),
+        title: person.title,
+        company: person.organization?.name,
+        email: person.email,
+        phone: person.phone_numbers?.[0]?.sanitized_number,
+        location: person.city && person.state ? `${person.city}, ${person.state}` : person.city || person.state,
+        linkedin_url: person.linkedin_url,
+        verified: person.email_status === 'verified'
+      }));
+
+      res.json({
+        success: true,
+        tool: "Apollo.io",
+        status: "complete",
+        total_contacts: data.pagination?.total_entries || 0,
+        results: formattedResults
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ 
+        error: "Apollo scraping failed", 
+        message: error.message 
+      });
+    }
+  });
+
   // ElevenLabs voice integration endpoints
   app.get('/api/elevenlabs/voices', async (req, res) => {
     try {

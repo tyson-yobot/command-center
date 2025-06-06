@@ -40,6 +40,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i.png';
+import { LeadScrapingInterface } from '@/components/lead-scraping-interface';
 
 export default function ClientDashboard() {
   const { data: metrics } = useQuery({ queryKey: ['/api/metrics'] });
@@ -75,6 +76,7 @@ export default function ClientDashboard() {
   const [selectedRecordings, setSelectedRecordings] = useState<string[]>([]);
   const [showRecordingList, setShowRecordingList] = useState(false);
   const [editingRecording, setEditingRecording] = useState<any>(null);
+  const [showLeadScraping, setShowLeadScraping] = useState(false);
 
   // Voice recognition functions for RAG system
   const initializeVoiceRecognition = () => {
