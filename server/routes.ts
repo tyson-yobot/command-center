@@ -9584,7 +9584,7 @@ Provide 3 actionable suggestions in bullet points.`;
           'xi-api-key': "sk_abb746b1e386be0085d005a594c6818afac710a9c3d6780a"
         },
         body: JSON.stringify({
-          text: text || 'Hello, this is a test of the voice persona system.',
+          text: text || 'Hello, this is YoBot, your advanced AI enterprise assistant. I am conducting a comprehensive voice system test to demonstrate my full capabilities. This extended test will showcase my natural speech patterns, clarity, and professional tone. I can handle complex conversations, provide detailed explanations, and maintain consistent voice quality throughout extended interactions. My voice generation system is powered by advanced AI technology that ensures clear, natural, and engaging communication for all your business needs. Whether you need me to explain complex processes, conduct detailed consultations, or provide comprehensive support, I am ready to assist with professional excellence. This test demonstrates my ability to maintain consistent voice quality and natural flow throughout longer conversations, ensuring optimal performance for your enterprise requirements.',
           model_id: 'eleven_monolingual_v1',
           voice_settings: {
             stability: 0.5,
