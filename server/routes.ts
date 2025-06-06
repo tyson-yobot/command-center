@@ -1753,60 +1753,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // 🧾 YoBot® Sales Order Form LIVE
-  app.post('/api/orders/live', async (req, res) => {
-    try {
-      const { client_name, email, phone, package: pkg, addons, total } = req.body;
-
-      const apiKey = process.env.AIRTABLE_API_KEY;
-      if (!apiKey) {
-        return res.status(500).json({ error: "Airtable API key not configured" });
-      }
-
-      // Create data record matching your webhook spec
-      const webhookData = {
-        type: "Sales Order - Live",
-        client_name,
-        email,
-        phone,
-        package: pkg,
-        addons,
-        total,
-        form: "Sales Order - Live",
-        timestamp: new Date().toISOString()
-      };
-
-      try {
-        await axios.post(
-          `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU/`,
-          {
-            fields: {
-              "Data": JSON.stringify(webhookData)
-            }
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${apiKey}`,
-              "Content-Type": "application/json"
-            }
-          }
-        );
-      } catch (airtableError) {
-        console.log("Sales order data logged:", webhookData);
-      }
-
-      res.json({
-        success: true,
-        message: "Sales order recorded successfully",
-        webhook: "Sales Order Live",
-        data: { client_name, email, total }
-      });
-
-    } catch (err: any) {
-      console.error("Sales order error:", err);
-      res.status(500).json({ error: "Server error" });
-    }
-  });
+  // Basic logging endpoint removed - using complete automation workflow instead
 
   // 📥 Webhook for: SmartSpend™ Charge Intake
   app.post('/api/smartspend/charge', async (req, res) => {
@@ -2952,23 +2899,33 @@ print(json.dumps(results))
     }
   });
 
-  // 📦 Sales Order Live (Updated to trigger complete Google automation)
+  // 📦 Sales Order Live (Complete automation with PDF generation and email)
   app.post('/api/orders/live', async (req, res) => {
     try {
-      const { order_id, client_name, client_email, product, quantity, unit_price, total_amount, payment_method, order_status, delivery_date } = req.body;
+      // Handle multiple field name variations from Tally form
+      const { 
+        order_id, client_name, customer_name, client_email, email, 
+        product, package: pkg, quantity, unit_price, total_amount, total,
+        payment_method, order_status, delivery_date, phone, addons 
+      } = req.body;
 
-      console.log("🚀 Live sales order received from Tally form:", { client_name, client_email, product, total_amount });
+      const finalCustomerName = customer_name || client_name || 'Valued Client';
+      const finalEmail = email || client_email || 'customer@example.com';
+      const finalPackage = pkg || product || 'YoBot Package';
+      const finalTotal = total || total_amount || '$0';
 
-      // Transform Tally form data to match your Google script format
+      console.log("🚀 Live sales order received from Tally form:", { finalCustomerName, finalEmail, finalPackage, finalTotal });
+
+      // Transform Tally form data for complete automation
       const orderData = {
-        customer_name: client_name || 'Valued Client',
-        email: client_email || 'customer@example.com',
-        company: client_name || 'Company Inc.',
-        package: product || 'YoBot Package',
-        total: total_amount || '$0',
+        customer_name: finalCustomerName,
+        email: finalEmail,
+        company: finalCustomerName,
+        package: finalPackage,
+        total: finalTotal,
         order_id: order_id || `ORD-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-${Math.floor(Math.random() * 1000)}`,
-        addons: [],
-        phone: '(000) 000-0000',
+        addons: addons || [],
+        phone: phone || '(000) 000-0000',
         monthly_fee: '$0'
       };
 
