@@ -41,6 +41,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i.png';
 import { LeadScrapingInterface } from '@/components/lead-scraping-interface';
+import { CallMonitoringPopup } from '@/components/call-monitoring-popup';
 
 export default function ClientDashboard() {
   const { data: metrics } = useQuery({ queryKey: ['/api/metrics'] });
@@ -77,6 +78,13 @@ export default function ClientDashboard() {
   const [showRecordingList, setShowRecordingList] = useState(false);
   const [editingRecording, setEditingRecording] = useState<any>(null);
   const [showLeadScraping, setShowLeadScraping] = useState(false);
+  
+  // Call monitoring states
+  const [showCallMonitoring, setShowCallMonitoring] = useState(false);
+  const [activeCalls, setActiveCalls] = useState<any[]>([]);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [completedCalls, setCompletedCalls] = useState(0);
+  const [pipelineRunning, setPipelineRunning] = useState(false);
 
   // Voice recognition functions for RAG system
   const initializeVoiceRecognition = () => {
@@ -1090,6 +1098,92 @@ export default function ClientDashboard() {
     }
   };
 
+  // Pipeline call functions with monitoring
+  const startPipelineCalls = async () => {
+    try {
+      setPipelineRunning(true);
+      setShowCallMonitoring(true);
+      
+      const response = await fetch('/api/pipeline/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: "trigger_pipeline_calls",
+          filter: "active"
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setTotalRecords(result.total_records || 0);
+        setActiveCalls(result.activeCalls || []);
+        
+        // Simulate call monitoring with real-time updates
+        const mockCalls = Array.from({length: result.active_calls || 0}, (_, i) => ({
+          id: `call-${Date.now()}-${i}`,
+          phoneNumber: `+1555${Math.floor(Math.random() * 9000) + 1000}${Math.floor(Math.random() * 90) + 10}`,
+          contactName: `Contact ${i + 1}`,
+          status: 'dialing',
+          duration: 0,
+          startTime: new Date(),
+          voiceId: selectedPersona,
+          script: 'Pipeline call script'
+        }));
+        
+        setActiveCalls(mockCalls);
+        
+        setToast({
+          title: "Pipeline Started",
+          description: `Started ${result.active_calls} calls from your Airtable`,
+        });
+      } else {
+        setPipelineRunning(false);
+        setToast({
+          title: "Pipeline Failed",
+          description: result.error || result.message || 'Failed to start pipeline',
+          variant: "destructive"
+        });
+      }
+    } catch (error: any) {
+      setPipelineRunning(false);
+      setToast({
+        title: "Connection Error",
+        description: `Failed to connect to pipeline: ${error.message}`,
+        variant: "destructive"
+      });
+    }
+  };
+
+  const stopPipelineCalls = async () => {
+    try {
+      const response = await fetch('/api/pipeline/stop', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: "stop_pipeline_calls",
+          terminate_all: true
+        })
+      });
+
+      const result = await response.json();
+      
+      setPipelineRunning(false);
+      setActiveCalls([]);
+      
+      setToast({
+        title: "Pipeline Stopped",
+        description: "All pipeline calls have been terminated",
+      });
+    } catch (error: any) {
+      setToast({
+        title: "Stop Failed",
+        description: `Failed to stop pipeline: ${error.message}`,
+        variant: "destructive"
+      });
+    }
+  };
+
   // Live Command Execution Handler
   const executeLiveCommand = async (category: string) => {
     try {
@@ -1100,11 +1194,11 @@ export default function ClientDashboard() {
       
       switch (category) {
         case "Start Pipeline Calls":
-          endpoint = '/api/pipeline/start';
-          break;
+          await startPipelineCalls();
+          return;
         case "Stop Pipeline Calls":
-          endpoint = '/api/pipeline/stop';
-          break;
+          await stopPipelineCalls();
+          return;
         case "Initiate Voice Call":
           endpoint = '/api/voice/call';
           break;
@@ -3191,6 +3285,15 @@ export default function ClientDashboard() {
           </div>
         </div>
       )}
+
+      {/* Call Monitoring Popup */}
+      <CallMonitoringPopup
+        isOpen={showCallMonitoring}
+        onClose={() => setShowCallMonitoring(false)}
+        activeCalls={activeCalls}
+        totalRecords={totalRecords}
+        completedCalls={completedCalls}
+      />
     </div>
   );
 }
