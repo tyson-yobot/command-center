@@ -46,6 +46,7 @@ export default function ClientDashboard() {
   const { data: crmData } = useQuery({ queryKey: ['/api/crm'] });
   const { data: testMetrics } = useQuery({ queryKey: ['/api/airtable/test-metrics'] });
   const { data: commandCenterMetrics } = useQuery({ queryKey: ['/api/airtable/command-center-metrics'] });
+  const { data: knowledgeStats, refetch: refetchKnowledge } = useQuery({ queryKey: ['/api/knowledge/stats'] });
   const [isListening, setIsListening] = React.useState(false);
   const [showEscalation, setShowEscalation] = React.useState(false);
   const [selectedTier, setSelectedTier] = React.useState('All');
@@ -202,9 +203,11 @@ export default function ClientDashboard() {
     setVoicesLoading(false);
   };
 
-  // Test voice persona with fallback to browser speech
+  // Test voice persona with proper error handling
   const testVoicePersona = async () => {
     try {
+      setVoiceStatus('Testing voice...');
+      
       const response = await fetch('/api/elevenlabs/test-voice', {
         method: 'POST',
         headers: {
@@ -212,7 +215,7 @@ export default function ClientDashboard() {
         },
         body: JSON.stringify({
           voice_id: selectedPersona,
-          text: 'Hello, this is a test of the voice persona system.'
+          text: 'Hello, this is a test of the voice persona system powered by YoBot.'
         })
       });
 
@@ -220,23 +223,28 @@ export default function ClientDashboard() {
         const audioBlob = await response.blob();
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
-        audio.play();
-        setVoiceStatus('Voice test completed');
+        
+        audio.onloadeddata = () => {
+          setVoiceStatus('Playing voice test...');
+        };
+        
+        audio.onended = () => {
+          setVoiceStatus('Voice test completed successfully');
+        };
+        
+        audio.onerror = () => {
+          setVoiceStatus('Audio playback error');
+        };
+        
+        await audio.play();
       } else {
-        // Fallback to browser speech synthesis
-        const utterance = new SpeechSynthesisUtterance('Hello, this is a test of the voice persona system.');
-        const voices = speechSynthesis.getVoices();
-        if (voices.length > 0) {
-          utterance.voice = voices.find(v => v.name.includes('Female')) || voices[0];
-        }
-        speechSynthesis.speak(utterance);
-        setVoiceStatus('Using browser speech synthesis');
+        const errorData = await response.text();
+        setVoiceStatus(`Voice test failed: ${response.status}`);
+        console.error('Voice test error:', errorData);
       }
     } catch (error) {
-      // Fallback to browser speech synthesis
-      const utterance = new SpeechSynthesisUtterance('Hello, this is a test of the voice persona system.');
-      speechSynthesis.speak(utterance);
-      setVoiceStatus('Using browser speech synthesis');
+      setVoiceStatus(`Voice test error: ${error.message}`);
+      console.error('Voice test exception:', error);
     }
   };
 
@@ -328,16 +336,23 @@ export default function ClientDashboard() {
 
   const handleApplyPersona = async () => {
     try {
+      setVoiceStatus('Applying voice persona...');
+      
       const response = await fetch('/api/voice/apply-persona', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ voiceId: selectedPersona })
       });
+      
       if (response.ok) {
-        setVoiceStatus('Voice persona applied');
+        const result = await response.json();
+        setVoiceStatus(`Voice persona applied: ${selectedPersona}`);
+      } else {
+        const error = await response.text();
+        setVoiceStatus(`Failed to apply persona: ${response.status}`);
       }
     } catch (error) {
-      setVoiceStatus('Failed to apply persona');
+      setVoiceStatus(`Apply persona error: ${error.message}`);
     }
   };
 

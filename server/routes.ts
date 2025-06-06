@@ -9609,23 +9609,44 @@ Provide 3 actionable suggestions in bullet points.`;
   // Knowledge Management API Endpoints
   app.post('/api/knowledge/upload', async (req, res) => {
     try {
-      // Handle file upload for knowledge base
-      const files = req.files || [];
-      const uploadResults = [];
+      const multer = require('multer');
+      const fs = require('fs').promises;
       
-      for (const file of files) {
-        // Process and store document
-        uploadResults.push({
+      // Configure multer for file uploads
+      const storage = multer.diskStorage({
+        destination: './uploads/',
+        filename: (req, file, cb) => {
+          cb(null, Date.now() + '-' + file.originalname);
+        }
+      });
+      
+      const upload = multer({ 
+        storage: storage,
+        fileFilter: (req, file, cb) => {
+          const allowedTypes = ['.pdf', '.doc', '.docx', '.txt'];
+          const fileExt = require('path').extname(file.originalname).toLowerCase();
+          cb(null, allowedTypes.includes(fileExt));
+        }
+      }).array('files');
+      
+      upload(req, res, async (err) => {
+        if (err) {
+          return res.status(500).json({ success: false, error: err.message });
+        }
+        
+        const uploadedFiles = req.files || [];
+        const uploadResults = uploadedFiles.map(file => ({
           filename: file.filename,
+          originalname: file.originalname,
           size: file.size,
           status: 'uploaded'
+        }));
+        
+        res.json({ 
+          success: true, 
+          message: `${uploadResults.length} documents uploaded successfully`,
+          files: uploadResults 
         });
-      }
-      
-      res.json({ 
-        success: true, 
-        message: `${uploadResults.length} documents uploaded successfully`,
-        files: uploadResults 
       });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
@@ -9646,11 +9667,43 @@ Provide 3 actionable suggestions in bullet points.`;
 
   app.get('/api/knowledge/stats', async (req, res) => {
     try {
+      // Get real document count from knowledge base
+      const fs = require('fs').promises;
+      let documentCount = 0;
+      let totalSize = '0 MB';
+      
+      try {
+        const uploadDir = './uploads';
+        const files = await fs.readdir(uploadDir);
+        documentCount = files.filter(file => 
+          file.endsWith('.pdf') || 
+          file.endsWith('.doc') || 
+          file.endsWith('.docx') || 
+          file.endsWith('.txt')
+        ).length;
+        
+        let totalBytes = 0;
+        for (const file of files) {
+          try {
+            const stats = await fs.stat(`${uploadDir}/${file}`);
+            totalBytes += stats.size;
+          } catch (e) {
+            // Skip files that can't be read
+          }
+        }
+        
+        totalSize = totalBytes > 0 ? `${(totalBytes / 1024 / 1024).toFixed(1)} MB` : '0 MB';
+      } catch (dirError) {
+        // Directory doesn't exist or can't be read
+        documentCount = 0;
+        totalSize = '0 MB';
+      }
+      
       res.json({
-        documentCount: 1247,
-        totalSize: '2.3 GB',
+        documentCount,
+        totalSize,
         lastIndexed: new Date().toISOString(),
-        status: 'active'
+        status: documentCount > 0 ? 'active' : 'empty'
       });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
@@ -9762,6 +9815,46 @@ Provide 3 actionable suggestions in bullet points.`;
       res.send(reportData);
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Toggle API endpoint exactly as specified
+  app.post('/api/set_toggles', async (req, res) => {
+    try {
+      const { client, toggles } = req.body;
+      
+      if (!client || !toggles) {
+        return res.status(400).json({
+          error: 'Missing required fields: client and toggles'
+        });
+      }
+
+      // Log toggle update to Airtable
+      try {
+        await logToAirtable('🎛️ Toggle Updates', {
+          '🏢 Client': client,
+          '📅 Timestamp': new Date().toISOString(),
+          '🔧 Toggles': JSON.stringify(toggles),
+          '✅ Status': 'Updated'
+        });
+      } catch (logError) {
+        console.error('Failed to log toggle update:', logError);
+      }
+
+      console.log(`✅ TOGGLES SUCCESS for ${client}:`, toggles);
+      
+      res.json({
+        success: true,
+        message: `Toggles updated for ${client}`,
+        client,
+        toggles
+      });
+    } catch (error: any) {
+      console.error(`❌ GENERAL ERROR for ${client}: ${error.message}`);
+      res.status(500).json({
+        error: 'Failed to update toggles',
+        details: error.message
+      });
     }
   });
 
