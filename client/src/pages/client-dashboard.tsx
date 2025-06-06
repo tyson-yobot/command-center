@@ -26,7 +26,14 @@ import {
   Monitor,
   PieChart,
   FileText,
-  Gauge
+  Gauge,
+  Search,
+  Database,
+  Upload,
+  RefreshCw,
+  Trash2,
+  Eye,
+  Download
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i.png';
@@ -1537,6 +1544,143 @@ export default function ClientDashboard() {
                     )) || (
                       <div className="text-slate-400 text-sm">No recent test data available</div>
                     )}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* RAG Knowledge Base System - Positioned at bottom as requested */}
+        <div className="mb-12">
+          <Card className="bg-gradient-to-br from-purple-900/80 via-blue-900/80 to-indigo-900/80 backdrop-blur-sm border border-purple-400/50 shadow-2xl shadow-purple-500/30">
+            <CardHeader className="border-b border-purple-400/30">
+              <CardTitle className="text-white flex items-center text-2xl font-bold">
+                <Brain className="w-7 h-7 mr-3 text-purple-400" />
+                🧠 RAG Knowledge Base
+                <Badge className="ml-3 bg-green-600 text-white">ACTIVE</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
+              {/* Query Interface */}
+              <div className="mb-8">
+                <h3 className="text-white text-lg font-semibold mb-4">Knowledge Query Interface</h3>
+                <div className="space-y-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-5 w-5 text-purple-400" />
+                    <input
+                      type="text"
+                      placeholder="Ask the knowledge base anything..."
+                      className="w-full pl-12 pr-4 py-3 bg-blue-900/60 border border-purple-400/50 rounded-lg text-white placeholder-purple-300 focus:border-purple-400 focus:outline-none"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                      <Search className="w-4 h-4 mr-2" />
+                      Query Knowledge
+                    </Button>
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                      <Brain className="w-4 h-4 mr-2" />
+                      Smart Search
+                    </Button>
+                    <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                      <FileText className="w-4 h-4 mr-2" />
+                      Context Search
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Voice Generation & Phone Calling */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                {/* Voice Generation */}
+                <div className="bg-blue-900/60 rounded-lg p-6 border border-cyan-400/50">
+                  <h3 className="text-white text-lg font-semibold mb-4 flex items-center">
+                    <Mic className="w-5 h-5 mr-2 text-cyan-400" />
+                    Voice Generation
+                  </h3>
+                  <div className="space-y-4">
+                    <textarea
+                      placeholder="Enter text to convert to speech..."
+                      className="w-full p-3 bg-blue-800/60 border border-cyan-400/50 rounded text-white placeholder-cyan-300"
+                      rows={3}
+                    />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button className="bg-cyan-600 hover:bg-cyan-700 text-white">
+                        <Headphones className="w-4 h-4 mr-2" />
+                        Generate Voice
+                      </Button>
+                      <Button className="bg-teal-600 hover:bg-teal-700 text-white">
+                        <Download className="w-4 h-4 mr-2" />
+                        Download Audio
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Phone Calling */}
+                <div className="bg-green-900/60 rounded-lg p-6 border border-green-400/50">
+                  <h3 className="text-white text-lg font-semibold mb-4 flex items-center">
+                    <Phone className="w-5 h-5 mr-2 text-green-400" />
+                    Outbound Calling
+                  </h3>
+                  <div className="space-y-4">
+                    <input
+                      type="tel"
+                      placeholder="Enter phone number..."
+                      className="w-full p-3 bg-green-800/60 border border-green-400/50 rounded text-white placeholder-green-300"
+                    />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button className="bg-green-600 hover:bg-green-700 text-white">
+                        <Phone className="w-4 h-4 mr-2" />
+                        Start Call
+                      </Button>
+                      <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                        <MessageSquare className="w-4 h-4 mr-2" />
+                        Voice Message
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Knowledge Management */}
+              <div className="bg-slate-800/60 rounded-lg p-6 border border-purple-400/50">
+                <h3 className="text-white text-lg font-semibold mb-4 flex items-center">
+                  <Database className="w-5 h-5 mr-2 text-purple-400" />
+                  Knowledge Management
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                  <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload Docs
+                  </Button>
+                  <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Reindex Knowledge
+                  </Button>
+                  <Button className="bg-red-600 hover:bg-red-700 text-white">
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Clear Knowledge
+                  </Button>
+                  <Button className="bg-amber-600 hover:bg-amber-700 text-white">
+                    <Eye className="w-4 h-4 mr-2" />
+                    View Sources
+                  </Button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-purple-400">1,247</div>
+                    <div className="text-purple-300 text-sm">Documents Indexed</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-cyan-400">98.7%</div>
+                    <div className="text-cyan-300 text-sm">Query Accuracy</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-400">2.1s</div>
+                    <div className="text-green-300 text-sm">Avg Response Time</div>
                   </div>
                 </div>
               </div>
