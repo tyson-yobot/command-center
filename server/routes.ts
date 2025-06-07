@@ -6949,118 +6949,7 @@ except Exception as e:
     }
   });
 
-  // Tally Form Webhook Handler - Parse Tally webhook payload
-  app.post('/webhook/sales-order', async (req, res) => {
-    try {
-      const data = req.body;
-      console.log('📦 Tally webhook received:', data);
-
-      // Parse Tally fieldsArray format
-      const fields: Record<string, any> = {};
-      if (data.fieldsArray) {
-        data.fieldsArray.forEach((item: any) => {
-          fields[item.label] = item.value;
-        });
-      }
-
-      // Extract core fields from Tally form
-      const company_name = fields['Company Name'];
-      const contact_name = fields['Full Name'];
-      const email = fields['Email Address'];
-      const phone = fields['Phone Number'];
-      const website = fields['Website'];
-      const bot_package = fields['Which YoBot® Package would you like to start with?'];
-      const selected_addons = Object.keys(fields).filter(key => 
-        fields[key] === true && key.includes('Add-On')
-      );
-      const custom_notes = fields['Custom Notes or Special Requests (Optional)'];
-      const requested_start_date = fields['Requested Start Date (Optional)'];
-      const payment_method = fields['Preferred Payment Method'];
-
-      // Generate quote ID
-      const quote_id = `Q-${new Date().toISOString().slice(0,10).replace(/-/g, '')}-${company_name?.slice(0,4).toUpperCase() || 'TALLY'}`;
-
-      console.log(`📦 Company: ${company_name}`);
-      console.log(`👤 Contact: ${contact_name}`);
-      console.log(`📬 Email: ${email}`);
-      console.log(`🤖 Package: ${bot_package}`);
-      console.log(`🧩 Add-Ons: ${selected_addons}`);
-      console.log(`🧾 Quote ID: ${quote_id}`);
-
-      // Convert to standardized format for automation
-      const standardizedData = {
-        'Parsed Company Name': company_name,
-        'Parsed Contact Name': contact_name,
-        'Parsed Contact Email': email,
-        'Parsed Contact Phone': phone,
-        'Parsed Bot Package': bot_package,
-        'Parsed Add-On List': selected_addons,
-        'Parsed Stripe Payment': '0', // Will be updated after payment
-        'Parsed Industry': 'General'
-      };
-
-      // Run complete sales order automation
-      const { spawn } = await import('child_process');
-      
-      const automationResult = await new Promise((resolve, reject) => {
-        const pythonProcess = spawn('python3', [
-          'complete_yobot_integration.py'
-        ], {
-          cwd: './server',
-          stdio: 'pipe'
-        });
-
-        let outputData = '';
-        let errorData = '';
-
-        pythonProcess.stdin.write(JSON.stringify(standardizedData));
-        pythonProcess.stdin.end();
-
-        pythonProcess.stdout.on('data', (data: Buffer) => {
-          outputData += data.toString();
-        });
-
-        pythonProcess.stderr.on('data', (data: Buffer) => {
-          errorData += data.toString();
-        });
-
-        pythonProcess.on('close', (code: number) => {
-          if (code === 0) {
-            try {
-              const jsonMatch = outputData.match(/🎯 FINAL RESULT: (.*)/);
-              if (jsonMatch) {
-                resolve(JSON.parse(jsonMatch[1]));
-              } else {
-                resolve({ success: true, automation_complete: true });
-              }
-            } catch (e) {
-              resolve({ success: true, automation_complete: true, output: outputData });
-            }
-          } else {
-            reject(new Error(`Automation failed with code ${code}: ${errorData}`));
-          }
-        });
-      });
-
-      const response = {
-        status: "success",
-        message: "Sales order received and processed",
-        quote_id: quote_id,
-        company: company_name,
-        automation_result: automationResult
-      };
-
-      console.log('✅ Tally webhook processed successfully');
-      res.json(response);
-
-    } catch (error: any) {
-      console.error('Tally webhook error:', error);
-      res.status(500).json({
-        status: "error",
-        message: error.message
-      });
-    }
-  });
+  // Tally Form Webhook Handler - Removed conflicting Python handler
 
   // Sales Order Webhook - Complete implementation from your provided code
   app.post('/webhook/sales_order', async (req, res) => {
@@ -12189,7 +12078,7 @@ print(json.dumps(result))
             fields: 'webViewLink'
           });
 
-          driveUrl = fileRes.data.webViewLink;
+          driveUrl = fileRes?.data?.webViewLink || (fileRes?.data?.id ? `https://drive.google.com/file/d/${fileRes.data.id}/view` : null);
         } catch (driveError) {
           console.log('Google Drive upload failed:', driveError);
         }
