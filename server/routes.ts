@@ -10290,90 +10290,7 @@ print(json.dumps(result))
     }
   });
 
-  // Original webhook handler
-  app.post('/webhook/sales-order', async (req, res) => {
-    try {
-      const data = req.body;
-      
-      // Process webhook data using Python handler
-      const { spawn } = require('child_process');
-      const python = spawn('python3', [
-        'server/webhookSalesOrderHandler.py'
-      ], {
-        stdio: ['pipe', 'pipe', 'pipe']
-      });
-      
-      python.stdin.write(JSON.stringify(data));
-      python.stdin.end();
-      
-      let result = '';
-      python.stdout.on('data', (data: any) => {
-        result += data.toString();
-      });
-      
-      python.on('close', async (code: number) => {
-        if (code === 0) {
-          try {
-            const webhookResult = JSON.parse(result);
-            
-            if (webhookResult.status === 'success') {
-              // Trigger complete automation workflow
-              const quoteData = webhookResult.data;
-              
-              // Execute quote generation
-              const quoteGenerationData = {
-                company_name: quoteData.company,
-                contact_name: quoteData.contact,
-                client_email: quoteData.email,
-                client_phone: quoteData.phone,
-                bot_package: quoteData.package,
-                add_ons: quoteData.addons,
-                items: [
-                  {
-                    name: quoteData.package || "Enterprise Bot",
-                    desc: "Complete AI voice automation solution",
-                    qty: 1,
-                    price: 25000.00
-                  }
-                ]
-              };
-              
-              // Generate quote PDF
-              const quotePython = spawn('python3', [
-                'server/quoteGenerator.py'
-              ], {
-                stdio: ['pipe', 'pipe', 'pipe']
-              });
-              
-              quotePython.stdin.write(JSON.stringify(quoteGenerationData));
-              quotePython.stdin.end();
-              
-              console.log('📋 Sales order webhook processed, triggering complete automation...');
-            }
-            
-            res.json(webhookResult);
-          } catch (parseError) {
-            res.status(500).json({ 
-              status: 'error', 
-              message: 'Failed to parse webhook result' 
-            });
-          }
-        } else {
-          res.status(500).json({ 
-            status: 'error', 
-            message: 'Webhook processing failed' 
-          });
-        }
-      });
-      
-    } catch (error: any) {
-      console.error('Webhook error:', error);
-      res.status(500).json({ 
-        status: 'error', 
-        message: error.message 
-      });
-    }
-  });
+  // Original webhook handler - Removed conflicting Python handler
 
 
 
@@ -11263,70 +11180,7 @@ print(json.dumps(result))
     }
   });
 
-  // Webhook endpoint for Tally sales orders with complete automation
-  app.post('/webhook/sales-order', async (req, res) => {
-    try {
-      const { spawn } = require('child_process');
-      
-      // Parse Tally webhook payload
-      const data = req.body;
-      const fields: Record<string, any> = {};
-      
-      if (data.fieldsArray) {
-        data.fieldsArray.forEach((item: any) => {
-          fields[item.label] = item.value;
-        });
-      }
-      
-      // Extract sales order data with pricing fields
-      const salesOrderData = {
-        company: fields['Company Name'],
-        contact: fields['Full Name'],
-        email: fields['Email Address'],
-        phone: fields['Phone Number'],
-        website: fields['Website'],
-        package: fields['Which YoBot® Package would you like to start with?'],
-        addons: Object.keys(fields).filter(key => fields[key] === true && key.includes('Add-On')),
-        custom_notes: fields['Custom Notes or Special Requests (Optional)'],
-        requested_start_date: fields['Requested Start Date (Optional)'],
-        payment_method: fields['Preferred Payment Method'],
-        one_time_payment: fields['💳 One-Time Payment Amount'],
-        monthly_recurring: fields['📆 Monthly Recurring Cost'],
-        grand_total: fields['💰 Final Quote Total'],
-        date: new Date().toISOString().split('T')[0],
-        quote_id: `Q-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-001`
-      };
-      
-      console.log('Sales order automation triggered:', salesOrderData);
-      
-      // Trigger complete automation pipeline
-      const pythonProcess = spawn('python3', ['server/completeSalesOrderAutomation.py'], {
-        stdio: ['pipe', 'pipe', 'pipe']
-      });
-      
-      pythonProcess.stdin.write(JSON.stringify(salesOrderData));
-      pythonProcess.stdin.end();
-      
-      pythonProcess.stdout.on('data', (data) => {
-        console.log('Automation output:', data.toString());
-      });
-      
-      pythonProcess.stderr.on('data', (data) => {
-        console.error('Automation error:', data.toString());
-      });
-      
-      res.json({ 
-        status: 'success', 
-        message: 'Complete sales order automation initiated',
-        quote_id: salesOrderData.quote_id,
-        company: salesOrderData.company
-      });
-      
-    } catch (error: any) {
-      console.error('Sales order webhook error:', error);
-      res.status(500).json({ status: 'error', message: error.message });
-    }
-  });
+  // Webhook endpoint for Tally sales orders - Removed conflicting Python handler
 
   // Bot cloning workflow trigger endpoint
   app.post('/api/bot-cloning/trigger', async (req, res) => {
@@ -11548,38 +11402,7 @@ print(json.dumps(result))
 
 
 
-  // Test Sales Order Automation
-  app.post("/api/sales-order/test", async (req, res) => {
-    try {
-      const { spawn } = require('child_process');
-      const python = spawn('python3', ['server/salesOrderAutomation.py']);
-
-      let output = '';
-      let error = '';
-
-      python.stdout.on('data', (data: any) => {
-        output += data.toString();
-      });
-
-      python.stderr.on('data', (data: any) => {
-        error += data.toString();
-      });
-
-      python.on('close', (code: number) => {
-        res.json({
-          success: code === 0,
-          test_output: output,
-          errors: error || null,
-          exit_code: code,
-          timestamp: new Date().toISOString()
-        });
-      });
-
-    } catch (error: any) {
-      console.error('Sales order test error:', error);
-      res.status(500).json({ error: "Failed to test sales order automation" });
-    }
-  });
+  // Test Sales Order Automation - Removed conflicting Python handler
 
   // Voice Recording Management APIs
   app.get('/api/voice/recordings', async (req, res) => {
