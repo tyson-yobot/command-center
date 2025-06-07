@@ -44,33 +44,68 @@ let liveAutomationMetrics = {
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Direct webhook endpoint for Tally forms - NO MOCK DATA
-  app.post('/api/orders/test', async (req, res) => {
-    console.log("🧠 LIVE Webhook Data:", req.body);
-    console.log("📋 Full request details:", {
-      url: req.url,
-      method: req.method,
-      headers: req.headers,
-      body: req.body
-    });
-    
-    // Save actual submission data
-    const timestamp = Date.now();
-    const filename = `live_tally_${timestamp}.json`;
-    const { writeFileSync } = await import('fs');
-    writeFileSync(filename, JSON.stringify({
-      timestamp: new Date().toISOString(),
-      body: req.body,
-      headers: req.headers
-    }, null, 2));
-    
-    console.log(`💾 Live data saved to: ${filename}`);
-    
-    res.json({
-      success: true,
-      message: "Live Tally form received",
-      timestamp: new Date().toISOString(),
-      dataFile: filename
+  // Comprehensive webhook capture - catches ALL possible Tally endpoints
+  const webhookPaths = [
+    '/api/orders/test',
+    '/webhook/tally',
+    '/webhook/tally_sales_order', 
+    '/api/webhook/tally',
+    '/tally/webhook',
+    '/orders/webhook',
+    '/api/orders',
+    '/webhook'
+  ];
+  
+  webhookPaths.forEach(path => {
+    app.post(path, async (req, res) => {
+      console.log(`🎯 TALLY WEBHOOK HIT: ${path}`);
+      console.log("🧠 LIVE Webhook Data:", req.body);
+      console.log("📋 Headers:", req.headers);
+      
+      // Save the actual submission
+      const timestamp = Date.now();
+      const filename = `REAL_TALLY_${timestamp}.json`;
+      const { writeFileSync } = await import('fs');
+      writeFileSync(filename, JSON.stringify({
+        timestamp: new Date().toISOString(),
+        path: path,
+        url: req.url,
+        method: req.method,
+        headers: req.headers,
+        body: req.body,
+        query: req.query
+      }, null, 2));
+      
+      console.log(`💾 ACTUAL FORM DATA SAVED: ${filename}`);
+      
+      // Trigger processing pipeline
+      if (req.body && Object.keys(req.body).length > 0) {
+        console.log("🚀 Processing live Tally form data...");
+        
+        const { spawn } = await import('child_process');
+        const pythonProcess = spawn('python3', ['live_tally_processor.py'], {
+          stdio: ['pipe', 'pipe', 'pipe']
+        });
+        
+        pythonProcess.stdin.write(JSON.stringify(req.body));
+        pythonProcess.stdin.end();
+        
+        pythonProcess.stdout.on('data', (data) => {
+          console.log('🐍 Processing:', data.toString());
+        });
+        
+        pythonProcess.stderr.on('data', (data) => {
+          console.error('🐍 Error:', data.toString());
+        });
+      }
+      
+      res.json({
+        success: true,
+        message: "Live Tally form processed",
+        timestamp: new Date().toISOString(),
+        path: path,
+        dataFile: filename
+      });
     });
   });
 
