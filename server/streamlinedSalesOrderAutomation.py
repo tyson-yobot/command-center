@@ -10,10 +10,6 @@ from google.oauth2.service_account import Credentials
 from email.message import EmailMessage
 import smtplib
 import json
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-from reportlab.lib.utils import ImageReader
-from reportlab.lib.colors import HexColor
 
 # === CONFIG ===
 GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh"
@@ -23,107 +19,7 @@ AIRTABLE_BASE_ID = "appb2f3D77Tc4DWAr"
 AIRTABLE_TABLE_NAME = "📥 Scraped Leads (Universal)"
 SLACK_WEBHOOK = "https://hooks.slack.com/services/xRYo7LD89mNz2EvZy3kOrFiv"
 
-# === PDF GENERATION ===
-def generate_quote_pdf(form_data, total_amount):
-    """Generate professional PDF quote using ReportLab"""
-    try:
-        # Ensure pdfs directory exists
-        pdf_dir = "./pdfs"
-        if not os.path.exists(pdf_dir):
-            os.makedirs(pdf_dir)
-        
-        # Generate quote number and filename
-        today = datetime.now().strftime("%Y%m%d")
-        company_short = form_data["Company Name"][:4].upper()
-        quote_number = f"Q-{today}-{company_short}"
-        
-        filename = f"YoBot_Quote_{quote_number}_{form_data['Company Name'].replace(' ', '_').replace(',', '')}.pdf"
-        pdf_path = os.path.join(pdf_dir, filename)
-        
-        # Create PDF
-        c = canvas.Canvas(pdf_path, pagesize=letter)
-        width, height = letter
-        
-        # Header
-        c.setFont("Helvetica-Bold", 24)
-        c.drawString(50, height - 80, "YoBot® AI Quote")
-        
-        c.setFont("Helvetica", 12)
-        c.drawString(50, height - 100, "Enterprise AI Voice Automation Solutions")
-        
-        # Quote details
-        y_position = height - 150
-        c.setFont("Helvetica-Bold", 14)
-        c.drawString(50, y_position, "Quote For:")
-        
-        y_position -= 30
-        c.setFont("Helvetica", 12)
-        c.drawString(50, y_position, f"Company: {form_data['Company Name']}")
-        y_position -= 20
-        c.drawString(50, y_position, f"Contact: {form_data['Contact Name']}")
-        y_position -= 20
-        c.drawString(50, y_position, f"Email: {form_data['Email']}")
-        y_position -= 20
-        if form_data.get('Phone Number'):
-            c.drawString(50, y_position, f"Phone: {form_data['Phone Number']}")
-            y_position -= 20
-        
-        # Package details
-        y_position -= 30
-        c.setFont("Helvetica-Bold", 14)
-        c.drawString(50, y_position, "Service Package:")
-        
-        y_position -= 30
-        c.setFont("Helvetica", 12)
-        c.drawString(50, y_position, "YoBot Enterprise Voice AI Solution")
-        y_position -= 20
-        c.drawString(50, y_position, "• 24/7 AI Voice Assistant")
-        y_position -= 20
-        c.drawString(50, y_position, "• Advanced Call Routing & Analytics")
-        y_position -= 20
-        c.drawString(50, y_position, "• Custom Personality Training")
-        y_position -= 20
-        c.drawString(50, y_position, "• Integration with CRM/Tools")
-        
-        # Pricing
-        y_position -= 50
-        c.setFont("Helvetica-Bold", 14)
-        c.drawString(50, y_position, "Investment:")
-        
-        y_position -= 30
-        c.setFont("Helvetica", 12)
-        c.drawString(50, y_position, "Setup & Implementation:")
-        c.drawString(400, y_position, f"${2500:,}")
-        y_position -= 20
-        c.drawString(50, y_position, "Monthly Service:")
-        c.drawString(400, y_position, f"${150:,}")
-        y_position -= 20
-        c.drawString(50, y_position, "First Year Total:")
-        c.drawString(400, y_position, f"${4300:,}")
-        
-        # Total
-        y_position -= 30
-        c.setFont("Helvetica-Bold", 14)
-        c.drawString(50, y_position, "Total Investment:")
-        c.drawString(400, y_position, f"${total_amount:,.2f}")
-        
-        # Footer
-        y_position = 100
-        c.setFont("Helvetica", 10)
-        c.drawString(50, y_position, f"Quote Number: {quote_number}")
-        y_position -= 15
-        c.drawString(50, y_position, f"Date: {datetime.now().strftime('%B %d, %Y')}")
-        y_position -= 15
-        c.drawString(50, y_position, "Valid for 30 days")
-        
-        c.save()
-        
-        print(f"✅ PDF generated: {filename}")
-        return pdf_path
-        
-    except Exception as e:
-        print(f"❌ PDF generation failed: {e}")
-        return None
+
 
 # === 1. UPLOAD TO GOOGLE DRIVE ===
 def upload_to_drive(pdf_path, company_name):
@@ -256,17 +152,17 @@ def run_complete_sales_order_automation(webhook_data):
             "Website": webhook_data.get("Website", "")
         }
         
-        # Generate the actual PDF first
-        pdf_path = generate_quote_pdf(form_data, total_amount)
+        # Use the PDF path provided by your existing PDF generation system
+        pdf_path = webhook_data.get("pdf_path", "")
         
         if not pdf_path:
             return {
                 'success': False,
-                'error': 'PDF generation failed',
-                'message': 'Unable to create PDF quote'
+                'error': 'PDF path not provided',
+                'message': 'Your PDF generation system must provide pdf_path in webhook data'
             }
         
-        # Run the complete pipeline with the generated PDF
+        # Run the complete pipeline with your generated PDF
         run_sales_order_pipeline(form_data, pdf_path, total_amount)
         
         return {

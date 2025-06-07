@@ -12565,7 +12565,7 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
     }
   });
 
-  // Complete Sales Order Pipeline with PDF generation and Google Drive upload
+  // Complete Sales Order Pipeline using your streamlined automation
   app.post('/api/sales-order/complete', async (req, res) => {
     try {
       const { customerName, customerEmail, orderDetails, billingAddress } = req.body;
@@ -12577,49 +12577,57 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
         });
       }
 
-      // Import the sales order processor
-      const { salesOrderProcessor } = await import('./salesOrderProcessor');
-      
-      // Create form data for the processor
-      const formData = {
-        'Contact Name': customerName,
-        'Company Name': customerName,
-        'Email': customerEmail,
-        'Phone Number': billingAddress?.phone || '',
+      // Prepare webhook data for your streamlined automation
+      const webhookData = {
+        'Parsed Company Name': customerName,
+        'Parsed Contact Name': customerName,
+        'Parsed Contact Email': customerEmail,
+        'Parsed Contact Phone': billingAddress?.phone || '',
+        'Parsed Stripe Payment': orderDetails?.amount || 0,
         'Website': billingAddress?.website || ''
       };
 
-      // Generate a temporary PDF path (this would normally be created by PDF generator)
-      const pdfPath = `/tmp/quote-${customerName.replace(/\s+/g, '-')}.pdf`;
-      
-      // Create a simple PDF content for testing
-      const fs = await import('fs');
-      const quoteContent = `QUOTE FOR ${customerName}\n\nPackage: ${orderDetails?.product || 'Standard'}\nAmount: $${orderDetails?.amount || 0}\n\nGenerated: ${new Date().toISOString()}`;
-      fs.writeFileSync(pdfPath, quoteContent);
+      // Call your streamlined sales order automation using spawn
+      const { spawn } = require('child_process');
+      const pythonProcess = spawn('python3', ['server/streamlinedSalesOrderAutomation.py'], {
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
 
-      // Run the complete sales order pipeline
-      const result = await salesOrderProcessor.runSalesOrderPipeline(formData, pdfPath);
+      // Send webhook data to your Python automation
+      pythonProcess.stdin.write(JSON.stringify({
+        action: 'run_complete_sales_order_automation',
+        data: webhookData
+      }));
+      pythonProcess.stdin.end();
 
-      // Clean up temporary file
-      try {
-        fs.unlinkSync(pdfPath);
-      } catch (cleanupError) {
-        console.log('Cleanup warning:', cleanupError.message);
-      }
+      let result = '';
+      let errorOutput = '';
 
-      if (result.success) {
-        res.json({
-          success: true,
-          message: 'Complete sales order pipeline executed successfully',
-          quoteLink: result.quoteLink,
-          timestamp: new Date().toISOString()
-        });
-      } else {
-        res.status(500).json({
-          success: false,
-          error: result.error || 'Sales order pipeline failed'
-        });
-      }
+      pythonProcess.stdout.on('data', (data: Buffer) => {
+        result += data.toString();
+      });
+
+      pythonProcess.stderr.on('data', (data: Buffer) => {
+        errorOutput += data.toString();
+      });
+
+      pythonProcess.on('close', (code: number) => {
+        if (code === 0) {
+          res.json({
+            success: true,
+            message: "Sales order automation completed successfully",
+            result: result,
+            webhookData: webhookData
+          });
+        } else {
+          res.status(500).json({
+            success: false,
+            message: "Sales order automation failed",
+            error: errorOutput,
+            code: code
+          });
+        }
+      });
 
     } catch (error) {
       console.error('Complete sales order pipeline error:', error);
