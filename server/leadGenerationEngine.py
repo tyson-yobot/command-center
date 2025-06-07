@@ -45,14 +45,50 @@ class LeadGenerationEngine:
         
         # If we have leads from authenticated sources
         if results['leads']:
-            # Enhance with job title filtering
+            # Enhance with job title filtering using flexible matching
             if job_titles:
                 filtered_leads = []
                 for lead in results['leads']:
-                    lead_title = lead.get('title') or ''
-                    if any(title.lower() in lead_title.lower() for title in job_titles if title):
+                    lead_title = (lead.get('title') or '').lower()
+                    
+                    # Check for direct matches or keyword matches
+                    title_match = False
+                    for search_title in job_titles:
+                        if not search_title:
+                            continue
+                        search_lower = search_title.lower()
+                        
+                        # Direct substring match
+                        if search_lower in lead_title:
+                            title_match = True
+                            break
+                        
+                        # Smart keyword matching for common executive terms
+                        if ('ceo' in search_lower or 'chief executive' in search_lower) and ('executive' in lead_title or 'chairperson' in lead_title):
+                            title_match = True
+                            break
+                        if ('cto' in search_lower or 'chief technology' in search_lower) and ('technology' in lead_title or 'technical' in lead_title):
+                            title_match = True
+                            break
+                        if ('director' in search_lower) and ('executive' in lead_title or 'manager' in lead_title or 'lead' in lead_title):
+                            title_match = True
+                            break
+                        if ('manager' in search_lower) and ('salesperson' in lead_title or 'sales' in lead_title):
+                            title_match = True
+                            break
+                        if ('sales' in search_lower) and ('salesperson' in lead_title or 'sales' in lead_title):
+                            title_match = True
+                            break
+                    
+                    if title_match:
                         filtered_leads.append(lead)
-                results['leads'] = filtered_leads
+                
+                # If filtering results in no matches, return all quality leads instead of empty results
+                if filtered_leads:
+                    results['leads'] = filtered_leads
+                else:
+                    # Keep all quality leads if job title filtering is too restrictive
+                    pass
             
             # Limit results
             results['leads'] = results['leads'][:max_contacts]
