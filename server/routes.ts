@@ -1751,10 +1751,13 @@ CRM Data:
       const fs = require('fs');
       const path = require('path');
       
-      // Check if webhook handler exists
+      // Check if webhook handler exists and execute it
       const scriptPath = path.join(process.cwd(), 'webhooks', 'webhook_handler.py');
+      console.log(`🔍 Looking for webhook handler at: ${scriptPath}`);
+      
       if (!fs.existsSync(scriptPath)) {
         console.log(`❌ Webhook handler not found at: ${scriptPath}`);
+        console.log(`📁 Files in webhooks dir:`, fs.readdirSync(path.join(process.cwd(), 'webhooks')).slice(0, 5));
         return res.status(200).json({
           success: true,
           message: "Webhook received but handler not available",
@@ -1762,6 +1765,8 @@ CRM Data:
           payloadFile: filename
         });
       }
+      
+      console.log(`✅ Found webhook handler, executing...`);
       
       const python = spawn('python3', [scriptPath], {
         stdio: ['pipe', 'pipe', 'pipe'],
