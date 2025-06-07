@@ -44,13 +44,26 @@ let liveAutomationMetrics = {
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Clean Tally webhook processor - filters hidden fields and generates PDFs
+  // Clean Tally webhook processor - captures payload and generates PDFs
   app.use('*', async (req, res, next) => {
     if (req.method === 'POST' && req.body && Object.keys(req.body).length > 0) {
       const timestamp = Date.now();
       
       console.log(`Processing Tally webhook: ${req.originalUrl}`);
       
+      // Save raw payload for user review
+      const { writeFileSync } = await import('fs');
+      const payloadFile = `tally_payload_${timestamp}.json`;
+      writeFileSync(payloadFile, JSON.stringify({
+        timestamp: new Date().toISOString(),
+        url: req.originalUrl,
+        headers: req.headers,
+        raw_payload: req.body
+      }, null, 2));
+      
+      console.log(`Raw payload saved: ${payloadFile}`);
+      
+      // Process with clean handler
       const { spawn } = await import('child_process');
       const pythonProcess = spawn('python3', ['webhook_handler.py'], {
         stdio: ['pipe', 'pipe', 'pipe']
@@ -71,6 +84,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: true,
         message: "Tally form processed with PDF generation",
         timestamp: new Date().toISOString(),
+        payloadFile: payloadFile,
         processing: true
       });
     }
