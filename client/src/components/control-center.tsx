@@ -147,6 +147,47 @@ export default function ControlCenter() {
       }
     };
     loadConfig();
+
+    // Initialize WebSocket connection for real-time updates
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const wsUrl = `${protocol}//${window.location.host}/ws`;
+    
+    try {
+      const socket = new WebSocket(wsUrl);
+      
+      socket.onopen = () => {
+        console.log('WebSocket connected to Command Center');
+      };
+      
+      socket.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.type === 'metrics') {
+            // Update automation metrics in real-time
+            setActiveConnections(data.data.activeFunctions || 0);
+          }
+        } catch (error) {
+          console.error('WebSocket message error:', error);
+        }
+      };
+      
+      socket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+      
+      socket.onclose = () => {
+        console.log('WebSocket disconnected');
+      };
+      
+      // Cleanup on component unmount
+      return () => {
+        if (socket.readyState === WebSocket.OPEN) {
+          socket.close();
+        }
+      };
+    } catch (error) {
+      console.error('WebSocket initialization error:', error);
+    }
   }, []);
 
   return (

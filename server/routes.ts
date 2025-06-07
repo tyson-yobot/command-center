@@ -1808,6 +1808,52 @@ CRM Data:
   });
 
   const httpServer = createServer(app);
+  
+  // Add WebSocket server for real-time Command Center updates
+  const { WebSocketServer } = await import('ws');
+  const wss = new WebSocketServer({ 
+    server: httpServer, 
+    path: '/ws',
+    verifyClient: (info) => {
+      // Accept all connections for now
+      return true;
+    }
+  });
+
+  wss.on('connection', (ws, req) => {
+    console.log('WebSocket connected from:', req.socket.remoteAddress);
+    
+    // Send initial automation metrics
+    ws.send(JSON.stringify({
+      type: 'metrics',
+      data: liveAutomationMetrics
+    }));
+    
+    // Handle incoming messages
+    ws.on('message', (message) => {
+      try {
+        const data = JSON.parse(message.toString());
+        console.log('WebSocket message:', data);
+        
+        // Echo back for now
+        ws.send(JSON.stringify({
+          type: 'response',
+          data: { received: true, timestamp: new Date().toISOString() }
+        }));
+      } catch (error) {
+        console.error('WebSocket message parse error:', error);
+      }
+    });
+    
+    ws.on('error', (error) => {
+      console.error('WebSocket error:', error);
+    });
+    
+    ws.on('close', () => {
+      console.log('WebSocket disconnected');
+    });
+  });
+
   return httpServer;
 }
 
