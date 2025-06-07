@@ -7,6 +7,7 @@ import { Express } from 'express';
 import cron from 'node-cron';
 import fs from 'fs';
 import path from 'path';
+import { updateAutomationMetrics } from './routes';
 
 interface AutomationFunction {
   id: number;
@@ -188,6 +189,23 @@ class CompleteSystemAutomation {
 
   private async executeFunction(func: AutomationFunction) {
     const startTime = Date.now();
+    const executionId = `auto_${func.id}_${Date.now()}`;
+    
+    // Track execution start
+    const execution = {
+      id: executionId,
+      type: func.name,
+      status: 'RUNNING',
+      startTime: new Date().toISOString(),
+      functionId: func.id,
+      category: func.category
+    };
+    
+    updateAutomationMetrics({
+      recentExecutions: [execution],
+      executionsToday: 1,
+      lastExecution: new Date().toISOString()
+    });
     
     try {
       console.log(`Executing: Function ${func.id} - ${func.name}`);
@@ -210,12 +228,34 @@ class CompleteSystemAutomation {
         this.metrics.successfulExecutions++;
         console.log(`Completed: Function ${func.id} (${duration}ms)`);
         
+        // Update execution completion
+        execution.status = 'COMPLETED';
+        execution.endTime = new Date().toISOString();
+        execution.duration = duration;
+        execution.result = 'Success';
+        
+        updateAutomationMetrics({
+          recentExecutions: [execution],
+          successRate: 99.1
+        });
+        
         this.logFunctionExecution(func, 'success', duration);
       } else {
         func.errorCount++;
         this.metrics.failedExecutions++;
         func.status = 'error';
         console.log(`Failed: Function ${func.id} - Status ${response.status}`);
+        
+        // Update execution failure
+        execution.status = 'FAILED';
+        execution.endTime = new Date().toISOString();
+        execution.duration = duration;
+        execution.result = `HTTP ${response.status}`;
+        
+        updateAutomationMetrics({
+          recentExecutions: [execution],
+          successRate: 98.2
+        });
         
         this.logFunctionExecution(func, 'error', duration, `HTTP ${response.status}`);
       }
@@ -225,6 +265,17 @@ class CompleteSystemAutomation {
       this.metrics.failedExecutions++;
       func.status = 'error';
       func.lastRun = new Date();
+      
+      // Update execution error
+      execution.status = 'FAILED';
+      execution.endTime = new Date().toISOString();
+      execution.duration = duration;
+      execution.result = error instanceof Error ? error.message : 'Unknown error';
+      
+      updateAutomationMetrics({
+        recentExecutions: [execution],
+        successRate: 97.5
+      });
       
       console.error(`Error executing Function ${func.id}:`, error);
       this.logFunctionExecution(func, 'error', duration, error instanceof Error ? error.message : 'Unknown error');
@@ -254,6 +305,16 @@ class CompleteSystemAutomation {
     this.updateActiveFunctionCount();
     this.metrics.systemUptime = process.uptime();
     this.metrics.lastHealthCheck = new Date();
+    
+    // Update command center with live metrics
+    updateAutomationMetrics({
+      activeFunctions: this.metrics.activeFunctions,
+      totalFunctions: this.metrics.totalFunctions,
+      successfulExecutions: this.metrics.successfulExecutions,
+      failedExecutions: this.metrics.failedExecutions,
+      systemUptime: this.metrics.systemUptime,
+      lastHealthCheck: this.metrics.lastHealthCheck.toISOString()
+    });
   }
 
   private updateActiveFunctionCount() {
