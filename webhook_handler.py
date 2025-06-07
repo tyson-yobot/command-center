@@ -14,19 +14,7 @@ def is_display_field(field_name):
     return not any(keyword in field_name for keyword in HIDDEN_FIELD_KEYWORDS)
 
 def is_authentic_tally_submission(webhook_data):
-    """Validate that this is a real Tally form submission, not test data"""
-    
-    # Block any data containing test indicators
-    test_indicators = [
-        "User Submission Test", "Test Submission Company", "usertest@",
-        "Test", "test", "TEST", "evt_user_submission", "resp_user_",
-        "user_sales_order_form", "connectivity_check"
-    ]
-    
-    data_str = json.dumps(webhook_data).lower()
-    for indicator in test_indicators:
-        if indicator.lower() in data_str:
-            return False
+    """Validate that this is a real Tally form submission"""
     
     # Require authentic Tally webhook structure
     if not isinstance(webhook_data, dict):
@@ -36,35 +24,35 @@ def is_authentic_tally_submission(webhook_data):
     if webhook_data.get('eventType') != 'FORM_RESPONSE':
         return False
         
-    # Must have real Tally event ID (not our test format)
+    # Must have real Tally event ID format
     event_id = webhook_data.get('eventId', '')
-    if event_id.startswith('evt_user_submission') or 'test' in event_id:
+    if not event_id or not event_id.startswith('evt_'):
         return False
         
     return True
 
 def process_tally_webhook(webhook_data):
-    """Process ONLY authentic Tally webhook data - block all test submissions"""
+    """Process authentic Tally webhook data only"""
     
-    # Block test data immediately
+    # Validate authentic submission
     if not is_authentic_tally_submission(webhook_data):
-        print("❌ BLOCKED: Test data detected - only processing real Tally submissions")
-        return {"error": "Test data blocked - only authentic submissions accepted"}
+        print("❌ BLOCKED: Invalid submission format")
+        return {"error": "Invalid submission format"}
     
     submission_id = str(uuid.uuid4())[:8]
     timestamp = datetime.now().isoformat()
     
-    # Save complete raw payload for analysis
-    raw_payload_file = f"authentic_tally_payload_{submission_id}.json"
+    # Save complete raw payload
+    raw_payload_file = f"tally_submission_{submission_id}.json"
     with open(raw_payload_file, 'w') as f:
         json.dump({
             "submission_id": submission_id,
             "timestamp": timestamp,
-            "authentic_tally_data": webhook_data
+            "tally_data": webhook_data
         }, f, indent=2)
     
-    print(f"✅ Processing authentic Tally submission: {submission_id}")
-    print(f"📋 Authentic payload saved: {raw_payload_file}")
+    print(f"✅ Processing Tally submission: {submission_id}")
+    print(f"📋 Payload saved: {raw_payload_file}")
     
     # Extract fields array from webhook data
     fields_array = []

@@ -1659,14 +1659,14 @@ CRM Data:
     }
   });
 
-  // Tally form webhook endpoint - actual URL used in form
+  // Tally form webhook endpoint
   app.post('/api/orders/test', async (req, res) => {
     try {
       const timestamp = new Date().toISOString();
-      console.log("📥 REAL TALLY FORM SUBMISSION at", timestamp);
+      console.log("📥 Tally form submission at", timestamp);
       
-      // Live webhook data logging
-      console.log("🧠 LIVE Webhook Data:", req.body);
+      // Webhook data logging
+      console.log("🧠 Webhook Data:", req.body);
       
       // Save the real submission
       const { writeFileSync } = await import('fs');
