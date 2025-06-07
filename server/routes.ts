@@ -1453,9 +1453,9 @@ CRM Data:
     console.log("🔥 WEBHOOK PAYLOAD CAPTURED:", JSON.stringify(payloadData, null, 2));
     
     // Save to file
-    const fs = require('fs');
+    const { writeFileSync } = await import('fs');
     const filename = `webhook_payload_${Date.now()}.json`;
-    fs.writeFileSync(filename, JSON.stringify(payloadData, null, 2));
+    writeFileSync(filename, JSON.stringify(payloadData, null, 2));
     console.log(`💾 Payload saved to: ${filename}`);
     
     res.json({
@@ -1467,37 +1467,44 @@ CRM Data:
   });
 
   // Check for recent webhook payloads
-  app.get('/api/webhooks/recent', (req, res) => {
-    const fs = require('fs');
-    const files = fs.readdirSync('.')
-      .filter(file => file.startsWith('webhook_payload_') || file.startsWith('sales_order_payload_'))
-      .sort((a, b) => {
-        const aTime = fs.statSync(a).mtime;
-        const bTime = fs.statSync(b).mtime;
-        return bTime.getTime() - aTime.getTime();
-      })
-      .slice(0, 10);
-    
-    const payloads = files.map(file => {
-      try {
-        const content = JSON.parse(fs.readFileSync(file, 'utf8'));
-        return {
-          filename: file,
-          timestamp: content.timestamp,
-          body: content.body
-        };
-      } catch (error) {
-        return {
-          filename: file,
-          error: 'Could not parse file'
-        };
-      }
-    });
-    
-    res.json({
-      success: true,
-      payloads: payloads
-    });
+  app.get('/api/webhooks/recent', async (req, res) => {
+    try {
+      const { readdirSync, statSync, readFileSync } = await import('fs');
+      const files = readdirSync('.')
+        .filter(file => file.startsWith('webhook_payload_') || file.startsWith('sales_order_payload_'))
+        .sort((a, b) => {
+          const aTime = statSync(a).mtime;
+          const bTime = statSync(b).mtime;
+          return bTime.getTime() - aTime.getTime();
+        })
+        .slice(0, 10);
+      
+      const payloads = files.map(file => {
+        try {
+          const content = JSON.parse(readFileSync(file, 'utf8'));
+          return {
+            filename: file,
+            timestamp: content.timestamp,
+            body: content.body
+          };
+        } catch (error) {
+          return {
+            filename: file,
+            error: 'Could not parse file'
+          };
+        }
+      });
+      
+      res.json({
+        success: true,
+        payloads: payloads
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: 'Failed to read webhook files'
+      });
+    }
   });
 
   // Health check endpoint
