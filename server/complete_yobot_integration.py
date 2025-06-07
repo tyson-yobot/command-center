@@ -556,17 +556,4 @@ def run_complete_sales_order_automation_enhanced(form_data):
             "automation_complete": False
         }
 
-if __name__ == "__main__":
-    # Test with comprehensive data
-    test_data = {
-        'Parsed Company Name': 'Complete Integration Test Corp',
-        'Parsed Contact Name': 'Integration Manager',
-        'Parsed Contact Email': 'integration@testcorp.com',
-        'Parsed Contact Phone': '(555) 999-TEST',
-        'Parsed Bot Package': 'YoBot Enterprise Package',
-        'Parsed Add-On List': ['SmartSpend', 'Advanced Analytics', 'A/B Testing'],
-        'Parsed Stripe Payment': '12500'
-    }
-    
-    result = run_complete_sales_order_automation_enhanced(test_data)
-    print(f"\n🎯 FINAL RESULT: {json.dumps(result, indent=2)}")
+# Removed test data - only live webhook data processed

@@ -194,15 +194,3 @@ def process_sales_order(order_data):
             'error': str(e)
         }
 
-if __name__ == "__main__":
-    # Test with sample data
-    test_order = {
-        "customer_name": "Test Company Inc",
-        "email": "test@testcompany.com",
-        "package": "YoBot Professional Package",
-        "addons": ["SmartSpend"],
-        "phone": "(555) 123-4567"
-    }
-    
-    result = process_sales_order(test_order)
-    print(json.dumps(result, indent=2))

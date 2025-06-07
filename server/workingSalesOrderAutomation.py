@@ -479,17 +479,3 @@ def run_complete_sales_order_automation(form_data):
             'automation_complete': False
         }
 
-if __name__ == "__main__":
-    # Test automation
-    test_data = {
-        "Parsed Company Name": "Final Test Solutions",
-        "Parsed Contact Name": "Test Manager",
-        "Parsed Contact Email": "test@finaltestsolutions.com",
-        "Parsed Contact Phone": "(555) 999-0000",
-        "Parsed Bot Package": "YoBot Professional Package",
-        "Parsed Add-On List": ["SmartSpend", "Advanced Analytics"],
-        "Parsed Stripe Payment": "7500"
-    }
-    
-    result = run_complete_sales_order_automation(test_data)
-    print(json.dumps(result, indent=2))

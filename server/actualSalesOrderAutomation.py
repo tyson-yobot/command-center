@@ -355,17 +355,3 @@ def run_complete_sales_order_automation(form_data):
         print(f"❌ Sales order automation failed: {str(e)}")
         return {"success": False, "error": str(e)}
 
-if __name__ == "__main__":
-    # Test data
-    test_data = {
-        'Parsed Company Name': 'Live Test Corporation',
-        'Parsed Contact Name': 'Sarah Manager',
-        'Parsed Contact Email': 'sarah@livetest.com',
-        'Parsed Contact Phone': '(555) 999-8888',
-        'Parsed Bot Package': 'YoBot Professional Package',
-        'Parsed Add-On List': ['SmartSpend', 'Advanced Analytics'],
-        'Parsed Stripe Payment': '7500'
-    }
-    
-    result = run_complete_sales_order_automation(test_data)
-    print("\nFINAL RESULT:", json.dumps(result, indent=2))

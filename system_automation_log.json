@@ -1,20 +1,5 @@
 [
   {
-    "timestamp": "2025-06-07T02:10:00.083Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "Health check: 100.0% healthy",
-    "metrics": {
-      "totalFunctions": 40,
-      "activeFunctions": 40,
-      "successfulExecutions": 0,
-      "failedExecutions": 0,
-      "systemUptime": 29.478648858,
-      "lastHealthCheck": "2025-06-07T02:09:00.010Z",
-      "automationStatus": "running"
-    }
-  },
-  {
     "timestamp": "2025-06-07T02:10:00.151Z",
     "functionId": 147,
     "functionName": "Full API Health Check",
@@ -11376,6 +11361,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-07T14:45:12.417Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-07T14:48:23.474Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-07T14:48:23.135Z",
       "automationStatus": "running"
     }
   }
