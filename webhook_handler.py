@@ -20,13 +20,18 @@ def is_authentic_tally_submission(webhook_data):
     if not isinstance(webhook_data, dict):
         return False
         
-    # Must have eventType from Tally
-    if webhook_data.get('eventType') != 'FORM_RESPONSE':
+    # Tally provides 'data' field with form responses
+    if 'data' not in webhook_data:
         return False
         
-    # Must have real Tally event ID format
-    event_id = webhook_data.get('eventId', '')
-    if not event_id or not event_id.startswith('evt_'):
+    # Tally provides 'fields' within data
+    data = webhook_data.get('data', {})
+    if 'fields' not in data:
+        return False
+        
+    # Must have actual form field responses
+    fields = data.get('fields', [])
+    if not fields or not isinstance(fields, list):
         return False
         
     return True
