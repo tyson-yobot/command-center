@@ -110,7 +110,7 @@ import sys
 import json
 sys.path.append('/home/runner/workspace/server')
 
-from workingSalesOrderAutomation import run_complete_sales_order_automation
+from streamlinedSalesOrderAutomation import run_complete_sales_order_automation
 
 form_data = ${JSON.stringify(data)}
 result = run_complete_sales_order_automation(form_data)
