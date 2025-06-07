@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-06-07T18:55:00.095Z",
+  "url": "/api/automation-batch-15/function-147",
+  "headers": {
+    "host": "localhost:5000",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "accept": "*/*",
+    "accept-language": "*",
+    "sec-fetch-mode": "cors",
+    "user-agent": "node",
+    "accept-encoding": "gzip, deflate",
+    "content-length": "84"
+  },
+  "raw_payload": {
+    "automationExecution": true,
+    "functionId": 147,
+    "timestamp": "2025-06-07T18:55:00.072Z"
+  }
+}

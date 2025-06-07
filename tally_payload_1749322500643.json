@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-06-07T18:55:00.650Z",
+  "url": "/api/automation-batch-21/function-204",
+  "headers": {
+    "host": "localhost:5000",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "accept": "*/*",
+    "accept-language": "*",
+    "sec-fetch-mode": "cors",
+    "user-agent": "node",
+    "accept-encoding": "gzip, deflate",
+    "content-length": "84"
+  },
+  "raw_payload": {
+    "automationExecution": true,
+    "functionId": 204,
+    "timestamp": "2025-06-07T18:55:00.079Z"
+  }
+}
