@@ -628,49 +628,7 @@ export default function ClientDashboard() {
     }
   };
 
-  const testSalesOrderAutomation = async () => {
-    try {
-      setVoiceStatus('Processing sales order automation...');
-      
-      const orderData = {
-        company_id: "recTestCompany123",
-        sales_order_id: `rec${Date.now()}`,
-        bot_package: "Pro",
-        selected_addons: ["📊 SmartSpend™ Dashboard", "🔔 Slack Notifications", "📞 Voice Bot Premium"]
-      };
-      
-      const response = await fetch('/api/sales-order/process', { 
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData)
-      });
-      const result = await response.json();
-      
-      if (result.success) {
-        setVoiceStatus('Sales order automation test passed');
-        setToast({
-          title: "Automation Test Successful",
-          description: "Sales order processing workflow is operational",
-        });
-      } else {
-        setVoiceStatus('Sales order automation test failed');
-        setToast({
-          title: "Automation Test Failed",
-          description: "Check Airtable API configuration",
-          variant: "destructive"
-        });
-      }
-    } catch (error) {
-      setVoiceStatus('Sales order test error');
-      setToast({
-        title: "Test Error",
-        description: "Network error during automation test",
-        variant: "destructive"
-      });
-    }
-  };
+  // Removed test sales order automation - only live webhook data processed
 
   const handleVoiceToggle = () => {
     if (!isListening) {
@@ -1139,83 +1097,9 @@ export default function ClientDashboard() {
     }
   };
 
-  // Quote Generation Test
-  const testQuoteGeneration = async () => {
-    try {
-      setToast({
-        title: "Generating Quote",
-        description: "Creating test quote with YoBot branding...",
-        variant: "default"
-      });
+  // Removed test quote generation - only live webhook data processed
 
-      const testQuoteData = {
-        company_name: "AMT66 Test",
-        contact_name: "Tyson B.",
-        email: "tyson@yobot.bot",
-        phone: "701-371-8391",
-        bot_package: "🤖 Enterprise Bot Package",
-        monthly_total: 2247,
-        add_ons: ["📊 SmartSpend™ Dashboard", "🧠 AI Content Studio"],
-        items: [
-          {
-            name: "Enterprise Bot",
-            desc: "Complete AI voice automation solution",
-            qty: 1,
-            price: 25000.00
-          },
-          {
-            name: "Monthly Service Fee",
-            desc: "Ongoing support and maintenance",
-            qty: 1,
-            price: 1499.00
-          }
-        ]
-      };
-
-      const response = await fetch('/api/generate-quote', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(testQuoteData)
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        setToast({
-          title: "Quote Generated Successfully",
-          description: `Quote ${result.quote_id} created with Airtable integration`,
-          variant: "default"
-        });
-      } else {
-        throw new Error(result.error || 'Quote generation failed');
-      }
-    } catch (error) {
-      setToast({
-        title: "Quote Generation Failed",
-        description: "Unable to generate test quote",
-        variant: "destructive"
-      });
-    }
-  };
-
-  // Notification Test
-  const testNotifications = async () => {
-    setToast({
-      title: "Testing Notifications",
-      description: "Sending test email to tyson@yobot.bot and daniel@yobot.bot...",
-      variant: "default"
-    });
-    
-    setTimeout(() => {
-      setToast({
-        title: "Notifications Sent",
-        description: "Enhanced email and Slack notifications delivered",
-        variant: "default"
-      });
-    }, 2000);
-  };
+  // Removed test notifications - only live webhook notifications processed
 
   // PDF Download Handler - generates comprehensive system report
   const handleDownloadPDF = async () => {
