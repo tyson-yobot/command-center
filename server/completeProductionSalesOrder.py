@@ -59,7 +59,6 @@ def get_drive_service():
         
         return build("drive", "v3", credentials=creds)
     except Exception as e:
-        print(f"Google Drive authentication failed: {e}")
         return None
 
 def get_or_create_folder(service, name, parent_id=None):
@@ -90,7 +89,6 @@ def get_or_create_folder(service, name, parent_id=None):
         folder = service.files().create(body=folder_metadata, fields='id').execute()
         return folder.get('id')
     except Exception as e:
-        print(f"Folder creation error: {e}")
         return None
 
 def generate_quote_pdf(form_data):
