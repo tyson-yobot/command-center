@@ -12236,14 +12236,16 @@ print(json.dumps(result))
           } catch (parseError) {
             res.json({
               status: "success",
-              message: "PDF generated successfully",
-              output: result
+              message: "Sales order processed successfully using your Flask handler",
+              output: result.trim(),
+              company: req.body.company_name
             });
           }
         } else {
+          console.error('Flask handler error:', errorOutput);
           res.status(500).json({
             status: "error",
-            message: "PDF generation failed",
+            message: "Sales order processing failed",
             error: errorOutput,
             code: code
           });
