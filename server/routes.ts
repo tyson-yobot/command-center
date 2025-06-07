@@ -1771,7 +1771,15 @@ CRM Data:
         cwd: process.cwd()
       });
       
-      python.stdin.write(JSON.stringify(req.body));
+      // Pass the complete payload structure to Python
+      const payloadToProcess = {
+        timestamp,
+        body: req.body,
+        headers: req.headers,
+        raw_payload: req.body
+      };
+      
+      python.stdin.write(JSON.stringify(payloadToProcess));
       python.stdin.end();
       
       python.stdout.on('data', (data: Buffer) => {
