@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-06-07T22:10:00.148Z",
+  "url": "/api/automation-batch-14/function-140",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "accept": "*/*",
+    "accept-language": "*",
+    "sec-fetch-mode": "cors",
+    "user-agent": "node",
+    "accept-encoding": "gzip, deflate",
+    "content-length": "84"
+  },
+  "body": {
+    "automationExecution": true,
+    "functionId": 140,
+    "timestamp": "2025-06-07T22:10:00.080Z"
+  },
+  "query": {}
+}

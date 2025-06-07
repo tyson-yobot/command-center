@@ -1748,8 +1748,20 @@ CRM Data:
       
       // Process with Python handler directly
       const { spawn } = require('child_process');
+      const fs = require('fs');
       const path = require('path');
+      
+      // Check if webhook handler exists
       const scriptPath = path.join(process.cwd(), 'webhooks', 'webhook_handler.py');
+      if (!fs.existsSync(scriptPath)) {
+        console.log(`❌ Webhook handler not found at: ${scriptPath}`);
+        return res.status(200).json({
+          success: true,
+          message: "Webhook received but handler not available",
+          timestamp: new Date().toISOString(),
+          payloadFile: filename
+        });
+      }
       
       const python = spawn('python3', [scriptPath], {
         stdio: ['pipe', 'pipe', 'pipe'],

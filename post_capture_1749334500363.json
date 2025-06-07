@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-06-07T22:15:00.363Z",
+  "url": "/api/automation-batch-16/function-159",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "accept": "*/*",
+    "accept-language": "*",
+    "sec-fetch-mode": "cors",
+    "user-agent": "node",
+    "accept-encoding": "gzip, deflate",
+    "content-length": "84"
+  },
+  "body": {
+    "automationExecution": true,
+    "functionId": 159,
+    "timestamp": "2025-06-07T22:15:00.177Z"
+  },
+  "query": {}
+}
