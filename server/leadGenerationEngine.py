@@ -35,6 +35,7 @@ class LeadGenerationEngine:
             if hubspot_leads:
                 results['leads'].extend(hubspot_leads)
                 results['sources_used'].append('HubSpot')
+                print(f"Retrieved {len(hubspot_leads)} leads from HubSpot")
         
         # Try Airtable for existing lead database
         if self.airtable_key:
@@ -42,6 +43,7 @@ class LeadGenerationEngine:
             if airtable_leads:
                 results['leads'].extend(airtable_leads)
                 results['sources_used'].append('Airtable')
+                print(f"Retrieved {len(airtable_leads)} leads from Airtable")
         
         # If we have leads from authenticated sources
         if results['leads']:
@@ -49,7 +51,8 @@ class LeadGenerationEngine:
             if job_titles:
                 filtered_leads = []
                 for lead in results['leads']:
-                    if any(title.lower() in lead.get('title', '').lower() for title in job_titles):
+                    lead_title = lead.get('title') or ''
+                    if any(title.lower() in lead_title.lower() for title in job_titles if title):
                         filtered_leads.append(lead)
                 results['leads'] = filtered_leads
             
@@ -135,56 +138,89 @@ class LeadGenerationEngine:
             return []
             
         try:
-            # Use the main CRM base
+            # Use the main CRM base with proper table name
             base_id = os.environ.get('AIRTABLE_BASE_ID', 'appMbVQJ0n3nWR11N')
-            table_name = 'CRM Contacts'
             
-            url = f"https://api.airtable.com/v0/{base_id}/{table_name}"
-            headers = {
-                'Authorization': f'Bearer {self.airtable_key}',
-                'Content-Type': 'application/json'
-            }
+            # Try multiple table names that might exist
+            table_names = ['CRM Contacts', 'Contacts', 'Leads', 'tblJOqKu9Zk0fXZVr']
             
-            # Build filter formula
-            filters = []
-            if company_name:
-                filters.append(f"SEARCH('{company_name}', {{Company}})")
-            if industry:
-                filters.append(f"SEARCH('{industry}', {{Industry}})")
-            if location:
-                filters.append(f"SEARCH('{location}', {{Location}})")
-            
-            params = {
-                'maxRecords': 100,
-                'view': 'Grid view'
-            }
-            
-            if filters:
-                filter_formula = 'AND(' + ', '.join(filters) + ')'
-                params['filterByFormula'] = filter_formula
-            
-            response = requests.get(url, headers=headers, params=params, timeout=30)
-            
-            if response.status_code == 200:
-                data = response.json()
-                leads = []
-                
-                for record in data.get('records', []):
-                    fields = record.get('fields', {})
-                    lead = {
-                        'name': fields.get('Full Name', ''),
-                        'title': fields.get('Job Title', ''),
-                        'company': fields.get('Company', ''),
-                        'email': fields.get('Email', ''),
-                        'phone': fields.get('Phone', ''),
-                        'location': fields.get('Location', ''),
-                        'source': 'Airtable CRM',
-                        'verified': fields.get('Email Verified', False)
+            for table_name in table_names:
+                try:
+                    url = f"https://api.airtable.com/v0/{base_id}/{table_name.replace(' ', '%20')}"
+                    headers = {
+                        'Authorization': f'Bearer {self.airtable_key}',
+                        'Content-Type': 'application/json'
                     }
-                    leads.append(lead)
-                
-                return leads
-                
+                    
+                    # Simple request without filters first to test table access
+                    params = {
+                        'maxRecords': 20,
+                        'pageSize': 20
+                    }
+                    
+                    response = requests.get(url, headers=headers, params=params, timeout=30)
+                    
+                    if response.status_code == 200:
+                        data = response.json()
+                        leads = []
+                        
+                        for record in data.get('records', []):
+                            fields = record.get('fields', {})
+                            
+                            # Extract data using flexible field mapping
+                            name = (fields.get('Name') or fields.get('Full Name') or 
+                                   fields.get('Contact Name') or fields.get('Client Name') or '')
+                            
+                            title = (fields.get('Title') or fields.get('Job Title') or 
+                                    fields.get('Position') or fields.get('Role') or '')
+                            
+                            company = (fields.get('Company') or fields.get('Organization') or 
+                                      fields.get('Account') or fields.get('Business') or '')
+                            
+                            email = (fields.get('Email') or fields.get('Email Address') or 
+                                    fields.get('Contact Email') or '')
+                            
+                            phone = (fields.get('Phone') or fields.get('Phone Number') or 
+                                    fields.get('Mobile') or fields.get('Contact Phone') or '')
+                            
+                            location_field = (fields.get('Location') or fields.get('City') or 
+                                            fields.get('Address') or fields.get('Region') or '')
+                            
+                            # Apply filters if any data exists
+                            if name or email or company:
+                                # Basic filtering
+                                include_record = True
+                                if company_name and company:
+                                    include_record = company_name.lower() in company.lower()
+                                if industry and include_record:
+                                    industry_fields = str(fields.get('Industry', '') + ' ' + 
+                                                        fields.get('Sector', '') + ' ' +
+                                                        fields.get('Business Type', '')).lower()
+                                    include_record = industry.lower() in industry_fields
+                                if location and location_field and include_record:
+                                    include_record = location.lower() in location_field.lower()
+                                
+                                if include_record:
+                                    lead = {
+                                        'name': name,
+                                        'title': title,
+                                        'company': company,
+                                        'email': email,
+                                        'phone': phone,
+                                        'location': location_field,
+                                        'source': f'Airtable {table_name}',
+                                        'verified': bool(email and '@' in email)
+                                    }
+                                    leads.append(lead)
+                        
+                        if leads:
+                            print(f"Successfully retrieved {len(leads)} leads from Airtable table: {table_name}")
+                            return leads
+                            
+                except Exception as table_error:
+                    print(f"Failed to access table {table_name}: {table_error}")
+                    continue
+                    
         except Exception as e:
             print(f"Airtable API error: {e}")
             
