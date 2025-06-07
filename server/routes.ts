@@ -1737,6 +1737,9 @@ CRM Data:
       
       // Save submission immediately
       const fs = require('fs');
+      const path = require('path');
+      const { spawn } = require('child_process');
+      
       const filename = `logs/tally_submission_${Date.now()}.json`;
       fs.writeFileSync(filename, JSON.stringify({
         timestamp,
@@ -1745,11 +1748,6 @@ CRM Data:
       }, null, 2));
       
       console.log(`💾 Saved to: ${filename}`);
-      
-      // Process with Python handler directly
-      const { spawn } = require('child_process');
-      const fs = require('fs');
-      const path = require('path');
       
       // Check if webhook handler exists and execute it
       const scriptPath = path.join(process.cwd(), 'webhooks', 'webhook_handler.py');

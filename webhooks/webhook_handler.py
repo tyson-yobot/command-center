@@ -46,6 +46,14 @@ def is_authentic_tally_submission(webhook_data):
 def process_tally_webhook(webhook_data):
     """Process authentic Tally webhook data only"""
     
+    # Handle wrapped payload from Node.js
+    if isinstance(webhook_data, dict) and 'body' in webhook_data:
+        webhook_data = webhook_data['body']
+    
+    # Handle raw_payload wrapper
+    if isinstance(webhook_data, dict) and 'raw_payload' in webhook_data:
+        webhook_data = webhook_data['raw_payload']
+    
     # Validate authentic submission
     if not is_authentic_tally_submission(webhook_data):
         print("❌ BLOCKED: Invalid submission format")
