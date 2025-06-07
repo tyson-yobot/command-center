@@ -1,0 +1,12 @@
+{
+  "quote_id": "YQ-20250607-ABC",
+  "company_name": "ABC Roofing Solutions",
+  "contact_name": "John Smith",
+  "email": "john@abcroofing.com",
+  "service_type": "Commercial Roofing",
+  "folder_path": "./client_folders/ABC Roofing Solutions_YQ-20250607-ABC",
+  "document_path": "./pdfs/YoBot_Quote_YQ-20250607-ABC_ABC_Roofing_Solutions.txt",
+  "processed_timestamp": "2025-06-07T18:33:00.648309",
+  "status": "processed_directly",
+  "form_data_file": "REAL_FORM_SUBMISSION_1749321177228.json"
+}

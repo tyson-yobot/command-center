@@ -1,0 +1,27 @@
+
+YoBot Sales Order Quote
+======================
+
+Quote Number: YQ-20250607-ABC
+Date: 2025-06-07 18:32:57
+
+CUSTOMER INFORMATION
+Company: ABC Roofing Solutions
+Contact: John Smith
+Email: john@abcroofing.com
+Phone: +1-555-123-4567
+
+SERVICE DETAILS
+Service Type: Commercial Roofing
+Timeline: Q2 2025
+Budget Range: $75,000 - $100,000
+
+PROJECT DESCRIPTION
+New warehouse facility requiring complete roofing system installation. 50,000 sq ft building with specialized drainage requirements.
+
+QUOTE STATUS
+Status: Active
+Generated: 2025-06-07 18:32:57
+Valid Until: 2025-06-07 + 30 days
+
+Contact YoBot for questions: admin@yobot.com
