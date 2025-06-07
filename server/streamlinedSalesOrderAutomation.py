@@ -20,27 +20,97 @@ SLACK_WEBHOOK = "https://hooks.slack.com/services/xRYo7LD89mNz2EvZy3kOrFiv"
 
 # === 1. UPLOAD TO GOOGLE DRIVE ===
 def upload_to_drive(pdf_path, company_name):
-    creds = Credentials.from_service_account_file("google_creds.json", scopes=["https://www.googleapis.com/auth/drive"])
-    service = build("drive", "v3", credentials=creds)
+    """Upload PDF to Google Drive using service account or OAuth fallback"""
+    try:
+        # Try service account method first (preferred)
+        try:
+            import json
+            creds_json = os.getenv("GOOGLE_DRIVE_CREDENTIALS")
+            if creds_json:
+                creds_data = json.loads(creds_json)
+                creds = Credentials.from_service_account_info(
+                    creds_data, 
+                    scopes=["https://www.googleapis.com/auth/drive"]
+                )
+                print("✅ Using Google service account authentication")
+            else:
+                # Fallback to service account file
+                creds = Credentials.from_service_account_file(
+                    "google_creds.json", 
+                    scopes=["https://www.googleapis.com/auth/drive"]
+                )
+                print("✅ Using Google service account file authentication")
+        except Exception as service_error:
+            print(f"⚠️ Service account failed: {service_error}")
+            # Fallback to OAuth (original method)
+            from google.oauth2.credentials import Credentials as OAuth2Credentials
+            import requests
+            
+            client_id = os.getenv('GOOGLE_CLIENT_ID')
+            client_secret = os.getenv('GOOGLE_CLIENT_SECRET')
+            refresh_token = os.getenv('GOOGLE_REFRESH_TOKEN')
+            
+            if not all([client_id, client_secret, refresh_token]):
+                print("❌ Missing Google OAuth credentials")
+                return None
+                
+            # Get access token
+            token_data = {
+                'client_id': client_id,
+                'client_secret': client_secret,
+                'refresh_token': refresh_token,
+                'grant_type': 'refresh_token'
+            }
+            
+            response = requests.post('https://oauth2.googleapis.com/token', data=token_data)
+            if response.status_code != 200:
+                print(f"❌ Failed to refresh Google token: {response.json()}")
+                return None
+                
+            token_info = response.json()
+            access_token = token_info['access_token']
+            
+            creds = OAuth2Credentials(
+                token=access_token,
+                refresh_token=refresh_token,
+                client_id=client_id,
+                client_secret=client_secret,
+                token_uri='https://oauth2.googleapis.com/token'
+            )
+            print("✅ Using Google OAuth authentication")
 
-    folders = service.files().list(q=f"mimeType='application/vnd.google-apps.folder' and name='{company_name}' and '{GOOGLE_FOLDER_ID}' in parents").execute()
-    folder_id = folders["files"][0]["id"] if folders["files"] else None
+        service = build("drive", "v3", credentials=creds)
 
-    if not folder_id:
-        folder = service.files().create(body={
-            "name": company_name,
-            "mimeType": "application/vnd.google-apps.folder",
-            "parents": [GOOGLE_FOLDER_ID]
-        }, fields="id").execute()
-        folder_id = folder["id"]
+        # Check if company folder exists
+        folders = service.files().list(
+            q=f"mimeType='application/vnd.google-apps.folder' and name='{company_name}' and '{GOOGLE_FOLDER_ID}' in parents"
+        ).execute()
+        
+        folder_id = folders["files"][0]["id"] if folders["files"] else None
 
-    media = MediaFileUpload(pdf_path, mimetype="application/pdf")
-    file = service.files().create(body={
-        "name": os.path.basename(pdf_path),
-        "parents": [folder_id]
-    }, media_body=media, fields="id,webViewLink").execute()
+        # Create folder if it doesn't exist
+        if not folder_id:
+            folder = service.files().create(body={
+                "name": company_name,
+                "mimeType": "application/vnd.google-apps.folder",
+                "parents": [GOOGLE_FOLDER_ID]
+            }, fields="id").execute()
+            folder_id = folder["id"]
+            print(f"✅ Created Google Drive folder for {company_name}")
 
-    return file["webViewLink"]
+        # Upload PDF to folder
+        media = MediaFileUpload(pdf_path, mimetype="application/pdf")
+        file = service.files().create(body={
+            "name": os.path.basename(pdf_path),
+            "parents": [folder_id]
+        }, media_body=media, fields="id,webViewLink").execute()
+
+        print(f"✅ Uploaded PDF to Google Drive")
+        return file["webViewLink"]
+        
+    except Exception as e:
+        print(f"❌ Google Drive upload failed: {str(e)}")
+        return None
 
 # === 2. SEND EMAIL ===
 def send_email(to_emails, subject, body, attachment_path):
