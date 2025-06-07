@@ -44,6 +44,7 @@ import { invoiceRouter } from "./invoiceAutomation";
 import { qboTokenRouter } from "./qboTokenExchange";
 import { configManager as controlCenterConfig } from "./controlCenterConfig";
 import { ingestLead, testLeadIngestion } from "./leadIngestion";
+import { registerProductionSalesOrder } from "./productionSalesOrder";
 import axios from "axios";
 import { 
   logCommandCenterMetrics, 
@@ -10096,148 +10097,7 @@ Provide 3 actionable suggestions in bullet points.`;
     }
   });
 
-  // Production Sales Order Webhook - Complete 10-Step Process
-  app.post('/webhook/production_sales_order', async (req, res) => {
-    try {
-      const { spawn } = require('child_process');
-      
-      // Use your complete production sales order automation
-      const pythonProcess = spawn('python3', ['server/completeProductionSalesOrder.py'], {
-        stdio: ['pipe', 'pipe', 'pipe']
-      });
 
-      pythonProcess.stdin.write(JSON.stringify({
-        webhook_data: req.body
-      }));
-      pythonProcess.stdin.end();
-
-      let result = '';
-      let errorOutput = '';
-
-      pythonProcess.stdout.on('data', (data: Buffer) => {
-        result += data.toString();
-      });
-
-      pythonProcess.stderr.on('data', (data: Buffer) => {
-        errorOutput += data.toString();
-      });
-
-      pythonProcess.on('close', (code: number) => {
-        if (code === 0 && result) {
-          try {
-            const parsedResult = JSON.parse(result.trim());
-            res.json({
-              success: true,
-              message: "Complete production sales order processed",
-              data: parsedResult
-            });
-          } catch (e) {
-            res.json({
-              success: true,
-              message: "Production sales order completed",
-              output: result.trim()
-            });
-          }
-        } else {
-          res.status(500).json({
-            success: false,
-            message: "Production sales order failed",
-            error: errorOutput || result
-          });
-        }
-      });
-
-    } catch (error: any) {
-      res.status(500).json({
-        success: false,
-        message: "Production sales order error",
-        error: error.message
-      });
-    }
-  });
-
-  // Legacy Tally Webhook Handler
-  app.post('/webhook/sales_order', async (req, res) => {
-    try {
-      const data = req.body;
-      
-      // Extract parsed values from Tally exactly as your code specifies
-      const salesOrderData = {
-        'Parsed Company Name': data['Parsed Company Name'] || data.company_name,
-        'Parsed Contact Name': data['Parsed Contact Name'] || data.contact_name,
-        'Parsed Contact Email': data['Parsed Contact Email'] || data.contact_email,
-        'Parsed Contact Phone': data['Parsed Contact Phone'] || data.contact_phone,
-        'Parsed Bot Package': data['Parsed Bot Package'] || data.package_name,
-        'Parsed Add-On List': data['Parsed Add-On List'] || data.selected_addons || [],
-        'Parsed Stripe Payment': data['Parsed Stripe Payment'] || data.stripe_paid || '0',
-        'Parsed Industry': data.get?.('Parsed Industry') || data.industry || ''
-      };
-
-      // Run clean sales order automation with parsed data
-      const { spawn } = require('child_process');
-      const pythonScript = `
-import sys
-sys.path.append('/home/runner/workspace/server')
-from clean_sales_order_automation import process_sales_order_clean
-import json
-
-# Convert parsed data to expected format
-order_data = {
-    'company_name': '${salesOrderData['Parsed Company Name']}',
-    'contact_name': '${salesOrderData['Parsed Contact Name']}',
-    'email': '${salesOrderData['Parsed Contact Email']}',
-    'phone': '${salesOrderData['Parsed Contact Phone']}',
-    'package': '${salesOrderData['Parsed Bot Package']}'
-}
-
-result = process_sales_order_clean(order_data)
-print(json.dumps(result))
-      `;
-
-      const { exec } = require('child_process');
-      exec(`python3 -c "${pythonScript.replace(/"/g, '\\"')}"`, (error, stdout, stderr) => {
-        if (error) {
-          console.error('Webhook automation error:', error);
-          return res.status(500).json({
-            success: false,
-            error: 'Automation execution failed',
-            details: error.message
-          });
-        }
-
-        try {
-          const result = JSON.parse(stdout);
-          console.log('Complete webhook automation result:', result);
-          
-          res.json({
-            success: true,
-            message: 'Clean sales order automation executed successfully',
-            webhook_type: 'Tally Sales Order',
-            quote_id: result.quote_id,
-            company_name: result.company_name,
-            pdf_path: result.pdf_path,
-            total: result.total,
-            deposit_due: result.deposit_due,
-            automation_result: result
-          });
-        } catch (parseError) {
-          console.error('Result parsing error:', parseError);
-          res.status(500).json({
-            success: false,
-            error: 'Automation result parsing failed'
-          });
-        }
-      });
-
-    } catch (error: any) {
-      console.error('Webhook error:', error);
-      res.status(500).json({
-        success: false,
-        error: 'Webhook processing failed',
-        details: error.message
-      });
-    }
-  });
 
   // Original webhook handler - Removed conflicting Python handler
 
@@ -12375,6 +12235,9 @@ print(json.dumps(result))
       console.error('DocuSign preparation error:', error);
     }
   }
+
+  // Register production sales order handler
+  registerProductionSalesOrder(app);
 
   return httpServer;
 }
