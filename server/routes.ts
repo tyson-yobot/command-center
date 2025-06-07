@@ -46,7 +46,7 @@ let liveAutomationMetrics = {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Clean Tally webhook processor - captures payload and generates PDFs
   app.use('*', async (req, res, next) => {
-    if (req.method === 'POST' && req.body && Object.keys(req.body).length > 0) {
+    if (req.method === 'POST' && req.body && Object.keys(req.body).length > 0 && !req.body.automationExecution) {
       const timestamp = Date.now();
       
       console.log(`Processing Tally webhook: ${req.originalUrl}`);
