@@ -224,36 +224,34 @@ export default function ClientDashboard() {
   const fetchAvailableVoices = async () => {
     setVoicesLoading(true);
     try {
-      const response = await fetch('/api/elevenlabs/voices');
-      const data = await response.json();
-      
-      if (data.voices && data.voices.length > 0) {
-        setAvailableVoices(data.voices);
-        setVoiceStatus(`${data.voices.length} voices loaded successfully`);
-        setToast({
-          title: "ElevenLabs Voices Loaded",
-          description: `Successfully loaded ${data.voices.length} available voices`,
-        });
-      } else {
-        setAvailableVoices([]);
-        if (data.message) {
-          setVoiceStatus(data.message);
-          setToast({
-            title: "ElevenLabs Configuration Required",
-            description: data.message,
-            variant: "default"
-          });
+      const response = await fetch('/api/elevenlabs/voices', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Cache-Control': 'no-cache'
         }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        
+        if (data.voices && data.voices.length > 0) {
+          setAvailableVoices(data.voices);
+          setVoiceStatus(`${data.voices.length} voices loaded successfully`);
+          console.log('Loaded voices:', data.voices.map(v => v.name));
+        } else {
+          setAvailableVoices([]);
+          setVoiceStatus(data.message || 'No voices available');
+        }
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        setAvailableVoices([]);
+        setVoiceStatus(`Failed to load voices: ${response.status}`);
       }
     } catch (error) {
       console.error('Failed to fetch voices:', error);
       setAvailableVoices([]);
-      setVoiceStatus('Error connecting to ElevenLabs');
-      setToast({
-        title: "Voice Loading Error",
-        description: "Unable to connect to ElevenLabs service",
-        variant: "destructive"
-      });
+      setVoiceStatus('Network error loading voices');
     }
     setVoicesLoading(false);
   };

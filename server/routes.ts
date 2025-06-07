@@ -4,6 +4,7 @@ import multer from "multer";
 import { WebSocketServer } from "ws";
 import { storage } from "./storage";
 import { dashboardSecurityMiddleware, secureAutomationEndpoint } from "./security";
+import { sendDocuSignSignature, getEnvelopeStatus, listEnvelopes } from "./docusignIntegration";
 import fs from "fs";
 import path from "path";
 
@@ -1035,6 +1036,99 @@ print(json.dumps(results))
     } catch (error: any) {
       console.error('Calendar invite error:', error);
       res.status(500).json({ error: 'Failed to create calendar invite' });
+    }
+  });
+
+  // DocuSign Integration - Send signature request
+  app.post('/api/docusign/send', async (req, res) => {
+    try {
+      const { signerEmail, signerName, emailSubject } = req.body;
+      
+      if (!signerEmail || !signerName) {
+        return res.status(400).json({ error: 'Signer email and name are required' });
+      }
+
+      const result = await sendDocuSignSignature(
+        signerEmail, 
+        signerName, 
+        emailSubject || "YoBot Sales Agreement – Please Sign"
+      );
+
+      if (result.success) {
+        // Log to Airtable
+        const { logMetric } = await import('./airtableUtils.js');
+        await logMetric({
+          '🧠 Function Name': 'DocuSign Envelope Sent',
+          '📝 Source Form': 'Sales Dashboard',
+          '📅 Timestamp': new Date().toISOString(),
+          '📊 Dashboard Name': 'Document Management',
+          '👤 Signer': signerName,
+          '📧 Email': signerEmail,
+          '📄 Envelope ID': result.envelopeId,
+          '🎯 Status': 'Sent'
+        });
+
+        res.json({
+          success: true,
+          message: 'DocuSign envelope sent successfully',
+          envelopeId: result.envelopeId
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          error: result.error || 'Failed to send DocuSign envelope'
+        });
+      }
+    } catch (error: any) {
+      console.error('DocuSign send error:', error);
+      res.status(500).json({ error: 'DocuSign integration error' });
+    }
+  });
+
+  // DocuSign - Get envelope status
+  app.get('/api/docusign/status/:envelopeId', async (req, res) => {
+    try {
+      const { envelopeId } = req.params;
+      const result = await getEnvelopeStatus(envelopeId);
+
+      if (result.success) {
+        res.json({
+          success: true,
+          status: result.status,
+          envelopeId: envelopeId
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          error: result.error || 'Failed to get envelope status'
+        });
+      }
+    } catch (error: any) {
+      console.error('DocuSign status error:', error);
+      res.status(500).json({ error: 'Failed to check DocuSign status' });
+    }
+  });
+
+  // DocuSign - List recent envelopes
+  app.get('/api/docusign/envelopes', async (req, res) => {
+    try {
+      const count = parseInt(req.query.count as string) || 10;
+      const result = await listEnvelopes(count);
+
+      if (result.success) {
+        res.json({
+          success: true,
+          envelopes: result.envelopes || []
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          error: result.error || 'Failed to list envelopes'
+        });
+      }
+    } catch (error: any) {
+      console.error('DocuSign list error:', error);
+      res.status(500).json({ error: 'Failed to list DocuSign envelopes' });
     }
   });
 
