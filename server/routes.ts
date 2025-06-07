@@ -11967,10 +11967,10 @@ print(json.dumps(result))
                 <th>Monthly Fee</th>
             </tr>
             <tr>
-                <td>${data.bot_package.name}</td>
-                <td>${data.bot_package.description || 'Advanced AI voice assistant with custom personality'}</td>
-                <td>$${data.bot_package.price.toLocaleString()}</td>
-                <td>$${data.bot_package.monthly}/month</td>
+                <td>${data.package || data.bot_package || 'Professional Package'}</td>
+                <td>Advanced AI voice assistant with custom personality</td>
+                <td>$${data.one_time_payment || '15,000'}</td>
+                <td>$${data.monthly_recurring || '2,500'}/month</td>
             </tr>
         </table>
         
@@ -11984,17 +11984,17 @@ print(json.dumps(result))
             </tr>
             ${data.addons.map((addon: any) => `
             <tr>
-                <td>${addon.name}</td>
-                <td>$${addon.setup}</td>
-                <td>$${addon.monthly}/month</td>
+                <td>${addon}</td>
+                <td>$2,500</td>
+                <td>$500/month</td>
             </tr>
             `).join('')}
         </table>
         ` : ''}
         
         <div class="total">
-            <p>Total Setup: $${(data.bot_package.price + (data.addons?.reduce((sum: number, addon: any) => sum + addon.setup, 0) || 0)).toLocaleString()}</p>
-            <p>Monthly Total: $${(data.bot_package.monthly + (data.addons?.reduce((sum: number, addon: any) => sum + addon.monthly, 0) || 0))}/month</p>
+            <p>Total Setup: $${(parseInt(data.one_time_payment) + (data.addons?.length * 2500 || 0)).toLocaleString()}</p>
+            <p>Monthly Total: $${(parseInt(data.monthly_recurring) + (data.addons?.length * 500 || 0))}/month</p>
         </div>
     </div>
     
