@@ -11379,7 +11379,7 @@ print(json.dumps(result))
   // Stop pipeline calls endpoint
   app.post('/api/pipeline/stop', async (req, res) => {
     try {
-      const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+      const AIRTABLE_API_KEY = process.env.AIRTABLE_VALID_TOKEN || process.env.AIRTABLE_API_KEY;
       const BASE_ID = process.env.AIRTABLE_BASE_ID || "appCoAtCZdARb4AM2";
       const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
       const TABLE_NAME = "🧠 Lead Engine";
@@ -11566,7 +11566,7 @@ print(json.dumps(result))
     try {
       console.log('Starting pipeline calls from Airtable...');
       
-      const airtableApiKey = process.env.AIRTABLE_API_KEY || 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa';
+      const airtableApiKey = process.env.AIRTABLE_VALID_TOKEN || process.env.AIRTABLE_API_KEY || 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa';
       const baseId = 'appb2f3D77Tc4DWAr';
       const tableId = 'tbluqrDSomu5UVhDw';
 
