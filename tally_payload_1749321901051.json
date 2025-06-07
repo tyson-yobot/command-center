@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-06-07T18:45:01.227Z",
+  "url": "/api/automation-batch-14/function-133",
+  "headers": {
+    "host": "localhost:5000",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "accept": "*/*",
+    "accept-language": "*",
+    "sec-fetch-mode": "cors",
+    "user-agent": "node",
+    "accept-encoding": "gzip, deflate",
+    "content-length": "84"
+  },
+  "raw_payload": {
+    "automationExecution": true,
+    "functionId": 133,
+    "timestamp": "2025-06-07T18:45:00.182Z"
+  }
+}

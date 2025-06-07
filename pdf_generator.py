@@ -2,6 +2,22 @@ from fpdf import FPDF
 import os
 import json
 from datetime import datetime
+import re
+
+def clean_text_for_pdf(text):
+    """Remove or replace characters that can't be displayed in PDF"""
+    # Remove emojis and special Unicode characters
+    text = re.sub(r'[^\x00-\x7F]+', '', str(text))
+    # Replace common problematic characters
+    replacements = {
+        '🤖': 'Bot',
+        '🧩': 'Add-On',
+        '💳': 'Payment',
+        '✍️': 'Signature'
+    }
+    for emoji, replacement in replacements.items():
+        text = text.replace(emoji, replacement)
+    return text
 
 def generate_pdf_from_fields(submission_id, fields_array):
     pdf = FPDF()
@@ -25,8 +41,8 @@ def generate_pdf_from_fields(submission_id, fields_array):
     pdf.set_font("Arial", size=12)
 
     for field in fields_array:
-        name = field["name"]
-        value = field["value"]
+        name = clean_text_for_pdf(field.get("name", ""))
+        value = clean_text_for_pdf(field.get("value", ""))
         if any(k in name for k in HIDDEN_FIELD_KEYWORDS):
             continue
         pdf.multi_cell(0, 10, f"{name}:\n{value}\n", border=0)

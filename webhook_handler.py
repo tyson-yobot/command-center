@@ -34,16 +34,24 @@ def process_tally_webhook(webhook_data):
     # Extract fields array from webhook data
     fields_array = []
     
-    # Handle different webhook data formats
+    # Handle different webhook data formats - prioritize rich field structure
     if isinstance(webhook_data, dict):
-        if 'fields' in webhook_data:
+        # First check for Tally's rich field structure in data.fields
+        if 'data' in webhook_data and 'fields' in webhook_data['data']:
+            for field in webhook_data['data']['fields']:
+                if is_display_field(field.get('label', field.get('key', ''))):
+                    fields_array.append({
+                        "name": field.get('label', field.get('key', 'Unknown Field')),
+                        "value": field.get('value', ''),
+                        "type": field.get('type', 'TEXT')
+                    })
+        # Fallback to direct fields array
+        elif 'fields' in webhook_data:
             fields_array = webhook_data['fields']
-        elif 'data' in webhook_data and 'fields' in webhook_data['data']:
-            fields_array = webhook_data['data']['fields']
         else:
-            # Convert flat dict to fields array
+            # Convert flat dict to fields array (last resort)
             for key, value in webhook_data.items():
-                if is_display_field(key):
+                if is_display_field(key) and key not in ['data', 'eventId', 'eventType', 'createdAt']:
                     fields_array.append({"name": key, "value": value})
     
     # Generate clean summary for email
@@ -52,17 +60,23 @@ def process_tally_webhook(webhook_data):
     contact_email = "admin@yobot.com"
     
     for field in fields_array:
-        name = field["name"]
-        value = field["value"]
+        name = field.get("name", "")
+        value = field.get("value", "")
+        field_type = field.get("type", "TEXT")
         
         # Skip hidden logic fields
         if not is_display_field(name):
             continue
             
-        # Extract key info
-        if "company" in name.lower() or "business" in name.lower():
+        # Format array values properly
+        if isinstance(value, list):
+            value = ", ".join(str(v) for v in value)
+            
+        # Extract key info with better matching
+        name_lower = name.lower()
+        if "company" in name_lower or "business" in name_lower:
             company_name = value
-        elif "email" in name.lower():
+        elif "email" in name_lower or field_type == "INPUT_EMAIL":
             contact_email = value
             
         summary_lines.append(f"{name}\n{value}\n")
