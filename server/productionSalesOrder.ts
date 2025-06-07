@@ -1,10 +1,15 @@
 import type { Express, Request, Response } from "express";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import puppeteer from "puppeteer";
 import { google } from "googleapis";
 import nodemailer from "nodemailer";
 import axios from "axios";
+
+// Get __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Configuration
 const GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh";

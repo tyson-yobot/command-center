@@ -12236,7 +12236,7 @@ Provide 3 actionable suggestions in bullet points.`;
     }
   }
 
-  // Register production sales order handler
+  // Clean Production Sales Order Endpoint - No Test Data
   registerProductionSalesOrder(app);
 
   return httpServer;
