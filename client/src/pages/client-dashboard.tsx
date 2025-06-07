@@ -43,6 +43,7 @@ import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_
 import { LeadScrapingInterface } from '@/components/lead-scraping-interface';
 import { CallMonitoringPopup } from '@/components/call-monitoring-popup';
 import { ZendeskChatWidget } from '@/components/zendesk-chat-widget';
+import { SalesOrderProcessor } from '@/components/sales-order-processor';
 
 export default function ClientDashboard() {
   const { data: metrics } = useQuery({ queryKey: ['/api/metrics'] });
@@ -80,6 +81,7 @@ export default function ClientDashboard() {
   const [showRecordingList, setShowRecordingList] = useState(false);
   const [editingRecording, setEditingRecording] = useState<any>(null);
   const [showLeadScraping, setShowLeadScraping] = useState(false);
+  const [showSalesOrderProcessor, setShowSalesOrderProcessor] = useState(false);
   
   // Call monitoring states
   const [showCallMonitoring, setShowCallMonitoring] = useState(false);
