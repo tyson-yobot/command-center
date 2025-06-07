@@ -33,7 +33,7 @@ def generate_submission_pdf(submission_data, submission_id):
     pdf.add_page()
     pdf.set_font("Arial", size=12)
 
-    pdf.cell(200, 10, txt="YoBot Sales Order Summary", ln=True, align='C')
+    pdf.cell(200, 10, text="YoBot Sales Order Summary", ln=True, align='C')
     pdf.ln(10)
 
     # Filter out hidden logic fields and add content
@@ -47,6 +47,10 @@ def generate_submission_pdf(submission_data, submission_id):
         # Handle array values
         if isinstance(item.get("value"), list):
             value = ", ".join(str(v) for v in item.get("value"))
+            
+        # Clean Unicode characters that cause PDF issues
+        label = label.encode('ascii', 'ignore').decode('ascii')
+        value = value.encode('ascii', 'ignore').decode('ascii')
             
         pdf.multi_cell(0, 10, f"{label}: {value}")
         pdf.ln(2)
@@ -139,13 +143,20 @@ def process_tally_webhook(webhook_data):
                 if is_display_field(key) and key not in ['data', 'eventId', 'eventType', 'createdAt']:
                     fields_array.append({"name": key, "value": value})
     
-    # Generate clean summary for email
-    summary_lines = []
+    # Initialize all variables at top level
     company_name = "Unknown Company"
     contact_email = "admin@yobot.com"
+    contact_name = "Unknown Contact"
+    phone = "000-000-0000"
+    website = "no-website.com"
+    package = "Unknown Package"
+    total_onetime = "0"
+    total_monthly = "0"
+    
+    summary_lines = []
     
     for field in fields_array:
-        name = field.get("name", "")
+        name = field.get("name", field.get("label", ""))
         value = field.get("value", "")
         field_type = field.get("type", "TEXT")
         
@@ -157,12 +168,20 @@ def process_tally_webhook(webhook_data):
         if isinstance(value, list):
             value = ", ".join(str(v) for v in value)
             
-        # Extract key info with better matching
+        # Extract key info with comprehensive matching
         name_lower = name.lower()
         if "company" in name_lower or "business" in name_lower:
-            company_name = value
+            company_name = str(value)
         elif "email" in name_lower or field_type == "INPUT_EMAIL":
-            contact_email = value
+            contact_email = str(value)
+        elif "contact name" in name_lower or (name_lower == "name" and not company_name in str(value)):
+            contact_name = str(value)
+        elif "phone" in name_lower or field_type == "INPUT_PHONE_NUMBER":
+            phone = str(value)
+        elif "website" in name_lower or field_type == "INPUT_LINK":
+            website = str(value)
+        elif "package" in name_lower and "bot" in name_lower:
+            package = str(value)
             
         summary_lines.append(f"{name}\n{value}\n")
     
@@ -179,21 +198,16 @@ def process_tally_webhook(webhook_data):
     try:
         import requests
         
-        # Extract key fields for Airtable
-        contact_name = ""
-        phone = ""
-        website = ""
-        package = ""
+        # Use already extracted variables - no redeclaration needed
         addons = []
-        total_onetime = ""
-        total_monthly = ""
         
         for field in fields_array:
             name = field.get("name", "").lower()
             value = str(field.get("value", ""))
             
-            if "contact name" in name or "name" in name:
-                contact_name = value
+            # Extract addons
+            if "addon" in name or "add-on" in name or ("dashboard" in name and field.get("value")):
+                addons.append(value)
             elif "phone" in name:
                 phone = value
             elif "website" in name:

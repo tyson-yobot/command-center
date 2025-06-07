@@ -77,8 +77,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       // Process with clean handler
-      const pythonProcess = spawn('python3', ['webhook_handler.py'], {
-        stdio: ['pipe', 'pipe', 'pipe']
+      const pythonProcess = spawn('python3', ['webhooks/webhook_handler.py'], {
+        stdio: ['pipe', 'pipe', 'pipe'],
+        cwd: process.cwd()
       });
       
       pythonProcess.stdin.write(JSON.stringify(req.body));
