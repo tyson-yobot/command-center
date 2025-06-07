@@ -7,7 +7,23 @@ export function registerProductionSalesOrder(app: Express) {
   
   app.post('/webhook/tally_sales_order', async (req: Request, res: Response) => {
     try {
-      console.log("📥 Received Tally webhook");
+      const timestamp = new Date().toISOString();
+      console.log("📥 Received Tally webhook at", timestamp);
+      
+      // Log complete payload for debugging
+      console.log("🔍 FULL WEBHOOK PAYLOAD:", JSON.stringify(req.body, null, 2));
+      
+      // Save payload to file for inspection
+      const fs = require('fs');
+      const payloadLogPath = `./sales_order_payload_${Date.now()}.json`;
+      fs.writeFileSync(payloadLogPath, JSON.stringify({
+        timestamp: timestamp,
+        headers: req.headers,
+        body: req.body,
+        method: req.method,
+        url: req.url
+      }, null, 2));
+      console.log(`💾 Payload saved to: ${payloadLogPath}`);
       
       // Track execution start
       const executionId = `sales_${Date.now()}`;
@@ -15,32 +31,36 @@ export function registerProductionSalesOrder(app: Express) {
         id: executionId,
         type: 'Sales Order Processing',
         status: 'RUNNING',
-        startTime: new Date().toISOString(),
-        company: req.body["Company Name"] || "Unknown Company"
+        startTime: timestamp,
+        company: req.body["Company Name"] || req.body["company_name"] || "Unknown Company",
+        payloadFile: payloadLogPath,
+        endTime: '',
+        result: {}
       };
       
       // Update automation metrics
       updateAutomationMetrics({
         recentExecutions: [execution],
         executionsToday: 1,
-        lastExecution: new Date().toISOString()
+        lastExecution: timestamp
       });
       
-      // Parse mapped fields only
+      // Parse mapped fields with multiple field name variations
       const cleanData = {
-        "Full Name": req.body["Full Name"] || "",
-        "Company Name": req.body["Company Name"] || "",
-        "Email Address": req.body["Email Address"] || "",
-        "Phone Number": req.body["Phone Number"] || "",
-        "Website": req.body["Website"] || "",
-        "🤖 Bot Package": req.body["🤖 Bot Package"] || "",
-        "🧩 Add-On Modules": req.body["🧩 Add-On Modules"] || "",
-        "💳 Final Payment Amount Due": req.body["💳 Final Payment Amount Due"] || "",
-        "✍️ Typed Signature": req.body["✍️ Typed Signature"] || "",
-        "💳 Preferred Payment Method": req.body["💳 Preferred Payment Method"] || ""
+        "Full Name": req.body["Full Name"] || req.body["full_name"] || req.body["name"] || "",
+        "Company Name": req.body["Company Name"] || req.body["company_name"] || req.body["company"] || "",
+        "Email Address": req.body["Email Address"] || req.body["email_address"] || req.body["email"] || "",
+        "Phone Number": req.body["Phone Number"] || req.body["phone_number"] || req.body["phone"] || "",
+        "Website": req.body["Website"] || req.body["website"] || req.body["url"] || "",
+        "🤖 Bot Package": req.body["🤖 Bot Package"] || req.body["bot_package"] || req.body["package"] || "",
+        "🧩 Add-On Modules": req.body["🧩 Add-On Modules"] || req.body["add_on_modules"] || req.body["modules"] || "",
+        "💳 Final Payment Amount Due": req.body["💳 Final Payment Amount Due"] || req.body["payment_amount"] || req.body["amount"] || "",
+        "✍️ Typed Signature": req.body["✍️ Typed Signature"] || req.body["signature"] || req.body["typed_signature"] || "",
+        "💳 Preferred Payment Method": req.body["💳 Preferred Payment Method"] || req.body["payment_method"] || req.body["payment"] || ""
       };
       
       console.log(`📋 Processing order for: ${cleanData["Company Name"]}`);
+      console.log("📊 Extracted data:", JSON.stringify(cleanData, null, 2));
       
       // Execute Python pipeline for all 10 steps
       console.log("🐍 Executing complete Python automation pipeline");

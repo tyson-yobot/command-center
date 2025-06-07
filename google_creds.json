@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "yobot-command-center",
+  "private_key_id": "yobot-production-key-2025",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC7+KV4nPQOm8tJ\nYOURKEuQF5V3Z9R8nE7YB2pF4rK8QwL9XmzVkN5RqP1mS3uB8cH2wF7TjK5vG9qL\n3aB4dE2rN6wQ8fH9vK3xL2mR5tY7uS6pO9wA1nK8vF2dG3hS4eP7qL1cN5xR9oB2\n3vK6wL8dH5qN2rS9fG7eB1tY4uP3xK2mS8vL5dH9qR6wN3oB8fG2vK7eS1tN4qP\n5xL9mR2uB6dH3wS8fG7vK5eN1tY2qP9xL6mR4uB3dH8wS7fG5vK2eN9tY1qP8xL\n7mR3uB5dH6wS9fG4vK1eN8tY0qP7xL5mR2uB4dH7wS8fG3vK0eN7tYzqP6xL4mR\n1uB3dH5wS7fG2vKzeN6tYyqP5xL3mR0uB2dH4wS6fG1vKyeN5tYxqP4xL2mRzuB\n1dH3wS5fG0vKxeN4tYwqP3xL1mRyuB0dH2wS4fGzvKweN3tYvqP2xL0mRxuBzdH\n1wS3fGyuKveN2tYuqP1xLzmRwuByeH0wS2fGxuKueN1tYtqP0xLymRvuBxeHzwS\n1fGwuKteN0tYsqPzxLxmRuuBweHywS0fGvuKseNztYrqPyxLwmRtuBveHxwSzfG\nuuKreNytYqqPxxLvmRsuBueHwwSyfGtuKqeNxtYpqPwxLumRruBteHvwSxfGsuK\npeNwtYoqPvxLtmRquBseHuwSwfGruKoeNvtYnqPuxLsmRpuBreHtwSvfGquKneN\nutYmqPtxLrmRpuBqeHswSufGpuKmeNttYlqPsxLqmRouBpeHrwStfGouKleNstY\nkqPrxLpmRnuBoeHqwSsfGnuKkeMrsYjqPqxLomRmuBneHpwSrfGmuKjeMqsYiqP\npxLnmRluBmeHowSqfGluKieMpsYhqPoxLmmRkuBlekBAgMBAAECggEBAKmqREHy\nvZAr5Qp3t1dEhFLqE\n-----END PRIVATE KEY-----\n",
+  "client_email": "yobot-automation@yobot-command-center.iam.gserviceaccount.com",
+  "client_id": "116547893521054729641",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/yobot-automation%40yobot-command-center.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
