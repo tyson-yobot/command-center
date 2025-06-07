@@ -10445,42 +10445,22 @@ print(json.dumps(result))
         }
       }
       
-      // If Apollo API fails, use the integrated lead processing engine
+      // If Apollo API fails, use comprehensive lead generation engine
       if (!apolloData) {
-        console.log('Apollo API unavailable, using integrated lead processor...');
+        console.log('Apollo API unavailable, using comprehensive lead generation engine...');
         const { execSync } = await import('child_process');
         
         try {
-          // Use the lead processing engine for authentic lead data
-          const jobTitleValue = Array.isArray(job_titles) ? job_titles[0] || "Director" : (job_titles || "Director").toString();
-          const locationValue = location || "Seattle";
-          const maxContactsValue = parseInt(max_contacts) || 25;
+          // Prepare parameters for lead generation engine
+          const engineParams = {
+            company_name: company_name || '',
+            industry: industry || '',
+            location: location || '',
+            job_titles: job_titles || [],
+            max_contacts: parseInt(max_contacts) || 25
+          };
           
-          const leadCommand = `python3 -c "
-import sys
-sys.path.append('.')
-from lead_processing_engine import process_apollo_leads
-import json
-
-# Generate sample Apollo data structure for processing
-apollo_data = {
-    'people': [
-        {
-            'first_name': 'John',
-            'last_name': 'Smith',
-            'title': '${jobTitleValue.replace(/'/g, "\\'")}',
-            'email': 'john.smith@company.com',
-            'organization': {'name': 'TechCorp'},
-            'city': '${locationValue.replace(/'/g, "\\'")}',
-            'phone_numbers': [{'sanitized_number': '+1234567890'}]
-        } for _ in range(${maxContactsValue})
-    ]
-}
-
-# Process through the engine
-results = process_apollo_leads(apollo_data, 'Apollo')
-print(json.dumps(results))
-"`;
+          const leadCommand = `python3 server/leadGenerationEngine.py '${JSON.stringify(engineParams)}'`;
 
           const leadResult = execSync(leadCommand, { 
             encoding: 'utf8',
@@ -10489,23 +10469,38 @@ print(json.dumps(results))
           
           const leadData = JSON.parse(leadResult.trim());
           
-          // Convert processed leads back to Apollo format
-          apolloData = {
-            people: leadData.processed_leads || [],
-            pagination: {
-              total_entries: leadData.processed_leads ? leadData.processed_leads.length : 0
-            }
-          };
-          
-          console.log('Lead processor returned:', apolloData.people.length, 'leads');
+          if (leadData.success) {
+            // Convert to Apollo format
+            apolloData = {
+              people: leadData.leads.map((lead: any) => ({
+                first_name: lead.name.split(' ')[0] || '',
+                last_name: lead.name.split(' ').slice(1).join(' ') || '',
+                title: lead.title,
+                email: lead.email,
+                organization: { name: lead.company },
+                city: lead.location.split(',')[0] || '',
+                state: lead.location.split(',')[1]?.trim() || '',
+                phone_numbers: lead.phone ? [{ sanitized_number: lead.phone }] : [],
+                linkedin_url: lead.linkedin_url,
+                email_status: lead.verified ? 'verified' : 'unknown'
+              })),
+              pagination: {
+                total_entries: leadData.total_found || leadData.leads.length
+              }
+            };
+            console.log('Lead generation engine returned:', apolloData.people.length, 'leads from', leadData.sources_used.join(', '));
+          } else {
+            throw new Error(leadData.error || 'Lead generation engine failed');
+          }
         } catch (processorError) {
-          console.log('Lead processor failed:', processorError.message);
+          console.log('Lead generation engine failed:', processorError.message);
           
-          // Final fallback - return structured error
+          // Return guidance for setting up authenticated sources
           return res.status(500).json({
-            error: "Lead scraping unavailable",
-            message: "Both Apollo API and integrated lead processor are currently unavailable.",
-            suggestion: "Please check your Apollo API credentials or try again later."
+            error: "Lead generation unavailable",
+            message: "No authenticated lead sources configured. Set up HubSpot or verify Airtable access for lead data.",
+            suggestion: "Configure HubSpot API key or ensure Airtable CRM access to retrieve existing contact data.",
+            sources_needed: ["HubSpot API Key", "Airtable CRM Access", "Apollo API with Search Permissions"]
           });
         }
       }
