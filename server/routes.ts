@@ -9,7 +9,7 @@ import { registerBatch25 } from "./automationBatch25";
 
 // Live automation tracking
 let liveAutomationMetrics = {
-  activeFunctions: 70,
+  activeFunctions: 100,
   executionsToday: 0,
   successRate: 98.7,
   lastExecution: new Date().toISOString(),
