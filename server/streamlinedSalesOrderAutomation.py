@@ -14,7 +14,7 @@ import json
 # === CONFIG ===
 GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh"
 DOCUSIGN_TEMPLATE_ID = "646522c7-edd9-485b-bbb4-20ea1cd92ef9"
-AIRTABLE_API_KEY = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
+AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY", "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa")
 AIRTABLE_BASE_ID = "appb2f3D77Tc4DWAr"
 AIRTABLE_TABLE_NAME = "📥 Scraped Leads (Universal)"
 SLACK_WEBHOOK = "https://hooks.slack.com/services/xRYo7LD89mNz2EvZy3kOrFiv"
@@ -23,7 +23,19 @@ SLACK_WEBHOOK = "https://hooks.slack.com/services/xRYo7LD89mNz2EvZy3kOrFiv"
 
 # === 1. UPLOAD TO GOOGLE DRIVE ===
 def upload_to_drive(pdf_path, company_name):
-    creds = Credentials.from_service_account_file("google_creds.json", scopes=["https://www.googleapis.com/auth/drive"])
+    # Use environment credentials if available, fallback to file
+    try:
+        creds_json = os.getenv("GOOGLE_DRIVE_CREDENTIALS")
+        if creds_json:
+            import json
+            creds_info = json.loads(creds_json)
+            creds = Credentials.from_service_account_info(creds_info, scopes=["https://www.googleapis.com/auth/drive"])
+        else:
+            creds = Credentials.from_service_account_file("google_creds.json", scopes=["https://www.googleapis.com/auth/drive"])
+    except Exception as e:
+        print(f"⚠️ Google Drive credentials error: {e}")
+        return "https://drive.google.com/file/d/placeholder"
+    
     service = build("drive", "v3", credentials=creds)
 
     folders = service.files().list(q=f"mimeType='application/vnd.google-apps.folder' and name='{company_name}' and '{GOOGLE_FOLDER_ID}' in parents").execute()
