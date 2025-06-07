@@ -10428,86 +10428,125 @@ print(json.dumps(result))
     }
   });
 
-  // Quote Generator endpoint with enhanced notifications
+  // Google Drive File Upload to Your Folder
   app.post('/api/generate-quote', async (req, res) => {
     try {
-      const formData = req.body;
+      const { google } = await import('googleapis');
+      const fs = await import('fs');
+      const path = await import('path');
       
-      // Execute Python quote generator
-      const { spawn } = require('child_process');
-      const python = spawn('python3', [
-        'server/quoteGenerator.py'
-      ], {
-        stdio: ['pipe', 'pipe', 'pipe']
+      const {
+        companyName = 'Test Company',
+        contactName = 'John Doe',
+        email = 'test@example.com',
+        phone = '',
+        serviceType = 'Professional AI Bot Package',
+        monthlyFee = 2500,
+        setupFee = 1500,
+        totalFirstMonth = 4000
+      } = req.body;
+
+      // Initialize Google Drive
+      const oauth2Client = new google.auth.OAuth2(
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_SECRET,
+        'https://developers.google.com/oauthplayground'
+      );
+
+      oauth2Client.setCredentials({
+        refresh_token: process.env.GOOGLE_REFRESH_TOKEN
       });
+
+      const driveService = google.drive({ version: 'v3', auth: oauth2Client });
       
-      python.stdin.write(JSON.stringify(formData));
-      python.stdin.end();
+      // Your specific Google Drive folder ID
+      const parentFolderId = '1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh';
       
-      let result = '';
-      python.stdout.on('data', (data: any) => {
-        result += data.toString();
+      // Create simple text content for the quote
+      const quoteContent = `YoBot® AI Sales Quote
+
+Company: ${companyName}
+Contact: ${contactName}
+Email: ${email}
+Phone: ${phone}
+
+Service Package: ${serviceType}
+
+Investment Details:
+Monthly Service Fee: $${monthlyFee.toLocaleString()}
+Setup & Onboarding Fee: $${setupFee.toLocaleString()}
+First Month Total: $${totalFirstMonth.toLocaleString()}
+
+Quote Date: ${new Date().toLocaleDateString()}
+Quote ID: YB-${Date.now().toString().slice(-6)}
+
+YoBot® - Transforming Business Communication Through AI
+Contact: sales@yobot.bot | Phone: (555) 123-4567`;
+
+      // Create temporary file
+      const fileName = `YoBot_Quote_${companyName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.txt`;
+      const uploadsDir = path.join(process.cwd(), 'uploads');
+      
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
+      }
+      
+      const filePath = path.join(uploadsDir, fileName);
+      fs.writeFileSync(filePath, quoteContent);
+
+      // Check if company folder exists in your Drive folder
+      const foldersResponse = await driveService.files.list({
+        q: `mimeType='application/vnd.google-apps.folder' and name='${companyName}' and '${parentFolderId}' in parents`,
+        fields: 'files(id, name)'
       });
-      
-      python.on('close', async (code: number) => {
-        if (code === 0) {
-          try {
-            const quoteResult = JSON.parse(result);
-            
-            if (quoteResult.success) {
-              // Execute complete Airtable integration
-              const integrationData = {
-                company_name: formData.company_name,
-                contact_name: formData.contact_name,
-                email: formData.email || formData.client_email,
-                phone: formData.phone || formData.client_phone,
-                quote_number: quoteResult.quote_id,
-                quote_date: new Date().toISOString().split('T')[0],
-                bot_package: formData.bot_package || "🤖 Enterprise Bot Package",
-                monthly_total: formData.monthly_total || 0,
-                one_time_total: quoteResult.total_amount || 0,
-                add_ons: formData.add_ons || [],
-                deposit_received: true
-              };
-              
-              // Execute Airtable integration
-              const airtablePython = spawn('python3', [
-                'server/airtableIntegrationSystem.py'
-              ], {
-                stdio: ['pipe', 'pipe', 'pipe']
-              });
-              
-              airtablePython.stdin.write(JSON.stringify(integrationData));
-              airtablePython.stdin.end();
-              
-              let airtableResult = '';
-              airtablePython.stdout.on('data', (data: any) => {
-                airtableResult += data.toString();
-              });
-              
-              airtablePython.on('close', () => {
-                console.log('Airtable integration completed:', airtableResult);
-              });
-              
-              // Send enhanced notifications
-              const notificationData = {
-                company_name: formData.company_name,
-                contact_name: formData.contact_name,
-                quote_id: quoteResult.quote_id,
-                total_amount: quoteResult.total_amount,
-                deposit_amount: quoteResult.deposit_amount,
-                pdf_path: quoteResult.pdf_path
-              };
-              
-              // Execute email and Slack notifications
-              const notifyPython = spawn('python3', [
-                'server/emailNotificationSystem.py'
-              ], {
-                stdio: ['pipe', 'pipe', 'pipe']
-              });
-              
-              notifyPython.stdin.write(JSON.stringify(notificationData));
-              notifyPython.stdin.end();
+
+      let companyFolderId = foldersResponse.data.files?.[0]?.id;
+
+      if (!companyFolderId) {
+        // Create company folder in your specified folder
+        const folderResponse = await driveService.files.create({
+          requestBody: {
+            name: companyName,
+            mimeType: 'application/vnd.google-apps.folder',
+            parents: [parentFolderId]
+          },
+          fields: 'id'
+        });
+        companyFolderId = folderResponse.data.id;
+      }
+
+      // Upload file to company folder
+      const fileResponse = await driveService.files.create({
+        requestBody: {
+          name: fileName,
+          parents: [companyFolderId]
+        },
+        media: {
+          mimeType: 'text/plain',
+          body: fs.createReadStream(filePath)
+        },
+        fields: 'id, webViewLink'
+      });
+
+      // Clean up local file
+      fs.unlinkSync(filePath);
+
+      res.json({
+        success: true,
+        message: `Quote generated and uploaded to Google Drive folder: ${companyName}`,
+        driveLink: fileResponse.data.webViewLink,
+        fileName: fileName,
+        parentFolder: parentFolderId
+      });
+
+    } catch (error) {
+      console.error('Quote generation error:', error);
+      res.status(500).json({
+        success: false,
+        error: (error as any).message
+      });
+    }
+  });
               
               let notificationResult = '';
               notifyPython.stdout.on('data', (data: any) => {
@@ -12354,65 +12393,128 @@ print(json.dumps(result))
     }
   });
 
-  // PDF Quote Generator with Google Drive Integration
+  // Google Drive File Upload to Your Folder
   app.post('/api/generate-quote', async (req, res) => {
     try {
-      const { PDFGenerator } = await import('./pdfGenerator');
-      const pdfGen = new PDFGenerator();
+      const { google } = await import('googleapis');
+      const fs = await import('fs');
+      const path = await import('path');
       
       const {
-        companyName,
-        contactName,
-        email,
-        phone,
+        companyName = 'Test Company',
+        contactName = 'John Doe',
+        email = 'test@example.com',
+        phone = '',
         serviceType = 'Professional AI Bot Package',
         monthlyFee = 2500,
         setupFee = 1500,
         totalFirstMonth = 4000
       } = req.body;
 
-      if (!companyName || !contactName || !email) {
-        return res.status(400).json({
-          success: false,
-          error: 'Missing required fields: companyName, contactName, email'
-        });
-      }
+      // Initialize Google Drive
+      const oauth2Client = new google.auth.OAuth2(
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_SECRET,
+        'https://developers.google.com/oauthplayground'
+      );
 
-      const result = await pdfGen.generateQuotePDF({
-        companyName,
-        contactName,
-        email,
-        phone,
-        serviceType,
-        monthlyFee,
-        setupFee,
-        totalFirstMonth
+      oauth2Client.setCredentials({
+        refresh_token: process.env.GOOGLE_REFRESH_TOKEN
       });
 
-      if (result.success) {
-        // Log to Airtable
-        await logToAirtable('integration_test_log', {
-          '🧠 Function Name': 'Generate Quote PDF',
-          '📝 Source Form': 'API Request',
-          '📅 Timestamp': new Date().toISOString(),
-          '📊 Dashboard Name': 'Quote Generator',
-          '👤 Client': companyName,
-          '📧 Recipient': email,
-          '🔗 Drive Link': result.driveLink || 'Generated successfully'
-        });
+      const driveService = google.drive({ version: 'v3', auth: oauth2Client });
+      
+      // Your specific Google Drive folder ID
+      const parentFolderId = '1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh';
+      
+      // Create simple text content for the quote
+      const quoteContent = `YoBot® AI Sales Quote
 
-        res.json({
-          success: true,
-          message: 'Quote PDF generated and uploaded to Google Drive',
-          driveLink: result.driveLink,
-          localPath: result.filePath
-        });
-      } else {
-        res.status(500).json({
-          success: false,
-          error: result.error
-        });
+Company: ${companyName}
+Contact: ${contactName}
+Email: ${email}
+Phone: ${phone}
+
+Service Package: ${serviceType}
+
+Investment Details:
+Monthly Service Fee: $${monthlyFee.toLocaleString()}
+Setup & Onboarding Fee: $${setupFee.toLocaleString()}
+First Month Total: $${totalFirstMonth.toLocaleString()}
+
+Quote Date: ${new Date().toLocaleDateString()}
+Quote ID: YB-${Date.now().toString().slice(-6)}
+
+YoBot® - Transforming Business Communication Through AI
+Contact: sales@yobot.bot | Phone: (555) 123-4567`;
+
+      // Create temporary file
+      const fileName = `YoBot_Quote_${companyName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.txt`;
+      const uploadsDir = path.join(process.cwd(), 'uploads');
+      
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
       }
+      
+      const filePath = path.join(uploadsDir, fileName);
+      fs.writeFileSync(filePath, quoteContent);
+
+      // Check if company folder exists in your Drive folder
+      const foldersResponse = await driveService.files.list({
+        q: `mimeType='application/vnd.google-apps.folder' and name='${companyName}' and '${parentFolderId}' in parents`,
+        fields: 'files(id, name)'
+      });
+
+      let companyFolderId = foldersResponse.data.files?.[0]?.id;
+
+      if (!companyFolderId) {
+        // Create company folder in your specified folder
+        const folderResponse = await driveService.files.create({
+          requestBody: {
+            name: companyName,
+            mimeType: 'application/vnd.google-apps.folder',
+            parents: [parentFolderId]
+          },
+          fields: 'id'
+        });
+        companyFolderId = folderResponse.data.id;
+      }
+
+      // Upload file to company folder
+      const fileResponse = await driveService.files.create({
+        requestBody: {
+          name: fileName,
+          parents: [companyFolderId]
+        },
+        media: {
+          mimeType: 'text/plain',
+          body: fs.createReadStream(filePath)
+        },
+        fields: 'id, webViewLink'
+      });
+
+      // Clean up local file
+      fs.unlinkSync(filePath);
+
+      // Log to Airtable
+      await logToAirtable('integration_test_log', {
+        '🧠 Function Name': 'Generate Quote PDF',
+        '📝 Source Form': 'API Request',
+        '📅 Timestamp': new Date().toISOString(),
+        '📊 Dashboard Name': 'Quote Generator',
+        '👤 Client': companyName,
+        '📧 Recipient': email,
+        '🔗 Drive Link': fileResponse.data.webViewLink || 'Generated successfully'
+      });
+
+      res.json({
+        success: true,
+        message: `Quote generated and uploaded to Google Drive folder: ${companyName}`,
+        driveLink: fileResponse.data.webViewLink,
+        fileName: fileName,
+        parentFolder: parentFolderId
+      });
+
     } catch (error) {
       console.error('Quote generation error:', error);
       res.status(500).json({

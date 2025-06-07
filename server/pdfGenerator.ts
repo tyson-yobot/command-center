@@ -1,4 +1,4 @@
-import PDFDocument from 'pdfkit';
+import * as PDFDocument from 'pdfkit';
 import fs from 'fs';
 import path from 'path';
 import { google } from 'googleapis';
@@ -47,7 +47,7 @@ export class PDFGenerator {
       }
 
       // Create PDF document
-      const doc = new PDFDocument({ margin: 50 });
+      const doc = new (PDFDocument as any)({ margin: 50 });
       const stream = fs.createWriteStream(filePath);
       doc.pipe(stream);
 
