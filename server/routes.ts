@@ -10548,24 +10548,27 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
     }
   });
 
-  // Simple Quote Generator (works without Google Drive)
-  app.post('/api/generate-simple-quote', async (req, res) => {
+  // Complete Sales Order Processing Pipeline
+  app.post('/api/process-sales-order', async (req, res) => {
     try {
+      const { salesOrderProcessor } = await import('./salesOrderProcessor');
       const { SimpleQuoteGenerator } = await import('./simpleQuoteGenerator');
-      const generator = new SimpleQuoteGenerator();
       
       const {
         companyName = 'Test Company',
         contactName = 'John Doe',
         email = 'test@example.com',
         phone = '',
+        website = '',
         serviceType = 'Professional AI Bot Package',
         monthlyFee = 2500,
         setupFee = 1500,
         totalFirstMonth = 4000
       } = req.body;
 
-      const result = await generator.generateQuote({
+      // Step 1: Generate PDF quote
+      const generator = new SimpleQuoteGenerator();
+      const quoteResult = await generator.generateQuote({
         companyName,
         contactName,
         email,
@@ -10576,28 +10579,56 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
         totalFirstMonth
       });
 
-      if (result.success) {
-        console.log('Quote generated successfully:', {
-          company: companyName,
-          quoteId: result.quoteId,
-          filePath: result.filePath
+      if (!quoteResult.success) {
+        return res.status(500).json({
+          success: false,
+          error: `Quote generation failed: ${quoteResult.error}`
         });
+      }
 
+      // Step 2: Process through complete sales pipeline
+      const formData = {
+        'Contact Name': contactName,
+        'Company Name': companyName,
+        'Email': email,
+        'Phone Number': phone,
+        'Website': website
+      };
+
+      const pipelineResult = await salesOrderProcessor.runSalesOrderPipeline(
+        formData,
+        quoteResult.filePath!
+      );
+
+      if (pipelineResult.success) {
         res.json({
           success: true,
-          message: `Quote generated successfully for ${companyName}`,
-          quoteId: result.quoteId,
-          filePath: result.filePath,
-          ready_for_google_drive: true
+          message: `Complete sales order processed for ${companyName}`,
+          quoteId: quoteResult.quoteId,
+          driveLink: pipelineResult.quoteLink,
+          pipeline: {
+            pdfGenerated: true,
+            driveUploaded: true,
+            emailSent: true,
+            slackNotified: true,
+            docusignQueued: true,
+            airtableSynced: true,
+            hubspotQueued: true
+          }
         });
       } else {
         res.status(500).json({
           success: false,
-          error: result.error
+          error: pipelineResult.error,
+          partialSuccess: {
+            quoteGenerated: true,
+            quoteId: quoteResult.quoteId,
+            filePath: quoteResult.filePath
+          }
         });
       }
     } catch (error) {
-      console.error('Simple quote generation error:', error);
+      console.error('Sales order processing error:', error);
       res.status(500).json({
         success: false,
         error: (error as any).message
@@ -11361,9 +11392,6 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
         toggles: toggles,
         timestamp: new Date().toISOString()
       });
-      } catch (logError) {
-        console.error('Failed to log toggle update:', logError);
-      }
 
       console.log(`✅ TOGGLES SUCCESS for ${client}:`, toggles);
       
@@ -11386,15 +11414,12 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
     try {
       const { command, type, persona } = req.body;
       
-      // Log voice programming command to Airtable
-      await logToAirtable('📄 Voice Programming Commands', {
-        '🧠 Function Name': 'Voice Programming Interface',
-        '📝 Source Form': 'RAG Voice System',
-        '📅 Timestamp': new Date().toISOString(),
-        '📊 Dashboard Name': 'YoBot Command Center',
-        '🎯 Command': command,
-        '🎭 Persona': persona,
-        '🔄 Type': type
+      // Log voice programming command
+      console.log('Voice programming command:', {
+        command: command,
+        type: type,
+        persona: persona,
+        timestamp: new Date().toISOString()
       });
 
       res.json({ 

@@ -1,0 +1,136 @@
+import os
+import requests
+from datetime import datetime
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+from google.oauth2.service_account import Credentials
+from email.message import EmailMessage
+import smtplib
+import json
+
+# === SETUP ===
+GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh"
+AIRTABLE_API_KEY = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
+BASE_ID = "appRt8V3tH4g5Z5if"
+TABLE_NAME = "📥 Scraped Leads (Universal)"
+
+# === 1. UPLOAD TO GOOGLE DRIVE ===
+def upload_to_drive(pdf_path, company_name):
+    creds = Credentials.from_service_account_file("google_creds.json", scopes=["https://www.googleapis.com/auth/drive"])
+    service = build("drive", "v3", credentials=creds)
+
+    folders = service.files().list(q=f"mimeType='application/vnd.google-apps.folder' and name='{company_name}' and '{GOOGLE_FOLDER_ID}' in parents").execute()
+    folder_id = folders["files"][0]["id"] if folders["files"] else None
+
+    if not folder_id:
+        folder = service.files().create(body={
+            "name": company_name,
+            "mimeType": "application/vnd.google-apps.folder",
+            "parents": [GOOGLE_FOLDER_ID]
+        }, fields="id").execute()
+        folder_id = folder["id"]
+
+    media = MediaFileUpload(pdf_path, mimetype="application/pdf")
+    file = service.files().create(body={
+        "name": os.path.basename(pdf_path),
+        "parents": [folder_id]
+    }, media_body=media, fields="id,webViewLink").execute()
+
+    return file["webViewLink"]
+
+# === 2. SEND EMAIL ===
+def send_email(to_emails, subject, body, attachment_path):
+    msg = EmailMessage()
+    msg["Subject"] = subject
+    msg["From"] = "noreply@yobot.bot"
+    msg["To"] = ", ".join(to_emails)
+    msg.set_content(body)
+
+    with open(attachment_path, "rb") as f:
+        msg.add_attachment(f.read(), maintype="application", subtype="pdf", filename=os.path.basename(attachment_path))
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+        smtp.login("noreply@yobot.bot", "your_email_app_password")
+        smtp.send_message(msg)
+
+# === 3. SEND SLACK DM ===
+def send_slack_alert(webhook_url, company_name, quote_url):
+    message = {
+        "text": f"📩 New Quote Generated for *{company_name}*\n📎 [View Quote]({quote_url})\n✅ Ready for signature."
+    }
+    requests.post(webhook_url, json=message)
+
+# === 4. SEND DOCUSIGN SIGNATURE REQUEST ===
+def send_docusign_signature(template_id, signer_email, signer_name, company_name):
+    print(f"📩 Sending DocuSign to {signer_name} <{signer_email}> using template {template_id} for {company_name}")
+    # TODO: Convert to live integration
+
+# === 5. ADD TO AIRTABLE ===
+def insert_scraped_lead(form_data):
+    airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
+    headers = {
+        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "fields": {
+            "🧑‍💼 Name": form_data["Contact Name"],
+            "🏢 Company": form_data["Company Name"],
+            "📧 Email": form_data["Email"],
+            "☎️ Phone": form_data["Phone Number"],
+            "🌐 Website": form_data.get("Website", ""),
+            "✅ Synced to HubSpot": True,
+            "📅 Date Added": datetime.utcnow().strftime("%Y-%m-%d")
+        }
+    }
+    res = requests.post(airtable_url, headers=headers, json=payload)
+    res.raise_for_status()
+    print("✅ Lead added to Airtable.")
+
+# === 6. SEND TO HUBSPOT (placeholder) ===
+def send_to_hubspot(form_data):
+    print(f"📤 Sending contact to HubSpot: {form_data['Contact Name']} <{form_data['Email']}>")
+
+# === MAIN FLOW ===
+def run_sales_order_pipeline(form_data, pdf_path):
+    # 1. Upload to Google Drive
+    quote_link = upload_to_drive(pdf_path, form_data["Company Name"])
+
+    # 2. Email to Tyson + Daniel
+    send_email(
+        to_emails=["tyson@yobot.bot", "daniel@yobot.bot"],
+        subject=f"📎 Quote Ready – {form_data['Company Name']}",
+        body=f"The quote has been created for {form_data['Company Name']}\n\nView: {quote_link}",
+        attachment_path=pdf_path
+    )
+
+    # 3. Slack Alert
+    send_slack_alert(
+        webhook_url="your_slack_webhook_url",
+        company_name=form_data["Company Name"],
+        quote_url=quote_link
+    )
+
+    # 4. DocuSign Signature Request
+    send_docusign_signature(
+        template_id="646522c7-edd9-485b-bbb4-20ea1cd92ef9",
+        signer_email=form_data["Email"],
+        signer_name=form_data["Contact Name"],
+        company_name=form_data["Company Name"]
+    )
+
+    # 5. Airtable Sync
+    insert_scraped_lead(form_data)
+
+    # 6. HubSpot Sync
+    send_to_hubspot(form_data)
+
+# === EXAMPLE USAGE ===
+# form_data = {
+#     "Contact Name": "Tyson Lerfald",
+#     "Company Name": "YoBot Inc.",
+#     "Email": "tyson@yobot.bot",
+#     "Phone Number": "701-371-8391",
+#     "Website": "https://yobot.bot"
+# }
+# run_sales_order_pipeline(form_data, "YoBot Inc. - Q-20250606-001.pdf")
