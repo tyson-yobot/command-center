@@ -1,5 +1,6 @@
 import type { Express, Request, Response } from "express";
 import { spawn } from "child_process";
+import { writeFileSync } from "fs";
 import { updateAutomationMetrics } from "./routes";
 
 export function registerProductionSalesOrder(app: Express) {
@@ -14,9 +15,8 @@ export function registerProductionSalesOrder(app: Express) {
       console.log("🔍 FULL WEBHOOK PAYLOAD:", JSON.stringify(req.body, null, 2));
       
       // Save payload to file for inspection
-      const fs = require('fs');
       const payloadLogPath = `./sales_order_payload_${Date.now()}.json`;
-      fs.writeFileSync(payloadLogPath, JSON.stringify({
+      writeFileSync(payloadLogPath, JSON.stringify({
         timestamp: timestamp,
         headers: req.headers,
         body: req.body,
