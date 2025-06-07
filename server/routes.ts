@@ -44,7 +44,65 @@ let liveAutomationMetrics = {
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Comprehensive webhook capture - catches ALL possible Tally endpoints
+  // UNIVERSAL WEBHOOK CATCHER - captures ANY incoming POST request
+  app.use('*', async (req, res, next) => {
+    if (req.method === 'POST') {
+      const timestamp = Date.now();
+      const filename = `UNIVERSAL_CATCH_${timestamp}.json`;
+      
+      console.log(`🌐 UNIVERSAL POST CAUGHT: ${req.originalUrl}`);
+      console.log("🎯 Method:", req.method);
+      console.log("📋 Headers:", req.headers);
+      console.log("🧠 Body:", req.body);
+      console.log("🔍 Query:", req.query);
+      
+      const { writeFileSync } = await import('fs');
+      writeFileSync(filename, JSON.stringify({
+        timestamp: new Date().toISOString(),
+        originalUrl: req.originalUrl,
+        path: req.path,
+        method: req.method,
+        headers: req.headers,
+        body: req.body,
+        query: req.query,
+        params: req.params
+      }, null, 2));
+      
+      console.log(`💾 UNIVERSAL DATA SAVED: ${filename}`);
+      
+      // If this looks like Tally form data, process it immediately
+      if (req.body && (Object.keys(req.body).length > 0)) {
+        console.log("🚀 LIVE TALLY FORM DETECTED - PROCESSING NOW");
+        
+        const { spawn } = await import('child_process');
+        const pythonProcess = spawn('python3', ['live_tally_processor.py'], {
+          stdio: ['pipe', 'pipe', 'pipe']
+        });
+        
+        pythonProcess.stdin.write(JSON.stringify(req.body));
+        pythonProcess.stdin.end();
+        
+        pythonProcess.stdout.on('data', (data) => {
+          console.log('🐍 LIVE PROCESSING:', data.toString());
+        });
+        
+        pythonProcess.stderr.on('data', (data) => {
+          console.error('🐍 LIVE ERROR:', data.toString());
+        });
+        
+        return res.json({
+          success: true,
+          message: "LIVE TALLY FORM CAPTURED AND PROCESSING",
+          timestamp: new Date().toISOString(),
+          captureFile: filename,
+          processing: true
+        });
+      }
+    }
+    next();
+  });
+  
+  // Specific webhook endpoints for confirmed paths
   const webhookPaths = [
     '/api/orders/test',
     '/webhook/tally',
@@ -58,17 +116,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   webhookPaths.forEach(path => {
     app.post(path, async (req, res) => {
-      console.log(`🎯 TALLY WEBHOOK HIT: ${path}`);
-      console.log("🧠 LIVE Webhook Data:", req.body);
-      console.log("📋 Headers:", req.headers);
+      console.log(`🎯 SPECIFIC TALLY WEBHOOK HIT: ${path}`);
+      console.log("🧠 CONFIRMED TALLY DATA:", req.body);
       
-      // Save the actual submission
       const timestamp = Date.now();
-      const filename = `REAL_TALLY_${timestamp}.json`;
+      const filename = `CONFIRMED_TALLY_${timestamp}.json`;
       const { writeFileSync } = await import('fs');
       writeFileSync(filename, JSON.stringify({
         timestamp: new Date().toISOString(),
-        path: path,
+        confirmedPath: path,
         url: req.url,
         method: req.method,
         headers: req.headers,
@@ -76,32 +132,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         query: req.query
       }, null, 2));
       
-      console.log(`💾 ACTUAL FORM DATA SAVED: ${filename}`);
-      
-      // Trigger processing pipeline
-      if (req.body && Object.keys(req.body).length > 0) {
-        console.log("🚀 Processing live Tally form data...");
-        
-        const { spawn } = await import('child_process');
-        const pythonProcess = spawn('python3', ['live_tally_processor.py'], {
-          stdio: ['pipe', 'pipe', 'pipe']
-        });
-        
-        pythonProcess.stdin.write(JSON.stringify(req.body));
-        pythonProcess.stdin.end();
-        
-        pythonProcess.stdout.on('data', (data) => {
-          console.log('🐍 Processing:', data.toString());
-        });
-        
-        pythonProcess.stderr.on('data', (data) => {
-          console.error('🐍 Error:', data.toString());
-        });
-      }
+      console.log(`💾 CONFIRMED TALLY SAVED: ${filename}`);
       
       res.json({
         success: true,
-        message: "Live Tally form processed",
+        message: "CONFIRMED Tally form processed",
         timestamp: new Date().toISOString(),
         path: path,
         dataFile: filename
