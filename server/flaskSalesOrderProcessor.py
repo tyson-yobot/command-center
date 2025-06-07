@@ -13,7 +13,7 @@ import os, textwrap
 app = Flask(__name__)
 
 # === Google Drive Setup ===
-SERVICE_ACCOUNT_FILE = 'credentials.json'  # make sure this is uploaded to Replit
+SERVICE_ACCOUNT_FILE = '../credentials.json'  # Path to credentials from server directory
 SCOPES = ['https://www.googleapis.com/auth/drive']
 credentials = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE, scopes=SCOPES)
@@ -60,7 +60,7 @@ def process_sales_order(data):
     elems = []
 
     # Logo
-    logo_path = "Main YoBot Logo.png"  # must be uploaded to Replit
+    logo_path = "../Main YoBot Logo.png"  # Path from server directory
     if os.path.exists(logo_path):
         elems.append(Image(logo_path, width=150, height=60))
         elems.append(Spacer(1, 10))
