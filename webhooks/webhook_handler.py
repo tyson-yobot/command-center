@@ -197,6 +197,7 @@ def process_tally_webhook(webhook_data):
     airtable_success = False
     try:
         import requests
+        import os
         
         # Use already extracted variables - no redeclaration needed
         addons = []
@@ -257,6 +258,9 @@ def process_tally_webhook(webhook_data):
     # CREATE HUBSPOT CONTACT + DEAL
     hubspot_success = False
     try:
+        import requests
+        import os
+        
         hubspot_headers = {
             "Authorization": f"Bearer {os.getenv('HUBSPOT_API_KEY')}",
             "Content-Type": "application/json"
@@ -319,6 +323,9 @@ def process_tally_webhook(webhook_data):
     # CREATE QUICKBOOKS INVOICE
     qb_success = False
     try:
+        import requests
+        import os
+        
         qb_headers = {
             "Authorization": f"Bearer {os.getenv('QUICKBOOKS_ACCESS_TOKEN')}",
             "Content-Type": "application/json",
@@ -376,6 +383,9 @@ def process_tally_webhook(webhook_data):
     # TRIGGER DOCUSIGN ENVELOPE
     docusign_success = False
     try:
+        import requests
+        import os
+        
         # Using DocuSign API to send contract for signature
         docusign_headers = {
             "Authorization": f"Bearer {os.getenv('DOCUSIGN_ACCESS_TOKEN')}",
