@@ -164,17 +164,18 @@ class LeadGenerationEngine:
                     email = props.get('email', '').strip() if props.get('email') else ''
                     company = props.get('company', '').strip() if props.get('company') else ''
                     
-                    # Only include leads with meaningful data (name AND email, or company AND email)
-                    if (name and name != 'None None' and email) or (company and email):
+                    # Strict validation for production data only
+                    if self._is_valid_lead(name, email, company):
+                        phone = props.get('phone', '') or ''
                         lead = {
                             'name': name or 'Contact',
                             'title': props.get('jobtitle', '') or '',
                             'company': company,
                             'email': email,
-                            'phone': props.get('phone', '') or '',
+                            'phone': phone,
                             'location': f"{props.get('city', '') or ''}, {props.get('state', '') or ''}".strip(', '),
                             'source': 'HubSpot',
-                            'verified': bool(email and '@' in email)
+                            'verified': self._verify_contact_data(email, phone)
                         }
                         leads.append(lead)
                 
@@ -184,6 +185,59 @@ class LeadGenerationEngine:
             print(f"HubSpot API error: {e}")
             
         return []
+    
+    def _is_valid_lead(self, name, email, company):
+        """Validate lead data to exclude test/sample data"""
+        # Exclude sample/test data patterns
+        test_patterns = [
+            'sample', 'test', 'demo', 'example', 'placeholder',
+            'fake', 'dummy', 'mock', 'temp', 'trial'
+        ]
+        
+        # Check name
+        if not name or name == 'None None' or len(name.strip()) < 2:
+            return False
+            
+        # Check email domain and format
+        if not email or '@' not in email:
+            return False
+            
+        # Exclude obvious test emails
+        email_lower = email.lower()
+        for pattern in test_patterns:
+            if pattern in email_lower:
+                return False
+                
+        # Exclude test domains
+        test_domains = ['test.com', 'example.com', 'demo.com', 'sample.com']
+        email_domain = email.split('@')[-1].lower()
+        if email_domain in test_domains:
+            return False
+            
+        # Must have either valid name or company
+        return bool((name and len(name.strip()) > 2) or (company and len(company.strip()) > 2))
+    
+    def _verify_contact_data(self, email, phone):
+        """Enhanced verification for email and phone data"""
+        email_valid = False
+        phone_valid = False
+        
+        # Email verification
+        if email and '@' in email and '.' in email.split('@')[-1]:
+            # Basic email format check
+            parts = email.split('@')
+            if len(parts) == 2 and len(parts[0]) > 0 and len(parts[1]) > 3:
+                email_valid = True
+        
+        # Phone verification  
+        if phone:
+            # Remove common formatting
+            clean_phone = ''.join(filter(str.isdigit, phone))
+            # Valid if 10+ digits (US/international format)
+            if len(clean_phone) >= 10:
+                phone_valid = True
+        
+        return email_valid
     
     def _get_airtable_leads(self, company_name, industry, location):
         """Get leads from Airtable CRM database"""
