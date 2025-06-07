@@ -11355,14 +11355,12 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
         });
       }
 
-      // Log toggle update to Airtable
-      try {
-        await logToAirtable('🎛️ Toggle Updates', {
-          '🏢 Client': client,
-          '📅 Timestamp': new Date().toISOString(),
-          '🔧 Toggles': JSON.stringify(toggles),
-          '✅ Status': 'Updated'
-        });
+      // Log toggle update
+      console.log('Toggle update:', {
+        client: client,
+        toggles: toggles,
+        timestamp: new Date().toISOString()
+      });
       } catch (logError) {
         console.error('Failed to log toggle update:', logError);
       }
