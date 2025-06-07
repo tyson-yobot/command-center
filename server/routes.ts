@@ -10577,15 +10577,10 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
       });
 
       if (result.success) {
-        // Log to Airtable using existing function
-        await logToAirtable('integration_test_log', {
-          '🧠 Function Name': 'Generate Simple Quote',
-          '📝 Source Form': 'API Request',
-          '📅 Timestamp': new Date().toISOString(),
-          '📊 Dashboard Name': 'Quote Generator',
-          '👤 Client': companyName,
-          '📧 Recipient': email,
-          '🔗 File Path': result.filePath || 'Generated successfully'
+        console.log('Quote generated successfully:', {
+          company: companyName,
+          quoteId: result.quoteId,
+          filePath: result.filePath
         });
 
         res.json({
@@ -12524,15 +12519,10 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
       // Clean up local file
       fs.unlinkSync(filePath);
 
-      // Log to Airtable
-      await logToAirtable('integration_test_log', {
-        '🧠 Function Name': 'Generate Quote PDF',
-        '📝 Source Form': 'API Request',
-        '📅 Timestamp': new Date().toISOString(),
-        '📊 Dashboard Name': 'Quote Generator',
-        '👤 Client': companyName,
-        '📧 Recipient': email,
-        '🔗 Drive Link': fileResponse.data.webViewLink || 'Generated successfully'
+      // Log success
+      console.log('Quote PDF uploaded to Google Drive:', {
+        company: companyName,
+        driveLink: fileResponse.data.webViewLink
       });
 
       res.json({
