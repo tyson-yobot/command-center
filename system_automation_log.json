@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-06T12:15:00.451Z",
-    "functionId": 144,
-    "functionName": "QBO Invoice Summary",
-    "batch": 15,
-    "category": "Financial",
-    "status": "success",
-    "duration": 246,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-06T12:15:00.472Z",
     "functionId": 145,
     "functionName": "Role Assignment by Domain",
@@ -11404,6 +11393,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-07T04:56:25.782Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-07T04:59:01.363Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-07T04:59:01.048Z",
       "automationStatus": "running"
     }
   }

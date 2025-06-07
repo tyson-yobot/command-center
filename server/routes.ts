@@ -11921,9 +11921,9 @@ print(json.dumps(result))
       const data = req.body;
       console.log('Processing sales order for:', data.company_name);
 
-      // Use your existing Flask sales order processor
+      // Use the simple PDF generator without complex dependencies
       const { spawn } = await import('child_process');
-      const python = spawn('python3', ['server/flaskSalesOrderProcessor.py'], {
+      const python = spawn('python3', ['server/simplePdfGenerator.py'], {
         stdio: ['pipe', 'pipe', 'pipe']
       });
 

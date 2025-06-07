@@ -1,7 +1,7 @@
 import express from 'express';
-import puppeteer from 'puppeteer';
 import fs from 'fs';
 import path from 'path';
+import { spawn } from 'child_process';
 
 const router = express.Router();
 
@@ -166,31 +166,49 @@ router.post('/generate', async (req, res) => {
       </html>
     `;
 
-    const browser = await puppeteer.launch({ 
-      headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-    
-    const page = await browser.newPage();
-    await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
-    
+    // Use your existing Flask PDF system instead of Puppeteer
     const timestamp = Date.now();
     const filename = `${timestamp}_quote_${clientName.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
     const pdfPath = path.resolve(pdfDir, filename);
-    
-    await page.pdf({ 
-      path: pdfPath, 
-      format: 'A4',
-      printBackground: true,
-      margin: {
-        top: '20px',
-        bottom: '20px',
-        left: '20px',
-        right: '20px'
-      }
+
+    // Call your Flask PDF generator
+    const python = spawn('python3', ['server/flaskSalesOrderProcessor.py'], {
+      stdio: ['pipe', 'pipe', 'pipe']
     });
 
-    await browser.close();
+    const pdfData = {
+      company_name: clientName,
+      contact_name: clientName,
+      package: botPackage,
+      addons: addOns,
+      one_time_payment: totalOneTime,
+      monthly_recurring: totalMonthly,
+      filename: filename
+    };
+
+    python.stdin.write(JSON.stringify(pdfData));
+    python.stdin.end();
+
+    let result = '';
+    let error = '';
+
+    python.stdout.on('data', (chunk) => {
+      result += chunk.toString();
+    });
+
+    python.stderr.on('data', (chunk) => {
+      error += chunk.toString();
+    });
+
+    await new Promise((resolve, reject) => {
+      python.on('close', (code) => {
+        if (code === 0) {
+          resolve(result);
+        } else {
+          reject(new Error(error || 'PDF generation failed'));
+        }
+      });
+    });
 
     // Set proper headers for PDF download
     res.setHeader('Content-Type', 'application/pdf');
