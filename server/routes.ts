@@ -10547,37 +10547,65 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
       });
     }
   });
-              
-              let notificationResult = '';
-              notifyPython.stdout.on('data', (data: any) => {
-                notificationResult += data.toString();
-              });
-              
-              notifyPython.on('close', () => {
-                console.log('Notifications sent:', notificationResult);
-              });
-            }
-            
-            res.json(quoteResult);
-          } catch (parseError) {
-            res.status(500).json({ 
-              success: false, 
-              error: 'Failed to parse quote generation result' 
-            });
-          }
-        } else {
-          res.status(500).json({ 
-            success: false, 
-            error: 'Quote generation failed' 
-          });
-        }
-      });
+
+  // Simple Quote Generator (works without Google Drive)
+  app.post('/api/generate-simple-quote', async (req, res) => {
+    try {
+      const { SimpleQuoteGenerator } = await import('./simpleQuoteGenerator');
+      const generator = new SimpleQuoteGenerator();
       
-    } catch (error: any) {
-      console.error('Quote generation error:', error);
-      res.status(500).json({ 
-        success: false, 
-        error: error.message 
+      const {
+        companyName = 'Test Company',
+        contactName = 'John Doe',
+        email = 'test@example.com',
+        phone = '',
+        serviceType = 'Professional AI Bot Package',
+        monthlyFee = 2500,
+        setupFee = 1500,
+        totalFirstMonth = 4000
+      } = req.body;
+
+      const result = await generator.generateQuote({
+        companyName,
+        contactName,
+        email,
+        phone,
+        serviceType,
+        monthlyFee,
+        setupFee,
+        totalFirstMonth
+      });
+
+      if (result.success) {
+        // Log to Airtable using existing function
+        await logToAirtable('integration_test_log', {
+          '🧠 Function Name': 'Generate Simple Quote',
+          '📝 Source Form': 'API Request',
+          '📅 Timestamp': new Date().toISOString(),
+          '📊 Dashboard Name': 'Quote Generator',
+          '👤 Client': companyName,
+          '📧 Recipient': email,
+          '🔗 File Path': result.filePath || 'Generated successfully'
+        });
+
+        res.json({
+          success: true,
+          message: `Quote generated successfully for ${companyName}`,
+          quoteId: result.quoteId,
+          filePath: result.filePath,
+          ready_for_google_drive: true
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          error: result.error
+        });
+      }
+    } catch (error) {
+      console.error('Simple quote generation error:', error);
+      res.status(500).json({
+        success: false,
+        error: (error as any).message
       });
     }
   });
