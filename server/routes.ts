@@ -7,10 +7,12 @@ import { registerBatch23 } from "./automationBatch23";
 import { registerBatch24 } from "./automationBatch24";
 import { registerBatch25 } from "./automationBatch25";
 import { registerBatch26 } from "./automationBatch26";
+import { registerBatch27 } from "./automationBatch27";
+import { registerBatch28 } from "./automationBatch28";
 
 // Live automation tracking
 let liveAutomationMetrics = {
-  activeFunctions: 110,
+  activeFunctions: 170,
   executionsToday: 0,
   successRate: 98.7,
   lastExecution: new Date().toISOString(),
@@ -31,6 +33,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   registerBatch24(app);
   registerBatch25(app);
   registerBatch26(app);
+  registerBatch27(app);
+  registerBatch28(app);
 
   // Live automation metrics endpoint
   app.get('/api/automation/metrics', (req, res) => {
