@@ -186,7 +186,6 @@ def generate_quote_pdf(form_data):
     ))
     
     doc.build(elements)
-    print(f"✅ PDF generated: {pdf_path}")
     return pdf_path, quote_number
 
 def upload_to_drive_with_folder(pdf_path, company_name):
@@ -200,7 +199,6 @@ def upload_to_drive_with_folder(pdf_path, company_name):
         if os.path.exists(pdf_path):
             local_pdf = os.path.join(local_folder, os.path.basename(pdf_path))
             shutil.copy2(pdf_path, local_pdf)
-            print(f"📁 PDF saved locally: {local_pdf}")
         return f"https://drive.google.com/folder/{GOOGLE_FOLDER_ID}"
     
     try:
@@ -223,11 +221,9 @@ def upload_to_drive_with_folder(pdf_path, company_name):
             fields='id,webViewLink'
         ).execute()
         
-        print(f"✅ PDF uploaded to Google Drive: 1. Clients/{company_name}")
         return file['webViewLink']
         
     except Exception as e:
-        print(f"Drive upload error: {e}")
         return f"https://drive.google.com/folder/{GOOGLE_FOLDER_ID}"
 
 def send_email_notification(form_data, pdf_path, drive_link):
@@ -272,10 +268,8 @@ PDF has been saved to: 1. Clients/{company}
                 )
                 msg.attach(part)
         
-        print("✅ Email notification prepared")
-        
     except Exception as e:
-        print(f"Email error: {e}")
+        pass
 
 def send_slack_notification(form_data, drive_link):
     """Step 6: Send Slack DM with summary + PDF link"""
@@ -297,17 +291,14 @@ def send_slack_notification(form_data, drive_link):
             }]
         }
         
-        print("✅ Slack notification prepared")
-        
     except Exception as e:
-        print(f"Slack error: {e}")
+        pass
 
 def create_airtable_record(form_data):
     """Step 7: Create Airtable record in 📥 Scraped Leads (Universal)"""
     try:
         api_key = os.getenv("AIRTABLE_API_KEY")
         if not api_key:
-            print("⚠️ Airtable API key not found")
             return
         
         url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_TABLE_NAME}"
@@ -330,34 +321,27 @@ def create_airtable_record(form_data):
         }
         
         response = requests.post(url, headers=headers, json=data)
-        if response.status_code == 200:
-            print("✅ Airtable record created")
-        else:
-            print(f"⚠️ Airtable error: {response.status_code}")
             
     except Exception as e:
-        print(f"Airtable error: {e}")
+        pass
 
 def sync_to_hubspot(form_data):
     """Step 8: Create/Update HubSpot Contact"""
     try:
         api_key = os.getenv("HUBSPOT_API_KEY")
         if not api_key:
-            print("⚠️ HubSpot API key not found")
             return
         
-        print("✅ HubSpot sync prepared")
-        
     except Exception as e:
-        print(f"HubSpot error: {e}")
+        pass
 
 def trigger_docusign(form_data):
     """Step 9: Trigger DocuSign signature request"""
     try:
-        print("✅ DocuSign signature request prepared")
+        pass
         
     except Exception as e:
-        print(f"DocuSign error: {e}")
+        pass
 
 def generate_qbo_invoice(form_data):
     """Step 10: Generate initial QBO Invoice for 50% down"""
@@ -365,10 +349,8 @@ def generate_qbo_invoice(form_data):
         amount = float(form_data.get("💳 Final Payment Amount Due", 0))
         down_payment = amount * 0.5
         
-        print(f"✅ QBO invoice prepared for 50% down payment: ${down_payment:,.2f}")
-        
     except Exception as e:
-        print(f"QBO error: {e}")
+        pass
 
 def run_complete_sales_order_automation(webhook_data):
     """Execute complete 10-step sales order process"""
