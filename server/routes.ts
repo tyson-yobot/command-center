@@ -10096,7 +10096,67 @@ Provide 3 actionable suggestions in bullet points.`;
     }
   });
 
-  // Complete Tally Webhook Handler from your 8-day code
+  // Production Sales Order Webhook - Complete 10-Step Process
+  app.post('/webhook/production_sales_order', async (req, res) => {
+    try {
+      const { spawn } = require('child_process');
+      
+      // Use your complete production sales order automation
+      const pythonProcess = spawn('python3', ['server/completeProductionSalesOrder.py'], {
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+
+      pythonProcess.stdin.write(JSON.stringify({
+        webhook_data: req.body
+      }));
+      pythonProcess.stdin.end();
+
+      let result = '';
+      let errorOutput = '';
+
+      pythonProcess.stdout.on('data', (data: Buffer) => {
+        result += data.toString();
+      });
+
+      pythonProcess.stderr.on('data', (data: Buffer) => {
+        errorOutput += data.toString();
+      });
+
+      pythonProcess.on('close', (code: number) => {
+        if (code === 0 && result) {
+          try {
+            const parsedResult = JSON.parse(result.trim());
+            res.json({
+              success: true,
+              message: "Complete production sales order processed",
+              data: parsedResult
+            });
+          } catch (e) {
+            res.json({
+              success: true,
+              message: "Production sales order completed",
+              output: result.trim()
+            });
+          }
+        } else {
+          res.status(500).json({
+            success: false,
+            message: "Production sales order failed",
+            error: errorOutput || result
+          });
+        }
+      });
+
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: "Production sales order error",
+        error: error.message
+      });
+    }
+  });
+
+  // Legacy Tally Webhook Handler
   app.post('/webhook/sales_order', async (req, res) => {
     try {
       const data = req.body;
