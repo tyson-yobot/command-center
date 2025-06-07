@@ -10415,7 +10415,7 @@ print(json.dumps(result))
             q_organization_industry_tag_names: industry ? [industry] : undefined,
             q_organization_locations: location ? [location] : undefined,
             organization_num_employees_ranges: employee_range ? [employee_range] : undefined,
-            person_titles: job_titles ? job_titles.split(',').map((t: string) => t.trim()) : undefined,
+            person_titles: Array.isArray(job_titles) ? job_titles : (job_titles ? job_titles.split(',').map((t: string) => t.trim()) : undefined),
             page: 1,
             per_page: Math.min(parseInt(max_contacts) || 25, 100)
           };
@@ -10452,6 +10452,10 @@ print(json.dumps(result))
         
         try {
           // Use the lead processing engine for authentic lead data
+          const jobTitleValue = Array.isArray(job_titles) ? job_titles[0] || "Director" : (job_titles || "Director").toString();
+          const locationValue = location || "Seattle";
+          const maxContactsValue = parseInt(max_contacts) || 25;
+          
           const leadCommand = `python3 -c "
 import sys
 sys.path.append('.')
@@ -10464,12 +10468,12 @@ apollo_data = {
         {
             'first_name': 'John',
             'last_name': 'Smith',
-            'title': '${(job_titles || 'Director').replace(/'/g, "\\'")}',
+            'title': '${jobTitleValue.replace(/'/g, "\\'")}',
             'email': 'john.smith@company.com',
             'organization': {'name': 'TechCorp'},
-            'city': '${(location || 'Seattle').replace(/'/g, "\\'")}',
+            'city': '${locationValue.replace(/'/g, "\\'")}',
             'phone_numbers': [{'sanitized_number': '+1234567890'}]
-        } for _ in range(${parseInt(max_contacts) || 25})
+        } for _ in range(${maxContactsValue})
     ]
 }
 
