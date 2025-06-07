@@ -9879,60 +9879,7 @@ Provide 3 actionable suggestions in bullet points.`;
     console.error("❌ Failed to register automation batches:", error);
   }
 
-  // Sales Order Automation Endpoint
-  app.post('/api/sales-order/process', async (req, res) => {
-    try {
-      const orderData = req.body;
-      
-      // Validate order data
-      const requiredFields = ['company_id', 'sales_order_id', 'bot_package'];
-      const missingFields = requiredFields.filter(field => !orderData[field]);
-      
-      if (missingFields.length > 0) {
-        return res.status(400).json({
-          success: false,
-          error: `Missing required fields: ${missingFields.join(', ')}`
-        });
-      }
-      
-      // Simulate sales order processing for now
-      const processingResult = {
-        orderId: orderData.sales_order_id,
-        companyId: orderData.company_id,
-        package: orderData.bot_package,
-        addons: orderData.selected_addons || [],
-        tasksCreated: (orderData.selected_addons?.length || 0) + 5, // Base tasks + addons
-        status: 'processed',
-        timestamp: new Date().toISOString()
-      };
-      
-      // Log to Airtable if API key is available
-      try {
-        const airtableApiKey = process.env.AIRTABLE_API_KEY;
-        if (airtableApiKey) {
-          // TODO: Implement actual Airtable integration when API key is provided
-          console.log('Sales order would be logged to Airtable:', processingResult);
-        }
-      } catch (airtableError) {
-        console.log('Airtable logging skipped - authentication needed');
-      }
-      
-      res.json({
-        success: true,
-        message: `Sales order processed successfully. Created ${processingResult.tasksCreated} tasks.`,
-        data: processingResult,
-        timestamp: new Date().toISOString()
-      });
-      
-    } catch (error: any) {
-      console.error('Sales order processing error:', error);
-      res.status(500).json({ 
-        success: false, 
-        error: 'Failed to process sales order', 
-        details: error.message 
-      });
-    }
-  });
+
 
   // Dashboard automation endpoints
   app.get('/api/dashboard/status', async (req, res) => {
@@ -11717,74 +11664,7 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
     }
   });
 
-  // Sales Order Automation Endpoint
-  app.post("/api/sales-order/process", async (req, res) => {
-    try {
-      const { company_id, sales_order_id, bot_package, selected_addons } = req.body;
-      
-      if (!company_id || !sales_order_id || !bot_package) {
-        return res.status(400).json({ 
-          error: "Missing required fields: company_id, sales_order_id, bot_package" 
-        });
-      }
 
-      // Execute Python sales order automation
-      const { spawn } = require('child_process');
-      const python = spawn('python3', ['-c', `
-import sys
-sys.path.append('server')
-from salesOrderAutomation import process_sales_order
-import json
-
-result = process_sales_order(
-    "${company_id}",
-    "${sales_order_id}", 
-    "${bot_package}",
-    ${JSON.stringify(selected_addons || [])}
-)
-print(json.dumps(result))
-`]);
-
-      let output = '';
-      let error = '';
-
-      python.stdout.on('data', (data: any) => {
-        output += data.toString();
-      });
-
-      python.stderr.on('data', (data: any) => {
-        error += data.toString();
-      });
-
-      python.on('close', (code: number) => {
-        if (code === 0) {
-          try {
-            const result = JSON.parse(output.trim());
-            res.json({
-              success: true,
-              automation_result: result,
-              timestamp: new Date().toISOString()
-            });
-          } catch (parseError) {
-            res.status(500).json({ 
-              error: "Failed to parse automation result",
-              raw_output: output 
-            });
-          }
-        } else {
-          res.status(500).json({ 
-            error: "Sales order automation failed",
-            stderr: error,
-            exit_code: code 
-          });
-        }
-      });
-
-    } catch (error: any) {
-      console.error('Sales order automation error:', error);
-      res.status(500).json({ error: "Failed to process sales order" });
-    }
-  });
 
   // Test Sales Order Automation
   app.post("/api/sales-order/test", async (req, res) => {
