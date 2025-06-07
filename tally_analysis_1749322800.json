@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-06-07T19:00:00.419984",
+  "payload_type": "<class 'dict'>",
+  "raw_payload": {
+    "automationExecution": true,
+    "functionId": 133,
+    "timestamp": "2025-06-07T19:00:00.209Z"
+  },
+  "analysis": {
+    "has_fields_array": false,
+    "has_data_object": false,
+    "field_count": 3
+  }
+}
