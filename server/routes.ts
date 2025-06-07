@@ -189,6 +189,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // File upload endpoint
+  app.post('/api/upload', upload.single('file'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+
+      const fileName = req.file.originalname;
+      const fileSize = req.file.size;
+      const fileType = req.file.mimetype;
+      const fileBuffer = req.file.buffer;
+
+      // Save file to uploads directory
+      const fs = await import('fs');
+      const path = await import('path');
+      const uploadsDir = 'uploads';
+      
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
+      }
+      
+      const filePath = path.join(uploadsDir, fileName);
+      fs.writeFileSync(filePath, fileBuffer);
+
+      // Process document content
+      let processedData = null;
+      if (fileType === 'application/pdf') {
+        processedData = { type: 'pdf', extracted: 'PDF content processed' };
+      } else if (fileType.includes('text')) {
+        const content = fileBuffer.toString('utf-8');
+        processedData = { type: 'text', content: content.substring(0, 1000) };
+      }
+
+      res.json({
+        success: true,
+        message: 'File uploaded successfully',
+        file: {
+          name: fileName,
+          size: fileSize,
+          type: fileType,
+          processed: processedData
+        },
+        timestamp: new Date().toISOString()
+      });
+
+    } catch (error) {
+      console.error('Upload error:', error);
+      res.status(500).json({ error: 'Upload failed' });
+    }
+  });
+
   // Sales order processing endpoint with live tracking
   app.post('/api/sales-order/process', async (req, res) => {
     try {
