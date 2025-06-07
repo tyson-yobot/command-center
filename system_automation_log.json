@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-06T09:15:03.744Z",
-    "functionId": 208,
-    "functionName": "Call Review Flagging",
-    "batch": 21,
-    "category": "Quality Control",
-    "status": "success",
-    "duration": 3328,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-06T09:15:03.757Z",
     "functionId": 136,
     "functionName": "Personality Assigner",
@@ -11435,6 +11424,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-07T02:10:41.816Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-07T02:11:27.390Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-07T02:11:27.136Z",
       "automationStatus": "running"
     }
   }
