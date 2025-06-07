@@ -5,6 +5,7 @@
 
 import { Express } from 'express';
 import { logIntegrationTest } from './airtableIntegrations';
+import { updateAutomationMetrics } from './routes';
 
 // Helper function for Airtable API operations
 async function createAirtableRecord(tableName: string, fields: Record<string, any>) {
