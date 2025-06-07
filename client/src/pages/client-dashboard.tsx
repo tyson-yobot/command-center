@@ -1654,6 +1654,14 @@ export default function ClientDashboard() {
                     <Mic className="w-5 h-5 mr-3" />
                     <span>Voice Input</span>
                   </Button>
+                  
+                  <Button
+                    disabled
+                    className="bg-gray-500 text-gray-300 flex items-center justify-start p-3 cursor-not-allowed"
+                  >
+                    <span className="text-xl mr-3">⚙️</span>
+                    <span>Open</span>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -1698,11 +1706,11 @@ export default function ClientDashboard() {
                   </Button>
                   
                   <Button
-                    onClick={() => setShowSalesOrderProcessor(true)}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+                    disabled
+                    className="bg-gray-500 text-gray-300 flex items-center justify-start p-3 cursor-not-allowed"
                   >
-                    <span className="text-xl mr-3">💼</span>
-                    <span>Sales Orders</span>
+                    <span className="text-xl mr-3">⚙️</span>
+                    <span>Open</span>
                   </Button>
                 </div>
               </CardContent>
