@@ -38,12 +38,12 @@ export class PDFGenerator {
   async generateQuotePDF(quoteData: QuoteData): Promise<{ success: boolean; filePath?: string; driveLink?: string; error?: string }> {
     try {
       const fileName = `YoBot_Quote_${quoteData.companyName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.pdf`;
-      const filePath = path.join(process.cwd(), 'uploads', fileName);
+      const filePath = path.join(process.cwd(), 'pdfs', fileName);
 
-      // Ensure uploads directory exists
-      const uploadsDir = path.dirname(filePath);
-      if (!fs.existsSync(uploadsDir)) {
-        fs.mkdirSync(uploadsDir, { recursive: true });
+      // Ensure pdfs directory exists
+      const pdfsDir = path.dirname(filePath);
+      if (!fs.existsSync(pdfsDir)) {
+        fs.mkdirSync(pdfsDir, { recursive: true });
       }
 
       // Create PDF document
