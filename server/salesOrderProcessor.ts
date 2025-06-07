@@ -130,7 +130,23 @@ export class SalesOrderProcessor {
   async sendSlackAlert(webhookUrl: string, companyName: string, quoteUrl: string): Promise<void> {
     try {
       const message = {
-        text: `📩 New Quote Generated for *${companyName}*\n📎 [View Quote](${quoteUrl})\n✅ Ready for signature.`
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `📩 *New Quote Generated for* *${companyName}*`
+            }
+          },
+          { type: "divider" },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `📎 <${quoteUrl}|*Click here to view the PDF quote*>\n✅ Ready for client signature.`
+            }
+          }
+        ]
       };
 
       await axios.post(webhookUrl, message);

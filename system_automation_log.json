@@ -1,196 +1,5 @@
 [
   {
-    "timestamp": "2025-06-06T10:25:00.121Z",
-    "functionId": 153,
-    "functionName": "System Health Metric Update",
-    "batch": 16,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 64,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:25:00.136Z",
-    "functionId": 157,
-    "functionName": "New Lead Notification",
-    "batch": 16,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 78,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:25:00.141Z",
-    "functionId": 132,
-    "functionName": "Intake Form Validator",
-    "batch": 14,
-    "category": "Forms",
-    "status": "success",
-    "duration": 76,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:25:00.153Z",
-    "functionId": 147,
-    "functionName": "Full API Health Check",
-    "batch": 15,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 87,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:25:00.157Z",
-    "functionId": 204,
-    "functionName": "Duplicate Record Detection",
-    "batch": 21,
-    "category": "Data Validation",
-    "status": "success",
-    "duration": 88,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:25:00.178Z",
-    "functionId": 140,
-    "functionName": "Live Error Push",
-    "batch": 14,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 112,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:25:00.194Z",
-    "functionId": 151,
-    "functionName": "VoiceBot Escalation Detection",
-    "batch": 16,
-    "category": "Voice",
-    "status": "success",
-    "duration": 127,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:25:00.212Z",
-    "functionId": 156,
-    "functionName": "Google Drive Backup",
-    "batch": 16,
-    "category": "Backup",
-    "status": "success",
-    "duration": 144,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:30:00.206Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "Health check: 100.0% healthy",
-    "metrics": {
-      "totalFunctions": 40,
-      "activeFunctions": 40,
-      "successfulExecutions": 24,
-      "failedExecutions": 0,
-      "systemUptime": 699.345284229,
-      "lastHealthCheck": "2025-06-06T10:29:00.006Z",
-      "automationStatus": "running"
-    }
-  },
-  {
-    "timestamp": "2025-06-06T10:30:00.297Z",
-    "functionId": 131,
-    "functionName": "CRM Script Generator",
-    "batch": 14,
-    "category": "CRM",
-    "status": "success",
-    "duration": 118,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:30:00.314Z",
-    "functionId": 136,
-    "functionName": "Personality Assigner",
-    "batch": 14,
-    "category": "AI",
-    "status": "success",
-    "duration": 127,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:30:00.320Z",
-    "functionId": 137,
-    "functionName": "SmartSpend Entry Creator",
-    "batch": 14,
-    "category": "Financial",
-    "status": "success",
-    "duration": 132,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:30:00.343Z",
-    "functionId": 139,
-    "functionName": "Call Digest Poster",
-    "batch": 14,
-    "category": "Communication",
-    "status": "success",
-    "duration": 154,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:30:00.361Z",
-    "functionId": 141,
-    "functionName": "Bot Training Prompt Generator",
-    "batch": 15,
-    "category": "AI",
-    "status": "success",
-    "duration": 171,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:30:00.369Z",
-    "functionId": 144,
-    "functionName": "QBO Invoice Summary",
-    "batch": 15,
-    "category": "Financial",
-    "status": "success",
-    "duration": 178,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:30:00.404Z",
-    "functionId": 205,
-    "functionName": "Phone Number Normalizer",
-    "batch": 21,
-    "category": "Data Processing",
-    "status": "success",
-    "duration": 208,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-06T10:30:00.419Z",
-    "functionId": 148,
-    "functionName": "ROI Summary Generator",
-    "batch": 15,
-    "category": "Analytics",
-    "status": "success",
-    "duration": 227,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-06T10:30:00.426Z",
     "functionId": 208,
     "functionName": "Call Review Flagging",
@@ -11443,6 +11252,197 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-07T02:43:33.627Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.235Z",
+    "functionId": 147,
+    "functionName": "Full API Health Check",
+    "batch": 15,
+    "category": "Monitoring",
+    "status": "success",
+    "duration": 84,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.245Z",
+    "functionId": 152,
+    "functionName": "Failure Categorization",
+    "batch": 16,
+    "category": "Error Handling",
+    "status": "success",
+    "duration": 89,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.258Z",
+    "functionId": 159,
+    "functionName": "Auto-Complete Task",
+    "batch": 16,
+    "category": "Task Management",
+    "status": "success",
+    "duration": 101,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.273Z",
+    "functionId": 132,
+    "functionName": "Intake Form Validator",
+    "batch": 14,
+    "category": "Forms",
+    "status": "success",
+    "duration": 112,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.277Z",
+    "functionId": 140,
+    "functionName": "Live Error Push",
+    "batch": 14,
+    "category": "Monitoring",
+    "status": "success",
+    "duration": 115,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.308Z",
+    "functionId": 146,
+    "functionName": "Customer Reconciliation",
+    "batch": 15,
+    "category": "Data",
+    "status": "success",
+    "duration": 145,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.327Z",
+    "functionId": 149,
+    "functionName": "Manual Override Logger",
+    "batch": 15,
+    "category": "Audit",
+    "status": "success",
+    "duration": 164,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.332Z",
+    "functionId": 151,
+    "functionName": "VoiceBot Escalation Detection",
+    "batch": 16,
+    "category": "Voice",
+    "status": "success",
+    "duration": 168,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.337Z",
+    "functionId": 204,
+    "functionName": "Duplicate Record Detection",
+    "batch": 21,
+    "category": "Data Validation",
+    "status": "success",
+    "duration": 168,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.349Z",
+    "functionId": 206,
+    "functionName": "Lead Score Calculator",
+    "batch": 21,
+    "category": "Lead Management",
+    "status": "success",
+    "duration": 179,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.362Z",
+    "functionId": 153,
+    "functionName": "System Health Metric Update",
+    "batch": 16,
+    "category": "Monitoring",
+    "status": "success",
+    "duration": 197,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.378Z",
+    "functionId": 156,
+    "functionName": "Google Drive Backup",
+    "batch": 16,
+    "category": "Backup",
+    "status": "success",
+    "duration": 211,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.388Z",
+    "functionId": 157,
+    "functionName": "New Lead Notification",
+    "batch": 16,
+    "category": "Lead Management",
+    "status": "success",
+    "duration": 220,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.431Z",
+    "functionId": 131,
+    "functionName": "CRM Script Generator",
+    "batch": 14,
+    "category": "CRM",
+    "status": "success",
+    "duration": 260,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.438Z",
+    "functionId": 133,
+    "functionName": "Silent Call Detector",
+    "batch": 14,
+    "category": "Voice",
+    "status": "success",
+    "duration": 266,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:45:00.456Z",
+    "functionId": 137,
+    "functionName": "SmartSpend Entry Creator",
+    "batch": 14,
+    "category": "Financial",
+    "status": "success",
+    "duration": 282,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-07T02:48:36.766Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-07T02:48:36.324Z",
       "automationStatus": "running"
     }
   }
