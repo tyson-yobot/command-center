@@ -1728,63 +1728,57 @@ CRM Data:
     res.json({ status: 'OK', timestamp: new Date().toISOString() });
   });
 
-  // Universal webhook endpoint - handles all domain variations
-  const webhookHandler = async (req: Request, res: Response) => {
+  // Production webhook endpoint for Tally forms
+  app.post('/api/orders', async (req, res) => {
     try {
       const timestamp = new Date().toISOString();
-      console.log("📥 Tally form submission at", timestamp);
-      console.log("🧠 Webhook Data:", req.body);
+      console.log("📥 Tally form submission received at", timestamp);
+      console.log("📋 Form data:", JSON.stringify(req.body, null, 2));
       
-      const { writeFileSync } = await import('fs');
+      // Save submission immediately
+      const fs = require('fs');
       const filename = `tally_submission_${Date.now()}.json`;
-      writeFileSync(filename, JSON.stringify({
-        timestamp: timestamp,
-        headers: req.headers,
+      fs.writeFileSync(filename, JSON.stringify({
+        timestamp,
         body: req.body,
-        method: req.method,
-        url: req.url
+        headers: req.headers
       }, null, 2));
       
-      console.log(`💾 Tally submission saved: ${filename}`);
+      console.log(`💾 Saved to: ${filename}`);
       
-      const { spawn } = await import('child_process');
-      const pythonProcess = spawn('python3', ['webhook_handler.py'], {
+      // Process with Python handler
+      const { spawn } = require('child_process');
+      const python = spawn('python3', ['webhook_handler.py'], {
         stdio: ['pipe', 'pipe', 'pipe']
       });
       
-      pythonProcess.stdin.write(JSON.stringify(req.body));
-      pythonProcess.stdin.end();
+      python.stdin.write(JSON.stringify(req.body));
+      python.stdin.end();
       
-      pythonProcess.stdout.on('data', (data) => {
-        console.log('Processing:', data.toString());
+      python.stdout.on('data', (data: Buffer) => {
+        console.log('✅ Processing output:', data.toString());
       });
       
-      pythonProcess.stderr.on('data', (data) => {
-        console.error('Error:', data.toString());
+      python.stderr.on('data', (data: Buffer) => {
+        console.error('❌ Processing error:', data.toString());
       });
       
       res.json({
         success: true,
-        message: "Tally form processed successfully",
-        timestamp: timestamp,
-        filename: filename
+        message: "Form submission processed",
+        timestamp,
+        file: filename
       });
       
     } catch (error) {
-      console.error("Tally processing failed:", error);
+      console.error("❌ Webhook error:", error);
       res.status(500).json({
         success: false,
-        error: (error as Error).message,
+        error: String(error),
         timestamp: new Date().toISOString()
       });
     }
-  };
-
-  // Register webhook on production paths
-  app.post('/api/orders', webhookHandler);
-  app.post('/webhook', webhookHandler);
-  app.post('/webhook/tally', webhookHandler);
-  app.post('/api/webhook', webhookHandler);
+  });
 
   const httpServer = createServer(app);
   return httpServer;
