@@ -1,0 +1,10 @@
+{
+  "submission_id": "c35f400f",
+  "timestamp": "2025-06-07T18:53:56.040560",
+  "company_name": "Test Company",
+  "contact_email": "test@example.com",
+  "pdf_path": "submissions/c35f400f/submission.pdf",
+  "fields_processed": 3,
+  "fields_hidden": 0,
+  "status": "processed"
+}
