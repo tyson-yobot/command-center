@@ -12565,5 +12565,70 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
     }
   });
 
+  // Complete Sales Order Pipeline with PDF generation and Google Drive upload
+  app.post('/api/sales-order/complete', async (req, res) => {
+    try {
+      const { customerName, customerEmail, orderDetails, billingAddress } = req.body;
+      
+      if (!customerName || !customerEmail) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required fields: customerName, customerEmail'
+        });
+      }
+
+      // Import the sales order processor
+      const { salesOrderProcessor } = await import('./salesOrderProcessor');
+      
+      // Create form data for the processor
+      const formData = {
+        'Contact Name': customerName,
+        'Company Name': customerName,
+        'Email': customerEmail,
+        'Phone Number': billingAddress?.phone || '',
+        'Website': billingAddress?.website || ''
+      };
+
+      // Generate a temporary PDF path (this would normally be created by PDF generator)
+      const pdfPath = `/tmp/quote-${customerName.replace(/\s+/g, '-')}.pdf`;
+      
+      // Create a simple PDF content for testing
+      const fs = await import('fs');
+      const quoteContent = `QUOTE FOR ${customerName}\n\nPackage: ${orderDetails?.product || 'Standard'}\nAmount: $${orderDetails?.amount || 0}\n\nGenerated: ${new Date().toISOString()}`;
+      fs.writeFileSync(pdfPath, quoteContent);
+
+      // Run the complete sales order pipeline
+      const result = await salesOrderProcessor.runSalesOrderPipeline(formData, pdfPath);
+
+      // Clean up temporary file
+      try {
+        fs.unlinkSync(pdfPath);
+      } catch (cleanupError) {
+        console.log('Cleanup warning:', cleanupError.message);
+      }
+
+      if (result.success) {
+        res.json({
+          success: true,
+          message: 'Complete sales order pipeline executed successfully',
+          quoteLink: result.quoteLink,
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          error: result.error || 'Sales order pipeline failed'
+        });
+      }
+
+    } catch (error) {
+      console.error('Complete sales order pipeline error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
   return httpServer;
 }

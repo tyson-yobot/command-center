@@ -49,16 +49,21 @@ export class SalesOrderProcessor {
         throw new Error('Google Drive service not initialized');
       }
 
+      console.log(`🔍 Checking if folder for '${companyName}' exists in parent ID ${GOOGLE_FOLDER_ID}`);
+
       // Check if company folder exists
       const foldersResponse = await this.driveService.files.list({
         q: `mimeType='application/vnd.google-apps.folder' and name='${companyName}' and '${GOOGLE_FOLDER_ID}' in parents`,
         fields: 'files(id, name)'
       });
 
+      console.log(`🔁 Folder search returned: ${JSON.stringify(foldersResponse.data.files)}`);
+
       let folderId = foldersResponse.data.files?.[0]?.id;
 
       // Create folder if it doesn't exist
       if (!folderId) {
+        console.log(`📂 Creating new folder for company: ${companyName}`);
         const folderResponse = await this.driveService.files.create({
           requestBody: {
             name: companyName,
@@ -68,7 +73,9 @@ export class SalesOrderProcessor {
           fields: 'id'
         });
         folderId = folderResponse.data.id;
-        console.log(`Created folder for ${companyName}: ${folderId}`);
+        console.log(`📂 Folder created: ${folderId}`);
+      } else {
+        console.log(`📁 Using existing folder: ${folderId}`);
       }
 
       // Upload PDF to company folder
