@@ -1668,9 +1668,9 @@ CRM Data:
       // Webhook data logging
       console.log("🧠 Webhook Data:", req.body);
       
-      // Save the real submission
+      // Save the submission
       const { writeFileSync } = await import('fs');
-      const filename = `real_tally_submission_${Date.now()}.json`;
+      const filename = `tally_submission_${Date.now()}.json`;
       writeFileSync(filename, JSON.stringify({
         timestamp: timestamp,
         headers: req.headers,
@@ -1679,42 +1679,45 @@ CRM Data:
         url: req.url
       }, null, 2));
       
-      console.log(`💾 Real Tally submission saved: ${filename}`);
+      console.log(`💾 Tally submission saved: ${filename}`);
       
-      // Process with live Tally processor
+      // Process with webhook handler
       const { spawn } = await import('child_process');
-      const pythonProcess = spawn('python3', ['live_tally_processor.py'], {
+      const pythonProcess = spawn('python3', ['webhook_handler.py'], {
         stdio: ['pipe', 'pipe', 'pipe']
       });
       
       let result = '';
       pythonProcess.stdout.on('data', (data) => {
         const output = data.toString();
-        console.log('🐍 Python Output:', output);
+        console.log('Processing:', output);
         result += output;
       });
       
       pythonProcess.stderr.on('data', (data) => {
-        console.error('🐍 Python Error:', data.toString());
+        console.error('Error:', data.toString());
       });
       
       pythonProcess.on('close', (code) => {
-        console.log(`🐍 Python process completed with code: ${code}`);
+        console.log(`Process completed with code: ${code}`);
       });
+      
+      pythonProcess.stdin.write(JSON.stringify(req.body));
+      pythonProcess.stdin.end();
       
       res.json({
         success: true,
-        message: "Live Tally form processed successfully",
+        message: "Tally form processed successfully",
         timestamp: timestamp,
         filename: filename,
         processing: "Complete automation pipeline triggered"
       });
       
     } catch (error) {
-      console.error("❌ Live Tally processing failed:", error);
+      console.error("Tally processing failed:", error);
       res.status(500).json({
         success: false,
-        error: error.message,
+        error: (error as Error).message,
         timestamp: new Date().toISOString()
       });
     }
