@@ -409,7 +409,23 @@ def run_complete_sales_order_automation(form_data):
         
         results = {}
         
-        # 1. Generate professional quote PDF
+        # 1. Create Google Drive folder first
+        try:
+            from googleDriveFolderSystem import create_client_folder
+            folder_result = create_client_folder(company_name)
+            results['google_drive_folder'] = folder_result
+            if folder_result.get('success'):
+                print(f"✅ Google Drive folder created: {folder_result.get('folder_url')}")
+            else:
+                print(f"⚠️ Google Drive folder creation failed: {folder_result.get('error')}")
+        except ImportError:
+            print("⚠️ Google Drive integration not available")
+            results['google_drive_folder'] = {'success': False, 'error': 'Google Drive module not found'}
+        except Exception as e:
+            print(f"⚠️ Google Drive folder creation error: {str(e)}")
+            results['google_drive_folder'] = {'success': False, 'error': str(e)}
+        
+        # 2. Generate professional quote PDF
         pdf_result = generate_quote_pdf(client_data)
         results['pdf_generation'] = pdf_result
         

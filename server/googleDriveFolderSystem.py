@@ -38,24 +38,54 @@ def create_client_folder(client_name):
             
         service = build('drive', 'v3', credentials=creds_result["credentials"])
         
-        # Create folder name with date
-        folder_name = f"{client_name} - YoBot Project {datetime.datetime.now().strftime('%Y-%m-%d')}"
+        # Your specified parent folder ID
+        parent_folder_id = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh"
         
+        print(f"🔍 Checking if folder for '{client_name}' exists in parent ID {parent_folder_id}")
+        
+        # Check if folder already exists
+        existing_folders = service.files().list(
+            q=f"mimeType='application/vnd.google-apps.folder' and name='{client_name}' and '{parent_folder_id}' in parents",
+            fields='files(id, name)'
+        ).execute()
+        
+        print(f"🔁 Folder search returned: {json.dumps(existing_folders.get('files', []))}")
+        
+        if existing_folders.get('files'):
+            folder_id = existing_folders['files'][0]['id']
+            print(f"📁 Using existing folder: {folder_id}")
+            
+            # Get the webViewLink for existing folder
+            folder_info = service.files().get(fileId=folder_id, fields='webViewLink').execute()
+            
+            return {
+                "success": True,
+                "folder_id": folder_id,
+                "folder_url": folder_info.get('webViewLink'),
+                "folder_name": client_name
+            }
+        
+        # Create new folder in specified parent
+        print(f"📂 Creating new folder for company: {client_name}")
         folder_metadata = {
-            'name': folder_name,
-            'mimeType': 'application/vnd.google-apps.folder'
+            'name': client_name,
+            'mimeType': 'application/vnd.google-apps.folder',
+            'parents': [parent_folder_id]
         }
         
         folder = service.files().create(body=folder_metadata, fields='id,webViewLink').execute()
+        folder_id = folder.get('id')
+        print(f"📂 Folder created: {folder_id}")
         
         return {
             "success": True,
-            "folder_id": folder.get('id'),
+            "folder_id": folder_id,
             "folder_url": folder.get('webViewLink'),
-            "folder_name": folder_name
+            "folder_name": client_name
         }
         
     except Exception as e:
+        print(f"❌ Google Drive folder creation failed: {str(e)}")
         return {"success": False, "error": str(e)}
 
 def upload_pdf_to_drive(pdf_path, folder_id, client_name, quote_number):
