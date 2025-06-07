@@ -2,18 +2,16 @@
 import json
 import uuid
 import sys
-from datetime import datetime
-import sys
 import os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append('..')
+from datetime import datetime
 
-try:
-    from pdf_generator import generate_pdf_from_fields
-    from send_email import send_email_with_pdf
-except ImportError:
-    from webhooks.pdf_generator import generate_pdf_from_fields
-    from webhooks.send_email import send_email_with_pdf
+# Add current directory to path for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, current_dir)
+sys.path.insert(0, os.path.dirname(current_dir))
+
+from pdf_generator import generate_pdf_from_fields
+from send_email import send_email_with_pdf
 
 HIDDEN_FIELD_KEYWORDS = [
     "Multiplier", "Trigger", "Test Mode", "Always On", "First Month Total", "Bot Package Base Price", "Initialize"
@@ -120,7 +118,8 @@ def process_tally_webhook(webhook_data):
     
     # Generate PDF and save to folder
     try:
-        pdf_path = generate_pdf_from_fields(submission_id, fields_array)
+        pdf_path = f"../pdfs/order_{submission_id}.pdf"
+        generate_pdf_from_fields(fields_array, submission_id, pdf_path)
         print(f"📄 PDF generated: {pdf_path}")
     except Exception as e:
         print(f"❌ PDF generation failed: {e}")
@@ -143,10 +142,10 @@ PDF attached with complete submission details.
     if pdf_path:
         try:
             email_sent = send_email_with_pdf(
-                to=contact_email,
-                subject=f"YoBot Order - {company_name} ({submission_id})",
-                body=email_body,
-                pdf_path=pdf_path
+                contact_email,
+                f"YoBot Order - {company_name} ({submission_id})",
+                pdf_path,
+                company_name
             )
             print(f"📧 Email sent: {email_sent}")
         except Exception as e:

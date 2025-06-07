@@ -1746,10 +1746,14 @@ CRM Data:
       
       console.log(`💾 Saved to: ${filename}`);
       
-      // Process with Python handler
+      // Process with Python handler directly
       const { spawn } = require('child_process');
-      const python = spawn('python3', ['webhooks/webhook_handler.py'], {
-        stdio: ['pipe', 'pipe', 'pipe']
+      const path = require('path');
+      const scriptPath = path.join(process.cwd(), 'webhooks', 'webhook_handler.py');
+      
+      const python = spawn('python3', [scriptPath], {
+        stdio: ['pipe', 'pipe', 'pipe'],
+        cwd: process.cwd()
       });
       
       python.stdin.write(JSON.stringify(req.body));
