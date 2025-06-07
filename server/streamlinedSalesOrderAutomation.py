@@ -9,6 +9,11 @@ from googleapiclient.http import MediaFileUpload
 from google.oauth2.service_account import Credentials
 from email.message import EmailMessage
 import smtplib
+import json
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
+from reportlab.lib.colors import HexColor
 
 # === CONFIG ===
 GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh"
@@ -18,99 +23,131 @@ AIRTABLE_BASE_ID = "appb2f3D77Tc4DWAr"
 AIRTABLE_TABLE_NAME = "📥 Scraped Leads (Universal)"
 SLACK_WEBHOOK = "https://hooks.slack.com/services/xRYo7LD89mNz2EvZy3kOrFiv"
 
-# === 1. UPLOAD TO GOOGLE DRIVE ===
-def upload_to_drive(pdf_path, company_name):
-    """Upload PDF to Google Drive using service account or OAuth fallback"""
+# === PDF GENERATION ===
+def generate_quote_pdf(form_data, total_amount):
+    """Generate professional PDF quote using ReportLab"""
     try:
-        # Try service account method first (preferred)
-        try:
-            import json
-            creds_json = os.getenv("GOOGLE_DRIVE_CREDENTIALS")
-            if creds_json:
-                creds_data = json.loads(creds_json)
-                creds = Credentials.from_service_account_info(
-                    creds_data, 
-                    scopes=["https://www.googleapis.com/auth/drive"]
-                )
-                print("✅ Using Google service account authentication")
-            else:
-                # Fallback to service account file
-                creds = Credentials.from_service_account_file(
-                    "google_creds.json", 
-                    scopes=["https://www.googleapis.com/auth/drive"]
-                )
-                print("✅ Using Google service account file authentication")
-        except Exception as service_error:
-            print(f"⚠️ Service account failed: {service_error}")
-            # Fallback to OAuth (original method)
-            from google.oauth2.credentials import Credentials as OAuth2Credentials
-            import requests
-            
-            client_id = os.getenv('GOOGLE_CLIENT_ID')
-            client_secret = os.getenv('GOOGLE_CLIENT_SECRET')
-            refresh_token = os.getenv('GOOGLE_REFRESH_TOKEN')
-            
-            if not all([client_id, client_secret, refresh_token]):
-                print("❌ Missing Google OAuth credentials")
-                return None
-                
-            # Get access token
-            token_data = {
-                'client_id': client_id,
-                'client_secret': client_secret,
-                'refresh_token': refresh_token,
-                'grant_type': 'refresh_token'
-            }
-            
-            response = requests.post('https://oauth2.googleapis.com/token', data=token_data)
-            if response.status_code != 200:
-                print(f"❌ Failed to refresh Google token: {response.json()}")
-                return None
-                
-            token_info = response.json()
-            access_token = token_info['access_token']
-            
-            creds = OAuth2Credentials(
-                token=access_token,
-                refresh_token=refresh_token,
-                client_id=client_id,
-                client_secret=client_secret,
-                token_uri='https://oauth2.googleapis.com/token'
-            )
-            print("✅ Using Google OAuth authentication")
-
-        service = build("drive", "v3", credentials=creds)
-
-        # Check if company folder exists
-        folders = service.files().list(
-            q=f"mimeType='application/vnd.google-apps.folder' and name='{company_name}' and '{GOOGLE_FOLDER_ID}' in parents"
-        ).execute()
+        # Ensure pdfs directory exists
+        pdf_dir = "./pdfs"
+        if not os.path.exists(pdf_dir):
+            os.makedirs(pdf_dir)
         
-        folder_id = folders["files"][0]["id"] if folders["files"] else None
-
-        # Create folder if it doesn't exist
-        if not folder_id:
-            folder = service.files().create(body={
-                "name": company_name,
-                "mimeType": "application/vnd.google-apps.folder",
-                "parents": [GOOGLE_FOLDER_ID]
-            }, fields="id").execute()
-            folder_id = folder["id"]
-            print(f"✅ Created Google Drive folder for {company_name}")
-
-        # Upload PDF to folder
-        media = MediaFileUpload(pdf_path, mimetype="application/pdf")
-        file = service.files().create(body={
-            "name": os.path.basename(pdf_path),
-            "parents": [folder_id]
-        }, media_body=media, fields="id,webViewLink").execute()
-
-        print(f"✅ Uploaded PDF to Google Drive")
-        return file["webViewLink"]
+        # Generate quote number and filename
+        today = datetime.now().strftime("%Y%m%d")
+        company_short = form_data["Company Name"][:4].upper()
+        quote_number = f"Q-{today}-{company_short}"
+        
+        filename = f"YoBot_Quote_{quote_number}_{form_data['Company Name'].replace(' ', '_').replace(',', '')}.pdf"
+        pdf_path = os.path.join(pdf_dir, filename)
+        
+        # Create PDF
+        c = canvas.Canvas(pdf_path, pagesize=letter)
+        width, height = letter
+        
+        # Header
+        c.setFont("Helvetica-Bold", 24)
+        c.drawString(50, height - 80, "YoBot® AI Quote")
+        
+        c.setFont("Helvetica", 12)
+        c.drawString(50, height - 100, "Enterprise AI Voice Automation Solutions")
+        
+        # Quote details
+        y_position = height - 150
+        c.setFont("Helvetica-Bold", 14)
+        c.drawString(50, y_position, "Quote For:")
+        
+        y_position -= 30
+        c.setFont("Helvetica", 12)
+        c.drawString(50, y_position, f"Company: {form_data['Company Name']}")
+        y_position -= 20
+        c.drawString(50, y_position, f"Contact: {form_data['Contact Name']}")
+        y_position -= 20
+        c.drawString(50, y_position, f"Email: {form_data['Email']}")
+        y_position -= 20
+        if form_data.get('Phone Number'):
+            c.drawString(50, y_position, f"Phone: {form_data['Phone Number']}")
+            y_position -= 20
+        
+        # Package details
+        y_position -= 30
+        c.setFont("Helvetica-Bold", 14)
+        c.drawString(50, y_position, "Service Package:")
+        
+        y_position -= 30
+        c.setFont("Helvetica", 12)
+        c.drawString(50, y_position, "YoBot Enterprise Voice AI Solution")
+        y_position -= 20
+        c.drawString(50, y_position, "• 24/7 AI Voice Assistant")
+        y_position -= 20
+        c.drawString(50, y_position, "• Advanced Call Routing & Analytics")
+        y_position -= 20
+        c.drawString(50, y_position, "• Custom Personality Training")
+        y_position -= 20
+        c.drawString(50, y_position, "• Integration with CRM/Tools")
+        
+        # Pricing
+        y_position -= 50
+        c.setFont("Helvetica-Bold", 14)
+        c.drawString(50, y_position, "Investment:")
+        
+        y_position -= 30
+        c.setFont("Helvetica", 12)
+        c.drawString(50, y_position, "Setup & Implementation:")
+        c.drawString(400, y_position, f"${2500:,}")
+        y_position -= 20
+        c.drawString(50, y_position, "Monthly Service:")
+        c.drawString(400, y_position, f"${150:,}")
+        y_position -= 20
+        c.drawString(50, y_position, "First Year Total:")
+        c.drawString(400, y_position, f"${4300:,}")
+        
+        # Total
+        y_position -= 30
+        c.setFont("Helvetica-Bold", 14)
+        c.drawString(50, y_position, "Total Investment:")
+        c.drawString(400, y_position, f"${total_amount:,.2f}")
+        
+        # Footer
+        y_position = 100
+        c.setFont("Helvetica", 10)
+        c.drawString(50, y_position, f"Quote Number: {quote_number}")
+        y_position -= 15
+        c.drawString(50, y_position, f"Date: {datetime.now().strftime('%B %d, %Y')}")
+        y_position -= 15
+        c.drawString(50, y_position, "Valid for 30 days")
+        
+        c.save()
+        
+        print(f"✅ PDF generated: {filename}")
+        return pdf_path
         
     except Exception as e:
-        print(f"❌ Google Drive upload failed: {str(e)}")
+        print(f"❌ PDF generation failed: {e}")
         return None
+
+# === 1. UPLOAD TO GOOGLE DRIVE ===
+def upload_to_drive(pdf_path, company_name):
+    creds = Credentials.from_service_account_file("google_creds.json", scopes=["https://www.googleapis.com/auth/drive"])
+    service = build("drive", "v3", credentials=creds)
+
+    folders = service.files().list(q=f"mimeType='application/vnd.google-apps.folder' and name='{company_name}' and '{GOOGLE_FOLDER_ID}' in parents").execute()
+    folder_id = folders["files"][0]["id"] if folders["files"] else None
+
+    if not folder_id:
+        folder = service.files().create(body={
+            "name": company_name,
+            "mimeType": "application/vnd.google-apps.folder",
+            "parents": [GOOGLE_FOLDER_ID]
+        }, fields="id").execute()
+        folder_id = folder["id"]
+
+    media = MediaFileUpload(pdf_path, mimetype="application/pdf")
+    file = service.files().create(body={
+        "name": os.path.basename(pdf_path),
+        "parents": [folder_id]
+    }, media_body=media, fields="id,webViewLink").execute()
+
+    return file["webViewLink"]
 
 # === 2. SEND EMAIL ===
 def send_email(to_emails, subject, body, attachment_path):
@@ -219,25 +256,43 @@ def run_complete_sales_order_automation(webhook_data):
             "Website": webhook_data.get("Website", "")
         }
         
-        # Generate PDF path (will be created by external PDF generator)
-        pdf_filename = f"{company_name.replace(' ', '_').replace(',', '')}_Quote.pdf"
-        pdf_path = f"./pdfs/{pdf_filename}"
+        # Generate the actual PDF first
+        pdf_path = generate_quote_pdf(form_data, total_amount)
         
-        # Run the complete pipeline with real data only
+        if not pdf_path:
+            return {
+                'success': False,
+                'error': 'PDF generation failed',
+                'message': 'Unable to create PDF quote'
+            }
+        
+        # Run the complete pipeline with the generated PDF
         run_sales_order_pipeline(form_data, pdf_path, total_amount)
         
         return {
             'success': True,
-            'message': 'Production sales order automation completed',
-            'company': company_name,
-            'contact': contact_name,
-            'total': total_amount
+            'company_name': company_name,
+            'contact_name': contact_name,
+            'contact_email': contact_email,
+            'total_amount': total_amount,
+            'pdf_path': pdf_path,
+            'message': 'Complete sales order automation finished successfully'
         }
         
     except Exception as e:
-        print(f"❌ Production automation failed: {str(e)}")
+        print(f"❌ Sales order automation failed: {e}")
         return {
             'success': False,
-            'error': 'Production automation failed',
-            'details': str(e)
+            'error': str(e),
+            'message': 'Sales order automation encountered an error'
         }
+
+# === EXAMPLE USAGE ===
+# form_data = {
+#     "Contact Name": "Tyson Lerfald",
+#     "Company Name": "YoBot, Inc.",
+#     "Email": "tyson@yobot.bot",
+#     "Phone Number": "701-371-8391",
+#     "Website": "https://yobot.bot"
+# }
+# run_sales_order_pipeline(form_data, "YoBot Inc. - Q-20250606-001.pdf", 12849.00)
