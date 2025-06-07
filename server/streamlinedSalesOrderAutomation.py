@@ -174,7 +174,7 @@ def insert_scraped_lead(form_data):
                 "☎️ Phone": form_data["Phone Number"],
                 "🌐 Website": form_data.get("Website", ""),
                 "✅ Synced to HubSpot": True,
-                "📅 Date Added": datetime.datetime.utcnow().strftime("%Y-%m-%d")
+                "📅 Date Added": datetime.datetime.now().strftime("%Y-%m-%d")
             }
         }
         res = requests.post(url, headers=headers, json=payload)
