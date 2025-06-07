@@ -537,17 +537,4 @@ def run_complete_sales_order_automation(form_data):
         "automation_complete": True
     }
 
-if __name__ == "__main__":
-    # Test the automation with sample data
-    test_data = {
-        "Parsed Company Name": "Test Automation Corp",
-        "Parsed Contact Name": "John Tester",
-        "Parsed Contact Email": "john@testautomation.com",
-        "Parsed Contact Phone": "(555) 123-4567",
-        "Parsed Bot Package": "YoBot Professional Package",
-        "Parsed Add-On List": ["SmartSpend", "Advanced Analytics"],
-        "Parsed Stripe Payment": "7500"
-    }
-    
-    result = run_complete_sales_order_automation(test_data)
-    print(json.dumps(result, indent=2))
+# Removed test data - only live webhook data processed
