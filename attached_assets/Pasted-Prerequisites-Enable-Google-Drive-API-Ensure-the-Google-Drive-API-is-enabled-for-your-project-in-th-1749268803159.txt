@@ -1,0 +1,92 @@
+Prerequisites
+Enable Google Drive API: Ensure the Google Drive API is enabled for your project in the Google Cloud Console.
+
+Service Account: Create a service account and download the credentials.json file. Share the target folder (1. Clients) with the service account's email address to grant access.
+
+Install Required Libraries:
+
+bash
+Copy
+Edit
+pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+📁 Step 1: Authenticate and Build the Drive Service
+python
+Copy
+Edit
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+
+# Path to your service account key file
+SERVICE_ACCOUNT_FILE = 'path/to/credentials.json'
+SCOPES = ['https://www.googleapis.com/auth/drive']
+
+credentials = service_account.Credentials.from_service_account_file(
+    SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+drive_service = build('drive', 'v3', credentials=credentials)
+📂 Step 2: Find or Create the '1. Clients' Folder
+python
+Copy
+Edit
+def get_folder_id(folder_name, parent_id=None):
+    query = f"name='{folder_name}' and mimeType='application/vnd.google-apps.folder'"
+    if parent_id:
+        query += f" and '{parent_id}' in parents"
+    results = drive_service.files().list(q=query, spaces='drive',
+                                         fields='files(id, name)').execute()
+    files = results.get('files', [])
+    if files:
+        return files[0]['id']
+    else:
+        # Create the folder
+        file_metadata = {
+            'name': folder_name,
+            'mimeType': 'application/vnd.google-apps.folder',
+        }
+        if parent_id:
+            file_metadata['parents'] = [parent_id]
+        file = drive_service.files().create(body=file_metadata,
+                                            fields='id').execute()
+        return file.get('id')
+
+# Get or create '1. Clients' folder
+clients_folder_id = get_folder_id('1. Clients')
+🗂️ Step 3: Create Client-Specific Folder
+python
+Copy
+Edit
+# Replace with your client's company name
+company_name = 'Alpha Test Co'
+client_folder_id = get_folder_id(company_name, parent_id=clients_folder_id)
+📄 Step 4: Upload the PDF to the Client's Folder
+python
+Copy
+Edit
+from googleapiclient.http import MediaFileUpload
+
+# Path to your PDF file
+file_path = '/mnt/data/YoBot_Quote_AUTOMATION_READY.pdf'
+file_name = f"{company_name} - Q-20250605-001.pdf"
+
+file_metadata = {
+    'name': file_name,
+    'parents': [client_folder_id]
+}
+media = MediaFileUpload(file_path, mimetype='application/pdf')
+file = drive_service.files().create(body=file_metadata,
+                                    media_body=media,
+                                    fields='id').execute()
+print(f"File ID: {file.get('id')}")
+🔗 Step 5: Generate Shareable Link (Optional)
+python
+Copy
+Edit
+# Make the file shareable
+permission = {
+    'type': 'anyone',
+    'role': 'reader',
+}
+drive_service.permissions().create(fileId=file.get('id'), body=permission).execute()
+
+# Get the shareable link
+file = drive_service.files().get(fileId=file.get('id'), fields='webViewLink').execute()
+print(f"Shareable Link: {file.get('webViewLink')}")
