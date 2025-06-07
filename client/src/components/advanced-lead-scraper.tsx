@@ -33,6 +33,7 @@ export function AdvancedLeadScraper({ onScrapingStart, onScrapingComplete }: Adv
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [scrapingTool, setScrapingTool] = useState<'apollo' | 'phantombuster' | 'apify'>('apollo');
   const [selectedTools, setSelectedTools] = useState<{apollo: boolean, phantombuster: boolean, apify: boolean}>({
     apollo: true,
     phantombuster: true,
