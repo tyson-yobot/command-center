@@ -1598,6 +1598,14 @@ export default function ClientDashboard() {
                   </Button>
                   
                   <Button
+                    onClick={() => setShowSalesOrderProcessor(true)}
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">💼</span>
+                    <span>Sales Orders</span>
+                  </Button>
+                  
+                  <Button
                     disabled
                     className="bg-gray-500 text-gray-300 flex items-center justify-start p-3 cursor-not-allowed"
                   >

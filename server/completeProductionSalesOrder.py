@@ -189,40 +189,50 @@ def generate_quote_pdf(form_data):
 def upload_to_drive_with_folder(pdf_path, company_name):
     """Step 4: Save PDF to Google Drive under 1. Clients / [Company Name]"""
     service = get_drive_service()
+    
+    # Always create local backup regardless of Drive success
+    local_folder = f"client_folders/{company_name.replace(' ', '_')}"
+    os.makedirs(local_folder, exist_ok=True)
+    import shutil
+    if os.path.exists(pdf_path):
+        local_pdf = os.path.join(local_folder, os.path.basename(pdf_path))
+        shutil.copy2(pdf_path, local_pdf)
+    
     if not service:
-        # Create local backup folder
-        local_folder = f"client_folders/{company_name.replace(' ', '_')}"
-        os.makedirs(local_folder, exist_ok=True)
-        import shutil
-        if os.path.exists(pdf_path):
-            local_pdf = os.path.join(local_folder, os.path.basename(pdf_path))
-            shutil.copy2(pdf_path, local_pdf)
-        return f"https://drive.google.com/folder/{GOOGLE_FOLDER_ID}"
+        return f"https://drive.google.com/drive/folders/{GOOGLE_FOLDER_ID}"
     
     try:
-        # Step 1: Ensure "1. Clients" folder exists
+        # Step 1: Ensure "1. Clients" folder exists in the main folder
         clients_folder_id = get_or_create_folder(service, "1. Clients", GOOGLE_FOLDER_ID)
+        if not clients_folder_id:
+            clients_folder_id = GOOGLE_FOLDER_ID
         
-        # Step 2: Create company subfolder
+        # Step 2: Create company subfolder under "1. Clients"
         company_folder_id = get_or_create_folder(service, company_name, clients_folder_id)
+        if not company_folder_id:
+            company_folder_id = clients_folder_id
         
         # Step 3: Upload PDF to company folder
-        file_metadata = {
-            'name': os.path.basename(pdf_path),
-            'parents': [company_folder_id]
-        }
+        if os.path.exists(pdf_path):
+            file_metadata = {
+                'name': os.path.basename(pdf_path),
+                'parents': [company_folder_id]
+            }
+            
+            media = MediaFileUpload(pdf_path, mimetype='application/pdf')
+            file = service.files().create(
+                body=file_metadata, 
+                media_body=media, 
+                fields='id,webViewLink'
+            ).execute()
+            
+            # Return the company folder link instead of the file link
+            return f"https://drive.google.com/drive/folders/{company_folder_id}"
         
-        media = MediaFileUpload(pdf_path, mimetype='application/pdf')
-        file = service.files().create(
-            body=file_metadata, 
-            media_body=media, 
-            fields='id,webViewLink'
-        ).execute()
-        
-        return file['webViewLink']
+        return f"https://drive.google.com/drive/folders/{company_folder_id}"
         
     except Exception as e:
-        return f"https://drive.google.com/folder/{GOOGLE_FOLDER_ID}"
+        return f"https://drive.google.com/drive/folders/{GOOGLE_FOLDER_ID}"
 
 def send_email_notification(form_data, pdf_path, drive_link):
     """Step 5: Email PDF to Tyson + Daniel"""
