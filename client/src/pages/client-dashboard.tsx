@@ -1705,23 +1705,23 @@ export default function ClientDashboard() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">MRR:</span>
-                  <span className="text-white font-bold">$24,500</span>
+                  <span className="text-white font-bold">${(crmData?.monthlyRevenue || 0).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Projected 30d:</span>
-                  <span className="text-green-400 font-bold">$31,200</span>
+                  <span className="text-slate-300 text-sm">Pipeline Value:</span>
+                  <span className="text-green-400 font-bold">${(crmData?.pipelineValue || 0).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Pipeline Deals:</span>
-                  <span className="text-blue-400 font-bold">14</span>
+                  <span className="text-slate-300 text-sm">Active Deals:</span>
+                  <span className="text-blue-400 font-bold">{crmData?.activeDeals || 0}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Confidence:</span>
-                  <span className="text-green-400 font-bold">87%</span>
+                  <span className="text-slate-300 text-sm">Close Rate:</span>
+                  <span className="text-green-400 font-bold">{crmData?.closeRate || 0}%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Sales Velocity:</span>
-                  <span className="text-blue-400 font-bold">3.2 deals/week</span>
+                  <span className="text-blue-400 font-bold">{crmData?.salesVelocity || '0'} deals/week</span>
                 </div>
               </div>
             </CardContent>
