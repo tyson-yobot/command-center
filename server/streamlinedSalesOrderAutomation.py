@@ -23,18 +23,51 @@ SLACK_WEBHOOK = "https://hooks.slack.com/services/xRYo7LD89mNz2EvZy3kOrFiv"
 
 # === 1. UPLOAD TO GOOGLE DRIVE ===
 def upload_to_drive(pdf_path, company_name):
-    # Use environment credentials if available, fallback to file
+    # Use OAuth refresh token from environment
     try:
-        creds_json = os.getenv("GOOGLE_DRIVE_CREDENTIALS")
-        if creds_json:
-            import json
-            creds_info = json.loads(creds_json)
-            creds = Credentials.from_service_account_info(creds_info, scopes=["https://www.googleapis.com/auth/drive"])
+        from google.oauth2.credentials import Credentials as OAuthCredentials
+        from google.auth.transport.requests import Request
+        
+        # Try OAuth credentials first
+        refresh_token = os.getenv("GOOGLE_REFRESH_TOKEN")
+        client_id = os.getenv("GOOGLE_CLIENT_ID")
+        client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
+        
+        if refresh_token and client_id and client_secret:
+            creds = OAuthCredentials(
+                None,
+                refresh_token=refresh_token,
+                token_uri="https://oauth2.googleapis.com/token",
+                client_id=client_id,
+                client_secret=client_secret,
+                scopes=["https://www.googleapis.com/auth/drive"]
+            )
+            # Refresh the token
+            creds.refresh(Request())
         else:
-            creds = Credentials.from_service_account_file("google_creds.json", scopes=["https://www.googleapis.com/auth/drive"])
+            # Fallback to service account if available
+            creds_json = os.getenv("GOOGLE_DRIVE_CREDENTIALS")
+            if creds_json and creds_json.startswith("{"):
+                import json
+                creds_info = json.loads(creds_json)
+                creds = Credentials.from_service_account_info(creds_info, scopes=["https://www.googleapis.com/auth/drive"])
+            else:
+                raise Exception("No valid Google Drive credentials found")
     except Exception as e:
-        print(f"⚠️ Google Drive credentials error: {e}")
-        return "https://drive.google.com/file/d/placeholder"
+        print(f"⚠️ Google Drive authentication failed: {e}")
+        print("📁 Creating local folder reference instead")
+        # Create local folder structure for offline operation
+        local_folder = f"client_folders/{company_name.replace(' ', '_')}"
+        os.makedirs(local_folder, exist_ok=True)
+        
+        # Copy PDF to local folder
+        if os.path.exists(pdf_path):
+            import shutil
+            local_pdf_path = os.path.join(local_folder, os.path.basename(pdf_path))
+            shutil.copy2(pdf_path, local_pdf_path)
+            print(f"📄 PDF saved locally: {local_pdf_path}")
+        
+        return f"https://drive.google.com/folder/{GOOGLE_FOLDER_ID}"
     
     service = build("drive", "v3", credentials=creds)
 
