@@ -11915,253 +11915,65 @@ print(json.dumps(result))
 
 
 
-  // Sales Order Processing - Direct TypeScript implementation using your logic
+  // Sales Order Processing - Using your existing Flask PDF system
   app.post('/api/sales-order/process', async (req, res) => {
     try {
       const data = req.body;
       console.log('Processing sales order for:', data.company_name);
 
-      // Step 1: Generate PDF using your exact logic
-      const fs = await import('fs');
-      const path = await import('path');
-      
-      // Create HTML content for PDF generation
-      const htmlContent = `
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        .header { text-align: center; margin-bottom: 40px; }
-        .logo { width: 200px; height: auto; }
-        .company-info { margin-bottom: 30px; }
-        .quote-details { margin-bottom: 30px; }
-        .package-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        .package-table th, .package-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        .package-table th { background-color: #f2f2f2; }
-        .total { font-size: 18px; font-weight: bold; color: #2c5aa0; }
-        .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #666; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" alt="YoBot Logo" class="logo" />
-        <h1>Professional VoiceBot Quote</h1>
-    </div>
-    
-    <div class="company-info">
-        <h2>Quote for: ${data.company_name}</h2>
-        <p><strong>Contact:</strong> ${data.contact_name}</p>
-        <p><strong>Email:</strong> ${data.email}</p>
-        <p><strong>Phone:</strong> ${data.phone}</p>
-        <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
-    </div>
-    
-    <div class="quote-details">
-        <h3>Bot Package Details</h3>
-        <table class="package-table">
-            <tr>
-                <th>Package</th>
-                <th>Description</th>
-                <th>Setup Fee</th>
-                <th>Monthly Fee</th>
-            </tr>
-            <tr>
-                <td>${data.package || data.bot_package || 'Professional Package'}</td>
-                <td>Advanced AI voice assistant with custom personality</td>
-                <td>$${data.one_time_payment || '15,000'}</td>
-                <td>$${data.monthly_recurring || '2,500'}/month</td>
-            </tr>
-        </table>
-        
-        ${data.addons && data.addons.length > 0 ? `
-        <h3>Add-On Modules</h3>
-        <table class="package-table">
-            <tr>
-                <th>Add-On</th>
-                <th>Setup Fee</th>
-                <th>Monthly Fee</th>
-            </tr>
-            ${data.addons.map((addon: any) => `
-            <tr>
-                <td>${addon}</td>
-                <td>$2,500</td>
-                <td>$500/month</td>
-            </tr>
-            `).join('')}
-        </table>
-        ` : ''}
-        
-        <div class="total">
-            <p>Total Setup: $${(parseInt(data.one_time_payment) + (data.addons?.length * 2500 || 0)).toLocaleString()}</p>
-            <p>Monthly Total: $${(parseInt(data.monthly_recurring) + (data.addons?.length * 500 || 0))}/month</p>
-        </div>
-    </div>
-    
-    <div class="footer">
-        <p>This quote is valid for 30 days. Terms and conditions apply.</p>
-        <p>YoBot Enterprise Solutions - Transforming Customer Engagement with AI</p>
-    </div>
-</body>
-</html>`;
-
-      // Create temporary HTML file
-      const timestamp = Date.now();
-      const htmlPath = `/tmp/quote_${timestamp}.html`;
-      const pdfPath = `/tmp/quote_${timestamp}.pdf`;
-      
-      fs.writeFileSync(htmlPath, htmlContent);
-      
-      // Generate PDF using puppeteer (already installed)
-      const puppeteer = await import('puppeteer');
-      const browser = await puppeteer.launch({ headless: true });
-      const page = await browser.newPage();
-      await page.setContent(htmlContent);
-      await page.pdf({ 
-        path: pdfPath, 
-        format: 'A4',
-        printBackground: true,
-        margin: { top: '20px', bottom: '20px', left: '20px', right: '20px' }
+      // Use your existing Flask sales order processor
+      const { spawn } = await import('child_process');
+      const python = spawn('python3', ['server/flaskSalesOrderProcessor.py'], {
+        stdio: ['pipe', 'pipe', 'pipe']
       });
-      await browser.close();
 
-      // Step 2: Google Drive upload (folder: 1. Clients / [Company Name])
-      const { google } = await import('googleapis');
-      
-      let drive;
-      try {
-        const auth = new google.auth.GoogleAuth({
-          credentials: JSON.parse(process.env.GOOGLE_DRIVE_CREDENTIALS || '{}'),
-          scopes: ['https://www.googleapis.com/auth/drive']
-        });
-        drive = google.drive({ version: 'v3', auth: await auth.getClient() });
-      } catch (authError) {
-        console.log('Google Drive auth failed, continuing with local PDF:', authError);
-        drive = null;
-      }
+      // Send the order data to your Flask processor
+      python.stdin.write(JSON.stringify(data));
+      python.stdin.end();
 
-      let driveUrl = null;
-      if (drive) {
-        try {
-          const GOOGLE_FOLDER_ID = '1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh';
-          
-          // Find or create company folder
-          const folderRes = await drive.files.list({
-            q: `mimeType='application/vnd.google-apps.folder' and name='${data.company_name}' and '${GOOGLE_FOLDER_ID}' in parents`,
-            fields: 'files(id)'
-          });
+      let result = '';
+      let error = '';
 
-          let folderId = folderRes.data.files?.[0]?.id;
-          if (!folderId) {
-            const folder = await drive.files.create({
-              requestBody: {
-                name: data.company_name,
-                mimeType: 'application/vnd.google-apps.folder',
-                parents: [GOOGLE_FOLDER_ID]
-              },
-              fields: 'id'
+      python.stdout.on('data', (chunk) => {
+        result += chunk.toString();
+      });
+
+      python.stderr.on('data', (chunk) => {
+        error += chunk.toString();
+      });
+
+      python.on('close', (code) => {
+        if (code === 0 && result.trim()) {
+          try {
+            const processedResult = JSON.parse(result.trim());
+            console.log('Flask processing result:', processedResult);
+            
+            res.json({
+              status: "success",
+              message: "Sales order processed successfully using your Flask system",
+              company: data.company_name,
+              result: processedResult,
+              timestamp: new Date().toISOString()
             });
-            folderId = folder.data.id!;
+          } catch (parseError) {
+            console.log('Flask processor output:', result);
+            res.json({
+              status: "success", 
+              message: "Sales order processed - using your streamlined Flask logic",
+              company: data.company_name,
+              output: result.trim(),
+              timestamp: new Date().toISOString()
+            });
           }
-
-          // Upload PDF
-          const fileRes = await drive.files.create({
-            requestBody: {
-              name: `Quote - ${data.company_name} - ${new Date().toLocaleDateString()}.pdf`,
-              mimeType: 'application/pdf',
-              parents: [folderId]
-            },
-            media: {
-              mimeType: 'application/pdf',
-              body: fs.createReadStream(pdfPath)
-            },
-            fields: 'webViewLink'
-          });
-
-          driveUrl = fileRes?.data?.webViewLink || (fileRes?.data?.id ? `https://drive.google.com/file/d/${fileRes.data.id}/view` : null);
-        } catch (driveError) {
-          console.log('Google Drive upload failed:', driveError);
-        }
-      }
-
-      // Step 3: Send Slack notification
-      try {
-        const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
-        if (slackWebhookUrl) {
-          const axios = await import('axios');
-          await axios.default.post(slackWebhookUrl, {
-            text: `📎 New Quote Generated for ${data.company_name}`,
-            blocks: [
-              {
-                type: "section",
-                text: {
-                  type: "mrkdwn",
-                  text: `*📎 Quote Generated*\n*Company:* ${data.company_name}\n*Contact:* ${data.contact_name}\n*Package:* ${data.bot_package.name}\n*Total Setup:* $${(data.bot_package.price + (data.addons?.reduce((sum: number, addon: any) => sum + addon.setup, 0) || 0)).toLocaleString()}`
-                }
-              },
-              driveUrl ? {
-                type: "section",
-                text: {
-                  type: "mrkdwn",
-                  text: `<${driveUrl}|📄 View Quote in Google Drive>`
-                }
-              } : null
-            ].filter(Boolean)
+        } else {
+          console.error('Flask processing error:', error);
+          res.status(500).json({
+            status: "error",
+            message: "Sales order processing failed",
+            error: error || 'No output from Flask processor',
+            company: data.company_name
           });
         }
-      } catch (slackError) {
-        console.log('Slack notification failed:', slackError);
-      }
-
-      // Step 4: Email notification
-      try {
-        const nodemailer = await import('nodemailer');
-        const transporter = nodemailer.createTransporter({
-          service: 'gmail',
-          auth: {
-            user: process.env.GMAIL_USER || 'noreply@yobot.bot',
-            pass: process.env.GMAIL_PASSWORD || process.env.SENDGRID_API_KEY
-          }
-        });
-
-        await transporter.sendMail({
-          from: '"YoBot" <noreply@yobot.bot>',
-          to: ['tyson@yobot.bot', 'daniel@yobot.bot'],
-          subject: `📎 Quote Ready – ${data.company_name}`,
-          html: `
-            <h2>New Quote Generated</h2>
-            <p><strong>Company:</strong> ${data.company_name}</p>
-            <p><strong>Contact:</strong> ${data.contact_name} (${data.email})</p>
-            <p><strong>Package:</strong> ${data.bot_package.name}</p>
-            <p><strong>Total Setup:</strong> $${(data.bot_package.price + (data.addons?.reduce((sum: number, addon: any) => sum + addon.setup, 0) || 0)).toLocaleString()}</p>
-            ${driveUrl ? `<p><a href="${driveUrl}">📄 View Quote in Google Drive</a></p>` : ''}
-          `,
-          attachments: [{ 
-            filename: `Quote-${data.company_name}.pdf`, 
-            path: pdfPath 
-          }]
-        });
-      } catch (emailError) {
-        console.log('Email notification failed:', emailError);
-      }
-
-      // Clean up temporary files
-      try {
-        fs.unlinkSync(htmlPath);
-        fs.unlinkSync(pdfPath);
-      } catch (cleanupError) {
-        console.log('Cleanup failed:', cleanupError);
-      }
-
-      // Return success response
-      res.json({
-        status: "success",
-        message: "Sales order processed successfully using your streamlined logic",
-        company: data.company_name,
-        contact: data.contact_name,
-        package: data.bot_package.name,
-        driveUrl: driveUrl,
-        timestamp: new Date().toISOString()
       });
 
     } catch (error: any) {
@@ -12170,7 +11982,7 @@ print(json.dumps(result))
         status: "error",
         message: "Sales order processing failed",
         error: error.message,
-        company: req.body.company_name
+        company: req.body?.company_name || 'Unknown'
       });
     }
   });
