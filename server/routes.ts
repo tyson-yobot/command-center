@@ -63,8 +63,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log(`Raw payload saved: ${payloadFile}`);
       
-      // Process with clean handler
+      // Analyze payload structure first
       const { spawn } = await import('child_process');
+      const analyzerProcess = spawn('python3', ['tally_payload_analyzer.py'], {
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+      
+      analyzerProcess.stdin.write(JSON.stringify(req.body));
+      analyzerProcess.stdin.end();
+      
+      analyzerProcess.stdout.on('data', (data) => {
+        console.log('Payload Analysis:', data.toString());
+      });
+      
+      // Process with clean handler
       const pythonProcess = spawn('python3', ['webhook_handler.py'], {
         stdio: ['pipe', 'pipe', 'pipe']
       });

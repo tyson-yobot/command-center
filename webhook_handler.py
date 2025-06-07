@@ -19,7 +19,17 @@ def process_tally_webhook(webhook_data):
     submission_id = str(uuid.uuid4())[:8]
     timestamp = datetime.now().isoformat()
     
+    # Save complete raw payload for analysis
+    raw_payload_file = f"raw_tally_payload_{submission_id}.json"
+    with open(raw_payload_file, 'w') as f:
+        json.dump({
+            "submission_id": submission_id,
+            "timestamp": timestamp,
+            "complete_raw_data": webhook_data
+        }, f, indent=2)
+    
     print(f"🎯 Processing Tally submission: {submission_id}")
+    print(f"📋 Raw payload saved: {raw_payload_file}")
     
     # Extract fields array from webhook data
     fields_array = []
