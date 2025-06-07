@@ -68,8 +68,6 @@ class LiveFunctionValidator {
     { id: 260, name: 'Intelligent Follow-up Scheduler', endpoint: '/api/automation-batch-25/function-260', category: 'Automation', priority: 'medium', status: 'PENDING' },
 
     // Original Batch 21 Functions (161-210)
-    { id: 161, name: 'Intake Form Validator', endpoint: '/api/automation-batch-21/function-161', category: 'Data Validation', priority: 'high', status: 'PENDING' },
-    // High Priority Functions (12 functions)
     { id: 161, name: "Intake Form Validator", endpoint: "/api/automation-batch-21/function-161", category: "Data Validation", priority: "high", status: "PENDING" },
     { id: 162, name: "QA Failure Alert", endpoint: "/api/automation-batch-21/function-162", category: "Quality Control", priority: "high", status: "PENDING" },
     { id: 163, name: "Live Error Push", endpoint: "/api/automation-batch-21/function-163", category: "Error Handling", priority: "high", status: "PENDING" },
