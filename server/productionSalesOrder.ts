@@ -1,15 +1,13 @@
 import type { Express, Request, Response } from "express";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 import puppeteer from "puppeteer";
 import { google } from "googleapis";
 import nodemailer from "nodemailer";
 import axios from "axios";
 
-// Get __dirname equivalent for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Use process.cwd() for current working directory
+const __dirname = process.cwd();
 
 // Configuration
 const GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh";
@@ -124,7 +122,7 @@ export function registerProductionSalesOrder(app: Express) {
 
 async function generateQuotePDF(data: ParsedSalesOrder, quoteNumber: string): Promise<string> {
   // Load HTML template
-  const templatePath = path.join(__dirname, '../templates/quote_template.html');
+  const templatePath = path.join(process.cwd(), 'templates/quote_template.html');
   let template = fs.readFileSync(templatePath, 'utf8');
 
   // Replace template variables
@@ -156,7 +154,7 @@ async function generateQuotePDF(data: ParsedSalesOrder, quoteNumber: string): Pr
   await page.setContent(template, { waitUntil: 'networkidle0' });
   
   const pdfFileName = `YoBot_Quote_${quoteNumber}_${data["Company Name"].replace(/\s+/g, '_')}.pdf`;
-  const pdfPath = path.join(__dirname, '../pdfs', pdfFileName);
+  const pdfPath = path.join(process.cwd(), 'pdfs', pdfFileName);
   
   // Ensure pdfs directory exists
   fs.mkdirSync(path.dirname(pdfPath), { recursive: true });
