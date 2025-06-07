@@ -6,6 +6,66 @@ import { updateAutomationMetrics } from "./routes";
 export function registerProductionSalesOrder(app: Express) {
   console.log("🚀 Registering production sales order webhook");
   
+  // Correct endpoint that matches your Tally webhook URL
+  app.post('/api/orders/test', async (req: Request, res: Response) => {
+    try {
+      const timestamp = new Date().toISOString();
+      console.log("📥 REAL TALLY FORM SUBMISSION at", timestamp);
+      
+      // Live webhook data logging
+      console.log("🧠 LIVE Webhook Data:", req.body);
+      
+      // Save the real submission
+      const filename = `real_tally_submission_${Date.now()}.json`;
+      writeFileSync(filename, JSON.stringify({
+        timestamp: timestamp,
+        headers: req.headers,
+        body: req.body,
+        method: req.method,
+        url: req.url
+      }, null, 2));
+      
+      console.log(`💾 Real Tally submission saved: ${filename}`);
+      
+      // Process with live Tally processor
+      const pythonProcess = spawn('python3', ['live_tally_processor.py'], {
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+      
+      let result = '';
+      pythonProcess.stdout.on('data', (data) => {
+        const output = data.toString();
+        console.log('🐍 Python Output:', output);
+        result += output;
+      });
+      
+      pythonProcess.stderr.on('data', (data) => {
+        console.error('🐍 Python Error:', data.toString());
+      });
+      
+      pythonProcess.on('close', (code) => {
+        console.log(`🐍 Python process completed with code: ${code}`);
+      });
+      
+      res.json({
+        success: true,
+        message: "Live Tally form processed successfully",
+        timestamp: timestamp,
+        filename: filename,
+        processing: "Complete automation pipeline triggered"
+      });
+      
+    } catch (error) {
+      console.error("❌ Live Tally processing failed:", error);
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        timestamp: new Date().toISOString()
+      });
+    }
+  });
+  
+  // Legacy endpoint for reference
   app.post('/webhook/tally_sales_order', async (req: Request, res: Response) => {
     try {
       const timestamp = new Date().toISOString();

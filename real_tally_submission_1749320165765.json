@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-06-07T18:16:05.762Z",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "28"
+  },
+  "body": {
+    "test": "connection_check"
+  },
+  "method": "POST",
+  "url": "/api/orders/test"
+}
