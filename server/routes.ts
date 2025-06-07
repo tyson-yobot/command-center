@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { registerProductionSalesOrder } from "./productionSalesOrder";
+import { registerLiveFunctionValidation } from "./liveFunctionValidator";
 
 // Live automation tracking
 let liveAutomationMetrics = {
@@ -15,6 +16,9 @@ let liveAutomationMetrics = {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Register production sales order webhook
   registerProductionSalesOrder(app);
+  
+  // Register live function validation system
+  registerLiveFunctionValidation(app);
 
   // Live automation metrics endpoint
   app.get('/api/automation/metrics', (req, res) => {
