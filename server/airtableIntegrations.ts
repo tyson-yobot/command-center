@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { AIRTABLE_BASES, getAirtableUrl } from './airtableConfig';
 
-const AIRTABLE_API_KEY = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY;
+const AIRTABLE_API_KEY = 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa';
 
 if (!AIRTABLE_API_KEY) {
   console.warn('AIRTABLE_API_KEY not found in environment variables');

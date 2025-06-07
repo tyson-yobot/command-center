@@ -21,7 +21,7 @@ const upload = multer({
     }
   }
 });
-import { generateQuotePDF, generateROIPDF } from "./pdfGenerator";
+// PDF generation handled dynamically in routes
 import { z } from "zod";
 import { insertBotSchema, insertNotificationSchema, insertMetricsSchema, insertCrmDataSchema, insertScannedContactSchema, insertKnowledgeBaseSchema } from "@shared/schema";
 import { createWorker } from 'tesseract.js';
@@ -12350,6 +12350,74 @@ print(json.dumps(result))
         success: false,
         error: 'SMS service error',
         message: error.message
+      });
+    }
+  });
+
+  // PDF Quote Generator with Google Drive Integration
+  app.post('/api/generate-quote', async (req, res) => {
+    try {
+      const { PDFGenerator } = await import('./pdfGenerator');
+      const pdfGen = new PDFGenerator();
+      
+      const {
+        companyName,
+        contactName,
+        email,
+        phone,
+        serviceType = 'Professional AI Bot Package',
+        monthlyFee = 2500,
+        setupFee = 1500,
+        totalFirstMonth = 4000
+      } = req.body;
+
+      if (!companyName || !contactName || !email) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required fields: companyName, contactName, email'
+        });
+      }
+
+      const result = await pdfGen.generateQuotePDF({
+        companyName,
+        contactName,
+        email,
+        phone,
+        serviceType,
+        monthlyFee,
+        setupFee,
+        totalFirstMonth
+      });
+
+      if (result.success) {
+        // Log to Airtable
+        await logToAirtable('integration_test_log', {
+          '🧠 Function Name': 'Generate Quote PDF',
+          '📝 Source Form': 'API Request',
+          '📅 Timestamp': new Date().toISOString(),
+          '📊 Dashboard Name': 'Quote Generator',
+          '👤 Client': companyName,
+          '📧 Recipient': email,
+          '🔗 Drive Link': result.driveLink || 'Generated successfully'
+        });
+
+        res.json({
+          success: true,
+          message: 'Quote PDF generated and uploaded to Google Drive',
+          driveLink: result.driveLink,
+          localPath: result.filePath
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          error: result.error
+        });
+      }
+    } catch (error) {
+      console.error('Quote generation error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message
       });
     }
   });

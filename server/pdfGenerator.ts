@@ -1,166 +1,203 @@
+import PDFDocument from 'pdfkit';
 import fs from 'fs';
-import puppeteer from 'puppeteer';
 import path from 'path';
-import axios from 'axios';
+import { google } from 'googleapis';
 
-// Make webhook URL from environment
-const MAKE_WEBHOOK_URL = process.env.MAKE_WEBHOOK_URL || 'https://hook.us2.make.com/q8jd4o7mpku0cddAdd';
+interface QuoteData {
+  companyName: string;
+  contactName: string;
+  email: string;
+  phone?: string;
+  serviceType: string;
+  monthlyFee: number;
+  setupFee: number;
+  totalFirstMonth: number;
+}
 
-/**
- * Notify Make.com webhook with PDF generation data
- */
-async function notifyMakeWithPDF(pdfData: Record<string, any>): Promise<void> {
-  try {
-    const response = await axios.post(MAKE_WEBHOOK_URL, pdfData, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+export class PDFGenerator {
+  private driveService: any;
+
+  constructor() {
+    this.initializeGoogleDrive();
+  }
+
+  private async initializeGoogleDrive() {
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      'https://developers.google.com/oauthplayground'
+    );
+
+    oauth2Client.setCredentials({
+      refresh_token: process.env.GOOGLE_REFRESH_TOKEN
     });
-    console.log('✅ Make Webhook Triggered:', response.status);
-  } catch (error: any) {
-    console.error('❌ Failed to trigger Make:', error.message);
-  }
-}
 
-/**
- * Replace {{keys}} in the HTML template with real values
- */
-function injectData(template: string, data: Record<string, any>): string {
-  return template.replace(/{{(.*?)}}/g, (_, key) => data[key.trim()] || '');
-}
-
-/**
- * Generate PDF from template and data
- */
-export async function generatePDF(type: string, data: Record<string, any>, outputPath: string): Promise<void> {
-  const fileMap: Record<string, string> = {
-    quote: 'quote.html',
-    roi: 'roi-report.html',
-  };
-
-  const templatePath = path.join(process.cwd(), 'templates', fileMap[type]);
-  
-  if (!fs.existsSync(templatePath)) {
-    throw new Error(`Template not found: ${templatePath}`);
+    this.driveService = google.drive({ version: 'v3', auth: oauth2Client });
   }
 
-  const templateHtml = fs.readFileSync(templatePath, 'utf-8');
-  const html = injectData(templateHtml, data);
+  async generateQuotePDF(quoteData: QuoteData): Promise<{ success: boolean; filePath?: string; driveLink?: string; error?: string }> {
+    try {
+      const fileName = `YoBot_Quote_${quoteData.companyName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.pdf`;
+      const filePath = path.join(process.cwd(), 'uploads', fileName);
 
-  const browser = await puppeteer.launch({ 
-    headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
-  });
-  
-  try {
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'domcontentloaded' });
-    await page.pdf({ 
-      path: outputPath, 
-      format: 'A4',
-      printBackground: true,
-      margin: {
-        top: '1cm',
-        right: '1cm',
-        bottom: '1cm',
-        left: '1cm'
+      // Ensure uploads directory exists
+      const uploadsDir = path.dirname(filePath);
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
       }
-    });
-  } finally {
-    await browser.close();
+
+      // Create PDF document
+      const doc = new PDFDocument({ margin: 50 });
+      const stream = fs.createWriteStream(filePath);
+      doc.pipe(stream);
+
+      // Add YoBot header
+      doc.fontSize(24).font('Helvetica-Bold').text('YoBot® AI Sales Quote', { align: 'center' });
+      doc.moveDown(0.5);
+      doc.fontSize(12).font('Helvetica').text('Enterprise AI Automation Solutions', { align: 'center' });
+      doc.moveDown(2);
+
+      // Company Information
+      doc.fontSize(16).font('Helvetica-Bold').text('Quote For:', { underline: true });
+      doc.moveDown(0.5);
+      doc.fontSize(12).font('Helvetica');
+      doc.text(`Company: ${quoteData.companyName}`);
+      doc.text(`Contact: ${quoteData.contactName}`);
+      doc.text(`Email: ${quoteData.email}`);
+      if (quoteData.phone) {
+        doc.text(`Phone: ${quoteData.phone}`);
+      }
+      doc.moveDown(2);
+
+      // Service Details
+      doc.fontSize(16).font('Helvetica-Bold').text('Service Package:', { underline: true });
+      doc.moveDown(0.5);
+      doc.fontSize(12).font('Helvetica');
+      doc.text(`Package: ${quoteData.serviceType}`);
+      doc.moveDown(1);
+
+      // Pricing Table
+      doc.fontSize(16).font('Helvetica-Bold').text('Investment Details:', { underline: true });
+      doc.moveDown(0.5);
+      
+      // Table headers
+      const tableTop = doc.y;
+      doc.fontSize(12).font('Helvetica-Bold');
+      doc.text('Description', 50, tableTop);
+      doc.text('Amount', 400, tableTop, { width: 100, align: 'right' });
+      
+      // Line under headers
+      doc.moveTo(50, tableTop + 20).lineTo(500, tableTop + 20).stroke();
+      
+      // Table content
+      doc.font('Helvetica');
+      let currentY = tableTop + 30;
+      
+      doc.text('Monthly Service Fee', 50, currentY);
+      doc.text(`$${quoteData.monthlyFee.toLocaleString()}`, 400, currentY, { width: 100, align: 'right' });
+      currentY += 20;
+      
+      doc.text('Setup & Onboarding Fee', 50, currentY);
+      doc.text(`$${quoteData.setupFee.toLocaleString()}`, 400, currentY, { width: 100, align: 'right' });
+      currentY += 30;
+      
+      // Total line
+      doc.moveTo(300, currentY - 10).lineTo(500, currentY - 10).stroke();
+      doc.font('Helvetica-Bold');
+      doc.text('First Month Total', 50, currentY);
+      doc.text(`$${quoteData.totalFirstMonth.toLocaleString()}`, 400, currentY, { width: 100, align: 'right' });
+      
+      doc.moveDown(3);
+
+      // Terms and Conditions
+      doc.fontSize(14).font('Helvetica-Bold').text('Terms & Conditions:', { underline: true });
+      doc.moveDown(0.5);
+      doc.fontSize(10).font('Helvetica');
+      doc.text('• Monthly fees are billed in advance on the same date each month');
+      doc.text('• Setup fee is a one-time charge due upon contract signing');
+      doc.text('• 30-day notice required for cancellation');
+      doc.text('• All services include 24/7 technical support and monitoring');
+      doc.text('• Quote valid for 30 days from issue date');
+      
+      doc.moveDown(2);
+      doc.fontSize(12).font('Helvetica-Bold');
+      doc.text(`Quote Date: ${new Date().toLocaleDateString()}`);
+      doc.text('Quote ID: YB-' + Date.now().toString().slice(-6));
+
+      // Footer
+      doc.fontSize(10).font('Helvetica');
+      doc.text('YoBot® - Transforming Business Communication Through AI', 50, doc.page.height - 100, { align: 'center' });
+      doc.text('Contact: sales@yobot.bot | Phone: (555) 123-4567', { align: 'center' });
+
+      doc.end();
+
+      // Wait for PDF generation to complete
+      await new Promise((resolve, reject) => {
+        stream.on('finish', resolve);
+        stream.on('error', reject);
+      });
+
+      // Upload to Google Drive with your specific folder ID
+      const driveLink = await this.uploadToGoogleDrive(filePath, fileName, quoteData.companyName);
+
+      return {
+        success: true,
+        filePath,
+        driveLink
+      };
+
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
   }
-}
 
-/**
- * Generate quote PDF for client
- */
-export async function generateQuotePDF(quoteData: {
-  clientName: string;
-  botPackage: string;
-  addons: string;
-  oneTime: string;
-  recurring: string;
-  date: string;
-  version: string;
-}): Promise<string> {
-  const timestamp = Date.now();
-  const quoteId = `Q${timestamp}`;
-  const filename = `quote-${quoteData.clientName.replace(/\s+/g, '-')}-${timestamp}.pdf`;
-  const outputPath = path.join(process.cwd(), 'static', filename);
+  private async uploadToGoogleDrive(filePath: string, fileName: string, companyName: string): Promise<string> {
+    try {
+      // Your specific Google Drive folder ID
+      const parentFolderId = '1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh';
+      
+      // Check if company folder exists, create if not
+      const foldersResponse = await this.driveService.files.list({
+        q: `mimeType='application/vnd.google-apps.folder' and name='${companyName}' and '${parentFolderId}' in parents`,
+        fields: 'files(id, name)'
+      });
 
-  // Ensure static directory exists
-  const staticDir = path.join(process.cwd(), 'static');
-  if (!fs.existsSync(staticDir)) {
-    fs.mkdirSync(staticDir, { recursive: true });
+      let companyFolderId = foldersResponse.data.files?.[0]?.id;
+
+      if (!companyFolderId) {
+        // Create company folder
+        const folderResponse = await this.driveService.files.create({
+          requestBody: {
+            name: companyName,
+            mimeType: 'application/vnd.google-apps.folder',
+            parents: [parentFolderId]
+          },
+          fields: 'id'
+        });
+        companyFolderId = folderResponse.data.id;
+      }
+
+      // Upload PDF to company folder
+      const fileResponse = await this.driveService.files.create({
+        requestBody: {
+          name: fileName,
+          parents: [companyFolderId]
+        },
+        media: {
+          mimeType: 'application/pdf',
+          body: fs.createReadStream(filePath)
+        },
+        fields: 'id, webViewLink'
+      });
+
+      return fileResponse.data.webViewLink;
+    } catch (error) {
+      console.error('Google Drive upload error:', error);
+      throw new Error(`Failed to upload to Google Drive: ${error.message}`);
+    }
   }
-
-  await generatePDF('quote', quoteData, outputPath);
-
-  // Trigger Make webhook after successful PDF generation
-  const webhookPayload = {
-    pdf_url: `/static/${filename}`,
-    client: quoteData.clientName,
-    type: "quote",
-    quote_id: quoteId,
-    timestamp: new Date().toISOString(),
-    package: quoteData.botPackage,
-    one_time_price: quoteData.oneTime,
-    recurring_price: quoteData.recurring,
-    addons: quoteData.addons
-  };
-
-  await notifyMakeWithPDF(webhookPayload);
-
-  return outputPath;
-}
-
-/**
- * Generate ROI report PDF
- */
-export async function generateROIPDF(roiData: {
-  clientName: string;
-  reportPeriod: string;
-  date: string;
-  package: string;
-  ticketsProcessed: string;
-  responseTime: string;
-  satisfaction: string;
-  costSavings: string;
-  roiPercentage: string;
-  monthlySavings: string;
-  achievement1: string;
-  achievement2: string;
-  achievement3: string;
-}): Promise<string> {
-  const timestamp = Date.now();
-  const reportId = `ROI${timestamp}`;
-  const filename = `roi-report-${roiData.clientName.replace(/\s+/g, '-')}-${timestamp}.pdf`;
-  const outputPath = path.join(process.cwd(), 'static', filename);
-
-  // Ensure static directory exists
-  const staticDir = path.join(process.cwd(), 'static');
-  if (!fs.existsSync(staticDir)) {
-    fs.mkdirSync(staticDir, { recursive: true });
-  }
-
-  await generatePDF('roi', roiData, outputPath);
-
-  // Trigger Make webhook after successful PDF generation
-  const webhookPayload = {
-    pdf_url: `/static/${filename}`,
-    client: roiData.clientName,
-    type: "roi_report",
-    report_id: reportId,
-    timestamp: new Date().toISOString(),
-    package: roiData.package,
-    report_period: roiData.reportPeriod,
-    tickets_processed: roiData.ticketsProcessed,
-    roi_percentage: roiData.roiPercentage,
-    monthly_savings: roiData.monthlySavings,
-    satisfaction: roiData.satisfaction
-  };
-
-  await notifyMakeWithPDF(webhookPayload);
-
-  return outputPath;
 }

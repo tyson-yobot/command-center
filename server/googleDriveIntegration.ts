@@ -54,7 +54,7 @@ export class GoogleDriveIntegration {
 
   async uploadToGoogleDrive(pdfPath: string, companyName: string): Promise<string> {
     try {
-      const parentId = process.env.GOOGLE_DRIVE_PARENT_FOLDER_ID || '1BQf9vZ8KZy4X5Nw2M3P4Q5R6S7T8U9V0';
+      const parentId = '1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh';
       
       // Find or create company folder
       const foldersResponse = await this.driveService.files.list({
