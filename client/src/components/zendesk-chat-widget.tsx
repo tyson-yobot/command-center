@@ -47,17 +47,20 @@ export function ZendeskChatWidget({ zendeskDomain }: ZendeskChatWidgetProps) {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const messageToSend = currentMessage;
     setCurrentMessage('');
     setIsTyping(true);
 
-    // Get AI response first
     try {
       const aiResponse = await fetch('/api/ai/chat-support', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: currentMessage,
-          context: messages.map(m => ({ text: m.text, isUser: m.isUser }))
+          message: messageToSend,
+          context: messages.slice(-5).map(m => ({ 
+            role: m.isUser ? 'user' : 'assistant', 
+            content: m.text 
+          }))
         })
       });
 
@@ -66,7 +69,8 @@ export function ZendeskChatWidget({ zendeskDomain }: ZendeskChatWidgetProps) {
       setTimeout(() => {
         const botResponse: ChatMessage = {
           id: (Date.now() + 1).toString(),
-          text: aiResult.response || 'I understand your request. How can I help you further?',
+          text: aiResult.success && aiResult.response ? aiResult.response : 
+                'I can help you with YoBot platform questions, troubleshooting, and feature guidance. What specific issue are you experiencing?',
           isUser: false,
           timestamp: new Date()
         };
@@ -74,26 +78,28 @@ export function ZendeskChatWidget({ zendeskDomain }: ZendeskChatWidgetProps) {
         setMessages(prev => [...prev, botResponse]);
         setIsTyping(false);
 
-        // If the request needs escalation, create a support ticket
-        if (aiResult.needsEscalation) {
+        // Create support ticket for complex issues
+        if (messageToSend.toLowerCase().includes('error') || 
+            messageToSend.toLowerCase().includes('not working') ||
+            messageToSend.toLowerCase().includes('broken')) {
           fetch('/api/support/ticket', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              subject: 'Escalated Live Chat Support',
-              description: `Original message: ${currentMessage}\n\nAI Response: ${aiResult.response}`,
+              subject: `Support Request: ${messageToSend.substring(0, 50)}...`,
+              description: `User message: ${messageToSend}\n\nAI Response: ${aiResult.response || 'No AI response'}`,
               priority: 'high',
               clientName: 'Dashboard User',
-              email: 'support@yourdomain.com'
+              email: 'dashboard@yobot.com'
             })
-          });
+          }).catch(err => console.error('Failed to create support ticket:', err));
         }
-      }, 1500);
+      }, 1000);
     } catch (error) {
       setTimeout(() => {
         const errorResponse: ChatMessage = {
           id: (Date.now() + 1).toString(),
-          text: 'I understand your request. Our support team will be with you shortly.',
+          text: 'I can assist with YoBot automation features, lead management, voice AI, and technical troubleshooting. What would you like help with?',
           isUser: false,
           timestamp: new Date()
         };

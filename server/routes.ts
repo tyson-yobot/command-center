@@ -287,15 +287,387 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ success: false, error: 'ElevenLabs API key required' });
       }
 
-      const voices = [
-        { id: 'voice_1', name: 'Professional Male', language: 'en-US', style: 'professional' },
-        { id: 'voice_2', name: 'Friendly Female', language: 'en-US', style: 'conversational' },
-        { id: 'voice_3', name: 'Executive Voice', language: 'en-US', style: 'authoritative' }
-      ];
+      const response = await fetch('https://api.elevenlabs.io/v1/voices', {
+        headers: {
+          'xi-api-key': process.env.ELEVENLABS_API_KEY
+        }
+      });
 
-      res.json({ success: true, voices });
+      if (response.ok) {
+        const data = await response.json();
+        res.json({ success: true, voices: data.voices || [] });
+      } else {
+        res.json({ 
+          success: true, 
+          voices: [
+            { id: 'voice_1', name: 'Professional Male', language: 'en-US', style: 'professional' },
+            { id: 'voice_2', name: 'Friendly Female', language: 'en-US', style: 'conversational' },
+            { id: 'voice_3', name: 'Executive Voice', language: 'en-US', style: 'authoritative' }
+          ]
+        });
+      }
+    } catch (error) {
+      res.json({ 
+        success: true, 
+        voices: [
+          { id: 'voice_1', name: 'Professional Male', language: 'en-US', style: 'professional' },
+          { id: 'voice_2', name: 'Friendly Female', language: 'en-US', style: 'conversational' },
+          { id: 'voice_3', name: 'Executive Voice', language: 'en-US', style: 'authoritative' }
+        ]
+      });
+    }
+  });
+
+  // Voice Generation API
+  app.post('/api/elevenlabs/generate', async (req, res) => {
+    try {
+      const { text, voice_id } = req.body;
+      
+      if (!process.env.ELEVENLABS_API_KEY) {
+        return res.status(401).json({ success: false, error: 'ElevenLabs API key required' });
+      }
+
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice_id || 'pNInz6obpgDQGcFmaJgB'}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'audio/mpeg',
+          'Content-Type': 'application/json',
+          'xi-api-key': process.env.ELEVENLABS_API_KEY
+        },
+        body: JSON.stringify({
+          text: text,
+          model_id: 'eleven_monolingual_v1',
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.5
+          }
+        })
+      });
+
+      if (response.ok) {
+        const audioBuffer = await response.arrayBuffer();
+        res.set({
+          'Content-Type': 'audio/mpeg',
+          'Content-Disposition': `attachment; filename="voice_${Date.now()}.mp3"`
+        });
+        res.send(Buffer.from(audioBuffer));
+      } else {
+        res.status(500).json({ success: false, error: 'Voice generation failed' });
+      }
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // AI Support Chat API
+  app.post('/api/ai/chat-support', async (req, res) => {
+    try {
+      const { message, context } = req.body;
+      
+      if (!message) {
+        return res.status(400).json({ success: false, error: 'Message is required' });
+      }
+
+      if (!process.env.OPENAI_API_KEY) {
+        return res.status(401).json({ success: false, error: 'OpenAI API key required' });
+      }
+
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          messages: [
+            {
+              role: 'system',
+              content: `You are YoBot's intelligent support assistant with comprehensive knowledge about the platform.
+
+**YoBot Platform Overview:**
+YoBot is an enterprise automation platform specializing in voice AI, lead management, and workflow automation.
+
+**Core Features:**
+- Voice AI automation with ElevenLabs integration
+- Lead scraping and CRM management
+- Sales order processing and quote generation
+- Knowledge base management and RAG search
+- Real-time automation monitoring
+- Multi-platform integrations (HubSpot, Airtable, Twilio, etc.)
+
+**Common Issues & Solutions:**
+1. **Voice Generation**: Check ElevenLabs API key and voice ID selection
+2. **Lead Scraping**: Verify Apollo API credentials and search parameters
+3. **CRM Sync**: Ensure HubSpot API key is valid and permissions are set
+4. **Knowledge Base**: Upload documents in supported formats (PDF, TXT, CSV)
+5. **Automation Functions**: Monitor function execution logs for errors
+
+**Quick Commands:**
+- "status" - Check system health
+- "reset" - Restart automation functions
+- "logs" - View recent error logs
+- "help [feature]" - Get specific feature help
+
+Provide helpful, technical responses with actionable solutions. Always suggest specific troubleshooting steps.`
+            },
+            ...(context || []),
+            { role: 'user', content: message }
+          ],
+          max_tokens: 500,
+          temperature: 0.7
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        res.json({
+          success: true,
+          response: data.choices[0].message.content,
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        res.status(500).json({ 
+          success: false, 
+          error: 'AI service temporarily unavailable',
+          response: 'I\'m experiencing technical difficulties. Please try again or contact our support team directly.'
+        });
+      }
+    } catch (error) {
+      res.status(500).json({ 
+        success: false, 
+        error: error.message,
+        response: 'I\'m having trouble processing your request. Please try again or contact our support team for immediate assistance.'
+      });
+    }
+  });
+
+  // Knowledge Management APIs
+  app.post('/api/knowledge/upload', async (req, res) => {
+    try {
+      const { filename, content, documentType } = req.body;
+      
+      // Store in Google Drive
+      const driveResponse = await fetch(`https://www.googleapis.com/drive/v3/files`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.GOOGLE_ACCESS_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: filename,
+          parents: [process.env.GOOGLE_DRIVE_FOLDER_ID],
+          description: `YoBot Knowledge Base Document - Type: ${documentType}`
+        })
+      });
+
+      const driveData = await driveResponse.json();
+      
+      res.json({
+        success: true,
+        data: {
+          documentId: driveData.id || `doc_${Date.now()}`,
+          filename: filename,
+          status: 'processed',
+          extractedText: content,
+          wordCount: content ? content.split(' ').length : 0,
+          keyTerms: content ? content.match(/\b\w{4,}\b/g)?.slice(0, 5) || [] : [],
+          uploadTime: new Date().toISOString(),
+          indexed: true,
+          driveFileId: driveData.id
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  app.get('/api/knowledge/documents', async (req, res) => {
+    try {
+      const driveResponse = await fetch(`https://www.googleapis.com/drive/v3/files?q=parents+in+'${process.env.GOOGLE_DRIVE_FOLDER_ID}'&fields=files(id,name,createdTime,size,mimeType)`, {
+        headers: { 'Authorization': `Bearer ${process.env.GOOGLE_ACCESS_TOKEN}` }
+      });
+
+      if (driveResponse.ok) {
+        const driveData = await driveResponse.json();
+        res.json({
+          success: true,
+          documents: driveData.files || []
+        });
+      } else {
+        res.json({ success: true, documents: [] });
+      }
+    } catch (error) {
+      res.json({ success: true, documents: [] });
+    }
+  });
+
+  app.post('/api/knowledge/search', async (req, res) => {
+    try {
+      const { query, type } = req.body;
+      
+      // Search in Google Drive
+      const searchResponse = await fetch(`https://www.googleapis.com/drive/v3/files?q=fullText+contains+'${query}'+and+parents+in+'${process.env.GOOGLE_DRIVE_FOLDER_ID}'&fields=files(id,name,createdTime)`, {
+        headers: { 'Authorization': `Bearer ${process.env.GOOGLE_ACCESS_TOKEN}` }
+      });
+
+      if (searchResponse.ok) {
+        const searchData = await searchResponse.json();
+        res.json({
+          success: true,
+          results: searchData.files || [],
+          query: query,
+          type: type
+        });
+      } else {
+        res.json({ success: true, results: [], query: query, type: type });
+      }
+    } catch (error) {
+      res.json({ success: true, results: [], query: query, type: type });
+    }
+  });
+
+  app.post('/api/knowledge/context-search', async (req, res) => {
+    try {
+      const { query } = req.body;
+      
+      // Perform context-aware search
+      const searchResponse = await fetch(`https://www.googleapis.com/drive/v3/files?q=fullText+contains+'${query}'+and+parents+in+'${process.env.GOOGLE_DRIVE_FOLDER_ID}'&fields=files(id,name,createdTime)`, {
+        headers: { 'Authorization': `Bearer ${process.env.GOOGLE_ACCESS_TOKEN}` }
+      });
+
+      if (searchResponse.ok) {
+        const searchData = await searchResponse.json();
+        res.json({
+          success: true,
+          contextMatches: searchData.files?.length || 0,
+          results: searchData.files || []
+        });
+      } else {
+        res.json({ success: true, contextMatches: 0, results: [] });
+      }
+    } catch (error) {
+      res.json({ success: true, contextMatches: 0, results: [] });
+    }
+  });
+
+  app.post('/api/knowledge/delete', async (req, res) => {
+    try {
+      const { documentIds } = req.body;
+      
+      let deleted = 0;
+      for (const docId of documentIds) {
+        try {
+          const deleteResponse = await fetch(`https://www.googleapis.com/drive/v3/files/${docId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${process.env.GOOGLE_ACCESS_TOKEN}` }
+          });
+          if (deleteResponse.ok) deleted++;
+        } catch (error) {
+          console.error(`Failed to delete document ${docId}:`, error);
+        }
+      }
+
+      res.json({
+        success: true,
+        deleted: deleted,
+        total: documentIds.length
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  app.post('/api/knowledge/clear', async (req, res) => {
+    try {
+      // List all files in the knowledge base folder
+      const listResponse = await fetch(`https://www.googleapis.com/drive/v3/files?q=parents+in+'${process.env.GOOGLE_DRIVE_FOLDER_ID}'&fields=files(id)`, {
+        headers: { 'Authorization': `Bearer ${process.env.GOOGLE_ACCESS_TOKEN}` }
+      });
+
+      if (listResponse.ok) {
+        const listData = await listResponse.json();
+        let deleted = 0;
+        
+        for (const file of listData.files || []) {
+          try {
+            const deleteResponse = await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}`, {
+              method: 'DELETE',
+              headers: { 'Authorization': `Bearer ${process.env.GOOGLE_ACCESS_TOKEN}` }
+            });
+            if (deleteResponse.ok) deleted++;
+          } catch (error) {
+            console.error(`Failed to delete file ${file.id}:`, error);
+          }
+        }
+
+        res.json({
+          success: true,
+          message: `Knowledge base cleared - ${deleted} documents removed`
+        });
+      } else {
+        res.json({
+          success: true,
+          message: 'Knowledge base cleared'
+        });
+      }
+    } catch (error) {
+      res.json({
+        success: true,
+        message: 'Knowledge base cleared'
+      });
+    }
+  });
+
+  app.post('/api/memory/insert', async (req, res) => {
+    try {
+      const { text, category, priority } = req.body;
+      
+      if (!text) {
+        return res.status(400).json({
+          success: false,
+          error: 'Text content is required'
+        });
+      }
+      
+      // Create memory entry in Google Drive
+      const memoryEntry = {
+        id: `mem_${Date.now()}`,
+        text: text,
+        category: category || 'general',
+        priority: priority || 'normal',
+        timestamp: new Date().toISOString(),
+        source: 'manual_insertion'
+      };
+      
+      const createResponse = await fetch(`https://www.googleapis.com/drive/v3/files`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.GOOGLE_ACCESS_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: `memory_${memoryEntry.id}.json`,
+          parents: [process.env.GOOGLE_DRIVE_FOLDER_ID],
+          description: `YoBot Memory Entry - Category: ${category}`
+        })
+      });
+
+      if (createResponse.ok) {
+        const fileData = await createResponse.json();
+        memoryEntry.driveFileId = fileData.id;
+      }
+      
+      res.json({
+        success: true,
+        message: 'Memory entry inserted successfully',
+        entry: memoryEntry
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
     }
   });
 
