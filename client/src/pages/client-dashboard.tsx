@@ -1688,6 +1688,14 @@ export default function ClientDashboard() {
                     <MessageSquare className="w-5 h-5 mr-3" />
                     <span>Send SMS</span>
                   </Button>
+                  
+                  <Button
+                    onClick={() => setShowSalesOrderProcessor(true)}
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">💼</span>
+                    <span>Sales Orders</span>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -3411,6 +3419,35 @@ export default function ClientDashboard() {
               >
                 Delete Knowledge
               </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sales Order Processor Modal */}
+      {showSalesOrderProcessor && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-green-400/50">
+            <div className="sticky top-0 bg-slate-900 border-b border-green-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white">Complete Sales Order Processing</h2>
+              <Button
+                onClick={() => setShowSalesOrderProcessor(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6">
+              <SalesOrderProcessor
+                onProcessComplete={(result) => {
+                  console.log('Sales order processed:', result);
+                  // Refresh metrics after successful processing
+                  if (result.success) {
+                    window.location.reload();
+                  }
+                }}
+              />
             </div>
           </div>
         </div>
