@@ -12565,39 +12565,18 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
     }
   });
 
-  // Complete Sales Order Pipeline using your streamlined automation
-  app.post('/api/sales-order/complete', async (req, res) => {
+  // Sales Order Processing with your exact Flask handler
+  app.post('/api/sales-order/process', async (req, res) => {
     try {
-      const { customerName, customerEmail, orderDetails, billingAddress } = req.body;
-      
-      if (!customerName || !customerEmail) {
-        return res.status(400).json({
-          success: false,
-          error: 'Missing required fields: customerName, customerEmail'
-        });
-      }
-
-      // Prepare webhook data for your streamlined automation
-      const webhookData = {
-        'Parsed Company Name': customerName,
-        'Parsed Contact Name': customerName,
-        'Parsed Contact Email': customerEmail,
-        'Parsed Contact Phone': billingAddress?.phone || '',
-        'Parsed Stripe Payment': orderDetails?.amount || 0,
-        'Website': billingAddress?.website || ''
-      };
-
-      // Call your streamlined sales order automation using spawn
       const { spawn } = require('child_process');
-      const pythonProcess = spawn('python3', ['server/streamlinedSalesOrderAutomation.py'], {
+      
+      // Call your Flask sales order processor
+      const pythonProcess = spawn('python3', ['server/flaskSalesOrderProcessor.py'], {
         stdio: ['pipe', 'pipe', 'pipe']
       });
 
-      // Send webhook data to your Python automation
-      pythonProcess.stdin.write(JSON.stringify({
-        action: 'run_complete_sales_order_automation',
-        data: webhookData
-      }));
+      // Send the request data directly to your Flask handler
+      pythonProcess.stdin.write(JSON.stringify(req.body));
       pythonProcess.stdin.end();
 
       let result = '';
@@ -12613,16 +12592,20 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
 
       pythonProcess.on('close', (code: number) => {
         if (code === 0) {
-          res.json({
-            success: true,
-            message: "Sales order automation completed successfully",
-            result: result,
-            webhookData: webhookData
-          });
+          try {
+            const parsedResult = JSON.parse(result);
+            res.json(parsedResult);
+          } catch (parseError) {
+            res.json({
+              status: "success",
+              message: "PDF generated successfully",
+              output: result
+            });
+          }
         } else {
           res.status(500).json({
-            success: false,
-            message: "Sales order automation failed",
+            status: "error",
+            message: "PDF generation failed",
             error: errorOutput,
             code: code
           });
@@ -12630,9 +12613,9 @@ Contact: sales@yobot.bot | Phone: (555) 123-4567`;
       });
 
     } catch (error) {
-      console.error('Complete sales order pipeline error:', error);
+      console.error('Sales order processing error:', error);
       res.status(500).json({
-        success: false,
+        status: "error",
         error: error.message
       });
     }
