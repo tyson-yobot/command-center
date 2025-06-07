@@ -95,12 +95,12 @@ def get_or_create_folder(service, name, parent_id=None):
 
 def generate_quote_pdf(form_data):
     """Step 3: Generate Quote PDF using ReportLab"""
-    company = form_data.get("Parsed Company Name", "")
-    contact = form_data.get("Parsed Contact Name", "")
-    email = form_data.get("Parsed Contact Email", "")
-    phone = form_data.get("Parsed Contact Phone", "")
-    package = form_data.get("Parsed Bot Package", "AI Voice Bot Package")
-    amount = float(form_data.get("Parsed Stripe Payment", 0))
+    company = form_data.get("Company Name", "")
+    contact = form_data.get("Full Name", "")
+    email = form_data.get("Email Address", "")
+    phone = form_data.get("Phone Number", "")
+    package = form_data.get("🤖 Bot Package", "AI Voice Bot Package")
+    amount = float(form_data.get("💳 Final Payment Amount Due", 0))
     
     today = datetime.today()
     date_str = today.strftime("%Y-%m-%d")
@@ -233,8 +233,8 @@ def upload_to_drive_with_folder(pdf_path, company_name):
 def send_email_notification(form_data, pdf_path, drive_link):
     """Step 5: Email PDF to Tyson + Daniel"""
     try:
-        company = form_data.get("Parsed Company Name", "")
-        amount = form_data.get("Parsed Stripe Payment", "0")
+        company = form_data.get("Company Name", "")
+        amount = form_data.get("💳 Final Payment Amount Due", "0")
         
         # Create email with attachment
         import smtplib
@@ -280,9 +280,9 @@ PDF has been saved to: 1. Clients/{company}
 def send_slack_notification(form_data, drive_link):
     """Step 6: Send Slack DM with summary + PDF link"""
     try:
-        company = form_data.get("Parsed Company Name", "")
-        contact = form_data.get("Parsed Contact Name", "")
-        amount = form_data.get("Parsed Stripe Payment", "0")
+        company = form_data.get("Company Name", "")
+        contact = form_data.get("Full Name", "")
+        amount = form_data.get("💳 Final Payment Amount Due", "0")
         
         slack_message = {
             "text": f"📎 New Quote Generated",
@@ -318,13 +318,13 @@ def create_airtable_record(form_data):
         
         data = {
             "fields": {
-                "🧑‍💼 Name": form_data.get("Parsed Contact Name", ""),
-                "🏢 Company": form_data.get("Parsed Company Name", ""),
-                "📧 Email": form_data.get("Parsed Contact Email", ""),
-                "☎️ Phone": form_data.get("Parsed Contact Phone", ""),
+                "🧑‍💼 Name": form_data.get("Full Name", ""),
+                "🏢 Company": form_data.get("Company Name", ""),
+                "📧 Email": form_data.get("Email Address", ""),
+                "☎️ Phone": form_data.get("Phone Number", ""),
                 "✅ Synced to HubSpot": True,
                 "📅 Date Added": datetime.utcnow().strftime("%Y-%m-%d"),
-                "💰 Quote Amount": form_data.get("Parsed Stripe Payment", ""),
+                "💰 Quote Amount": form_data.get("💳 Final Payment Amount Due", ""),
                 "📋 Status": "Quote Generated"
             }
         }
@@ -362,7 +362,7 @@ def trigger_docusign(form_data):
 def generate_qbo_invoice(form_data):
     """Step 10: Generate initial QBO Invoice for 50% down"""
     try:
-        amount = float(form_data.get("Parsed Stripe Payment", 0))
+        amount = float(form_data.get("💳 Final Payment Amount Due", 0))
         down_payment = amount * 0.5
         
         print(f"✅ QBO invoice prepared for 50% down payment: ${down_payment:,.2f}")
@@ -376,9 +376,9 @@ def run_complete_sales_order_automation(webhook_data):
         print("🚀 Starting complete sales order automation...")
         
         # Validate required fields
-        company_name = webhook_data.get("Parsed Company Name", "")
-        contact_name = webhook_data.get("Parsed Contact Name", "")
-        contact_email = webhook_data.get("Parsed Contact Email", "")
+        company_name = webhook_data.get("Company Name", "")
+        contact_name = webhook_data.get("Full Name", "")
+        contact_email = webhook_data.get("Email Address", "")
         
         if not all([company_name, contact_name, contact_email]):
             return {

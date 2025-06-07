@@ -1,20 +1,5 @@
 [
   {
-    "timestamp": "2025-06-06T14:30:00.162Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "Health check: 100.0% healthy",
-    "metrics": {
-      "totalFunctions": 40,
-      "activeFunctions": 40,
-      "successfulExecutions": 0,
-      "failedExecutions": 0,
-      "systemUptime": 4.304167054,
-      "lastHealthCheck": "2025-06-06T14:29:00.088Z",
-      "automationStatus": "running"
-    }
-  },
-  {
     "timestamp": "2025-06-06T14:30:00.234Z",
     "functionId": 132,
     "functionName": "Intake Form Validator",
@@ -11360,6 +11345,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-07T14:25:36.948Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-07T14:27:24.595Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-07T14:27:24.226Z",
       "automationStatus": "running"
     }
   }
