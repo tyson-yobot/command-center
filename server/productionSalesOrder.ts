@@ -11,6 +11,9 @@ export function registerProductionSalesOrder(app: Express) {
       const timestamp = new Date().toISOString();
       console.log("📥 Received Tally webhook at", timestamp);
       
+      // Live webhook data logging
+      console.log("🧠 LIVE Webhook Data:", req.body);
+      
       // Log complete payload for debugging
       console.log("🔍 FULL WEBHOOK PAYLOAD:", JSON.stringify(req.body, null, 2));
       
