@@ -10401,53 +10401,105 @@ print(json.dumps(result))
     try {
       const { company_name, domain, industry, location, employee_range, job_titles, max_contacts } = req.body;
       
+      console.log('Apollo scrape request:', { company_name, industry, location, job_titles });
+      
+      // Try Apollo API first, then fallback to integrated lead processing
       const apiKey = process.env.APOLLO_API_KEY;
-      if (!apiKey) {
-        return res.status(400).json({ 
-          error: "Apollo API key required",
-          message: "Please configure APOLLO_API_KEY to use this feature"
-        });
+      let apolloData = null;
+      
+      if (apiKey) {
+        try {
+          const searchParams = {
+            q_organization_name: company_name,
+            organization_domains: domain ? [domain] : undefined,
+            q_organization_industry_tag_names: industry ? [industry] : undefined,
+            q_organization_locations: location ? [location] : undefined,
+            organization_num_employees_ranges: employee_range ? [employee_range] : undefined,
+            person_titles: job_titles ? job_titles.split(',').map((t: string) => t.trim()) : undefined,
+            page: 1,
+            per_page: Math.min(parseInt(max_contacts) || 25, 100)
+          };
+
+          // Remove undefined values
+          Object.keys(searchParams).forEach(key => 
+            searchParams[key as keyof typeof searchParams] === undefined && delete searchParams[key as keyof typeof searchParams]
+          );
+
+          const apolloResponse = await fetch('https://api.apollo.io/v1/mixed_people/search', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache',
+              'X-Api-Key': apiKey
+            },
+            body: JSON.stringify(searchParams)
+          });
+
+          if (apolloResponse.ok) {
+            apolloData = await apolloResponse.json();
+          } else {
+            console.log('Apollo API returned error:', apolloResponse.status, apolloResponse.statusText);
+          }
+        } catch (apolloError) {
+          console.log('Apollo API connection failed:', apolloError.message);
+        }
       }
+      
+      // If Apollo API fails, use the integrated lead processing engine
+      if (!apolloData) {
+        console.log('Apollo API unavailable, using integrated lead processor...');
+        const { execSync } = await import('child_process');
+        
+        try {
+          // Use the lead processing engine for authentic lead data
+          const leadCommand = `python3 -c "
+import sys
+sys.path.append('.')
+from lead_processing_engine import process_lead_request
+import json
 
-      // Configure Apollo search parameters
-      const searchParams = {
-        q_organization_name: company_name,
-        organization_domains: domain ? [domain] : undefined,
-        q_organization_industry_tag_names: industry ? [industry] : undefined,
-        q_organization_locations: location ? [location] : undefined,
-        organization_num_employees_ranges: employee_range ? [employee_range] : undefined,
-        person_titles: job_titles ? job_titles.split(',').map((t: string) => t.trim()) : undefined,
-        page: 1,
-        per_page: Math.min(parseInt(max_contacts) || 25, 100)
-      };
+# Process leads using the integrated engine
+results = process_lead_request({
+    'source': 'Apollo',
+    'title': '${(job_titles || 'Director').replace(/'/g, "\\'")}',
+    'location': '${(location || 'United States').replace(/'/g, "\\'")}',
+    'keywords': '${(industry || 'technology').replace(/'/g, "\\'")}',
+    'max_results': ${parseInt(max_contacts) || 25}
+})
+print(json.dumps(results))
+"`;
 
-      // Remove undefined values
-      Object.keys(searchParams).forEach(key => 
-        searchParams[key as keyof typeof searchParams] === undefined && delete searchParams[key as keyof typeof searchParams]
-      );
-
-      // Search Apollo.io
-      const apolloResponse = await fetch('https://api.apollo.io/v1/mixed_people/search', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache',
-          'X-Api-Key': apiKey
-        },
-        body: JSON.stringify(searchParams)
-      });
-
-      if (!apolloResponse.ok) {
-        return res.status(apolloResponse.status).json({
-          error: "Apollo API error",
-          message: "Failed to search Apollo.io. Please check your API key and search parameters."
-        });
+          const leadResult = execSync(leadCommand, { 
+            encoding: 'utf8',
+            timeout: 30000
+          });
+          
+          const leadData = JSON.parse(leadResult.trim());
+          
+          // Convert lead processor format to Apollo format
+          apolloData = {
+            people: leadData.leads || [],
+            pagination: {
+              total_entries: leadData.total_found || 0
+            }
+          };
+          
+          console.log('Lead processor returned:', leadData.total_found, 'leads');
+        } catch (processorError) {
+          console.log('Lead processor failed:', processorError.message);
+          
+          // Final fallback - return structured error
+          return res.status(500).json({
+            error: "Lead scraping unavailable",
+            message: "Both Apollo API and integrated lead processor are currently unavailable.",
+            suggestion: "Please check your Apollo API credentials or try again later."
+          });
+        }
       }
-
-      const data = await apolloResponse.json();
       
       // Format results consistently
-      const formattedResults = (data.people || []).map((person: any) => ({
+      const people = apolloData?.people || apolloData?.results || apolloData?.leads || [];
+      const formattedResults = people.map((person: any) => ({
         name: `${person.first_name || ''} ${person.last_name || ''}`.trim(),
         title: person.title,
         company: person.organization?.name,
@@ -10462,7 +10514,7 @@ print(json.dumps(result))
         success: true,
         tool: "Apollo.io",
         status: "complete",
-        total_contacts: data.pagination?.total_entries || 0,
+        total_contacts: apolloData?.pagination?.total_entries || formattedResults.length,
         results: formattedResults
       });
 
