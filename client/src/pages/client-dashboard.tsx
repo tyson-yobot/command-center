@@ -354,10 +354,31 @@ export default function ClientDashboard() {
     }
   };
 
-  // Load voices on component mount
+  // Load voices on component mount and retry if failed
   React.useEffect(() => {
     fetchAvailableVoices();
+    
+    // Retry voice loading if initial load fails
+    const retryTimer = setTimeout(() => {
+      if (availableVoices.length === 0 && !voicesLoading) {
+        fetchAvailableVoices();
+      }
+    }, 2000);
+    
+    return () => clearTimeout(retryTimer);
   }, []);
+  
+  // Retry voice loading when component regains focus
+  React.useEffect(() => {
+    const handleFocus = () => {
+      if (availableVoices.length === 0) {
+        fetchAvailableVoices();
+      }
+    };
+    
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, [availableVoices.length]);
 
   // Button handlers for all dashboard functionality
   const handleUploadDocs = async () => {
