@@ -81,29 +81,38 @@ class LeadGenerationEngine:
                 'Content-Type': 'application/json'
             }
             
-            # Build search filters
-            filters = []
-            if company_name:
-                filters.append({
-                    'propertyName': 'company',
-                    'operator': 'CONTAINS_TOKEN',
-                    'value': company_name
-                })
-            
-            if industry:
-                filters.append({
-                    'propertyName': 'industry',
-                    'operator': 'CONTAINS_TOKEN',
-                    'value': industry
-                })
-            
-            search_data = {
-                'filterGroups': [{'filters': filters}] if filters else [],
-                'properties': ['firstname', 'lastname', 'email', 'phone', 'company', 'jobtitle', 'city', 'state'],
-                'limit': 100
-            }
-            
-            response = requests.post(f'{url}/search', headers=headers, json=search_data, timeout=30)
+            # Use different endpoints based on whether we have search criteria
+            if company_name or industry or location:
+                # Use search endpoint with filters
+                filters = []
+                if company_name:
+                    filters.append({
+                        'propertyName': 'company',
+                        'operator': 'CONTAINS_TOKEN',
+                        'value': company_name
+                    })
+                
+                if industry:
+                    filters.append({
+                        'propertyName': 'industry',
+                        'operator': 'CONTAINS_TOKEN',
+                        'value': industry
+                    })
+                
+                search_data = {
+                    'filterGroups': [{'filters': filters}],
+                    'properties': ['firstname', 'lastname', 'email', 'phone', 'company', 'jobtitle', 'city', 'state'],
+                    'limit': 100
+                }
+                
+                response = requests.post(f'{url}/search', headers=headers, json=search_data, timeout=30)
+            else:
+                # Use simple list endpoint for general contact retrieval
+                params = {
+                    'limit': 100,
+                    'properties': 'firstname,lastname,email,phone,company,jobtitle,city,state'
+                }
+                response = requests.get(url, headers=headers, params=params, timeout=30)
             
             if response.status_code == 200:
                 data = response.json()
@@ -111,17 +120,27 @@ class LeadGenerationEngine:
                 
                 for contact in data.get('results', []):
                     props = contact.get('properties', {})
-                    lead = {
-                        'name': f"{props.get('firstname', '')} {props.get('lastname', '')}".strip(),
-                        'title': props.get('jobtitle', ''),
-                        'company': props.get('company', ''),
-                        'email': props.get('email', ''),
-                        'phone': props.get('phone', ''),
-                        'location': f"{props.get('city', '')}, {props.get('state', '')}".strip(', '),
-                        'source': 'HubSpot',
-                        'verified': True
-                    }
-                    leads.append(lead)
+                    
+                    # Extract basic info
+                    firstname = props.get('firstname', '').strip() if props.get('firstname') else ''
+                    lastname = props.get('lastname', '').strip() if props.get('lastname') else ''
+                    name = f"{firstname} {lastname}".strip()
+                    email = props.get('email', '').strip() if props.get('email') else ''
+                    company = props.get('company', '').strip() if props.get('company') else ''
+                    
+                    # Only include leads with meaningful data (name AND email, or company AND email)
+                    if (name and name != 'None None' and email) or (company and email):
+                        lead = {
+                            'name': name or 'Contact',
+                            'title': props.get('jobtitle', '') or '',
+                            'company': company,
+                            'email': email,
+                            'phone': props.get('phone', '') or '',
+                            'location': f"{props.get('city', '') or ''}, {props.get('state', '') or ''}".strip(', '),
+                            'source': 'HubSpot',
+                            'verified': bool(email and '@' in email)
+                        }
+                        leads.append(lead)
                 
                 return leads
                 
