@@ -35,7 +35,6 @@ class LeadGenerationEngine:
             if hubspot_leads:
                 results['leads'].extend(hubspot_leads)
                 results['sources_used'].append('HubSpot')
-                print(f"Retrieved {len(hubspot_leads)} leads from HubSpot")
         
         # Try Airtable for existing lead database
         if self.airtable_key:
@@ -43,7 +42,6 @@ class LeadGenerationEngine:
             if airtable_leads:
                 results['leads'].extend(airtable_leads)
                 results['sources_used'].append('Airtable')
-                print(f"Retrieved {len(airtable_leads)} leads from Airtable")
         
         # If we have leads from authenticated sources
         if results['leads']:

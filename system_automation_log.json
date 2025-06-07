@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-06T13:30:00.437Z",
-    "functionId": 141,
-    "functionName": "Bot Training Prompt Generator",
-    "batch": 15,
-    "category": "AI",
-    "status": "success",
-    "duration": 264,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-06T13:30:00.451Z",
     "functionId": 145,
     "functionName": "Role Assignment by Domain",
@@ -11384,6 +11373,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-07T10:30:11.206Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-07T10:31:49.743Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-07T10:31:49.458Z",
       "automationStatus": "running"
     }
   }
