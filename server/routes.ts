@@ -1780,8 +1780,8 @@ CRM Data:
     }
   };
 
-  // Register webhook on multiple paths to ensure connectivity
-  app.post('/api/orders/test', webhookHandler);
+  // Register webhook on production paths
+  app.post('/api/orders', webhookHandler);
   app.post('/webhook', webhookHandler);
   app.post('/webhook/tally', webhookHandler);
   app.post('/api/webhook', webhookHandler);
