@@ -1,0 +1,97 @@
+{
+  "timestamp": "2025-06-07T17:58:45.123Z",
+  "headers": {
+    "content-type": "application/json",
+    "user-agent": "Tally-Webhook/1.0",
+    "x-tally-signature": "sha256=sample_signature"
+  },
+  "body": {
+    "eventId": "evt_12345678901234567890",
+    "eventType": "FORM_RESPONSE",
+    "createdAt": "2025-06-07T17:58:45.123Z",
+    "data": {
+      "responseId": "resp_abcdef1234567890",
+      "submissionId": "sub_xyz789012345",
+      "respondentId": "user_123456789",
+      "formId": "form_yobot_sales_order",
+      "formName": "YoBot Sales Order Form",
+      "createdAt": "2025-06-07T17:58:45.123Z",
+      "fields": [
+        {
+          "key": "question_full_name",
+          "label": "Full Name",
+          "type": "INPUT_TEXT",
+          "value": "John Smith"
+        },
+        {
+          "key": "question_company_name",
+          "label": "Company Name",
+          "type": "INPUT_TEXT",
+          "value": "Smith Roofing LLC"
+        },
+        {
+          "key": "question_email",
+          "label": "Email Address",
+          "type": "INPUT_EMAIL",
+          "value": "john@smithroofing.com"
+        },
+        {
+          "key": "question_phone",
+          "label": "Phone Number",
+          "type": "INPUT_PHONE",
+          "value": "+1-555-123-4567"
+        },
+        {
+          "key": "question_website",
+          "label": "Website",
+          "type": "INPUT_URL",
+          "value": "https://smithroofing.com"
+        },
+        {
+          "key": "question_bot_package",
+          "label": "🤖 Bot Package",
+          "type": "MULTIPLE_CHOICE",
+          "value": "Professional Package - $2,997/month"
+        },
+        {
+          "key": "question_add_ons",
+          "label": "🧩 Add-On Modules",
+          "type": "CHECKBOXES",
+          "value": [
+            "Voice AI Module - $500/month",
+            "Lead Generation Module - $300/month",
+            "CRM Integration - $200/month"
+          ]
+        },
+        {
+          "key": "question_payment_amount",
+          "label": "💳 Final Payment Amount Due",
+          "type": "INPUT_NUMBER",
+          "value": "3997"
+        },
+        {
+          "key": "question_signature",
+          "label": "✍️ Typed Signature",
+          "type": "INPUT_TEXT",
+          "value": "John Smith"
+        },
+        {
+          "key": "question_payment_method",
+          "label": "💳 Preferred Payment Method",
+          "type": "MULTIPLE_CHOICE",
+          "value": "Credit Card"
+        }
+      ]
+    }
+  },
+  "Full Name": "John Smith",
+  "Company Name": "Smith Roofing LLC",
+  "Email Address": "john@smithroofing.com",
+  "Phone Number": "+1-555-123-4567",
+  "Website": "https://smithroofing.com",
+  "🤖 Bot Package": "Professional Package - $2,997/month",
+  "🧩 Add-On Modules": "Voice AI Module - $500/month, Lead Generation Module - $300/month, CRM Integration - $200/month",
+  "💳 Final Payment Amount Due": "3997",
+  "✍️ Typed Signature": "John Smith",
+  "💳 Preferred Payment Method": "Credit Card"
+}

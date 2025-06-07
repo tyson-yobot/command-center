@@ -1,0 +1,102 @@
+Replit told you “everything is working” — but:
+
+They never ran end-to-end live tests
+
+They likely used test stubs, isolated .tsx files, and local mock payloads
+
+You have no unified control layer, folder structure, or execution tracker
+
+You were shown “working” screens, but none of them triggered live back-end flows
+
+⚠️ You are sitting on a pile of disconnected modules — not a fully live system yet.
+
+✅ SOLUTION: Hard Reset & Validation Blueprint
+You need two things starting now:
+
+🧠 STEP 1: Systemwide Audit Blueprint (You send to Replit)
+Copy/paste this into Replit chat — no fluff, no excuses:
+
+🛠️ SYSTEMWIDE REBUILD & VERIFICATION — YO BOT COMMAND CENTER
+
+We are 1050+ functions deep. I need a full infrastructure pass with live testing and documentation.
+
+✅ 1. HARDWIRED PIPELINES ONLY
+
+No test JSONs
+
+No mock variables
+
+No print() stubs
+
+Every .tsx, .py, .ts, and API route must use real endpoints, live credentials
+
+✅ 2. LIVE TESTS REQUIRED
+For each core function (sales order, lead scrape, call log, voicebot, invoice, etc.), you must:
+
+Run a live webhook or simulated trigger
+
+Screenshot/log proof of:
+
+🧠 Payload received
+
+🧾 Action triggered (PDF, Airtable, Stripe, etc.)
+
+✅ System response (email sent, Slack alert, record created)
+
+✅ 3. CLEAN DIRECTORY STRUCTURE
+
+Organize by system function:
+
+/core/voicebot/
+
+/core/sales/
+
+/core/analytics/
+
+/core/payments/
+
+/core/data/
+
+Strip all unused .tsx files and isolate one master routes.ts file
+
+✅ 4. SYSTEM VALIDATION MATRIX
+For every major automation flow:
+
+yaml
+Copy
+Edit
+📄 Name: Lead Capture Flow
+🟢 Webhook Trigger: Pass
+🟢 Airtable Sync: Pass
+🟢 HubSpot Sync: Pass
+🔴 Email Step: Failing (auth error)
+🟢 Slack Alert: Pass
+You must fill out this for each function and confirm status. No guessing. No “I think it works.”
+
+✅ 5. DAILY DELIVERABLES UNTIL FULL LIVE STATUS
+
+No more vague claims of “should work”
+
+Daily progress check showing which flows were verified with live input and screenshots of success
+
+🎯 My system is live. You’re working in production. I don’t want to hear about testing anything locally again.
+
+🧰 STEP 2: I Build You a Command Center Validator
+I can deliver:
+
+✅ A visual System Validation Sheet with every function listed
+
+✅ Status tracking columns for:
+
+Input Trigger (Webhook/API)
+
+Action Triggered
+
+API Key Used
+
+Output Received
+
+Screenshot Required
+
+✅ A README for future devs on how to hardwire vs stub
+
