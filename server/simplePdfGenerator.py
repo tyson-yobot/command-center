@@ -77,8 +77,8 @@ def create_quote_pdf(data, filename):
         [
             data.get('package', 'Professional Package'),
             "Complete AI voice automation solution",
-            f"${data.get('one_time_payment', '15,000'):,}",
-            f"${data.get('monthly_recurring', '2,500'):,}/month"
+            f"${float(str(data.get('one_time_payment', 15000)).replace(',', '')):,.2f}",
+            f"${float(str(data.get('monthly_recurring', 2500)).replace(',', '')):,.2f}/month"
         ]
     ]
     
@@ -109,8 +109,8 @@ def create_quote_pdf(data, filename):
     total_monthly = data.get('monthly_recurring', 2500)
     
     summary_data = [
-        ["Total Setup Investment:", f"${total_setup:,}"],
-        ["Monthly Service Fee:", f"${total_monthly:,}/month"]
+        ["Total Setup Investment:", f"${total_setup:,.2f}"],
+        ["Monthly Service Fee:", f"${total_monthly:,.2f}/month"]
     ]
     
     summary_table = Table(summary_data, colWidths=[3*inch, 2*inch])
