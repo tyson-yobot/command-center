@@ -3,8 +3,17 @@ import json
 import uuid
 import sys
 from datetime import datetime
-from pdf_generator import generate_pdf_from_fields
-from send_email import send_email_with_pdf
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append('..')
+
+try:
+    from pdf_generator import generate_pdf_from_fields
+    from send_email import send_email_with_pdf
+except ImportError:
+    from webhooks.pdf_generator import generate_pdf_from_fields
+    from webhooks.send_email import send_email_with_pdf
 
 HIDDEN_FIELD_KEYWORDS = [
     "Multiplier", "Trigger", "Test Mode", "Always On", "First Month Total", "Bot Package Base Price", "Initialize"
