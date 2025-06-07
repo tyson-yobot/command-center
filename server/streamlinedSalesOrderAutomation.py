@@ -20,20 +20,7 @@ AIRTABLE_BASE_ID = "appb2f3D77Tc4DWAr"
 AIRTABLE_TABLE_NAME = "📥 Scraped Leads (Universal)"
 SLACK_WEBHOOK = "https://hooks.slack.com/services/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"
 
-# Package configurations for PDF generation
-PACKAGES = {
-    "YoBot Standard Package": {"setup": 1500, "monthly": 99, "desc": "Essential AI automation for small businesses"},
-    "YoBot Professional Package": {"setup": 2500, "monthly": 149, "desc": "Advanced AI with custom integrations"},
-    "YoBot Platinum Package": {"setup": 4500, "monthly": 249, "desc": "Premium AI with dedicated support"},
-    "YoBot Enterprise Package": {"setup": 7500, "monthly": 399, "desc": "Full-scale AI transformation suite"}
-}
-
-ADDONS = {
-    "SmartSpend": {"setup": 500, "monthly": 49, "desc": "AI-powered budget optimization"},
-    "Advanced Analytics": {"setup": 750, "monthly": 79, "desc": "Deep insights and reporting"},
-    "A/B Testing": {"setup": 300, "monthly": 39, "desc": "Automated split testing"},
-    "Custom Integration": {"setup": 1000, "monthly": 99, "desc": "Bespoke API connections"}
-}
+# Production pricing from Stripe payment amount - no hardcoded pricing
 
 # === 1. UPLOAD TO GOOGLE DRIVE ===
 def upload_to_drive(pdf_path, company_name):
