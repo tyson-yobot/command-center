@@ -1659,7 +1659,7 @@ CRM Data:
     }
   });
 
-  // Tally form webhook endpoint
+  // Primary Tally webhook endpoint
   app.post('/api/orders/test', async (req, res) => {
     try {
       const timestamp = new Date().toISOString();
