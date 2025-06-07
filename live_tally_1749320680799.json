@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-06-07T18:24:40.801Z",
+  "body": {
+    "verification": "endpoint_active"
+  },
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "35"
+  }
+}

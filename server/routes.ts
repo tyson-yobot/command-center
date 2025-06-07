@@ -44,6 +44,36 @@ let liveAutomationMetrics = {
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Direct webhook endpoint for Tally forms - NO MOCK DATA
+  app.post('/api/orders/test', async (req, res) => {
+    console.log("🧠 LIVE Webhook Data:", req.body);
+    console.log("📋 Full request details:", {
+      url: req.url,
+      method: req.method,
+      headers: req.headers,
+      body: req.body
+    });
+    
+    // Save actual submission data
+    const timestamp = Date.now();
+    const filename = `live_tally_${timestamp}.json`;
+    const { writeFileSync } = await import('fs');
+    writeFileSync(filename, JSON.stringify({
+      timestamp: new Date().toISOString(),
+      body: req.body,
+      headers: req.headers
+    }, null, 2));
+    
+    console.log(`💾 Live data saved to: ${filename}`);
+    
+    res.json({
+      success: true,
+      message: "Live Tally form received",
+      timestamp: new Date().toISOString(),
+      dataFile: filename
+    });
+  });
+
   // Register production sales order webhook
   registerProductionSalesOrder(app);
   
