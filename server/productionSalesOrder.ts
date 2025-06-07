@@ -6,6 +6,27 @@ import { updateAutomationMetrics } from "./routes";
 export function registerProductionSalesOrder(app: Express) {
   console.log("🚀 Registering production sales order webhook");
   
+  // Global POST capture middleware for debugging
+  app.use((req: any, res: any, next: any) => {
+    if (req.method === 'POST') {
+      const timestamp = new Date().toISOString();
+      console.log(`🔍 POST REQUEST DETECTED: ${req.url} at ${timestamp}`);
+      console.log(`📋 Headers:`, JSON.stringify(req.headers, null, 2));
+      console.log(`📊 Body:`, JSON.stringify(req.body, null, 2));
+      
+      // Save ALL POST requests
+      writeFileSync(`post_capture_${Date.now()}.json`, JSON.stringify({
+        timestamp,
+        url: req.url,
+        method: req.method,
+        headers: req.headers,
+        body: req.body,
+        query: req.query
+      }, null, 2));
+    }
+    next();
+  });
+  
   // Correct endpoint that matches your Tally webhook URL
   app.post('/api/orders/test', async (req: Request, res: Response) => {
     try {
