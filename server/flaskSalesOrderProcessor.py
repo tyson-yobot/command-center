@@ -13,10 +13,35 @@ import os, textwrap
 app = Flask(__name__)
 
 # === Google Drive Setup ===
-SERVICE_ACCOUNT_FILE = '../credentials.json'  # Path to credentials from server directory
+import os
+import json
+
 SCOPES = ['https://www.googleapis.com/auth/drive']
-credentials = service_account.Credentials.from_service_account_file(
-    SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+
+# Use Google Drive credentials from environment
+credentials_json = os.getenv('GOOGLE_DRIVE_CREDENTIALS')
+if credentials_json:
+    try:
+        # Clean the JSON string - remove any extra quotes or escaping
+        cleaned_json = credentials_json.strip()
+        if cleaned_json.startswith('"') and cleaned_json.endswith('"'):
+            cleaned_json = cleaned_json[1:-1]
+        cleaned_json = cleaned_json.replace('\\"', '"')
+        
+        credentials_info = json.loads(cleaned_json)
+        credentials = service_account.Credentials.from_service_account_info(
+            credentials_info, scopes=SCOPES)
+    except json.JSONDecodeError as e:
+        print(f"Error parsing Google Drive credentials: {e}")
+        # Fallback to file
+        SERVICE_ACCOUNT_FILE = '../credentials.json'
+        credentials = service_account.Credentials.from_service_account_file(
+            SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+else:
+    # Fallback to file if environment variable not available
+    SERVICE_ACCOUNT_FILE = '../credentials.json'
+    credentials = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 drive_service = build('drive', 'v3', credentials=credentials)
 
 # === Helper: Find or create folder ===

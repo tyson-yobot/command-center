@@ -12206,7 +12206,7 @@ print(json.dumps(result))
   // Sales Order Processing with your exact Flask handler
   app.post('/api/sales-order/process', async (req, res) => {
     try {
-      const { spawn } = require('child_process');
+      const { spawn } = await import('child_process');
       
       // Call your Flask sales order processor
       const pythonProcess = spawn('python3', ['server/flaskSalesOrderProcessor.py'], {
