@@ -1,91 +1,134 @@
-from flask import Flask, request, jsonify
-from ai_support_agent_refactored import generate_ai_reply
-from elevenlabs_voice_generator_refactored import generate_voice_reply
-from support_dispatcher import dispatch_support_response
-import os
+#!/usr/bin/env python3
+import json
+import uuid
+import sys
+from datetime import datetime
+from pdf_generator import generate_pdf_from_fields
+from send_email import send_email_with_pdf
 
-app = Flask(__name__)
+HIDDEN_FIELD_KEYWORDS = [
+    "Multiplier", "Trigger", "Test Mode", "Always On", "First Month Total", "Bot Package Base Price", "Initialize"
+]
 
-@app.route('/support-ticket', methods=['POST'])
-def handle_support_ticket():
-    """Main webhook handler for support tickets"""
+def is_display_field(field_name):
+    return not any(keyword in field_name for keyword in HIDDEN_FIELD_KEYWORDS)
+
+def process_tally_webhook(webhook_data):
+    """Process incoming Tally webhook data with clean output"""
+    
+    submission_id = str(uuid.uuid4())[:8]
+    timestamp = datetime.now().isoformat()
+    
+    print(f"🎯 Processing Tally submission: {submission_id}")
+    
+    # Extract fields array from webhook data
+    fields_array = []
+    
+    # Handle different webhook data formats
+    if isinstance(webhook_data, dict):
+        if 'fields' in webhook_data:
+            fields_array = webhook_data['fields']
+        elif 'data' in webhook_data and 'fields' in webhook_data['data']:
+            fields_array = webhook_data['data']['fields']
+        else:
+            # Convert flat dict to fields array
+            for key, value in webhook_data.items():
+                if is_display_field(key):
+                    fields_array.append({"name": key, "value": value})
+    
+    # Generate clean summary for email
+    summary_lines = []
+    company_name = "Unknown Company"
+    contact_email = "admin@yobot.com"
+    
+    for field in fields_array:
+        name = field["name"]
+        value = field["value"]
+        
+        # Skip hidden logic fields
+        if not is_display_field(name):
+            continue
+            
+        # Extract key info
+        if "company" in name.lower() or "business" in name.lower():
+            company_name = value
+        elif "email" in name.lower():
+            contact_email = value
+            
+        summary_lines.append(f"{name}\n{value}\n")
+    
+    # Generate PDF and save to folder
     try:
-        # Get ticket data from webhook
-        ticket_data = request.get_json()
-        
-        # Generate AI reply
-        ai_response = generate_ai_reply(ticket_data)
-        
-        # Add AI reply to ticket data
-        ticket_data.update(ai_response)
-        
-        # Generate voice MP3
-        voice_file = generate_voice_reply(ai_response["aiReply"])
-        
-        # Dispatch to Slack and Airtable
-        dispatch_result = dispatch_support_response(ticket_data)
-        
-        return jsonify({
-            "status": "success",
-            "ticket_id": ticket_data.get("ticketId"),
-            "ai_reply": ai_response["aiReply"],
-            "escalation_flag": ai_response["escalationFlag"],
-            "voice_generated": voice_file is not None,
-            "dispatched": dispatch_result
-        })
-        
+        pdf_path = generate_pdf_from_fields(submission_id, fields_array)
+        print(f"📄 PDF generated: {pdf_path}")
     except Exception as e:
-        return jsonify({
-            "status": "error",
-            "message": str(e)
-        }), 500
+        print(f"❌ PDF generation failed: {e}")
+        pdf_path = None
+    
+    # Send clean email with PDF attachment
+    email_body = f"""
+New YoBot Sales Order Submission
 
-@app.route('/test-ticket', methods=['GET', 'POST'])
-def test_support_ticket():
-    """Test endpoint with sample ticket"""
-    test_ticket = {
-        "ticketId": "TCK-TEST-001",
-        "clientName": "Test Client",
-        "topic": "Bot not responding to commands",
-        "sentiment": "frustrated"
+Submission ID: {submission_id}
+Company: {company_name}
+Timestamp: {timestamp}
+
+Details:
+{''.join(summary_lines)}
+
+PDF attached with complete submission details.
+"""
+    
+    if pdf_path:
+        try:
+            email_sent = send_email_with_pdf(
+                to=contact_email,
+                subject=f"YoBot Order - {company_name} ({submission_id})",
+                body=email_body,
+                pdf_path=pdf_path
+            )
+            print(f"📧 Email sent: {email_sent}")
+        except Exception as e:
+            print(f"❌ Email sending failed: {e}")
+    
+    # Save processing log
+    log_data = {
+        "submission_id": submission_id,
+        "timestamp": timestamp,
+        "company_name": company_name,
+        "contact_email": contact_email,
+        "pdf_path": pdf_path,
+        "fields_processed": len([f for f in fields_array if is_display_field(f["name"])]),
+        "fields_hidden": len([f for f in fields_array if not is_display_field(f["name"])]),
+        "status": "processed"
     }
     
-    try:
-        # Generate AI reply
-        ai_response = generate_ai_reply(test_ticket)
-        test_ticket.update(ai_response)
-        
-        # Generate voice
-        voice_file = generate_voice_reply(ai_response["aiReply"])
-        
-        # Dispatch
-        dispatch_result = dispatch_support_response(test_ticket)
-        
-        return jsonify({
-            "status": "test_success",
-            "ticket": test_ticket,
-            "voice_generated": voice_file is not None,
-            "dispatched": dispatch_result
-        })
-        
-    except Exception as e:
-        return jsonify({
-            "status": "test_error",
-            "message": str(e)
-        }), 500
-
-@app.route('/health', methods=['GET'])
-def health_check():
-    """Health check endpoint"""
-    return jsonify({
-        "status": "healthy",
-        "service": "YoBot Support Ticket Handler",
-        "version": "1.0"
-    })
-
-if __name__ == '__main__':
-    # Ensure uploads directory exists
-    os.makedirs('./uploads', exist_ok=True)
+    log_file = f"processing_logs/submission_{submission_id}.json"
+    import os
+    os.makedirs("processing_logs", exist_ok=True)
     
-    # Run Flask app
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    with open(log_file, 'w') as f:
+        json.dump(log_data, f, indent=2)
+    
+    print(f"📋 Processing complete: {submission_id}")
+    print(f"📁 Folder: submissions/{submission_id}")
+    print(f"📄 PDF: {pdf_path}")
+    print(f"📧 Email: {contact_email}")
+    
+    return {
+        "success": True,
+        "submission_id": submission_id,
+        "pdf_path": pdf_path,
+        "company_name": company_name,
+        "timestamp": timestamp
+    }
+
+if __name__ == "__main__":
+    # Read webhook data from stdin
+    try:
+        webhook_data = json.loads(sys.stdin.read())
+        result = process_tally_webhook(webhook_data)
+        print(json.dumps(result))
+    except Exception as e:
+        print(f"Error processing webhook: {e}")
+        sys.exit(1)
