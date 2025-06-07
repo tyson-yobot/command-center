@@ -372,9 +372,9 @@ def generate_qbo_invoice(form_data):
 
 def run_complete_sales_order_automation(webhook_data):
     """Execute complete 10-step sales order process"""
+    import sys
+    
     try:
-        print("🚀 Starting complete sales order automation...")
-        
         # Validate required fields
         company_name = webhook_data.get("Company Name", "")
         contact_name = webhook_data.get("Full Name", "")
@@ -385,8 +385,6 @@ def run_complete_sales_order_automation(webhook_data):
                 "success": False,
                 "error": "Missing required fields: company_name, contact_name, or contact_email"
             }
-        
-        print(f"📋 Processing order for: {company_name}")
         
         # Step 3: Generate Quote PDF
         pdf_path, quote_number = generate_quote_pdf(webhook_data)
@@ -422,7 +420,6 @@ def run_complete_sales_order_automation(webhook_data):
         }
         
     except Exception as e:
-        print(f"❌ Sales order automation failed: {e}")
         return {
             "success": False,
             "error": str(e),
@@ -430,15 +427,18 @@ def run_complete_sales_order_automation(webhook_data):
         }
 
 if __name__ == "__main__":
-    # Test with sample data
-    test_data = {
-        "Parsed Company Name": "Acme Solutions Inc",
-        "Parsed Contact Name": "John Smith",
-        "Parsed Contact Email": "john@acmesolutions.com", 
-        "Parsed Contact Phone": "+1-555-123-4567",
-        "Parsed Bot Package": "Enterprise AI Voice Bot",
-        "Parsed Stripe Payment": "5500.00"
-    }
+    import sys
     
-    result = run_complete_sales_order_automation(test_data)
-    print(json.dumps(result, indent=2))
+    # Read data from stdin
+    try:
+        input_data = sys.stdin.read()
+        webhook_data = json.loads(input_data)
+        result = run_complete_sales_order_automation(webhook_data)
+        print(json.dumps(result))
+    except Exception as e:
+        error_result = {
+            "success": False,
+            "error": str(e),
+            "message": "Failed to process webhook data"
+        }
+        print(json.dumps(error_result))

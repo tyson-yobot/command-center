@@ -1,4 +1,5 @@
 import type { Express, Request, Response } from "express";
+import { spawn } from "child_process";
 
 export function registerProductionSalesOrder(app: Express) {
   console.log("🚀 Registering production sales order webhook");
@@ -26,7 +27,6 @@ export function registerProductionSalesOrder(app: Express) {
       // Execute Python pipeline for all 10 steps
       console.log("🐍 Executing complete Python automation pipeline");
       
-      const { spawn } = require('child_process');
       const pythonProcess = spawn('python3', ['server/completeProductionSalesOrder.py'], {
         stdio: ['pipe', 'pipe', 'pipe']
       });
