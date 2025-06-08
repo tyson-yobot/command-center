@@ -1,0 +1,93 @@
+📥 Scraper → Airtable Sync Logic
+Every scrape (Apollo, Apify, Phantom) should send a POST payload to:
+
+nginx
+Copy
+Edit
+POST https://your-replit-domain/api/save-scraped-leads
+Payload Example:
+json
+Copy
+Edit
+{
+  "source": "apollo",
+  "timestamp": "2025-06-08T21:15:00Z",
+  "leads": [
+    {
+      "fullName": "Sarah Thompson",
+      "email": "sarah@medclinic.com",
+      "company": "MedClinic Group",
+      "title": "Owner",
+      "location": "Dallas, TX",
+      "phone": "214-555-1234",
+      "industry": "Chiropractic",
+      "sourceTag": "Apollo - June 8",
+      "scrapeSessionId": "apollo-1686173700000"
+    }
+  ]
+}
+Airtable Field Mapping:
+Airtable Field	JSON Field
+🧑 Full Name	fullName
+✉️ Email	email
+🏢 Company Name	company
+💼 Title	title
+🌍 Location	location
+📞 Phone Number	phone
+🏭 Industry	industry
+🔖 Source Tag	sourceTag
+🆔 Scrape Session ID	scrapeSessionId
+🕒 Scraped Timestamp	timestamp
+
+✅ Add a formula in Airtable:
+
+airtable
+Copy
+Edit
+DATETIME_FORMAT(SET_TIMEZONE({🕒 Scraped Timestamp}, 'America/Chicago'), 'YYYY-MM-DD hh:mm A')
+2. 🔔 Slack Alert After Every Scrape
+When a scrape completes, post this to your Slack webhook:
+
+Slack Payload
+json
+Copy
+Edit
+{
+  "text": "✅ New Leads Scraped: 84\n🔍 Tool: Apollo.io\n🏷️ Target: Chiropractors in Dallas\n📥 Saved to Airtable & HubSpot"
+}
+✅ Hook this into the scraper result handler
+✅ If it fails, send fallback to @tyson or alert channel
+
+3. 📊 Auto-Aggregation to Command Center Metrics
+Update this row in 📊 Command Center · Metrics Tracker:
+
+Metric	Value
+🔢 Total Leads Scraped	(SUM of Airtable)
+🧰 Last Tool Used	Apollo
+⏱ Last Scrape Time	NOW()
+
+✅ Use Make or Replit function to pull count from Airtable after each scrape and update this row
+
+4. 🧾 PDF Scrape Summary Generator (Optional but Scale-Ready)
+If you want to send a client a summary of what was scraped:
+
+Fields:
+
+Tool used
+
+Filters applied
+
+Total leads
+
+Timestamp
+
+Export link (CSV or Airtable view share URL)
+
+Output to Google Docs → Convert to PDF → Email to Slack or client
+
+✅ NEXT MODULES YOU NEED:
+🧠 RAG + ingestion: Automatically train YoBot with scraped lead profiles for smarter outreach
+
+📤 Auto-Push to Outreach or HubSpot for follow-up
+
+🔁 Schedule recurring scrapes based on saved presets
