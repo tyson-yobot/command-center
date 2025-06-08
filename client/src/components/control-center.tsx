@@ -10,7 +10,28 @@ import {
   BarChart3,
   Search,
   Wifi,
-  WifiOff
+  WifiOff,
+  Target,
+  Building,
+  MapPin,
+  Star,
+  Mail,
+  Globe,
+  Briefcase,
+  User,
+  Calendar,
+  DollarSign,
+  Eye,
+  Edit,
+  Trash2,
+  RefreshCw,
+  FileDown,
+  Save,
+  Plus,
+  Minus,
+  Download,
+  Play,
+  Filter
 } from "lucide-react";
 
 // Inline UI components to prevent import issues
@@ -278,7 +299,6 @@ export default function ControlCenter() {
           <div className="flex gap-2 bg-slate-800/50 p-2 rounded-lg">
             {[
               { id: 'overview', label: 'Overview', icon: <BarChart3 className="h-4 w-4" /> },
-              { id: 'automation', label: 'Automation', icon: <Bot className="h-4 w-4" /> },
               { id: 'leads', label: 'Lead Scraper', icon: <Users className="h-4 w-4" /> },
               { id: 'settings', label: 'Settings', icon: <Settings className="h-4 w-4" /> }
             ].map(tab => (
@@ -349,81 +369,21 @@ export default function ControlCenter() {
           </div>
         )}
 
-        {activeTab === 'automation' && (
+
+
+        {activeTab === 'leads' && (
           <div className="space-y-6">
-            {/* Controls */}
+            {/* Professional Lead Scraper */}
             <Card className="bg-slate-800/50 border-blue-500/30">
               <CardHeader>
-                <CardTitle className="text-white">Automation Control</CardTitle>
+                <CardTitle className="text-white">Professional Lead Scraper</CardTitle>
+                <p className="text-blue-200">Apollo.io • Apify • PhantomBuster Integration</p>
               </CardHeader>
               <CardContent>
-                <div className="flex gap-4 mb-6">
-                  <Input
-                    placeholder="Search functions..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
-                  />
-                  <select
-                    value={selectedPriority}
-                    onChange={(e) => setSelectedPriority(e.target.value)}
-                    className="px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white"
-                  >
-                    <option value="all">All Priorities</option>
-                    <option value="high">High Priority</option>
-                    <option value="medium">Medium Priority</option>
-                    <option value="low">Low Priority</option>
-                  </select>
-                </div>
-
-                <div className="grid gap-4">
-                  {filteredFunctions.map((func) => (
-                    <div key={func.id} className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg">
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                          <Badge className={getPriorityColor(func.priority)}>
-                            {func.priority}
-                          </Badge>
-                          <Badge className={getStatusColor(func.status)}>
-                            {func.status}
-                          </Badge>
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-white">{func.name}</h3>
-                          <p className="text-sm text-slate-400">
-                            {func.executions} executions • Last run: {new Date(func.lastRun || '').toLocaleTimeString()}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Button variant="outline" className="text-blue-400 border-blue-600 hover:bg-blue-600 hover:text-white">
-                          Review
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <LeadScraperInterface />
               </CardContent>
             </Card>
           </div>
-        )}
-
-        {activeTab === 'leads' && (
-          <Card className="bg-slate-800/50 border-blue-500/30">
-            <CardHeader>
-              <CardTitle className="text-white">Lead Scraper</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <Users className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                <h3 className="text-white font-medium mb-2">Lead Scraper Available</h3>
-                <p className="text-slate-400 mb-4">Professional lead generation with Apollo, Apify, and PhantomBuster</p>
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                  Launch Lead Scraper
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
         )}
 
         {activeTab === 'settings' && (
