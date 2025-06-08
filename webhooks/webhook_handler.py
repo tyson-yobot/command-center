@@ -193,64 +193,58 @@ def process_tally_webhook(webhook_data):
         print(f"❌ PDF generation failed: {e}")
         pdf_path = None
     
-    # PUSH TO AIRTABLE (Scraped Leads)
+    # PUSH TO AIRTABLE (Sales Orders)
     airtable_success = False
     try:
-        import requests
-        import os
-        
-        # Use already extracted variables - no redeclaration needed
+        # Extract addon and pricing data from form
         addons = []
-        
         for field in fields_array:
             name = field.get("name", "").lower()
             value = str(field.get("value", ""))
             
-            # Extract addons
-            if "addon" in name or "add-on" in name or ("dashboard" in name and field.get("value")):
-                addons.append(value)
-            elif "phone" in name:
-                phone = value
-            elif "website" in name:
-                website = value
-            elif "package" in name and "would you like" in name:
-                package = value
-            elif value == "True" and field.get("name", "") not in ["Test Mode", "Initialize"]:
+            # Extract addons and pricing
+            if "addon" in name or "add-on" in name:
+                if value and value != "False":
+                    addons.append(field.get("name", ""))
+            elif value == "True" and any(x in field.get("name", "") for x in ["Dashboard", "VoiceBot", "Analytics"]):
                 addons.append(field.get("name", ""))
-            elif "one-time" in name and "amount" in name:
-                total_onetime = value
+            elif "one-time" in name and "total" in name:
+                total_onetime = value.replace('$', '').replace(',', '')
             elif "monthly" in name and "total" in name:
-                total_monthly = value
+                total_monthly = value.replace('$', '').replace(',', '')
         
-        airtable_url = f"https://api.airtable.com/v0/{os.getenv('AIRTABLE_BASE_ID')}/Scraped%20Leads%20%C2%B7%20Universal"
+        # Use working Airtable configuration
+        airtable_url = f"https://api.airtable.com/v0/appMbVQJ0n3nWR11N/Sales%20Orders"
         headers = {
-            "Authorization": f"Bearer {os.getenv('AIRTABLE_API_KEY')}",
+            "Authorization": f"Bearer {os.getenv('AIRTABLE_VALID_TOKEN')}",
             "Content-Type": "application/json"
         }
         
+        # Create sales order record
         record_data = {
             "fields": {
-                "👤 Contact Name": contact_name,
-                "🏢 Company": company_name,
-                "📧 Email": contact_email,
-                "📞 Phone": phone,
-                "🌐 Website": website,
-                "🤖 Bot Package": package,
-                "💡 Add-Ons Selected": ", ".join(addons),
-                "💳 One-Time Total": total_onetime,
-                "💳 Monthly Total": total_monthly,
-                "📅 Submission Date": timestamp,
-                "🆔 Submission ID": submission_id,
-                "🔄 Status": "New Order"
+                "Order ID": submission_id,
+                "Company Name": company_name,
+                "Contact Name": contact_name,
+                "Email": contact_email,
+                "Phone": phone,
+                "Website": website,
+                "Bot Package": package,
+                "Add-Ons": ", ".join(addons) if addons else "None",
+                "One-Time Total": float(total_onetime) if total_onetime.replace('.','').isdigit() else 0,
+                "Monthly Total": float(total_monthly) if total_monthly.replace('.','').isdigit() else 0,
+                "Order Date": timestamp,
+                "Status": "New Order",
+                "Source": "Tally Form"
             }
         }
         
         response = requests.post(airtable_url, json=record_data, headers=headers)
-        if response.status_code == 200:
+        if response.status_code in [200, 201]:
             airtable_success = True
-            print(f"✅ Airtable record created")
+            print(f"✅ Airtable sales order created: {submission_id}")
         else:
-            print(f"❌ Airtable failed: {response.status_code}")
+            print(f"❌ Airtable failed: {response.status_code} - {response.text}")
             
     except Exception as e:
         print(f"❌ Airtable integration failed: {e}")
@@ -258,49 +252,64 @@ def process_tally_webhook(webhook_data):
     # CREATE HUBSPOT CONTACT + DEAL
     hubspot_success = False
     try:
-        import requests
-        import os
-        
         hubspot_headers = {
             "Authorization": f"Bearer {os.getenv('HUBSPOT_API_KEY')}",
             "Content-Type": "application/json"
         }
         
-        # Create Contact
+        # Create or update contact
         contact_data = {
             "properties": {
                 "email": contact_email,
-                "firstname": contact_name.split()[0] if contact_name else "",
-                "lastname": " ".join(contact_name.split()[1:]) if len(contact_name.split()) > 1 else "",
+                "firstname": contact_name.split()[0] if contact_name and len(contact_name.split()) > 0 else contact_name,
+                "lastname": " ".join(contact_name.split()[1:]) if contact_name and len(contact_name.split()) > 1 else "",
                 "company": company_name,
                 "phone": phone,
-                "website": website
+                "website": website,
+                "lifecyclestage": "customer",
+                "hs_lead_status": "NEW"
             }
         }
         
+        # Try to create contact (will update if exists)
         contact_response = requests.post(
             "https://api.hubapi.com/crm/v3/objects/contacts",
             json=contact_data,
             headers=hubspot_headers
         )
         
+        contact_id = None
         if contact_response.status_code in [200, 201]:
             contact_id = contact_response.json().get('id')
-            
-            # Create Deal
+        elif contact_response.status_code == 409:  # Contact exists
+            # Search for existing contact by email
+            search_response = requests.post(
+                "https://api.hubapi.com/crm/v3/objects/contacts/search",
+                json={
+                    "filterGroups": [{
+                        "filters": [{"propertyName": "email", "operator": "EQ", "value": contact_email}]
+                    }]
+                },
+                headers=hubspot_headers
+            )
+            if search_response.status_code == 200:
+                results = search_response.json().get('results', [])
+                if results:
+                    contact_id = results[0].get('id')
+        
+        if contact_id:
+            # Create deal
+            deal_amount = total_onetime.replace('$', '').replace(',', '') if total_onetime else "0"
             deal_data = {
                 "properties": {
-                    "dealname": f"YoBot Order - {company_name}",
-                    "amount": total_onetime.replace('$', '').replace(',', '') if total_onetime else "0",
-                    "dealstage": "appointmentscheduled",
-                    "pipeline": "default"
-                },
-                "associations": [
-                    {
-                        "to": {"id": contact_id},
-                        "types": [{"associationCategory": "HUBSPOT_DEFINED", "associationTypeId": 3}]
-                    }
-                ]
+                    "dealname": f"YoBot {package} - {company_name} ({submission_id})",
+                    "amount": deal_amount,
+                    "dealstage": "qualifiedtobuy",
+                    "pipeline": "default",
+                    "closedate": timestamp,
+                    "deal_currency_code": "USD",
+                    "hubspot_owner_id": "1"
+                }
             }
             
             deal_response = requests.post(
@@ -310,12 +319,20 @@ def process_tally_webhook(webhook_data):
             )
             
             if deal_response.status_code in [200, 201]:
+                deal_id = deal_response.json().get('id')
+                
+                # Associate deal with contact
+                association_response = requests.put(
+                    f"https://api.hubapi.com/crm/v3/objects/deals/{deal_id}/associations/contacts/{contact_id}/3",
+                    headers=hubspot_headers
+                )
+                
                 hubspot_success = True
-                print(f"✅ HubSpot contact + deal created")
+                print(f"✅ HubSpot contact {contact_id} + deal {deal_id} created")
             else:
-                print(f"❌ HubSpot deal failed: {deal_response.status_code}")
+                print(f"❌ HubSpot deal failed: {deal_response.status_code} - {deal_response.text}")
         else:
-            print(f"❌ HubSpot contact failed: {contact_response.status_code}")
+            print(f"❌ HubSpot contact creation failed: {contact_response.status_code}")
             
     except Exception as e:
         print(f"❌ HubSpot integration failed: {e}")
