@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-06-08T08:53:15.675Z",
+  "url": "/api/save-scraped-leads",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "347"
+  },
+  "raw_payload": {
+    "source": "apollo",
+    "timestamp": "2025-06-08T08:55:00.000Z",
+    "leads": [
+      {
+        "fullName": "Test Lead",
+        "email": "test@example.com",
+        "company": "Test Company",
+        "title": "Test Manager",
+        "location": "Test City",
+        "phone": "+1-555-9999",
+        "industry": "Technology"
+      }
+    ]
+  }
+}
