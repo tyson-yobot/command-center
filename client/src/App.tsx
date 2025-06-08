@@ -1,7 +1,7 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
-import ControlCenter from "./components/control-center";
+import DedicatedLeadScraper from "./components/dedicated-lead-scraper";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,8 +16,8 @@ function Router() {
   return (
     <div className="min-h-screen">
       <Switch>
-        <Route path="/" component={ControlCenter} />
-        <Route path="/control" component={ControlCenter} />
+        <Route path="/" component={DedicatedLeadScraper} />
+        <Route path="/scraper" component={DedicatedLeadScraper} />
         <Route>
           <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
             <div className="text-center">
