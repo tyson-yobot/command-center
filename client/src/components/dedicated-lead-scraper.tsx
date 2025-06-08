@@ -218,76 +218,151 @@ export default function DedicatedLeadScraper() {
   // Tool Selection Step
   if (currentStep === 'tool-selection') {
     return (
-      <div className="space-y-6">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            Lead Scraper
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400">
-            Select your preferred lead generation platform
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Apollo.io */}
-          <Card className="p-6 hover:shadow-lg cursor-pointer border-2 hover:border-blue-500 transition-all">
-            <div onClick={() => handleToolSelection('apollo')}>
-              <div className="flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg mb-4">
-                <Target className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Apollo.io
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                Professional contact database with advanced filtering by industry, role, and company size
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <Badge>B2B Contacts</Badge>
-                <Badge>Industry Filter</Badge>
-                <Badge>Job Titles</Badge>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="flex justify-center mb-6">
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-full">
+                <Target className="w-8 h-8 text-white" />
               </div>
             </div>
-          </Card>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+              Dedicated Lead Scraper
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              Choose your preferred lead generation platform and unlock powerful targeting capabilities
+            </p>
+          </div>
 
-          {/* Apify */}
-          <Card className="p-6 hover:shadow-lg cursor-pointer border-2 hover:border-green-500 transition-all">
-            <div onClick={() => handleToolSelection('apify')}>
-              <div className="flex items-center justify-center w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg mb-4">
-                <Globe className="w-6 h-6 text-green-600 dark:text-green-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Apify
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                Web scraping platform for extracting leads from multiple sources and websites
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Web Scraping</Badge>
-                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Multi-Source</Badge>
-                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Custom Search</Badge>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Apollo.io */}
+            <div 
+              onClick={() => handleToolSelection('apollo')}
+              className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative p-8">
+                <div className="flex justify-center mb-6">
+                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-4 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+                    <Target className="w-8 h-8 text-white" />
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 text-center">
+                  Apollo.io
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 text-center mb-6 leading-relaxed">
+                  Professional B2B contact database with advanced filtering by industry, seniority, and company metrics
+                </p>
+                <div className="flex flex-wrap justify-center gap-2 mb-6">
+                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
+                    250M+ Contacts
+                  </span>
+                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
+                    Email Verified
+                  </span>
+                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
+                    CRM Ready
+                  </span>
+                </div>
+                <div className="flex justify-center">
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+                    Select Apollo.io
+                  </Button>
+                </div>
               </div>
             </div>
-          </Card>
 
-          {/* PhantomBuster */}
-          <Card className="p-6 hover:shadow-lg cursor-pointer border-2 hover:border-purple-500 transition-all">
-            <div onClick={() => handleToolSelection('phantombuster')}>
-              <div className="flex items-center justify-center w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg mb-4">
-                <Users className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                PhantomBuster
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                Social media automation for LinkedIn, Twitter, and Instagram lead extraction
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <Badge className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">Social Media</Badge>
-                <Badge className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">LinkedIn</Badge>
-                <Badge className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">Automation</Badge>
+            {/* Apify */}
+            <div 
+              onClick={() => handleToolSelection('apify')}
+              className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer border border-gray-200 dark:border-gray-700 hover:border-green-500 dark:hover:border-green-400 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-green-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative p-8">
+                <div className="flex justify-center mb-6">
+                  <div className="bg-gradient-to-br from-green-500 to-green-600 p-4 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+                    <Globe className="w-8 h-8 text-white" />
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 text-center">
+                  Apify
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 text-center mb-6 leading-relaxed">
+                  Advanced web scraping platform for extracting leads from LinkedIn, websites, and social platforms
+                </p>
+                <div className="flex flex-wrap justify-center gap-2 mb-6">
+                  <span className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
+                    Web Scraping
+                  </span>
+                  <span className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
+                    Multi-Source
+                  </span>
+                  <span className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
+                    Custom Data
+                  </span>
+                </div>
+                <div className="flex justify-center">
+                  <Button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium">
+                    Select Apify
+                  </Button>
+                </div>
               </div>
             </div>
-          </Card>
+
+            {/* PhantomBuster */}
+            <div 
+              onClick={() => handleToolSelection('phantombuster')}
+              className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer border border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-400 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative p-8">
+                <div className="flex justify-center mb-6">
+                  <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-4 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+                    <Users className="w-8 h-8 text-white" />
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 text-center">
+                  PhantomBuster
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 text-center mb-6 leading-relaxed">
+                  Social media automation for LinkedIn, Twitter, Instagram with email enrichment and CRM integration
+                </p>
+                <div className="flex flex-wrap justify-center gap-2 mb-6">
+                  <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">
+                    Social Media
+                  </span>
+                  <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">
+                    LinkedIn Pro
+                  </span>
+                  <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">
+                    Automation
+                  </span>
+                </div>
+                <div className="flex justify-center">
+                  <Button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium">
+                    Select PhantomBuster
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-16 text-center">
+            <div className="inline-flex items-center space-x-8 text-sm text-gray-500 dark:text-gray-400">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-5 h-5 text-green-500" />
+                <span>Real-time data extraction</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-5 h-5 text-green-500" />
+                <span>Automatic Slack notifications</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-5 h-5 text-green-500" />
+                <span>CSV export ready</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
