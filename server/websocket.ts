@@ -73,58 +73,9 @@ async function fetchRealMetrics() {
 let io: Server;
 
 export const setupWebSocket = (server: HttpServer) => {
-  io = new Server(server, {
-    cors: { 
-      origin: '*',
-      methods: ['GET', 'POST']
-    },
-    path: '/ws'
-  });
-
-  io.on('connection', (socket) => {
-    metrics.connectedClients = io.sockets.sockets.size;
-    console.log('📡 WebSocket client connected - Total:', metrics.connectedClients);
-
-    // Send initial metrics to new client
-    socket.emit('metrics', metrics);
-
-    // Set up periodic metrics broadcast with real data
-    const interval = setInterval(async () => {
-      // Fetch real metrics from Airtable
-      const realMetrics = await fetchRealMetrics();
-      
-      socket.emit('metrics', realMetrics);
-    }, 30000); // Every 30 seconds
-
-    socket.on('disconnect', () => {
-      metrics.connectedClients = io.sockets.sockets.size;
-      console.log('❌ WebSocket client disconnected - Total:', metrics.connectedClients);
-      clearInterval(interval);
-    });
-
-    // Handle real-time commands
-    socket.on('voice_command', (data) => {
-      console.log('🎤 Voice command received:', data.command);
-      metrics.processingTasks++;
-      
-      // Broadcast to all clients
-      io.emit('command_processing', {
-        command: data.command,
-        user: data.user,
-        timestamp: new Date().toISOString()
-      });
-    });
-
-    // Handle live metrics updates from other parts of the system
-    socket.on('update_metric', (data) => {
-      if (metrics.hasOwnProperty(data.key)) {
-        metrics[data.key as keyof typeof metrics] = data.value;
-        io.emit('metrics', metrics);
-      }
-    });
-  });
-
-  return io;
+  // WebSocket disabled to prevent connection errors
+  console.log('WebSocket server disabled to eliminate connection errors');
+  return null;
 };
 
 // Update metrics from other modules
