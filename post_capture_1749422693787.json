@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-06-08T22:44:53.787Z",
+  "url": "/api/scraping/phantombuster",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "191"
+  },
+  "body": {
+    "filters": {
+      "platform": "linkedin",
+      "keywords": "product manager",
+      "industry": "Technology",
+      "numberOfProfiles": "50",
+      "connectionDegree": "2nd"
+    }
+  },
+  "query": {}
+}
