@@ -1,12 +1,12 @@
 import React from "react";
 import { Sun, Moon, Mic, Headphones, Phone, Users, FileText, Zap, Settings } from "lucide-react";
-import { useWebSocket } from "@/hooks/use-websocket";
+// WebSocket disabled to prevent connection errors
 import { useTheme } from "@/hooks/use-theme";
 import { Button } from "@/components/ui/button";
 import yobotLogoPath from "@assets/A_flat_vector_illustration_features_a_robot_face_i.png";
 
 export default function Header() {
-  const { isConnected } = useWebSocket();
+  const isConnected = false; // Connection disabled
   const { theme, setTheme } = useTheme();
 
   const handleCallPipeline = () => {
