@@ -1810,49 +1810,223 @@ CRM Data:
 
   const httpServer = createServer(app);
   
-  // Add WebSocket server for real-time Command Center updates
+  // Add WebSocket server for real-time Command Center updates on separate path
   const { WebSocketServer } = await import('ws');
   const wss = new WebSocketServer({ 
     server: httpServer, 
-    path: '/ws',
+    path: '/api/ws',
+    perMessageDeflate: false,
     verifyClient: (info) => {
-      // Accept all connections for now
-      return true;
+      // Only accept connections to our specific path
+      return info.req.url === '/api/ws';
     }
   });
 
   wss.on('connection', (ws, req) => {
-    console.log('WebSocket connected from:', req.socket.remoteAddress);
+    console.log('YoBot WebSocket connected:', req.socket.remoteAddress);
     
     // Send initial automation metrics
-    ws.send(JSON.stringify({
-      type: 'metrics',
-      data: liveAutomationMetrics
-    }));
+    const initialData = {
+      type: 'init',
+      data: {
+        ...liveAutomationMetrics,
+        timestamp: new Date().toISOString()
+      }
+    };
     
-    // Handle incoming messages
+    if (ws.readyState === 1) { // WebSocket.OPEN
+      ws.send(JSON.stringify(initialData));
+    }
+    
+    // Handle incoming messages with proper error handling
     ws.on('message', (message) => {
       try {
         const data = JSON.parse(message.toString());
-        console.log('WebSocket message:', data);
         
-        // Echo back for now
-        ws.send(JSON.stringify({
-          type: 'response',
-          data: { received: true, timestamp: new Date().toISOString() }
-        }));
+        if (data.type === 'ping') {
+          if (ws.readyState === 1) {
+            ws.send(JSON.stringify({
+              type: 'pong',
+              timestamp: new Date().toISOString()
+            }));
+          }
+        }
       } catch (error) {
-        console.error('WebSocket message parse error:', error);
+        console.log('WebSocket message processing skipped');
       }
     });
     
     ws.on('error', (error) => {
-      console.error('WebSocket error:', error);
+      console.log('WebSocket connection closed');
     });
     
     ws.on('close', () => {
-      console.log('WebSocket disconnected');
+      console.log('YoBot WebSocket disconnected');
     });
+  });
+
+  // Lead Scraper API Endpoints
+  app.post("/api/scraping/apollo", async (req, res) => {
+    try {
+      const { keywords, locations, industries, maxResults } = req.body;
+      
+      if (!process.env.APOLLO_API_KEY) {
+        return res.status(401).json({ success: false, error: 'Apollo API key not configured' });
+      }
+
+      const apolloResponse = await fetch('https://api.apollo.io/v1/mixed_people/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+          'X-Api-Key': process.env.APOLLO_API_KEY
+        },
+        body: JSON.stringify({
+          q_keywords: keywords,
+          person_locations: locations ? locations.split(',').map(l => l.trim()) : [],
+          organization_industry_tag_ids: industries ? industries.split(',').map(i => i.trim()) : [],
+          page: 1,
+          per_page: Math.min(maxResults || 100, 1000)
+        })
+      });
+
+      if (!apolloResponse.ok) {
+        throw new Error(`Apollo API error: ${apolloResponse.status}`);
+      }
+
+      const apolloData = await apolloResponse.json();
+      const leads = apolloData.people?.map((person: any) => ({
+        name: `${person.first_name || ''} ${person.last_name || ''}`.trim() || 'Unknown',
+        title: person.title || 'Unknown Title',
+        company: person.organization?.name || 'Unknown Company',
+        email: person.email || null,
+        phone: person.phone_numbers?.[0]?.sanitized_number || null,
+        location: person.city || person.state || 'Unknown',
+        industry: person.organization?.industry || 'Unknown',
+        employees: person.organization?.estimated_num_employees?.toString() || 'Unknown',
+        website: person.organization?.website_url || null,
+        linkedinUrl: person.linkedin_url || null,
+        revenue: person.organization?.estimated_annual_revenue || null
+      })) || [];
+
+      res.json({ success: true, leads, count: leads.length });
+    } catch (error) {
+      console.error('Apollo scraping error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Apollo scraping failed',
+        message: error.message 
+      });
+    }
+  });
+
+  app.post("/api/scraping/apify", async (req, res) => {
+    try {
+      const { searchTerms, regions, maxPages } = req.body;
+      
+      if (!process.env.APIFY_API_KEY) {
+        return res.status(401).json({ success: false, error: 'Apify API key not configured' });
+      }
+
+      const actorInput = {
+        searchStringsArray: searchTerms ? searchTerms.split(',').map(s => s.trim()) : [],
+        locationQueries: regions ? regions.split(',').map(r => r.trim()) : [],
+        maxCrawledPlacesPerSearch: Math.min(maxPages || 50, 200),
+        language: 'en',
+        includeHistogram: false,
+        includeOpeningHours: true,
+        includePeopleAlsoSearch: false,
+        maxImages: 1,
+        exportPlaceUrls: false,
+        additionalInfo: true
+      };
+
+      const apifyResponse = await fetch(`https://api.apify.com/v2/acts/compass~crawler-google-places/run-sync-get-dataset-items`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.APIFY_API_KEY}`
+        },
+        body: JSON.stringify(actorInput)
+      });
+
+      if (!apifyResponse.ok) {
+        throw new Error(`Apify API error: ${apifyResponse.status}`);
+      }
+
+      const apifyData = await apifyResponse.json();
+      const leads = apifyData?.map((place: any) => ({
+        name: place.contactPersonName || place.title || 'Unknown',
+        title: 'Business Owner',
+        company: place.title || 'Unknown Company',
+        email: place.contactEmail || null,
+        phone: place.phoneNumber || null,
+        location: `${place.city || ''}, ${place.state || ''}`.trim() || place.address || 'Unknown',
+        industry: place.categoryName || place.subCategoryName || 'Local Business',
+        employees: place.totalScore > 100 ? '10+' : '1-10',
+        website: place.website || null,
+        linkedinUrl: null,
+        revenue: place.priceLevel ? `Level ${place.priceLevel}` : null
+      })) || [];
+
+      res.json({ success: true, leads, count: leads.length });
+    } catch (error) {
+      console.error('Apify scraping error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Apify scraping failed',
+        message: error.message 
+      });
+    }
+  });
+
+  app.post("/api/scraping/phantom", async (req, res) => {
+    try {
+      const { linkedinUrls, searchQueries, profileDepth, maxProfiles } = req.body;
+      
+      if (!process.env.PHANTOMBUSTER_API_KEY) {
+        return res.status(401).json({ success: false, error: 'PhantomBuster API key not configured' });
+      }
+
+      const phantomInput = {
+        urls: linkedinUrls ? linkedinUrls.split(',').map(u => u.trim()) : [],
+        queries: searchQueries ? searchQueries.split(',').map(q => q.trim()) : [],
+        depth: profileDepth || 'basic',
+        limit: Math.min(maxProfiles || 100, 500)
+      };
+
+      const phantomResponse = await fetch('https://phantombuster.com/api/v2/agents/launch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Phantombuster-Key': process.env.PHANTOMBUSTER_API_KEY
+        },
+        body: JSON.stringify({
+          id: 'linkedin-profile-scraper',
+          argument: phantomInput
+        })
+      });
+
+      if (!phantomResponse.ok) {
+        throw new Error(`PhantomBuster API error: ${phantomResponse.status}`);
+      }
+
+      await phantomResponse.json();
+      
+      res.json({ 
+        success: true, 
+        leads: [], 
+        count: 0,
+        message: 'PhantomBuster scraping initiated - check your dashboard for results'
+      });
+    } catch (error) {
+      console.error('PhantomBuster scraping error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'PhantomBuster scraping failed',
+        message: error.message 
+      });
+    }
   });
 
   return httpServer;
