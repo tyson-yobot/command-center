@@ -1,0 +1,100 @@
+ Here’s Your Final 2-Step Flow for Replit
+✅ Step 1: Lead Scraper Launcher Modal (Already Designed – Use As-Is)
+When “Run Lead Scrape” is clicked:
+
+➡️ Show this Professional Lead Scraper screen
+➡️ Each button (Select Apollo.io, Select Apify, Select PhantomBuster) triggers a dynamic config panel below
+
+✅ Step 2: Dynamic Filter Builder (Based on Tool Chosen)
+This will appear directly below the current modal, expanding the UI vertically or sliding in a new drawer.
+
+🧩 Apollo.io Filters Panel
+Contact Filters:
+
+Job Titles (multi-select: e.g. CEO, Marketing Manager)
+
+Departments (dropdown: Sales, HR, etc.)
+
+Seniority (dropdown: Entry, Manager, Director, etc.)
+
+Industries (multi-select)
+
+Location (City, State, Country)
+
+Company Filters:
+
+Company Size (dropdown: 1–10, 11–50, etc.)
+
+Funding Stage (Seed, Series A–E, IPO)
+
+Revenue Range (dropdown)
+
+Technologies Used (typeahead – pulls from Apollo API list)
+
+Verification:
+
+Email Verified Only (toggle)
+
+Phone Available Only (toggle)
+
+✅ Preview Count button
+✅ Estimated Export Time
+✅ Save to Airtable & HubSpot toggles
+✅ Launch Scraper CTA
+
+🌎 Apify Filters Panel
+Business Targeting:
+
+Platform: Google Maps, Yelp, Custom Scraper (dropdown)
+
+Category (e.g., Restaurants, Clinics)
+
+Rating Threshold (slider or numeric)
+
+Review Count Minimum
+
+Location Filters:
+
+Region (text input or dropdown)
+
+Zip or Radius (numeric)
+
+Scrape Settings:
+
+Pagination Limit (numeric)
+
+Delay Between Requests (ms)
+
+Contact Info Extraction (toggle)
+
+🧠 PhantomBuster Filters Panel
+LinkedIn Filters:
+
+Profile URLs Upload (CSV block)
+
+Job Titles (multi-select)
+
+Seniority (dropdown)
+
+Industry (dropdown)
+
+Company Size (dropdown)
+
+Connection Degree (1st/2nd/3rd – toggle)
+
+Behavior Settings:
+
+Auto Connect With Message (input field)
+
+Retry Failed Scrapes (toggle)
+
+Use Phantom vs API (dropdown)
+
+✅ Show live logging stream (optional toggle)
+✅ Confirm LinkedIn login cookie presence (modal alert if missing)
+
+Final UI Recommendation to Devs
+📦 Place each scraper’s panel in its own component file so they can be swapped in easily
+⚙️ Use persistent state for each scraper so filters aren’t lost if switching back/forth
+🧠 Track active scraper + last run config for audit purposes
+

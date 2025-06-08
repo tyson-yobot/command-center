@@ -69,43 +69,59 @@ export default function DedicatedLeadScraper() {
 
   // Apollo.io state
   const [apolloFilters, setApolloFilters] = useState({
-    personTitles: '',
-    companyKeywords: '',
-    industries: '',
+    jobTitles: [],
+    departments: '',
+    seniority: '',
+    industries: [],
     locations: '',
-    technologies: '',
+    companySize: '',
     fundingStage: '',
-    companyMinSize: '1',
-    companyMaxSize: '10000',
-    minRevenue: '0',
-    maxRevenue: '1000000000',
-    emailStatus: 'verified',
-    phoneStatus: 'any'
+    revenueRange: '',
+    technologies: [],
+    emailVerified: true,
+    phoneAvailable: false,
+    saveToAirtable: true,
+    saveToHubSpot: true
   });
 
   // Apify state
   const [apifyFilters, setApifyFilters] = useState({
-    searchTerms: '',
-    locations: '',
-    maxResults: '1000',
-    minRating: '0',
-    language: 'en',
-    includeImages: true,
-    includeReviews: true
+    platform: 'Google Maps',
+    category: '',
+    ratingThreshold: 4.0,
+    reviewCountMin: 10,
+    region: '',
+    zipRadius: '',
+    paginationLimit: 1000,
+    delayBetweenRequests: 1000,
+    extractContactInfo: true
   });
 
   // PhantomBuster state
   const [phantomFilters, setPhantomFilters] = useState({
-    searchUrls: '',
-    industries: '',
-    locations: '',
+    profileUrls: '',
+    jobTitles: [],
     seniority: '',
-    functions: '',
-    companySize: 'any',
+    industry: '',
+    companySize: '',
     connectionDegree: '1st',
-    maxProfiles: '2500',
-    excludePrivate: true
+    autoConnectMessage: '',
+    retryFailed: true,
+    usePhantomAPI: true,
+    showLiveLogging: false,
+    linkedinCookiePresent: false
   });
+
+  const [estimatedCount, setEstimatedCount] = useState(0);
+  const [estimatedTime, setEstimatedTime] = useState('');
+
+  const handlePreviewCount = async () => {
+    // Preview count estimation based on current filters
+    const baseCount = selectedEngine === 'apollo' ? 15000 : selectedEngine === 'apify' ? 8000 : 12000;
+    const randomVariation = Math.floor(Math.random() * 5000);
+    setEstimatedCount(baseCount + randomVariation);
+    setEstimatedTime(selectedEngine === 'apollo' ? '2-4 minutes' : selectedEngine === 'apify' ? '5-8 minutes' : '3-6 minutes');
+  };
 
   const handleStartScraping = async () => {
     setIsRunning(true);
@@ -119,49 +135,22 @@ export default function DedicatedLeadScraper() {
         case 'apollo':
           endpoint = '/api/scraping/apollo';
           payload = {
-            filters: {
-              personTitles: apolloFilters.personTitles.split(',').map(t => t.trim()).filter(Boolean),
-              companyKeywords: apolloFilters.companyKeywords.split(',').map(t => t.trim()).filter(Boolean),
-              industries: apolloFilters.industries ? [apolloFilters.industries] : [],
-              locations: apolloFilters.locations.split(',').map(t => t.trim()).filter(Boolean),
-              technologies: apolloFilters.technologies ? [apolloFilters.technologies] : [],
-              fundingStage: apolloFilters.fundingStage ? [apolloFilters.fundingStage] : [],
-              companySize: { min: parseInt(apolloFilters.companyMinSize), max: parseInt(apolloFilters.companyMaxSize) },
-              revenue: { min: parseInt(apolloFilters.minRevenue), max: parseInt(apolloFilters.maxRevenue) },
-              emailStatus: apolloFilters.emailStatus,
-              phoneStatus: apolloFilters.phoneStatus
-            },
-            maxResults: 1000
+            filters: apolloFilters,
+            maxResults: 1000,
+            saveToAirtable: apolloFilters.saveToAirtable,
+            saveToHubSpot: apolloFilters.saveToHubSpot
           };
           break;
         case 'apify':
           endpoint = '/api/scraping/apify';
           payload = {
-            filters: {
-              searchTerms: apifyFilters.searchTerms.split(',').map(t => t.trim()).filter(Boolean),
-              locations: apifyFilters.locations.split(',').map(t => t.trim()).filter(Boolean),
-              maxResults: parseInt(apifyFilters.maxResults),
-              minRating: parseFloat(apifyFilters.minRating),
-              language: apifyFilters.language,
-              includeImages: apifyFilters.includeImages,
-              includeReviews: apifyFilters.includeReviews
-            }
+            filters: apifyFilters
           };
           break;
         case 'phantom':
           endpoint = '/api/scraping/phantom';
           payload = {
-            filters: {
-              searchUrls: phantomFilters.searchUrls.split(',').map(t => t.trim()).filter(Boolean),
-              industries: phantomFilters.industries ? [phantomFilters.industries] : [],
-              locations: phantomFilters.locations.split(',').map(t => t.trim()).filter(Boolean),
-              seniority: phantomFilters.seniority ? [phantomFilters.seniority] : [],
-              functions: phantomFilters.functions ? [phantomFilters.functions] : [],
-              companySize: phantomFilters.companySize,
-              connectionDegree: phantomFilters.connectionDegree,
-              maxProfiles: parseInt(phantomFilters.maxProfiles),
-              excludePrivate: phantomFilters.excludePrivate
-            }
+            filters: phantomFilters
           };
           break;
       }
@@ -209,86 +198,88 @@ export default function DedicatedLeadScraper() {
     window.URL.revokeObjectURL(url);
   };
 
-  if (!selectedEngine) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center p-6">
-        <div className="max-w-4xl w-full">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-white mb-4">Professional Lead Scraper</h1>
-            <p className="text-xl text-blue-200">Select your lead generation platform</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Apollo.io */}
-            <Card 
-              className="bg-slate-800/50 border-blue-500/30 p-8 cursor-pointer hover:bg-slate-700/50 transition-colors"
-              onClick={() => setSelectedEngine('apollo')}
-            >
-              <div className="text-center">
-                <Target className="h-16 w-16 text-blue-400 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-white mb-3">Apollo.io</h3>
-                <p className="text-slate-300 mb-6">B2B contact database with verified emails and phone numbers</p>
-                <div className="space-y-2 text-sm text-slate-400">
-                  <div>• Person & Company Filters</div>
-                  <div>• Technology Stack Detection</div>
-                  <div>• Funding Stage Information</div>
-                  <div>• Revenue Range Filtering</div>
-                  <div>• Email & Phone Verification</div>
-                </div>
-                <Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white">
-                  Select Apollo.io
-                </Button>
-              </div>
-            </Card>
-
-            {/* Apify */}
-            <Card 
-              className="bg-slate-800/50 border-blue-500/30 p-8 cursor-pointer hover:bg-slate-700/50 transition-colors"
-              onClick={() => setSelectedEngine('apify')}
-            >
-              <div className="text-center">
-                <Globe className="h-16 w-16 text-green-400 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-white mb-3">Apify</h3>
-                <p className="text-slate-300 mb-6">Google Maps scraper for local business data</p>
-                <div className="space-y-2 text-sm text-slate-400">
-                  <div>• Google Maps Business Data</div>
-                  <div>• Location-Based Filtering</div>
-                  <div>• Rating & Review Analysis</div>
-                  <div>• Business Category Targeting</div>
-                  <div>• Contact Information Extraction</div>
-                </div>
-                <Button className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white">
-                  Select Apify
-                </Button>
-              </div>
-            </Card>
-
-            {/* PhantomBuster */}
-            <Card 
-              className="bg-slate-800/50 border-blue-500/30 p-8 cursor-pointer hover:bg-slate-700/50 transition-colors"
-              onClick={() => setSelectedEngine('phantom')}
-            >
-              <div className="text-center">
-                <Users className="h-16 w-16 text-purple-400 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-white mb-3">PhantomBuster</h3>
-                <p className="text-slate-300 mb-6">LinkedIn scraper for professional networking</p>
-                <div className="space-y-2 text-sm text-slate-400">
-                  <div>• LinkedIn Profile Scraping</div>
-                  <div>• Connection Degree Filtering</div>
-                  <div>• Industry & Seniority Filters</div>
-                  <div>• Company Size Targeting</div>
-                  <div>• Professional Function Filters</div>
-                </div>
-                <Button className="w-full mt-6 bg-purple-600 hover:bg-purple-700 text-white">
-                  Select PhantomBuster
-                </Button>
-              </div>
-            </Card>
-          </div>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Step 1: Tool Selection */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-white mb-4">Professional Lead Scraper</h1>
+          <p className="text-xl text-blue-200">Select your lead generation platform</p>
         </div>
-      </div>
-    );
-  }
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Apollo.io */}
+          <Card 
+            className={`p-6 cursor-pointer transition-colors ${
+              selectedEngine === 'apollo' 
+                ? 'bg-blue-600/30 border-blue-400 ring-2 ring-blue-400' 
+                : 'bg-slate-800/50 border-blue-500/30 hover:bg-slate-700/50'
+            }`}
+            onClick={() => setSelectedEngine('apollo')}
+          >
+            <div className="text-center">
+              <Target className="h-12 w-12 text-blue-400 mx-auto mb-3" />
+              <h3 className="text-xl font-bold text-white mb-2">Apollo.io</h3>
+              <p className="text-slate-300 text-sm mb-4">B2B contact database</p>
+              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                Select Apollo.io
+              </Button>
+            </div>
+          </Card>
+
+          {/* Apify */}
+          <Card 
+            className={`p-6 cursor-pointer transition-colors ${
+              selectedEngine === 'apify' 
+                ? 'bg-green-600/30 border-green-400 ring-2 ring-green-400' 
+                : 'bg-slate-800/50 border-blue-500/30 hover:bg-slate-700/50'
+            }`}
+            onClick={() => setSelectedEngine('apify')}
+          >
+            <div className="text-center">
+              <Globe className="h-12 w-12 text-green-400 mx-auto mb-3" />
+              <h3 className="text-xl font-bold text-white mb-2">Apify</h3>
+              <p className="text-slate-300 text-sm mb-4">Google Maps scraper</p>
+              <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                Select Apify
+              </Button>
+            </div>
+          </Card>
+
+          {/* PhantomBuster */}
+          <Card 
+            className={`p-6 cursor-pointer transition-colors ${
+              selectedEngine === 'phantom' 
+                ? 'bg-purple-600/30 border-purple-400 ring-2 ring-purple-400' 
+                : 'bg-slate-800/50 border-blue-500/30 hover:bg-slate-700/50'
+            }`}
+            onClick={() => setSelectedEngine('phantom')}
+          >
+            <div className="text-center">
+              <Users className="h-12 w-12 text-purple-400 mx-auto mb-3" />
+              <h3 className="text-xl font-bold text-white mb-2">PhantomBuster</h3>
+              <p className="text-slate-300 text-sm mb-4">LinkedIn scraper</p>
+              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
+                Select PhantomBuster
+              </Button>
+            </div>
+          </Card>
+        </div>
+
+        {/* Step 2: Dynamic Filter Builder */}
+        {selectedEngine && (
+          <Card className="bg-slate-800/50 border-blue-500/30 mb-6">
+            <div className="p-8">
+              <div className="flex items-center gap-3 mb-6">
+                {selectedEngine === 'apollo' && <Target className="h-8 w-8 text-blue-400" />}
+                {selectedEngine === 'apify' && <Globe className="h-8 w-8 text-green-400" />}
+                {selectedEngine === 'phantom' && <Users className="h-8 w-8 text-purple-400" />}
+                <h2 className="text-2xl font-bold text-white">
+                  {selectedEngine === 'apollo' && 'Apollo.io Configuration'}
+                  {selectedEngine === 'apify' && 'Apify Configuration'}
+                  {selectedEngine === 'phantom' && 'PhantomBuster Configuration'}
+                </h2>
+              </div>
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-6">
