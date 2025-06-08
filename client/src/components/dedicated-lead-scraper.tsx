@@ -111,6 +111,83 @@ const Badge = ({ children, className = "" }: { children: React.ReactNode; classN
   </span>
 );
 
+// Multi-Select Component
+const MultiSelect = ({ 
+  value, 
+  onChange, 
+  options, 
+  placeholder, 
+  className = "" 
+}: {
+  value: string[];
+  onChange: (selected: string[]) => void;
+  options: Array<{ value: string; label: string }>;
+  placeholder?: string;
+  className?: string;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const toggleOption = (optionValue: string) => {
+    const newValue = value.includes(optionValue)
+      ? value.filter(v => v !== optionValue)
+      : [...value, optionValue];
+    onChange(newValue);
+  };
+
+  return (
+    <div className={`relative ${className}`}>
+      <div 
+        className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className="flex-1 flex flex-wrap gap-1">
+          {value.length === 0 ? (
+            <span className="text-gray-500">{placeholder}</span>
+          ) : (
+            value.map((item) => (
+              <span key={item} className="inline-flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-0.5 rounded text-xs">
+                {options.find(opt => opt.value === item)?.label || item}
+                <button
+                  className="ml-1 hover:text-blue-600"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleOption(item);
+                  }}
+                >
+                  ×
+                </button>
+              </span>
+            ))
+          )}
+        </div>
+        <div className="flex items-center">
+          <span className="text-gray-400">▼</span>
+        </div>
+      </div>
+      
+      {isOpen && (
+        <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-60 overflow-auto">
+          {options.map((option) => (
+            <div
+              key={option.value}
+              className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-600 cursor-pointer"
+              onClick={() => toggleOption(option.value)}
+            >
+              <input
+                type="checkbox"
+                checked={value.includes(option.value)}
+                readOnly
+                className="mr-2 text-blue-600"
+              />
+              <span className="text-sm">{option.label}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function DedicatedLeadScraper() {
   const [currentStep, setCurrentStep] = useState<'tool-selection' | 'filters' | 'results'>('tool-selection');
   const [selectedTool, setSelectedTool] = useState<'apollo' | 'apify' | 'phantombuster' | null>(null);
@@ -120,11 +197,13 @@ export default function DedicatedLeadScraper() {
 
   // Filter states for each tool
   const [apolloFilters, setApolloFilters] = useState({
-    jobTitles: "",
-    industry: "Technology",
-    location: "",
+    jobTitles: [],
+    industry: [],
+    location: [],
     companySize: "1-50",
-    seniorityLevel: "Manager",
+    seniorityLevel: [],
+    departments: [],
+    technologies: [],
     keywords: "",
     organizationIds: "",
     personTitles: "",
@@ -133,7 +212,11 @@ export default function DedicatedLeadScraper() {
     organizationLocations: "",
     contactEmailStatus: "likely_to_engage",
     prospectedByCurrentTeam: "false",
-    stage: "all"
+    stage: "all",
+    excludeDomains: "",
+    lastUpdated: "30_days",
+    revenueRange: "",
+    fundingStage: ""
   });
 
   const [apifyFilters, setApifyFilters] = useState({
@@ -371,32 +454,37 @@ export default function DedicatedLeadScraper() {
   // Filter Configuration Step
   if (currentStep === 'filters' && selectedTool) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <Button variant="outline" onClick={resetToToolSelection}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </Button>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Configure {selectedTool === 'apollo' ? 'Apollo.io' : selectedTool === 'apify' ? 'Apify' : 'PhantomBuster'} Filters
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              Set your targeting parameters for lead generation
-            </p>
-          </div>
-        </div>
-
-        {error && (
-          <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-md p-4">
-            <div className="flex">
-              <AlertCircle className="w-5 h-5 text-red-400 mr-2" />
-              <span className="text-red-800 dark:text-red-200">{error}</span>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-800 dark:to-gray-900 p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-6 mb-8">
+            <Button 
+              variant="outline" 
+              onClick={resetToToolSelection}
+              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-gray-300 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-700"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Tools
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                {selectedTool === 'apollo' ? 'Apollo.io Professional' : selectedTool === 'apify' ? 'Apify Web Scraper' : 'PhantomBuster Social'} Configuration
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300 text-lg">
+                Configure advanced targeting parameters for high-quality lead generation
+              </p>
             </div>
           </div>
-        )}
 
-        <Card className="p-6">
+          {error && (
+            <div className="bg-red-50/90 dark:bg-red-900/20 backdrop-blur-sm border border-red-200 dark:border-red-700 rounded-lg p-4 mb-6">
+              <div className="flex">
+                <AlertCircle className="w-5 h-5 text-red-400 mr-2" />
+                <span className="text-red-800 dark:text-red-200">{error}</span>
+              </div>
+            </div>
+          )}
+
+          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8">
           {/* Apollo.io Filters */}
           {selectedTool === 'apollo' && (
             <div className="space-y-6">
