@@ -63,16 +63,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
         source: "apollo"
       }));
 
-      // Call the save-scraped-leads endpoint
-      const saveResponse = await fetch(`http://localhost:5000/api/save-scraped-leads`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          source: "apollo",
-          timestamp: new Date().toISOString(),
-          leads: mockLeads
-        })
-      });
+      // Save leads directly to PostgreSQL database
+      const { Pool } = require('pg');
+      const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+      
+      let savedCount = 0;
+      for (const lead of mockLeads) {
+        try {
+          const insertQuery = `
+            INSERT INTO phantombuster_leads (
+              lead_owner, source, campaign_id, platform, name, email, phone, 
+              company, website, title, location, status, synced_hubspot, 
+              synced_yobot, score, date_added
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+          `;
+          
+          const values = [
+            'YoBot System',
+            'apollo',
+            `apollo-${Date.now()}`,
+            'Apollo.io',
+            lead.fullName,
+            lead.email,
+            lead.phone,
+            lead.company,
+            '',
+            lead.title,
+            lead.location,
+            'new',
+            false,
+            true,
+            Math.floor(Math.random() * 100) + 1,
+            new Date().toISOString()
+          ];
+
+          await pool.query(insertQuery, values);
+          savedCount++;
+        } catch (dbError) {
+          console.error(`Error saving lead ${lead.fullName}:`, dbError);
+        }
+      }
+      
+      await pool.end();
+      
+      // Send Slack notification
+      try {
+        await fetch("https://hooks.slack.com/services/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", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: `Apollo Scraper: ${mockLeads.length} leads generated, ${savedCount} saved to database`
+          })
+        });
+      } catch (slackError) {
+        console.error('Slack notification error:', slackError);
+      }
 
       res.json({ success: true, leads: mockLeads, count: mockLeads.length, filters });
     } catch (error) {
