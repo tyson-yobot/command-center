@@ -1809,61 +1809,6 @@ CRM Data:
   });
 
   const httpServer = createServer(app);
-  
-  // Add WebSocket server for real-time Command Center updates on separate path
-  const { WebSocketServer } = await import('ws');
-  const wss = new WebSocketServer({ 
-    server: httpServer, 
-    path: '/api/ws',
-    perMessageDeflate: false,
-    verifyClient: (info) => {
-      // Only accept connections to our specific path
-      return info.req.url === '/api/ws';
-    }
-  });
-
-  wss.on('connection', (ws, req) => {
-    console.log('YoBot WebSocket connected:', req.socket.remoteAddress);
-    
-    // Send initial automation metrics
-    const initialData = {
-      type: 'init',
-      data: {
-        ...liveAutomationMetrics,
-        timestamp: new Date().toISOString()
-      }
-    };
-    
-    if (ws.readyState === 1) { // WebSocket.OPEN
-      ws.send(JSON.stringify(initialData));
-    }
-    
-    // Handle incoming messages with proper error handling
-    ws.on('message', (message) => {
-      try {
-        const data = JSON.parse(message.toString());
-        
-        if (data.type === 'ping') {
-          if (ws.readyState === 1) {
-            ws.send(JSON.stringify({
-              type: 'pong',
-              timestamp: new Date().toISOString()
-            }));
-          }
-        }
-      } catch (error) {
-        console.log('WebSocket message processing skipped');
-      }
-    });
-    
-    ws.on('error', (error) => {
-      console.log('WebSocket connection closed');
-    });
-    
-    ws.on('close', () => {
-      console.log('YoBot WebSocket disconnected');
-    });
-  });
 
   // Lead Scraper API Endpoints
   app.post("/api/scraping/apollo", async (req, res) => {

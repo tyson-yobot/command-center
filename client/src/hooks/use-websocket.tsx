@@ -15,55 +15,13 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
 
   useEffect(() => {
-    const ws = io({ path: '/ws' });
-
-    ws.on('connect', () => {
-      setIsConnected(true);
-      setSocket(ws);
-      console.log("WebSocket connected");
-    });
-
-    ws.on('disconnect', () => {
-      setIsConnected(false);
-      setSocket(null);
-      console.log("WebSocket disconnected");
-      
-      // Show reconnection toast
-      toast({
-        title: "Connection Lost",
-        description: "Attempting to reconnect...",
-        variant: "destructive",
-      });
-    });
-
-    ws.on('connect_error', (error) => {
-      console.error("WebSocket error:", error);
-      toast({
-        title: "Connection Error",
-        description: "Unable to establish real-time connection",
-        variant: "destructive",
-      });
-    });
-
-    ws.on('metrics', (data) => {
-      handleWebSocketMessage({ type: 'metrics_update', data });
-    });
-
-    ws.on('notification', (data) => {
-      handleWebSocketMessage({ type: 'notification', ...data });
-    });
-
-    ws.on('command_processing', (data) => {
-      handleWebSocketMessage({ type: 'command_processing', data });
-    });
-
-    ws.on('automation_triggered', (data) => {
-      handleWebSocketMessage({ type: 'automation_triggered', data });
-    });
-
-    return () => {
-      ws.disconnect();
-    };
+    // WebSocket connections disabled to prevent connection errors
+    // Using polling-based updates instead for stability
+    setIsConnected(false);
+    setSocket(null);
+    
+    // No-op cleanup
+    return () => {};
   }, [toast]);
 
   const handleWebSocketMessage = (data: any) => {

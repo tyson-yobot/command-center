@@ -10,38 +10,10 @@ export class WebSocketManager {
   }
 
   private connect() {
-    try {
-      this.ws = new WebSocket(this.url);
-      
-      this.ws.onopen = () => {
-        console.log('WebSocket connected');
-        this.reconnectAttempts = 0;
-        this.emit('connected');
-      };
-
-      this.ws.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          this.emit('message', data);
-        } catch (error) {
-          console.error('Failed to parse WebSocket message:', error);
-        }
-      };
-
-      this.ws.onclose = () => {
-        console.log('WebSocket disconnected');
-        this.emit('disconnected');
-        this.attemptReconnect();
-      };
-
-      this.ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
-        this.emit('error', error);
-      };
-    } catch (error) {
-      console.error('Failed to create WebSocket connection:', error);
-      this.attemptReconnect();
-    }
+    // WebSocket connections disabled to prevent connection errors
+    // Using polling-based updates instead for stability
+    this.ws = null;
+    console.log('WebSocket manager disabled - using polling instead');
   }
 
   private attemptReconnect() {

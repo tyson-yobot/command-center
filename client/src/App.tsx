@@ -164,11 +164,9 @@ function App() {
       <TooltipProvider>
         <ThemeProvider defaultTheme="light" storageKey="yobot-ui-theme">
           <PWAProvider>
-            <WebSocketProvider>
-              <Toaster />
-              <CriticalAlertOverlay />
-              <Router />
-            </WebSocketProvider>
+            <Toaster />
+            <CriticalAlertOverlay />
+            <Router />
           </PWAProvider>
         </ThemeProvider>
       </TooltipProvider>
