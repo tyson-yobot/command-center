@@ -380,7 +380,227 @@ export default function ControlCenter() {
                 <p className="text-blue-200">Apollo.io • Apify • PhantomBuster Integration</p>
               </CardHeader>
               <CardContent>
-                <LeadScraperInterface />
+                <div className="space-y-6">
+                  {/* Engine Selection */}
+                  <div className="flex gap-2 bg-slate-700/50 p-2 rounded-lg">
+                    {['apollo', 'apify', 'phantom'].map(engine => (
+                      <button
+                        key={engine}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                          'apollo' === engine ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-600'
+                        }`}
+                      >
+                        {engine === 'apollo' && <Target className="h-4 w-4" />}
+                        {engine === 'apify' && <Globe className="h-4 w-4" />}
+                        {engine === 'phantom' && <Users className="h-4 w-4" />}
+                        {engine.charAt(0).toUpperCase() + engine.slice(1)}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Apollo.io Interface */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="space-y-4">
+                      <h3 className="text-white font-semibold">Person Criteria</h3>
+                      
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Person Titles</label>
+                        <Input
+                          placeholder="CEO, CTO, Marketing Manager..."
+                          value=""
+                          onChange={() => {}}
+                          className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Email Status</label>
+                        <select className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white">
+                          <option value="any">Any Email</option>
+                          <option value="verified">Verified Email</option>
+                          <option value="likely">Likely Email</option>
+                          <option value="none">No Email</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Phone Status</label>
+                        <select className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white">
+                          <option value="any">Any Phone</option>
+                          <option value="verified">Verified Phone</option>
+                          <option value="likely">Likely Phone</option>
+                          <option value="none">No Phone</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-white font-semibold">Company Criteria</h3>
+                      
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Company Keywords</label>
+                        <Input
+                          placeholder="Software, SaaS, Startup..."
+                          value=""
+                          onChange={() => {}}
+                          className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Industries</label>
+                        <select className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white">
+                          <option value="">Select Industry</option>
+                          <option value="Technology">Technology</option>
+                          <option value="Healthcare">Healthcare</option>
+                          <option value="Financial Services">Financial Services</option>
+                          <option value="Manufacturing">Manufacturing</option>
+                          <option value="Retail">Retail</option>
+                          <option value="Real Estate">Real Estate</option>
+                          <option value="Education">Education</option>
+                          <option value="Government">Government</option>
+                          <option value="Non-Profit">Non-Profit</option>
+                          <option value="Media & Entertainment">Media & Entertainment</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Company Size</label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <Input
+                            type="number"
+                            placeholder="Min"
+                            value="1"
+                            onChange={() => {}}
+                            className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
+                          />
+                          <Input
+                            type="number"
+                            placeholder="Max"
+                            value="10000"
+                            onChange={() => {}}
+                            className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Technologies</label>
+                        <select className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white">
+                          <option value="">Select Technology</option>
+                          <option value="Salesforce">Salesforce</option>
+                          <option value="HubSpot">HubSpot</option>
+                          <option value="Microsoft Office 365">Microsoft Office 365</option>
+                          <option value="Google Workspace">Google Workspace</option>
+                          <option value="Slack">Slack</option>
+                          <option value="Zoom">Zoom</option>
+                          <option value="AWS">AWS</option>
+                          <option value="Microsoft Azure">Microsoft Azure</option>
+                          <option value="Shopify">Shopify</option>
+                          <option value="WordPress">WordPress</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-white font-semibold">Location & Revenue</h3>
+                      
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Locations</label>
+                        <Input
+                          placeholder="United States, California, San Francisco..."
+                          value=""
+                          onChange={() => {}}
+                          className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Funding Stage</label>
+                        <select className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white">
+                          <option value="">Select Funding Stage</option>
+                          <option value="Bootstrapped">Bootstrapped</option>
+                          <option value="Pre-Seed">Pre-Seed</option>
+                          <option value="Seed">Seed</option>
+                          <option value="Series A">Series A</option>
+                          <option value="Series B">Series B</option>
+                          <option value="Series C">Series C</option>
+                          <option value="Series D+">Series D+</option>
+                          <option value="IPO">IPO</option>
+                          <option value="Acquired">Acquired</option>
+                          <option value="Private Equity">Private Equity</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="text-slate-300 text-sm mb-2 block">Annual Revenue Range</label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <Input
+                            type="number"
+                            placeholder="Min Revenue"
+                            value="0"
+                            onChange={() => {}}
+                            className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
+                          />
+                          <Input
+                            type="number"
+                            placeholder="Max Revenue"
+                            value="1000000000"
+                            onChange={() => {}}
+                            className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-4 pt-6 border-t border-slate-600">
+                    <Button
+                      onClick={async () => {
+                        try {
+                          const response = await fetch('/api/scraping/apollo', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              filters: {
+                                personTitles: [],
+                                companyKeywords: [],
+                                industries: [],
+                                locations: [],
+                                technologies: [],
+                                fundingStage: [],
+                                emailStatus: 'verified',
+                                phoneStatus: 'any'
+                              },
+                              maxResults: 1000
+                            })
+                          });
+                          const data = await response.json();
+                          console.log('Apollo results:', data);
+                        } catch (error) {
+                          console.error('Scraping error:', error);
+                        }
+                      }}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3"
+                    >
+                      <Play className="h-4 w-4 mr-2" />
+                      Start Apollo Scraping
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      className="text-blue-400 border-blue-600 hover:bg-blue-600 hover:text-white"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Export Results
+                    </Button>
+
+                    <div className="ml-auto text-slate-300">
+                      <span className="text-sm">Ready to scrape leads</span>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
