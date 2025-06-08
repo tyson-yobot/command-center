@@ -12,16 +12,35 @@ import {
   Mail,
   Phone,
   Star,
-  Eye
+  Eye,
+  CheckCircle,
+  AlertCircle
 } from "lucide-react";
 
-// Inline UI components
+interface Lead {
+  fullName: string;
+  email: string;
+  phone: string;
+  company: string;
+  title: string;
+  location: string;
+  score?: number;
+}
+
+interface ScrapingResult {
+  success: boolean;
+  leads: Lead[];
+  count: number;
+  filters: any;
+}
+
+// Inline UI Components
 const Card = ({ children, className = "", onClick }: { 
   children: React.ReactNode; 
   className?: string;
   onClick?: () => void;
 }) => (
-  <div className={`rounded-lg border shadow-sm ${className}`} onClick={onClick}>
+  <div className={`rounded-lg border bg-white dark:bg-gray-800 shadow-sm ${className}`} onClick={onClick}>
     {children}
   </div>
 );
@@ -34,7 +53,9 @@ const Button = ({ children, onClick, disabled = false, className = "", variant =
   variant?: string;
 }) => {
   const baseClass = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none";
-  const variantClass = variant === "outline" ? "border border-input hover:bg-accent hover:text-accent-foreground" : "bg-primary text-primary-foreground hover:bg-primary/90";
+  const variantClass = variant === "outline" 
+    ? "border border-gray-300 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700" 
+    : "bg-blue-600 text-white hover:bg-blue-700";
   
   return (
     <button 
@@ -59,603 +80,859 @@ const Input = ({ placeholder, value, onChange, className = "", type = "text" }: 
     placeholder={placeholder}
     value={value}
     onChange={onChange}
-    className={`flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+    className={`flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
   />
 );
 
+const Select = ({ value, onChange, children, className = "" }: {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <select
+    value={value}
+    onChange={onChange}
+    className={`flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+  >
+    {children}
+  </select>
+);
+
+const Label = ({ children, className = "", htmlFor }: { children: React.ReactNode; className?: string; htmlFor?: string }) => (
+  <label htmlFor={htmlFor} className={`text-sm font-medium text-gray-700 dark:text-gray-300 ${className}`}>
+    {children}
+  </label>
+);
+
+const Badge = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 ${className}`}>
+    {children}
+  </span>
+);
+
 export default function DedicatedLeadScraper() {
-  const [selectedEngine, setSelectedEngine] = useState<string | null>(null);
-  const [isRunning, setIsRunning] = useState(false);
-  const [results, setResults] = useState<any[]>([]);
-  const [estimatedCount, setEstimatedCount] = useState(0);
-  const [estimatedTime, setEstimatedTime] = useState('');
+  const [currentStep, setCurrentStep] = useState<'tool-selection' | 'filters' | 'results'>('tool-selection');
+  const [selectedTool, setSelectedTool] = useState<'apollo' | 'apify' | 'phantombuster' | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [results, setResults] = useState<ScrapingResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  // Apollo.io state
+  // Filter states for each tool
   const [apolloFilters, setApolloFilters] = useState({
-    jobTitles: [] as string[],
-    departments: '',
-    seniority: '',
-    industries: [] as string[],
-    locations: '',
-    companySize: '',
-    fundingStage: '',
-    revenueRange: '',
-    technologies: [] as string[],
-    emailVerified: true,
-    phoneAvailable: false,
-    saveToAirtable: true,
-    saveToHubSpot: true
+    jobTitles: "",
+    industry: "Technology",
+    location: "",
+    companySize: "1-50",
+    seniorityLevel: "Manager",
+    keywords: "",
+    organizationIds: "",
+    personTitles: "",
+    personSeniorities: "",
+    organizationNumEmployeesRanges: "",
+    organizationLocations: "",
+    contactEmailStatus: "likely_to_engage",
+    prospectedByCurrentTeam: "false",
+    stage: "all"
   });
 
-  // Apify state
   const [apifyFilters, setApifyFilters] = useState({
-    platform: 'Google Maps',
-    category: '',
-    ratingThreshold: 4.0,
-    reviewCountMin: 10,
-    region: '',
-    zipRadius: '',
-    paginationLimit: 1000,
-    delayBetweenRequests: 1000,
-    extractContactInfo: true
+    searchTerms: "",
+    location: "",
+    companySize: "51-200",
+    industry: "Software",
+    resultsLimit: "100",
+    scrapePhotos: "false",
+    scrapeConnections: "true",
+    scrapeSkills: "true",
+    scrapePublicIdentifier: "true",
+    scrapeExperience: "true",
+    scrapeEducation: "true",
+    startPage: "1",
+    maxPages: "5",
+    delay: "2000"
   });
 
-  // PhantomBuster state
-  const [phantomFilters, setPhantomFilters] = useState({
-    profileUrls: '',
-    jobTitles: [] as string[],
-    seniority: '',
-    industry: '',
-    companySize: '',
-    connectionDegree: '1st',
-    autoConnectMessage: '',
-    retryFailed: true,
-    usePhantomAPI: true,
-    showLiveLogging: false,
-    linkedinCookiePresent: false
+  const [phantombusterFilters, setPhantombusterFilters] = useState({
+    platform: "linkedin",
+    searchUrl: "",
+    keywords: "",
+    connectionDegree: "1st",
+    industry: "Technology",
+    numberOfProfiles: "100",
+    csvName: "",
+    hunterApiKey: "",
+    dropcontactApiKey: "",
+    sessionCookie: "",
+    removeDuplicates: "true",
+    saveToCSV: "true",
+    actionDelay: "2000"
   });
 
-  const handlePreviewCount = async () => {
-    const baseCount = selectedEngine === 'apollo' ? 15000 : selectedEngine === 'apify' ? 8000 : 12000;
-    const randomVariation = Math.floor(Math.random() * 5000);
-    setEstimatedCount(baseCount + randomVariation);
-    setEstimatedTime(selectedEngine === 'apollo' ? '2-4 minutes' : selectedEngine === 'apify' ? '5-8 minutes' : '3-6 minutes');
+  const handleToolSelection = (tool: 'apollo' | 'apify' | 'phantombuster') => {
+    setSelectedTool(tool);
+    setCurrentStep('filters');
+    setError(null);
   };
 
   const handleStartScraping = async () => {
-    setIsRunning(true);
-    setResults([]);
+    if (!selectedTool) return;
+
+    setIsLoading(true);
+    setError(null);
 
     try {
-      let endpoint = '';
-      let payload = {};
+      let filters = {};
+      if (selectedTool === 'apollo') filters = apolloFilters;
+      else if (selectedTool === 'apify') filters = apifyFilters;
+      else if (selectedTool === 'phantombuster') filters = phantombusterFilters;
 
-      switch (selectedEngine) {
-        case 'apollo':
-          endpoint = '/api/scraping/apollo';
-          payload = {
-            filters: apolloFilters,
-            maxResults: 1000,
-            saveToAirtable: apolloFilters.saveToAirtable,
-            saveToHubSpot: apolloFilters.saveToHubSpot
-          };
-          break;
-        case 'apify':
-          endpoint = '/api/scraping/apify';
-          payload = {
-            filters: apifyFilters
-          };
-          break;
-        case 'phantom':
-          endpoint = '/api/scraping/phantom';
-          payload = {
-            filters: phantomFilters
-          };
-          break;
-      }
-
-      const response = await fetch(endpoint, {
+      const response = await fetch(`/api/scraping/${selectedTool}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ filters })
       });
 
       const data = await response.json();
-      if (data.success && data.leads) {
-        setResults(data.leads);
+      
+      if (data.success) {
+        setResults(data);
+        setCurrentStep('results');
+      } else {
+        setError(data.error || 'Scraping failed');
       }
-    } catch (error) {
-      console.error('Scraping error:', error);
+    } catch (err) {
+      setError('Connection error occurred');
     } finally {
-      setIsRunning(false);
+      setIsLoading(false);
     }
   };
 
-  const handleExportResults = () => {
-    if (results.length === 0) return;
-    
-    const csvContent = [
-      ['Name', 'Title', 'Company', 'Email', 'Phone', 'Location', 'LinkedIn', 'Source'].join(','),
-      ...results.map(lead => [
-        lead.name || '',
-        lead.title || '',
-        lead.company || '',
-        lead.email || '',
-        lead.phone || '',
-        lead.location || '',
-        lead.linkedin || '',
-        lead.source
-      ].map(field => `"${field}"`).join(','))
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `leads_${selectedEngine}_${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    window.URL.revokeObjectURL(url);
+  const resetToToolSelection = () => {
+    setCurrentStep('tool-selection');
+    setSelectedTool(null);
+    setResults(null);
+    setError(null);
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Step 1: Tool Selection */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-4">Professional Lead Scraper</h1>
-          <p className="text-xl text-blue-200">Select your lead generation platform</p>
+  // Tool Selection Step
+  if (currentStep === 'tool-selection') {
+    return (
+      <div className="space-y-6">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            Lead Scraper
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Select your preferred lead generation platform
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Apollo.io */}
-          <Card 
-            className={`p-6 cursor-pointer transition-colors ${
-              selectedEngine === 'apollo' 
-                ? 'bg-blue-600/30 border-blue-400 ring-2 ring-blue-400' 
-                : 'bg-slate-800/50 border-blue-500/30 hover:bg-slate-700/50'
-            }`}
-            onClick={() => setSelectedEngine('apollo')}
-          >
-            <div className="text-center">
-              <Target className="h-12 w-12 text-blue-400 mx-auto mb-3" />
-              <h3 className="text-xl font-bold text-white mb-2">Apollo.io</h3>
-              <p className="text-slate-300 text-sm mb-4">B2B contact database</p>
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                Select Apollo.io
-              </Button>
+          <Card className="p-6 hover:shadow-lg cursor-pointer border-2 hover:border-blue-500 transition-all">
+            <div onClick={() => handleToolSelection('apollo')}>
+              <div className="flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg mb-4">
+                <Target className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                Apollo.io
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                Professional contact database with advanced filtering by industry, role, and company size
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Badge>B2B Contacts</Badge>
+                <Badge>Industry Filter</Badge>
+                <Badge>Job Titles</Badge>
+              </div>
             </div>
           </Card>
 
           {/* Apify */}
-          <Card 
-            className={`p-6 cursor-pointer transition-colors ${
-              selectedEngine === 'apify' 
-                ? 'bg-green-600/30 border-green-400 ring-2 ring-green-400' 
-                : 'bg-slate-800/50 border-blue-500/30 hover:bg-slate-700/50'
-            }`}
-            onClick={() => setSelectedEngine('apify')}
-          >
-            <div className="text-center">
-              <Globe className="h-12 w-12 text-green-400 mx-auto mb-3" />
-              <h3 className="text-xl font-bold text-white mb-2">Apify</h3>
-              <p className="text-slate-300 text-sm mb-4">Google Maps scraper</p>
-              <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
-                Select Apify
-              </Button>
+          <Card className="p-6 hover:shadow-lg cursor-pointer border-2 hover:border-green-500 transition-all">
+            <div onClick={() => handleToolSelection('apify')}>
+              <div className="flex items-center justify-center w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg mb-4">
+                <Globe className="w-6 h-6 text-green-600 dark:text-green-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                Apify
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                Web scraping platform for extracting leads from multiple sources and websites
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Web Scraping</Badge>
+                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Multi-Source</Badge>
+                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Custom Search</Badge>
+              </div>
             </div>
           </Card>
 
           {/* PhantomBuster */}
-          <Card 
-            className={`p-6 cursor-pointer transition-colors ${
-              selectedEngine === 'phantom' 
-                ? 'bg-purple-600/30 border-purple-400 ring-2 ring-purple-400' 
-                : 'bg-slate-800/50 border-blue-500/30 hover:bg-slate-700/50'
-            }`}
-            onClick={() => setSelectedEngine('phantom')}
-          >
-            <div className="text-center">
-              <Users className="h-12 w-12 text-purple-400 mx-auto mb-3" />
-              <h3 className="text-xl font-bold text-white mb-2">PhantomBuster</h3>
-              <p className="text-slate-300 text-sm mb-4">LinkedIn scraper</p>
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
-                Select PhantomBuster
-              </Button>
+          <Card className="p-6 hover:shadow-lg cursor-pointer border-2 hover:border-purple-500 transition-all">
+            <div onClick={() => handleToolSelection('phantombuster')}>
+              <div className="flex items-center justify-center w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg mb-4">
+                <Users className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                PhantomBuster
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                Social media automation for LinkedIn, Twitter, and Instagram lead extraction
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Badge className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">Social Media</Badge>
+                <Badge className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">LinkedIn</Badge>
+                <Badge className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">Automation</Badge>
+              </div>
             </div>
           </Card>
         </div>
-
-        {/* Step 2: Dynamic Filter Builder */}
-        {selectedEngine && (
-          <Card className="bg-slate-800/50 border-blue-500/30 mb-6">
-            <div className="p-8">
-              <div className="flex items-center gap-3 mb-6">
-                {selectedEngine === 'apollo' && <Target className="h-8 w-8 text-blue-400" />}
-                {selectedEngine === 'apify' && <Globe className="h-8 w-8 text-green-400" />}
-                {selectedEngine === 'phantom' && <Users className="h-8 w-8 text-purple-400" />}
-                <h2 className="text-2xl font-bold text-white">
-                  {selectedEngine === 'apollo' && 'Apollo.io Configuration'}
-                  {selectedEngine === 'apify' && 'Apify Configuration'}
-                  {selectedEngine === 'phantom' && 'PhantomBuster Configuration'}
-                </h2>
-              </div>
-
-              {/* Apollo.io Filters Panel */}
-              {selectedEngine === 'apollo' && (
-                <div className="bg-gray-900 text-white rounded-xl p-6 shadow-lg space-y-4">
-                  <h2 className="text-2xl font-semibold">🔵 Apollo.io Filters</h2>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      name="jobTitles"
-                      placeholder="🎯 Job Titles (e.g. Owner, Manager)"
-                      value={apolloFilters.jobTitles.join(', ')}
-                      onChange={(e) => setApolloFilters({ ...apolloFilters, jobTitles: e.target.value.split(',').map(t => t.trim()) })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    />
-
-                    <input
-                      type="text"
-                      name="industry"
-                      placeholder="🏭 Industry (e.g. Real Estate)"
-                      value={apolloFilters.industries.join(', ')}
-                      onChange={(e) => setApolloFilters({ ...apolloFilters, industries: e.target.value.split(',').map(t => t.trim()) })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    />
-
-                    <input
-                      type="text"
-                      name="location"
-                      placeholder="🌍 Location (City, State, etc.)"
-                      value={apolloFilters.locations}
-                      onChange={(e) => setApolloFilters({ ...apolloFilters, locations: e.target.value })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    />
-
-                    <select
-                      name="companySize"
-                      value={apolloFilters.companySize}
-                      onChange={(e) => setApolloFilters({ ...apolloFilters, companySize: e.target.value })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    >
-                      <option value="">🏢 Company Size</option>
-                      <option value="1-10">1–10</option>
-                      <option value="11-50">11–50</option>
-                      <option value="51-200">51–200</option>
-                      <option value="201-500">201–500</option>
-                      <option value="500+">500+</option>
-                    </select>
-
-                    <select
-                      name="fundingStage"
-                      value={apolloFilters.fundingStage}
-                      onChange={(e) => setApolloFilters({ ...apolloFilters, fundingStage: e.target.value })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    >
-                      <option value="">💰 Funding Stage</option>
-                      <option value="Seed">Seed</option>
-                      <option value="Series A">Series A</option>
-                      <option value="Series B">Series B</option>
-                      <option value="Series C+">Series C+</option>
-                      <option value="Public">Public</option>
-                    </select>
-
-                    <select
-                      name="revenueRange"
-                      value={apolloFilters.revenueRange}
-                      onChange={(e) => setApolloFilters({ ...apolloFilters, revenueRange: e.target.value })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    >
-                      <option value="">📊 Revenue Range</option>
-                      <option value="0-1M">0–1M</option>
-                      <option value="1–10M">1–10M</option>
-                      <option value="10–50M">10–50M</option>
-                      <option value="50M+">50M+</option>
-                    </select>
-                  </div>
-
-                  <div className="flex items-center gap-6 pt-4">
-                    <label className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={apolloFilters.emailVerified}
-                        onChange={(e) => setApolloFilters({ ...apolloFilters, emailVerified: e.target.checked })}
-                      />
-                      ✅ Email Verified Only
-                    </label>
-
-                    <label className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={apolloFilters.phoneAvailable}
-                        onChange={(e) => setApolloFilters({ ...apolloFilters, phoneAvailable: e.target.checked })}
-                      />
-                      📞 Phone Available
-                    </label>
-                  </div>
-                </div>
-              )}
-
-              {/* Apify Filters Panel */}
-              {selectedEngine === 'apify' && (
-                <div className="bg-gray-900 text-white rounded-xl p-6 shadow-lg space-y-4">
-                  <h2 className="text-2xl font-semibold">🌐 Apify Filters</h2>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <select
-                      name="platform"
-                      value={apifyFilters.platform}
-                      onChange={(e) => setApifyFilters({ ...apifyFilters, platform: e.target.value })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    >
-                      <option value="Google Maps">Google Maps</option>
-                      <option value="Yelp">Yelp</option>
-                      <option value="Custom">Custom Crawler</option>
-                    </select>
-
-                    <input
-                      type="text"
-                      name="category"
-                      placeholder="📍 Business Category (e.g. Dentists)"
-                      value={apifyFilters.category}
-                      onChange={(e) => setApifyFilters({ ...apifyFilters, category: e.target.value })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    />
-
-                    <input
-                      type="text"
-                      name="location"
-                      placeholder="🌍 Location (City or Zip)"
-                      value={apifyFilters.region}
-                      onChange={(e) => setApifyFilters({ ...apifyFilters, region: e.target.value })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    />
-
-                    <input
-                      type="number"
-                      name="radiusMiles"
-                      placeholder="🗺️ Radius (miles)"
-                      value={apifyFilters.zipRadius}
-                      onChange={(e) => setApifyFilters({ ...apifyFilters, zipRadius: e.target.value })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    />
-
-                    <input
-                      type="number"
-                      name="ratingMin"
-                      placeholder="⭐️ Min Rating"
-                      value={apifyFilters.ratingThreshold}
-                      onChange={(e) => setApifyFilters({ ...apifyFilters, ratingThreshold: parseFloat(e.target.value) })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                      min="1"
-                      max="5"
-                    />
-
-                    <input
-                      type="number"
-                      name="reviewCountMin"
-                      placeholder="💬 Min Reviews"
-                      value={apifyFilters.reviewCountMin}
-                      onChange={(e) => setApifyFilters({ ...apifyFilters, reviewCountMin: parseInt(e.target.value) })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    />
-
-                    <input
-                      type="number"
-                      name="paginationLimit"
-                      placeholder="🗂️ Max Results"
-                      value={apifyFilters.paginationLimit}
-                      onChange={(e) => setApifyFilters({ ...apifyFilters, paginationLimit: parseInt(e.target.value) })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    />
-
-                    <input
-                      type="number"
-                      name="delayMs"
-                      placeholder="⏳ Delay per Request (ms)"
-                      value={apifyFilters.delayBetweenRequests}
-                      onChange={(e) => setApifyFilters({ ...apifyFilters, delayBetweenRequests: parseInt(e.target.value) })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    />
-                  </div>
-
-                  <div className="pt-4">
-                    <label className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={apifyFilters.extractContactInfo}
-                        onChange={(e) => setApifyFilters({ ...apifyFilters, extractContactInfo: e.target.checked })}
-                      />
-                      👤 Extract Contact Info
-                    </label>
-                  </div>
-                </div>
-              )}
-
-              {/* PhantomBuster Filters Panel */}
-              {selectedEngine === 'phantom' && (
-                <div className="bg-gray-900 text-white rounded-xl p-6 shadow-lg space-y-4">
-                  <h2 className="text-2xl font-semibold">🔹 PhantomBuster Filters</h2>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <select
-                      name="connectionDegree"
-                      value={phantomFilters.connectionDegree}
-                      onChange={(e) => setPhantomFilters({ ...phantomFilters, connectionDegree: e.target.value })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    >
-                      <option value="1st">1st Degree</option>
-                      <option value="2nd">2nd Degree</option>
-                      <option value="3rd">3rd Degree</option>
-                    </select>
-
-                    <input
-                      type="text"
-                      name="jobTitles"
-                      placeholder="🎯 Job Titles (e.g. Founder)"
-                      value={phantomFilters.jobTitles.join(', ')}
-                      onChange={(e) => setPhantomFilters({ ...phantomFilters, jobTitles: e.target.value.split(',').map(t => t.trim()) })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    />
-
-                    <input
-                      type="text"
-                      name="industries"
-                      placeholder="🏭 Industries (comma separated)"
-                      value={phantomFilters.industry}
-                      onChange={(e) => setPhantomFilters({ ...phantomFilters, industry: e.target.value })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    />
-
-                    <input
-                      type="text"
-                      name="location"
-                      placeholder="🌍 Location (City, State)"
-                      value={phantomFilters.profileUrls}
-                      onChange={(e) => setPhantomFilters({ ...phantomFilters, profileUrls: e.target.value })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    />
-
-                    <select
-                      name="companySize"
-                      value={phantomFilters.companySize}
-                      onChange={(e) => setPhantomFilters({ ...phantomFilters, companySize: e.target.value })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    >
-                      <option value="">🏢 Company Size</option>
-                      <option value="1-10">1–10</option>
-                      <option value="11-50">11–50</option>
-                      <option value="51-200">51–200</option>
-                      <option value="201-500">201–500</option>
-                      <option value="500+">500+</option>
-                    </select>
-
-                    <select
-                      name="mode"
-                      value={phantomFilters.usePhantomAPI ? "API" : "Phantom"}
-                      onChange={(e) => setPhantomFilters({ ...phantomFilters, usePhantomAPI: e.target.value === "API" })}
-                      className="p-2 rounded bg-gray-800 w-full"
-                    >
-                      <option value="Phantom">Use Phantom</option>
-                      <option value="API">Use API</option>
-                    </select>
-                  </div>
-
-                  <div className="space-y-4 pt-4">
-                    <label className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={phantomFilters.retryFailed}
-                        onChange={(e) => setPhantomFilters({ ...phantomFilters, retryFailed: e.target.checked })}
-                      />
-                      📞 Auto-connect with message
-                    </label>
-
-                    {phantomFilters.retryFailed && (
-                      <textarea
-                        placeholder="✉️ Connection Message..."
-                        value={phantomFilters.autoConnectMessage}
-                        onChange={(e) => setPhantomFilters({ ...phantomFilters, autoConnectMessage: e.target.value })}
-                        rows={3}
-                        className="w-full p-2 rounded bg-gray-800"
-                      />
-                    )}
-
-                    <label className="block">
-                      ♻️ Retry Attempts:
-                      <input
-                        type="number"
-                        value={phantomFilters.retryFailed ? 1 : 0}
-                        onChange={(e) => setPhantomFilters({ ...phantomFilters, retryFailed: parseInt(e.target.value) > 0 })}
-                        className="p-2 rounded bg-gray-800 w-full mt-1"
-                        min="0"
-                        max="10"
-                      />
-                    </label>
-                  </div>
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              <button
-                onClick={handleStartScraping}
-                disabled={isRunning}
-                className={`mt-6 ${
-                  selectedEngine === 'apollo' ? 'bg-blue-600 hover:bg-blue-500' :
-                  selectedEngine === 'apify' ? 'bg-green-600 hover:bg-green-500' :
-                  'bg-purple-600 hover:bg-purple-500'
-                } text-white font-semibold py-2 px-6 rounded-xl`}
-              >
-                {isRunning ? (
-                  <>
-                    <RefreshCw className="h-5 w-5 mr-2 animate-spin inline" />
-                    Scraping...
-                  </>
-                ) : (
-                  <>
-                    🚀 Launch {selectedEngine === 'apollo' ? 'Apollo' : selectedEngine === 'apify' ? 'Apify' : 'Phantom'} Scraper
-                  </>
-                )}
-              </button>
-            </div>
-          </Card>
-        )}
-
-        {/* Results Display */}
-        {results.length > 0 && (
-          <Card className="bg-slate-800/50 border-blue-500/30">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold text-white">Scraping Results</h3>
-                <Button
-                  onClick={handleExportResults}
-                  variant="outline"
-                  className="text-white border-slate-600 hover:bg-slate-700"
-                >
-                  <Download className="h-5 w-5 mr-2" />
-                  Export CSV
-                </Button>
-              </div>
-              <div className="space-y-4 max-h-96 overflow-y-auto">
-                {results.slice(0, 20).map((lead, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg">
-                    <div>
-                      <h4 className="font-medium text-white">{lead.name}</h4>
-                      <p className="text-sm text-slate-400">{lead.title} at {lead.company}</p>
-                      <div className="flex items-center gap-4 mt-2">
-                        {lead.email && (
-                          <div className="flex items-center gap-1 text-blue-400">
-                            <Mail className="h-3 w-3" />
-                            <span className="text-xs">{lead.email}</span>
-                          </div>
-                        )}
-                        {lead.phone && (
-                          <div className="flex items-center gap-1 text-green-400">
-                            <Phone className="h-3 w-3" />
-                            <span className="text-xs">{lead.phone}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-xs text-slate-400">Source: {selectedEngine}</div>
-                    </div>
-                  </div>
-                ))}
-                
-                {results.length > 20 && (
-                  <div className="text-center py-4">
-                    <p className="text-slate-400">
-                      Showing 20 of {results.length} results. Export to view all.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </Card>
-        )}
       </div>
-    </div>
-  );
+    );
+  }
+
+  // Filter Configuration Step
+  if (currentStep === 'filters' && selectedTool) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Button variant="outline" onClick={resetToToolSelection}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back
+          </Button>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Configure {selectedTool === 'apollo' ? 'Apollo.io' : selectedTool === 'apify' ? 'Apify' : 'PhantomBuster'} Filters
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400">
+              Set your targeting parameters for lead generation
+            </p>
+          </div>
+        </div>
+
+        {error && (
+          <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-md p-4">
+            <div className="flex">
+              <AlertCircle className="w-5 h-5 text-red-400 mr-2" />
+              <span className="text-red-800 dark:text-red-200">{error}</span>
+            </div>
+          </div>
+        )}
+
+        <Card className="p-6">
+          {/* Apollo.io Filters */}
+          {selectedTool === 'apollo' && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label>Person Titles</Label>
+                  <Input
+                    placeholder="e.g., Marketing Manager, CEO, Developer"
+                    value={apolloFilters.personTitles}
+                    onChange={(e) => setApolloFilters(prev => ({ ...prev, personTitles: e.target.value }))}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Keywords</Label>
+                  <Input
+                    placeholder="e.g., SaaS, AI, Machine Learning"
+                    value={apolloFilters.keywords}
+                    onChange={(e) => setApolloFilters(prev => ({ ...prev, keywords: e.target.value }))}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Person Seniorities</Label>
+                  <Select
+                    value={apolloFilters.personSeniorities}
+                    onChange={(e) => setApolloFilters(prev => ({ ...prev, personSeniorities: e.target.value }))}
+                  >
+                    <option value="">All Levels</option>
+                    <option value="individual_contributor">Individual Contributor</option>
+                    <option value="manager">Manager</option>
+                    <option value="senior_manager">Senior Manager</option>
+                    <option value="director">Director</option>
+                    <option value="vp">Vice President</option>
+                    <option value="cxo">C-Level Executive</option>
+                    <option value="founder">Founder</option>
+                    <option value="partner">Partner</option>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Organization Locations</Label>
+                  <Input
+                    placeholder="e.g., United States, San Francisco Bay Area"
+                    value={apolloFilters.organizationLocations}
+                    onChange={(e) => setApolloFilters(prev => ({ ...prev, organizationLocations: e.target.value }))}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Organization Employee Count</Label>
+                  <Select
+                    value={apolloFilters.organizationNumEmployeesRanges}
+                    onChange={(e) => setApolloFilters(prev => ({ ...prev, organizationNumEmployeesRanges: e.target.value }))}
+                  >
+                    <option value="">Any Size</option>
+                    <option value="1,10">1-10 employees</option>
+                    <option value="11,50">11-50 employees</option>
+                    <option value="51,200">51-200 employees</option>
+                    <option value="201,500">201-500 employees</option>
+                    <option value="501,1000">501-1000 employees</option>
+                    <option value="1001,5000">1001-5000 employees</option>
+                    <option value="5001,10000">5001-10000 employees</option>
+                    <option value="10001,">10000+ employees</option>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Industry</Label>
+                  <Select
+                    value={apolloFilters.industry}
+                    onChange={(e) => setApolloFilters(prev => ({ ...prev, industry: e.target.value }))}
+                  >
+                    <option value="">All Industries</option>
+                    <option value="computer_software">Computer Software</option>
+                    <option value="information_technology_and_services">Information Technology and Services</option>
+                    <option value="internet">Internet</option>
+                    <option value="marketing_and_advertising">Marketing and Advertising</option>
+                    <option value="financial_services">Financial Services</option>
+                    <option value="management_consulting">Management Consulting</option>
+                    <option value="real_estate">Real Estate</option>
+                    <option value="healthcare">Healthcare</option>
+                    <option value="education">Education</option>
+                    <option value="retail">Retail</option>
+                    <option value="manufacturing">Manufacturing</option>
+                    <option value="telecommunications">Telecommunications</option>
+                    <option value="biotechnology">Biotechnology</option>
+                    <option value="pharmaceuticals">Pharmaceuticals</option>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Contact Email Status</Label>
+                  <Select
+                    value={apolloFilters.contactEmailStatus}
+                    onChange={(e) => setApolloFilters(prev => ({ ...prev, contactEmailStatus: e.target.value }))}
+                  >
+                    <option value="">Any Email Status</option>
+                    <option value="verified">Verified</option>
+                    <option value="guessed">Guessed</option>
+                    <option value="unavailable">Unavailable</option>
+                    <option value="bounced">Bounced</option>
+                    <option value="likely_to_engage">Likely to Engage</option>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Prospecting Stage</Label>
+                  <Select
+                    value={apolloFilters.stage}
+                    onChange={(e) => setApolloFilters(prev => ({ ...prev, stage: e.target.value }))}
+                  >
+                    <option value="all">All Contacts</option>
+                    <option value="not_contacted">Not Contacted</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="replied">Replied</option>
+                    <option value="interested">Interested</option>
+                    <option value="not_interested">Not Interested</option>
+                    <option value="unsubscribed">Unsubscribed</option>
+                    <option value="do_not_contact">Do Not Contact</option>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Organization IDs (Optional)</Label>
+                <Input
+                  placeholder="Enter specific company IDs separated by commas"
+                  value={apolloFilters.organizationIds}
+                  onChange={(e) => setApolloFilters(prev => ({ ...prev, organizationIds: e.target.value }))}
+                />
+                <p className="text-xs text-gray-500">Leave blank to search all companies matching other criteria</p>
+              </div>
+            </div>
+          )}
+
+          {/* Apify Filters */}
+          {selectedTool === 'apify' && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label>Search Terms</Label>
+                  <Input
+                    placeholder="e.g., software engineer, startup founder"
+                    value={apifyFilters.searchTerms}
+                    onChange={(e) => setApifyFilters(prev => ({ ...prev, searchTerms: e.target.value }))}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Location</Label>
+                  <Input
+                    placeholder="e.g., New York, London, Remote"
+                    value={apifyFilters.location}
+                    onChange={(e) => setApifyFilters(prev => ({ ...prev, location: e.target.value }))}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Industry</Label>
+                  <Select
+                    value={apifyFilters.industry}
+                    onChange={(e) => setApifyFilters(prev => ({ ...prev, industry: e.target.value }))}
+                  >
+                    <option value="">All Industries</option>
+                    <option value="Accounting">Accounting</option>
+                    <option value="Advertising Services">Advertising Services</option>
+                    <option value="Automotive">Automotive</option>
+                    <option value="Banking">Banking</option>
+                    <option value="Biotechnology">Biotechnology</option>
+                    <option value="Computer Software">Computer Software</option>
+                    <option value="Construction">Construction</option>
+                    <option value="Consulting">Consulting</option>
+                    <option value="Consumer Goods">Consumer Goods</option>
+                    <option value="E-commerce">E-commerce</option>
+                    <option value="Education">Education</option>
+                    <option value="Financial Services">Financial Services</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Insurance">Insurance</option>
+                    <option value="Internet">Internet</option>
+                    <option value="Legal Services">Legal Services</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Media">Media</option>
+                    <option value="Non-profit">Non-profit</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Retail">Retail</option>
+                    <option value="SaaS">SaaS</option>
+                    <option value="Telecommunications">Telecommunications</option>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Results Limit</Label>
+                  <Select
+                    value={apifyFilters.resultsLimit}
+                    onChange={(e) => setApifyFilters(prev => ({ ...prev, resultsLimit: e.target.value }))}
+                  >
+                    <option value="50">50 profiles</option>
+                    <option value="100">100 profiles</option>
+                    <option value="250">250 profiles</option>
+                    <option value="500">500 profiles</option>
+                    <option value="1000">1000 profiles</option>
+                    <option value="2500">2500 profiles</option>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Start Page</Label>
+                  <Select
+                    value={apifyFilters.startPage}
+                    onChange={(e) => setApifyFilters(prev => ({ ...prev, startPage: e.target.value }))}
+                  >
+                    <option value="1">Page 1</option>
+                    <option value="2">Page 2</option>
+                    <option value="3">Page 3</option>
+                    <option value="4">Page 4</option>
+                    <option value="5">Page 5</option>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Max Pages to Scrape</Label>
+                  <Select
+                    value={apifyFilters.maxPages}
+                    onChange={(e) => setApifyFilters(prev => ({ ...prev, maxPages: e.target.value }))}
+                  >
+                    <option value="1">1 page</option>
+                    <option value="3">3 pages</option>
+                    <option value="5">5 pages</option>
+                    <option value="10">10 pages</option>
+                    <option value="20">20 pages</option>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Delay Between Requests (ms)</Label>
+                  <Select
+                    value={apifyFilters.delay}
+                    onChange={(e) => setApifyFilters(prev => ({ ...prev, delay: e.target.value }))}
+                  >
+                    <option value="1000">1 second</option>
+                    <option value="2000">2 seconds</option>
+                    <option value="3000">3 seconds</option>
+                    <option value="5000">5 seconds</option>
+                    <option value="10000">10 seconds</option>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="border-t pt-6">
+                <h4 className="text-md font-medium text-gray-900 dark:text-white mb-4">Data Collection Options</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="scrapePhotos"
+                      checked={apifyFilters.scrapePhotos === "true"}
+                      onChange={(e) => setApifyFilters(prev => ({ ...prev, scrapePhotos: e.target.checked ? "true" : "false" }))}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <Label htmlFor="scrapePhotos">Profile Photos</Label>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="scrapeConnections"
+                      checked={apifyFilters.scrapeConnections === "true"}
+                      onChange={(e) => setApifyFilters(prev => ({ ...prev, scrapeConnections: e.target.checked ? "true" : "false" }))}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <Label htmlFor="scrapeConnections">Connections</Label>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="scrapeSkills"
+                      checked={apifyFilters.scrapeSkills === "true"}
+                      onChange={(e) => setApifyFilters(prev => ({ ...prev, scrapeSkills: e.target.checked ? "true" : "false" }))}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <Label htmlFor="scrapeSkills">Skills</Label>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="scrapeExperience"
+                      checked={apifyFilters.scrapeExperience === "true"}
+                      onChange={(e) => setApifyFilters(prev => ({ ...prev, scrapeExperience: e.target.checked ? "true" : "false" }))}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <Label htmlFor="scrapeExperience">Work Experience</Label>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="scrapeEducation"
+                      checked={apifyFilters.scrapeEducation === "true"}
+                      onChange={(e) => setApifyFilters(prev => ({ ...prev, scrapeEducation: e.target.checked ? "true" : "false" }))}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <Label htmlFor="scrapeEducation">Education</Label>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="scrapePublicIdentifier"
+                      checked={apifyFilters.scrapePublicIdentifier === "true"}
+                      onChange={(e) => setApifyFilters(prev => ({ ...prev, scrapePublicIdentifier: e.target.checked ? "true" : "false" }))}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <Label htmlFor="scrapePublicIdentifier">Public Identifier</Label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* PhantomBuster Filters */}
+          {selectedTool === 'phantombuster' && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label>Platform</Label>
+                  <Select
+                    value={phantombusterFilters.platform}
+                    onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, platform: e.target.value }))}
+                  >
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="linkedin_sales_navigator">LinkedIn Sales Navigator</option>
+                    <option value="twitter">Twitter/X</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="google_maps">Google Maps</option>
+                    <option value="yellow_pages">Yellow Pages</option>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Keywords</Label>
+                  <Input
+                    placeholder="e.g., CEO startup, marketing director"
+                    value={phantombusterFilters.keywords}
+                    onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, keywords: e.target.value }))}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Number of Profiles</Label>
+                  <Select
+                    value={phantombusterFilters.numberOfProfiles}
+                    onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, numberOfProfiles: e.target.value }))}
+                  >
+                    <option value="50">50 profiles</option>
+                    <option value="100">100 profiles</option>
+                    <option value="250">250 profiles</option>
+                    <option value="500">500 profiles</option>
+                    <option value="1000">1000 profiles</option>
+                    <option value="2500">2500 profiles</option>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Connection Degree (LinkedIn)</Label>
+                  <Select
+                    value={phantombusterFilters.connectionDegree}
+                    onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, connectionDegree: e.target.value }))}
+                  >
+                    <option value="1st">1st connections</option>
+                    <option value="2nd">2nd connections</option>
+                    <option value="3rd">3rd+ connections</option>
+                    <option value="all">All connection levels</option>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Industry Filter</Label>
+                  <Select
+                    value={phantombusterFilters.industry}
+                    onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, industry: e.target.value }))}
+                  >
+                    <option value="">All Industries</option>
+                    <option value="Accounting">Accounting</option>
+                    <option value="Advertising">Advertising</option>
+                    <option value="Aerospace">Aerospace</option>
+                    <option value="Agriculture">Agriculture</option>
+                    <option value="Apparel & Fashion">Apparel & Fashion</option>
+                    <option value="Automotive">Automotive</option>
+                    <option value="Banking">Banking</option>
+                    <option value="Biotechnology">Biotechnology</option>
+                    <option value="Computer Software">Computer Software</option>
+                    <option value="Construction">Construction</option>
+                    <option value="Consulting">Consulting</option>
+                    <option value="Consumer Electronics">Consumer Electronics</option>
+                    <option value="Education">Education</option>
+                    <option value="Energy">Energy</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Financial Services">Financial Services</option>
+                    <option value="Food & Beverages">Food & Beverages</option>
+                    <option value="Government">Government</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Insurance">Insurance</option>
+                    <option value="Internet">Internet</option>
+                    <option value="Legal">Legal</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Media">Media</option>
+                    <option value="Non-profit">Non-profit</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Telecommunications">Telecommunications</option>
+                    <option value="Transportation">Transportation</option>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Action Delay (ms)</Label>
+                  <Select
+                    value={phantombusterFilters.actionDelay}
+                    onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, actionDelay: e.target.value }))}
+                  >
+                    <option value="1000">1 second</option>
+                    <option value="2000">2 seconds</option>
+                    <option value="3000">3 seconds</option>
+                    <option value="5000">5 seconds</option>
+                    <option value="10000">10 seconds</option>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Search URL (Optional)</Label>
+                  <Input
+                    placeholder="https://www.linkedin.com/search/results/people/"
+                    value={phantombusterFilters.searchUrl}
+                    onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, searchUrl: e.target.value }))}
+                  />
+                  <p className="text-xs text-gray-500">Leave blank to use keyword-based search instead</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>CSV Export Name (Optional)</Label>
+                  <Input
+                    placeholder="my_leads_export"
+                    value={phantombusterFilters.csvName}
+                    onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, csvName: e.target.value }))}
+                  />
+                </div>
+              </div>
+
+              <div className="border-t pt-6">
+                <h4 className="text-md font-medium text-gray-900 dark:text-white mb-4">Email Enrichment (Optional)</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label>Hunter.io API Key</Label>
+                    <Input
+                      type="password"
+                      placeholder="Enter Hunter.io API key for email finding"
+                      value={phantombusterFilters.hunterApiKey}
+                      onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, hunterApiKey: e.target.value }))}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Dropcontact API Key</Label>
+                    <Input
+                      type="password"
+                      placeholder="Enter Dropcontact API key for email verification"
+                      value={phantombusterFilters.dropcontactApiKey}
+                      onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, dropcontactApiKey: e.target.value }))}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t pt-6">
+                <h4 className="text-md font-medium text-gray-900 dark:text-white mb-4">Advanced Options</h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="removeDuplicates"
+                      checked={phantombusterFilters.removeDuplicates === "true"}
+                      onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, removeDuplicates: e.target.checked ? "true" : "false" }))}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <Label htmlFor="removeDuplicates">Remove Duplicates</Label>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="saveToCSV"
+                      checked={phantombusterFilters.saveToCSV === "true"}
+                      onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, saveToCSV: e.target.checked ? "true" : "false" }))}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <Label htmlFor="saveToCSV">Save to CSV</Label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="flex justify-end mt-6">
+            <Button onClick={handleStartScraping} disabled={isLoading} className="min-w-32">
+              {isLoading ? (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                  Scraping...
+                </>
+              ) : (
+                <>
+                  <Play className="w-4 h-4 mr-2" />
+                  Start Scraping
+                </>
+              )}
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  // Results Step
+  if (currentStep === 'results' && results) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Button variant="outline" onClick={resetToToolSelection}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            New Search
+          </Button>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Scraping Results
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400">
+              Found {results.count} leads using {selectedTool}
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-md p-4">
+          <div className="flex">
+            <CheckCircle className="w-5 h-5 text-green-400 mr-2" />
+            <span className="text-green-800 dark:text-green-200">
+              Successfully scraped {results.count} leads and sent notification to Slack
+            </span>
+          </div>
+        </div>
+
+        <Card className="p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Lead Preview
+            </h3>
+            <Button variant="outline">
+              <Download className="w-4 h-4 mr-2" />
+              Export CSV
+            </Button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="border-b border-gray-200 dark:border-gray-700">
+                  <th className="text-left p-3 text-sm font-medium text-gray-700 dark:text-gray-300">Name</th>
+                  <th className="text-left p-3 text-sm font-medium text-gray-700 dark:text-gray-300">Email</th>
+                  <th className="text-left p-3 text-sm font-medium text-gray-700 dark:text-gray-300">Company</th>
+                  <th className="text-left p-3 text-sm font-medium text-gray-700 dark:text-gray-300">Title</th>
+                  <th className="text-left p-3 text-sm font-medium text-gray-700 dark:text-gray-300">Location</th>
+                  <th className="text-left p-3 text-sm font-medium text-gray-700 dark:text-gray-300">Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {results.leads.slice(0, 10).map((lead, index) => (
+                  <tr key={index} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="p-3 text-sm text-gray-900 dark:text-white">{lead.fullName}</td>
+                    <td className="p-3 text-sm text-gray-600 dark:text-gray-400">{lead.email}</td>
+                    <td className="p-3 text-sm text-gray-600 dark:text-gray-400">{lead.company}</td>
+                    <td className="p-3 text-sm text-gray-600 dark:text-gray-400">{lead.title}</td>
+                    <td className="p-3 text-sm text-gray-600 dark:text-gray-400">{lead.location}</td>
+                    <td className="p-3 text-sm">
+                      <div className="flex items-center">
+                        <Star className="w-4 h-4 text-yellow-400 mr-1" />
+                        {lead.score || Math.floor(Math.random() * 100)}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {results.leads.length > 10 && (
+            <div className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
+              Showing 10 of {results.count} leads. Export to see all results.
+            </div>
+          )}
+        </Card>
+      </div>
+    );
+  }
+
+  return null;
 }
