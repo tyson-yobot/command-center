@@ -1808,9 +1808,7 @@ CRM Data:
     }
   });
 
-  const httpServer = createServer(app);
-
-  // Lead Scraper API Endpoints - Updated to match React component filters
+  // Lead Scraper API Endpoints - Must be before catch-all webhook handlers
   app.post("/api/scraping/apollo", async (req, res) => {
     try {
       const { filters } = req.body;
@@ -1927,60 +1925,65 @@ CRM Data:
   app.post("/api/save-scraped-leads", async (req, res) => {
     try {
       const { source, timestamp, leads } = req.body;
+      const scrapeSessionId = `${source}-${Date.now()}`;
 
       console.log(`📥 Saving ${leads.length} leads from ${source} to Airtable`);
 
-      // Send to Airtable using existing integration test log functionality
-      for (const lead of leads.slice(0, 10)) {
-        const airtableData = {
-          "🧑 Full Name": lead.fullName,
-          "✉️ Email": lead.email,
-          "🏢 Company Name": lead.company,
-          "💼 Title": lead.title,
-          "🌍 Location": lead.location,
-          "📞 Phone Number": lead.phone,
-          "🏭 Industry": lead.industry,
-          "🔖 Source Tag": lead.sourceTag,
-          "🆔 Scrape Session ID": lead.scrapeSessionId,
-          "🕒 Scraped Timestamp": timestamp
-        };
-
+      // Send leads directly to Airtable 🧲 Scraped Leads (Universal) table
+      let savedCount = 0;
+      for (const lead of leads) {
         try {
-          // Use the existing logIntegrationTest endpoint that works
-          await fetch(`http://localhost:5000/api/log-integration-test`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          const airtableResponse = await fetch("https://api.airtable.com/v0/appMbVQJ0n3nWR11N/tbluqrDSomu5UVhDw", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN}`,
+              "Content-Type": "application/json"
+            },
             body: JSON.stringify({
-              testName: `Lead: ${lead.fullName}`,
-              status: "PASS",
-              details: JSON.stringify(airtableData),
-              timestamp: timestamp
+              fields: {
+                "🧑 Full Name": lead.fullName,
+                "✉️ Email": lead.email,
+                "🏢 Company Name": lead.company,
+                "💼 Title": lead.title,
+                "🌍 Location": lead.location,
+                "📞 Phone Number": lead.phone,
+                "🏭 Industry": lead.industry,
+                "🔖 Source Tag": `${source.charAt(0).toUpperCase() + source.slice(1)} - ${new Date().toLocaleDateString()}`,
+                "🆔 Scrape Session ID": scrapeSessionId,
+                "🕒 Scraped Timestamp": timestamp
+              }
             })
           });
+
+          if (airtableResponse.ok) {
+            savedCount++;
+          } else {
+            console.error(`Airtable error for lead ${lead.fullName}:`, await airtableResponse.text());
+          }
         } catch (leadError) {
           console.error(`Error saving lead ${lead.fullName}:`, leadError);
         }
       }
 
       // Send Slack notification
-      if (process.env.SLACK_WEBHOOK_URL) {
-        try {
-          await fetch(process.env.SLACK_WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              text: `✅ New Leads Scraped: ${leads.length}\n🔍 Tool: ${source.charAt(0).toUpperCase() + source.slice(1)}\n📥 Saved to Airtable & Ready for Outreach`
-            })
-          });
-        } catch (slackError) {
-          console.error('Slack notification error:', slackError);
-        }
+      const slackWebhookUrl = "https://hooks.slack.com/services/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";
+      try {
+        await fetch(slackWebhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: `✅ *New Leads Scraped*: ${leads.length}\n🧰 Tool: ${source.charAt(0).toUpperCase() + source.slice(1)}\n🕒 Time: ${new Date(timestamp).toLocaleString()}\n📥 Synced to Airtable ✅`
+          })
+        });
+      } catch (slackError) {
+        console.error('Slack notification error:', slackError);
       }
 
       res.json({
         success: true,
         message: `Successfully processed ${leads.length} leads from ${source}`,
-        airtableSaved: Math.min(leads.length, 10),
+        airtableSaved: savedCount,
+        scrapeSessionId: scrapeSessionId,
         timestamp: timestamp
       });
 
@@ -1990,8 +1993,179 @@ CRM Data:
     }
   });
 
+  // Recurring scrape scheduler endpoint
+  app.post("/api/scraping/schedule", async (req, res) => {
+    try {
+      const { tool, filters, frequency, startTime, enabled } = req.body;
+      
+      const scheduleId = `schedule-${tool}-${Date.now()}`;
+      const scheduleData = {
+        id: scheduleId,
+        tool,
+        filters,
+        frequency, // 'daily', 'weekly', 'monthly'
+        startTime,
+        enabled,
+        created: new Date().toISOString(),
+        lastRun: null,
+        nextRun: calculateNextRun(frequency, startTime)
+      };
+
+      // Save schedule to Airtable for persistence
+      await fetch("https://api.airtable.com/v0/appMbVQJ0n3nWR11N/tblScheduledScrapes", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          fields: {
+            "Schedule ID": scheduleId,
+            "Tool": tool,
+            "Filters": JSON.stringify(filters),
+            "Frequency": frequency,
+            "Start Time": startTime,
+            "Enabled": enabled,
+            "Next Run": scheduleData.nextRun
+          }
+        })
+      });
+
+      res.json({
+        success: true,
+        scheduleId,
+        message: `Recurring ${tool} scrape scheduled for ${frequency}`,
+        nextRun: scheduleData.nextRun
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Auto-push to HubSpot CRM endpoint
+  app.post("/api/crm/push-leads", async (req, res) => {
+    try {
+      const { leads, source } = req.body;
+      
+      if (!process.env.HUBSPOT_API_KEY) {
+        return res.status(401).json({ success: false, error: 'HubSpot API key required' });
+      }
+
+      let pushedCount = 0;
+      for (const lead of leads) {
+        try {
+          const hubspotContact = {
+            properties: {
+              email: lead.email,
+              firstname: lead.fullName.split(' ')[0],
+              lastname: lead.fullName.split(' ').slice(1).join(' '),
+              company: lead.company,
+              jobtitle: lead.title,
+              phone: lead.phone,
+              city: lead.location,
+              hs_lead_status: "NEW",
+              lifecyclestage: "lead",
+              lead_source: `Lead Scraper - ${source}`
+            }
+          };
+
+          const hubspotResponse = await fetch("https://api.hubapi.com/crm/v3/objects/contacts", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${process.env.HUBSPOT_API_KEY}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(hubspotContact)
+          });
+
+          if (hubspotResponse.ok) {
+            pushedCount++;
+          }
+        } catch (leadError) {
+          console.error(`HubSpot push error for ${lead.fullName}:`, leadError);
+        }
+      }
+
+      res.json({
+        success: true,
+        message: `Pushed ${pushedCount} leads to HubSpot CRM`,
+        pushedCount,
+        source
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // PDF scrape summary generator endpoint
+  app.post("/api/scraping/generate-pdf-summary", async (req, res) => {
+    try {
+      const { scrapeSessionId, source, leads, filters } = req.body;
+      
+      const PDFDocument = require('pdfkit');
+      const fs = require('fs');
+      
+      const doc = new PDFDocument();
+      const filename = `scrape-summary-${scrapeSessionId}.pdf`;
+      const stream = fs.createWriteStream(filename);
+      doc.pipe(stream);
+
+      // PDF Header
+      doc.fontSize(20).text('Lead Scraping Summary Report', 50, 50);
+      doc.fontSize(12).text(`Generated: ${new Date().toLocaleString()}`, 50, 80);
+      doc.text(`Source: ${source.charAt(0).toUpperCase() + source.slice(1)}`, 50, 100);
+      doc.text(`Session ID: ${scrapeSessionId}`, 50, 120);
+      doc.text(`Total Leads: ${leads.length}`, 50, 140);
+
+      // Filters section
+      doc.fontSize(14).text('Search Criteria:', 50, 180);
+      let yPos = 200;
+      Object.entries(filters).forEach(([key, value]) => {
+        doc.fontSize(10).text(`${key}: ${value}`, 70, yPos);
+        yPos += 15;
+      });
+
+      // Leads summary
+      doc.fontSize(14).text('Lead Summary:', 50, yPos + 20);
+      yPos += 50;
+      
+      leads.slice(0, 20).forEach((lead, index) => {
+        if (yPos > 700) {
+          doc.addPage();
+          yPos = 50;
+        }
+        doc.fontSize(10)
+           .text(`${index + 1}. ${lead.fullName}`, 70, yPos)
+           .text(`   ${lead.company} - ${lead.title}`, 70, yPos + 12)
+           .text(`   ${lead.email} | ${lead.phone}`, 70, yPos + 24);
+        yPos += 45;
+      });
+
+      if (leads.length > 20) {
+        doc.text(`... and ${leads.length - 20} more leads`, 70, yPos);
+      }
+
+      doc.end();
+
+      stream.on('finish', () => {
+        res.json({
+          success: true,
+          filename,
+          message: 'PDF summary generated successfully',
+          downloadUrl: `/downloads/${filename}`
+        });
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  const httpServer = createServer(app);
+
   return httpServer;
 }
+
+
 
 // Export for other modules to update metrics
 export function updateAutomationMetrics(update: any) {

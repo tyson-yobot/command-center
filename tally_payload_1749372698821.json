@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-06-08T08:51:38.821Z",
+  "url": "/api/save-scraped-leads",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "380"
+  },
+  "raw_payload": {
+    "source": "apollo",
+    "timestamp": "2025-06-08T08:52:00.000Z",
+    "leads": [
+      {
+        "fullName": "Sarah Johnson",
+        "email": "sarah.johnson@techcorp.com",
+        "company": "TechCorp Solutions",
+        "title": "Marketing Manager",
+        "location": "San Francisco, CA",
+        "phone": "+1-555-0123",
+        "industry": "Technology"
+      }
+    ]
+  }
+}
