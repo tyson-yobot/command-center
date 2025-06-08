@@ -996,22 +996,23 @@ export default function DedicatedLeadScraper() {
             </div>
           )}
 
-          <div className="flex justify-end mt-6">
-            <Button onClick={handleStartScraping} disabled={isLoading} className="min-w-32">
-              {isLoading ? (
-                <>
-                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                  Scraping...
-                </>
-              ) : (
-                <>
-                  <Play className="w-4 h-4 mr-2" />
-                  Start Scraping
-                </>
-              )}
-            </Button>
+            <div className="flex justify-end mt-6">
+              <Button onClick={handleStartScraping} disabled={isLoading} className="min-w-32 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0">
+                {isLoading ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    Scraping...
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-4 h-4 mr-2" />
+                    Start Scraping
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
-        </Card>
+        </div>
       </div>
     );
   }

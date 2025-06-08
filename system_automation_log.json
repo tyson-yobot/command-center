@@ -1,38 +1,5 @@
 [
   {
-    "timestamp": "2025-06-07T23:45:00.591Z",
-    "functionId": 148,
-    "functionName": "ROI Summary Generator",
-    "batch": 15,
-    "category": "Analytics",
-    "status": "success",
-    "duration": 414,
-    "successCount": 3,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-07T23:45:00.602Z",
-    "functionId": 147,
-    "functionName": "Full API Health Check",
-    "batch": 15,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 424,
-    "successCount": 8,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-07T23:45:00.694Z",
-    "functionId": 149,
-    "functionName": "Manual Override Logger",
-    "batch": 15,
-    "category": "Audit",
-    "status": "success",
-    "duration": 514,
-    "successCount": 8,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-07T23:45:00.790Z",
     "functionId": 140,
     "functionName": "Live Error Push",
@@ -11216,6 +11183,51 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-08T23:29:47.580Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-08T23:30:16.649Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-08T23:30:16.357Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-08T23:30:42.827Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-08T23:30:42.511Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-08T23:33:51.653Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-08T23:33:51.340Z",
       "automationStatus": "running"
     }
   }
