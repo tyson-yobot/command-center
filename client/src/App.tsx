@@ -1,7 +1,7 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
-import EnhancedLeadScraper from "./components/lead-scraper-enhanced";
+import EnterpriseLeadScraper from "./components/enterprise-lead-scraper";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,8 +16,8 @@ function Router() {
   return (
     <div className="min-h-screen">
       <Switch>
-        <Route path="/" component={EnhancedLeadScraper} />
-        <Route path="/scraper" component={EnhancedLeadScraper} />
+        <Route path="/" component={EnterpriseLeadScraper} />
+        <Route path="/scraper" component={EnterpriseLeadScraper} />
         <Route>
           <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
             <div className="text-center">

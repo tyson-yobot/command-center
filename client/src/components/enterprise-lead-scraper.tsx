@@ -1,0 +1,1087 @@
+import React, { useState } from "react";
+import { 
+  Target,
+  Globe,
+  Users,
+  Play,
+  Download,
+  RefreshCw,
+  ArrowLeft,
+  Building,
+  MapPin,
+  Mail,
+  Phone,
+  Star,
+  Eye,
+  CheckCircle,
+  AlertCircle,
+  Shield,
+  Zap,
+  TrendingUp
+} from "lucide-react";
+
+interface Lead {
+  fullName: string;
+  email: string;
+  phone: string;
+  company: string;
+  title: string;
+  location: string;
+  score?: number;
+}
+
+interface ScrapingResult {
+  success: boolean;
+  leads: Lead[];
+  count: number;
+  filters: any;
+}
+
+// Enterprise UI Components with Command Center Styling
+const Card = ({ children, className = "", onClick }: { 
+  children: React.ReactNode; 
+  className?: string;
+  onClick?: () => void;
+}) => (
+  <div 
+    className={`rounded-3xl bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-xl border border-slate-700/50 shadow-2xl ${className}`} 
+    onClick={onClick}
+  >
+    {children}
+  </div>
+);
+
+const Button = ({ children, onClick, disabled = false, className = "", variant = "default" }: {
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  className?: string;
+  variant?: string;
+}) => {
+  const baseClass = "inline-flex items-center justify-center rounded-2xl text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 disabled:opacity-50 disabled:pointer-events-none transform hover:scale-105 active:scale-95";
+  
+  const variantClass = variant === "outline" 
+    ? "border-2 border-slate-600/50 bg-gradient-to-r from-slate-700/80 to-slate-800/80 backdrop-blur-sm hover:from-slate-600/80 hover:to-slate-700/80 text-white shadow-lg hover:shadow-xl" 
+    : "bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white border-0 shadow-2xl hover:shadow-blue-500/25";
+  
+  return (
+    <button 
+      className={`${baseClass} ${variantClass} h-12 py-3 px-8 ${className}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {children}
+    </button>
+  );
+};
+
+const Input = ({ placeholder, value, onChange, className = "", type = "text" }: {
+  placeholder?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
+  type?: string;
+}) => (
+  <input
+    type={type}
+    placeholder={placeholder}
+    value={value}
+    onChange={onChange}
+    className={`flex h-12 w-full rounded-xl border-2 border-slate-600/50 bg-gradient-to-r from-slate-700/80 to-slate-800/80 backdrop-blur-sm px-4 py-3 text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 ${className}`}
+  />
+);
+
+const Select = ({ value, onChange, children, className = "" }: {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <select
+    value={value}
+    onChange={onChange}
+    className={`flex h-12 w-full rounded-xl border-2 border-slate-600/50 bg-gradient-to-r from-slate-700/80 to-slate-800/80 backdrop-blur-sm px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 ${className}`}
+  >
+    {children}
+  </select>
+);
+
+const Label = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <label className={`text-sm font-semibold text-slate-200 ${className}`}>
+    {children}
+  </label>
+);
+
+export default function EnterpriseLeadScraper() {
+  const [currentStep, setCurrentStep] = useState<'tool-selection' | 'filters' | 'results'>('tool-selection');
+  const [selectedTool, setSelectedTool] = useState<'apollo' | 'apify' | 'phantombuster' | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [results, setResults] = useState<ScrapingResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  // Enhanced Filter States
+  const [apolloFilters, setApolloFilters] = useState({
+    personTitles: "",
+    industry: "",
+    location: "",
+    companySize: "",
+    seniorityLevel: "",
+    emailStatus: "verified",
+    department: "",
+    keywords: "",
+    revenueRange: "",
+    fundingStage: "",
+    lastUpdated: "30_days"
+  });
+
+  const [apifyFilters, setApifyFilters] = useState({
+    searchTerms: "",
+    location: "",
+    industry: "",
+    resultsLimit: "100",
+    minReviews: "5",
+    maxListings: "1000",
+    ratingThreshold: "4",
+    excludeKeywords: "",
+    requestDelay: "2000"
+  });
+
+  const [phantombusterFilters, setPhantombusterFilters] = useState({
+    platform: "linkedin",
+    keywords: "",
+    connectionDegree: "2nd",
+    seniorityLevel: "",
+    department: "",
+    industry: "",
+    location: "",
+    companySize: "",
+    dailyLimit: "100",
+    messageTemplate: ""
+  });
+
+  const handleToolSelection = (tool: 'apollo' | 'apify' | 'phantombuster') => {
+    setSelectedTool(tool);
+    setCurrentStep('filters');
+    setError(null);
+  };
+
+  const handleStartScraping = async () => {
+    if (!selectedTool) return;
+    
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const filters = selectedTool === 'apollo' ? apolloFilters 
+                   : selectedTool === 'apify' ? apifyFilters 
+                   : phantombusterFilters;
+      
+      const response = await fetch(`/api/scraping/${selectedTool}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filters })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setResults(data);
+        setCurrentStep('results');
+      } else {
+        setError(data.message || 'Scraping failed');
+      }
+    } catch (err) {
+      setError('Network error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const resetToToolSelection = () => {
+    setCurrentStep('tool-selection');
+    setSelectedTool(null);
+    setResults(null);
+    setError(null);
+  };
+
+  // Tool Selection Step - Enterprise Design
+  if (currentStep === 'tool-selection') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Header Section */}
+          <div className="text-center mb-16">
+            <div className="flex justify-center mb-8">
+              <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 p-6 rounded-full shadow-2xl animate-pulse">
+                <Target className="w-12 h-12 text-white" />
+              </div>
+            </div>
+            <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent mb-6">
+              Enterprise Lead Intelligence Platform
+            </h1>
+            <p className="text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
+              Advanced multi-platform lead generation with enterprise-grade targeting and real-time intelligence
+            </p>
+          </div>
+
+          {/* Platform Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-16">
+            {/* Apollo.io */}
+            <Card 
+              onClick={() => handleToolSelection('apollo')}
+              className="group cursor-pointer hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 overflow-hidden p-10 transform hover:scale-105"
+            >
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-2xl blur-xl"></div>
+                <div className="relative">
+                  <div className="flex justify-center mb-8">
+                    <div className="bg-gradient-to-br from-blue-500 to-cyan-600 p-6 rounded-3xl group-hover:scale-110 transition-transform duration-500 shadow-2xl">
+                      <Target className="w-10 h-10 text-white" />
+                    </div>
+                  </div>
+                  <h3 className="text-3xl font-bold text-white mb-4 text-center">
+                    Apollo.io
+                  </h3>
+                  <p className="text-slate-300 text-center mb-8 leading-relaxed text-lg">
+                    Professional B2B intelligence with 250M+ verified contacts and advanced enterprise filtering
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-3 mb-8">
+                    <span className="px-4 py-2 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-400/30 text-blue-300 rounded-full text-sm font-semibold backdrop-blur-sm">
+                      <Shield className="w-4 h-4 inline mr-2" />
+                      Verified Emails
+                    </span>
+                    <span className="px-4 py-2 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-400/30 text-blue-300 rounded-full text-sm font-semibold backdrop-blur-sm">
+                      <TrendingUp className="w-4 h-4 inline mr-2" />
+                      Executive Targeting
+                    </span>
+                  </div>
+                  <div className="text-center">
+                    <div className="inline-flex items-center text-sm text-slate-400">
+                      <Zap className="w-4 h-4 mr-2" />
+                      Enterprise-grade accuracy
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            {/* Apify */}
+            <Card 
+              onClick={() => handleToolSelection('apify')}
+              className="group cursor-pointer hover:shadow-2xl hover:shadow-green-500/20 transition-all duration-500 overflow-hidden p-10 transform hover:scale-105"
+            >
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-2xl blur-xl"></div>
+                <div className="relative">
+                  <div className="flex justify-center mb-8">
+                    <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-6 rounded-3xl group-hover:scale-110 transition-transform duration-500 shadow-2xl">
+                      <Globe className="w-10 h-10 text-white" />
+                    </div>
+                  </div>
+                  <h3 className="text-3xl font-bold text-white mb-4 text-center">
+                    Apify
+                  </h3>
+                  <p className="text-slate-300 text-center mb-8 leading-relaxed text-lg">
+                    Advanced web intelligence platform for LinkedIn profiles and comprehensive business listings
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-3 mb-8">
+                    <span className="px-4 py-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-400/30 text-green-300 rounded-full text-sm font-semibold backdrop-blur-sm">
+                      <Globe className="w-4 h-4 inline mr-2" />
+                      Web Intelligence
+                    </span>
+                    <span className="px-4 py-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-400/30 text-green-300 rounded-full text-sm font-semibold backdrop-blur-sm">
+                      <Building className="w-4 h-4 inline mr-2" />
+                      Business Listings
+                    </span>
+                  </div>
+                  <div className="text-center">
+                    <div className="inline-flex items-center text-sm text-slate-400">
+                      <Zap className="w-4 h-4 mr-2" />
+                      Custom data extraction
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            {/* PhantomBuster */}
+            <Card 
+              onClick={() => handleToolSelection('phantombuster')}
+              className="group cursor-pointer hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 overflow-hidden p-10 transform hover:scale-105"
+            >
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-violet-500/20 rounded-2xl blur-xl"></div>
+                <div className="relative">
+                  <div className="flex justify-center mb-8">
+                    <div className="bg-gradient-to-br from-purple-500 to-violet-600 p-6 rounded-3xl group-hover:scale-110 transition-transform duration-500 shadow-2xl">
+                      <Users className="w-10 h-10 text-white" />
+                    </div>
+                  </div>
+                  <h3 className="text-3xl font-bold text-white mb-4 text-center">
+                    PhantomBuster
+                  </h3>
+                  <p className="text-slate-300 text-center mb-8 leading-relaxed text-lg">
+                    Premium social media automation for LinkedIn, Twitter with intelligent connection management
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-3 mb-8">
+                    <span className="px-4 py-2 bg-gradient-to-r from-purple-500/20 to-violet-500/20 border border-purple-400/30 text-purple-300 rounded-full text-sm font-semibold backdrop-blur-sm">
+                      <Users className="w-4 h-4 inline mr-2" />
+                      Social Automation
+                    </span>
+                    <span className="px-4 py-2 bg-gradient-to-r from-purple-500/20 to-violet-500/20 border border-purple-400/30 text-purple-300 rounded-full text-sm font-semibold backdrop-blur-sm">
+                      <Shield className="w-4 h-4 inline mr-2" />
+                      Safe Outreach
+                    </span>
+                  </div>
+                  <div className="text-center">
+                    <div className="inline-flex items-center text-sm text-slate-400">
+                      <Zap className="w-4 h-4 mr-2" />
+                      Multi-platform reach
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+
+          {/* Enterprise Features Bar */}
+          <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-xl rounded-3xl border border-slate-600/30 p-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+              <div className="flex flex-col items-center">
+                <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-4 rounded-2xl mb-4">
+                  <CheckCircle className="w-8 h-8 text-white" />
+                </div>
+                <h4 className="text-xl font-semibold text-white mb-2">Real-time Processing</h4>
+                <p className="text-slate-400">Instant lead extraction with live notifications</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="bg-gradient-to-r from-blue-500 to-cyan-500 p-4 rounded-2xl mb-4">
+                  <Shield className="w-8 h-8 text-white" />
+                </div>
+                <h4 className="text-xl font-semibold text-white mb-2">Enterprise Security</h4>
+                <p className="text-slate-400">Bank-grade encryption and compliance</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="bg-gradient-to-r from-purple-500 to-violet-500 p-4 rounded-2xl mb-4">
+                  <TrendingUp className="w-8 h-8 text-white" />
+                </div>
+                <h4 className="text-xl font-semibold text-white mb-2">Advanced Analytics</h4>
+                <p className="text-slate-400">Comprehensive reporting and insights</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Filter Configuration Step - Enterprise Design
+  if (currentStep === 'filters' && selectedTool) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-8 mb-12">
+            <Button 
+              variant="outline" 
+              onClick={resetToToolSelection}
+              className="text-lg"
+            >
+              <ArrowLeft className="w-5 h-5 mr-3" />
+              Back to Platforms
+            </Button>
+            <div>
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent mb-2">
+                {selectedTool === 'apollo' ? 'Apollo.io Enterprise Configuration' : 
+                 selectedTool === 'apify' ? 'Apify Advanced Configuration' : 
+                 'PhantomBuster Professional Setup'}
+              </h1>
+              <p className="text-xl text-slate-300">
+                Configure precision targeting parameters for optimal enterprise results
+              </p>
+            </div>
+          </div>
+
+          {error && (
+            <div className="bg-gradient-to-r from-red-500/20 to-rose-500/20 backdrop-blur-xl border-2 border-red-400/30 rounded-2xl p-6 mb-8">
+              <div className="flex items-center">
+                <AlertCircle className="w-6 h-6 text-red-400 mr-3" />
+                <span className="text-red-200 text-lg font-medium">{error}</span>
+              </div>
+            </div>
+          )}
+
+          <Card className="p-12">
+            {/* Apollo.io Filters */}
+            {selectedTool === 'apollo' && (
+              <div className="space-y-12">
+                <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm p-8 rounded-2xl border border-blue-400/30">
+                  <div className="flex items-center mb-4">
+                    <Target className="w-8 h-8 text-blue-400 mr-4" />
+                    <h3 className="text-2xl font-bold text-white">Apollo.io Professional Intelligence</h3>
+                  </div>
+                  <p className="text-blue-200 text-lg">Target verified B2B contacts with advanced professional filters and enterprise-grade accuracy</p>
+                </div>
+
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-12">
+                  <div className="space-y-8">
+                    <h4 className="text-2xl font-semibold text-white border-b-2 border-blue-400/30 pb-4">Executive Targeting</h4>
+                    
+                    <div className="space-y-3">
+                      <Label>Executive Job Titles</Label>
+                      <Select
+                        value={apolloFilters.personTitles}
+                        onChange={(e) => setApolloFilters(prev => ({ ...prev, personTitles: e.target.value }))}
+                      >
+                        <option value="">Select Executive Title</option>
+                        <option value="ceo">Chief Executive Officer</option>
+                        <option value="cto">Chief Technology Officer</option>
+                        <option value="cfo">Chief Financial Officer</option>
+                        <option value="cmo">Chief Marketing Officer</option>
+                        <option value="coo">Chief Operating Officer</option>
+                        <option value="founder">Founder</option>
+                        <option value="president">President</option>
+                        <option value="vp_sales">VP of Sales</option>
+                        <option value="vp_marketing">VP of Marketing</option>
+                        <option value="vp_operations">VP of Operations</option>
+                        <option value="director_sales">Director of Sales</option>
+                        <option value="director_marketing">Director of Marketing</option>
+                        <option value="sales_manager">Sales Manager</option>
+                        <option value="marketing_manager">Marketing Manager</option>
+                        <option value="account_executive">Account Executive</option>
+                        <option value="business_development">Business Development Manager</option>
+                        <option value="product_manager">Product Manager</option>
+                        <option value="regional_manager">Regional Manager</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Executive Seniority Level</Label>
+                      <Select
+                        value={apolloFilters.seniorityLevel}
+                        onChange={(e) => setApolloFilters(prev => ({ ...prev, seniorityLevel: e.target.value }))}
+                      >
+                        <option value="">All Executive Levels</option>
+                        <option value="owner">Business Owner</option>
+                        <option value="founder">Founder/Co-Founder</option>
+                        <option value="cxo">C-Level Executive</option>
+                        <option value="partner">Partner/Principal</option>
+                        <option value="vp">Vice President</option>
+                        <option value="svp">Senior Vice President</option>
+                        <option value="evp">Executive Vice President</option>
+                        <option value="director">Director</option>
+                        <option value="senior_director">Senior Director</option>
+                        <option value="senior_manager">Senior Manager</option>
+                        <option value="manager">Manager</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Email Verification Status</Label>
+                      <Select
+                        value={apolloFilters.emailStatus}
+                        onChange={(e) => setApolloFilters(prev => ({ ...prev, emailStatus: e.target.value }))}
+                      >
+                        <option value="verified">Verified (Best Deliverability)</option>
+                        <option value="likely_to_engage">Likely to Engage</option>
+                        <option value="high_quality">High Quality</option>
+                        <option value="guessed">Guessed Format</option>
+                        <option value="">All Email Types</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Department Focus</Label>
+                      <Select
+                        value={apolloFilters.department}
+                        onChange={(e) => setApolloFilters(prev => ({ ...prev, department: e.target.value }))}
+                      >
+                        <option value="">All Departments</option>
+                        <option value="sales">Sales & Revenue</option>
+                        <option value="marketing">Marketing & Growth</option>
+                        <option value="operations">Operations & Strategy</option>
+                        <option value="finance">Finance & Accounting</option>
+                        <option value="hr">Human Resources</option>
+                        <option value="it">Information Technology</option>
+                        <option value="product">Product & Innovation</option>
+                        <option value="engineering">Engineering & Development</option>
+                        <option value="business_development">Business Development</option>
+                        <option value="customer_success">Customer Success</option>
+                        <option value="legal">Legal & Compliance</option>
+                        <option value="procurement">Procurement & Supply Chain</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Target Keywords</Label>
+                      <Input
+                        placeholder="e.g., SaaS, AI, Machine Learning, Enterprise Software"
+                        value={apolloFilters.keywords}
+                        onChange={(e) => setApolloFilters(prev => ({ ...prev, keywords: e.target.value }))}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-8">
+                    <h4 className="text-2xl font-semibold text-white border-b-2 border-purple-400/30 pb-4">Enterprise Company Targeting</h4>
+                    
+                    <div className="space-y-3">
+                      <Label>Industry Vertical</Label>
+                      <Select
+                        value={apolloFilters.industry}
+                        onChange={(e) => setApolloFilters(prev => ({ ...prev, industry: e.target.value }))}
+                      >
+                        <option value="">Select Industry</option>
+                        <option value="computer_software">Computer Software & SaaS</option>
+                        <option value="information_technology">Information Technology Services</option>
+                        <option value="saas">Software as a Service (SaaS)</option>
+                        <option value="financial_services">Financial Services & FinTech</option>
+                        <option value="marketing_advertising">Marketing & Advertising Technology</option>
+                        <option value="consulting">Management Consulting</option>
+                        <option value="healthcare">Healthcare & Medical Technology</option>
+                        <option value="real_estate">Real Estate & PropTech</option>
+                        <option value="ecommerce">E-commerce & Retail Technology</option>
+                        <option value="manufacturing">Manufacturing & Industrial</option>
+                        <option value="education">Education Technology (EdTech)</option>
+                        <option value="telecommunications">Telecommunications</option>
+                        <option value="automotive">Automotive & Transportation</option>
+                        <option value="media">Media & Entertainment</option>
+                        <option value="biotechnology">Biotechnology & Life Sciences</option>
+                        <option value="aerospace">Aerospace & Defense</option>
+                        <option value="energy">Energy & CleanTech</option>
+                        <option value="banking">Banking & Investment</option>
+                        <option value="insurance">Insurance & InsurTech</option>
+                        <option value="logistics">Logistics & Supply Chain</option>
+                        <option value="cybersecurity">Cybersecurity & Data Protection</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Enterprise Company Size</Label>
+                      <Select
+                        value={apolloFilters.companySize}
+                        onChange={(e) => setApolloFilters(prev => ({ ...prev, companySize: e.target.value }))}
+                      >
+                        <option value="">All Company Sizes</option>
+                        <option value="1,10">1-10 employees (Startup)</option>
+                        <option value="11,50">11-50 employees (Small Business)</option>
+                        <option value="51,200">51-200 employees (Mid-Market)</option>
+                        <option value="201,500">201-500 employees (Enterprise)</option>
+                        <option value="501,1000">501-1000 employees (Large Enterprise)</option>
+                        <option value="1001,5000">1001-5000 employees (Major Corporation)</option>
+                        <option value="5001,10000">5001-10000 employees (Global Enterprise)</option>
+                        <option value="10001,">10000+ employees (Fortune 500)</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Geographic Location</Label>
+                      <Select
+                        value={apolloFilters.location}
+                        onChange={(e) => setApolloFilters(prev => ({ ...prev, location: e.target.value }))}
+                      >
+                        <option value="">Select Location</option>
+                        <option value="united_states">United States</option>
+                        <option value="california">California</option>
+                        <option value="new_york">New York</option>
+                        <option value="texas">Texas</option>
+                        <option value="florida">Florida</option>
+                        <option value="illinois">Illinois</option>
+                        <option value="massachusetts">Massachusetts</option>
+                        <option value="washington">Washington</option>
+                        <option value="san_francisco">San Francisco Bay Area</option>
+                        <option value="new_york_city">New York Metropolitan Area</option>
+                        <option value="los_angeles">Greater Los Angeles</option>
+                        <option value="chicago">Chicago Metropolitan</option>
+                        <option value="boston">Boston-Cambridge</option>
+                        <option value="seattle">Seattle Metropolitan</option>
+                        <option value="austin">Austin-Round Rock</option>
+                        <option value="denver">Denver-Boulder</option>
+                        <option value="atlanta">Atlanta Metropolitan</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Annual Revenue Range</Label>
+                      <Select
+                        value={apolloFilters.revenueRange}
+                        onChange={(e) => setApolloFilters(prev => ({ ...prev, revenueRange: e.target.value }))}
+                      >
+                        <option value="">All Revenue Ranges</option>
+                        <option value="0,1M">$0 - $1M (Startup)</option>
+                        <option value="1M,10M">$1M - $10M (Small Business)</option>
+                        <option value="10M,50M">$10M - $50M (Mid-Market)</option>
+                        <option value="50M,100M">$50M - $100M (Large Business)</option>
+                        <option value="100M,500M">$100M - $500M (Enterprise)</option>
+                        <option value="500M,1B">$500M - $1B (Large Enterprise)</option>
+                        <option value="1B,5B">$1B - $5B (Major Corporation)</option>
+                        <option value="5B,">$5B+ (Fortune 500)</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Data Freshness & Quality</Label>
+                      <Select
+                        value={apolloFilters.lastUpdated}
+                        onChange={(e) => setApolloFilters(prev => ({ ...prev, lastUpdated: e.target.value }))}
+                      >
+                        <option value="7_days">Last 7 days (Premium Fresh)</option>
+                        <option value="30_days">Last 30 days (Recommended)</option>
+                        <option value="90_days">Last 90 days (Standard)</option>
+                        <option value="180_days">Last 6 months (Extended)</option>
+                        <option value="">All available data</option>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Similar enterprise styling for Apify and PhantomBuster filters... */}
+            {selectedTool === 'apify' && (
+              <div className="space-y-12">
+                <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 backdrop-blur-sm p-8 rounded-2xl border border-green-400/30">
+                  <div className="flex items-center mb-4">
+                    <Globe className="w-8 h-8 text-green-400 mr-4" />
+                    <h3 className="text-2xl font-bold text-white">Apify Web Intelligence Platform</h3>
+                  </div>
+                  <p className="text-green-200 text-lg">Extract comprehensive business listings and profiles with advanced filtering and quality controls</p>
+                </div>
+
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-12">
+                  <div className="space-y-8">
+                    <h4 className="text-2xl font-semibold text-white border-b-2 border-green-400/30 pb-4">Search Parameters</h4>
+                    
+                    <div className="space-y-3">
+                      <Label>Business Search Terms</Label>
+                      <Input
+                        placeholder="e.g., digital marketing agencies, software companies"
+                        value={apifyFilters.searchTerms}
+                        onChange={(e) => setApifyFilters(prev => ({ ...prev, searchTerms: e.target.value }))}
+                      />
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Target Location</Label>
+                      <Select
+                        value={apifyFilters.location}
+                        onChange={(e) => setApifyFilters(prev => ({ ...prev, location: e.target.value }))}
+                      >
+                        <option value="">Select Location</option>
+                        <option value="new_york_ny">New York, NY</option>
+                        <option value="los_angeles_ca">Los Angeles, CA</option>
+                        <option value="chicago_il">Chicago, IL</option>
+                        <option value="houston_tx">Houston, TX</option>
+                        <option value="phoenix_az">Phoenix, AZ</option>
+                        <option value="philadelphia_pa">Philadelphia, PA</option>
+                        <option value="san_antonio_tx">San Antonio, TX</option>
+                        <option value="san_diego_ca">San Diego, CA</option>
+                        <option value="dallas_tx">Dallas, TX</option>
+                        <option value="san_jose_ca">San Jose, CA</option>
+                        <option value="austin_tx">Austin, TX</option>
+                        <option value="jacksonville_fl">Jacksonville, FL</option>
+                        <option value="fort_worth_tx">Fort Worth, TX</option>
+                        <option value="columbus_oh">Columbus, OH</option>
+                        <option value="indianapolis_in">Indianapolis, IN</option>
+                        <option value="charlotte_nc">Charlotte, NC</option>
+                        <option value="seattle_wa">Seattle, WA</option>
+                        <option value="denver_co">Denver, CO</option>
+                        <option value="boston_ma">Boston, MA</option>
+                        <option value="nashville_tn">Nashville, TN</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Industry Category</Label>
+                      <Select
+                        value={apifyFilters.industry}
+                        onChange={(e) => setApifyFilters(prev => ({ ...prev, industry: e.target.value }))}
+                      >
+                        <option value="">All Categories</option>
+                        <option value="restaurants">Restaurants & Food Services</option>
+                        <option value="retail">Retail & Shopping</option>
+                        <option value="healthcare">Healthcare & Medical</option>
+                        <option value="professional_services">Professional Services</option>
+                        <option value="automotive">Automotive Services</option>
+                        <option value="beauty_wellness">Beauty & Wellness</option>
+                        <option value="home_garden">Home & Garden Services</option>
+                        <option value="entertainment">Entertainment & Recreation</option>
+                        <option value="education">Education & Training</option>
+                        <option value="real_estate">Real Estate</option>
+                        <option value="financial_services">Financial Services</option>
+                        <option value="technology">Technology Services</option>
+                        <option value="construction">Construction & Contractors</option>
+                        <option value="legal">Legal Services</option>
+                        <option value="consulting">Business Consulting</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Exclude Keywords</Label>
+                      <Input
+                        placeholder="e.g., closed, temporary, spam, fake"
+                        value={apifyFilters.excludeKeywords}
+                        onChange={(e) => setApifyFilters(prev => ({ ...prev, excludeKeywords: e.target.value }))}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-8">
+                    <h4 className="text-2xl font-semibold text-white border-b-2 border-emerald-400/30 pb-4">Quality Controls</h4>
+                    
+                    <div className="space-y-3">
+                      <Label>Minimum Reviews Required</Label>
+                      <Select
+                        value={apifyFilters.minReviews}
+                        onChange={(e) => setApifyFilters(prev => ({ ...prev, minReviews: e.target.value }))}
+                      >
+                        <option value="0">No minimum reviews</option>
+                        <option value="5">5+ reviews (Basic quality)</option>
+                        <option value="10">10+ reviews (Good quality)</option>
+                        <option value="25">25+ reviews (High quality)</option>
+                        <option value="50">50+ reviews (Premium quality)</option>
+                        <option value="100">100+ reviews (Enterprise quality)</option>
+                        <option value="250">250+ reviews (Top tier)</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Minimum Rating Threshold</Label>
+                      <Select
+                        value={apifyFilters.ratingThreshold}
+                        onChange={(e) => setApifyFilters(prev => ({ ...prev, ratingThreshold: e.target.value }))}
+                      >
+                        <option value="0">Any rating</option>
+                        <option value="3">3+ stars (Basic)</option>
+                        <option value="3.5">3.5+ stars (Good)</option>
+                        <option value="4">4+ stars (High quality)</option>
+                        <option value="4.5">4.5+ stars (Premium)</option>
+                        <option value="4.8">4.8+ stars (Elite)</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Maximum Listings to Extract</Label>
+                      <Select
+                        value={apifyFilters.maxListings}
+                        onChange={(e) => setApifyFilters(prev => ({ ...prev, maxListings: e.target.value }))}
+                      >
+                        <option value="100">100 listings (Quick scan)</option>
+                        <option value="250">250 listings (Standard)</option>
+                        <option value="500">500 listings (Comprehensive)</option>
+                        <option value="1000">1000 listings (Deep scan)</option>
+                        <option value="2500">2500 listings (Enterprise)</option>
+                        <option value="5000">5000 listings (Maximum)</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Request Delay (Safety)</Label>
+                      <Select
+                        value={apifyFilters.requestDelay}
+                        onChange={(e) => setApifyFilters(prev => ({ ...prev, requestDelay: e.target.value }))}
+                      >
+                        <option value="1000">1 second (Fast)</option>
+                        <option value="2000">2 seconds (Recommended)</option>
+                        <option value="3000">3 seconds (Safe)</option>
+                        <option value="5000">5 seconds (Conservative)</option>
+                        <option value="10000">10 seconds (Maximum safety)</option>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {selectedTool === 'phantombuster' && (
+              <div className="space-y-12">
+                <div className="bg-gradient-to-r from-purple-500/20 to-violet-500/20 backdrop-blur-sm p-8 rounded-2xl border border-purple-400/30">
+                  <div className="flex items-center mb-4">
+                    <Users className="w-8 h-8 text-purple-400 mr-4" />
+                    <h3 className="text-2xl font-bold text-white">PhantomBuster Social Intelligence</h3>
+                  </div>
+                  <p className="text-purple-200 text-lg">Automate LinkedIn outreach and social media engagement with intelligent targeting and safety controls</p>
+                </div>
+
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-12">
+                  <div className="space-y-8">
+                    <h4 className="text-2xl font-semibold text-white border-b-2 border-purple-400/30 pb-4">Social Targeting</h4>
+                    
+                    <div className="space-y-3">
+                      <Label>Social Platform</Label>
+                      <Select
+                        value={phantombusterFilters.platform}
+                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, platform: e.target.value }))}
+                      >
+                        <option value="linkedin">LinkedIn (Professional)</option>
+                        <option value="linkedin_sales_navigator">LinkedIn Sales Navigator</option>
+                        <option value="twitter">Twitter/X (Business)</option>
+                        <option value="instagram">Instagram (Business)</option>
+                        <option value="facebook">Facebook (Business)</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Target Keywords</Label>
+                      <Input
+                        placeholder="e.g., startup founder, marketing director, SaaS executive"
+                        value={phantombusterFilters.keywords}
+                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, keywords: e.target.value }))}
+                      />
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Connection Degree (LinkedIn)</Label>
+                      <Select
+                        value={phantombusterFilters.connectionDegree}
+                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, connectionDegree: e.target.value }))}
+                      >
+                        <option value="1st">1st connections (Direct)</option>
+                        <option value="2nd">2nd connections (Recommended)</option>
+                        <option value="3rd">3rd+ connections (Extended)</option>
+                        <option value="all">All connection levels</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Executive Seniority Level</Label>
+                      <Select
+                        value={phantombusterFilters.seniorityLevel}
+                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, seniorityLevel: e.target.value }))}
+                      >
+                        <option value="">All Seniority Levels</option>
+                        <option value="owner">Business Owner</option>
+                        <option value="founder">Founder/Co-Founder</option>
+                        <option value="cxo">C-Level Executive</option>
+                        <option value="vp">Vice President</option>
+                        <option value="director">Director</option>
+                        <option value="senior_manager">Senior Manager</option>
+                        <option value="manager">Manager</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Connection Message Template</Label>
+                      <Input
+                        placeholder="Hi [firstName], I'd love to connect and explore [company]..."
+                        value={phantombusterFilters.messageTemplate}
+                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, messageTemplate: e.target.value }))}
+                      />
+                      <p className="text-xs text-slate-400">Use [firstName] and [company] for personalization</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-8">
+                    <h4 className="text-2xl font-semibold text-white border-b-2 border-violet-400/30 pb-4">Professional Filters</h4>
+                    
+                    <div className="space-y-3">
+                      <Label>Department/Function</Label>
+                      <Select
+                        value={phantombusterFilters.department}
+                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, department: e.target.value }))}
+                      >
+                        <option value="">All Departments</option>
+                        <option value="sales">Sales & Revenue</option>
+                        <option value="marketing">Marketing & Growth</option>
+                        <option value="operations">Operations & Strategy</option>
+                        <option value="finance">Finance & Accounting</option>
+                        <option value="hr">Human Resources</option>
+                        <option value="it">Information Technology</option>
+                        <option value="product">Product & Innovation</option>
+                        <option value="engineering">Engineering & Development</option>
+                        <option value="business_development">Business Development</option>
+                        <option value="customer_success">Customer Success</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Industry Focus</Label>
+                      <Select
+                        value={phantombusterFilters.industry}
+                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, industry: e.target.value }))}
+                      >
+                        <option value="">All Industries</option>
+                        <option value="technology">Technology & Software</option>
+                        <option value="finance">Finance & FinTech</option>
+                        <option value="healthcare">Healthcare & MedTech</option>
+                        <option value="consulting">Consulting & Professional Services</option>
+                        <option value="marketing">Marketing & AdTech</option>
+                        <option value="sales">Sales & CRM</option>
+                        <option value="startups">Startups & Venture Capital</option>
+                        <option value="saas">SaaS & Cloud</option>
+                        <option value="ecommerce">E-commerce & Retail</option>
+                        <option value="manufacturing">Manufacturing & Industrial</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Geographic Location</Label>
+                      <Select
+                        value={phantombusterFilters.location}
+                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, location: e.target.value }))}
+                      >
+                        <option value="">All Locations</option>
+                        <option value="san_francisco">San Francisco Bay Area</option>
+                        <option value="new_york">New York Metropolitan</option>
+                        <option value="los_angeles">Greater Los Angeles</option>
+                        <option value="chicago">Chicago Metropolitan</option>
+                        <option value="boston">Boston-Cambridge</option>
+                        <option value="seattle">Seattle Metropolitan</option>
+                        <option value="austin">Austin-Round Rock</option>
+                        <option value="denver">Denver-Boulder</option>
+                        <option value="atlanta">Atlanta Metropolitan</option>
+                        <option value="miami">Miami-Fort Lauderdale</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Company Size</Label>
+                      <Select
+                        value={phantombusterFilters.companySize}
+                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, companySize: e.target.value }))}
+                      >
+                        <option value="">All Company Sizes</option>
+                        <option value="1-10">1-10 employees (Startup)</option>
+                        <option value="11-50">11-50 employees (Small Business)</option>
+                        <option value="51-200">51-200 employees (Mid-Market)</option>
+                        <option value="201-500">201-500 employees (Enterprise)</option>
+                        <option value="501-1000">501-1000 employees (Large Enterprise)</option>
+                        <option value="1000+">1000+ employees (Fortune 500)</option>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Daily Connection Limit</Label>
+                      <Select
+                        value={phantombusterFilters.dailyLimit}
+                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, dailyLimit: e.target.value }))}
+                      >
+                        <option value="20">20 per day (Ultra Conservative)</option>
+                        <option value="50">50 per day (Conservative)</option>
+                        <option value="100">100 per day (Recommended)</option>
+                        <option value="150">150 per day (Aggressive)</option>
+                        <option value="200">200 per day (Maximum)</option>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-end mt-12">
+              <Button onClick={handleStartScraping} disabled={isLoading} className="text-lg px-12 py-4">
+                {isLoading ? (
+                  <>
+                    <RefreshCw className="w-5 h-5 mr-3 animate-spin" />
+                    Processing Intelligence...
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-5 h-5 mr-3" />
+                    Launch Intelligence Extraction
+                  </>
+                )}
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Results Step - Enterprise Design
+  if (currentStep === 'results' && results) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-8 mb-12">
+            <Button 
+              variant="outline" 
+              onClick={resetToToolSelection}
+              className="text-lg"
+            >
+              <ArrowLeft className="w-5 h-5 mr-3" />
+              New Intelligence Search
+            </Button>
+            <div>
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent mb-2">
+                Intelligence Results
+              </h1>
+              <p className="text-xl text-slate-300">
+                Extracted {results.count} high-quality leads using {selectedTool?.toUpperCase()} platform
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 backdrop-blur-xl border-2 border-green-400/30 rounded-2xl p-6 mb-8">
+            <div className="flex items-center">
+              <CheckCircle className="w-8 h-8 text-green-400 mr-4" />
+              <div>
+                <span className="text-green-200 text-xl font-semibold">
+                  Successfully extracted {results.count} enterprise leads
+                </span>
+                <p className="text-green-300 mt-1">Notification sent to Slack • Data ready for export</p>
+              </div>
+            </div>
+          </div>
+
+          <Card className="p-12">
+            <div className="flex justify-between items-center mb-8">
+              <h3 className="text-2xl font-semibold text-white">
+                Premium Lead Intelligence Preview
+              </h3>
+              <Button variant="outline" className="text-lg">
+                <Download className="w-5 h-5 mr-3" />
+                Export Enterprise CSV
+              </Button>
+            </div>
+            
+            <div className="grid gap-6">
+              {results.leads.slice(0, 5).map((lead, index) => (
+                <div key={index} className="border-2 border-slate-600/30 rounded-2xl p-6 bg-gradient-to-r from-slate-700/50 to-slate-800/50 backdrop-blur-sm hover:from-slate-600/50 hover:to-slate-700/50 transition-all duration-300">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <h4 className="text-xl font-semibold text-white mb-2">{lead.fullName}</h4>
+                      <p className="text-lg text-slate-300 mb-3">{lead.title} at {lead.company}</p>
+                      <div className="flex items-center space-x-6 text-sm text-slate-400">
+                        <span className="flex items-center">
+                          <Mail className="w-4 h-4 mr-2" />
+                          {lead.email}
+                        </span>
+                        {lead.phone && (
+                          <span className="flex items-center">
+                            <Phone className="w-4 h-4 mr-2" />
+                            {lead.phone}
+                          </span>
+                        )}
+                        <span className="flex items-center">
+                          <MapPin className="w-4 h-4 mr-2" />
+                          {lead.location}
+                        </span>
+                      </div>
+                    </div>
+                    {lead.score && (
+                      <div className="flex items-center bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-400/30 rounded-xl px-4 py-2">
+                        <Star className="w-5 h-5 text-yellow-400 mr-2" />
+                        <span className="text-lg font-semibold text-yellow-300">{lead.score}/10</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            {results.leads.length > 5 && (
+              <div className="text-center mt-8 p-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-400/20 rounded-2xl">
+                <p className="text-slate-300 text-lg">
+                  Showing 5 of {results.count} premium leads. Export complete dataset for full intelligence package.
+                </p>
+              </div>
+            )}
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
