@@ -160,6 +160,46 @@ export default function ProfessionalLeadScraper() {
     }
   };
 
+  const handleExportCSV = async () => {
+    if (!results?.leads?.length) return;
+    
+    try {
+      const response = await fetch('/api/scraping/export-csv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          sessionId: results.sessionId || 'export-session',
+          leads: results.leads
+        })
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `leads-export-${Date.now()}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        toast({
+          title: "CSV Exported",
+          description: "Lead data exported successfully",
+        });
+      } else {
+        throw new Error('Export failed');
+      }
+    } catch (error) {
+      toast({
+        title: "Export Failed",
+        description: "Could not export CSV file",
+        variant: "destructive",
+      });
+    }
+  };
+
   const resetToToolSelection = () => {
     setCurrentStep('tool-selection');
     setSelectedTool(null);
