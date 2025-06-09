@@ -7,12 +7,14 @@ import { Progress } from '@/components/ui/progress';
 import { Mail, Users, Send, Eye, TrendingUp, Download, Target } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import { useQuery } from '@tanstack/react-query';
+import { useToast } from '@/hooks/use-toast';
 
 interface MailchimpSyncProps {
   onClose: () => void;
 }
 
 export function MailchimpSyncDashboard({ onClose }: MailchimpSyncProps) {
+  const { toast } = useToast();
   const [selectedAudience, setSelectedAudience] = useState('');
   const [selectedSegment, setSelectedSegment] = useState('');
   const [campaignType, setCampaignType] = useState('regular');
@@ -44,11 +46,18 @@ export function MailchimpSyncDashboard({ onClose }: MailchimpSyncProps) {
         segmentId: selectedSegment
       });
       
+      const result = await response.json();
+      
+      toast({
+        title: "Campaign Sent",
+        description: `${campaignType} campaign sent to audience successfully`,
+      });
+      
       // Log to Airtable Campaign Metrics
       await apiRequest('POST', '/api/airtable/log', {
         table: 'Campaign Metrics Log',
         data: {
-          campaignId: response.campaignId,
+          campaignId: result.campaignId,
           audienceId: selectedAudience,
           campaignType,
           sentAt: new Date().toISOString(),
@@ -57,6 +66,11 @@ export function MailchimpSyncDashboard({ onClose }: MailchimpSyncProps) {
       });
     } catch (error) {
       console.error('Campaign send failed:', error);
+      toast({
+        title: "Campaign Failed",
+        description: "Unable to send campaign. Please check your settings.",
+        variant: "destructive"
+      });
     } finally {
       setIsSending(false);
     }
@@ -69,8 +83,18 @@ export function MailchimpSyncDashboard({ onClose }: MailchimpSyncProps) {
         campaignType,
         segmentId: selectedSegment
       });
+      
+      toast({
+        title: "Draft Created",
+        description: "Campaign draft saved to Mailchimp",
+      });
     } catch (error) {
       console.error('Draft creation failed:', error);
+      toast({
+        title: "Draft Failed",
+        description: "Unable to create campaign draft",
+        variant: "destructive"
+      });
     }
   };
 
@@ -84,15 +108,27 @@ export function MailchimpSyncDashboard({ onClose }: MailchimpSyncProps) {
         audienceId: selectedAudience
       });
       
+      const result = await response.json();
+      
       // Download the exported file
-      const blob = new Blob([response.data], { type: 'text/csv' });
+      const blob = new Blob([result.data], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `segment-${selectedSegment}-export.csv`;
       a.click();
+      
+      toast({
+        title: "Export Complete",
+        description: `Segment exported with ${result.count} records`,
+      });
     } catch (error) {
       console.error('Export failed:', error);
+      toast({
+        title: "Export Failed",
+        description: "Unable to export segment data",
+        variant: "destructive"
+      });
     } finally {
       setIsExporting(false);
     }

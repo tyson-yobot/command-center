@@ -8,12 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Calendar, FileText, Image, Video, Share2, Download, Send } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
 
 interface ContentCreatorProps {
   onClose: () => void;
 }
 
 export function ContentCreatorDashboard({ onClose }: ContentCreatorProps) {
+  const { toast } = useToast();
   const [contentType, setContentType] = useState('post');
   const [platform, setPlatform] = useState('linkedin');
   const [voiceTone, setVoiceTone] = useState('professional');
@@ -36,7 +38,13 @@ export function ContentCreatorDashboard({ onClose }: ContentCreatorProps) {
         customText: contentText
       });
       
-      setGeneratedContent(response.content);
+      const result = await response.json();
+      setGeneratedContent(result.content);
+      
+      toast({
+        title: "Content Generated",
+        description: `${contentType} for ${platform} created successfully!`,
+      });
       
       // Log to Airtable
       await apiRequest('POST', '/api/airtable/log', {
@@ -46,12 +54,17 @@ export function ContentCreatorDashboard({ onClose }: ContentCreatorProps) {
           platform,
           voiceTone,
           topic,
-          generatedContent: response.content,
+          generatedContent: result.content,
           timestamp: new Date().toISOString()
         }
       });
     } catch (error) {
       console.error('Content generation failed:', error);
+      toast({
+        title: "Generation Failed",
+        description: "Unable to generate content. Please try again.",
+        variant: "destructive"
+      });
     } finally {
       setIsGenerating(false);
     }
@@ -68,6 +81,11 @@ export function ContentCreatorDashboard({ onClose }: ContentCreatorProps) {
         scheduleTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // Tomorrow
       });
       
+      toast({
+        title: "Post Scheduled",
+        description: `${contentType} scheduled for ${platform} tomorrow`,
+      });
+      
       // Send to Slack
       await apiRequest('POST', '/api/slack/notify', {
         message: `📅 New ${platform} ${contentType} scheduled: ${topic}`,
@@ -75,6 +93,11 @@ export function ContentCreatorDashboard({ onClose }: ContentCreatorProps) {
       });
     } catch (error) {
       console.error('Scheduling failed:', error);
+      toast({
+        title: "Scheduling Failed",
+        description: "Unable to schedule post. Please try again.",
+        variant: "destructive"
+      });
     } finally {
       setIsScheduling(false);
     }
@@ -90,8 +113,18 @@ export function ContentCreatorDashboard({ onClose }: ContentCreatorProps) {
         topic,
         status: 'draft'
       });
+      
+      toast({
+        title: "Saved to Airtable",
+        description: "Content saved as draft successfully",
+      });
     } catch (error) {
       console.error('Save to Airtable failed:', error);
+      toast({
+        title: "Save Failed",
+        description: "Unable to save to Airtable. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
