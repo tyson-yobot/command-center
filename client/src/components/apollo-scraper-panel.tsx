@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { HelpCircle, Users, Building2, Settings, Save, Search, Rocket, Plus, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useIndustryTemplates } from "@/hooks/useIndustryTemplates";
 
 interface ApolloFilters {
   jobTitles: string[];

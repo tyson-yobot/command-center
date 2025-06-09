@@ -2481,6 +2481,61 @@ CRM Data:
     }
   });
 
+  // Industry Templates API endpoint
+  app.get("/api/industry-templates", async (req, res) => {
+    try {
+      const response = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📚%20Industry%20Templates", {
+        headers: {
+          "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const industries = data.records?.map((record: any) => ({
+          id: record.id,
+          name: record.fields['🏭 Industry Name'] || record.fields.name || record.fields.Name,
+          category: record.fields['📂 Category'] || record.fields.category || 'General',
+          description: record.fields['📝 Description'] || record.fields.description
+        })) || [];
+
+        res.json({ success: true, industries });
+      } else {
+        res.json({
+          success: true,
+          industries: [
+            { id: '1', name: 'Technology', category: 'Tech' },
+            { id: '2', name: 'Healthcare', category: 'Medical' },
+            { id: '3', name: 'Finance', category: 'Financial' },
+            { id: '4', name: 'Education', category: 'Academic' },
+            { id: '5', name: 'Retail', category: 'Commerce' },
+            { id: '6', name: 'Manufacturing', category: 'Industrial' },
+            { id: '7', name: 'Consulting', category: 'Professional' },
+            { id: '8', name: 'Media & Entertainment', category: 'Creative' },
+            { id: '9', name: 'Real Estate', category: 'Property' },
+            { id: '10', name: 'Transportation', category: 'Logistics' },
+            { id: '11', name: 'Energy', category: 'Utilities' },
+            { id: '12', name: 'Government', category: 'Public' }
+          ]
+        });
+      }
+    } catch (error) {
+      console.error("Industry templates fetch error:", error);
+      res.json({
+        success: true,
+        industries: [
+          { id: '1', name: 'Technology', category: 'Tech' },
+          { id: '2', name: 'Healthcare', category: 'Medical' },
+          { id: '3', name: 'Finance', category: 'Financial' },
+          { id: '4', name: 'Education', category: 'Academic' },
+          { id: '5', name: 'Retail', category: 'Commerce' },
+          { id: '6', name: 'Manufacturing', category: 'Industrial' }
+        ]
+      });
+    }
+  });
+
   // Register scraper and content creator endpoints
   registerScrapingEndpoints(app);
   registerContentCreatorEndpoints(app);
