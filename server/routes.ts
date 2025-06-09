@@ -2481,6 +2481,11 @@ CRM Data:
     }
   });
 
+  // Register scraper and content creator endpoints
+  registerScrapingEndpoints(app);
+  registerContentCreatorEndpoints(app);
+  registerDashboardEndpoints(app);
+
   const httpServer = createServer(app);
 
   return httpServer;
