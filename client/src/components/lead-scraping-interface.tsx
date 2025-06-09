@@ -18,6 +18,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
+import { useIndustryTemplates } from '@/hooks/useIndustryTemplates';
 
 interface LeadScrapingProps {
   onScrapingStart?: () => void;
@@ -28,6 +29,7 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
   const [searchQuery, setSearchQuery] = useState('');
   const [location, setLocation] = useState('');
   const [industry, setIndustry] = useState('');
+  const { industries, isLoading: industriesLoading } = useIndustryTemplates();
   const [companySize, setCompanySize] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [maxResults, setMaxResults] = useState(50);
@@ -187,19 +189,19 @@ export function LeadScrapingInterface({ onScrapingStart, onScrapingComplete }: L
 
             <div className="space-y-2">
               <Label htmlFor="industry">Industry</Label>
-              <Select value={industry} onValueChange={setIndustry} disabled={isRunning}>
+              <Select value={industry} onValueChange={setIndustry} disabled={isRunning || industriesLoading}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select industry" />
+                  <SelectValue placeholder={industriesLoading ? "Loading industries..." : "Select industry"} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="technology">Technology</SelectItem>
-                  <SelectItem value="healthcare">Healthcare</SelectItem>
-                  <SelectItem value="finance">Finance</SelectItem>
-                  <SelectItem value="retail">Retail</SelectItem>
-                  <SelectItem value="manufacturing">Manufacturing</SelectItem>
-                  <SelectItem value="education">Education</SelectItem>
-                  <SelectItem value="real-estate">Real Estate</SelectItem>
-                  <SelectItem value="consulting">Consulting</SelectItem>
+                  {!industriesLoading && industries.map((ind) => (
+                    <SelectItem key={ind.id} value={ind.id}>
+                      {ind.name}
+                    </SelectItem>
+                  ))}
+                  {industriesLoading && (
+                    <SelectItem value="loading" disabled>Loading industries...</SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>

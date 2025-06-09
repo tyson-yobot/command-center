@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useIndustryTemplates } from "../hooks/useIndustryTemplates";
 import { 
   Activity, 
   Bot, 
@@ -143,6 +144,7 @@ export default function ControlCenter() {
   const [selectedPriority, setSelectedPriority] = useState<string>('all');
   const [connectionStatus, setConnectionStatus] = useState(false);
   const [isTestMode, setIsTestMode] = useState(false);
+  const { industries, isLoading: industriesLoading } = useIndustryTemplates();
 
   // Poll for data with test/live mode separation
   useEffect(() => {
@@ -616,16 +618,14 @@ export default function ControlCenter() {
                         <label className="text-slate-300 text-sm mb-2 block">Industries</label>
                         <select className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white">
                           <option value="">Select Industry</option>
-                          <option value="Technology">Technology</option>
-                          <option value="Healthcare">Healthcare</option>
-                          <option value="Financial Services">Financial Services</option>
-                          <option value="Manufacturing">Manufacturing</option>
-                          <option value="Retail">Retail</option>
-                          <option value="Real Estate">Real Estate</option>
-                          <option value="Education">Education</option>
-                          <option value="Government">Government</option>
-                          <option value="Non-Profit">Non-Profit</option>
-                          <option value="Media & Entertainment">Media & Entertainment</option>
+                          {!industriesLoading && industries.map((industry) => (
+                            <option key={industry.id} value={industry.id}>
+                              {industry.name}
+                            </option>
+                          ))}
+                          {industriesLoading && (
+                            <option disabled>Loading industries...</option>
+                          )}
                         </select>
                       </div>
 
