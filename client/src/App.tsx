@@ -4,7 +4,7 @@ import { Route, Switch } from "wouter";
 import ClientDashboard from "./pages/client-dashboard";
 import LeadScrapingPage from "./pages/lead-scraping-page";
 import ControlCenter from "./pages/control-center";
-import MultiView from "./pages/multi-view";
+import Mobile from "./pages/mobile";
 
 // Test/Live Mode Context for synchronized mode across all screens
 interface ModeContextType {
@@ -35,10 +35,10 @@ function Router() {
     <ModeContext.Provider value={{ isTestMode, setTestMode }}>
       <div className="min-h-screen">
         <Switch>
-          <Route path="/multi-view" component={MultiView} />
+          <Route path="/command-center" component={ClientDashboard} />
           <Route path="/control-center" component={ControlCenter} />
           <Route path="/lead-scraper" component={LeadScrapingPage} />
-          <Route path="/command-center" component={ClientDashboard} />
+          <Route path="/mobile" component={Mobile} />
           <Route path="/" component={ClientDashboard} />
           <Route>
             <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
