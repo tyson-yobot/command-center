@@ -763,7 +763,6 @@ export function registerDashboardEndpoints(app: Express) {
       res.status(500).json({ success: false, error: error.message });
     }
   });
-}
 
 // Helper functions for database operations and integrations
 async function getExpensesFromDatabase() {
@@ -996,4 +995,5 @@ async function logSentimentToAirtable(data: any) {
   } catch (error) {
     console.error('Failed to log sentiment to Airtable:', error);
   }
+}
 }
