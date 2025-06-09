@@ -166,26 +166,7 @@ export default function ApifyScraperPanel({ onLaunch, isLoading = false }: Apify
     <TooltipProvider>
       <div className="space-y-6 p-6 bg-gradient-to-br from-slate-900/80 via-green-900/60 to-emerald-900/80 backdrop-blur-xl rounded-xl border border-slate-700/50 shadow-2xl">
         
-        {/* Test Mode Toggle */}
-        <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg border border-slate-600/50">
-          <div className="flex items-center space-x-3">
-            <Label htmlFor="test-mode" className="text-green-200 font-medium">Test Company Mode</Label>
-            <Tooltip>
-              <TooltipTrigger>
-                <HelpCircle className="h-4 w-4 text-slate-400" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Toggle between fake test data (instant) vs real Apify scraping</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
-          <Switch
-            id="test-mode"
-            checked={isTestMode}
-            onCheckedChange={setIsTestMode}
-            className="data-[state=checked]:bg-green-500"
-          />
-        </div>
+        {/* Live mode only - test mode removed */}
 
         {/* Location Filters Section */}
         <Card className="bg-slate-800/50 border-slate-600/50 backdrop-blur-sm">

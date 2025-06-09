@@ -804,33 +804,7 @@ export default function CommandCenter() {
     }
   };
 
-  // Clear test data function
-  const handleClearTestData = async () => {
-    try {
-      const response = await apiRequest('POST', '/api/clear-test-data');
-      if (response.ok) {
-        setToast({
-          title: "Test Data Cleared",
-          description: "All test data has been successfully cleared",
-        });
-        // Refresh the page to show updated metrics
-        window.location.reload();
-      } else {
-        const error = await response.json();
-        setToast({
-          title: "Clear Failed",
-          description: error.error || "Failed to clear test data",
-          variant: "destructive"
-        });
-      }
-    } catch (error) {
-      setToast({
-        title: "Clear Failed", 
-        description: "Network error occurred while clearing test data",
-        variant: "destructive"
-      });
-    }
-  };
+  // Test data clearing removed - live mode only
 
   // Removed test sales order automation - only live webhook data processed
 

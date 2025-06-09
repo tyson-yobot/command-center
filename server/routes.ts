@@ -174,7 +174,7 @@ function clearTestData() {
     salesOrderData = [];
     crmData = [];
     automationActivity = [];
-    testAutomationMetrics.recentExecutions = [];
+    liveAutomationMetrics.recentExecutions = [];
     console.log('✅ All test data cleared - System ready for production');
     return true;
   }
@@ -2705,9 +2705,9 @@ CRM Data:
         logOperation('command-center-blocked', { category }, 'blocked', `Command center trigger blocked in test mode: ${category}`);
         
         // Only log automation execution in test mode
-        testAutomationMetrics.executionsToday += 1;
-        testAutomationMetrics.lastExecution = new Date().toISOString();
-        testAutomationMetrics.recentExecutions.push({
+        liveAutomationMetrics.executionsToday += 1;
+        liveAutomationMetrics.lastExecution = new Date().toISOString();
+        liveAutomationMetrics.recentExecutions.push({
           id: `exec_${Date.now()}`,
           type: category,
           status: 'COMPLETED (TEST)',
@@ -2716,8 +2716,8 @@ CRM Data:
         });
         
         // Keep only last 50 executions
-        if (testAutomationMetrics.recentExecutions.length > 50) {
-          testAutomationMetrics.recentExecutions = testAutomationMetrics.recentExecutions.slice(-50);
+        if (liveAutomationMetrics.recentExecutions.length > 50) {
+          liveAutomationMetrics.recentExecutions = liveAutomationMetrics.recentExecutions.slice(-50);
         }
         
         logOperation('test-execution-logged', { category }, 'success', `Test execution logged for ${category}`);
@@ -4066,7 +4066,7 @@ CRM Data:
           salesOrderData = [];
           crmData = [];
           automationActivity = [];
-          testAutomationMetrics.recentExecutions = [];
+          liveAutomationMetrics.recentExecutions = [];
           
           logOperation('test-data-cleared', {}, 'success', 'All test data cleared - System ready for production');
           console.log('✅ All test data cleared - System ready for production');
