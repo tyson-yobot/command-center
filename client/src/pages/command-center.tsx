@@ -54,7 +54,7 @@ import { MailchimpSyncDashboard } from '../components/mailchimp-sync-dashboard';
 import { SocialContentCreator } from '../components/social-content-creator';
 import { useToast } from '../hooks/use-toast';
 
-export default function ClientDashboard() {
+export default function CommandCenter() {
   const { isTestMode, setTestMode } = useModeContext();
   const { data: metrics } = useQuery({ queryKey: ['/api/metrics'] });
   const { data: bot } = useQuery({ queryKey: ['/api/bot'] });
