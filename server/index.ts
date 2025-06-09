@@ -7,6 +7,8 @@ import { setupVite, serveStatic, log } from "./vite";
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
 import { registerQATracker } from "./qaTracker";
+import { officialQATracker } from "./officialQATracker";
+import { registerQATestEndpoints } from "./qaTestEndpoints";
 
 const app = express();
 app.use(express.json());
@@ -240,6 +242,9 @@ print(json.dumps(result))
   
   // Register QA tracking system
   registerQATracker(app);
+  
+  // Register official QA test endpoints
+  registerQATestEndpoints(app);
   
   // Register Batch 21 automation routes
   const { registerBatch21Routes } = await import('./automationBatch21');
