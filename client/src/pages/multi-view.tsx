@@ -97,13 +97,10 @@ export default function MultiView() {
             </div>
           </CardHeader>
           <CardContent className="h-full overflow-hidden">
-            <div className="h-full overflow-y-auto">
-              <iframe
-                src="/command-center"
-                className="w-full h-full border-0 rounded"
-                style={{ minHeight: '600px' }}
-                title="Command Center"
-              />
+            <div className="h-full overflow-y-auto" style={{ maxHeight: '600px' }}>
+              <div className="transform scale-50 origin-top-left w-[200%] h-[200%]">
+                <ClientDashboard />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -126,13 +123,10 @@ export default function MultiView() {
             </div>
           </CardHeader>
           <CardContent className="h-full overflow-hidden">
-            <div className="h-full overflow-y-auto">
-              <iframe
-                src="/control-center"
-                className="w-full h-full border-0 rounded"
-                style={{ minHeight: '600px' }}
-                title="Control Center"
-              />
+            <div className="h-full overflow-y-auto" style={{ maxHeight: '600px' }}>
+              <div className="transform scale-50 origin-top-left w-[200%] h-[200%]">
+                <ControlCenter />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -155,13 +149,10 @@ export default function MultiView() {
             </div>
           </CardHeader>
           <CardContent className="h-full overflow-hidden">
-            <div className="h-full overflow-y-auto">
-              <iframe
-                src="/lead-scraper"
-                className="w-full h-full border-0 rounded"
-                style={{ minHeight: '600px' }}
-                title="Lead Scraper"
-              />
+            <div className="h-full overflow-y-auto" style={{ maxHeight: '600px' }}>
+              <div className="transform scale-50 origin-top-left w-[200%] h-[200%]">
+                <LeadScrapingPage />
+              </div>
             </div>
           </CardContent>
         </Card>
