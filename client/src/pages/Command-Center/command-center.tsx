@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-// Simplified imports to avoid path issues
-// import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-// import { Badge } from '@/components/ui/badge';
-// import { Button } from '@/components/ui/button';
-// import { Progress } from '@/components/ui/progress';
-// import { Switch } from '@/components/ui/switch';
-// import { useModeContext } from '@/App';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { Switch } from '@/components/ui/switch';
+import { useModeContext } from '@/App';
 import { 
   TrendingUp, 
   Phone, 

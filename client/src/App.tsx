@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
-import CommandCenter from "./pages/Command-Center/command-center-basic";
+import CommandCenter from "./pages/Command-Center/command-center";
 import LeadScraper from "./pages/Lead-Scraper/lead-scraper";
 import ControlCenter from "./pages/Control-Center/control-center";
 import Mobile from "./pages/Mobile/mobile";
