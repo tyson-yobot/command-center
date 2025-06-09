@@ -78,6 +78,13 @@ export default function CommandCenter() {
     queryKey: ['/api/automation/functions'],
     refetchInterval: 10000 
   });
+  
+  // System mode control
+  const { data: systemModeData } = useQuery({ 
+    queryKey: ['/api/system-mode'],
+    refetchInterval: 2000 
+  });
+  
   const [isListening, setIsListening] = React.useState(false);
   const [showEscalation, setShowEscalation] = React.useState(false);
   const [selectedTier, setSelectedTier] = React.useState('All');
@@ -98,6 +105,33 @@ export default function CommandCenter() {
   const [memoryText, setMemoryText] = useState('');
   const [memoryCategory, setMemoryCategory] = useState('general');
   const [voiceGenerationText, setVoiceGenerationText] = useState('');
+
+  // System mode toggle function
+  const toggleSystemMode = async () => {
+    try {
+      const currentMode = systemModeData?.systemMode || 'live';
+      const newMode = currentMode === 'live' ? 'test' : 'live';
+      
+      const response = await apiRequest('POST', '/api/system-mode', {
+        mode: newMode
+      });
+      
+      if (response.ok) {
+        toast({
+          title: "System Mode Changed",
+          description: `Switched to ${newMode} mode. ${newMode === 'live' ? 'Production data only.' : 'Test data enabled.'}`,
+        });
+        // Refetch all data to update the dashboard
+        window.location.reload();
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to toggle system mode",
+        variant: "destructive"
+      });
+    }
+  };
   const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
   const [showDocumentManager, setShowDocumentManager] = useState(false);
@@ -108,7 +142,6 @@ export default function CommandCenter() {
   const [editingRecording, setEditingRecording] = useState<any>(null);
   const [showLeadScraping, setShowLeadScraping] = useState(false);
   const [activeModule, setActiveModule] = useState<string | null>(null);
-  const { toast } = useToast();
   
   // Replace all setToast calls with toast
   const setToast = (config: any) => toast(config);

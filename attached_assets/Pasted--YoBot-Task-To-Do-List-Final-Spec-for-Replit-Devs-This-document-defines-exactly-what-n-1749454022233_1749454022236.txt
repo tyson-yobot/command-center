@@ -1,0 +1,142 @@
+🧠 **YoBot® Task To Do List — Final Spec for Replit Devs**
+
+This document defines **exactly what needs to be done** for each lead scraper module (Apollo, Apify, PhantomBuster) and all additional Command Center systems to ensure full functionality, perfect UX, cross-platform compatibility, and sales order automation — with scalability for global deployment.
+
+---
+
+### 🗂️ Required Screen Structure & Naming — URGENT CLEANUP
+
+⚠️ Replit has created 4+ duplicate Command Centers and several unnamed screens. This is causing complete disconnection and dev confusion. This must be resolved immediately.
+
+#### ✅ Only These Screens Should Exist:
+
+* **Main Command Center (Primary Dashboard)** → `/command-center`
+* **Lead Scraper Configuration Tool** → `/lead-scraper`
+* **Feature Toggle Panel (Control Panel)** → `/control-center`
+* **Mobile Optimized Panel** → `/mobile`
+
+#### 📱 Mobile vs. Desktop Clarification — DO NOT CROSS WIRE
+
+* `/command-center` is the **full desktop interface** for live automation management, analytics, sales orders, and voice commands.
+* `/mobile` is a **lightweight mobile dashboard** with mobile-only tools such as:
+
+  * 📇 **Business Card Scanner**
+  * 📱 One-touch communication shortcuts
+  * 🎤 Mobile voice commands (limited)
+
+> ❗ The Business Card Scanner belongs on `/mobile` — not `/command-center`. Connecting it to the desktop interface is incorrect and will break routing.
+
+#### 🛠️ Dev Task List for Fixing This:
+
+1. **Open Every Live Page You’ve Built** → One-by-one. Screens must be previewed or linked.
+2. **Show Tyson Each Screen** → He will confirm if it’s legitimate or deprecated.
+3. **Rename Approved Screens ONLY** using the routes above. All others:
+
+   * Move to `/zzz-deprecated-do-not-use/`
+   * Archive from active build workspace
+
+#### 🚨 Why This Is Critical:
+
+* Disconnections are spread across **the wrong pages**
+* Dev is working on **multiple Command Center clones** at once
+* Client has no way to verify which version is "live"
+
+> ✅ Summary: There must be one Command Center, one Control Panel, one Lead Scraper, one Mobile Dashboard. Everything else must be deleted or archived immediately.
+
+---
+
+### 🧪 Airtable Test Logging – QA Sync Requirements
+
+Every function, automation, and integration **must now log its QA test results into Airtable** using the official **Integration Test Log** table shown in the screenshot.
+
+#### ✅ Airtable Info (Confirmed Active)
+
+* **Base ID**: `appRt8V3tH4g5Z5if`
+* **Table ID**: `tbldPRZ4nHbtj9opU`
+* **API Key**: `paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`
+
+#### ✅ Replit-Side Test Logging Script (Use After Every Function Test)
+
+```js
+await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU", {
+  method: "POST",
+  headers: {
+    Authorization: "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    records: [
+      {
+        fields: {
+          "Integration Name": "Slack → Client Alert",
+          "✅ Pass/Fail": "✅ Pass",
+          "🛠 Notes / Debug": "Slack triggered but Airtable logging failed on first attempt. Resolved.",
+          "📅 Test Date": new Date().toISOString(),
+          "🧑‍💻 QA Owner": "Daniel Sharpe",
+          "📤 Output Data Populated?": true,
+          "🧾 Record Created?": true,
+          "🔁 Retry Attempted?": false,
+          "🧩 Module Type": "Slack",
+          "📂 Related Scenario Link": "https://replit.dev/scenario/slack-alert-qaflow"
+        },
+      },
+    ],
+  }),
+});
+```
+
+> 🔁 **This script must be called after every individual module or function test**.
+> No feature is considered completed unless it is confirmed live and logged in this Airtable table.
+
+#### 🔧 What You Need to Do Now
+
+1. Go back and hook up **every single function, feature, and automation** to `replit.dev/command-center` only.
+2. Remove all outdated, duplicate, or unused references from alternate dashboards
+3. As you reconnect each function, test it **one by one** and then use the script above to log it to Airtable.
+4. Ensure fields match exactly with: ✅ Pass/Fail, QA Owner, Module Type, Debug Notes, Scenario Link
+
+✅ This is how we restore structure and prevent these issues from recurring.
+
+---
+
+### 🚫 Test Mode Isolation – PRODUCTION LOCKDOWN REQUIREMENTS
+
+Effective immediately — all test data, test automation, or test logic must remain fully isolated from production mode.
+
+#### ✅ Your App Must Support This Behavior:
+
+| Mode          | Behavior                                                                                                                               |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **Live Mode** | Writes to production databases (Airtable, Stripe, QBO, HubSpot). Logs real contacts, sales orders, automations. No dummy data allowed. |
+| **Test Mode** | Uses sandbox/test keys, mock payloads, and test Airtable QA table if available. All UI should display a visible "🧪 Test Mode" status. |
+
+#### 🔧 How to Implement
+
+* Declare a global systemMode state (e.g. `"test" | "live"`)
+* Set default to `"live"`, toggle via Control Panel UI
+* Surround all automation triggers and data writes with a mode check:
+
+```ts
+if (systemMode === 'live') {
+  triggerStripeInvoice();
+  createQuickBooksRecord();
+  postToAirtableProd();
+} else {
+  useSandboxFlow();
+  logToAirtableTestTable();
+}
+```
+
+#### 🚫 What Is NOT Allowed
+
+* No test records in production Airtable
+* No sandbox transactions hitting real Stripe/QuickBooks keys
+* No test buttons wired to live `/command-center`
+
+> ⚠️ Any module that does not follow this rule must be disabled until properly split.
+
+---
+
+### 🎨 Command Center UI Cleanup: Color & Layout Improvements
+
+\[...rest of canvas content remains unchanged below this line — trimmed for brevity in this view\...]

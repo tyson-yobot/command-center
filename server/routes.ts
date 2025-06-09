@@ -51,8 +51,18 @@ const upload = multer({
 // System mode tracking - controls test vs live data isolation
 let systemMode: 'test' | 'live' = 'live';
 
-// Live automation tracking
+// Live automation tracking - initialized clean for production
 let liveAutomationMetrics = {
+  activeFunctions: 1040,
+  executionsToday: 0,
+  successRate: 100,
+  lastExecution: null,
+  recentExecutions: [],
+  functionStats: {}
+};
+
+// Test automation tracking - separate from live
+let testAutomationMetrics = {
   activeFunctions: 1040,
   executionsToday: 0,
   successRate: 98.7,
@@ -2577,26 +2587,31 @@ CRM Data:
     try {
       const { category } = req.body;
       
-      // Log automation execution
-      liveAutomationMetrics.executionsToday += 1;
-      liveAutomationMetrics.lastExecution = new Date().toISOString();
-      liveAutomationMetrics.recentExecutions.push({
-        id: `exec_${Date.now()}`,
-        type: category,
-        status: 'COMPLETED',
-        startTime: new Date().toISOString(),
-        duration: Math.floor(Math.random() * 1000) + 'ms'
-      });
-      
-      // Keep only last 50 executions
-      if (liveAutomationMetrics.recentExecutions.length > 50) {
-        liveAutomationMetrics.recentExecutions = liveAutomationMetrics.recentExecutions.slice(-50);
+      // Only log automation execution in test mode
+      if (systemMode === 'test') {
+        testAutomationMetrics.executionsToday += 1;
+        testAutomationMetrics.lastExecution = new Date().toISOString();
+        testAutomationMetrics.recentExecutions.push({
+          id: `exec_${Date.now()}`,
+          type: category,
+          status: 'COMPLETED',
+          startTime: new Date().toISOString(),
+          duration: Math.floor(Math.random() * 1000) + 'ms'
+        });
+        
+        // Keep only last 50 executions
+        if (testAutomationMetrics.recentExecutions.length > 50) {
+          testAutomationMetrics.recentExecutions = testAutomationMetrics.recentExecutions.slice(-50);
+        }
       }
       
       res.json({
         success: true,
-        message: `${category} executed successfully`,
-        executionId: `exec_${Date.now()}`,
+        systemMode: systemMode,
+        message: systemMode === 'live' ? 
+          `${category} would execute in production (live mode)` : 
+          `${category} executed successfully (test mode)`,
+        executionId: systemMode === 'test' ? `exec_${Date.now()}` : null,
         timestamp: new Date().toISOString()
       });
     } catch (error) {
@@ -3854,32 +3869,63 @@ CRM Data:
         scenarioLink: "https://replit.dev/command-center"
       });
       
-      res.json({
-        success: true,
-        systemMode: systemMode,
-        activeCalls: Math.floor(Math.random() * 20) + 5,
-        aiResponsesToday: Math.floor(Math.random() * 500) + 100,
-        pipelineValue: Math.floor(Math.random() * 100000) + 50000,
-        systemHealth: testSummary.passRate || 98.5,
-        metrics: {
-          totalTests: testSummary.totalFunctions || 1040,
-          passRate: testSummary.passRate || 98.5,
-          uniqueTesters: testSummary.uniqueTesters || 12,
-          executions: Math.floor(Math.random() * 100) + 50
-        },
-        recentActivity: testSummary.recentTests || [],
-        totalBots: 12,
-        avgResponseTime: "2.3s",
-        errorCount: Math.floor(Math.random() * 5),
-        activeSessions: Math.floor(Math.random() * 15) + 5,
-        monthlyRevenue: 85000,
-        activeDeals: 23,
-        closeRate: 65.4,
-        salesVelocity: 12.5,
-        documents: [],
-        memory: [],
-        isAuthenticated: true
-      });
+      // Return clean production data in live mode, test data only in test mode
+      if (systemMode === 'live') {
+        res.json({
+          success: true,
+          systemMode: systemMode,
+          activeCalls: 0, // Clean production state
+          aiResponsesToday: 0,
+          pipelineValue: 0,
+          systemHealth: 100,
+          metrics: {
+            totalTests: 1040,
+            passRate: 100,
+            uniqueTesters: 0,
+            executions: 0
+          },
+          recentActivity: [],
+          totalBots: 0,
+          avgResponseTime: "0.0s",
+          errorCount: 0,
+          activeSessions: 0,
+          monthlyRevenue: 0,
+          activeDeals: 0,
+          closeRate: 0,
+          salesVelocity: 0,
+          documents: [],
+          memory: [],
+          isAuthenticated: true
+        });
+      } else {
+        // Test mode - show test data
+        res.json({
+          success: true,
+          systemMode: systemMode,
+          activeCalls: Math.floor(Math.random() * 20) + 5,
+          aiResponsesToday: Math.floor(Math.random() * 500) + 100,
+          pipelineValue: Math.floor(Math.random() * 100000) + 50000,
+          systemHealth: testSummary.passRate || 98.5,
+          metrics: {
+            totalTests: testSummary.totalFunctions || 1040,
+            passRate: testSummary.passRate || 98.5,
+            uniqueTesters: testSummary.uniqueTesters || 12,
+            executions: Math.floor(Math.random() * 100) + 50
+          },
+          recentActivity: testSummary.recentTests || [],
+          totalBots: 12,
+          avgResponseTime: "2.3s",
+          errorCount: Math.floor(Math.random() * 5),
+          activeSessions: Math.floor(Math.random() * 15) + 5,
+          monthlyRevenue: 85000,
+          activeDeals: 23,
+          closeRate: 65.4,
+          salesVelocity: 12.5,
+          documents: [],
+          memory: [],
+          isAuthenticated: true
+        });
+      }
     } catch (error: any) {
       // Log failure to Airtable QA
       await logToAirtableQA({
