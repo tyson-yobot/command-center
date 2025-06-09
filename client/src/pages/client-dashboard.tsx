@@ -457,12 +457,6 @@ export default function ClientDashboard() {
 
     setDocumentsLoading(false);
     event.target.value = '';
-        executeLiveCommand(`Upload failed: ${file.name}`);
-      }
-    }
-    
-    // Reset the input
-    event.target.value = '';
   };
 
   // Button handlers for all dashboard functionality
@@ -706,6 +700,7 @@ export default function ClientDashboard() {
     }
   };
 
+  // Single consolidated function handlers
   const handleSendSMS = async () => {
     try {
       const phoneNumber = prompt('Enter phone number:');
@@ -744,54 +739,6 @@ export default function ClientDashboard() {
         variant: "destructive"
       });
     }
-  };
-
-  const handleDocumentUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (!files || files.length === 0) return;
-
-    setDocumentsLoading(true);
-    toast({
-      title: "Uploading Documents",
-      description: `Processing ${files.length} file(s)...`,
-    });
-
-    for (const file of Array.from(files)) {
-      const formData = new FormData();
-      formData.append('document', file);
-      formData.append('category', 'user-upload');
-
-      try {
-        const response = await fetch('/api/rag/upload', {
-          method: 'POST',
-          body: formData
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          setUploadedDocuments(prev => [...prev, result]);
-          toast({
-            title: "Document Uploaded",
-            description: `${file.name} processed successfully`,
-          });
-        } else {
-          toast({
-            title: "Upload Failed",
-            description: `Failed to upload ${file.name}`,
-            variant: "destructive"
-          });
-        }
-      } catch (error) {
-        toast({
-          title: "Upload Error",
-          description: `Error uploading ${file.name}`,
-          variant: "destructive"
-        });
-      }
-    }
-
-    setDocumentsLoading(false);
-    event.target.value = '';
   };
 
   const handleDownloadPDF = async () => {
@@ -1512,41 +1459,46 @@ export default function ClientDashboard() {
     }
   };
 
-  // Live Command Execution Handler
-  const executeLiveCommand = async (category: string) => {
+  // Pipeline call management
+  const startPipelineCalls = async () => {
+    setPipelineRunning(true);
+    setShowCallMonitoring(true);
+    
     try {
-      const payload = getLiveCommandPayload(category);
-      
-      // Use central automation dispatcher for all commands
-      const response = await fetch('/api/command-center/execute', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          command: category,
-          category: 'Core',
-          payload,
-          isTestMode: isTestMode
-        })
+      const response = await apiRequest('POST', '/api/calls/start-pipeline', {
+        mode: isTestMode ? 'test' : 'live'
       });
-
-      const result = await response.json();
-
-      if (result.success || response.ok) {
-        setToast({
-          title: "Command Executed",
-          description: `${category} completed successfully`,
-        });
-      } else {
-        setToast({
-          title: "Command Failed",
-          description: `${category} failed: ${result.error || result.message || 'Unknown error'}`,
-          variant: "destructive"
+      
+      if (response.ok) {
+        toast({
+          title: "Pipeline Started",
+          description: "Voice pipeline is now active",
         });
       }
-    } catch (error: any) {
-      setToast({
-        title: "Execution Error",
-        description: `Failed to execute ${category}: ${error.message}`,
+    } catch (error) {
+      setPipelineRunning(false);
+      toast({
+        title: "Pipeline Error",
+        description: "Failed to start pipeline",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const stopPipelineCalls = async () => {
+    setPipelineRunning(false);
+    setActiveCalls([]);
+    
+    try {
+      await apiRequest('POST', '/api/calls/stop-pipeline');
+      toast({
+        title: "Pipeline Stopped",
+        description: "Voice pipeline has been stopped",
+      });
+    } catch (error) {
+      toast({
+        title: "Stop Error",
+        description: "Error stopping pipeline",
         variant: "destructive"
       });
     }

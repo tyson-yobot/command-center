@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-09T00:10:00.166Z",
-    "functionId": 206,
-    "functionName": "Lead Score Calculator",
-    "batch": 21,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 85,
-    "successCount": 3,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-09T00:10:00.176Z",
     "functionId": 157,
     "functionName": "New Lead Notification",
@@ -11300,6 +11289,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-09T04:58:20.563Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-09T05:02:17.735Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-09T05:02:17.404Z",
       "automationStatus": "running"
     }
   }
