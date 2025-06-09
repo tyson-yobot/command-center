@@ -37,7 +37,8 @@ import {
   Trash2,
   Eye,
   Download,
-  Edit
+  Edit,
+  Share2
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '../lib/queryClient';
@@ -49,6 +50,7 @@ import { ZendeskChatWidget } from '../components/zendesk-chat-widget';
 import { SalesOrderProcessor } from '../components/sales-order-processor';
 import { ContentCreatorDashboard } from '../components/content-creator-dashboard';
 import { MailchimpSyncDashboard } from '../components/mailchimp-sync-dashboard';
+import { SocialContentCreator } from '../components/social-content-creator';
 import { useToast } from '../hooks/use-toast';
 
 export default function ClientDashboard() {
@@ -2766,27 +2768,33 @@ export default function ClientDashboard() {
             </CardContent>
           </Card>
 
-          {/* Bot Intelligence */}
+          {/* Data & Reports */}
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <Brain className="w-5 h-5 mr-2 text-purple-400" />
-                Bot Intelligence
+                <FileText className="w-5 h-5 mr-2 text-cyan-400" />
+                Data & Reports
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
+                <Button
+                  onClick={() => setShowSocialContentCreator(true)}
+                  className="w-full bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-center"
+                >
+                  <Share2 className="w-4 h-4 mr-2" />
+                  📢 Content Creator
+                </Button>
+                <Button
+                  onClick={() => setShowMailchimpSync(true)}
+                  className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-center"
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  📧 Mailchimp Sync
+                </Button>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">IQ Score:</span>
-                  <span className="text-white font-bold">142</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Confidence:</span>
-                  <span className="text-green-400 font-bold">91%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Training:</span>
-                  <span className="text-blue-400 font-bold">Active</span>
+                  <span className="text-slate-300 text-sm">Last Export:</span>
+                  <span className="text-blue-400 font-bold">2h ago</span>
                 </div>
               </div>
             </CardContent>
@@ -3587,6 +3595,11 @@ export default function ClientDashboard() {
       {/* Mailchimp Sync Dashboard Modal */}
       {showMailchimpSync && (
         <MailchimpSyncDashboard onBack={() => setShowMailchimpSync(false)} />
+      )}
+
+      {/* Social Content Creator Modal */}
+      {showSocialContentCreator && (
+        <SocialContentCreator onBack={() => setShowSocialContentCreator(false)} />
       )}
 
       {/* Hidden File Input for Document Upload */}
