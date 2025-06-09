@@ -191,13 +191,9 @@ export async function testAllEndpoints() {
   }
   
   try {
-    results.quote = await buildQuote({
-      package: 'Standard',
-      addOns: ['SmartSpend'],
-      email: 'test@example.com',
-      clientName: 'Test Client'
-    });
-    console.log('Quote builder working');
+    // Quote builder test disabled - live mode requires authentic client data only
+    results.quote = { error: 'Test disabled - no mock data allowed in live mode' };
+    console.log('Quote builder test skipped - live mode active');
   } catch (error) {
     console.error('Quote builder failed:', error.message);
     results.quote = { error: error.message };

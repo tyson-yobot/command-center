@@ -1786,6 +1786,13 @@ export default function CommandCenter() {
                     <span>Export Data</span>
                   </Button>
                   
+                  <Button
+                    onClick={() => setShowMailchimpSync(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">📧</span>
+                    <span>Mailchimp Sync</span>
+                  </Button>
 
                 </div>
               </CardContent>
