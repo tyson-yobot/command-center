@@ -2247,7 +2247,7 @@ export default function CommandCenter() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-white">🎉 Congratulations! You've saved 247 hours this month</h3>
+                  <h3 className="text-xl font-bold text-white">🎉 Live Automation Active</h3>
                   <p className="text-green-300">Your conversion rate is 15% above industry average</p>
                   <p className="text-blue-300">Ready to expand to email automation? Your ROI supports it!</p>
                 </div>
@@ -2348,7 +2348,7 @@ export default function CommandCenter() {
                 {/* Calendar events populated by live webhook data only */}
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Today's Schedule</div>
-                  <div className="text-white font-bold">12 total meetings</div>
+                  <div className="text-white font-bold">{metrics?.activeCampaigns || 0} total meetings</div>
                   <div className="text-cyan-400 text-xs">8 remaining today</div>
                 </div>
               </div>
@@ -2401,7 +2401,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Follow-ups Due:</span>
-                  <span className="text-orange-400 font-bold">12</span>
+                  <span className="text-orange-400 font-bold">{automationPerformance?.activeFunctions || 0}</span>
                 </div>
               </div>
             </CardContent>
@@ -2500,7 +2500,7 @@ export default function CommandCenter() {
               {/* Cost Per Lead */}
               <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-cyan-400 mb-1">$47</div>
+                  <div className="text-2xl font-black text-cyan-400 mb-1">${metrics?.totalRevenue || 0}</div>
                   <div className="text-cyan-300 text-sm">Cost Per Lead</div>
                 </div>
                 <div className="space-y-2">
@@ -2532,7 +2532,7 @@ export default function CommandCenter() {
               {/* Learning Rate */}
               <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-blue-400 mb-1">+12%</div>
+                  <div className="text-2xl font-black text-blue-400 mb-1">+{metrics?.conversionRate || 0}%</div>
                   <div className="text-blue-300 text-sm">Learning Rate</div>
                 </div>
                 <div className="space-y-2">
@@ -2548,7 +2548,7 @@ export default function CommandCenter() {
               {/* Total Interactions */}
               <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-purple-400 mb-1">1,247</div>
+                  <div className="text-2xl font-black text-purple-400 mb-1">{metrics?.totalInteractions || 0}</div>
                   <div className="text-purple-300 text-sm">Interactions</div>
                 </div>
                 <div className="space-y-2">

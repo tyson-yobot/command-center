@@ -110,7 +110,7 @@ function getAPIKeys() {
 }
 
 // IMMEDIATE FIX: One-Click Test Data Wipe Function
-async function airtableWipeTable(tableName: string): Promise<number> {
+async function airtableWipeTableDuplicate(tableName: string): Promise<number> {
   try {
     const apiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY;
     if (!apiKey) {
