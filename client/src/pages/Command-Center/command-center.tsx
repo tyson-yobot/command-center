@@ -1726,7 +1726,28 @@ export default function CommandCenter() {
                 </Button>
                 {/* Test mode buttons removed - live mode only */}
                 <Button 
-                  onClick={() => executeLiveCommand("Critical Escalation")}
+                  onClick={async () => {
+                    try {
+                      console.log('Critical Escalation button clicked');
+                      const response = await fetch('/api/automation/critical-escalation', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          escalationType: 'critical',
+                          source: 'command_center',
+                          timestamp: new Date().toISOString(),
+                          severity: 'high'
+                        })
+                      });
+                      const result = await response.json();
+                      console.log('Critical escalation result:', result);
+                      setShowEscalation(true);
+                      alert(result.success ? `Critical escalation triggered: ${result.escalationId}` : 'Critical escalation failed');
+                    } catch (error) {
+                      console.error('Critical escalation error:', error);
+                      alert('Critical escalation failed');
+                    }
+                  }}
                   size="sm"
                   className="bg-red-600 hover:bg-red-700 text-white border border-red-400"
                 >

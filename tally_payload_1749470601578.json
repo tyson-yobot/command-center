@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-06-09T12:03:21.579Z",
+  "url": "/api/automation/new-support-ticket",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "109"
+  },
+  "raw_payload": {
+    "clientName": "Test User",
+    "subject": "Test Ticket",
+    "description": "Testing support ticket",
+    "priority": "medium"
+  }
+}

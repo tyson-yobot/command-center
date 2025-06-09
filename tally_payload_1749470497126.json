@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-06-09T12:01:37.127Z",
+  "url": "/api/automation/new-booking-sync",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "84"
+  },
+  "raw_payload": {
+    "bookingData": {
+      "clientId": "TEST_123",
+      "date": "2025-06-09",
+      "service": "consultation"
+    }
+  }
+}
