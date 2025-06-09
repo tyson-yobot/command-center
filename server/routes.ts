@@ -112,13 +112,17 @@ function getAPIKeys() {
 // IMMEDIATE FIX: One-Click Test Data Wipe Function
 async function airtableWipeTable(tableName: string): Promise<number> {
   try {
-    if (!process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN) {
-      throw new Error('Airtable API token not configured');
+    const apiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY;
+    if (!apiKey) {
+      console.log(`❌ No Airtable API key configured for ${tableName}`);
+      return 0;
     }
 
     const baseId = process.env.AIRTABLE_BASE_ID || 'appRt8V3tH4g5Z5if';
     let recordsDeleted = 0;
     let offset = '';
+
+    console.log(`🔍 Attempting to wipe table: ${tableName}`);
 
     do {
       // Get records in batches
@@ -126,18 +130,21 @@ async function airtableWipeTable(tableName: string): Promise<number> {
       
       const response = await fetch(url, {
         headers: {
-          'Authorization': `Bearer ${process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN}`,
+          'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json'
         }
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch records: ${response.statusText}`);
+        console.log(`❌ Failed to access ${tableName}: ${response.status} ${response.statusText}`);
+        return 0;
       }
 
       const data = await response.json();
       
       if (data.records && data.records.length > 0) {
+        console.log(`📋 Found ${data.records.length} records in ${tableName}`);
+        
         // Delete records in batches of 10 (Airtable limit)
         const recordIds = data.records.map((record: any) => record.id);
         
@@ -148,7 +155,7 @@ async function airtableWipeTable(tableName: string): Promise<number> {
           const deleteResponse = await fetch(deleteUrl, {
             method: 'DELETE',
             headers: {
-              'Authorization': `Bearer ${process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN}`,
+              'Authorization': `Bearer ${apiKey}`,
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -158,8 +165,13 @@ async function airtableWipeTable(tableName: string): Promise<number> {
 
           if (deleteResponse.ok) {
             recordsDeleted += batch.length;
+            console.log(`🗑️ Deleted ${batch.length} records from ${tableName}`);
+          } else {
+            console.log(`❌ Failed to delete batch from ${tableName}: ${deleteResponse.status}`);
           }
         }
+      } else {
+        console.log(`✅ Table ${tableName} is already empty or does not exist`);
       }
 
       offset = data.offset || '';
@@ -167,7 +179,7 @@ async function airtableWipeTable(tableName: string): Promise<number> {
 
     return recordsDeleted;
   } catch (error) {
-    console.error(`Error wiping table ${tableName}:`, error);
+    console.error(`❌ Error wiping table ${tableName}:`, error);
     return 0;
   }
 }
