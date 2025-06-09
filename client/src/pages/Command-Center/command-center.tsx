@@ -1869,7 +1869,7 @@ export default function CommandCenter() {
                   Live Execution Stream
                 </h4>
                 <div className="bg-black/40 rounded-lg p-4 max-h-32 overflow-y-auto">
-                  {liveExecutions?.executions?.slice(-5).reverse().map((execution: any, index: number) => (
+                  {automationPerformance?.recentExecutions?.slice(-5).reverse().map((execution: any, index: number) => (
                     <div key={execution.id || index} className="flex items-center justify-between py-1 text-sm">
                       <span className="text-slate-300">
                         {execution.type || 'Automation Function'}
@@ -1946,23 +1946,23 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">MRR:</span>
-                  <span className="text-white font-bold">${(crmData?.monthlyRevenue || 0).toLocaleString()}</span>
+                  <span className="text-white font-bold">${(metrics?.monthlyRevenue || 0).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Pipeline Value:</span>
-                  <span className="text-green-400 font-bold">${(crmData?.pipelineValue || 0).toLocaleString()}</span>
+                  <span className="text-green-400 font-bold">${(metrics?.pipelineValue || 0).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Active Deals:</span>
-                  <span className="text-blue-400 font-bold">{crmData?.activeDeals || 0}</span>
+                  <span className="text-blue-400 font-bold">{metrics?.activeDeals || 0}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Close Rate:</span>
-                  <span className="text-green-400 font-bold">{crmData?.closeRate || 0}%</span>
+                  <span className="text-green-400 font-bold">{metrics?.closeRate || 0}%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Sales Velocity:</span>
-                  <span className="text-blue-400 font-bold">{crmData?.salesVelocity || '0'} deals/week</span>
+                  <span className="text-blue-400 font-bold">{metrics?.salesVelocity || '0'} deals/week</span>
                 </div>
               </div>
             </CardContent>
@@ -2877,19 +2877,19 @@ export default function CommandCenter() {
                     <div className="flex justify-between">
                       <span className="text-slate-400">Total Tests:</span>
                       <span className="text-white font-mono">
-                        {testMetrics?.isAuthenticated ? (testMetrics?.totalTests || 0) : "No Data"}
+                        {metrics?.totalTests || 0}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-400">Pass Rate:</span>
                       <span className="text-green-400 font-mono">
-                        {testMetrics?.isAuthenticated ? `${testMetrics?.passRate || 0}%` : "No Data"}
+                        {metrics?.passRate || 0}%
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-400">Unique Testers:</span>
                       <span className="text-blue-400 font-mono">
-                        {testMetrics?.isAuthenticated ? (testMetrics?.uniqueTesters || 0) : "No Data"}
+                        {metrics?.uniqueTesters || 0}
                       </span>
                     </div>
                   </div>
@@ -2897,7 +2897,7 @@ export default function CommandCenter() {
                 <div>
                   <h4 className="text-slate-300 font-medium mb-3">Recent Activity</h4>
                   <div className="space-y-2 max-h-32 overflow-y-auto">
-                    {testMetrics?.recentActivity?.slice(0, 5).map((test: any, index: number) => (
+                    {metrics?.recentActivity?.slice(0, 5).map((test: any, index: number) => (
                       <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded">
                         <span className="text-slate-300 text-sm truncate">{test.name}</span>
                         <Badge 
