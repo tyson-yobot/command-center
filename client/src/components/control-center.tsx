@@ -93,6 +93,29 @@ const Badge = ({ children, className = "" }: { children: React.ReactNode; classN
   </div>
 );
 
+const Switch = ({ id, checked, onCheckedChange, className = "" }: { 
+  id?: string; 
+  checked: boolean; 
+  onCheckedChange: (checked: boolean) => void; 
+  className?: string; 
+}) => (
+  <button
+    id={id}
+    role="switch"
+    aria-checked={checked}
+    onClick={() => onCheckedChange(!checked)}
+    className={`relative inline-flex h-6 w-11 items-center rounded-full border-2 border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 ${
+      checked ? 'bg-blue-600' : 'bg-slate-600'
+    } ${className}`}
+  >
+    <span
+      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+        checked ? 'translate-x-6' : 'translate-x-1'
+      }`}
+    />
+  </button>
+);
+
 interface Metric {
   label: string;
   value: string | number;
@@ -119,23 +142,18 @@ export default function ControlCenter() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPriority, setSelectedPriority] = useState<string>('all');
   const [connectionStatus, setConnectionStatus] = useState(false);
+  const [isTestMode, setIsTestMode] = useState(false);
 
-  // Poll for real data without WebSocket connections
+  // Poll for data with test/live mode separation
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [metricsRes, functionsRes, automationRes] = await Promise.all([
-          fetch('/api/metrics'),
-          fetch('/api/automation/functions'),
-          fetch('/api/automation/executions')
-        ]);
-
-        if (metricsRes.ok) {
-          const metricsData = await metricsRes.json();
+        if (isTestMode) {
+          // Test mode: Use curated demo data
           setMetrics([
             {
               label: "Active Calls",
-              value: metricsData.activeCalls || 0,
+              value: 47,
               change: "+12%",
               trend: "up",
               icon: <Phone className="h-4 w-4" />,
@@ -143,7 +161,7 @@ export default function ControlCenter() {
             },
             {
               label: "AI Responses Today",
-              value: metricsData.aiResponsesToday || 0,
+              value: 1247,
               change: "+28%",
               trend: "up",
               icon: <Bot className="h-4 w-4" />,
@@ -151,7 +169,7 @@ export default function ControlCenter() {
             },
             {
               label: "Conversion Rate",
-              value: `${metricsData.conversionRate || 0}%`,
+              value: "73.2%",
               change: "+5.2%",
               trend: "up",
               icon: <TrendingUp className="h-4 w-4" />,
@@ -159,13 +177,58 @@ export default function ControlCenter() {
             },
             {
               label: "System Health",
-              value: `${metricsData.systemHealth || 97}%`,
+              value: "98.7%",
               change: "Stable",
               trend: "neutral",
               icon: <Activity className="h-4 w-4" />,
               color: "text-green-500"
             }
           ]);
+        } else {
+          // Live mode: Fetch real data from APIs
+          const [metricsRes, functionsRes, automationRes] = await Promise.all([
+            fetch('/api/metrics'),
+            fetch('/api/automation/functions'),
+            fetch('/api/automation/executions')
+          ]);
+
+          if (metricsRes.ok) {
+            const metricsData = await metricsRes.json();
+            setMetrics([
+              {
+                label: "Active Calls",
+                value: metricsData.activeCalls || 0,
+                change: "+12%",
+                trend: "up",
+                icon: <Phone className="h-4 w-4" />,
+                color: "text-green-500"
+              },
+              {
+                label: "AI Responses Today",
+                value: metricsData.aiResponsesToday || 0,
+                change: "+28%",
+                trend: "up",
+                icon: <Bot className="h-4 w-4" />,
+                color: "text-blue-500"
+              },
+              {
+                label: "Conversion Rate",
+                value: `${metricsData.conversionRate || 0}%`,
+                change: "+5.2%",
+                trend: "up",
+                icon: <TrendingUp className="h-4 w-4" />,
+                color: "text-purple-500"
+              },
+              {
+                label: "System Health",
+                value: `${metricsData.systemHealth || 97}%`,
+                change: "Stable",
+                trend: "neutral",
+                icon: <Activity className="h-4 w-4" />,
+                color: "text-green-500"
+              }
+            ]);
+          }
         }
 
         if (functionsRes.ok && automationRes.ok) {
@@ -287,6 +350,20 @@ export default function ControlCenter() {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            {/* Test Mode Toggle */}
+            <div className="flex items-center gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-600/50">
+              <div className="flex items-center space-x-2">
+                <label htmlFor="test-mode-control" className="text-blue-200 font-medium text-sm">Test Mode</label>
+                <div className="text-xs text-slate-400">Demo data vs live system</div>
+              </div>
+              <Switch
+                id="test-mode-control"
+                checked={isTestMode}
+                onCheckedChange={setIsTestMode}
+                className="data-[state=checked]:bg-blue-500"
+              />
+            </div>
+            
             <div className={`flex items-center gap-2 px-3 py-1 rounded-lg ${connectionStatus ? 'bg-green-900/50 text-green-400' : 'bg-red-900/50 text-red-400'}`}>
               {connectionStatus ? <Wifi className="h-4 w-4" /> : <WifiOff className="h-4 w-4" />}
               <span className="text-sm">{connectionStatus ? 'Connected' : 'Disconnected'}</span>
