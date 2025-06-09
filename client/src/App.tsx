@@ -35,9 +35,9 @@ function Router() {
     <ModeContext.Provider value={{ isTestMode, setTestMode }}>
       <div className="min-h-screen">
         <Switch>
-          <Route path="/multi-view" component={MultiView} />
           <Route path="/command-center" component={ClientDashboard} />
           <Route path="/" component={ClientDashboard} />
+          <Route path="/multi-view" component={MultiView} />
           <Route path="/control-center" component={ControlCenter} />
           <Route path="/lead-scraper" component={LeadScrapingPage} />
           <Route>
