@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-09T00:55:00.250Z",
-    "functionId": 157,
-    "functionName": "New Lead Notification",
-    "batch": 16,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 142,
-    "successCount": 5,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-09T00:55:00.258Z",
     "functionId": 151,
     "functionName": "VoiceBot Escalation Detection",
@@ -11324,6 +11313,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-09T05:51:47.720Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-09T05:54:15.602Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-09T05:54:15.319Z",
       "automationStatus": "running"
     }
   }
