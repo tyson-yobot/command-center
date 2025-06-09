@@ -1695,11 +1695,11 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    disabled
-                    className="bg-gray-500 text-gray-300 flex items-center justify-start p-3 cursor-not-allowed"
+                    onClick={() => executeLiveCommand("Send SMS")}
+                    className="bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-start p-3"
                   >
-                    <span className="text-xl mr-3">⚙️</span>
-                    <span>Open</span>
+                    <MessageSquare className="w-5 h-5 mr-3" />
+                    <span>Send SMS</span>
                   </Button>
                 </div>
               </CardContent>
@@ -1745,11 +1745,11 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    disabled
-                    className="bg-gray-500 text-gray-300 flex items-center justify-start p-3 cursor-not-allowed"
+                    onClick={() => setShowContentCreator(true)}
+                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
                   >
-                    <span className="text-xl mr-3">⚙️</span>
-                    <span>Open</span>
+                    <span className="text-xl mr-3">📢</span>
+                    <span>Content Creator</span>
                   </Button>
                 </div>
               </CardContent>
@@ -1786,47 +1786,7 @@ export default function CommandCenter() {
                     <span>Export Data</span>
                   </Button>
                   
-                  <Button
-                    onClick={() => setActiveModule('content-creator')}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
-                  >
-                    <span className="text-xl mr-3">📢</span>
-                    <span>Content Creator</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => setActiveModule('mailchimp')}
-                    className="bg-yellow-600 hover:bg-yellow-700 text-white flex items-center justify-start p-3"
-                  >
-                    <span className="text-xl mr-3">📧</span>
-                    <span>Mailchimp Sync</span>
-                  </Button>
-                  
 
-                  
-                  <Button
-                    onClick={() => executeLiveCommand("Send SMS")}
-                    className="bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-start p-3"
-                  >
-                    <MessageSquare className="w-5 h-5 mr-3" />
-                    <span>Send SMS</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => setShowContentCreator(true)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
-                  >
-                    <span className="text-xl mr-3">📢</span>
-                    <span>Content Creator</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => setShowMailchimpSync(true)}
-                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
-                  >
-                    <span className="text-xl mr-3">📧</span>
-                    <span>Mailchimp Sync</span>
-                  </Button>
                 </div>
               </CardContent>
             </Card>
