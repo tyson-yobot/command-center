@@ -50,13 +50,13 @@ class AirtableLogger {
       const payload = {
         records: [{
           fields: {
-            'Integration Name': `Function ${entry.functionId}: ${entry.functionName}`,
-            '✅ Pass/Fail': entry.status === 'PASS' ? '✅ Pass' : '❌ Fail',
-            '🛠 Notes / Debug': entry.notes,
-            '📅 Test Date': new Date().toISOString(),
+            '🔧 Integration Name': `Function ${entry.functionId}: ${entry.functionName}`,
+            '✅ Pass/Fail': entry.status === 'PASS' ? '✅' : '❌',
+            '🧠 Notes / Debug': entry.notes,
+            '📅 Test Date': new Date().toISOString().split('T')[0],
             '🧑‍💻 QA Owner': 'Daniel Sharpe',
-            '📤 Output Data Populated?': entry.status === 'PASS',
-            '🧾 Record Created?': entry.status === 'PASS',
+            '📤 Output Data Populated': entry.status === 'PASS',
+            '🗃️ Record Created?': entry.status === 'PASS',
             '🔁 Retry Attempted?': false,
             '🧩 Module Type': entry.moduleType,
             '📂 Related Scenario Link': `https://replit.dev/command-center`
