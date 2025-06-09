@@ -262,8 +262,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      // If API failed or test mode, use curated test data
-      if (!isLiveData) {
+      // If API failed or test mode, return empty results in live mode
+      if (!isLiveData && systemMode === 'live') {
+        leads = []; // NO TEST DATA IN LIVE MODE
+      } else if (!isLiveData && systemMode === 'test') {
         leads = Array.from({ length: Math.floor(Math.random() * 100) + 50 }, (_, i) => ({
           fullName: `${['Sarah', 'John', 'Maria', 'David', 'Jennifer', 'Michael', 'Lisa', 'Robert'][i % 8]} ${['Thompson', 'Johnson', 'Garcia', 'Williams', 'Brown', 'Davis', 'Miller', 'Wilson'][i % 8]}`,
           email: `${['sarah', 'john', 'maria', 'david', 'jennifer', 'michael', 'lisa', 'robert'][i % 8]}.${['thompson', 'johnson', 'garcia', 'williams', 'brown', 'davis', 'miller', 'wilson'][i % 8]}@company${i + 1}.com`,
@@ -675,8 +677,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
               industry: person.organization?.industry,
               source: 'Apollo'
             })) || [];
-          } else {
-            // Test mode - return mock data
+          } else if (systemMode === 'test') {
+            // Test mode - return mock data ONLY in test mode
             results = [
               {
                 fullName: 'John Smith',
@@ -689,6 +691,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 source: 'Apollo (Test)'
               }
             ];
+          } else {
+            // Live mode without API - return empty
+            results = [];
           }
           break;
           
@@ -719,7 +724,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               category: place.categoryName,
               source: 'Apify'
             })) || [];
-          } else {
+          } else if (systemMode === 'test') {
             results = [
               {
                 businessName: 'Test Business',
@@ -732,6 +737,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 source: 'Apify (Test)'
               }
             ];
+          } else {
+            // Live mode without API - return empty
+            results = [];
           }
           break;
           
@@ -739,7 +747,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           if (!isTestMode) {
             // PhantomBuster implementation would go here
             results = [];
-          } else {
+          } else if (systemMode === 'test') {
             results = [
               {
                 fullName: 'Jane Doe',
@@ -751,6 +759,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 source: 'PhantomBuster (Test)'
               }
             ];
+          } else {
+            // Live mode without API - return empty
+            results = [];
           }
           break;
       }

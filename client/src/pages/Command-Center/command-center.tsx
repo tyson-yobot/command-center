@@ -1354,19 +1354,8 @@ export default function CommandCenter() {
         setTotalRecords(result.total_records || 0);
         setActiveCalls(result.activeCalls || []);
         
-        // Simulate call monitoring with real-time updates
-        const mockCalls = Array.from({length: result.active_calls || 0}, (_, i) => ({
-          id: `call-${Date.now()}-${i}`,
-          phoneNumber: `+1555${Math.floor(Math.random() * 9000) + 1000}${Math.floor(Math.random() * 90) + 10}`,
-          contactName: `Contact ${i + 1}`,
-          status: 'dialing',
-          duration: 0,
-          startTime: new Date(),
-          voiceId: selectedPersona,
-          script: 'Pipeline call script'
-        }));
-        
-        setActiveCalls(mockCalls);
+        // Use only real call data from API response - NO MOCK DATA IN LIVE MODE
+        setActiveCalls(result.activeCalls || []);
         
         setToast({
           title: "Pipeline Started",
@@ -1474,17 +1463,16 @@ export default function CommandCenter() {
       case "New Support Ticket":
         return { 
           subject: "Dashboard Support Request",
-          description: "Test support ticket from Command Center",
+          description: "Support request from Command Center",
           priority: "normal",
-          clientName: "Command Center User",
-          email: "user@company.com"
+          clientName: "Command Center User"
         };
       case "Manual Follow-up":
         return { lead_id: "manual_trigger", priority: "high" };
       case "Initiate Voice Call":
-        return { action: "test_call", number: "+15551234567" };
+        return { action: "voice_call" };
       case "Send SMS":
-        return { action: "send_sms", to: "+15551234567", message: "Test message from YoBot" };
+        return { action: "send_sms", message: "Message from YoBot" };
       case "Run Lead Scrape":
         return { query: "roofing contractor", limit: 10 };
       case "Export Data":
@@ -1519,8 +1507,8 @@ export default function CommandCenter() {
                 </div>
               </div>
               <div className="bg-red-50 p-3 rounded mb-4">
-                <p className="text-red-900 font-medium">Mike Rodriguez - CRM sync failure</p>
-                <p className="text-red-700 text-sm">Follow-up sequence stopped 2 hours ago</p>
+                <p className="text-red-900 font-medium">System Alert</p>
+                <p className="text-red-700 text-sm">Automation requires attention</p>
               </div>
               <div className="flex space-x-3">
                 <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white">
