@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
-import ClientDashboard from "./pages/client-dashboard";
+import CommandCenter from "./pages/command-center";
 import LeadScrapingPage from "./pages/lead-scraping-page";
 import ControlCenter from "./pages/control-center";
 import Mobile from "./pages/mobile";
@@ -35,11 +35,11 @@ function Router() {
     <ModeContext.Provider value={{ isTestMode, setTestMode }}>
       <div className="min-h-screen">
         <Switch>
-          <Route path="/command-center" component={ClientDashboard} />
+          <Route path="/command-center" component={CommandCenter} />
           <Route path="/control-center" component={ControlCenter} />
           <Route path="/lead-scraper" component={LeadScrapingPage} />
           <Route path="/mobile" component={Mobile} />
-          <Route path="/" component={ClientDashboard} />
+          <Route path="/" component={CommandCenter} />
           <Route>
             <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
               <div className="text-center">
