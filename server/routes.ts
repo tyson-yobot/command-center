@@ -20,6 +20,7 @@ import { registerDashboardEndpoints } from "./dashboardEndpoints";
 import { registerCentralAutomationDispatcher } from "./centralAutomationDispatcher";
 import { configManager } from "./controlCenterConfig";
 import { airtableLogger } from "./airtableLogger";
+import { automationTester } from "./automationTester";
 import OpenAI from "openai";
 
 // Initialize OpenAI

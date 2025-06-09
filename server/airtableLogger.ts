@@ -22,7 +22,7 @@ class AirtableLogger {
 
   constructor() {
     this.baseId = 'appRt8V3tH4g5Z5if';
-    this.tableId = 'tbldPRZ4nHbtj9opU';
+    this.tableId = 'tbly0fjE2M5uHET9X';
     this.apiKey = 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa';
     this.baseUrl = `https://api.airtable.com/v0/${this.baseId}/${this.tableId}`;
   }
@@ -50,16 +50,7 @@ class AirtableLogger {
       const payload = {
         records: [{
           fields: {
-            '🔧 Integration Name': `Function ${entry.functionId}: ${entry.functionName}`,
-            '✅ Pass/Fail': entry.status === 'PASS' ? '✅' : '❌',
-            '🧠 Notes / Debug': entry.notes,
-            '📅 Test Date': new Date().toISOString().split('T')[0],
-            '🧑‍💻 QA Owner': 'Daniel Sharpe',
-            '📤 Output Data Populated': entry.status === 'PASS',
-            '🗃️ Record Created?': entry.status === 'PASS',
-            '🔁 Retry Attempted?': false,
-            '🧩 Module Type': entry.moduleType,
-            '📂 Related Scenario Link': `https://replit.dev/command-center`
+            '🔧 Integration Name': `Function ${entry.functionId}: ${entry.functionName} - ${entry.status} - ${entry.notes} - Module: ${entry.moduleType}`
           }
         }]
       };
