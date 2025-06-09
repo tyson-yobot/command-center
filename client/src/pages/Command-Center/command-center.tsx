@@ -125,19 +125,34 @@ export default function CommandCenter() {
   const [memoryText, setMemoryText] = useState('');
   const [memoryCategory, setMemoryCategory] = useState('general');
   const [voiceGenerationText, setVoiceGenerationText] = useState('');
-  const [currentSystemMode, setCurrentSystemMode] = useState('live');
+  const [currentSystemMode, setCurrentSystemMode] = useState(() => {
+    // Try to get from localStorage first, fallback to 'live'
+    return localStorage.getItem('systemMode') || 'live';
+  });
   const { toast } = useToast();
 
-  // DISABLED - Fetch current system mode on load
-  // useEffect(() => {
-  //   fetch('/api/system-mode')
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       if (data.systemMode) {
-  //         setCurrentSystemMode(data.systemMode);
-  //       }
-  //     });
-  // }, []);
+  // Fetch current system mode on load and set up periodic sync
+  useEffect(() => {
+    const fetchSystemMode = () => {
+      fetch('/api/system-mode')
+        .then(res => res.json())
+        .then(data => {
+          if (data.systemMode) {
+            setCurrentSystemMode(data.systemMode);
+            localStorage.setItem('systemMode', data.systemMode);
+          }
+        })
+        .catch(err => console.error('Failed to fetch system mode:', err));
+    };
+    
+    // Fetch immediately
+    fetchSystemMode();
+    
+    // Set up periodic sync every 5 seconds to maintain state consistency
+    const interval = setInterval(fetchSystemMode, 5000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   // System mode toggle function
   const toggleSystemMode = async () => {
@@ -148,14 +163,14 @@ export default function CommandCenter() {
         mode: newMode
       });
       
-      if (response.ok) {
-        setCurrentSystemMode(newMode);
+      if (response.success) {
+        setCurrentSystemMode(response.systemMode); // Use server response for accurate state
         toast({
           title: "System Mode Changed",
-          description: `Switched to ${newMode} mode. ${newMode === 'live' ? 'Production data only.' : 'Test data enabled.'}`,
+          description: `Switched to ${response.systemMode} mode. ${response.systemMode === 'live' ? 'Production data only.' : 'Test data enabled.'}`,
         });
-        // Refetch all data to update the dashboard
-        setTimeout(() => window.location.reload(), 1000);
+        // Refresh to ensure all components update with new mode
+        setTimeout(() => window.location.reload(), 500);
       }
     } catch (error) {
       toast({

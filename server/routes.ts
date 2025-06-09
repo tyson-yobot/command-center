@@ -63,27 +63,25 @@ function logOperation(operation: string, data: any, result: 'success' | 'error' 
 }
 
 // System mode gate - blocks all real operations in test mode
-function enforceSystemModeGate(operation: string, allowedInTest: boolean = false) {
+function enforceSystemModeGate(operation: string, isProductionWrite: boolean = true) {
   if (!systemMode) {
     logOperation(operation, {}, 'error', "System mode not set - critical security violation");
     throw new Error("System mode not set - critical security violation");
   }
   
-  if (systemMode === 'test' && !allowedInTest) {
-    logOperation(operation, {}, 'blocked', "Production operation blocked in test mode");
-    console.log(`🧪 Test Mode Active - Blocking production operation: ${operation}`);
-    return false;
-  }
-  
-  if (systemMode === 'live') {
-    logOperation(operation, {}, 'success', "Production operation authorized");
+  if (systemMode === 'test' && isProductionWrite) {
+    console.log(`🚫 Test Mode - BLOCKING production operation: ${operation}`);
+    logOperation(`test-mode-block-${operation}`, {}, 'blocked', `Production operation blocked in test mode: ${operation}`);
+    return false; // Block production writes in test mode
+  } else if (systemMode === 'test') {
+    console.log(`🧪 Test Mode - Executing test operation: ${operation}`);
+    logOperation(`test-mode-execute-${operation}`, {}, 'success', `Test operation executed: ${operation}`);
+    return true; // Allow test operations
+  } else {
     console.log(`✅ Live Mode - Executing production operation: ${operation}`);
-    return true;
+    logOperation(`live-mode-execute-${operation}`, {}, 'success', `Production operation executed: ${operation}`);
+    return true; // Allow all operations in live mode
   }
-  
-  logOperation(operation, {}, 'success', "Test operation executed");
-  console.log(`🧪 Test Mode - Executing test operation: ${operation}`);
-  return true;
 }
 
 // Configure multer for file uploads
@@ -167,22 +165,7 @@ let salesOrderData = [];
 let crmData = [];
 let automationActivity = [];
 
-// System mode enforcement function - PRODUCTION LOCKDOWN REQUIREMENTS
-function enforceSystemModeGate(operation: string, isProductionWrite: boolean = true) {
-  if (systemMode === 'test' && isProductionWrite) {
-    console.log(`🚫 Test Mode - BLOCKING production operation: ${operation}`);
-    logOperation(`test-mode-block-${operation}`, {}, 'blocked', `Production operation blocked in test mode: ${operation}`);
-    return false; // Block production writes in test mode
-  } else if (systemMode === 'test') {
-    console.log(`🧪 Test Mode - Executing test operation: ${operation}`);
-    logOperation(`test-mode-execute-${operation}`, {}, 'success', `Test operation executed: ${operation}`);
-    return true; // Allow test operations
-  } else {
-    console.log(`✅ Live Mode - Executing production operation: ${operation}`);
-    logOperation(`live-mode-execute-${operation}`, {}, 'success', `Production operation executed: ${operation}`);
-    return true; // Allow live operations
-  }
-}
+
 
 // Clear all test data when switching to live mode - CRITICAL for production compliance
 function clearTestData() {
