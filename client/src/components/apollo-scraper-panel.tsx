@@ -104,16 +104,16 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
 
   return (
     <TooltipProvider>
-      <div className="space-y-6 p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+      <div className="space-y-6 p-6 bg-gradient-to-br from-slate-900/80 via-blue-900/60 to-indigo-900/80 backdrop-blur-xl rounded-xl border border-slate-700/50 shadow-2xl">
         
         {/* Contact Filters Section */}
-        <Card className="border-blue-200 dark:border-blue-800">
+        <Card className="bg-slate-800/50 border-slate-600/50 backdrop-blur-sm">
           <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2 text-blue-800 dark:text-blue-200">
+            <CardTitle className="flex items-center gap-2 text-blue-300">
               <Users className="h-5 w-5" />
               Contact Filters
             </CardTitle>
-            <CardDescription>Filter by contact characteristics and information</CardDescription>
+            <CardDescription className="text-slate-400">Filter by contact characteristics and information</CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             
