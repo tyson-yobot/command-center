@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Switch } from '@/components/ui/switch';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
+import { Progress } from '../components/ui/progress';
+import { Switch } from '../components/ui/switch';
 import { useModeContext } from '../App';
 import { 
   TrendingUp, 
@@ -40,14 +40,15 @@ import {
   Edit
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { apiRequest } from '@/lib/queryClient';
-import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i.png';
-import { LeadScrapingInterface } from '@/components/lead-scraping-interface';
-import { CallMonitoringPopup } from '@/components/call-monitoring-popup';
-import { ZendeskChatWidget } from '@/components/zendesk-chat-widget';
-import { SalesOrderProcessor } from '@/components/sales-order-processor';
-import { ContentCreatorDashboard } from '@/components/content-creator-dashboard';
-import { MailchimpSyncDashboard } from '@/components/mailchimp-sync-dashboard';
+import { apiRequest } from '../lib/queryClient';
+import yobotLogo from '/attached_assets/A_flat_vector_illustration_features_a_robot_face_i.png';
+import { LeadScrapingInterface } from '../components/lead-scraping-interface';
+import { CallMonitoringPopup } from '../components/call-monitoring-popup';
+import { ZendeskChatWidget } from '../components/zendesk-chat-widget';
+import { SalesOrderProcessor } from '../components/sales-order-processor';
+import { ContentCreatorDashboard } from '../components/content-creator-dashboard';
+import { MailchimpSyncDashboard } from '../components/mailchimp-sync-dashboard';
+import { useToast } from '../hooks/use-toast';
 
 export default function ClientDashboard() {
   const { isTestMode, setTestMode } = useModeContext();
@@ -98,6 +99,11 @@ export default function ClientDashboard() {
   const [showRecordingList, setShowRecordingList] = useState(false);
   const [editingRecording, setEditingRecording] = useState<any>(null);
   const [showLeadScraping, setShowLeadScraping] = useState(false);
+  const [activeModule, setActiveModule] = useState<string | null>(null);
+  const { toast } = useToast();
+  
+  // Replace all setToast calls with toast
+  const setToast = (config: any) => toast(config);
   const [showSalesOrderProcessor, setShowSalesOrderProcessor] = useState(false);
   const [showContentCreator, setShowContentCreator] = useState(false);
   const [showMailchimpSync, setShowMailchimpSync] = useState(false);

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '../ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Textarea } from '../ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { Switch } from '../ui/switch';
-import { Badge } from '../ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { useToast } from '../../hooks/use-toast';
-import { apiRequest } from '../../lib/queryClient';
+import { Button } from './ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Textarea } from './ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Switch } from './ui/switch';
+import { Badge } from './ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { useToast } from '../hooks/use-toast';
+import { apiRequest } from '../lib/queryClient';
 import { ArrowLeft, Wand2, Copy, Download, Share, Eye } from 'lucide-react';
 
 interface ContentCreatorProps {
