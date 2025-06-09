@@ -2420,9 +2420,9 @@ Always provide helpful, actionable guidance.`
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: new URLSearchParams({
-          To: to || '+15551234567',
-          From: from || process.env.TWILIO_PHONE_NUMBER || '+15551234567',
-          Body: message || 'Test message from YoBot automation system'
+          To: to,
+          From: from || process.env.TWILIO_PHONE_NUMBER,
+          Body: message
         })
       });
 
@@ -2461,8 +2461,8 @@ Always provide helpful, actionable guidance.`
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: new URLSearchParams({
-          To: number || '+15551234567',
-          From: process.env.TWILIO_PHONE_NUMBER || '+15551234567',
+          To: number,
+          From: process.env.TWILIO_PHONE_NUMBER,
           Url: twimlUrl
         })
       });
