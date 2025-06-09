@@ -21,6 +21,7 @@ import { registerCentralAutomationDispatcher } from "./centralAutomationDispatch
 import { configManager } from "./controlCenterConfig";
 import { airtableLogger } from "./airtableLogger";
 import { automationTester } from "./automationTester";
+import { registerAirtableQATracker } from "./airtableQATracker";
 import OpenAI from "openai";
 
 // Initialize OpenAI

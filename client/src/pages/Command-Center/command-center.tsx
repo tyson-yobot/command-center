@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
-import { useModeContext } from '@/App';
+// Live mode only - no test mode context needed
 import { 
   TrendingUp, 
   Phone, 
@@ -60,7 +60,7 @@ import { useToast } from '@/hooks/use-toast';
 
 
 export default function CommandCenter() {
-  const { isTestMode, setTestMode } = useModeContext();
+  // Live mode only - no test mode context needed
   // ALL QUERIES DISABLED TO STOP FLASHING - Manual refresh only
   const { data: metrics } = useQuery({ 
     queryKey: ['/api/metrics'],
