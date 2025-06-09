@@ -4,6 +4,7 @@ import { Route, Switch } from "wouter";
 import CommandCenter from "./pages/command-center";
 import LeadScraper from "./pages/lead-scraper";
 import ControlCenter from "./pages/control-center";
+import BusinessCardScanner from "./components/business-card-scanner";
 
 
 // Test/Live Mode Context for synchronized mode across all screens
