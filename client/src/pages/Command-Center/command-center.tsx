@@ -2349,7 +2349,7 @@ export default function CommandCenter() {
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Today's Schedule</div>
                   <div className="text-white font-bold">{metrics?.activeCampaigns || 0} total meetings</div>
-                  <div className="text-cyan-400 text-xs">8 remaining today</div>
+                  <div className="text-cyan-400 text-xs">{metrics?.remainingTasks || 0} remaining today</div>
                 </div>
               </div>
             </CardContent>
@@ -2393,11 +2393,11 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Today's Meetings:</span>
-                  <span className="text-white font-bold">8</span>
+                  <span className="text-white font-bold">{metrics?.todaysMeetings || 0}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Auto-Scheduled:</span>
-                  <span className="text-green-400 font-bold">6</span>
+                  <span className="text-green-400 font-bold">{metrics?.autoScheduled || 0}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Follow-ups Due:</span>
@@ -2554,7 +2554,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Today</span>
-                    <span className="text-green-400">89</span>
+                    <span className="text-green-400">{metrics?.todayInteractions || 0}</span>
                   </div>
                   <Progress value={67} className="h-1" />
                   <div className="text-center text-xs text-purple-400">Peak: 2-4 PM</div>
@@ -2564,13 +2564,13 @@ export default function CommandCenter() {
               {/* Conversion Rate */}
               <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-yellow-400 mb-1">31.2%</div>
+                  <div className="text-2xl font-black text-yellow-400 mb-1">{metrics?.closeRate || 0}%</div>
                   <div className="text-yellow-300 text-sm">Close Rate</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Industry Avg</span>
-                    <span className="text-red-400">18%</span>
+                    <span className="text-red-400">{metrics?.industryAverage || 0}%</span>
                   </div>
                   <Progress value={82} className="h-1" />
                   <div className="text-center text-xs text-green-400">+73% vs avg</div>
@@ -2593,7 +2593,7 @@ export default function CommandCenter() {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
               <div className="bg-gradient-to-br from-green-600/20 to-green-800/20 border border-cyan-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-green-400 mb-2">$127K</div>
+                  <div className="text-3xl font-black text-green-400 mb-2">${metrics?.monthlySavings || 0}</div>
                   <div className="text-green-300 text-sm">Monthly Savings</div>
                   <div className="text-green-200 text-xs mt-1">↑ 23% vs last month</div>
                 </div>
