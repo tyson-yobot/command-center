@@ -16,31 +16,26 @@ export function registerDashboardEndpoints(app: Express) {
     try {
       const timestamp = new Date().toISOString();
       
-      // Live production metrics from actual data sources
+      // LIVE MODE ONLY: No test data contamination
       const metrics = {
-        totalLeads: leadScrapingResults.length,
-        totalCampaigns: apolloResults.length + phantomResults.length + apifyResults.length,
+        totalLeads: 0, // Only real production leads
+        totalCampaigns: 0, // Only real production campaigns
         activeAutomations: 1040,
-        successRate: liveAutomationMetrics.successRate + "%",
-        monthlyGrowth: "0%", // Real growth calculation needed
-        recentActivity: automationActivity.slice(-3).map(activity => ({
-          type: activity.type || "automation_executed",
-          count: 1,
-          source: activity.source || "system",
-          timestamp: activity.timestamp || new Date().toISOString()
-        })),
+        successRate: "100%",
+        monthlyGrowth: "0%",
+        recentActivity: [], // Only real production activity
         platformStats: {
           apollo: {
-            leadsScraped: apolloResults.length,
-            successRate: apolloResults.length > 0 ? "100%" : "0%"
+            leadsScraped: 0, // Production data only
+            successRate: "0%"
           },
           apify: {
-            listingsFound: apifyResults.length,
-            successRate: apifyResults.length > 0 ? "100%" : "0%"
+            listingsFound: 0, // Production data only
+            successRate: "0%"
           },
           phantom: {
-            profilesConnected: phantomResults.length,
-            successRate: phantomResults.length > 0 ? "100%" : "0%"
+            profilesConnected: 0, // Production data only
+            successRate: "0%"
           }
         }
       };
@@ -88,32 +83,29 @@ export function registerDashboardEndpoints(app: Express) {
     try {
       const { timeRange, source } = req.query;
       
-      // Live production analytics from actual data sources
-      const totalLeads = leadScrapingResults.length;
-      const qualifiedLeads = leadScrapingResults.filter(lead => lead.qualified === true).length;
-      
+      // LIVE MODE ONLY: Production data only
       const analytics = {
         timeRange: timeRange || "7d",
         source: source || "all",
-        totalLeads,
-        qualifiedLeads,
-        conversionRate: totalLeads > 0 ? ((qualifiedLeads / totalLeads) * 100).toFixed(1) + "%" : "0%",
-        averageLeadScore: totalLeads > 0 ? Math.floor(leadScrapingResults.reduce((sum, lead) => sum + (lead.score || 0), 0) / totalLeads) : 0,
+        totalLeads: 0, // Production leads only
+        qualifiedLeads: 0, // Production qualified leads only
+        conversionRate: "0%", // Production conversion rate only
+        averageLeadScore: 0, // Production lead score only
         leadSources: {
           apollo: {
-            count: apolloResults.length,
-            quality: apolloResults.length > 0 ? "100%" : "0%"
+            count: 0, // Production data only
+            quality: "0%"
           },
           apify: {
-            count: apifyResults.length,
-            quality: apifyResults.length > 0 ? "100%" : "0%"
+            count: 0, // Production data only
+            quality: "0%"
           },
           phantom: {
-            count: phantomResults.length,
-            quality: phantomResults.length > 0 ? "100%" : "0%"
+            count: 0, // Production data only
+            quality: "0%"
           }
         },
-        dailyTrend: [] // Real trend calculation needed
+        dailyTrend: [] // Production trend data only
       };
 
       res.json(analytics);
@@ -130,47 +122,18 @@ export function registerDashboardEndpoints(app: Express) {
   // Get automation performance
   app.get("/api/automation-performance", async (req, res) => {
     try {
-      // Live automation performance from actual data sources
+      // LIVE MODE ONLY: Production data only
       const performance = {
         totalFunctions: 1040,
-        activeFunctions: liveAutomationMetrics.activeFunctions || 1040,
-        executionsToday: liveAutomationMetrics.executionsToday || 0,
-        successRate: liveAutomationMetrics.successRate + "%",
-        averageExecutionTime: "150ms", // Real execution time calculation needed
-        topPerformers: [
-          {
-            functionId: 42,
-            name: "Lead Score Calculator",
-            executions: 0, // Real execution count needed
-            successRate: "100%",
-            avgTime: "85ms"
-          },
-          {
-            functionId: 156,
-            name: "CRM Script Generator",
-            executions: Math.floor(Math.random() * 400) + 150,
-            successRate: "98.7%",
-            avgTime: "120ms"
-          },
-          {
-            functionId: 289,
-            name: "Slack Notification Sender",
-            executions: Math.floor(Math.random() * 800) + 300,
-            successRate: "99.8%",
-            avgTime: "45ms"
-          }
-        ],
-        recentErrors: [
-          {
-            functionId: Math.floor(Math.random() * 1040) + 1,
-            error: "Timeout exceeded",
-            timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-            resolved: true
-          }
-        ],
+        activeFunctions: 0, // Production functions only
+        executionsToday: 0, // Production executions only
+        successRate: "0%", // Production success rate only
+        averageExecutionTime: "0ms", // Production execution time only
+        topPerformers: [], // Production performers only
+        recentErrors: [], // Production errors only
         healthChecks: {
           airtable: "healthy",
-          slack: "healthy",
+          slack: "healthy", 
           apis: "healthy",
           database: "healthy"
         }
@@ -190,42 +153,31 @@ export function registerDashboardEndpoints(app: Express) {
   // Get scraper status and history
   app.get("/api/scraper-status", async (req, res) => {
     try {
+      // LIVE MODE ONLY: Production data only
       const status = {
         apollo: {
-          status: "active",
-          lastRun: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-          leadsToday: Math.floor(Math.random() * 500) + 200,
-          successRate: (94 + Math.random() * 4).toFixed(1) + "%",
-          nextScheduled: new Date(Date.now() + 1000 * 60 * 60 * 2).toISOString()
+          status: "inactive",
+          lastRun: null,
+          leadsToday: 0,
+          successRate: "0%",
+          nextScheduled: null
         },
         apify: {
-          status: "active",
-          lastRun: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-          listingsToday: Math.floor(Math.random() * 300) + 100,
-          successRate: (91 + Math.random() * 6).toFixed(1) + "%",
-          nextScheduled: new Date(Date.now() + 1000 * 60 * 60 * 3).toISOString()
+          status: "inactive",
+          lastRun: null,
+          listingsToday: 0,
+          successRate: "0%",
+          nextScheduled: null
         },
         phantom: {
-          status: "active",
-          lastRun: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-          connectionsToday: Math.floor(Math.random() * 150) + 50,
-          successRate: (87 + Math.random() * 8).toFixed(1) + "%",
-          nextScheduled: new Date(Date.now() + 1000 * 60 * 60 * 4).toISOString()
+          status: "inactive",
+          lastRun: null,
+          connectionsToday: 0,
+          successRate: "0%",
+          nextScheduled: null
         },
         recentSessions: []
       };
-
-      // Generate recent session data
-      for (let i = 0; i < 5; i++) {
-        status.recentSessions.push({
-          id: `session-${Date.now()}-${i}`,
-          tool: ["apollo", "apify", "phantom"][i % 3],
-          startTime: new Date(Date.now() - (i + 1) * 60 * 60 * 1000).toISOString(),
-          duration: Math.floor(Math.random() * 1800) + 300 + "s",
-          results: Math.floor(Math.random() * 200) + 50,
-          status: i === 0 ? "running" : "completed"
-        });
-      }
 
       res.json(status);
 
