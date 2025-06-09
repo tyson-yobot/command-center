@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-06-09T01:15:00.202Z",
+  "url": "/api/automation-batch-15/function-145",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "accept": "*/*",
+    "accept-language": "*",
+    "sec-fetch-mode": "cors",
+    "user-agent": "node",
+    "accept-encoding": "gzip, deflate",
+    "content-length": "84"
+  },
+  "body": {
+    "automationExecution": true,
+    "functionId": 145,
+    "timestamp": "2025-06-09T01:15:00.164Z"
+  },
+  "query": {}
+}
