@@ -167,6 +167,23 @@ let salesOrderData = [];
 let crmData = [];
 let automationActivity = [];
 
+// System mode enforcement function - PRODUCTION LOCKDOWN REQUIREMENTS
+function enforceSystemModeGate(operation: string, isProductionWrite: boolean = true) {
+  if (systemMode === 'test' && isProductionWrite) {
+    console.log(`🚫 Test Mode - BLOCKING production operation: ${operation}`);
+    logOperation(`test-mode-block-${operation}`, {}, 'blocked', `Production operation blocked in test mode: ${operation}`);
+    return false; // Block production writes in test mode
+  } else if (systemMode === 'test') {
+    console.log(`🧪 Test Mode - Executing test operation: ${operation}`);
+    logOperation(`test-mode-execute-${operation}`, {}, 'success', `Test operation executed: ${operation}`);
+    return true; // Allow test operations
+  } else {
+    console.log(`✅ Live Mode - Executing production operation: ${operation}`);
+    logOperation(`live-mode-execute-${operation}`, {}, 'success', `Production operation executed: ${operation}`);
+    return true; // Allow live operations
+  }
+}
+
 // Clear all test data when switching to live mode - CRITICAL for production compliance
 function clearTestData() {
   if (systemMode === 'live') {
@@ -624,6 +641,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/scraping/start', async (req, res) => {
     try {
       const { platform, searchTerms, keywords, locations, industries, jobTitle, companySize, maxResults, emailVerified, phoneAvailable, isTestMode } = req.body;
+      
+      // PRODUCTION LOCKDOWN: Check system mode before executing scraping operations
+      if (!enforceSystemModeGate(`${platform} Lead Scraping`, true)) {
+        return res.status(403).json({
+          success: false,
+          error: 'Test Mode Active - Production scraping blocked',
+          message: 'Switch to Live Mode to execute real API calls',
+          testModeActive: true
+        });
+      }
       
       let results = [];
       let endpoint = '';
