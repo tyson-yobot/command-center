@@ -48,6 +48,9 @@ let liveAutomationMetrics = {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Register real scraping routes with test/live mode
   registerRealScrapingRoutes(app);
+  
+  // Register real sales order processing
+  registerRealSalesOrderRoutes(app);
 
   // Legacy Lead Scraper API Endpoints - Deprecated
   app.post("/api/scraping/apollo", async (req, res) => {
