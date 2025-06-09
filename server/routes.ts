@@ -262,22 +262,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      // If API failed or test mode, return empty results in live mode
-      if (!isLiveData && systemMode === 'live') {
-        leads = []; // NO TEST DATA IN LIVE MODE
-      } else if (!isLiveData && systemMode === 'test') {
-        leads = Array.from({ length: Math.floor(Math.random() * 100) + 50 }, (_, i) => ({
-          fullName: `${['Sarah', 'John', 'Maria', 'David', 'Jennifer', 'Michael', 'Lisa', 'Robert'][i % 8]} ${['Thompson', 'Johnson', 'Garcia', 'Williams', 'Brown', 'Davis', 'Miller', 'Wilson'][i % 8]}`,
-          email: `${['sarah', 'john', 'maria', 'david', 'jennifer', 'michael', 'lisa', 'robert'][i % 8]}.${['thompson', 'johnson', 'garcia', 'williams', 'brown', 'davis', 'miller', 'wilson'][i % 8]}@company${i + 1}.com`,
-          company: `${filters.industry || 'Tech'} Solutions ${i + 1}`,
-          title: Array.isArray(filters.jobTitles) ? filters.jobTitles[0] : filters.jobTitles || "Manager",
-          location: Array.isArray(filters.location) ? filters.location[0] : filters.location || "Dallas, TX",
-          phone: `+1-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
-          industry: filters.industry || "Technology",
-          sourceTag: `Apollo Test - ${new Date().toLocaleDateString()}`,
-          scrapeSessionId: `apollo-test-${Date.now()}`,
-          source: "apollo-test"
-        }));
+      // Enforce strict test/live mode isolation
+      if (systemMode === 'live') {
+        // Live mode: only return real API data, never test data
+        if (!isLiveData) {
+          leads = [];
+        }
+      } else if (systemMode === 'test') {
+        // Test mode: generate test data only if no real data available
+        if (!isLiveData) {
+          leads = Array.from({ length: Math.floor(Math.random() * 100) + 50 }, (_, i) => ({
+            fullName: `${['Sarah', 'John', 'Maria', 'David', 'Jennifer', 'Michael', 'Lisa', 'Robert'][i % 8]} ${['Thompson', 'Johnson', 'Garcia', 'Williams', 'Brown', 'Davis', 'Miller', 'Wilson'][i % 8]}`,
+            email: `${['sarah', 'john', 'maria', 'david', 'jennifer', 'michael', 'lisa', 'robert'][i % 8]}.${['thompson', 'johnson', 'garcia', 'williams', 'brown', 'davis', 'miller', 'wilson'][i % 8]}@company${i + 1}.com`,
+            company: `${filters.industry || 'Tech'} Solutions ${i + 1}`,
+            title: Array.isArray(filters.jobTitles) ? filters.jobTitles[0] : filters.jobTitles || "Manager",
+            location: Array.isArray(filters.location) ? filters.location[0] : filters.location || "Dallas, TX",
+            phone: `+1-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+            industry: filters.industry || "Technology",
+            sourceTag: `Apollo Test - ${new Date().toLocaleDateString()}`,
+            scrapeSessionId: `apollo-test-${Date.now()}`,
+            source: "apollo-test"
+          }));
+        }
       }
 
       // Log the scraping execution

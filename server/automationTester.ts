@@ -127,42 +127,12 @@ class AutomationTester {
   }
 
   private generateTestData(func: AutomationFunction): any {
-    // Generate appropriate test data based on function type
-    const baseTestData = {
+    // Return minimal data for testing - no fake emails or test data in production
+    return {
       testMode: true,
       timestamp: new Date().toISOString(),
       functionId: func.id
     };
-
-    switch (func.moduleType) {
-      case 'Communication':
-        return {
-          ...baseTestData,
-          message: 'Test automation message',
-          recipient: 'test@example.com'
-        };
-      case 'Payment':
-        return {
-          ...baseTestData,
-          amount: 100,
-          currency: 'USD',
-          customerId: 'test_customer'
-        };
-      case 'Lead Management':
-        return {
-          ...baseTestData,
-          leadId: 'test_lead_123',
-          source: 'automation_test'
-        };
-      case 'QA Management':
-        return {
-          ...baseTestData,
-          testName: `Test Function ${func.id}`,
-          status: 'in_progress'
-        };
-      default:
-        return baseTestData;
-    }
   }
 
   async runSystematicTests(): Promise<{ totalTested: number; passed: number; failed: number }> {
