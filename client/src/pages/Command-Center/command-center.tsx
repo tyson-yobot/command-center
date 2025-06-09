@@ -1805,7 +1805,22 @@ export default function CommandCenter() {
               <CardContent>
                 <div className="grid grid-cols-1 gap-3">
                   <Button
-                    onClick={() => executeLiveCommand("Start Pipeline Calls")}
+                    onClick={async () => {
+                      try {
+                        console.log('Start Pipeline Calls button clicked');
+                        const response = await fetch('/api/voicebot/start-pipeline', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ action: 'start_pipeline_calls' })
+                        });
+                        const result = await response.json();
+                        console.log('Pipeline calls started:', result);
+                        alert(result.success ? 'Pipeline calls started' : 'Failed to start pipeline calls');
+                      } catch (error) {
+                        console.error('Pipeline start error:', error);
+                        alert('Failed to start pipeline calls');
+                      }
+                    }}
                     className="bg-lime-500 hover:bg-lime-600 text-black flex items-center justify-start p-3 font-semibold"
                   >
                     <span className="text-xl mr-3">📞</span>

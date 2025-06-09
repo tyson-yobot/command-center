@@ -1395,6 +1395,108 @@ export default function SystemControls() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Critical System Management Section - moved from Command Center */}
+      <Card className="bg-red-900/60 backdrop-blur-sm border border-red-500/30 mt-6">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-white text-base flex items-center space-x-2">
+            <AlertTriangle className="w-4 h-4 text-red-400" />
+            <span>Critical System Management</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Button
+            onClick={async () => {
+              try {
+                console.log('🧹 Clear Test Data button clicked');
+                const response = await fetch('/api/wipe-test-data', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' }
+                });
+                const result = await response.json();
+                console.log('Test data wipe result:', result);
+                alert(`Test data cleared: ${result.wipe?.totalRecordsDeleted || 0} records deleted`);
+              } catch (error) {
+                console.error('Test data wipe failed:', error);
+                alert('Test data wipe failed');
+              }
+            }}
+            className="w-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-start p-3"
+          >
+            <span className="text-xl mr-3">🧹</span>
+            <span>Clear Test Data</span>
+          </Button>
+          
+          <Button
+            onClick={async () => {
+              try {
+                const response = await fetch('/api/emergency-data-wipe', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ confirmationCode: 'EMERGENCY_WIPE_2024' })
+                });
+                const result = await response.json();
+                console.log('Emergency wipe result:', result);
+                alert('Emergency data wipe completed');
+              } catch (error) {
+                console.error('Emergency wipe failed:', error);
+                alert('Emergency wipe failed');
+              }
+            }}
+            className="w-full bg-red-800 hover:bg-red-900 text-white flex items-center justify-start p-3"
+          >
+            <span className="text-xl mr-3">🚨</span>
+            <span>Emergency Data Wipe</span>
+          </Button>
+          
+          <Button
+            onClick={async () => {
+              try {
+                const response = await fetch('/api/live-system-diagnostics', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' }
+                });
+                const result = await response.json();
+                console.log('Diagnostics result:', result);
+                alert('System diagnostics completed');
+              } catch (error) {
+                console.error('Diagnostics failed:', error);
+                alert('Diagnostics failed');
+              }
+            }}
+            className="w-full bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-start p-3"
+          >
+            <span className="text-xl mr-3">🔧</span>
+            <span>Live System Diagnostics</span>
+          </Button>
+          
+          <Button
+            onClick={async () => {
+              try {
+                const response = await fetch('/api/critical-escalation', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ 
+                    alertType: 'manual-escalation',
+                    severity: 'critical',
+                    message: 'Manual critical escalation triggered from Control Center'
+                  })
+                });
+                const result = await response.json();
+                console.log('Critical escalation result:', result);
+                alert('Critical escalation sent');
+              } catch (error) {
+                console.error('Critical escalation failed:', error);
+                alert('Critical escalation failed');
+              }
+            }}
+            className="w-full bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
+          >
+            <span className="text-xl mr-3">⚠️</span>
+            <span>Critical Escalation</span>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }

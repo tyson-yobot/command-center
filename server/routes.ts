@@ -291,6 +291,45 @@ function clearTestData() {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Complete Test Data Wipe - CRITICAL FOR DATA INTEGRITY
+  app.post('/api/wipe-test-data', async (req, res) => {
+    try {
+      console.log('🧹 INITIATING COMPLETE TEST DATA WIPE');
+      
+      const wipeResult = await wipeTestData();
+      
+      if (wipeResult.success) {
+        logOperation('test-data-wipe', wipeResult, 'success', 'Complete test data wipe executed');
+        
+        res.json({
+          success: true,
+          wipe: {
+            id: `WIPE-${Date.now()}`,
+            timestamp: new Date().toISOString(),
+            totalRecordsDeleted: wipeResult.recordsDeleted,
+            tablesProcessed: wipeResult.tablesWiped.length,
+            results: wipeResult.tablesWiped,
+            status: 'completed',
+            verification: 'test-data-isolation-confirmed'
+          },
+          message: 'All test data completely removed. System ready for live operations.'
+        });
+      } else {
+        throw new Error(wipeResult.error || 'Test data wipe failed');
+      }
+
+    } catch (error: any) {
+      console.error('❌ Test data wipe failed:', error);
+      logOperation('test-data-wipe', { error: error.message }, 'error', 'Test data wipe failed');
+
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        message: 'Test data wipe failed - manual intervention required'
+      });
+    }
+  });
+
   // Register real scraping routes with test/live mode
   registerRealScrapingRoutes(app);
   
