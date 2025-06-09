@@ -1572,28 +1572,7 @@ export default function CommandCenter() {
               </div>
             </div>
             
-            {/* System Mode Toggle - Controls Test/Live Data Isolation */}
-            <div className="flex justify-center mt-6">
-              <div className="flex items-center space-x-4 bg-slate-800/50 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
-                <label className="text-white font-medium">System Mode:</label>
-                <div className="flex items-center space-x-3">
-                  <span className={`text-sm ${currentSystemMode === 'test' ? 'text-yellow-400' : 'text-gray-400'}`}>
-                    Test
-                  </span>
-                  <Switch
-                    checked={currentSystemMode === 'live'}
-                    onCheckedChange={toggleSystemMode}
-                    className="data-[state=checked]:bg-green-500"
-                  />
-                  <span className={`text-sm ${currentSystemMode === 'live' ? 'text-green-400' : 'text-gray-400'}`}>
-                    Live
-                  </span>
-                </div>
-                <Badge variant={currentSystemMode === 'test' ? "secondary" : "default"} className="px-3 py-1">
-                  {currentSystemMode === 'test' ? "Test Mode - Safe Operations" : "Live Mode - Production Data"}
-                </Badge>
-              </div>
-            </div>
+
           </div>
           <div className="flex items-center justify-end">
             <div className="flex items-center space-x-4">
