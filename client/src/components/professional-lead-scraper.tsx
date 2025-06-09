@@ -66,10 +66,13 @@ export default function ProfessionalLeadScraper() {
     setError(null);
     
     try {
-      const response = await fetch('/api/scraping/apollo', {
+      const response = await fetch('/api/launch-scrape', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filters })
+        body: JSON.stringify({ 
+          tool: 'apollo',
+          filters 
+        })
       });
       
       const data = await response.json();
@@ -79,10 +82,10 @@ export default function ProfessionalLeadScraper() {
         setCurrentStep('results');
         toast({
           title: "Apollo Scraper Launched",
-          description: `✅ ${data.count} leads scraped. View in Airtable`,
+          description: `✅ ${data.leadCount} leads scraped. View in Airtable`,
         });
       } else {
-        setError(data.message || 'Apollo scraping failed');
+        setError(data.error || 'Apollo scraping failed');
       }
     } catch (err) {
       setError('Network error occurred');
@@ -96,10 +99,13 @@ export default function ProfessionalLeadScraper() {
     setError(null);
     
     try {
-      const response = await fetch('/api/scraping/apify', {
+      const response = await fetch('/api/launch-scrape', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filters })
+        body: JSON.stringify({ 
+          tool: 'apify',
+          filters 
+        })
       });
       
       const data = await response.json();
@@ -109,10 +115,10 @@ export default function ProfessionalLeadScraper() {
         setCurrentStep('results');
         toast({
           title: "Apify Scraper Launched",
-          description: `✅ ${data.count} listings scraped. View in Airtable`,
+          description: `✅ ${data.leadCount} listings scraped. View in Airtable`,
         });
       } else {
-        setError(data.message || 'Apify scraping failed');
+        setError(data.error || 'Apify scraping failed');
       }
     } catch (err) {
       setError('Network error occurred');

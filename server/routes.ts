@@ -14,6 +14,7 @@ import { registerBatch29 } from "./automationBatch29";
 import { registerBatch30 } from "./automationBatch30";
 import { registerRealScrapingRoutes } from "./realScrapingRoutes";
 import { registerRealSalesOrderRoutes } from "./realSalesOrderRoutes";
+import { registerScrapingEndpoints } from "./scrapingApiEndpoints";
 
 // Configure multer for file uploads
 const upload = multer({
@@ -48,6 +49,9 @@ let liveAutomationMetrics = {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Register real scraping routes with test/live mode
   registerRealScrapingRoutes(app);
+  
+  // Register universal scraping endpoints as per specification
+  registerScrapingEndpoints(app);
   
   // Register real sales order processing
   registerRealSalesOrderRoutes(app);

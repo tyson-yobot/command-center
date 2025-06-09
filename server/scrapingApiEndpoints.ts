@@ -75,7 +75,7 @@ export function registerScrapingEndpoints(app: Express) {
       
       // Generate CSV
       const csvHeader = 'Full Name,Email,Company,Title,Location,Phone,Industry,Source,Scraped Date\n';
-      const csvRows = leads.map(lead => 
+      const csvRows = leads.map((lead: Lead) => 
         `"${lead.fullName}","${lead.email}","${lead.company}","${lead.title}","${lead.location}","${lead.phone}","${lead.industry}","${lead.source}","${lead.scrapedDate}"`
       ).join('\n');
       
@@ -184,9 +184,22 @@ async function syncLeadsToAirtable(leads: any[], source: string, scrapeSessionId
   }
 }
 
-// Generate mock leads for testing
-function generateMockLeads(count: number, source: string) {
-  const leads = [];
+// Interface for lead data
+interface Lead {
+  fullName: string;
+  email: string;
+  company: string;
+  title: string;
+  location: string;
+  phone: string;
+  industry: string;
+  source: string;
+  scrapedDate: string;
+}
+
+// Generate mock leads for testing - will be replaced with real API calls
+function generateMockLeads(count: number, source: string): Lead[] {
+  const leads: Lead[] = [];
   const companies = ['TechCorp Inc', 'Innovation Labs', 'Digital Solutions', 'Growth Partners', 'Enterprise Systems'];
   const titles = ['CEO', 'CTO', 'VP Sales', 'Director Marketing', 'Head of Operations'];
   const locations = ['San Francisco, CA', 'New York, NY', 'Austin, TX', 'Seattle, WA', 'Boston, MA'];
