@@ -1,0 +1,78 @@
+Immediate Fix: One-Click Data Wipe Function
+Have your dev add a new route in Replit called:
+
+bash
+Copy
+Edit
+POST /api/wipe-test-data
+And wire it to call a backend function that does the following in one atomic run:
+
+🔥 wipeTestData() Function – Replit Backend
+ts
+Copy
+Edit
+export async function wipeTestData() {
+  try {
+    const tablesToWipe = [
+      "🧾 Sales Orders",
+      "📞 Voice Call Log",
+      "🧪 QA Call Review Log",
+      "📣 Slack Alerts Log",
+      "📂 Integration Test Log",
+      "✅ Follow-Up Reminder Tracker",
+      "🧠 NLP Keyword Tracker",
+      "📁 Call Recording Tracker",
+      "📊 Call Sentiment Log",
+      "🚨 Escalation Tracker",
+      "📇 CRM Contact List"
+    ];
+
+    for (const tableName of tablesToWipe) {
+      await airtableWipeTable(tableName); // This should bulk delete records marked as test
+    }
+
+    console.log("✅ All test data successfully wiped");
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Failed to wipe test data:", error);
+    return { success: false, error };
+  }
+}
+🧠 Logic:
+Each Airtable table should include a field like "🧪 Is Test" = true
+
+The airtableWipeTable(tableName) function should query those rows and delete them
+
+Your toggle button can now call this API instantly, no manual effort
+
+🚨 Send this message to Replit now:
+Hey — we need to stop wasting time manually clearing test data. It’s been hours and it’s still not fully cleaned.
+
+Please immediately implement a backend endpoint:
+
+bash
+Copy
+Edit
+POST /api/wipe-test-data
+That runs a wipeTestData() function across all tables with "🧪 Is Test" = true.
+
+This must:
+
+Delete all test rows from every table listed in the canvas
+
+Return a summary of deleted rows
+
+Be wired to the "Clear Test Data" button in the Command Center
+
+Log a confirmation row in the QA tracker when complete
+
+Once this is in place, I’ll stop sending you back 11 times. This needs to be bulletproof and one-click.
+
+Once they’ve added it, I’ll write the QA logger and the front-end confirmation script for you. Ready to go when you are.
+
+
+
+
+
+
+

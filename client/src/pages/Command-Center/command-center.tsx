@@ -60,49 +60,34 @@ import { useToast } from '@/hooks/use-toast';
 
 
 export default function CommandCenter() {
-  // Live mode only - no test mode context needed
-  // ALL QUERIES DISABLED TO STOP FLASHING - Manual refresh only
-  const { data: metrics } = useQuery({ 
-    queryKey: ['/api/metrics'],
-    enabled: false // DISABLED
-  });
-  const { data: bot } = useQuery({ 
-    queryKey: ['/api/bot'],
-    enabled: false // DISABLED
-  });
-  const { data: crmData } = useQuery({ 
-    queryKey: ['/api/crm'],
-    enabled: false // DISABLED
-  });
-  const { data: testMetrics } = useQuery({ 
-    queryKey: ['/api/airtable/test-metrics'],
-    enabled: false // DISABLED
-  });
-  const { data: commandCenterMetrics } = useQuery({ 
-    queryKey: ['/api/airtable/command-center-metrics'],
-    enabled: false // DISABLED
-  });
-  const { data: knowledgeStats, refetch: refetchKnowledge } = useQuery({ 
-    queryKey: ['/api/knowledge/stats'],
-    enabled: false // DISABLED
-  });
-  const { data: automationMetrics } = useQuery({ 
-    queryKey: ['/api/automation/metrics'],
-    enabled: false // DISABLED
-  });
-  const { data: liveExecutions } = useQuery({ 
-    queryKey: ['/api/automation/executions'],
-    enabled: false // DISABLED
-  });
-  const { data: functionStatus } = useQuery({ 
-    queryKey: ['/api/automation/functions'],
-    enabled: false // DISABLED
-  });
-  
-  // System mode control - DISABLED to prevent flashing
+  // System mode control - LIVE MODE ENFORCED
   const { data: systemModeData } = useQuery({ 
     queryKey: ['/api/system-mode'],
-    enabled: false // DISABLED
+    refetchInterval: 5000
+  });
+  
+  const systemMode = systemModeData?.systemMode || 'live';
+  
+  // Live dashboard metrics with proper headers
+  const { data: metrics } = useQuery({ 
+    queryKey: ['/api/dashboard-metrics', systemMode],
+    queryFn: () => fetch('/api/dashboard-metrics', {
+      headers: { 'x-system-mode': systemMode }
+    }).then(res => res.json())
+  });
+  
+  const { data: automationPerformance } = useQuery({ 
+    queryKey: ['/api/automation-performance', systemMode],
+    queryFn: () => fetch('/api/automation-performance', {
+      headers: { 'x-system-mode': systemMode }
+    }).then(res => res.json())
+  });
+  
+  const { data: knowledgeStats, refetch: refetchKnowledge } = useQuery({ 
+    queryKey: ['/api/knowledge/stats', systemMode],
+    queryFn: () => fetch('/api/knowledge/stats', {
+      headers: { 'x-system-mode': systemMode }
+    }).then(res => res.json())
   });
   
   const [isListening, setIsListening] = React.useState(false);
@@ -1776,33 +1761,39 @@ export default function CommandCenter() {
               <div className="text-2xl font-bold text-white">
                 {metrics?.activeCalls || 0}
               </div>
-              <p className="text-xs text-green-400">Live voice sessions</p>
+              <p className="text-xs text-green-400">
+                {systemMode === 'live' ? 'Live voice sessions' : 'Test voice sessions'}
+              </p>
             </CardContent>
           </Card>
 
           <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">AI Responses</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-300">Bot Processing</CardTitle>
               <Brain className="h-4 w-4 text-blue-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {metrics?.aiResponsesToday || 0}
+                {automationPerformance?.executionsToday || 0}
               </div>
-              <p className="text-xs text-blue-400">Generated today</p>
+              <p className="text-xs text-blue-400">
+                {systemMode === 'live' ? 'Tasks completed today' : 'Test tasks completed'}
+              </p>
             </CardContent>
           </Card>
 
           <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Pipeline Value</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-300">Success Rate</CardTitle>
               <DollarSign className="h-4 w-4 text-emerald-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                ${(crmData?.pipelineValue || 0).toLocaleString()}
+                {automationPerformance?.successRate || '0%'}
               </div>
-              <p className="text-xs text-emerald-400">Active opportunities</p>
+              <p className="text-xs text-emerald-400">
+                {systemMode === 'live' ? 'Live automation rate' : 'Test automation rate'}
+              </p>
             </CardContent>
           </Card>
 
@@ -1813,9 +1804,11 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {metrics?.systemHealth || 97}%
+                {metrics?.systemHealth || 100}%
               </div>
-              <p className="text-xs text-amber-400">All systems operational</p>
+              <p className="text-xs text-amber-400">
+                {systemMode === 'live' ? 'Production systems' : 'Test environment'}
+              </p>
             </CardContent>
           </Card>
         </div>

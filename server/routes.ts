@@ -17,6 +17,7 @@ import { registerRealSalesOrderRoutes } from "./realSalesOrderRoutes";
 import { registerScrapingEndpoints } from "./scrapingApiEndpoints";
 import { registerContentCreatorEndpoints } from "./contentCreatorEndpoints";
 import { registerDashboardEndpoints } from "./dashboardEndpoints";
+import { registerCoreAutomationEndpoints } from "./coreAutomationEndpoints";
 import { registerCentralAutomationDispatcher } from "./centralAutomationDispatcher";
 import { configManager } from "./controlCenterConfig";
 import { airtableLogger } from "./airtableLogger";
@@ -169,6 +170,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register dashboard endpoints for all add-on modules
   registerDashboardEndpoints(app);
+  
+  // Register core automation endpoints
+  registerCoreAutomationEndpoints(app);
   
   // Register real sales order processing
   registerRealSalesOrderRoutes(app);
