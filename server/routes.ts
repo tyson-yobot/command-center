@@ -4074,6 +4074,51 @@ CRM Data:
     }
   });
 
+  // Clear Test Data Endpoint - Only works in test mode
+  app.post('/api/clear-test-data', async (req, res) => {
+    try {
+      if (systemMode !== 'test') {
+        return res.status(400).json({ 
+          success: false, 
+          error: "Can only clear test data when in test mode" 
+        });
+      }
+
+      // Clear test automation metrics
+      testAutomationMetrics = {
+        activeFunctions: 1040,
+        executionsToday: 0,
+        successRate: 100,
+        lastExecution: null,
+        recentExecutions: [],
+        functionStats: {}
+      };
+
+      await logToAirtableQA({
+        integrationName: "Test Data Clear",
+        passFail: "✅ Pass",
+        notes: "All test data cleared successfully",
+        qaOwner: "Control Center",
+        outputDataPopulated: true,
+        recordCreated: true,
+        retryAttempted: false,
+        moduleType: "Data Management"
+      });
+
+      res.json({ 
+        success: true, 
+        message: "Test data cleared successfully",
+        systemMode: systemMode
+      });
+
+    } catch (error: any) {
+      res.status(500).json({ 
+        success: false, 
+        error: error.message 
+      });
+    }
+  });
+
   // Automation Status Dashboard Endpoint
   app.get('/api/automation-status', async (req, res) => {
     try {

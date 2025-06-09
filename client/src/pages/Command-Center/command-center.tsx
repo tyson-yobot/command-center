@@ -1615,6 +1615,16 @@ export default function CommandCenter() {
                 >
                   Submit Ticket
                 </Button>
+                {isTestMode && (
+                  <Button 
+                    onClick={handleClearTestData}
+                    size="sm"
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    <Trash2 className="w-4 h-4 mr-1" />
+                    Clear Test Data
+                  </Button>
+                )}
                 <Button 
                   onClick={() => executeLiveCommand("Critical Escalation")}
                   size="sm"
