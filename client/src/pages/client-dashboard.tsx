@@ -395,6 +395,36 @@ export default function ClientDashboard() {
     return () => window.removeEventListener('focus', handleFocus);
   }, [availableVoices.length]);
 
+  // Handle document upload
+  const handleDocumentUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) return;
+
+    for (const file of Array.from(files)) {
+      const formData = new FormData();
+      formData.append('document', file);
+      
+      try {
+        const response = await fetch('/api/documents/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+          setUploadedFiles(prev => [...prev, result.document]);
+          executeLiveCommand(`Document uploaded: ${file.name}`);
+        }
+      } catch (error) {
+        console.error('Upload failed:', error);
+        executeLiveCommand(`Upload failed: ${file.name}`);
+      }
+    }
+    
+    // Reset the input
+    event.target.value = '';
+  };
+
   // Button handlers for all dashboard functionality
   const handleUploadDocs = async () => {
     const input = document.createElement('input');
@@ -1566,7 +1596,7 @@ export default function ClientDashboard() {
               <CardContent>
                 <div className="grid grid-cols-1 gap-3">
                   <Button
-                    onClick={() => setShowLeadScraping(true)}
+                    onClick={() => window.location.href = '/lead-scrape'}
                     className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">🧲</span>
@@ -1588,6 +1618,22 @@ export default function ClientDashboard() {
                     <span className="text-xl mr-3">📊</span>
                     <span>Export Data</span>
                   </Button>
+                  
+                  <Button
+                    onClick={() => document.getElementById('document-upload')?.click()}
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">📄</span>
+                    <span>Upload Documents</span>
+                  </Button>
+                  <input
+                    id="document-upload"
+                    type="file"
+                    multiple
+                    accept=".pdf,.doc,.docx,.txt"
+                    className="hidden"
+                    onChange={handleDocumentUpload}
+                  />
                   
                   <Button
                     onClick={() => executeLiveCommand("Send SMS")}

@@ -1,0 +1,92 @@
+🧠 **YoBot® Task To Do List — Final Spec for Replit Devs**
+
+This document defines **exactly what needs to be done** for each lead scraper module (Apollo, Apify, PhantomBuster) and all additional Command Center systems to ensure full functionality, perfect UX, cross-platform compatibility, and sales order automation — with scalability for global deployment.
+
+---
+
+### ✅ Universal Requirements (Apply to All Tools)
+
+* Group filters into logical sections
+* Use consistent layout (2-column grid with left/right balance)
+* All dropdowns must support default value + full label names
+* Every input field should have a label and an optional tooltip ("?")
+* Filters should be grouped into sections:
+
+  * 🧑 Contact Filters
+  * 🏢 Company/Business Filters
+  * ⚙️ Scraping Settings / Execution Settings
+* Include bottom bar with:
+
+  * 🔄 Filter summary (e.g. “7 filters applied”)
+  * ⏱ Estimated leads/profiles/listings (dynamic)
+  * 💾 Save preset button
+  * 🚀 Launch button (sticky footer on scroll)
+* Toggle between Test Company Mode (fake data, instant) vs YoBot Live Mode (real scraper and live data)
+* Color scheme must match the YoBot® Command Center:
+
+  * Apollo: Blue accent (💙)
+  * Apify: Green accent (💚)
+  * PhantomBuster: Purple accent (💜)
+  * Base theme must always be dark navy/gradient, not harsh black
+* ✅ Ensure all buttons work (especially all "Add" buttons, dropdowns, and toggles)
+* ✅ Replace “Twitter” references with “X (formerly Twitter)”
+* ✅ Update PhantomBuster dropdown to say: Platform → LinkedIn, X (formerly Twitter)
+* ✅ "Use API" option should say: Use YoBot Dashboard instead
+* ✅ Email Verified / Phone Verified toggles should default to checked and reflect real verification before sending to HubSpot
+* 🚨 All industry dropdowns must dynamically populate from Airtable 📚 Industry Templates table
+* 🚨 Test Mode toggle must affect backend response mode — no fake data without toggle ON
+
+---
+
+### 📣 Command Center Expansion: Immediate Action Items
+
+**None of the current buttons in Command Center work or trigger real functions.** The following must be added, fixed, or replaced with real logic and integration.
+
+#### 🆕 MUST ADD TO COMMAND CENTER:
+
+**1. Social Media Content Creator**
+→ New button in `Data & Reports` column labeled `📢 Content Creator`
+→ Clicking opens side drawer or modal with:
+
+* Content type selector (Post / Reel / Ad / Email)
+* Platform selector (Instagram, LinkedIn, Facebook, TikTok, etc.)
+* Voice and tone dropdown (Professional, Funny, Aggressive, Value-Driven)
+* Monthly content calendar view
+* Auto-generate and export options (PDF, .txt, Airtable push)
+* Slack push for daily post
+* Save to Airtable `📣 Social Scripts Log`
+
+**2. Mailchimp Integration Manager**
+→ New section in `Data & Reports` column labeled `📧 Mailchimp Sync`
+→ Controls:
+
+* Audience List dropdown (fetched from Mailchimp)
+* Send Campaign / Draft Campaign / Preview
+* Connect to latest offer or client funnel via dropdown
+* Export lead segment from CRM based on tag
+* Track open/click rate to Airtable `📬 Campaign Metrics Log`
+
+---
+
+### 🔧 UX/Interface FIXES NEEDED FROM SCREENSHOTS
+
+* `Voice Programming Interface` fails to upload files → **RAG uploader not connected to vector DB**
+* `Voice Generation` works visually but not functionally → **ElevenLabs endpoint not triggered**
+* `Start/Stop Calls`, `Run Load Scrape`, `Submit Ticket`, and all buttons at top **currently do nothing** → Must be wired to backend automations
+* `System Mode Toggle` must trigger test/live state in global React context or cookie with API side effects
+* All red dots (❗) and system errors shown in widgets must be clickable to view logs or drill-down
+
+---
+
+### 🔐 KEYS & API IDs (Confirmed Active)
+
+* Airtable API Key: `paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`
+* Airtable Base ID: `appRt8V3tH4g5Z5if`
+* Airtable Table ID (Integration Log): `tbldPRZ4nHbtj9opU`
+* Apollo API Key: `K5haLlS3oGUe665fQ8xE4w`
+* Apify API Key: `apify_api_RH0E0HyvexOfmaoCYXwdT1W8tWar8i3mcjDl`
+* Slack Webhook: `https://hooks.slack.com/services/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`
+
+---
+
+\[... content continues unchanged below this line — trimmed for brevity in this view ...]

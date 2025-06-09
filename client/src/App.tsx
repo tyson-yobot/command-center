@@ -34,10 +34,11 @@ function Router() {
     <ModeContext.Provider value={{ isTestMode, setTestMode }}>
       <div className="min-h-screen">
         <Switch>
-          <Route path="/" component={ClientDashboard} />
           <Route path="/command-center" component={ClientDashboard} />
+          <Route path="/" component={ClientDashboard} />
           <Route path="/control-center" component={ControlCenterPage} />
           <Route path="/lead-scraping" component={LeadScrapingPage} />
+          <Route path="/lead-scrape" component={LeadScrapingPage} />
           <Route>
             <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
               <div className="text-center">
