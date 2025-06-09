@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-09T01:30:00.536Z",
-    "functionId": 204,
-    "functionName": "Duplicate Record Detection",
-    "batch": 21,
-    "category": "Data Validation",
-    "status": "success",
-    "duration": 357,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-09T01:30:00.580Z",
     "functionId": 153,
     "functionName": "System Health Metric Update",
@@ -11364,6 +11353,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-09T06:27:38.205Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-09T06:30:22.955Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-09T06:30:22.536Z",
       "automationStatus": "running"
     }
   }
