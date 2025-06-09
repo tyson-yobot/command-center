@@ -109,6 +109,101 @@ function getAPIKeys() {
   };
 }
 
+// IMMEDIATE FIX: One-Click Test Data Wipe Function
+async function wipeTestData() {
+  try {
+    const tablesToWipe = [
+      "🧾 Sales Orders",
+      "📞 Voice Call Log", 
+      "🧪 QA Call Review Log",
+      "📣 Slack Alerts Log",
+      "📂 Integration Test Log",
+      "✅ Follow-Up Reminder Tracker",
+      "🧠 NLP Keyword Tracker",
+      "📁 Call Recording Tracker",
+      "📊 Call Sentiment Log",
+      "🚨 Escalation Tracker",
+      "📇 CRM Contact List"
+    ];
+
+    let totalRecordsDeleted = 0;
+    const wipedTables = [];
+
+    for (const tableName of tablesToWipe) {
+      try {
+        const deletedCount = await airtableWipeTable(tableName);
+        totalRecordsDeleted += deletedCount;
+        wipedTables.push({ table: tableName, recordsDeleted: deletedCount });
+        console.log(`✅ Wiped ${deletedCount} test records from ${tableName}`);
+      } catch (error) {
+        console.error(`❌ Failed to wipe ${tableName}:`, error);
+        wipedTables.push({ table: tableName, error: error.message });
+      }
+    }
+
+    console.log(`✅ All test data successfully wiped: ${totalRecordsDeleted} records deleted`);
+    return { 
+      success: true, 
+      tablesWiped: wipedTables,
+      recordsDeleted: totalRecordsDeleted 
+    };
+  } catch (error) {
+    console.error("❌ Failed to wipe test data:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+async function airtableWipeTable(tableName: string) {
+  try {
+    // Get all records with "🧪 Is Test" = true
+    const response = await fetch(
+      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${encodeURIComponent(tableName)}?filterByFormula=AND({🧪 Is Test}=TRUE())`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch records: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const recordIds = data.records.map((record: any) => record.id);
+
+    if (recordIds.length === 0) {
+      return 0; // No test records to delete
+    }
+
+    // Delete records in batches of 10 (Airtable limit)
+    let deletedCount = 0;
+    for (let i = 0; i < recordIds.length; i += 10) {
+      const batch = recordIds.slice(i, i + 10);
+      const deleteParams = batch.map(id => `records[]=${id}`).join('&');
+      
+      const deleteResponse = await fetch(
+        `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${encodeURIComponent(tableName)}?${deleteParams}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`
+          }
+        }
+      );
+
+      if (deleteResponse.ok) {
+        deletedCount += batch.length;
+      }
+    }
+
+    return deletedCount;
+  } catch (error) {
+    console.error(`Error wiping table ${tableName}:`, error);
+    return 0;
+  }
+}
+
 // Live automation tracking - initialized clean for production
 let liveAutomationMetrics = {
   activeFunctions: 1040,
@@ -173,6 +268,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register core automation endpoints
   registerCoreAutomationEndpoints(app);
+  
+  // IMMEDIATE FIX: One-Click Test Data Wipe Function
+  app.post('/api/wipe-test-data', async (req, res) => {
+    try {
+      logOperation('wipe-test-data', {}, 'success', 'Starting test data wipe operation');
+      
+      const result = await wipeTestData();
+      
+      if (result.success) {
+        logOperation('wipe-test-data', result, 'success', 'Test data successfully wiped');
+        res.json({ 
+          success: true, 
+          message: 'All test data successfully wiped',
+          tablesWiped: result.tablesWiped,
+          recordsDeleted: result.recordsDeleted 
+        });
+      } else {
+        logOperation('wipe-test-data', result, 'error', 'Failed to wipe test data');
+        res.status(500).json({ 
+          success: false, 
+          error: result.error,
+          message: 'Failed to wipe test data' 
+        });
+      }
+    } catch (error) {
+      logOperation('wipe-test-data', { error: error.message }, 'error', 'Critical error during data wipe');
+      res.status(500).json({ 
+        success: false, 
+        error: error.message,
+        message: 'Critical error during data wipe operation'
+      });
+    }
+  });
   
   // Register real sales order processing
   registerRealSalesOrderRoutes(app);

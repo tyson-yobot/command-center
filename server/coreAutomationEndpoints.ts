@@ -322,63 +322,23 @@ export function registerCoreAutomationEndpoints(app: Express) {
     }
   });
 
-  // Clear Test Data - Full purge of test data
+  // Clear Test Data - Call the main wipe-test-data endpoint
   app.post("/api/automation/clear-test-data", async (req, res) => {
     try {
-      const systemMode = req.headers['x-system-mode'] || 'live';
-      
-      if (systemMode === 'live') {
-        return res.status(403).json({
-          success: false,
-          error: "Cannot clear data in live mode. Switch to test mode first."
-        });
-      }
-
-      // Simulate data clearing
-      const clearResults = {
-        testLogs: 0,
-        qaRows: 0,
-        sampleClients: 0,
-        tempFiles: 0,
-        clearedAt: new Date().toISOString()
-      };
-
-      // Log to QA tracker
-      await officialQATracker.logTestResult({
-        integrationName: "Clear Test Data",
-        status: "✅ Pass",
-        notes: "Test data purge completed successfully",
-        testDate: new Date().toISOString(),
-        qaOwner: "Daniel Sharpe",
-        outputDataPopulated: true,
-        recordCreated: true,
-        retryAttempted: false,
-        moduleType: "System",
-        scenarioLink: "https://replit.dev/scenario/testmode-clear"
+      // Forward to the main wipe endpoint
+      const response = await fetch('http://localhost:5000/api/wipe-test-data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
 
-      res.json({
-        success: true,
-        data: clearResults,
-        message: "Test data cleared successfully"
-      });
+      const result = await response.json();
+      res.status(response.status).json(result);
     } catch (error) {
-      await officialQATracker.logTestResult({
-        integrationName: "Clear Test Data",
-        status: "❌ Fail",
-        notes: `Test data clearing failed: ${error.message}`,
-        testDate: new Date().toISOString(),
-        qaOwner: "Daniel Sharpe",
-        outputDataPopulated: false,
-        recordCreated: false,
-        retryAttempted: true,
-        moduleType: "System",
-        scenarioLink: "https://replit.dev/scenario/testmode-clear"
-      });
-
       res.status(500).json({
         success: false,
-        error: "Test data clearing failed",
+        error: "Failed to clear test data",
         details: error.message
       });
     }

@@ -1272,7 +1272,7 @@ export default function CommandCenter() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: 'YoBot Command Center Report',
-          data: { metrics, bot, crmData }
+          data: { metrics, automationPerformance, knowledgeStats }
         })
       });
       
@@ -1593,9 +1593,9 @@ export default function CommandCenter() {
               </div>
               
               <div className="flex items-center space-x-3">
-                <div className={`w-3 h-3 rounded-full ${bot?.status === 'active' ? 'bg-green-400 status-active' : 'bg-amber-400'}`}></div>
+                <div className={`w-3 h-3 rounded-full ${systemMode === 'live' ? 'bg-green-400 status-active' : 'bg-amber-400'}`}></div>
                 <span className="text-white text-sm">
-                  Bot Status: {bot?.status === 'active' ? 'Online' : 'Standby'}
+                  System Status: {systemMode === 'live' ? 'Live Production' : 'Test Mode'}
                 </span>
               </div>
             </div>
@@ -1824,7 +1824,7 @@ export default function CommandCenter() {
                 </span>
                 <div className="flex items-center space-x-4">
                   <span className="text-sm text-green-400">
-                    {automationMetrics?.metrics?.activeFunctions || 40} Functions Active
+                    {automationPerformance?.activeFunctions || 1040} Functions Active
                   </span>
                   <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
                 </div>
@@ -1835,28 +1835,28 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Executions Today</div>
                   <div className="text-2xl font-bold text-white">
-                    {automationMetrics?.metrics?.executionsToday || 0}
+                    {automationPerformance?.executionsToday || 0}
                   </div>
                   <div className="text-xs text-green-400">Live tracking</div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Success Rate</div>
                   <div className="text-2xl font-bold text-green-400">
-                    {automationMetrics?.metrics?.successRate || 98.7}%
+                    {automationPerformance?.successRate || '100%'}
                   </div>
                   <div className="text-xs text-green-400">High reliability</div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Recent Executions</div>
                   <div className="text-2xl font-bold text-blue-400">
-                    {liveExecutions?.executions?.length || 0}
+                    {automationPerformance?.recentExecutions?.length || 0}
                   </div>
                   <div className="text-xs text-blue-400">In queue</div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">System Load</div>
                   <div className="text-2xl font-bold text-yellow-400">
-                    {Math.round((automationMetrics?.metrics?.activeFunctions || 40) / 40 * 100)}%
+                    {Math.round((automationPerformance?.activeFunctions || 1040) / 1040 * 100)}%
                   </div>
                   <div className="text-xs text-yellow-400">Optimal range</div>
                 </div>
