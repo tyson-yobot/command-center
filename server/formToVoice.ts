@@ -40,34 +40,12 @@ router.post('/form-submission', async (req, res) => {
   }
 });
 
-// Test endpoint for debugging
+// Test endpoint disabled - no mock data allowed in live mode
 router.get('/test', async (_req, res) => {
-  const mockSubmission = {
-    name: 'Alex Chen',
-    phone: '+15551234567',
-    message: 'Interested in YoBot automation for our sales team. Need demo.',
-    product: 'YoBot Enterprise Suite',
-  };
-
-  try {
-    const voicePayload = {
-      contact: { name: mockSubmission.name, phone: mockSubmission.phone },
-      prompt: `Test form submission about ${mockSubmission.product}.\n\nMessage:\n${mockSubmission.message}`,
-      source: 'YoBot Test Trigger',
-    };
-
-    if (VOICEBOT_URL && !VOICEBOT_URL.includes('your-voicebot-url.com')) {
-      await axios.post(VOICEBOT_URL, voicePayload);
-    }
-
-    res.json({ 
-      status: 'test completed',
-      payload: voicePayload
-    });
-  } catch (err) {
-    console.error('Test Error:', err);
-    res.status(500).json({ error: 'Test failed' });
-  }
+  res.json({ 
+    status: 'disabled',
+    message: 'Test endpoint disabled - live mode requires authentic data only'
+  });
 });
 
 export default router;

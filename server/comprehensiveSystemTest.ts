@@ -124,97 +124,14 @@ export async function runComprehensiveSystemTest(req: Request, res: Response) {
     testResults.integrations.missedCallLog = { status: 'FAILED', error: error.message };
   }
 
-  // Test 6: A/B Testing
-  try {
-    testResults.totalTests++;
-    await logABTest({
-      testName: "Voice Response Variant A vs B",
-      variant: "Variant A",
-      clientId: "client_001",
-      result: "Higher engagement",
-      timestamp: new Date().toISOString(),
-      metrics: "25% increase in conversion"
-    });
-    testResults.passedTests++;
-    testResults.integrations.abTestLog = { status: 'PASSED', table: 'A/B Test Log Table' };
-  } catch (error: any) {
-    testResults.failedTests++;
-    testResults.integrations.abTestLog = { status: 'FAILED', error: error.message };
-  }
+  // LIVE MODE: A/B testing and Bot Health testing disabled to prevent mock data contamination
+  testResults.integrations.abTestLog = { status: 'DISABLED', message: 'Test data disabled in live mode' };
+  testResults.integrations.botHealthMonitor = { status: 'DISABLED', message: 'Test data disabled in live mode' };
 
-  // Test 7: Bot Health Monitoring
-  try {
-    testResults.totalTests++;
-    await logBotHealth({
-      clientId: "client_001",
-      status: "Healthy",
-      uptime: "99.9%",
-      lastPing: new Date().toISOString(),
-      errorCount: 0,
-      timestamp: new Date().toISOString()
-    });
-    testResults.passedTests++;
-    testResults.integrations.botHealthMonitor = { status: 'PASSED', table: 'Bot Health Monitor Table' };
-  } catch (error: any) {
-    testResults.failedTests++;
-    testResults.integrations.botHealthMonitor = { status: 'FAILED', error: error.message };
-  }
-
-  // Test 8: CRM Contact Logging
-  try {
-    testResults.totalTests++;
-    await logCRMContact({
-      contactName: "Sarah Johnson",
-      email: "sarah@techcorp.com",
-      phone: "+1-555-0789",
-      company: "TechCorp Industries",
-      source: "LinkedIn Outreach",
-      status: "Qualified Lead",
-      timestamp: new Date().toISOString()
-    });
-    testResults.passedTests++;
-    testResults.integrations.crmContacts = { status: 'PASSED', table: 'CRM Contacts Table' };
-  } catch (error: any) {
-    testResults.failedTests++;
-    testResults.integrations.crmContacts = { status: 'FAILED', error: error.message };
-  }
-
-  // Test 9: Support Ticket Logging
-  try {
-    testResults.totalTests++;
-    await logSupportTicket({
-      ticketId: "SUP_001",
-      clientName: "Test Client",
-      subject: "Integration assistance needed",
-      priority: "Medium",
-      status: "Open",
-      timestamp: new Date().toISOString(),
-      assignedTo: "Support Team"
-    });
-    testResults.passedTests++;
-    testResults.integrations.supportTicketSummary = { status: 'PASSED', table: 'Support Ticket Summary Table' };
-  } catch (error: any) {
-    testResults.failedTests++;
-    testResults.integrations.supportTicketSummary = { status: 'FAILED', error: error.message };
-  }
-
-  // Test 10: ROI Calculation
-  try {
-    testResults.totalTests++;
-    await logClientROI({
-      clientName: "Test Client",
-      monthlySpend: 5000,
-      monthlySavings: 15000,
-      roiPercentage: 300,
-      timestamp: new Date().toISOString(),
-      calculationDetails: "Automated response handling saves 40 hours/month"
-    });
-    testResults.passedTests++;
-    testResults.integrations.clientROI = { status: 'PASSED', table: 'Client ROI Results Table' };
-  } catch (error: any) {
-    testResults.failedTests++;
-    testResults.integrations.clientROI = { status: 'FAILED', error: error.message };
-  }
+  // LIVE MODE: All testing with mock data disabled to prevent contamination
+  testResults.integrations.crmContacts = { status: 'DISABLED', message: 'Test data disabled in live mode' };
+  testResults.integrations.supportTicketSummary = { status: 'DISABLED', message: 'Test data disabled in live mode' };
+  testResults.integrations.clientROI = { status: 'DISABLED', message: 'Test data disabled in live mode' };
 
   // Calculate summary
   const passRate = Math.round((testResults.passedTests / testResults.totalTests) * 100);

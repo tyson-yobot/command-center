@@ -227,131 +227,18 @@ def log_qa_review(call_id, result, reviewer, notes):
     return response.status_code == 200
 
 def create_comprehensive_sample_data():
-    """Create comprehensive sample data for all 9 Command Center tables"""
+    """DISABLED - No mock data allowed in live mode"""
     
-    print("Creating comprehensive YoBot Command Center sample data...")
+    print("Sample data generation disabled - live mode requires authentic data only")
     print("=" * 60)
     
-    total_attempts = 0
-    successful_logs = 0
-    
-    # Test all 9 logging functions
-    test_scenarios = [
-        {
-            "function": log_support_ticket,
-            "name": "Support Ticket",
-            "params": {
-                "ticket_id": "TKT-CC-001",
-                "submitted_by": "admin@yobot.com",
-                "channel": "Voice",
-                "ticket_type": "Feature Request",
-                "description": "Command Center comprehensive logging system implementation",
-                "assigned_rep": "Command Center Team",
-                "resolved": True,
-                "resolution_notes": "All 9 logging functions implemented and tested successfully"
-            }
-        },
-        {
-            "function": log_call_recording,
-            "name": "Call Recording",
-            "params": {
-                "call_id": "CALL-CC-001",
-                "bot_name": "YoBot Command Center",
-                "start_time": datetime.utcnow().isoformat(),
-                "duration": 240,
-                "recording_url": "https://command-center.yobot.com/recordings/cc-001.mp3",
-                "qa_status": "Pass",
-                "review_notes": "Command Center validation call - excellent system performance",
-                "assigned_agent": "QA Team",
-                "related_ticket_id": "TKT-CC-001"
-            }
-        },
-        {
-            "function": log_nlp_keyword,
-            "name": "NLP Keyword",
-            "params": {
-                "keyword": "command_center",
-                "category": "Feature",
-                "sample_phrase": "I need access to the command center dashboard",
-                "target_action": "Route to Command Center access and provide dashboard overview",
-                "used_in_training": True,
-                "bot_name": "YoBot Command Center",
-                "owner": "Command Center Team"
-            }
-        },
-        {
-            "function": log_call_sentiment,
-            "name": "Call Sentiment",
-            "params": {
-                "call_id": "CALL-CC-001",
-                "bot_name": "YoBot Command Center",
-                "intent": "Support",
-                "sentiment_score": 0.94,
-                "highlights": "Customer extremely satisfied with Command Center capabilities and comprehensive logging",
-                "negatives": "None noted - excellent experience",
-                "qa_status": "Pass",
-                "reviewed_by": "Command Center QA"
-            }
-        },
-        {
-            "function": log_escalation,
-            "name": "Escalation",
-            "params": {
-                "ticket_id": "TKT-CC-001",
-                "reason": "High priority feature implementation - Command Center deployment",
-                "escalated_by": "System Administrator"
-            }
-        },
-        {
-            "function": log_touchpoint,
-            "name": "Client Touchpoint",
-            "params": {
-                "client_name": "YoBot Enterprise",
-                "contact_type": "Implementation Call",
-                "notes": "Command Center logging system deployment discussion and validation",
-                "agent": "Implementation Team"
-            }
-        },
-        {
-            "function": log_missed_call,
-            "name": "Missed Call",
-            "params": {
-                "client_name": "Test Client",
-                "phone_number": "+1-555-0123",
-                "reason": "Bot maintenance during Command Center deployment",
-                "bot_name": "YoBot Command Center"
-            }
-        },
-        {
-            "function": log_qa_review,
-            "name": "QA Review",
-            "params": {
-                "call_id": "CALL-CC-001",
-                "result": "Pass",
-                "reviewer": "Command Center QA Team",
-                "notes": "All logging functions operational, comprehensive system validation successful"
-            }
-        }
-    ]
-    
-    for i, scenario in enumerate(test_scenarios, 1):
-        total_attempts += 1
-        try:
-            success = scenario["function"](**scenario["params"])
-            if success:
-                successful_logs += 1
-                print(f"✅ SUCCESS {i:2d}/8: {scenario['name']} logged")
-            else:
-                print(f"❌ FAILED  {i:2d}/8: {scenario['name']} - authentication required")
-        except Exception as e:
-            print(f"❌ ERROR   {i:2d}/8: {scenario['name']} - {str(e)}")
-    
-    print("=" * 60)
-    print(f"Command Center logging complete: {successful_logs}/{total_attempts} functions tested")
-    
-    if successful_logs > 0:
-        print(f"✅ {successful_logs} logging functions are working")
-        print("✅ Command Center tables accessible")
+    return {
+        "status": "disabled",
+        "message": "Mock data generation disabled in live mode",
+        "total_attempts": 0,
+        "successful_logs": 0
+    }
+
         print("View data: https://airtable.com/appRt8V3tH4g5Z51f")
     else:
         print("❌ No tables accessible - Personal Access Token needed")
