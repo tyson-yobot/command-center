@@ -18,6 +18,12 @@ import { registerScrapingEndpoints } from "./scrapingApiEndpoints";
 import { registerContentCreatorEndpoints } from "./contentCreatorEndpoints";
 import { registerDashboardEndpoints } from "./dashboardEndpoints";
 import { registerCentralAutomationDispatcher } from "./centralAutomationDispatcher";
+import OpenAI from "openai";
+
+// Initialize OpenAI
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 // Configure multer for file uploads
 const upload = multer({

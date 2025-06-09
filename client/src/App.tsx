@@ -3,7 +3,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
 import ClientDashboard from "./pages/client-dashboard";
 import LeadScrapingPage from "./pages/lead-scraping-page";
-import ControlCenterPage from "./pages/control-center-page";
 
 // Test/Live Mode Context for synchronized mode across all screens
 interface ModeContextType {
@@ -36,7 +35,6 @@ function Router() {
         <Switch>
           <Route path="/command-center" component={ClientDashboard} />
           <Route path="/" component={ClientDashboard} />
-          <Route path="/control-center" component={ControlCenterPage} />
           <Route path="/lead-scraping" component={LeadScrapingPage} />
           <Route path="/lead-scrape" component={LeadScrapingPage} />
           <Route>
