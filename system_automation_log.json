@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-08T09:00:00.549Z",
-    "functionId": 149,
-    "functionName": "Manual Override Logger",
-    "batch": 15,
-    "category": "Audit",
-    "status": "success",
-    "duration": 309,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-08T09:00:00.572Z",
     "functionId": 151,
     "functionName": "VoiceBot Escalation Detection",
@@ -11232,6 +11221,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-09T02:26:01.625Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-09T02:29:07.054Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-09T02:29:06.755Z",
       "automationStatus": "running"
     }
   }

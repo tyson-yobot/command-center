@@ -507,6 +507,26 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* Test Mode Toggle */}
+            <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg border border-slate-600/50">
+              <div className="space-y-1">
+                <div className="font-medium text-slate-200">
+                  {isTestMode ? "Test Company Mode" : "YoBot Live Mode"}
+                </div>
+                <div className="text-sm text-slate-400">
+                  {isTestMode 
+                    ? "Uses sample data for testing - no real scraping performed" 
+                    : "Live scraping with real Apollo.io data"
+                  }
+                </div>
+              </div>
+              <Switch
+                checked={isTestMode}
+                onCheckedChange={setIsTestMode}
+                className="data-[state=checked]:bg-yellow-600"
+              />
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               
               {/* Data Freshness */}

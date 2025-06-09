@@ -5,23 +5,37 @@ export function registerScrapingEndpoints(app: Express) {
   // Launch scraper endpoint - handles all three tools
   app.post("/api/launch-scrape", async (req, res) => {
     try {
-      const { tool, filters } = req.body;
+      const { tool, filters, testMode = false } = req.body;
       const timestamp = new Date().toISOString();
       const sessionId = `scraper-${Date.now()}`;
 
       let leadCount = 0;
       let leads: any[] = [];
 
-      // Calculate estimated results based on tool and filters
-      if (tool === "apollo") {
-        leadCount = calculateApolloLeads(filters);
-        leads = generateApolloLeads(filters, leadCount);
-      } else if (tool === "apify") {
-        leadCount = calculateApifyListings(filters);
-        leads = generateApifyListings(filters, leadCount);
-      } else if (tool === "phantom") {
-        leadCount = calculatePhantomProfiles(filters);
-        leads = generatePhantomProfiles(filters, leadCount);
+      if (testMode) {
+        // TEST MODE: Generate sample data only
+        if (tool === "apollo") {
+          leadCount = Math.floor(Math.random() * 20) + 5; // 5-25 test leads
+          leads = generateTestApolloLeads(leadCount);
+        } else if (tool === "apify") {
+          leadCount = Math.floor(Math.random() * 15) + 3; // 3-18 test listings
+          leads = generateTestApifyListings(leadCount);
+        } else if (tool === "phantom") {
+          leadCount = Math.floor(Math.random() * 12) + 3; // 3-15 test profiles
+          leads = generateTestPhantomProfiles(leadCount);
+        }
+      } else {
+        // LIVE MODE: Real scraping calculations and data generation
+        if (tool === "apollo") {
+          leadCount = calculateApolloLeads(filters);
+          leads = generateApolloLeads(filters, leadCount);
+        } else if (tool === "apify") {
+          leadCount = calculateApifyListings(filters);
+          leads = generateApifyListings(filters, leadCount);
+        } else if (tool === "phantom") {
+          leadCount = calculatePhantomProfiles(filters);
+          leads = generatePhantomProfiles(filters, leadCount);
+        }
       }
 
       // Log to Airtable Integration Test Log
@@ -204,6 +218,71 @@ export function registerScrapingEndpoints(app: Express) {
       res.status(500).json({ success: false, error: "Failed to export CSV" });
     }
   });
+}
+
+// Test mode data generation functions - completely separate from live data
+function generateTestApolloLeads(count: number): any[] {
+  const testLeads = [];
+  const testCompanies = ["TestCorp Inc", "Sample Tech", "Demo Solutions", "Mock Industries", "Example Co"];
+  const testNames = ["John Test", "Jane Sample", "Mike Demo", "Sarah Mock", "Alex Example"];
+  const testTitles = ["Test Manager", "Sample Director", "Demo Lead", "Mock Specialist", "Example Coordinator"];
+  
+  for (let i = 0; i < count; i++) {
+    testLeads.push({
+      fullName: testNames[i % testNames.length],
+      email: `test${i + 1}@example.com`,
+      company: testCompanies[i % testCompanies.length],
+      title: testTitles[i % testTitles.length],
+      location: "Test City, Test State",
+      phone: `+1-555-${String(i + 1).padStart(4, '0')}`,
+      industry: "Test Industry",
+      sourceTag: "apollo-test",
+      scrapeSessionId: `test-session-${Date.now()}`,
+      source: "apollo-test-mode"
+    });
+  }
+  return testLeads;
+}
+
+function generateTestApifyListings(count: number): any[] {
+  const testListings = [];
+  const testBusinesses = ["Test Restaurant", "Sample Cafe", "Demo Store", "Mock Shop", "Example Deli"];
+  
+  for (let i = 0; i < count; i++) {
+    testListings.push({
+      businessName: testBusinesses[i % testBusinesses.length],
+      address: `${100 + i} Test Street, Test City, TS 12345`,
+      phone: `+1-555-${String(i + 1).padStart(4, '0')}`,
+      website: `https://test-business-${i + 1}.example.com`,
+      rating: "4.5",
+      reviewCount: Math.floor(Math.random() * 100) + 10,
+      category: "Test Category",
+      hours: "9AM-5PM (Test Hours)",
+      source: "apify-test-mode"
+    });
+  }
+  return testListings;
+}
+
+function generateTestPhantomProfiles(count: number): any[] {
+  const testProfiles = [];
+  const testNames = ["Test Profile 1", "Sample User 2", "Demo Contact 3", "Mock Person 4", "Example Lead 5"];
+  const testHeadlines = ["Test Position", "Sample Role", "Demo Title", "Mock Job", "Example Function"];
+  
+  for (let i = 0; i < count; i++) {
+    testProfiles.push({
+      fullName: testNames[i % testNames.length],
+      headline: testHeadlines[i % testHeadlines.length],
+      company: "Test Company",
+      location: "Test Location",
+      connectionDegree: "1st",
+      profileUrl: `https://test-profile-${i + 1}.example.com`,
+      mutualConnections: Math.floor(Math.random() * 10),
+      platform: "test-platform",
+      source: "phantom-test-mode"
+    });
+  }
+  return testProfiles;
 }
 
 // Helper functions for lead generation
