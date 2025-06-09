@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { ScrollArea } from '../components/ui/scroll-area';
 import { 
   Monitor, Settings, Users, Phone, Bot, 
   TrendingUp, AlertTriangle, CheckCircle,
   Menu, X, Home, Activity
 } from 'lucide-react';
-import { useModeContext } from '@/App';
+import { useModeContext } from '../App';
 
 export default function Mobile() {
   const { isTestMode, setTestMode } = useModeContext();

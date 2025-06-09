@@ -3581,6 +3581,30 @@ CRM Data:
     }
   });
 
+  // Control Center Configuration Routes
+  app.get('/api/control-center/config/:client_id', async (req, res) => {
+    try {
+      const { client_id } = req.params;
+      const { configManager } = await import('./controlCenterConfig.js');
+      const config = await configManager.getClientConfig(client_id);
+      res.json(config);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.put('/api/control-center/config/:client_id/toggle', async (req, res) => {
+    try {
+      const { client_id } = req.params;
+      const { toggle_name, enabled } = req.body;
+      const { configManager } = await import('./controlCenterConfig.js');
+      await configManager.updateClientToggle(client_id, toggle_name, enabled);
+      res.json({ success: true, message: `${toggle_name} ${enabled ? 'enabled' : 'disabled'}` });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Register scraper and content creator endpoints
   registerScrapingEndpoints(app);
   registerContentCreatorEndpoints(app);
