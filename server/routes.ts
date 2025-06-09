@@ -16,6 +16,7 @@ import { registerRealScrapingRoutes } from "./realScrapingRoutes";
 import { registerRealSalesOrderRoutes } from "./realSalesOrderRoutes";
 import { registerScrapingEndpoints } from "./scrapingApiEndpoints";
 import { registerContentCreatorEndpoints } from "./contentCreatorEndpoints";
+import { registerDashboardEndpoints } from "./dashboardEndpoints";
 
 // Configure multer for file uploads
 const upload = multer({
@@ -56,6 +57,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register content creator endpoints
   registerContentCreatorEndpoints(app);
+  
+  // Register dashboard endpoints for all add-on modules
+  registerDashboardEndpoints(app);
   
   // Register real sales order processing
   registerRealSalesOrderRoutes(app);

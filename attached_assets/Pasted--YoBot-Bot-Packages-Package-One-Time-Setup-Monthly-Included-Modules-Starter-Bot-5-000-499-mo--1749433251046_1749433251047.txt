@@ -1,0 +1,101 @@
+📦 YoBot® Bot Packages
+Package	One-Time Setup	Monthly	Included Modules
+Starter Bot	$5,000	$499/mo	
+AI Chatbot, SMS/Email Flows, Basic CRM Logging, Simple Integrations
+Pro Bot	$8,500	$999/mo	
+All Starter + VoiceBot, Calendar Tools, Smart Follow-Ups
+Enterprise Bot	$12,500	$1,499/mo	
+All Pro + Lead Scoring, Quoting Engine, Performance Dashboards, Multi-Platform Sync
+Platinum Bot	$25,000	$1,999/mo	
+All Enterprise + Full White Label, Custom Analytics, Unlimited Workflows, Support Rep
+🧩 Add-On Module List
+Add-On	
+One-Time Fee	Monthly	Notes
+SmartSpend™ Dashboard	$499	$49/mo	
+Track expenses, budget, and ROI directly inside your bot system
+YoBot Command Center Dashboard	$999	$79/mo	
+KPI dashboard -- sales, leads, usage, reporting
+Botalytics
+
+
+
+ChatGPT Booster	$299
+
+
+
+$499	$0/mo
+
+
+
+$49/mo	
+Calculates YoBot®’s performance, ROI, lead volume, conversion rates and revenue increases
+
+Adds advanced AI logic (OpenAI API layer)
+Slack Notifications	$249	$29/mo	
+Sends hot-lead alerts to your team instantly
+A/B Script Testing	$299	$49/mo	
+Optimize messaging with data-backed split tests
+
+Live Transfer Routing	
+$399	
+$39/mo	
+Send leads directly to sales reps
+
+Smart Quoting Engine	
+$499	
+$49/mo	
+Auto-send branded quotes in chat/SMS
+
+Custom Personality Pack	
+$399	
+$39/mo	
+Define tone (e.g., Chill, Corporate, Wild)
+QuickBooks Online Sync	$499	$29/mo	
+Invoice + payment tracking with CRM sync
+Booking Tool Setup	$399	$0/mo	
+Calendly, TidyCal, or Google Calendar integrations
+White Label Mode	$1,999	$199/mo	
+Rebrand the bot + remove YoBot® branding
+
+Lead Generation & Scraping Tools	$999	$99/mo	
+Automated lead collection from websites and directories
+
+Advanced Data Integration Hub	$1,899	$299/mo	
+Connect with any external system or database
+
+Automated Content Generation Studio	$999	$99/mo	
+Dynamic content creation for responses and documents
+Predictive Analytics Engine	$1,499	$149/mo	
+
+Forecast future sales and unlock insights, automate alerts based on predicted outcomes
+
+Conversational Intelligence Suite	$999	$99/mo	
+Advanced insights and optimization for conversations
+
+Customer Journey Orchestration	$1,299	$129/mo	
+Complete customer lifecycle management across touchpoints
+
+Competitive Intelligence Radar	$899	$89/mo	
+Monitor competitors and market trends automatically
+
+Voice Pattern Recognition & Analysis	$1,299	$129/mo	
+Advanced voice capabilities for emotion and pattern detection
+
+Call Sentiment Log
+
+
+
+Other (Custom Request)	
+
+$499
+
+
+
+Quote-based	$49/mo
+
+
+
+	
+Uses AI to detect emotional cues, frustration, or buying signals to improve both your bot scripts and human follow-up
+
+Unique workflows, features or integrations
