@@ -46,6 +46,8 @@ import { LeadScrapingInterface } from '@/components/lead-scraping-interface';
 import { CallMonitoringPopup } from '@/components/call-monitoring-popup';
 import { ZendeskChatWidget } from '@/components/zendesk-chat-widget';
 import { SalesOrderProcessor } from '@/components/sales-order-processor';
+import { ContentCreatorDashboard } from '@/components/content-creator-dashboard';
+import { MailchimpSyncDashboard } from '@/components/mailchimp-sync-dashboard';
 
 export default function ClientDashboard() {
   const { isTestMode, setTestMode } = useModeContext();
@@ -97,6 +99,9 @@ export default function ClientDashboard() {
   const [editingRecording, setEditingRecording] = useState<any>(null);
   const [showLeadScraping, setShowLeadScraping] = useState(false);
   const [showSalesOrderProcessor, setShowSalesOrderProcessor] = useState(false);
+  const [showContentCreator, setShowContentCreator] = useState(false);
+  const [showMailchimpSync, setShowMailchimpSync] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
   
   // Call monitoring states
   const [showCallMonitoring, setShowCallMonitoring] = useState(false);
@@ -1644,11 +1649,19 @@ export default function ClientDashboard() {
                   </Button>
                   
                   <Button
-                    disabled
-                    className="bg-gray-500 text-gray-300 flex items-center justify-start p-3 cursor-not-allowed"
+                    onClick={() => setShowContentCreator(true)}
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
                   >
-                    <span className="text-xl mr-3">⚙️</span>
-                    <span>Open</span>
+                    <span className="text-xl mr-3">📢</span>
+                    <span>Content Creator</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => setShowMailchimpSync(true)}
+                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">📧</span>
+                    <span>Mailchimp Sync</span>
                   </Button>
                 </div>
               </CardContent>
