@@ -20,6 +20,7 @@ import { registerDashboardEndpoints } from "./dashboardEndpoints";
 import { registerCoreAutomationEndpoints } from "./coreAutomationEndpoints";
 import { registerCentralAutomationDispatcher } from "./centralAutomationDispatcher";
 import { registerCommandCenterRoutes } from "./commandCenterRoutes";
+import { registerQAValidationRoutes } from "./qaValidationSystem";
 import { configManager } from "./controlCenterConfig";
 import { airtableLogger } from "./airtableLogger";
 import { automationTester } from "./automationTester";
@@ -295,6 +296,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register Command Center routes FIRST to bypass webhook middleware
   registerCommandCenterRoutes(app);
+  registerQAValidationRoutes(app);
   
   // Complete Test Data Wipe - CRITICAL FOR DATA INTEGRITY
   app.post('/api/wipe-test-data', async (req, res) => {
