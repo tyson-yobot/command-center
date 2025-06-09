@@ -434,22 +434,12 @@ export default function CommandCenter() {
     }
   };
 
-  // Load voices only once on component mount - no automatic retries to prevent flashing
-  React.useEffect(() => {
-    fetchAvailableVoices();
-  }, []);
+  // Voice fetching disabled to prevent flashing - manual refresh only
+  // React.useEffect(() => {
+  //   fetchAvailableVoices();
+  // }, []);
   
-  // Retry voice loading when component regains focus
-  React.useEffect(() => {
-    const handleFocus = () => {
-      if (availableVoices.length === 0) {
-        fetchAvailableVoices();
-      }
-    };
-    
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
-  }, [availableVoices.length]);
+  // Voice loading disabled to prevent flashing - users can manually refresh if needed
 
   // Handle document upload
   const handleDocumentUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
