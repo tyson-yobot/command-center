@@ -17,6 +17,7 @@ import { registerRealSalesOrderRoutes } from "./realSalesOrderRoutes";
 import { registerScrapingEndpoints } from "./scrapingApiEndpoints";
 import { registerContentCreatorEndpoints } from "./contentCreatorEndpoints";
 import { registerDashboardEndpoints } from "./dashboardEndpoints";
+import { registerCentralAutomationDispatcher } from "./centralAutomationDispatcher";
 
 // Configure multer for file uploads
 const upload = multer({
@@ -1434,6 +1435,39 @@ Always provide helpful, actionable guidance.`
   });
 
   // Airtable Test Metrics - Live Data Only
+  // Industry Templates endpoint for dynamic dropdown population
+  app.get('/api/airtable/industry-templates', async (req, res) => {
+    try {
+      const response = await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Industry%20Templates`, {
+        headers: {
+          'Authorization': `Bearer ${process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Airtable API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      const industries = data.records.map(record => ({
+        id: record.id,
+        name: record.fields.Industry || record.fields.Name,
+        description: record.fields.Description,
+        category: record.fields.Category,
+        isActive: record.fields.Active !== false
+      })).filter(industry => industry.isActive);
+      
+      res.json({ success: true, industries });
+    } catch (error) {
+      console.error('Industry Templates fetch error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to fetch industry templates'
+      });
+    }
+  });
+
   app.get('/api/airtable/test-metrics', async (req, res) => {
     try {
       // Calculate test metrics from automation execution results
