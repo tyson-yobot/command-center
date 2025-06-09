@@ -28,6 +28,29 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// CRITICAL PRODUCTION COMPLIANCE: Global system mode variable
+let systemMode: 'test' | 'live' = 'live';
+
+// System mode gate - blocks all real operations in test mode
+function enforceSystemModeGate(operation: string, allowedInTest: boolean = false) {
+  if (!systemMode) {
+    throw new Error("System mode not set - critical security violation");
+  }
+  
+  if (systemMode === 'test' && !allowedInTest) {
+    console.log(`🧪 Test Mode Active - Blocking production operation: ${operation}`);
+    return false;
+  }
+  
+  if (systemMode === 'live') {
+    console.log(`✅ Live Mode - Executing production operation: ${operation}`);
+    return true;
+  }
+  
+  console.log(`🧪 Test Mode - Executing test operation: ${operation}`);
+  return true;
+}
+
 // Configure multer for file uploads
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -47,29 +70,6 @@ const upload = multer({
     }
   }
 });
-
-// System mode tracking - controls test vs live data isolation
-let systemMode: 'test' | 'live' = 'live';
-
-// Global mode gate function - enforces data isolation
-function enforceSystemModeGate(operation: string, allowedInTest: boolean = true) {
-  if (!systemMode) {
-    throw new Error("System mode not set - critical security violation");
-  }
-  
-  if (systemMode === 'test' && !allowedInTest) {
-    console.log(`🧪 Test Mode Active - Blocking production operation: ${operation}`);
-    return false;
-  }
-  
-  if (systemMode === 'live') {
-    console.log(`✅ Live Mode - Executing production operation: ${operation}`);
-    return true;
-  }
-  
-  console.log(`🧪 Test Mode - Executing test operation: ${operation}`);
-  return true;
-}
 
 // Function to get appropriate Airtable table based on mode
 function getAirtableTable(baseTable: string) {
@@ -118,6 +118,41 @@ let testAutomationMetrics = {
   recentExecutions: [],
   functionStats: {}
 };
+
+// Data stores with proper test/live isolation
+let leadScrapingResults = [];
+let apolloResults = [];
+let phantomResults = [];
+let apifyResults = [];
+let processingTasks = [];
+let documentStore = [];
+let knowledgeStore = [];
+let voiceBotMetrics = { activeCalls: 0, totalCalls: 0, avgDuration: 0 };
+let salesOrderData = [];
+let crmData = [];
+let automationActivity = [];
+
+// Clear all test data when switching to live mode - CRITICAL for production compliance
+function clearTestData() {
+  if (systemMode === 'live') {
+    console.log('🔄 LIVE MODE ACTIVATED - Clearing all test data for production compliance');
+    leadScrapingResults = [];
+    apolloResults = [];
+    phantomResults = [];
+    apifyResults = [];
+    processingTasks = [];
+    documentStore = [];
+    knowledgeStore = [];
+    voiceBotMetrics = { activeCalls: 0, totalCalls: 0, avgDuration: 0 };
+    salesOrderData = [];
+    crmData = [];
+    automationActivity = [];
+    testAutomationMetrics.recentExecutions = [];
+    console.log('✅ All test data cleared - System ready for production');
+    return true;
+  }
+  return false;
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Register real scraping routes with test/live mode
@@ -3997,23 +4032,49 @@ CRM Data:
       const { mode } = req.body;
       
       if (mode === 'test' || mode === 'live') {
+        const previousMode = systemMode;
         systemMode = mode;
         
-        await logToAirtableQA({
-          integrationName: "System Mode Toggle",
-          passFail: "✅ Pass",
-          notes: `System mode changed to ${mode} mode`,
-          qaOwner: "Control Center",
-          outputDataPopulated: true,
-          recordCreated: true,
-          retryAttempted: false,
-          moduleType: "System Control"
-        });
+        // CRITICAL: Clear all test data when switching to live mode
+        if (mode === 'live' && previousMode === 'test') {
+          console.log('🔄 LIVE MODE ACTIVATED - Clearing all test data for production compliance');
+          
+          // Clear all data stores
+          leadScrapingResults = [];
+          apolloResults = [];
+          phantomResults = [];
+          apifyResults = [];
+          processingTasks = [];
+          documentStore = [];
+          knowledgeStore = [];
+          voiceBotMetrics = { activeCalls: 0, totalCalls: 0, avgDuration: 0 };
+          salesOrderData = [];
+          crmData = [];
+          automationActivity = [];
+          testAutomationMetrics.recentExecutions = [];
+          
+          console.log('✅ All test data cleared - System ready for production');
+        }
+        
+        // Only log to QA table in test mode, production table in live mode
+        if (enforceSystemModeGate("Airtable Logging", true)) {
+          await logToAirtableQA({
+            integrationName: "System Mode Toggle",
+            passFail: "✅ Pass",
+            notes: `System mode changed from ${previousMode} to ${mode}. ${mode === 'live' ? 'All test data cleared.' : 'Test mode activated.'}`,
+            qaOwner: "Control Center",
+            outputDataPopulated: true,
+            recordCreated: true,
+            retryAttempted: false,
+            moduleType: "System Control"
+          });
+        }
         
         res.json({
           success: true,
           systemMode: systemMode,
-          message: `System mode set to ${mode}`
+          message: `System mode set to ${mode}`,
+          dataCleared: mode === 'live' && previousMode === 'test'
         });
       } else {
         res.status(400).json({
@@ -4141,7 +4202,19 @@ function registerAutomationEndpoints(app: Express) {
     try {
       const { message, channel } = req.body;
       
-      // Execute Slack notification
+      // SYSTEM MODE GATE: Check if real operation is allowed
+      if (!enforceSystemModeGate("Slack Notification")) {
+        res.json({ 
+          success: true, 
+          functionId: 1,
+          executed: false,
+          mode: 'test',
+          message: '🧪 Test Mode - Slack notification skipped'
+        });
+        return;
+      }
+      
+      // Execute Slack notification in live mode only
       const response = await fetch(process.env.SLACK_WEBHOOK_URL!, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -4151,22 +4224,25 @@ function registerAutomationEndpoints(app: Express) {
         })
       });
       
-      // Log to Airtable QA
-      await logToAirtableQA({
-        integrationName: "Slack Team Notification",
-        passFail: response.ok ? "✅ Pass" : "❌ Fail",
-        notes: response.ok ? "Slack notification sent successfully" : "Failed to send Slack notification",
-        qaOwner: "Automation System",
-        outputDataPopulated: response.ok,
-        recordCreated: response.ok,
-        retryAttempted: false,
-        moduleType: "Communication"
-      });
+      // Log to Airtable QA (respects mode isolation)
+      if (enforceSystemModeGate("Airtable Logging", true)) {
+        await logToAirtableQA({
+          integrationName: "Slack Team Notification",
+          passFail: response.ok ? "✅ Pass" : "❌ Fail",
+          notes: response.ok ? "Slack notification sent successfully" : "Failed to send Slack notification",
+          qaOwner: "Automation System",
+          outputDataPopulated: response.ok,
+          recordCreated: response.ok,
+          retryAttempted: false,
+          moduleType: "Communication"
+        });
+      }
       
       res.json({ 
         success: response.ok, 
         functionId: 1,
         executed: true,
+        mode: systemMode,
         timestamp: new Date().toISOString()
       });
     } catch (error) {
