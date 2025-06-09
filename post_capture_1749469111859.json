@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-06-09T11:38:31.859Z",
+  "url": "/api/live-system-diagnostics",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "2"
+  },
+  "body": {},
+  "query": {}
+}

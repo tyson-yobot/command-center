@@ -1369,6 +1369,8 @@ export default function CommandCenter() {
 
   // Live Command Execution Handler
   const executeLiveCommand = async (category: string, data?: any) => {
+    console.log('Executing command:', category);
+    
     try {
       let endpoint = '';
       let requestData = data || getLiveCommandPayload(category);
@@ -1513,28 +1515,33 @@ export default function CommandCenter() {
           };
       }
 
+      console.log('Making request to:', endpoint, 'with data:', requestData);
+
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestData)
       });
 
+      console.log('Response status:', response.status);
       const result = await response.json();
+      console.log('Response data:', result);
 
       if (result.success || response.ok) {
-        setToast({
+        toast({
           title: "Command Executed",
           description: `${category} completed successfully`,
         });
       } else {
-        setToast({
+        toast({
           title: "Command Failed",
           description: `${category} failed: ${result.error || result.message || 'Unknown error'}`,
           variant: "destructive"
         });
       }
     } catch (error: any) {
-      setToast({
+      console.error('Command execution error:', error);
+      toast({
         title: "Execution Error",
         description: `Failed to execute ${category}: ${error.message}`,
         variant: "destructive"
@@ -1891,7 +1898,10 @@ export default function CommandCenter() {
               <CardContent>
                 <div className="grid grid-cols-1 gap-3">
                   <Button
-                    onClick={() => executeLiveCommand("Emergency Data Wipe")}
+                    onClick={() => {
+                      console.log('Emergency Data Wipe button clicked');
+                      executeLiveCommand("Emergency Data Wipe");
+                    }}
                     className="bg-red-600 hover:bg-red-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">🚨</span>

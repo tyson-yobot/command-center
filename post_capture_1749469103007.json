@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-06-09T11:38:23.007Z",
+  "url": "/api/emergency-data-wipe",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "43"
+  },
+  "body": {
+    "confirmationCode": "EMERGENCY_WIPE_2024"
+  },
+  "query": {}
+}
