@@ -132,10 +132,13 @@ export default function ProfessionalLeadScraper() {
     setError(null);
     
     try {
-      const response = await fetch('/api/scraping/phantombuster', {
+      const response = await fetch('/api/launch-scrape', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filters })
+        body: JSON.stringify({ 
+          tool: 'phantom',
+          filters 
+        })
       });
       
       const data = await response.json();
@@ -145,10 +148,10 @@ export default function ProfessionalLeadScraper() {
         setCurrentStep('results');
         toast({
           title: "PhantomBuster Scraper Launched",
-          description: `✅ ${data.count} profiles scraped. View in Airtable`,
+          description: `✅ ${data.leadCount} profiles scraped. View in Airtable`,
         });
       } else {
-        setError(data.message || 'PhantomBuster scraping failed');
+        setError(data.error || 'PhantomBuster scraping failed');
       }
     } catch (err) {
       setError('Network error occurred');
@@ -405,9 +408,14 @@ export default function ProfessionalLeadScraper() {
                 <p className="text-slate-300">{results.count} leads found</p>
               </div>
             </div>
-            <Button variant="secondary" size="sm">
+            <Button 
+              variant="secondary" 
+              size="sm"
+              onClick={handleExportCSV}
+              disabled={isLoading}
+            >
               <Download className="w-4 w-4 mr-2" />
-              Export Results
+              Export CSV
             </Button>
           </div>
 
