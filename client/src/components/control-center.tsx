@@ -231,59 +231,96 @@ export default function ControlCenter() {
           }
         }
 
-        if (functionsRes.ok && automationRes.ok) {
-          const functionsData = await functionsRes.json();
-          const executionsData = await automationRes.json();
-          
-          // Convert functions data to array format with real data
-          const functionsArray: AutomationFunction[] = [];
-          
-          // Add real automation functions from the system
-          const realFunctions = [
-            { name: "Intake Form Validator", priority: "high", status: "active" },
-            { name: "QA Failure Alert", priority: "high", status: "active" },
-            { name: "Live Error Push", priority: "high", status: "active" },
-            { name: "Customer Reconciliation", priority: "high", status: "active" },
-            { name: "Full API Health Check", priority: "high", status: "active" },
-            { name: "Manual Override Logger", priority: "high", status: "active" },
-            { name: "VoiceBot Escalation Detection", priority: "high", status: "active" },
-            { name: "System Health Metric Update", priority: "high", status: "active" },
-            { name: "Google Drive Backup", priority: "high", status: "active" },
-            { name: "New Lead Notification", priority: "high", status: "active" },
-            { name: "CRM Script Generator", priority: "medium", status: "active" },
-            { name: "Silent Call Detector", priority: "medium", status: "active" },
-            { name: "Personality Assigner", priority: "medium", status: "active" },
-            { name: "SmartSpend Entry Creator", priority: "medium", status: "active" },
-            { name: "Call Digest Poster", priority: "medium", status: "active" },
-            { name: "Bot Training Prompt Generator", priority: "medium", status: "active" },
-            { name: "QBO Invoice Summary", priority: "medium", status: "active" },
-            { name: "Role Assignment by Domain", priority: "medium", status: "active" },
-            { name: "ROI Summary Generator", priority: "medium", status: "active" },
-            { name: "Failure Categorization", priority: "medium", status: "active" },
-            { name: "ISO Date Formatter", priority: "low", status: "active" },
-            { name: "Voice Session ID Generator", priority: "low", status: "active" },
-            { name: "Cold Start Logger", priority: "low", status: "active" },
-            { name: "Markdown Converter", priority: "low", status: "active" },
-            { name: "Slack Message Formatter", priority: "low", status: "active" },
-            { name: "Domain Extraction", priority: "low", status: "active" },
-            { name: "Strip HTML Tags", priority: "low", status: "active" },
-            { name: "Weekend Date Checker", priority: "low", status: "active" },
-            { name: "Integration Template Filler", priority: "low", status: "active" }
+        // Automation functions data - separate for test/live mode
+        const functionsArray: AutomationFunction[] = [];
+        
+        if (isTestMode) {
+          // Test mode: Demo automation functions
+          const testFunctions = [
+            { name: "Demo Form Validator", priority: "high", status: "active" },
+            { name: "Test Alert System", priority: "high", status: "active" },
+            { name: "Sample Error Monitor", priority: "high", status: "active" },
+            { name: "Demo Reconciliation", priority: "high", status: "active" },
+            { name: "Test Health Check", priority: "high", status: "active" },
+            { name: "Demo Override Logger", priority: "high", status: "active" },
+            { name: "Test Escalation Detection", priority: "high", status: "active" },
+            { name: "Demo Metric Update", priority: "high", status: "active" },
+            { name: "Test Backup System", priority: "high", status: "active" },
+            { name: "Demo Lead Notification", priority: "high", status: "active" },
+            { name: "Test Script Generator", priority: "medium", status: "active" },
+            { name: "Demo Call Detector", priority: "medium", status: "active" },
+            { name: "Test Personality Assigner", priority: "medium", status: "active" },
+            { name: "Demo Spend Creator", priority: "medium", status: "active" },
+            { name: "Test Digest Poster", priority: "medium", status: "active" }
           ];
 
-          realFunctions.forEach((func, index) => {
+          testFunctions.forEach((func, index) => {
             functionsArray.push({
-              id: `func-${index}`,
+              id: `test-func-${index}`,
               name: func.name,
               status: func.status as 'active' | 'inactive' | 'error',
               lastRun: new Date(Date.now() - Math.random() * 3600000).toISOString(),
-              executions: Math.floor(Math.random() * 1000) + 100,
+              executions: Math.floor(Math.random() * 500) + 50,
               priority: func.priority as 'high' | 'medium' | 'low'
             });
           });
+        } else {
+          // Live mode: Real automation functions from system
+          const [functionsRes, automationRes] = await Promise.all([
+            fetch('/api/automation/functions'),
+            fetch('/api/automation/executions')
+          ]);
 
-          setAutomationFunctions(functionsArray);
+          if (functionsRes.ok && automationRes.ok) {
+            const functionsData = await functionsRes.json();
+            const executionsData = await automationRes.json();
+            
+            const realFunctions = [
+              { name: "Intake Form Validator", priority: "high", status: "active" },
+              { name: "QA Failure Alert", priority: "high", status: "active" },
+              { name: "Live Error Push", priority: "high", status: "active" },
+              { name: "Customer Reconciliation", priority: "high", status: "active" },
+              { name: "Full API Health Check", priority: "high", status: "active" },
+              { name: "Manual Override Logger", priority: "high", status: "active" },
+              { name: "VoiceBot Escalation Detection", priority: "high", status: "active" },
+              { name: "System Health Metric Update", priority: "high", status: "active" },
+              { name: "Google Drive Backup", priority: "high", status: "active" },
+              { name: "New Lead Notification", priority: "high", status: "active" },
+              { name: "CRM Script Generator", priority: "medium", status: "active" },
+              { name: "Silent Call Detector", priority: "medium", status: "active" },
+              { name: "Personality Assigner", priority: "medium", status: "active" },
+              { name: "SmartSpend Entry Creator", priority: "medium", status: "active" },
+              { name: "Call Digest Poster", priority: "medium", status: "active" },
+              { name: "Bot Training Prompt Generator", priority: "medium", status: "active" },
+              { name: "QBO Invoice Summary", priority: "medium", status: "active" },
+              { name: "Role Assignment by Domain", priority: "medium", status: "active" },
+              { name: "ROI Summary Generator", priority: "medium", status: "active" },
+              { name: "Failure Categorization", priority: "medium", status: "active" },
+              { name: "ISO Date Formatter", priority: "low", status: "active" },
+              { name: "Voice Session ID Generator", priority: "low", status: "active" },
+              { name: "Cold Start Logger", priority: "low", status: "active" },
+              { name: "Markdown Converter", priority: "low", status: "active" },
+              { name: "Slack Message Formatter", priority: "low", status: "active" },
+              { name: "Domain Extraction", priority: "low", status: "active" },
+              { name: "Strip HTML Tags", priority: "low", status: "active" },
+              { name: "Weekend Date Checker", priority: "low", status: "active" },
+              { name: "Integration Template Filler", priority: "low", status: "active" }
+            ];
+
+            realFunctions.forEach((func, index) => {
+              functionsArray.push({
+                id: `live-func-${index}`,
+                name: func.name,
+                status: func.status as 'active' | 'inactive' | 'error',
+                lastRun: new Date(Date.now() - Math.random() * 3600000).toISOString(),
+                executions: Math.floor(Math.random() * 1000) + 100,
+                priority: func.priority as 'high' | 'medium' | 'low'
+              });
+            });
+          }
         }
+
+        setAutomationFunctions(functionsArray);
 
         setConnectionStatus(true);
       } catch (error) {
@@ -298,7 +335,7 @@ export default function ControlCenter() {
     const interval = setInterval(fetchData, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isTestMode]); // Re-fetch when test mode changes
 
   const filteredFunctions = automationFunctions.filter(func => {
     const matchesSearch = func.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -398,14 +435,32 @@ export default function ControlCenter() {
         {/* Tab Content */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
+            {/* Test Mode Banner */}
+            {isTestMode && (
+              <div className="p-4 bg-amber-900/20 border border-amber-600/50 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
+                  <div className="text-amber-200 font-medium">TEST MODE ACTIVE</div>
+                  <div className="text-amber-300/80 text-sm">All data shown is demonstration data only</div>
+                </div>
+              </div>
+            )}
+
             {/* Metrics Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {metrics.map((metric, index) => (
-                <Card key={index} className="bg-slate-800/50 border-blue-500/30">
+                <Card key={index} className={`bg-slate-800/50 ${
+                  isTestMode ? 'border-amber-600/30 bg-amber-900/10' : 'border-blue-500/30'
+                }`}>
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-slate-400">{metric.label}</p>
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="text-sm font-medium text-slate-400">{metric.label}</p>
+                          {isTestMode && (
+                            <span className="text-xs text-amber-400 bg-amber-900/30 px-1.5 py-0.5 rounded">TEST</span>
+                          )}
+                        </div>
                         <p className="text-2xl font-bold text-white">{metric.value}</p>
                         <p className={`text-sm ${metric.color}`}>{metric.change}</p>
                       </div>
@@ -419,19 +474,32 @@ export default function ControlCenter() {
             </div>
 
             {/* Recent Activity */}
-            <Card className="bg-slate-800/50 border-blue-500/30">
+            <Card className={`bg-slate-800/50 ${
+              isTestMode ? 'border-amber-600/30 bg-amber-900/10' : 'border-blue-500/30'
+            }`}>
               <CardHeader>
-                <CardTitle className="text-white">Recent Activity</CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-white">Recent Activity</CardTitle>
+                  {isTestMode && (
+                    <span className="text-xs text-amber-400 bg-amber-900/30 px-2 py-1 rounded">TEST DATA</span>
+                  )}
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {[
+                  {(isTestMode ? [
+                    { time: "1 min ago", action: "Demo Lead Scraper executed", status: "success" },
+                    { time: "3 min ago", action: "Test Voice call processed", status: "success" },
+                    { time: "6 min ago", action: "Demo CRM sync completed", status: "success" },
+                    { time: "9 min ago", action: "Test Email campaign sent", status: "success" },
+                    { time: "12 min ago", action: "Demo Data backup completed", status: "success" }
+                  ] : [
                     { time: "2 min ago", action: "Lead Scraper executed", status: "success" },
                     { time: "5 min ago", action: "Voice call processed", status: "success" },
                     { time: "8 min ago", action: "CRM sync completed", status: "success" },
                     { time: "12 min ago", action: "Email campaign sent", status: "success" },
                     { time: "15 min ago", action: "Data backup completed", status: "success" }
-                  ].map((activity, index) => (
+                  ]).map((activity, index) => (
                     <div key={index} className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg">
                       <div className="flex items-center gap-3">
                         <CheckCircle className="h-4 w-4 text-green-500" />
@@ -450,11 +518,31 @@ export default function ControlCenter() {
 
         {activeTab === 'leads' && (
           <div className="space-y-6">
+            {/* Test Mode Banner for Lead Scraper */}
+            {isTestMode && (
+              <div className="p-4 bg-amber-900/20 border border-amber-600/50 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
+                  <div className="text-amber-200 font-medium">LEAD SCRAPER TEST MODE</div>
+                  <div className="text-amber-300/80 text-sm">All scraping operations will generate demonstration data only</div>
+                </div>
+              </div>
+            )}
+
             {/* Professional Lead Scraper */}
-            <Card className="bg-slate-800/50 border-blue-500/30">
+            <Card className={`bg-slate-800/50 ${
+              isTestMode ? 'border-amber-600/30 bg-amber-900/10' : 'border-blue-500/30'
+            }`}>
               <CardHeader>
-                <CardTitle className="text-white">Professional Lead Scraper</CardTitle>
-                <p className="text-blue-200">Apollo.io • Apify • PhantomBuster Integration</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-white">Professional Lead Scraper</CardTitle>
+                    <p className="text-blue-200">Apollo.io • Apify • PhantomBuster Integration</p>
+                  </div>
+                  {isTestMode && (
+                    <span className="text-xs text-amber-400 bg-amber-900/30 px-2 py-1 rounded">DEMO MODE</span>
+                  )}
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
