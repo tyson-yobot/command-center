@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useIndustryTemplates } from "../hooks/useIndustryTemplates";
 import { 
   Target,
   Globe,
@@ -194,6 +195,7 @@ export default function DedicatedLeadScraper() {
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<ScrapingResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { industries, isLoading: industriesLoading } = useIndustryTemplates();
 
   // Filter states for each tool
   const [apolloFilters, setApolloFilters] = useState({
