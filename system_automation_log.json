@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-08T04:15:00.710Z",
-    "functionId": 201,
-    "functionName": "Auto-create Airtable Record",
-    "batch": 21,
-    "category": "Data Creation",
-    "status": "success",
-    "duration": 562,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-08T04:15:00.758Z",
     "functionId": 203,
     "functionName": "Integration Summary to Slack",
@@ -11244,6 +11233,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-09T00:27:10.877Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-09T00:29:15.827Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-09T00:29:15.424Z",
       "automationStatus": "running"
     }
   }

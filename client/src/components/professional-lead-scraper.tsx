@@ -23,6 +23,10 @@ import {
   Settings,
   HelpCircle
 } from "lucide-react";
+import ApolloScraperPanel from "./apollo-scraper-panel";
+import ApifyScraperPanel from "./apify-scraper-panel";
+import PhantomBusterScraperPanel from "./phantombuster-scraper-panel";
+import { useToast } from "@/hooks/use-toast";
 
 interface Lead {
   fullName: string;
@@ -243,24 +247,20 @@ export default function ProfessionalLeadScraper() {
     retryAttempts: "3"
   });
 
+  const { toast } = useToast();
+
   const handleToolSelection = (tool: 'apollo' | 'apify' | 'phantombuster') => {
     setSelectedTool(tool);
     setCurrentStep('filters');
     setError(null);
   };
 
-  const handleStartScraping = async () => {
-    if (!selectedTool) return;
-    
+  const handleApolloLaunch = async (filters: any) => {
     setIsLoading(true);
     setError(null);
     
     try {
-      const filters = selectedTool === 'apollo' ? apolloFilters 
-                   : selectedTool === 'apify' ? apifyFilters 
-                   : phantombusterFilters;
-      
-      const response = await fetch(`/api/scraping/${selectedTool}`, {
+      const response = await fetch('/api/scraping/apollo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ filters })
@@ -271,8 +271,72 @@ export default function ProfessionalLeadScraper() {
       if (data.success) {
         setResults(data);
         setCurrentStep('results');
+        toast({
+          title: "Apollo Scraper Launched",
+          description: `✅ ${data.count} leads scraped. View in Airtable`,
+        });
       } else {
-        setError(data.message || 'Scraping failed');
+        setError(data.message || 'Apollo scraping failed');
+      }
+    } catch (err) {
+      setError('Network error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleApifyLaunch = async (filters: any) => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch('/api/scraping/apify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filters })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setResults(data);
+        setCurrentStep('results');
+        toast({
+          title: "Apify Scraper Launched",
+          description: `✅ ${data.count} listings scraped. View in Airtable`,
+        });
+      } else {
+        setError(data.message || 'Apify scraping failed');
+      }
+    } catch (err) {
+      setError('Network error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePhantomBusterLaunch = async (filters: any) => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch('/api/scraping/phantombuster', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filters })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setResults(data);
+        setCurrentStep('results');
+        toast({
+          title: "PhantomBuster Scraper Launched",
+          description: `✅ ${data.count} profiles scraped. View in Airtable`,
+        });
+      } else {
+        setError(data.message || 'PhantomBuster scraping failed');
       }
     } catch (err) {
       setError('Network error occurred');
@@ -518,30 +582,101 @@ export default function ProfessionalLeadScraper() {
             </div>
           )}
 
-          <Card className="p-8">
-            {/* Apollo.io Filters */}
-            {selectedTool === 'apollo' && (
-              <div className="space-y-12">
-                {/* Contact Filters Section */}
-                <div>
-                  <SectionHeader title="Contact Filters" icon={Users} color="blue" />
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="space-y-6">
-                      <div className="space-y-3">
-                        <Label tooltip="Select multiple job titles to target">Job Titles (Multi-select)</Label>
-                        <Select
-                          value=""
-                          onChange={(e) => {
-                            if (e.target.value && !apolloFilters.jobTitles.includes(e.target.value)) {
-                              setApolloFilters(prev => ({
-                                ...prev,
-                                jobTitles: [...prev.jobTitles, e.target.value]
-                              }));
-                            }
-                          }}
-                        >
-                          <option value="">Add Job Title</option>
-                          <option value="Chief Executive Officer">Chief Executive Officer</option>
+          {/* Dynamic Scraper Panel Integration */}
+          {selectedTool === 'apollo' && (
+            <ApolloScraperPanel 
+              onLaunch={handleApolloLaunch}
+              isLoading={isLoading}
+            />
+          )}
+          
+          {selectedTool === 'apify' && (
+            <ApifyScraperPanel 
+              onLaunch={handleApifyLaunch}
+              isLoading={isLoading}
+            />
+          )}
+          
+          {selectedTool === 'phantombuster' && (
+            <PhantomBusterScraperPanel 
+              onLaunch={handlePhantomBusterLaunch}
+              isLoading={isLoading}
+            />
+          )}
+
+        </div>
+      </div>
+    );
+  }
+
+  // Results Step
+  if (currentStep === 'results' && results) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-6">
+              <Button 
+                variant="outline" 
+                onClick={resetToToolSelection}
+                size="sm"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                New Search
+              </Button>
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
+                  Lead Generation Results
+                </h1>
+                <p className="text-slate-300">{results.count} leads found</p>
+              </div>
+            </div>
+            <Button variant="secondary" size="sm">
+              <Download className="w-4 w-4 mr-2" />
+              Export Results
+            </Button>
+          </div>
+
+          {/* Results Grid */}
+          <div className="grid gap-4">
+            {results.leads.map((lead, index) => (
+              <Card key={index} className="p-6 bg-slate-800/50 border-slate-700">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div>
+                    <div className="font-semibold text-white">{lead.fullName}</div>
+                    <div className="text-slate-400">{lead.title}</div>
+                  </div>
+                  <div>
+                    <div className="text-slate-300">{lead.company}</div>
+                    <div className="text-slate-400">{lead.location}</div>
+                  </div>
+                  <div>
+                    <div className="text-slate-300 flex items-center">
+                      <Mail className="w-4 h-4 mr-2" />
+                      {lead.email}
+                    </div>
+                    <div className="text-slate-300 flex items-center">
+                      <Phone className="w-4 h-4 mr-2" />
+                      {lead.phone}
+                    </div>
+                  </div>
+                  <div className="flex justify-end">
+                    <Button size="sm" variant="outline">
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Details
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
                           <option value="Chief Technology Officer">Chief Technology Officer</option>
                           <option value="Chief Financial Officer">Chief Financial Officer</option>
                           <option value="Chief Marketing Officer">Chief Marketing Officer</option>
