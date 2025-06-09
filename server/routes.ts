@@ -2729,14 +2729,19 @@ CRM Data:
     try {
       const { category } = req.body;
       
-      // Only log automation execution in test mode
-      if (systemMode === 'test') {
+      logOperation('command-center-trigger', { category, systemMode }, 'success', `Command center trigger received: ${category}`);
+      
+      // Check system mode before executing any automation
+      if (!enforceSystemModeGate(`Command Center: ${category}`)) {
+        logOperation('command-center-blocked', { category }, 'blocked', `Command center trigger blocked in test mode: ${category}`);
+        
+        // Only log automation execution in test mode
         testAutomationMetrics.executionsToday += 1;
         testAutomationMetrics.lastExecution = new Date().toISOString();
         testAutomationMetrics.recentExecutions.push({
           id: `exec_${Date.now()}`,
           type: category,
-          status: 'COMPLETED',
+          status: 'COMPLETED (TEST)',
           startTime: new Date().toISOString(),
           duration: Math.floor(Math.random() * 1000) + 'ms'
         });
@@ -2745,6 +2750,10 @@ CRM Data:
         if (testAutomationMetrics.recentExecutions.length > 50) {
           testAutomationMetrics.recentExecutions = testAutomationMetrics.recentExecutions.slice(-50);
         }
+        
+        logOperation('test-execution-logged', { category }, 'success', `Test execution logged for ${category}`);
+      } else {
+        logOperation('live-execution-authorized', { category }, 'success', `Live execution authorized for ${category}`);
       }
       
       res.json({
@@ -4065,6 +4074,7 @@ CRM Data:
   app.post('/api/system-mode', async (req, res) => {
     try {
       const { mode } = req.body;
+      logOperation('system-mode-toggle-request', { requestedMode: mode, currentMode: systemMode }, 'success', `System mode toggle requested: ${systemMode} -> ${mode}`);
       
       if (mode === 'test' || mode === 'live') {
         const previousMode = systemMode;
@@ -4072,6 +4082,7 @@ CRM Data:
         
         // CRITICAL: Clear all test data when switching to live mode
         if (mode === 'live' && previousMode === 'test') {
+          logOperation('live-mode-activation', {}, 'success', 'LIVE MODE ACTIVATED - Clearing all test data for production compliance');
           console.log('🔄 LIVE MODE ACTIVATED - Clearing all test data for production compliance');
           
           // Clear all data stores
@@ -4088,11 +4099,13 @@ CRM Data:
           automationActivity = [];
           testAutomationMetrics.recentExecutions = [];
           
+          logOperation('test-data-cleared', {}, 'success', 'All test data cleared - System ready for production');
           console.log('✅ All test data cleared - System ready for production');
         }
         
         // Only log to QA table in test mode, production table in live mode
         if (enforceSystemModeGate("Airtable Logging", true)) {
+          logOperation('airtable-log-system-mode', { previousMode, newMode: mode }, 'success', 'Logging system mode change to Airtable');
           await logToAirtableQA({
             integrationName: "System Mode Toggle",
             passFail: "✅ Pass",
@@ -4129,11 +4142,13 @@ CRM Data:
   // Get Current System Mode
   app.get('/api/system-mode', async (req, res) => {
     try {
+      logOperation('system-mode-query', {}, 'success', 'System mode queried');
       res.json({
         success: true,
         systemMode: systemMode
       });
     } catch (error: any) {
+      logOperation('system-mode-query', {}, 'error', `Failed to get system mode: ${error.message}`);
       res.status(500).json({
         success: false,
         error: 'Failed to get system mode',
@@ -4142,10 +4157,37 @@ CRM Data:
     }
   });
 
+  // Get Operation Logs - View all system operations
+  app.get('/api/operation-logs', async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 100;
+      const recentLogs = operationLogs.slice(-limit);
+      
+      logOperation('logs-accessed', { requestedLimit: limit, returnedCount: recentLogs.length }, 'success', 'Operation logs accessed');
+      
+      res.json({
+        success: true,
+        logs: recentLogs,
+        totalLogs: operationLogs.length,
+        systemMode: systemMode
+      });
+    } catch (error: any) {
+      logOperation('logs-access-error', {}, 'error', `Failed to access logs: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to get operation logs',
+        details: error.message
+      });
+    }
+  });
+
   // Clear Test Data Endpoint - Only works in test mode
   app.post('/api/clear-test-data', async (req, res) => {
     try {
+      logOperation('clear-test-data-request', { systemMode }, 'success', 'Test data clear requested');
+      
       if (systemMode !== 'test') {
+        logOperation('clear-test-data-blocked', { systemMode }, 'blocked', 'Test data clear blocked - not in test mode');
         return res.status(400).json({ 
           success: false, 
           error: "Can only clear test data when in test mode" 
