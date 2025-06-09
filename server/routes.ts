@@ -239,56 +239,7 @@ async function wipeTestData() {
   }
 }
 
-async function airtableWipeTable(tableName: string) {
-  try {
-    // Get all records with "🧪 Is Test" = true
-    const response = await fetch(
-      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${encodeURIComponent(tableName)}?filterByFormula=AND({🧪 Is Test}=TRUE())`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`
-        }
-      }
-    );
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch records: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    const recordIds = data.records.map((record: any) => record.id);
-
-    if (recordIds.length === 0) {
-      return 0; // No test records to delete
-    }
-
-    // Delete records in batches of 10 (Airtable limit)
-    let deletedCount = 0;
-    for (let i = 0; i < recordIds.length; i += 10) {
-      const batch = recordIds.slice(i, i + 10);
-      const deleteParams = batch.map(id => `records[]=${id}`).join('&');
-      
-      const deleteResponse = await fetch(
-        `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${encodeURIComponent(tableName)}?${deleteParams}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`
-          }
-        }
-      );
-
-      if (deleteResponse.ok) {
-        deletedCount += batch.length;
-      }
-    }
-
-    return deletedCount;
-  } catch (error) {
-    console.error(`Error wiping table ${tableName}:`, error);
-    return 0;
-  }
-}
 
 // Live automation tracking - initialized clean for production
 let liveAutomationMetrics = {

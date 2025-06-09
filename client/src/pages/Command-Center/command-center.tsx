@@ -1980,7 +1980,7 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Active Clients:</span>
-                  <span className="text-white font-bold">47</span>
+                  <span className="text-white font-bold">{metrics?.totalLeads || 0}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Client NPS:</span>
@@ -2022,7 +2022,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Error Trend (7d):</span>
-                  <span className="text-red-400 font-bold">12 errors ↗︎</span>
+                  <span className="text-red-400 font-bold">{metrics?.errorCount || 0} errors</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">API Usage:</span>
@@ -2030,7 +2030,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Bot Processing Load:</span>
-                  <span className="text-green-400 font-bold">2,847 tasks</span>
+                  <span className="text-green-400 font-bold">{automationPerformance?.activeFunctions || 0} tasks</span>
                 </div>
               </div>
             </CardContent>
@@ -2051,11 +2051,11 @@ export default function CommandCenter() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Active Workflows</span>
-                  <Badge className="bg-green-600 text-white">12</Badge>
+                  <Badge className="bg-green-600 text-white">{automationPerformance?.activeFunctions || 0}</Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Tasks Completed</span>
-                  <span className="text-green-400 font-bold">2,847</span>
+                  <span className="text-green-400 font-bold">{automationPerformance?.completedTasks || 0}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Success Rate</span>
@@ -2158,7 +2158,7 @@ export default function CommandCenter() {
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Monthly Savings vs Manual</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-white font-bold">$12,840</div>
+                    <div className="text-white font-bold">${metrics?.totalRevenue || 0}</div>
                     <Badge className="bg-green-600 text-white">384 hours saved</Badge>
                   </div>
                 </div>
@@ -2230,7 +2230,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Active Connections</span>
-                  <span className="text-green-400 font-bold">847</span>
+                  <span className="text-green-400 font-bold">{knowledgeStats?.totalDocuments || 0}</span>
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Last Maintenance</div>
