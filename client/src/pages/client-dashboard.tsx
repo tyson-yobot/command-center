@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { Link, useLocation } from 'wouter';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
@@ -1447,6 +1448,39 @@ export default function ClientDashboard() {
               YoBot® Command Center
             </h1>
             <p className="text-slate-300 text-xl">Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}</p>
+            
+            {/* Navigation Menu */}
+            <div className="flex justify-center mt-4 mb-6">
+              <div className="flex items-center space-x-4 bg-slate-800/50 backdrop-blur-sm rounded-lg p-3 border border-slate-700/50">
+                <Link href="/command-center">
+                  <Button 
+                    variant="outline" 
+                    className="bg-blue-600 hover:bg-blue-700 text-white border-blue-500"
+                  >
+                    <Monitor className="w-4 h-4 mr-2" />
+                    Command Center
+                  </Button>
+                </Link>
+                <Link href="/control-center">
+                  <Button 
+                    variant="outline" 
+                    className="bg-purple-600 hover:bg-purple-700 text-white border-purple-500"
+                  >
+                    <Settings className="w-4 h-4 mr-2" />
+                    Control Center
+                  </Button>
+                </Link>
+                <Link href="/lead-scraping">
+                  <Button 
+                    variant="outline" 
+                    className="bg-green-600 hover:bg-green-700 text-white border-green-500"
+                  >
+                    <Search className="w-4 h-4 mr-2" />
+                    Lead Scraping
+                  </Button>
+                </Link>
+              </div>
+            </div>
             
             {/* Global Test/Live Mode Toggle */}
             <div className="flex justify-center mt-6">
