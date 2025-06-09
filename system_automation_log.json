@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-08T09:45:00.303Z",
-    "functionId": 133,
-    "functionName": "Silent Call Detector",
-    "batch": 14,
-    "category": "Voice",
-    "status": "success",
-    "duration": 155,
-    "successCount": 3,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-08T09:45:00.321Z",
     "functionId": 155,
     "functionName": "AI Script Expansion",
@@ -11276,6 +11265,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-09T03:21:50.987Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-09T03:23:00.022Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-09T03:22:59.711Z",
       "automationStatus": "running"
     }
   }
