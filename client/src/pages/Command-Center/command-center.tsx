@@ -105,6 +105,7 @@ export default function CommandCenter() {
   const [memoryText, setMemoryText] = useState('');
   const [memoryCategory, setMemoryCategory] = useState('general');
   const [voiceGenerationText, setVoiceGenerationText] = useState('');
+  const { toast } = useToast();
 
   // System mode toggle function
   const toggleSystemMode = async () => {
@@ -1523,25 +1524,25 @@ export default function CommandCenter() {
               </div>
             </div>
             
-            {/* Global Test/Live Mode Toggle */}
+            {/* System Mode Toggle - Controls Test/Live Data Isolation */}
             <div className="flex justify-center mt-6">
               <div className="flex items-center space-x-4 bg-slate-800/50 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
                 <label className="text-white font-medium">System Mode:</label>
                 <div className="flex items-center space-x-3">
-                  <span className={`text-sm ${isTestMode ? 'text-yellow-400' : 'text-gray-400'}`}>
-                    🧪 Test
+                  <span className={`text-sm ${systemModeData?.systemMode === 'test' ? 'text-yellow-400' : 'text-gray-400'}`}>
+                    Test
                   </span>
                   <Switch
-                    checked={!isTestMode}
-                    onCheckedChange={(checked) => setTestMode(!checked)}
+                    checked={systemModeData?.systemMode === 'live'}
+                    onCheckedChange={toggleSystemMode}
                     className="data-[state=checked]:bg-green-500"
                   />
-                  <span className={`text-sm ${!isTestMode ? 'text-green-400' : 'text-gray-400'}`}>
-                    🚀 Live
+                  <span className={`text-sm ${systemModeData?.systemMode === 'live' ? 'text-green-400' : 'text-gray-400'}`}>
+                    Live
                   </span>
                 </div>
-                <Badge variant={isTestMode ? "secondary" : "default"} className="px-3 py-1">
-                  {isTestMode ? "Test Mode - Safe Operations" : "Live Mode - Real Operations"}
+                <Badge variant={systemModeData?.systemMode === 'test' ? "secondary" : "default"} className="px-3 py-1">
+                  {systemModeData?.systemMode === 'test' ? "Test Mode - Safe Operations" : "Live Mode - Production Data"}
                 </Badge>
               </div>
             </div>
