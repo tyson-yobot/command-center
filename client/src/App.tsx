@@ -36,6 +36,7 @@ function Router() {
         <Switch>
           <Route path="/command-center" component={ClientDashboard} />
           <Route path="/" component={ClientDashboard} />
+          <Route path="/control-center" component={ControlCenter} />
           <Route path="/lead-scraping" component={LeadScrapingPage} />
           <Route path="/lead-scrape" component={LeadScrapingPage} />
           <Route>
