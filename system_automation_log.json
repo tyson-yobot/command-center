@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-09T00:50:00.165Z",
-    "functionId": 153,
-    "functionName": "System Health Metric Update",
-    "batch": 16,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 80,
-    "successCount": 4,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-09T00:50:00.181Z",
     "functionId": 134,
     "functionName": "QA Failure Alert",
@@ -11312,6 +11301,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-09T05:47:20.540Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-09T05:48:08.211Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-09T05:48:07.871Z",
       "automationStatus": "running"
     }
   }
