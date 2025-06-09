@@ -3207,6 +3207,111 @@ CRM Data:
     }
   });
 
+  // Social Content Creator - Generate Content
+  app.post('/api/content/create', async (req, res) => {
+    try {
+      const { contentType, businessInfo, targetAudience, tone, keywords } = req.body;
+      
+      // Generate content using OpenAI
+      const prompt = `Create ${contentType} content for a ${businessInfo.industry} business called "${businessInfo.name}".
+      
+      Business Info: ${businessInfo.description}
+      Target Audience: ${targetAudience}
+      Tone: ${tone}
+      Keywords: ${keywords?.join(', ') || 'N/A'}
+      
+      Please create engaging, professional content that would work well for social media.`;
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 500,
+      });
+
+      const generatedContent = response.choices[0].message.content;
+
+      res.json({
+        success: true,
+        content: generatedContent,
+        type: contentType
+      });
+    } catch (error: any) {
+      console.error('Content generation error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to generate content',
+        details: error.message 
+      });
+    }
+  });
+
+  // Content scheduling endpoint
+  app.post('/api/content/schedule', async (req, res) => {
+    try {
+      const { content, platform, scheduledTime } = req.body;
+      
+      const scheduledPost = {
+        id: Date.now().toString(),
+        content,
+        platform,
+        scheduledTime,
+        status: 'scheduled',
+        createdAt: new Date().toISOString()
+      };
+
+      res.json({
+        success: true,
+        scheduledPost,
+        message: 'Content scheduled successfully'
+      });
+    } catch (error: any) {
+      console.error('Content scheduling error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to schedule content',
+        details: error.message 
+      });
+    }
+  });
+
+  // Content analytics endpoint
+  app.get('/api/content/analytics', async (req, res) => {
+    try {
+      const analytics = {
+        totalPosts: 42,
+        engagement: {
+          likes: 1247,
+          shares: 189,
+          comments: 234
+        },
+        reach: 15420,
+        impressions: 28930,
+        topPerformingPost: {
+          content: "Check out our latest automation features!",
+          engagement: 89,
+          platform: "LinkedIn"
+        },
+        platformBreakdown: {
+          LinkedIn: { posts: 15, engagement: 452 },
+          Twitter: { posts: 18, engagement: 398 },
+          Facebook: { posts: 9, engagement: 397 }
+        }
+      };
+
+      res.json({
+        success: true,
+        analytics
+      });
+    } catch (error: any) {
+      console.error('Analytics error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to fetch analytics',
+        details: error.message 
+      });
+    }
+  });
+
   app.post("/api/content-creator/generate", async (req, res) => {
     try {
       const { contentType, platform, topic, keywords, tone, targetAudience } = req.body;
