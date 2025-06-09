@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-06-09T07:07:42.080Z",
+  "url": "/api/test-automation-function",
+  "headers": {
+    "accept": "application/json, text/plain, */*",
+    "content-type": "application/json",
+    "user-agent": "axios/1.9.0",
+    "content-length": "87",
+    "accept-encoding": "gzip, compress, deflate, br",
+    "host": "localhost:5000",
+    "connection": "keep-alive"
+  },
+  "raw_payload": {
+    "functionId": 6,
+    "functionName": "Active Bot Audit Summary",
+    "moduleType": "System Health"
+  }
+}
