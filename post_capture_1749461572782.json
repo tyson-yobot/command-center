@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-06-09T09:32:52.782Z",
+  "url": "/api/qa-tracker/log-test",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "474"
+  },
+  "body": {
+    "integrationName": "Final System Validation Test",
+    "passFail": true,
+    "notes": "Complete system operational with 1040+ automation functions. QA tracker successfully integrated and monitoring all live operations.",
+    "qaOwner": "YoBot Production System",
+    "moduleType": "System Validation",
+    "scenarioLink": "https://replit.dev/scenario/final-system-validation",
+    "outputDataPopulated": true,
+    "recordCreated": true,
+    "retryAttempted": false
+  },
+  "query": {}
+}
