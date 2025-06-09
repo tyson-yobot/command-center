@@ -12,6 +12,8 @@ import { registerBatch27 } from "./automationBatch27";
 import { registerBatch28 } from "./automationBatch28";
 import { registerBatch29 } from "./automationBatch29";
 import { registerBatch30 } from "./automationBatch30";
+import { registerRealScrapingRoutes } from "./realScrapingRoutes";
+import { registerRealSalesOrderRoutes } from "./realSalesOrderRoutes";
 
 // Configure multer for file uploads
 const upload = multer({
@@ -44,39 +46,145 @@ let liveAutomationMetrics = {
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Lead Scraper API Endpoints - Must be registered before catch-all middleware
+  // Register real scraping routes with test/live mode
+  registerRealScrapingRoutes(app);
+
+  // Legacy Lead Scraper API Endpoints - Deprecated
   app.post("/api/scraping/apollo", async (req, res) => {
     try {
-      const { filters } = req.body;
+      const { filters, testMode = false } = req.body;
+      const timestamp = new Date().toISOString();
       
-      // Generate realistic leads based on filters
-      const mockLeads = Array.from({ length: Math.floor(Math.random() * 100) + 50 }, (_, i) => ({
-        fullName: `${['Sarah', 'John', 'Maria', 'David', 'Jennifer', 'Michael', 'Lisa', 'Robert'][i % 8]} ${['Thompson', 'Johnson', 'Garcia', 'Williams', 'Brown', 'Davis', 'Miller', 'Wilson'][i % 8]}`,
-        email: `${['sarah', 'john', 'maria', 'david', 'jennifer', 'michael', 'lisa', 'robert'][i % 8]}.${['thompson', 'johnson', 'garcia', 'williams', 'brown', 'davis', 'miller', 'wilson'][i % 8]}@company${i + 1}.com`,
-        company: `${filters.industry || 'Tech'} Solutions ${i + 1}`,
-        title: filters.jobTitles || "Manager",
-        location: filters.location || "Dallas, TX",
-        phone: `+1-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
-        industry: filters.industry || "Technology",
-        sourceTag: `Apollo - ${new Date().toLocaleDateString()}`,
-        scrapeSessionId: `apollo-${Date.now()}`,
-        source: "apollo"
-      }));
+      let leads = [];
+      let isLiveData = false;
+      
+      if (!testMode && process.env.APOLLO_API_KEY) {
+        // Real Apollo.io API call
+        try {
+          const apolloPayload = {
+            api_key: process.env.APOLLO_API_KEY,
+            q_organization_domains: filters.excludeDomains ? `NOT (${filters.excludeDomains})` : undefined,
+            person_titles: filters.jobTitles?.join(','),
+            person_seniorities: filters.seniorityLevel,
+            organization_industries: filters.industry,
+            organization_locations: filters.location?.join(','),
+            organization_num_employees_ranges: filters.companySize,
+            person_departments: filters.department,
+            organization_latest_funding_stage_cd: filters.fundingStage,
+            organization_annual_revenue_printed: filters.revenueRange,
+            page_size: parseInt(filters.recordLimit) || 100,
+            person_email_status: filters.emailVerified ? 'verified' : undefined
+          };
 
-      // Send Slack notification for successful scraping
+          const response = await fetch('https://api.apollo.io/v1/mixed_people/search', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache'
+            },
+            body: JSON.stringify(apolloPayload)
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            leads = data.people?.map(person => ({
+              fullName: `${person.first_name} ${person.last_name}`,
+              email: person.email,
+              company: person.organization?.name,
+              title: person.title,
+              location: person.city ? `${person.city}, ${person.state}` : person.state,
+              phone: person.phone_numbers?.[0]?.sanitized_number,
+              industry: person.organization?.industry,
+              sourceTag: `Apollo Live - ${new Date().toLocaleDateString()}`,
+              scrapeSessionId: `apollo-live-${Date.now()}`,
+              source: "apollo-live"
+            })) || [];
+            isLiveData = true;
+          }
+        } catch (apiError) {
+          console.error('Apollo API Error:', apiError);
+        }
+      }
+      
+      // If API failed or test mode, use curated test data
+      if (!isLiveData) {
+        leads = Array.from({ length: Math.floor(Math.random() * 100) + 50 }, (_, i) => ({
+          fullName: `${['Sarah', 'John', 'Maria', 'David', 'Jennifer', 'Michael', 'Lisa', 'Robert'][i % 8]} ${['Thompson', 'Johnson', 'Garcia', 'Williams', 'Brown', 'Davis', 'Miller', 'Wilson'][i % 8]}`,
+          email: `${['sarah', 'john', 'maria', 'david', 'jennifer', 'michael', 'lisa', 'robert'][i % 8]}.${['thompson', 'johnson', 'garcia', 'williams', 'brown', 'davis', 'miller', 'wilson'][i % 8]}@company${i + 1}.com`,
+          company: `${filters.industry || 'Tech'} Solutions ${i + 1}`,
+          title: Array.isArray(filters.jobTitles) ? filters.jobTitles[0] : filters.jobTitles || "Manager",
+          location: Array.isArray(filters.location) ? filters.location[0] : filters.location || "Dallas, TX",
+          phone: `+1-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+          industry: filters.industry || "Technology",
+          sourceTag: `Apollo Test - ${new Date().toLocaleDateString()}`,
+          scrapeSessionId: `apollo-test-${Date.now()}`,
+          source: "apollo-test"
+        }));
+      }
+
+      // Log the scraping execution
+      const logEntry = {
+        timestamp,
+        tool: 'apollo',
+        filtersUsed: filters,
+        leadCount: leads.length,
+        isLiveData,
+        testMode,
+        status: leads.length > 0 ? 'SUCCESS' : 'FAILED'
+      };
+
+      // Send to Airtable if configured
+      if (process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID) {
+        try {
+          await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Scraping Logs`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              records: [{
+                fields: {
+                  'Timestamp': timestamp,
+                  'Tool': 'Apollo.io',
+                  'Lead Count': leads.length,
+                  'Data Type': isLiveData ? 'Live' : 'Test',
+                  'Filters': JSON.stringify(filters),
+                  'Status': logEntry.status
+                }
+              }]
+            })
+          });
+        } catch (airtableError) {
+          console.error('Airtable logging error:', airtableError);
+        }
+      }
+
+      // Send Slack notification
       try {
-        await fetch("https://hooks.slack.com/services/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", {
+        await fetch(process.env.SLACK_WEBHOOK_URL || "https://hooks.slack.com/services/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", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            text: `Apollo Scraper Complete: ${mockLeads.length} leads generated from ${filters.industry || 'Technology'} industry`
+            text: `🎯 Apollo Scraper ${isLiveData ? 'LIVE' : 'TEST'}: ${leads.length} leads from ${filters.industry || 'Technology'} | ${timestamp}`
           })
         });
       } catch (error) {
         console.error('Slack notification error:', error);
       }
 
-      res.json({ success: true, leads: mockLeads, count: mockLeads.length, filters });
+      console.log('Apollo Scrape Log:', logEntry);
+
+      res.json({ 
+        success: true, 
+        leads, 
+        count: leads.length, 
+        filters,
+        isLiveData,
+        testMode,
+        timestamp,
+        logEntry
+      });
     } catch (error) {
       console.error('Apollo scraping error:', error);
       res.status(500).json({ success: false, error: error.message });
