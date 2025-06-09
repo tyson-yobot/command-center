@@ -128,16 +128,16 @@ export default function CommandCenter() {
   const [currentSystemMode, setCurrentSystemMode] = useState('live');
   const { toast } = useToast();
 
-  // Fetch current system mode on load
-  useEffect(() => {
-    fetch('/api/system-mode')
-      .then(res => res.json())
-      .then(data => {
-        if (data.systemMode) {
-          setCurrentSystemMode(data.systemMode);
-        }
-      });
-  }, []);
+  // DISABLED - Fetch current system mode on load
+  // useEffect(() => {
+  //   fetch('/api/system-mode')
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       if (data.systemMode) {
+  //         setCurrentSystemMode(data.systemMode);
+  //       }
+  //     });
+  // }, []);
 
   // System mode toggle function
   const toggleSystemMode = async () => {

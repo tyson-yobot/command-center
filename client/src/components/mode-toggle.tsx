@@ -9,16 +9,17 @@ export default function ModeToggle({ onModeChange }: ModeToggleProps) {
   const [currentMode, setCurrentMode] = useState<'test' | 'live'>('live');
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    // Get current mode from server
-    fetch('/api/system-mode')
-      .then(res => res.json())
-      .then(data => {
-        setCurrentMode(data.systemMode);
-        onModeChange?.(data.systemMode);
-      })
-      .catch(console.error);
-  }, [onModeChange]);
+  // DISABLED to stop API polling
+  // useEffect(() => {
+  //   // Get current mode from server
+  //   fetch('/api/system-mode')
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       setCurrentMode(data.systemMode);
+  //       onModeChange?.(data.systemMode);
+  //     })
+  //     .catch(console.error);
+  // }, [onModeChange]);
 
   const handleModeChange = async (newMode: 'test' | 'live') => {
     setIsLoading(true);
