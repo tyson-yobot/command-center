@@ -69,21 +69,21 @@ export default function CommandCenter() {
   const { data: knowledgeStats, refetch: refetchKnowledge } = useQuery({ queryKey: ['/api/knowledge/stats'] });
   const { data: automationMetrics } = useQuery({ 
     queryKey: ['/api/automation/metrics'],
-    refetchInterval: 5000 
+    refetchInterval: 30000 // Reduced from 5 seconds to 30 seconds
   });
   const { data: liveExecutions } = useQuery({ 
     queryKey: ['/api/automation/executions'],
-    refetchInterval: 3000 
+    refetchInterval: 60000 // Reduced from 3 seconds to 60 seconds
   });
   const { data: functionStatus } = useQuery({ 
     queryKey: ['/api/automation/functions'],
-    refetchInterval: 10000 
+    refetchInterval: 120000 // Reduced from 10 seconds to 2 minutes
   });
   
   // System mode control
   const { data: systemModeData } = useQuery({ 
     queryKey: ['/api/system-mode'],
-    refetchInterval: 2000 
+    refetchInterval: 30000 // Reduced from 2 seconds to 30 seconds
   });
   
   const [isListening, setIsListening] = React.useState(false);
@@ -784,6 +784,34 @@ export default function CommandCenter() {
       setToast({
         title: "Support Available",
         description: "Use the chat widget for immediate assistance or try again",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Clear test data function
+  const handleClearTestData = async () => {
+    try {
+      const response = await apiRequest('POST', '/api/clear-test-data');
+      if (response.ok) {
+        setToast({
+          title: "Test Data Cleared",
+          description: "All test data has been successfully cleared",
+        });
+        // Refresh the page to show updated metrics
+        window.location.reload();
+      } else {
+        const error = await response.json();
+        setToast({
+          title: "Clear Failed",
+          description: error.error || "Failed to clear test data",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      setToast({
+        title: "Clear Failed", 
+        description: "Network error occurred while clearing test data",
         variant: "destructive"
       });
     }
@@ -1615,7 +1643,7 @@ export default function CommandCenter() {
                 >
                   Submit Ticket
                 </Button>
-                {isTestMode && (
+                {currentSystemMode === 'test' && (
                   <Button 
                     onClick={handleClearTestData}
                     size="sm"
