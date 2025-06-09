@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Switch } from '@/components/ui/switch';
-import { useModeContext } from '@/App';
+// Simplified imports to avoid path issues
+// import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+// import { Badge } from '@/components/ui/badge';
+// import { Button } from '@/components/ui/button';
+// import { Progress } from '@/components/ui/progress';
+// import { Switch } from '@/components/ui/switch';
+// import { useModeContext } from '@/App';
 import { 
   TrendingUp, 
   Phone, 
@@ -57,6 +58,7 @@ import { ContentCreatorDashboard } from '@/components/content-creator-dashboard'
 import { MailchimpSyncDashboard } from '@/components/mailchimp-sync-dashboard';
 import { SocialContentCreator } from '@/components/social-content-creator';
 import { useToast } from '@/hooks/use-toast';
+import ModeToggle from '@/components/mode-toggle';
 
 export default function CommandCenter() {
   const { isTestMode, setTestMode } = useModeContext();
@@ -3720,6 +3722,12 @@ export default function CommandCenter() {
 
       {/* Zendesk Live Chat Widget */}
       <ZendeskChatWidget />
+      
+      {/* System Mode Toggle */}
+      <ModeToggle onModeChange={(mode) => {
+        // Refresh data when mode changes to ensure proper isolation
+        window.location.reload();
+      }} />
     </div>
   );
 }

@@ -6,16 +6,16 @@ interface ModeToggleProps {
 }
 
 export default function ModeToggle({ onModeChange }: ModeToggleProps) {
-  const [currentMode, setCurrentMode] = useState<'test' | 'live'>('test');
+  const [currentMode, setCurrentMode] = useState<'test' | 'live'>('live');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Get current mode from server
-    fetch('/api/get-mode')
+    fetch('/api/system-mode')
       .then(res => res.json())
       .then(data => {
-        setCurrentMode(data.mode);
-        onModeChange?.(data.mode);
+        setCurrentMode(data.systemMode);
+        onModeChange?.(data.systemMode);
       })
       .catch(console.error);
   }, [onModeChange]);
@@ -23,7 +23,7 @@ export default function ModeToggle({ onModeChange }: ModeToggleProps) {
   const handleModeChange = async (newMode: 'test' | 'live') => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/set-mode', {
+      const response = await fetch('/api/system-mode', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mode: newMode })
