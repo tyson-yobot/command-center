@@ -37,6 +37,7 @@ interface ApolloScraperPanelProps {
 
 export default function ApolloScraperPanel({ onLaunch, isLoading = false }: ApolloScraperPanelProps) {
   const { toast } = useToast();
+  const { industries, isLoading: industriesLoading } = useIndustryTemplates();
   const [isTestMode, setIsTestMode] = useState(false);
   const [estimatedLeads, setEstimatedLeads] = useState(0);
   
@@ -364,17 +365,31 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
               <div className="space-y-2">
                 <Label className="text-slate-200">Industry</Label>
                 <div className="flex gap-2">
-                  <Input
-                    placeholder="e.g., Technology, Healthcare, Finance"
-                    value={newIndustry}
-                    onChange={(e) => setNewIndustry(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && addTag('industry', newIndustry, setNewIndustry)}
-                    className="bg-slate-700/50 border-slate-600 text-slate-200"
-                  />
+                  <Select value={newIndustry} onValueChange={setNewIndustry}>
+                    <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
+                      <SelectValue placeholder="Select industry to add" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-slate-700 border-slate-600">
+                      {industriesLoading ? (
+                        <SelectItem value="loading" disabled>Loading industries...</SelectItem>
+                      ) : (
+                        industries.map((industry) => (
+                          <SelectItem 
+                            key={industry.id} 
+                            value={industry.name}
+                            className="text-slate-200 hover:bg-slate-600"
+                          >
+                            {industry.name}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
                   <Button
                     size="sm"
                     onClick={() => addTag('industry', newIndustry, setNewIndustry)}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    disabled={!newIndustry || industriesLoading}
+                    className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
                   >
                     <Plus className="h-4 w-4" />
                   </Button>

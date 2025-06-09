@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { HelpCircle, Users, Building2, Settings, Save, Search, Rocket, MessageSquare } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useIndustryTemplates } from "@/hooks/useIndustryTemplates";
 
 interface PhantomBusterFilters {
   platform: string;
@@ -36,6 +37,7 @@ interface PhantomBusterScraperPanelProps {
 
 export default function PhantomBusterScraperPanel({ onLaunch, isLoading = false }: PhantomBusterScraperPanelProps) {
   const { toast } = useToast();
+  const { industries, isLoading: industriesLoading } = useIndustryTemplates();
   const [isTestMode, setIsTestMode] = useState(false);
   const [estimatedProfiles, setEstimatedProfiles] = useState(0);
   

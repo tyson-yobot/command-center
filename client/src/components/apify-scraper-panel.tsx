@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { HelpCircle, MapPin, Star, Settings, Save, Search, Rocket } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useIndustryTemplates } from "@/hooks/useIndustryTemplates";
 
 interface ApifyFilters {
   searchTerms: string[];
@@ -32,6 +33,7 @@ interface ApifyScraperPanelProps {
 
 export default function ApifyScraperPanel({ onLaunch, isLoading = false }: ApifyScraperPanelProps) {
   const { toast } = useToast();
+  const { industries, isLoading: industriesLoading } = useIndustryTemplates();
   const [isTestMode, setIsTestMode] = useState(false);
   const [estimatedListings, setEstimatedListings] = useState(0);
   
@@ -270,21 +272,25 @@ export default function ApifyScraperPanel({ onLaunch, isLoading = false }: Apify
                 <Select 
                   value={filters.industryCategory} 
                   onValueChange={(value) => setFilters(prev => ({ ...prev, industryCategory: value }))}
+                  disabled={industriesLoading}
                 >
                   <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
-                    <SelectValue placeholder="Select industry" />
+                    <SelectValue placeholder={industriesLoading ? "Loading industries..." : "Select industry"} />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="restaurants">Restaurants & Food</SelectItem>
-                    <SelectItem value="retail">Retail & Shopping</SelectItem>
-                    <SelectItem value="healthcare">Healthcare & Medical</SelectItem>
-                    <SelectItem value="automotive">Automotive</SelectItem>
-                    <SelectItem value="beauty">Beauty & Wellness</SelectItem>
-                    <SelectItem value="professional">Professional Services</SelectItem>
-                    <SelectItem value="entertainment">Entertainment & Recreation</SelectItem>
-                    <SelectItem value="education">Education</SelectItem>
-                    <SelectItem value="real-estate">Real Estate</SelectItem>
-                    <SelectItem value="home-services">Home Services</SelectItem>
+                  <SelectContent className="bg-slate-700 border-slate-600">
+                    {industriesLoading ? (
+                      <SelectItem value="loading" disabled>Loading industries...</SelectItem>
+                    ) : (
+                      industries.map((industry) => (
+                        <SelectItem 
+                          key={industry.id} 
+                          value={industry.name}
+                          className="text-slate-200 hover:bg-slate-600"
+                        >
+                          {industry.name}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
               </div>
