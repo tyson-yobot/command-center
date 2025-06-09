@@ -250,76 +250,76 @@ export default function YoBotMasterDashboard() {
   }, {} as Record<string, AddOnService[]>);
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-6 space-y-6">
+    <div className="w-full max-w-7xl mx-auto p-6 space-y-6 bg-slate-900 min-h-screen">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
+          <h1 className="text-3xl font-bold flex items-center gap-2 text-blue-300">
             <Bot className="w-8 h-8" />
             YoBot Master Dashboard
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">Complete enterprise automation and analytics platform</p>
+          <p className="text-slate-400">Complete enterprise automation and analytics platform</p>
         </div>
-        <Badge variant="outline" className="text-lg px-4 py-2">
+        <Badge variant="outline" className="text-lg px-4 py-2 bg-slate-700/50 border-blue-500/50 text-blue-300">
           {activeServices.length} Active Services
         </Badge>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-8">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="smartspend">SmartSpend</TabsTrigger>
-          <TabsTrigger value="command-center">Command Center</TabsTrigger>
-          <TabsTrigger value="botalytics">Botalytics</TabsTrigger>
-          <TabsTrigger value="lead-scraping">Lead Tools</TabsTrigger>
-          <TabsTrigger value="content-creator">Content Studio</TabsTrigger>
-          <TabsTrigger value="ab-testing">A/B Testing</TabsTrigger>
-          <TabsTrigger value="call-sentiment">Sentiment</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-8 bg-slate-800/50 border-slate-600">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300">Overview</TabsTrigger>
+          <TabsTrigger value="smartspend" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300">SmartSpend</TabsTrigger>
+          <TabsTrigger value="command-center" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300">Command Center</TabsTrigger>
+          <TabsTrigger value="botalytics" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300">Botalytics</TabsTrigger>
+          <TabsTrigger value="lead-scraping" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300">Lead Tools</TabsTrigger>
+          <TabsTrigger value="content-creator" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300">Content Studio</TabsTrigger>
+          <TabsTrigger value="ab-testing" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300">A/B Testing</TabsTrigger>
+          <TabsTrigger value="call-sentiment" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300">Sentiment</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
           {/* System Overview Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <Card>
+            <Card className="bg-slate-800/50 border-slate-600/50 backdrop-blur-sm">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Automations</CardTitle>
-                <Bot className="h-4 w-4 text-blue-600" />
+                <CardTitle className="text-sm font-medium text-blue-300">Total Automations</CardTitle>
+                <Bot className="h-4 w-4 text-blue-400" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{systemMetrics.totalAutomations}</div>
-                <p className="text-xs text-muted-foreground">Active functions</p>
+                <div className="text-2xl font-bold text-slate-200">{systemMetrics.totalAutomations}</div>
+                <p className="text-xs text-slate-400">Active functions</p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-slate-800/50 border-slate-600/50 backdrop-blur-sm">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Services</CardTitle>
-                <Activity className="h-4 w-4 text-green-600" />
+                <CardTitle className="text-sm font-medium text-blue-300">Active Services</CardTitle>
+                <Activity className="h-4 w-4 text-green-400" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{activeServices.length}</div>
-                <p className="text-xs text-muted-foreground">Running modules</p>
+                <div className="text-2xl font-bold text-slate-200">{activeServices.length}</div>
+                <p className="text-xs text-slate-400">Running modules</p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-slate-800/50 border-slate-600/50 backdrop-blur-sm">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Monthly ROI</CardTitle>
-                <TrendingUp className="h-4 w-4 text-purple-600" />
+                <CardTitle className="text-sm font-medium text-blue-300">Monthly ROI</CardTitle>
+                <TrendingUp className="h-4 w-4 text-purple-400" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-green-600">+247%</div>
-                <p className="text-xs text-muted-foreground">Return on investment</p>
+                <div className="text-2xl font-bold text-green-400">+247%</div>
+                <p className="text-xs text-slate-400">Return on investment</p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-slate-800/50 border-slate-600/50 backdrop-blur-sm">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Leads Generated</CardTitle>
-                <Target className="h-4 w-4 text-orange-600" />
+                <CardTitle className="text-sm font-medium text-blue-300">Leads Generated</CardTitle>
+                <Target className="h-4 w-4 text-orange-400" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">2,847</div>
-                <p className="text-xs text-muted-foreground">This month</p>
+                <div className="text-2xl font-bold text-slate-200">2,847</div>
+                <p className="text-xs text-slate-400">This month</p>
               </CardContent>
             </Card>
           </div>
@@ -327,32 +327,32 @@ export default function YoBotMasterDashboard() {
           {/* Service Categories */}
           <div className="space-y-6">
             {Object.entries(servicesByCategory).map(([category, categoryServices]) => (
-              <Card key={category}>
+              <Card key={category} className="bg-slate-800/50 border-slate-600/50 backdrop-blur-sm">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 capitalize">
+                  <CardTitle className="flex items-center gap-2 capitalize text-blue-300">
                     {getCategoryIcon(category)}
                     {category} Services
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-slate-400">
                     {categoryServices.length} services in this category
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {categoryServices.map((service) => (
-                      <Card key={service.id} className="hover:shadow-md transition-shadow cursor-pointer"
+                      <Card key={service.id} className="bg-slate-700/50 border-slate-600 hover:bg-slate-600/50 transition-all cursor-pointer"
                             onClick={() => setActiveTab(service.id)}>
                         <CardContent className="p-4">
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex items-center gap-2">
-                              <service.icon className="w-5 h-5 text-blue-600" />
-                              <Badge className={getStatusColor(service.status)} variant="outline">
+                              <service.icon className="w-5 h-5 text-blue-400" />
+                              <Badge className={`${getStatusColor(service.status)} text-white`} variant="outline">
                                 {service.status}
                               </Badge>
                             </div>
                           </div>
-                          <h3 className="font-semibold text-sm mb-1">{service.name}</h3>
-                          <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
+                          <h3 className="font-semibold text-sm mb-1 text-slate-200">{service.name}</h3>
+                          <p className="text-xs text-slate-400 line-clamp-2">
                             {service.description}
                           </p>
                         </CardContent>
@@ -365,10 +365,10 @@ export default function YoBotMasterDashboard() {
           </div>
 
           {/* Quick Actions */}
-          <Card>
+          <Card className="bg-slate-800/50 border-slate-600/50 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-              <CardDescription>Common tasks and system controls</CardDescription>
+              <CardTitle className="text-blue-300">Quick Actions</CardTitle>
+              <CardDescription className="text-slate-400">Common tasks and system controls</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
