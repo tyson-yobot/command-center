@@ -110,6 +110,68 @@ function getAPIKeys() {
 }
 
 // IMMEDIATE FIX: One-Click Test Data Wipe Function
+async function airtableWipeTable(tableName: string): Promise<number> {
+  try {
+    if (!process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN) {
+      throw new Error('Airtable API token not configured');
+    }
+
+    const baseId = process.env.AIRTABLE_BASE_ID || 'appRt8V3tH4g5Z5if';
+    let recordsDeleted = 0;
+    let offset = '';
+
+    do {
+      // Get records in batches
+      const url = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}${offset ? `?offset=${offset}` : ''}`;
+      
+      const response = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch records: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.records && data.records.length > 0) {
+        // Delete records in batches of 10 (Airtable limit)
+        const recordIds = data.records.map((record: any) => record.id);
+        
+        for (let i = 0; i < recordIds.length; i += 10) {
+          const batch = recordIds.slice(i, i + 10);
+          const deleteUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`;
+          
+          const deleteResponse = await fetch(deleteUrl, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              records: batch
+            })
+          });
+
+          if (deleteResponse.ok) {
+            recordsDeleted += batch.length;
+          }
+        }
+      }
+
+      offset = data.offset || '';
+    } while (offset);
+
+    return recordsDeleted;
+  } catch (error) {
+    console.error(`Error wiping table ${tableName}:`, error);
+    return 0;
+  }
+}
+
 async function wipeTestData() {
   try {
     const tablesToWipe = [
@@ -123,11 +185,17 @@ async function wipeTestData() {
       "📁 Call Recording Tracker",
       "📊 Call Sentiment Log",
       "🚨 Escalation Tracker",
-      "📇 CRM Contact List"
+      "📇 CRM Contact List",
+      "📊 Command Center · Metrics Tracker",
+      "🧪 QA Test Results",
+      "📋 Task Management Log",
+      "🔄 System Activity Log"
     ];
 
     let totalRecordsDeleted = 0;
     const wipedTables = [];
+
+    console.log('🧹 Starting comprehensive test data wipe...');
 
     for (const tableName of tablesToWipe) {
       try {
@@ -141,11 +209,17 @@ async function wipeTestData() {
       }
     }
 
-    console.log(`✅ All test data successfully wiped: ${totalRecordsDeleted} records deleted`);
+    // Clear in-memory test data
+    global.testData = {};
+    global.qaResults = [];
+    global.testMetrics = {};
+
+    console.log(`✅ COMPLETE DATA WIPE: ${totalRecordsDeleted} records deleted from ${wipedTables.length} tables`);
     return { 
       success: true, 
       tablesWiped: wipedTables,
-      recordsDeleted: totalRecordsDeleted 
+      recordsDeleted: totalRecordsDeleted,
+      message: `All test data successfully purged: ${totalRecordsDeleted} records deleted`
     };
   } catch (error) {
     console.error("❌ Failed to wipe test data:", error);
