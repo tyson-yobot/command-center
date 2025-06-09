@@ -78,21 +78,9 @@ export function registerRealScrapingRoutes(app: Express) {
         }
       }
       
-      // Test mode or API fallback
-      if (mode === 'test' || !isLiveData) {
-        const testLeadCount = Math.floor(Math.random() * 50) + 25;
-        leads = Array.from({ length: testLeadCount }, (_, i) => ({
-          fullName: `${['Sarah', 'John', 'Maria', 'David', 'Jennifer', 'Michael', 'Lisa', 'Robert'][i % 8]} ${['Thompson', 'Johnson', 'Garcia', 'Williams', 'Brown', 'Davis', 'Miller', 'Wilson'][i % 8]}`,
-          email: `${['sarah', 'john', 'maria', 'david', 'jennifer', 'michael', 'lisa', 'robert'][i % 8]}.${['thompson', 'johnson', 'garcia', 'williams', 'brown', 'davis', 'miller', 'wilson'][i % 8]}@${filters.industry?.toLowerCase().replace(/\s+/g, '') || 'tech'}company${i + 1}.com`,
-          company: `${filters.industry || 'Tech'} Solutions ${i + 1}`,
-          title: Array.isArray(filters.jobTitles) ? filters.jobTitles[Math.floor(Math.random() * filters.jobTitles.length)] : filters.jobTitles || "Manager",
-          location: Array.isArray(filters.location) ? filters.location[Math.floor(Math.random() * filters.location.length)] : filters.location || "Dallas, TX",
-          phone: `+1-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
-          industry: filters.industry || "Technology",
-          sourceTag: `Apollo Test - ${new Date().toLocaleDateString()}`,
-          scrapeSessionId: `apollo-test-${Date.now()}`,
-          source: "apollo-test"
-        }));
+      // Live mode only - no mock data generation
+      if (!isLiveData) {
+        leads = [];
       }
 
       // Log execution to Airtable
@@ -246,23 +234,9 @@ export function registerRealScrapingRoutes(app: Express) {
         }
       }
       
-      // Test mode or API fallback
-      if (mode === 'test' || !isLiveData) {
-        const testLeadCount = Math.floor(Math.random() * 40) + 20;
-        leads = Array.from({ length: testLeadCount }, (_, i) => ({
-          fullName: `${['Michael', 'Lisa', 'Robert', 'Amanda', 'Christopher', 'Patricia', 'William', 'Linda'][i % 8]} ${['Davis', 'Miller', 'Wilson', 'Moore', 'Taylor', 'Anderson', 'Thomas', 'Jackson'][i % 8]}`,
-          email: `owner${i + 1}@${filters.industryCategory?.toLowerCase().replace(/\s+/g, '') || 'business'}${i + 1}.com`,
-          company: `${filters.industryCategory || 'Local Business'} ${i + 1}`,
-          title: "Business Owner",
-          location: Array.isArray(filters.location) ? filters.location[Math.floor(Math.random() * filters.location.length)] : filters.location || "Local Area",
-          phone: `+1-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
-          industry: filters.industryCategory || "Local Business",
-          sourceTag: `Apify Test - ${new Date().toLocaleDateString()}`,
-          scrapeSessionId: `apify-test-${Date.now()}`,
-          rating: (Math.random() * 2 + 3).toFixed(1),
-          reviewCount: Math.floor(Math.random() * 200) + (parseInt(filters.minReviews) || 10),
-          source: "apify-test"
-        }));
+      // Live mode only - no mock data generation
+      if (!isLiveData) {
+        leads = [];
       }
 
       // Log execution
@@ -419,23 +393,9 @@ export function registerRealScrapingRoutes(app: Express) {
         }
       }
       
-      // Test mode or API fallback
-      if (mode === 'test' || !isLiveData) {
-        const testLeadCount = Math.floor(Math.random() * 60) + 30;
-        leads = Array.from({ length: testLeadCount }, (_, i) => ({
-          fullName: `${['Alex', 'Jessica', 'Daniel', 'Michelle', 'Ryan', 'Emma', 'James', 'Sophia'][i % 8]} ${['Anderson', 'Jackson', 'White', 'Harris', 'Martin', 'Taylor', 'Thomas', 'Moore'][i % 8]}`,
-          email: `${['alex', 'jessica', 'daniel', 'michelle', 'ryan', 'emma', 'james', 'sophia'][i % 8]}.${['anderson', 'jackson', 'white', 'harris', 'martin', 'taylor', 'thomas', 'moore'][i % 8]}@company${i + 1}.com`,
-          company: `${['Startup Inc', 'Enterprise Corp', 'Growth Co', 'Innovation Ltd', 'Scale Systems'][i % 5]} ${i + 1}`,
-          title: filters.seniorityLevel || "Director",
-          location: Array.isArray(filters.location) ? filters.location[Math.floor(Math.random() * filters.location.length)] : filters.location || "San Francisco, CA",
-          phone: `+1-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
-          industry: filters.industry || "Technology",
-          sourceTag: `PhantomBuster Test - ${new Date().toLocaleDateString()}`,
-          scrapeSessionId: `phantom-test-${Date.now()}`,
-          linkedin: `https://linkedin.com/in/${['alex', 'jessica', 'daniel', 'michelle', 'ryan', 'emma', 'james', 'sophia'][i % 8]}-${['anderson', 'jackson', 'white', 'harris', 'martin', 'taylor', 'thomas', 'moore'][i % 8]}`,
-          connectionDegree: filters.connectionDegree || "2nd",
-          source: "phantombuster-test"
-        }));
+      // Live mode only - no mock data generation
+      if (!isLiveData) {
+        leads = [];
       }
 
       // Log execution
