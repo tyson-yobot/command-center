@@ -161,14 +161,14 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
             {/* Seniority Level */}
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Label>Seniority Level</Label>
+                <Label className="text-blue-300">Seniority Level</Label>
                 <Tooltip>
-                  <TooltipTrigger><HelpCircle className="h-4 w-4 text-gray-400" /></TooltipTrigger>
+                  <TooltipTrigger><HelpCircle className="h-4 w-4 text-slate-400" /></TooltipTrigger>
                   <TooltipContent>Filter by professional experience level</TooltipContent>
                 </Tooltip>
               </div>
               <Select value={filters.seniorityLevel} onValueChange={(value) => setFilters(prev => ({ ...prev, seniorityLevel: value }))}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
                   <SelectValue placeholder="Select seniority level" />
                 </SelectTrigger>
                 <SelectContent>
@@ -184,9 +184,9 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
 
             {/* Department */}
             <div className="space-y-2">
-              <Label>Department</Label>
+              <Label className="text-blue-300">Department</Label>
               <Select value={filters.department} onValueChange={(value) => setFilters(prev => ({ ...prev, department: value }))}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
                   <SelectValue placeholder="Select department" />
                 </SelectTrigger>
                 <SelectContent>
@@ -474,27 +474,27 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
         </Card>
 
         {/* Bottom Action Bar */}
-        <div className="sticky bottom-0 bg-white dark:bg-gray-900 border-t border-blue-200 dark:border-blue-800 p-4 rounded-b-lg flex items-center justify-between">
+        <div className="sticky bottom-0 bg-slate-800/90 border-t border-slate-600 p-4 rounded-b-lg flex items-center justify-between backdrop-blur-sm">
           <div className="flex items-center gap-4">
-            <Badge variant="outline" className="text-blue-600 border-blue-200">
+            <Badge variant="outline" className="text-blue-300 border-blue-500/50 bg-slate-700/50">
               {getFilterCount()} filters applied
             </Badge>
-            <span className="text-sm text-gray-500">Est. leads: ~{Math.max(50, 500 - getFilterCount() * 50)}</span>
+            <span className="text-sm text-slate-400">Est. leads: ~{Math.max(50, 500 - getFilterCount() * 50)}</span>
           </div>
           
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={savePreset} className="flex items-center gap-2">
+            <Button variant="outline" onClick={savePreset} className="flex items-center gap-2 bg-slate-700/50 border-slate-600 text-slate-200 hover:bg-slate-600/50">
               <Save className="h-4 w-4" />
               Save Preset
             </Button>
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button variant="outline" className="flex items-center gap-2 bg-slate-700/50 border-slate-600 text-slate-200 hover:bg-slate-600/50">
               <Search className="h-4 w-4" />
               Estimate Leads
             </Button>
             <Button 
               onClick={handleLaunch} 
               disabled={isLoading}
-              className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+              className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 shadow-lg"
             >
               <Rocket className="h-4 w-4" />
               {isLoading ? "Launching..." : "Launch Apollo Scraper"}
