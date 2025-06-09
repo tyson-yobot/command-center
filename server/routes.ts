@@ -114,15 +114,7 @@ function getAirtableTable(baseTable: string) {
 
 // Function to get appropriate API keys based on mode
 function getAPIKeys() {
-  if (systemMode === 'test') {
-    return {
-      stripe: process.env.STRIPE_TEST_KEY,
-      hubspot: process.env.HUBSPOT_TEST_KEY || process.env.HUBSPOT_API_KEY,
-      airtable: process.env.AIRTABLE_TEST_TOKEN || process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN,
-      slack: process.env.SLACK_TEST_WEBHOOK || process.env.SLACK_WEBHOOK_URL,
-      qbo: process.env.QBO_SANDBOX_TOKEN
-    };
-  }
+  // Live mode only - all test mode logic removed
   return {
     stripe: process.env.STRIPE_SECRET_KEY,
     hubspot: process.env.HUBSPOT_API_KEY,
@@ -4039,74 +4031,7 @@ CRM Data:
     }
   });
 
-  // System Mode Toggle Endpoint for Test/Live Mode Isolation
-  app.post('/api/system-mode', async (req, res) => {
-    try {
-      const { mode } = req.body;
-      logOperation('system-mode-toggle-request', { requestedMode: mode, currentMode: systemMode }, 'success', `System mode toggle requested: ${systemMode} -> ${mode}`);
-      
-      if (mode === 'test' || mode === 'live') {
-        const previousMode = systemMode;
-        systemMode = mode;
-        
-        // CRITICAL: Clear all test data when switching to live mode
-        if (mode === 'live' && previousMode === 'test') {
-          logOperation('live-mode-activation', {}, 'success', 'LIVE MODE ACTIVATED - Clearing all test data for production compliance');
-          console.log('🔄 LIVE MODE ACTIVATED - Clearing all test data for production compliance');
-          
-          // Clear all data stores
-          leadScrapingResults = [];
-          apolloResults = [];
-          phantomResults = [];
-          apifyResults = [];
-          processingTasks = [];
-          documentStore = [];
-          knowledgeStore = [];
-          voiceBotMetrics = { activeCalls: 0, totalCalls: 0, avgDuration: 0 };
-          salesOrderData = [];
-          crmData = [];
-          automationActivity = [];
-          liveAutomationMetrics.recentExecutions = [];
-          
-          logOperation('test-data-cleared', {}, 'success', 'All test data cleared - System ready for production');
-          console.log('✅ All test data cleared - System ready for production');
-        }
-        
-        // Only log to QA table in test mode, production table in live mode
-        if (enforceSystemModeGate("Airtable Logging", true)) {
-          logOperation('airtable-log-system-mode', { previousMode, newMode: mode }, 'success', 'Logging system mode change to Airtable');
-          await logToAirtableQA({
-            integrationName: "System Mode Toggle",
-            passFail: "✅ Pass",
-            notes: `System mode changed from ${previousMode} to ${mode}. ${mode === 'live' ? 'All test data cleared.' : 'Test mode activated.'}`,
-            qaOwner: "Control Center",
-            outputDataPopulated: true,
-            recordCreated: true,
-            retryAttempted: false,
-            moduleType: "System Control"
-          });
-        }
-        
-        res.json({
-          success: true,
-          systemMode: systemMode,
-          message: `System mode set to ${mode}`,
-          dataCleared: mode === 'live' && previousMode === 'test'
-        });
-      } else {
-        res.status(400).json({
-          success: false,
-          error: 'Invalid mode. Must be "test" or "live"'
-        });
-      }
-    } catch (error: any) {
-      res.status(500).json({
-        success: false,
-        error: 'Failed to toggle system mode',
-        details: error.message
-      });
-    }
-  });
+  // System mode toggle removed - live mode only enforced
 
   // Get Current System Mode
   app.get('/api/system-mode', async (req, res) => {
