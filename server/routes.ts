@@ -478,6 +478,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   registerBatch28(app);
   registerBatch29(app);
   registerBatch30(app);
+  registerCentralAutomationDispatcher(app);
 
   // Live automation metrics endpoint
   app.get('/api/automation/metrics', (req, res) => {

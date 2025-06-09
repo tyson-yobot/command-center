@@ -1235,45 +1235,15 @@ export default function ClientDashboard() {
     try {
       const payload = getLiveCommandPayload(category);
       
-      // Route to specific endpoints for better reliability
-      let endpoint = '/api/command-center/trigger';
-      
-      switch (category) {
-        case "Start Pipeline Calls":
-          await startPipelineCalls();
-          return;
-        case "Stop Pipeline Calls":
-          await stopPipelineCalls();
-          return;
-        case "Initiate Voice Call":
-          endpoint = '/api/voice/call';
-          break;
-        case "Send SMS":
-          endpoint = '/api/sms/send';
-          break;
-        case "New Support Ticket":
-          endpoint = '/api/support/ticket';
-          break;
-        case "Manual Follow-up":
-          endpoint = '/api/followup/manual';
-          break;
-        case "New Booking Sync":
-          endpoint = '/api/booking/sync';
-          break;
-        case "Export Data":
-          endpoint = '/api/export/data';
-          break;
-        case "Run Lead Scrape":
-          endpoint = '/api/leads/scrape';
-          break;
-      }
-      
-      const response = await fetch(endpoint, {
+      // Use central automation dispatcher for all commands
+      const response = await fetch('/api/command-center/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          category,
-          ...payload
+          command: category,
+          category: 'Core',
+          payload,
+          isTestMode: isTestMode
         })
       });
 
