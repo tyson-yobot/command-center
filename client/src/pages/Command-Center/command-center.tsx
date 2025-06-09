@@ -1368,20 +1368,135 @@ export default function CommandCenter() {
   };
 
   // Live Command Execution Handler
-  const executeLiveCommand = async (category: string) => {
+  const executeLiveCommand = async (category: string, data?: any) => {
     try {
-      const payload = getLiveCommandPayload(category);
-      
-      // Use central automation dispatcher for all commands
-      const response = await fetch('/api/command-center/execute', {
+      let endpoint = '';
+      let requestData = data || getLiveCommandPayload(category);
+
+      // Map commands to specific endpoints
+      switch (category) {
+        case 'New Booking Sync':
+          endpoint = '/api/new-booking-sync';
+          if (!data) {
+            requestData = {
+              clientName: 'Manual Booking',
+              email: 'booking@client.com',
+              date: new Date().toISOString().split('T')[0],
+              time: '10:00',
+              service: 'Consultation'
+            };
+          }
+          break;
+        case 'New Support Ticket':
+          endpoint = '/api/new-support-ticket';
+          if (!data) {
+            requestData = {
+              subject: 'Command Center Support Request',
+              description: 'Support ticket created from Command Center',
+              priority: 'normal',
+              clientEmail: 'support@client.com'
+            };
+          }
+          break;
+        case 'Manual Follow-up':
+          endpoint = '/api/manual-followup';
+          if (!data) {
+            requestData = {
+              clientName: 'Follow-up Client',
+              phone: '+1234567890',
+              notes: 'Manual follow-up triggered from Command Center'
+            };
+          }
+          break;
+        case 'Send SMS':
+          endpoint = '/api/send-sms';
+          if (!data) {
+            requestData = {
+              to: '+1234567890',
+              message: 'Message from YoBot Command Center'
+            };
+          }
+          break;
+        case 'Start Pipeline Calls':
+          endpoint = '/api/start-pipeline-calls';
+          break;
+        case 'Stop Pipeline Calls':
+          endpoint = '/api/stop-pipeline-calls';
+          break;
+        case 'Initiate Voice Call':
+          endpoint = '/api/initiate-voice-call';
+          if (!data) {
+            requestData = {
+              phoneNumber: '+1234567890',
+              script: 'Standard follow-up script'
+            };
+          }
+          break;
+        case 'Voice Input':
+          endpoint = '/api/voice-input';
+          if (!data) {
+            requestData = {
+              transcript: 'Voice command from Command Center'
+            };
+          }
+          break;
+        case 'Content Creator':
+          endpoint = '/api/content-creator';
+          if (!data) {
+            requestData = {
+              contentType: 'blog',
+              script: 'Generated content',
+              targetPlatform: 'web'
+            };
+          }
+          break;
+        case 'Export Data':
+          endpoint = '/api/export-data';
+          requestData = { format: 'csv', dataType: 'all' };
+          break;
+        case 'Mailchimp Sync':
+          endpoint = '/api/mailchimp-sync';
+          if (!data) {
+            requestData = {
+              contactList: [],
+              audienceId: 'default'
+            };
+          }
+          break;
+        case 'Upload Documents':
+          endpoint = '/api/upload-documents';
+          if (!data) {
+            requestData = {
+              files: [],
+              category: 'general'
+            };
+          }
+          break;
+        case 'Critical Escalation':
+          endpoint = '/api/critical-escalation';
+          if (!data) {
+            requestData = {
+              alertType: 'system',
+              message: 'Critical alert from Command Center',
+              severity: 'high'
+            };
+          }
+          break;
+        default:
+          // Use central automation dispatcher for other commands
+          endpoint = '/api/command-center/execute';
+          requestData = {
+            command: category,
+            category: 'Core',
+            payload: requestData,
+            isTestMode: false
+          };
+      }
+
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          command: category,
-          category: 'Core',
-          payload,
-          isTestMode: false
-        })
+        body: JSON.stringify(requestData)
       });
 
       const result = await response.json();
