@@ -2,7 +2,7 @@ import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
 import ProfessionalLeadScraper from "./components/professional-lead-scraper";
-import CommandCenterDashboard from "./components/command-center-dashboard";
+import ClientDashboard from "./pages/client-dashboard";
 import SmartSpendDashboard from "./components/smartspend-dashboard";
 import BotalyticsDashboard from "./components/botalytics-dashboard";
 
@@ -19,8 +19,8 @@ function Router() {
   return (
     <div className="min-h-screen">
       <Switch>
-        <Route path="/" component={CommandCenterDashboard} />
-        <Route path="/command-center" component={CommandCenterDashboard} />
+        <Route path="/" component={ClientDashboard} />
+        <Route path="/command-center" component={ClientDashboard} />
         <Route path="/control-center" component={ProfessionalLeadScraper} />
         <Route path="/smartspend" component={SmartSpendDashboard} />
         <Route path="/botalytics" component={BotalyticsDashboard} />
