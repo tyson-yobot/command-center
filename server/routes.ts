@@ -18,6 +18,7 @@ import { registerScrapingEndpoints } from "./scrapingApiEndpoints";
 import { registerContentCreatorEndpoints } from "./contentCreatorEndpoints";
 import { registerDashboardEndpoints } from "./dashboardEndpoints";
 import { registerCentralAutomationDispatcher } from "./centralAutomationDispatcher";
+import { configManager } from "./controlCenterConfig";
 import OpenAI from "openai";
 
 // Initialize OpenAI
