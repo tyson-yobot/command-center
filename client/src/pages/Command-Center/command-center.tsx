@@ -1395,7 +1395,7 @@ export default function CommandCenter() {
           command: category,
           category: 'Core',
           payload,
-          isTestMode: isTestMode
+          isTestMode: false
         })
       });
 

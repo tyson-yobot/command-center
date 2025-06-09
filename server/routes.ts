@@ -4061,6 +4061,7 @@ CRM Data:
   registerScrapingEndpoints(app);
   registerContentCreatorEndpoints(app);
   registerDashboardEndpoints(app);
+  registerAirtableQATracker(app);
 
   const httpServer = createServer(app);
 
