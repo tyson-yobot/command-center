@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-06-09T09:29:22.200Z",
+  "url": "/api/qa-tracker/log-test",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "381"
+  },
+  "body": {
+    "integrationName": "Slack → Client Alert",
+    "passFail": true,
+    "notes": "Slack triggered but Airtable logging failed on first attempt. Resolved.",
+    "qaOwner": "Daniel Sharpe",
+    "moduleType": "Slack",
+    "scenarioLink": "https://replit.dev/scenario/slack-alert-qaflow",
+    "outputDataPopulated": true,
+    "recordCreated": true,
+    "retryAttempted": false
+  },
+  "query": {}
+}

@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-06-09T09:30:22.603Z",
+  "url": "/api/qa-tracker/log-test",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "443"
+  },
+  "body": {
+    "integrationName": "Final System Cleanup Test",
+    "passFail": true,
+    "notes": "Live-only system operational with all 1040 automation functions. QA tracker successfully integrated.",
+    "qaOwner": "YoBot Production System",
+    "moduleType": "System Architecture",
+    "scenarioLink": "https://replit.dev/scenario/final-cleanup-validation",
+    "outputDataPopulated": true,
+    "recordCreated": true,
+    "retryAttempted": false
+  },
+  "query": {}
+}

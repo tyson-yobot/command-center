@@ -1,5 +1,20 @@
 import type { Express } from "express";
 
+// In-memory storage for QA test logs
+const qaTestLogs: Array<{
+  id: string;
+  integrationName: string;
+  passFail: boolean;
+  notes: string;
+  qaOwner: string;
+  moduleType: string;
+  scenarioLink: string;
+  outputDataPopulated: boolean;
+  recordCreated: boolean;
+  retryAttempted: boolean;
+  timestamp: string;
+}> = [];
+
 // Airtable Integration QA Tracker - Live production logging
 export function registerAirtableQATracker(app: Express) {
   
@@ -33,14 +48,29 @@ export function registerAirtableQATracker(app: Express) {
         }
       };
 
-      // Log to Integration Test Log table in Airtable
-      const response = await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Integration%20Test%20Log`, {
+      // Log to Integration Test Log table using configured environment credentials
+      const response = await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Integration%20QA%20Log`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(testData)
+        body: JSON.stringify({
+          records: [{
+            fields: {
+              "Integration Name": integrationName,
+              "Pass/Fail": passFail ? "Pass" : "Fail",
+              "Notes": notes || "",
+              "Test Date": new Date().toISOString(),
+              "QA Owner": qaOwner || "YoBot System",
+              "Output Data Populated": outputDataPopulated || false,
+              "Record Created": recordCreated || false,
+              "Retry Attempted": retryAttempted || false,
+              "Module Type": moduleType || "API",
+              "Scenario Link": scenarioLink || ""
+            }
+          }]
+        })
       });
 
       if (response.ok) {
@@ -74,7 +104,7 @@ export function registerAirtableQATracker(app: Express) {
   // Get integration test status from Airtable
   app.get('/api/qa-tracker/status', async (req, res) => {
     try {
-      const response = await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Integration%20Test%20Log`, {
+      const response = await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Integration%20QA%20Log`, {
         headers: {
           "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`
         }
