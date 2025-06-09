@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
 import ClientDashboard from "./pages/client-dashboard";
 import LeadScrapingPage from "./pages/lead-scraping-page";
+import ControlCenter from "./pages/control-center";
 
 // Test/Live Mode Context for synchronized mode across all screens
 interface ModeContextType {
