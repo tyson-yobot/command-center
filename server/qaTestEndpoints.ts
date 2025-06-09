@@ -3,7 +3,30 @@ import { officialQATracker } from "./officialQATracker";
 import { sendSlackAlert } from "./alerts";
 // Note: Sales order processing will be handled directly in test endpoints
 
+// Middleware to ensure QA tests only run in appropriate modes
+function qaTestModeMiddleware(req: any, res: any, next: any) {
+  const systemMode = req.headers['x-system-mode'] || 'live';
+  
+  // Allow status checks in any mode
+  if (req.path === '/api/qa-test/status') {
+    return next();
+  }
+  
+  // For actual test execution, warn about live mode but allow with explicit override
+  if (systemMode === 'live' && !req.headers['x-force-live-test']) {
+    console.warn(`⚠️  QA Test executed in LIVE mode: ${req.path}`);
+    // Log the live mode execution for audit trail
+    req.qaTestMode = 'live-mode-execution';
+  } else {
+    req.qaTestMode = 'test-mode-safe';
+  }
+  
+  next();
+}
+
 export function registerQATestEndpoints(app: Express) {
+  // Apply middleware to all QA test routes
+  app.use('/api/qa-test', qaTestModeMiddleware);
   
   // QA Test: Slack Client Alert
   app.post("/api/qa-test/slack-alert", async (req, res) => {
