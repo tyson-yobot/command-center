@@ -41,7 +41,8 @@ import {
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '../lib/queryClient';
-import yobotLogo from '/attached_assets/A_flat_vector_illustration_features_a_robot_face_i.png';
+// Using placeholder for logo until asset path is fixed
+const yobotLogo = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTgiIGZpbGw9IiM2MzY2ZjEiLz4KPGNpcmNsZSBjeD0iMTQiIGN5PSIxNiIgcj0iMiIgZmlsbD0id2hpdGUiLz4KPGNpcmNsZSBjeD0iMjYiIGN5PSIxNiIgcj0iMiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTE0IDI2IFEyMCAzMCAyNiAyNiIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+Cjwvc3ZnPg==';
 import { LeadScrapingInterface } from '../components/lead-scraping-interface';
 import { CallMonitoringPopup } from '../components/call-monitoring-popup';
 import { ZendeskChatWidget } from '../components/zendesk-chat-widget';
@@ -3562,15 +3563,7 @@ export default function ClientDashboard() {
               </Button>
             </div>
             <div className="p-6">
-              <LeadScrapingInterface
-                onScrapingStart={() => {
-                  // Optional: Add any tracking or notifications when scraping starts
-                }}
-                onScrapingComplete={(results) => {
-                  // Optional: Handle results, maybe save to your CRM
-                  console.log('Scraping completed with results:', results);
-                }}
-              />
+              <LeadScrapingInterface />
             </div>
           </div>
         </div>
@@ -3587,12 +3580,12 @@ export default function ClientDashboard() {
 
       {/* Content Creator Dashboard Modal */}
       {showContentCreator && (
-        <ContentCreatorDashboard onClose={() => setShowContentCreator(false)} />
+        <ContentCreatorDashboard onBack={() => setShowContentCreator(false)} />
       )}
 
       {/* Mailchimp Sync Dashboard Modal */}
       {showMailchimpSync && (
-        <MailchimpSyncDashboard onClose={() => setShowMailchimpSync(false)} />
+        <MailchimpSyncDashboard onBack={() => setShowMailchimpSync(false)} />
       )}
 
       {/* Hidden File Input for Document Upload */}
