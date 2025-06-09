@@ -90,17 +90,14 @@ const upload = multer({
   }
 });
 
-// Function to get appropriate Airtable table based on mode
+// Function to get appropriate Airtable table - live mode only
 function getAirtableTable(baseTable: string) {
-  if (systemMode === 'test') {
-    return baseTable + '-QA'; // Test tables have -QA suffix
-  }
   return baseTable;
 }
 
 // Function to get appropriate API keys based on mode
 function getAPIKeys() {
-  // Live mode only - all test mode logic removed
+  // Live mode only - production API keys
   return {
     stripe: process.env.STRIPE_SECRET_KEY,
     hubspot: process.env.HUBSPOT_API_KEY,
@@ -235,11 +232,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Enforce strict test/live mode isolation
       if (systemMode === 'live') {
         // Live mode: only return real API data, never test data
-        if (!isLiveData) {
-          leads = [];
-        }
-      } else if (systemMode === 'test') {
-        // Test mode: return empty array if no real data available - no fake data generation
         if (!isLiveData) {
           leads = [];
         }
@@ -2676,10 +2668,8 @@ CRM Data:
       res.json({
         success: true,
         systemMode: systemMode,
-        message: systemMode === 'live' ? 
-          `${category} would execute in production (live mode)` : 
-          `${category} executed successfully (test mode)`,
-        executionId: systemMode === 'test' ? `exec_${Date.now()}` : null,
+        message: `${category} would execute in production (live mode)`,
+        executionId: null,
         timestamp: new Date().toISOString()
       });
     } catch (error) {
