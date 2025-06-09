@@ -1,10 +1,24 @@
-import React from "react";
+import React, { createContext, useContext, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
 import ProfessionalLeadScraper from "./components/professional-lead-scraper";
 import ClientDashboard from "./pages/client-dashboard";
 import SmartSpendDashboard from "./components/smartspend-dashboard";
 import BotalyticsDashboard from "./components/botalytics-dashboard";
+import { LeadScrapingInterface } from "./components/lead-scraping-interface";
+
+// Test/Live Mode Context for synchronized mode across all screens
+interface ModeContextType {
+  isTestMode: boolean;
+  setTestMode: (isTest: boolean) => void;
+}
+
+const ModeContext = createContext<ModeContextType>({
+  isTestMode: false,
+  setTestMode: () => {},
+});
+
+export const useModeContext = () => useContext(ModeContext);
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,25 +30,29 @@ const queryClient = new QueryClient({
 });
 
 function Router() {
+  const [isTestMode, setTestMode] = useState(false);
+
   return (
-    <div className="min-h-screen">
-      <Switch>
-        <Route path="/" component={ClientDashboard} />
-        <Route path="/command-center" component={ClientDashboard} />
-        <Route path="/control-center" component={ProfessionalLeadScraper} />
-        <Route path="/smartspend" component={SmartSpendDashboard} />
-        <Route path="/botalytics" component={BotalyticsDashboard} />
-        <Route path="/scraper" component={ProfessionalLeadScraper} />
-        <Route>
-          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold text-white mb-4">404 - Page Not Found</h1>
-              <p className="text-blue-200">The page you're looking for doesn't exist.</p>
+    <ModeContext.Provider value={{ isTestMode, setTestMode }}>
+      <div className="min-h-screen">
+        <Switch>
+          <Route path="/" component={ClientDashboard} />
+          <Route path="/command-center" component={ClientDashboard} />
+          <Route path="/control-center" component={ProfessionalLeadScraper} />
+          <Route path="/lead-scraping" component={() => <LeadScrapingInterface onScrapingStart={() => {}} onScrapingComplete={() => {}} />} />
+          <Route path="/smartspend" component={SmartSpendDashboard} />
+          <Route path="/botalytics" component={BotalyticsDashboard} />
+          <Route>
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+              <div className="text-center">
+                <h1 className="text-4xl font-bold text-white mb-4">404 - Page Not Found</h1>
+                <p className="text-blue-200">The page you're looking for doesn't exist.</p>
+              </div>
             </div>
-          </div>
-        </Route>
-      </Switch>
-    </div>
+          </Route>
+        </Switch>
+      </div>
+    </ModeContext.Provider>
   );
 }
 
