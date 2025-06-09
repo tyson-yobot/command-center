@@ -198,15 +198,64 @@ export default function LeadScrapingPage() {
                       />
                     </div>
 
+                    {/* Keywords Management */}
                     <div>
-                      <Label htmlFor="location" className="text-white">Location</Label>
-                      <Input
-                        id="location"
-                        placeholder="e.g., New York, California"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                        className="bg-slate-700 border-slate-600 text-white"
-                      />
+                      <Label className="text-white">Keywords</Label>
+                      <div className="flex space-x-2 mb-2">
+                        <Input
+                          placeholder="Add keyword"
+                          value={newKeyword}
+                          onChange={(e) => setNewKeyword(e.target.value)}
+                          className="bg-slate-700 border-slate-600 text-white flex-1"
+                          onKeyPress={(e) => e.key === 'Enter' && addKeyword()}
+                        />
+                        <Button onClick={addKeyword} className="bg-blue-600 hover:bg-blue-700">
+                          Add
+                        </Button>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {keywords.map((keyword, index) => (
+                          <Badge key={index} variant="secondary" className="bg-blue-600/20 text-blue-200">
+                            {keyword}
+                            <button 
+                              onClick={() => removeKeyword(keyword)}
+                              className="ml-2 text-blue-300 hover:text-white"
+                            >
+                              ×
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Locations Management */}
+                    <div>
+                      <Label className="text-white">Locations</Label>
+                      <div className="flex space-x-2 mb-2">
+                        <Input
+                          placeholder="Add location"
+                          value={newLocation}
+                          onChange={(e) => setNewLocation(e.target.value)}
+                          className="bg-slate-700 border-slate-600 text-white flex-1"
+                          onKeyPress={(e) => e.key === 'Enter' && addLocation()}
+                        />
+                        <Button onClick={addLocation} className="bg-blue-600 hover:bg-blue-700">
+                          Add
+                        </Button>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {locations.map((location, index) => (
+                          <Badge key={index} variant="secondary" className="bg-green-600/20 text-green-200">
+                            {location}
+                            <button 
+                              onClick={() => removeLocation(location)}
+                              className="ml-2 text-green-300 hover:text-white"
+                            >
+                              ×
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
 
                     <div>
@@ -228,18 +277,32 @@ export default function LeadScrapingPage() {
                       <span>🏢 Company/Business Filters</span>
                     </h3>
 
+                    {/* Industries Management */}
                     <div>
-                      <Label htmlFor="industry" className="text-white">Industry</Label>
-                      <Select value={industry} onValueChange={setIndustry}>
+                      <Label className="text-white">Industries</Label>
+                      <Select value="" onValueChange={addIndustry}>
                         <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
-                          <SelectValue placeholder="Select Industry" />
+                          <SelectValue placeholder="Add Industry" />
                         </SelectTrigger>
                         <SelectContent>
-                          {industries.map((ind) => (
+                          {industries.filter(ind => !selectedIndustries.includes(ind)).map((ind) => (
                             <SelectItem key={ind} value={ind}>{ind}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {selectedIndustries.map((industry, index) => (
+                          <Badge key={index} variant="secondary" className="bg-purple-600/20 text-purple-200">
+                            {industry}
+                            <button 
+                              onClick={() => removeIndustry(industry)}
+                              className="ml-2 text-purple-300 hover:text-white"
+                            >
+                              ×
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
 
                     <div>
@@ -299,6 +362,27 @@ export default function LeadScrapingPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Action Buttons */}
+                <div className="flex justify-center pt-6 border-t border-slate-700">
+                  <Button 
+                    onClick={() => startScraping('apollo')}
+                    disabled={loading}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
+                  >
+                    {loading ? (
+                      <>
+                        <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2" />
+                        Scraping...
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-5 h-5 mr-2" />
+                        Start Apollo Search
+                      </>
+                    )}
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -314,7 +398,27 @@ export default function LeadScrapingPage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <p className="text-green-200">Configure Apify Google Maps scraping parameters...</p>
-                {/* Add Apify-specific controls here */}
+                
+                {/* Action Buttons */}
+                <div className="flex justify-center pt-6 border-t border-slate-700">
+                  <Button 
+                    onClick={() => startScraping('apify')}
+                    disabled={loading}
+                    className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg"
+                  >
+                    {loading ? (
+                      <>
+                        <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2" />
+                        Scraping...
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-5 h-5 mr-2" />
+                        Start Apify Search
+                      </>
+                    )}
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -330,11 +434,66 @@ export default function LeadScrapingPage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <p className="text-purple-200">Configure PhantomBuster LinkedIn and X (formerly Twitter) scraping...</p>
-                {/* Add PhantomBuster-specific controls here */}
+                
+                {/* Action Buttons */}
+                <div className="flex justify-center pt-6 border-t border-slate-700">
+                  <Button 
+                    onClick={() => startScraping('phantombuster')}
+                    disabled={loading}
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 text-lg"
+                  >
+                    {loading ? (
+                      <>
+                        <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2" />
+                        Scraping...
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-5 h-5 mr-2" />
+                        Start PhantomBuster Search
+                      </>
+                    )}
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* Results Section */}
+        {scrapingResults.length > 0 && (
+          <Card className="bg-slate-800/50 backdrop-blur-sm border-blue-500/20 mt-6">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center space-x-2">
+                <Download className="w-5 h-5 text-blue-400" />
+                <span>Scraping Results ({scrapingResults.length} leads)</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4">
+                {scrapingResults.slice(0, 5).map((result, index) => (
+                  <div key={index} className="bg-slate-700/50 p-4 rounded-lg">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="text-white font-semibold">{result.fullName || result.businessName}</h4>
+                        <p className="text-slate-300">{result.title || result.category}</p>
+                        <p className="text-slate-400">{result.company || result.address}</p>
+                      </div>
+                      <Badge variant="outline" className="text-blue-200 border-blue-500">
+                        {result.source}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+                {scrapingResults.length > 5 && (
+                  <p className="text-slate-400 text-center">
+                    ... and {scrapingResults.length - 5} more results
+                  </p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Bottom Action Bar */}
         <div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-t border-slate-700 p-4">

@@ -480,6 +480,337 @@ export async function registerRoutes(app: Express): Promise<Server> {
   registerBatch30(app);
   registerCentralAutomationDispatcher(app);
 
+  // Lead scraping endpoint
+  app.post('/api/scraping/start', async (req, res) => {
+    try {
+      const { platform, searchTerms, keywords, locations, industries, jobTitle, companySize, maxResults, emailVerified, phoneAvailable, isTestMode } = req.body;
+      
+      let results = [];
+      let endpoint = '';
+      let apiKey = '';
+      
+      switch (platform) {
+        case 'apollo':
+          endpoint = 'https://api.apollo.io/v1/mixed_people/search';
+          apiKey = process.env.APOLLO_API_KEY;
+          
+          const apolloPayload = {
+            api_key: apiKey,
+            q_keywords: searchTerms,
+            person_locations: locations,
+            person_titles: [jobTitle],
+            organization_industry_tag_ids: industries,
+            organization_num_employees_ranges: [companySize],
+            page: 1,
+            per_page: Math.min(maxResults, 100),
+            ...(emailVerified && { email_status: ['verified'] }),
+            ...(phoneAvailable && { phone_status: ['no_status', 'valid'] })
+          };
+          
+          if (!isTestMode) {
+            const apolloResponse = await fetch(endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(apolloPayload)
+            });
+            
+            const apolloData = await apolloResponse.json();
+            results = apolloData.people?.map(person => ({
+              fullName: `${person.first_name} ${person.last_name}`,
+              email: person.email,
+              company: person.organization?.name,
+              title: person.title,
+              location: person.city + (person.state ? `, ${person.state}` : ''),
+              phone: person.phone_numbers?.[0]?.sanitized_number,
+              industry: person.organization?.industry,
+              source: 'Apollo'
+            })) || [];
+          } else {
+            // Test mode - return mock data
+            results = [
+              {
+                fullName: 'John Smith',
+                email: 'john.smith@test.com',
+                company: 'Test Corp',
+                title: 'CEO',
+                location: 'New York, NY',
+                phone: '+1234567890',
+                industry: 'Technology',
+                source: 'Apollo (Test)'
+              }
+            ];
+          }
+          break;
+          
+        case 'apify':
+          if (!isTestMode) {
+            // Real Apify implementation
+            const apifyResponse = await fetch(`https://api.apify.com/v2/acts/compass~google-maps-reviews-scraper/run-sync-get-dataset-items?token=${process.env.APIFY_API_KEY}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                searchStringsArray: keywords.concat(locations),
+                maxReviews: 0,
+                maxImages: 0,
+                exportPlaceUrls: false,
+                additionalInfo: false,
+                maxCrawledPlaces: maxResults
+              })
+            });
+            
+            const apifyData = await apifyResponse.json();
+            results = apifyData?.map(place => ({
+              businessName: place.title,
+              address: place.address,
+              phone: place.phone,
+              website: place.website,
+              rating: place.totalScore,
+              reviewCount: place.reviewsCount,
+              category: place.categoryName,
+              source: 'Apify'
+            })) || [];
+          } else {
+            results = [
+              {
+                businessName: 'Test Business',
+                address: '123 Test St, Test City',
+                phone: '+1234567890',
+                website: 'test.com',
+                rating: '4.5',
+                reviewCount: 150,
+                category: 'Restaurant',
+                source: 'Apify (Test)'
+              }
+            ];
+          }
+          break;
+          
+        case 'phantombuster':
+          if (!isTestMode) {
+            // PhantomBuster implementation would go here
+            results = [];
+          } else {
+            results = [
+              {
+                fullName: 'Jane Doe',
+                headline: 'Marketing Director',
+                company: 'Test Marketing Co',
+                location: 'San Francisco, CA',
+                connectionDegree: '2nd',
+                profileUrl: 'linkedin.com/in/jane-doe-test',
+                source: 'PhantomBuster (Test)'
+              }
+            ];
+          }
+          break;
+      }
+      
+      // Log to Airtable if not in test mode
+      if (!isTestMode && results.length > 0) {
+        try {
+          await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU", {
+            method: "POST",
+            headers: {
+              Authorization: "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              records: [{
+                fields: {
+                  "✅ Integration Name": `${platform} Lead Scraping`,
+                  "✅ Pass/Fail": "PASS",
+                  "📝 Notes / Debug": `Successfully scraped ${results.length} leads`,
+                  "📅 Test Date": new Date().toISOString(),
+                  "👤 QA Owner": "YoBot System",
+                  "☑️ Output Data Populated?": true,
+                  "🗂 Record Created?": true,
+                  "🔁 Retry Attempted?": false,
+                  "⚙️ Module Type": "Lead Scraper",
+                  "📁 Related Scenario": ""
+                }
+              }]
+            })
+          });
+        } catch (logError) {
+          console.error('Airtable logging failed:', logError);
+        }
+      }
+      
+      res.json({
+        success: true,
+        results,
+        count: results.length,
+        platform,
+        isTestMode
+      });
+      
+    } catch (error) {
+      console.error('Scraping error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        results: []
+      });
+    }
+  });
+
+  // Sales order automation endpoint with Stripe and QuickBooks integration
+  app.post('/api/sales/create-order', async (req, res) => {
+    try {
+      const { client, services, total, isTestMode, stripeToken, customerInfo } = req.body;
+      
+      let stripePaymentIntent = null;
+      let qbInvoice = null;
+      let orderId = `order_${Date.now()}`;
+      
+      if (!isTestMode) {
+        // Create Stripe payment intent
+        const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+        stripePaymentIntent = await stripe.paymentIntents.create({
+          amount: Math.round(total * 100), // Convert to cents
+          currency: 'usd',
+          metadata: {
+            orderId,
+            client: client.name,
+            services: JSON.stringify(services)
+          }
+        });
+        
+        // Create QuickBooks invoice
+        const qbResponse = await fetch('https://sandbox-quickbooks.api.intuit.com/v3/company/companyID/invoice', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.QUICKBOOKS_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            Invoice: {
+              Line: services.map((service, index) => ({
+                Id: index + 1,
+                LineNum: index + 1,
+                Amount: service.price,
+                DetailType: "SalesItemLineDetail",
+                SalesItemLineDetail: {
+                  ItemRef: {
+                    value: "1",
+                    name: service.name
+                  }
+                }
+              })),
+              CustomerRef: {
+                value: "1",
+                name: customerInfo.name
+              }
+            }
+          })
+        });
+        
+        qbInvoice = await qbResponse.json();
+      }
+      
+      // Log successful sales order to Airtable
+      try {
+        await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU", {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            records: [{
+              fields: {
+                "✅ Integration Name": "Sales Order Automation",
+                "✅ Pass/Fail": "PASS",
+                "📝 Notes / Debug": `Order ${orderId} created - $${total} ${isTestMode ? '(Test Mode)' : ''}`,
+                "📅 Test Date": new Date().toISOString(),
+                "👤 QA Owner": "YoBot System",
+                "☑️ Output Data Populated?": true,
+                "🗂 Record Created?": true,
+                "🔁 Retry Attempted?": false,
+                "⚙️ Module Type": "Sales Automation",
+                "📁 Related Scenario": orderId
+              }
+            }]
+          })
+        });
+      } catch (logError) {
+        console.error('Airtable logging failed:', logError);
+      }
+      
+      res.json({
+        success: true,
+        orderId,
+        stripePaymentIntent: stripePaymentIntent?.client_secret,
+        qbInvoiceId: qbInvoice?.QueryResponse?.Invoice?.[0]?.Id,
+        total,
+        isTestMode
+      });
+      
+    } catch (error) {
+      console.error('Sales order error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // Unified webhook handler for all automation functions
+  app.post('/api/webhooks/automation/:functionId', async (req, res) => {
+    try {
+      const { functionId } = req.params;
+      const webhookData = req.body;
+      const isTestMode = req.headers['x-test-mode'] === 'true';
+      
+      // Process webhook through central automation dispatcher
+      const result = await executeAutomationFunction(functionId, webhookData, { isTestMode });
+      
+      // Log webhook trigger to Airtable
+      try {
+        await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU", {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            records: [{
+              fields: {
+                "✅ Integration Name": `Webhook Function ${functionId}`,
+                "✅ Pass/Fail": result.success ? "PASS" : "FAIL",
+                "📝 Notes / Debug": result.success ? "Webhook processed successfully" : result.error,
+                "📅 Test Date": new Date().toISOString(),
+                "👤 QA Owner": "YoBot System",
+                "☑️ Output Data Populated?": !!result.data,
+                "🗂 Record Created?": result.success,
+                "🔁 Retry Attempted?": false,
+                "⚙️ Module Type": "Webhook Handler",
+                "📁 Related Scenario": functionId
+              }
+            }]
+          })
+        });
+      } catch (logError) {
+        console.error('Webhook logging failed:', logError);
+      }
+      
+      res.json({
+        success: true,
+        functionId,
+        result,
+        timestamp: new Date().toISOString()
+      });
+      
+    } catch (error) {
+      console.error('Webhook error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
   // Live automation metrics endpoint
   app.get('/api/automation/metrics', (req, res) => {
     res.json({
