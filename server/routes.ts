@@ -665,8 +665,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Clean Tally webhook processor - captures payload and generates PDFs
   app.use('*', async (req, res, next) => {
-    // Skip all API endpoints except orders and automation
-    if (req.originalUrl.startsWith('/api/') && !req.originalUrl.startsWith('/api/orders') && !req.originalUrl.includes('automation')) {
+    // Skip Command Center direct API endpoints
+    const commandCenterPaths = [
+      '/api/automation/new-booking-sync',
+      '/api/automation/new-support-ticket', 
+      '/api/automation/manual-followup',
+      '/api/automation/sales-orders',
+      '/api/automation/send-sms',
+      '/api/automation/mailchimp-sync',
+      '/api/automation/critical-escalation',
+      '/api/voicebot/start-pipeline',
+      '/api/voicebot/stop-pipeline', 
+      '/api/voicebot/initiate-call',
+      '/api/data/export'
+    ];
+    
+    if (commandCenterPaths.includes(req.originalUrl)) {
+      return next();
+    }
+    
+    // Skip other API endpoints except orders
+    if (req.originalUrl.startsWith('/api/') && !req.originalUrl.startsWith('/api/orders')) {
       return next();
     }
     
@@ -770,6 +789,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+
+
   // Register production sales order webhook
   registerProductionSalesOrder(app);
   
@@ -788,119 +809,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   registerBatch30(app);
   registerCentralAutomationDispatcher(app);
 
-  // Command Center Direct API Endpoints
-  app.post('/api/automation/new-booking-sync', (req, res) => {
-    logOperation('new-booking-sync', req.body, 'success', 'Booking sync initiated');
-    res.json({
-      success: true,
-      bookingId: 'BOOKING_' + Date.now(),
-      message: 'Booking synced successfully',
-      timestamp: new Date().toISOString()
-    });
-  });
 
-  app.post('/api/automation/new-support-ticket', (req, res) => {
-    logOperation('new-support-ticket', req.body, 'success', 'Support ticket created');
-    res.json({
-      success: true,
-      ticketId: 'TICKET_' + Date.now(),
-      message: 'Support ticket created successfully',
-      timestamp: new Date().toISOString()
-    });
-  });
-
-  app.post('/api/automation/manual-followup', (req, res) => {
-    logOperation('manual-followup', req.body, 'success', 'Follow-up scheduled');
-    res.json({
-      success: true,
-      followupId: 'FOLLOWUP_' + Date.now(),
-      message: 'Follow-up scheduled successfully',
-      timestamp: new Date().toISOString()
-    });
-  });
-
-  app.post('/api/automation/sales-orders', (req, res) => {
-    logOperation('sales-orders', req.body, 'success', 'Sales order processed');
-    res.json({
-      success: true,
-      orderId: 'ORDER_' + Date.now(),
-      message: 'Sales order processed successfully',
-      timestamp: new Date().toISOString()
-    });
-  });
-
-  app.post('/api/automation/send-sms', (req, res) => {
-    logOperation('send-sms', req.body, 'success', 'SMS sent');
-    res.json({
-      success: true,
-      messageId: 'SMS_' + Date.now(),
-      message: 'SMS sent successfully',
-      timestamp: new Date().toISOString()
-    });
-  });
-
-  app.post('/api/automation/mailchimp-sync', (req, res) => {
-    logOperation('mailchimp-sync', req.body, 'success', 'Mailchimp sync completed');
-    res.json({
-      success: true,
-      contactsSynced: 42,
-      message: 'Mailchimp sync completed successfully',
-      timestamp: new Date().toISOString()
-    });
-  });
-
-  app.post('/api/automation/critical-escalation', (req, res) => {
-    logOperation('critical-escalation', req.body, 'success', 'Critical escalation triggered');
-    res.json({
-      success: true,
-      escalationId: 'ESC_' + Date.now(),
-      message: 'Critical escalation triggered successfully',
-      timestamp: new Date().toISOString()
-    });
-  });
-
-  app.post('/api/voicebot/start-pipeline', (req, res) => {
-    logOperation('start-pipeline', req.body, 'success', 'Pipeline calls started');
-    res.json({
-      success: true,
-      pipelineId: 'PIPELINE_' + Date.now(),
-      message: 'Pipeline calls started successfully',
-      timestamp: new Date().toISOString()
-    });
-  });
-
-  app.post('/api/voicebot/stop-pipeline', (req, res) => {
-    logOperation('stop-pipeline', req.body, 'success', 'Pipeline calls stopped');
-    res.json({
-      success: true,
-      message: 'Pipeline calls stopped successfully',
-      timestamp: new Date().toISOString()
-    });
-  });
-
-  app.post('/api/voicebot/initiate-call', (req, res) => {
-    logOperation('initiate-call', req.body, 'success', 'Voice call initiated');
-    res.json({
-      success: true,
-      callId: 'CALL_' + Date.now(),
-      message: 'Voice call initiated successfully',
-      timestamp: new Date().toISOString()
-    });
-  });
-
-  app.post('/api/data/export', (req, res) => {
-    logOperation('data-export', req.body, 'success', 'Data export generated');
-    
-    // Generate CSV data
-    const csvData = `Date,Type,Status,Count
-${new Date().toISOString().split('T')[0]},Leads,Active,25
-${new Date().toISOString().split('T')[0]},Calls,Completed,12
-${new Date().toISOString().split('T')[0]},Automation,Success,89`;
-
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename="yobot_export.csv"');
-    res.send(csvData);
-  });
 
   // Lead scraping endpoint
   app.post('/api/scraping/start', async (req, res) => {
