@@ -45,7 +45,7 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
     department: "",
     location: [],
     emailVerified: true,
-    phoneAvailable: false,
+    phoneAvailable: true,
     industry: [],
     companySize: "",
     fundingStage: "",
