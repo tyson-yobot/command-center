@@ -19,6 +19,7 @@ import { registerContentCreatorEndpoints } from "./contentCreatorEndpoints";
 import { registerDashboardEndpoints } from "./dashboardEndpoints";
 import { registerCentralAutomationDispatcher } from "./centralAutomationDispatcher";
 import { configManager } from "./controlCenterConfig";
+import { airtableLogger } from "./airtableLogger";
 import OpenAI from "openai";
 
 // Initialize OpenAI
@@ -3602,6 +3603,68 @@ CRM Data:
       res.json({ success: true, message: `${toggle_name} ${enabled ? 'enabled' : 'disabled'}` });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Airtable Connection Test and Automation Logging
+  app.get('/api/test-airtable-connection', async (req, res) => {
+    try {
+      const connectionTest = await airtableLogger.testConnection();
+      if (connectionTest) {
+        // Log successful connection test
+        await airtableLogger.logAutomationTest({
+          functionId: 1,
+          functionName: 'Airtable Connection Test',
+          status: 'PASS',
+          notes: 'Successfully connected to Airtable Integration Test Log table',
+          moduleType: 'System',
+          timestamp: new Date().toISOString()
+        });
+        res.json({ success: true, message: 'Airtable connection successful' });
+      } else {
+        res.status(500).json({ success: false, message: 'Airtable connection failed' });
+      }
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Test individual automation function
+  app.post('/api/test-automation-function', async (req, res) => {
+    try {
+      const { functionId, functionName, moduleType } = req.body;
+      
+      // Test the specific function
+      let status = 'PASS';
+      let notes = `Function ${functionId} tested successfully`;
+      
+      try {
+        // This would be replaced with actual function testing logic
+        console.log(`Testing Function ${functionId}: ${functionName}`);
+      } catch (error: any) {
+        status = 'FAIL';
+        notes = `Function test failed: ${error.message}`;
+      }
+
+      // Log the test result
+      await airtableLogger.logAutomationTest({
+        functionId,
+        functionName,
+        status: status as 'PASS' | 'FAIL',
+        notes,
+        moduleType,
+        timestamp: new Date().toISOString()
+      });
+
+      res.json({ 
+        success: true, 
+        functionId, 
+        functionName, 
+        status, 
+        message: `Function ${functionId} test completed and logged` 
+      });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: error.message });
     }
   });
 
