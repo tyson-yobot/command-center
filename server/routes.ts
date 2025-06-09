@@ -3787,6 +3787,36 @@ CRM Data:
     }
   });
 
+  // Automation Status Dashboard Endpoint
+  app.get('/api/automation-status', async (req, res) => {
+    try {
+      const testSummary = automationTester.getTestSummary();
+      const recentActivity = automationTester.getRecentActivity();
+      
+      res.json({
+        success: true,
+        data: {
+          totalFunctions: testSummary.totalFunctions,
+          testedFunctions: testSummary.testedFunctions,
+          passedTests: testSummary.passedTests,
+          failedTests: testSummary.failedTests,
+          passRate: testSummary.passRate,
+          lastTestRun: testSummary.lastTestRun,
+          isAuthenticated: true,
+          totalTests: testSummary.testedFunctions,
+          uniqueTesters: 1,
+          recentActivity: recentActivity || []
+        }
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch automation status',
+        details: error.message
+      });
+    }
+  });
+
   // Register scraper and content creator endpoints
   registerScrapingEndpoints(app);
   registerContentCreatorEndpoints(app);
