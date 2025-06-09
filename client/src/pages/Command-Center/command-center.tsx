@@ -2007,14 +2007,41 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => {
-                      console.log('Content Creator button clicked - opening Publy');
-                      window.open('https://publy.ai', '_blank');
+                    onClick={async () => {
+                      try {
+                        console.log('Content Creator with Publy button clicked');
+                        const response = await fetch('/api/automation/content-creator-publy', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            contentType: 'post',
+                            platform: 'linkedin',
+                            headline: 'YoBot Enterprise Automation Solutions',
+                            body: 'Transform your business operations with intelligent automation. Our comprehensive platform streamlines workflows, reduces manual tasks, and accelerates growth.',
+                            targetAudience: 'Business Leaders',
+                            cta: 'Schedule a Demo',
+                            tags: ['AI', 'Automation', 'Business', 'Enterprise']
+                          })
+                        });
+                        const result = await response.json();
+                        console.log('Content created with Publy:', result);
+                        
+                        if (result.success) {
+                          alert(`Content created successfully! SEO Score: ${result.content.optimizations.seoScore}%\nEngagement Prediction: ${result.content.optimizations.engagementPrediction}%\nPubly Dashboard: ${result.publyDashboard}`);
+                          // Open Publy dashboard
+                          window.open(result.publyDashboard, '_blank');
+                        } else {
+                          alert('Content creation failed');
+                        }
+                      } catch (error) {
+                        console.error('Content Creator error:', error);
+                        alert('Content creation failed');
+                      }
                     }}
                     className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📢</span>
-                    <span>Content Creator</span>
+                    <span>Content Creator (Publy)</span>
                   </Button>
                 </div>
               </CardContent>

@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-06-09T12:11:50.529Z",
+  "url": "/api/automation/publy-publish",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "63"
+  },
+  "body": {
+    "contentId": "test_123",
+    "platform": "linkedin",
+    "immediate": true
+  },
+  "query": {}
+}
