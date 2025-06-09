@@ -55,7 +55,7 @@ const CustomCard = ({ children, className = "", onClick }: {
   </div>
 );
 
-const Button = ({ children, onClick, disabled = false, className = "", variant = "default" }: {
+const CustomButton = ({ children, onClick, disabled = false, className = "", variant = "default" }: {
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
@@ -385,14 +385,14 @@ export default function EnterpriseLeadScraper() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-8 mb-12">
-            <Button 
+            <CustomButton 
               variant="outline" 
               onClick={resetToToolSelection}
               className="text-lg"
             >
               <ArrowLeft className="w-5 h-5 mr-3" />
               Back to Platforms
-            </Button>
+            </CustomButton>
             <div>
               <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent mb-2">
                 {selectedTool === 'apollo' ? 'Apollo.io Enterprise Configuration' : 
@@ -972,7 +972,7 @@ export default function EnterpriseLeadScraper() {
             )}
 
             <div className="flex justify-end mt-12">
-              <Button onClick={handleStartScraping} disabled={isLoading} className="text-lg px-12 py-4">
+              <CustomButton onClick={handleStartScraping} disabled={isLoading} className="text-lg px-12 py-4">
                 {isLoading ? (
                   <>
                     <RefreshCw className="w-5 h-5 mr-3 animate-spin" />
@@ -984,7 +984,7 @@ export default function EnterpriseLeadScraper() {
                     Launch Intelligence Extraction
                   </>
                 )}
-              </Button>
+              </CustomButton>
             </div>
           </CustomCard>
         </div>
@@ -998,14 +998,14 @@ export default function EnterpriseLeadScraper() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-8 mb-12">
-            <Button 
+            <CustomButton 
               variant="outline" 
               onClick={resetToToolSelection}
               className="text-lg"
             >
               <ArrowLeft className="w-5 h-5 mr-3" />
               New Intelligence Search
-            </Button>
+            </CustomButton>
             <div>
               <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent mb-2">
                 Intelligence Results
@@ -1033,10 +1033,10 @@ export default function EnterpriseLeadScraper() {
               <h3 className="text-2xl font-semibold text-white">
                 Premium Lead Intelligence Preview
               </h3>
-              <Button variant="outline" className="text-lg">
+              <CustomButton variant="outline" className="text-lg">
                 <Download className="w-5 h-5 mr-3" />
                 Export Enterprise CSV
-              </Button>
+              </CustomButton>
             </div>
             
             <div className="grid gap-6">
