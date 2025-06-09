@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-06-09T07:10:32.009Z",
+  "url": "/api/automation/track-lead-source",
+  "headers": {
+    "accept": "application/json, text/plain, */*",
+    "content-type": "application/json",
+    "user-agent": "axios/1.9.0",
+    "content-length": "123",
+    "accept-encoding": "gzip, compress, deflate, br",
+    "host": "localhost:5000",
+    "connection": "keep-alive"
+  },
+  "raw_payload": {
+    "testMode": true,
+    "timestamp": "2025-06-09T07:10:32.007Z",
+    "functionId": 3,
+    "leadId": "test_lead_123",
+    "source": "automation_test"
+  }
+}

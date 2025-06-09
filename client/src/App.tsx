@@ -4,7 +4,6 @@ import { Route, Switch } from "wouter";
 import CommandCenter from "./pages/Command-Center/command-center";
 import LeadScraper from "./pages/Lead-Scraper/lead-scraper";
 import ControlCenter from "./pages/Control-Center/control-center";
-import MobileCenter from "./pages/Mobile/mobile-center";
 
 
 
@@ -40,7 +39,6 @@ function Router() {
           <Route path="/command-center" component={CommandCenter} />
           <Route path="/control-center" component={ControlCenter} />
           <Route path="/lead-scraper" component={LeadScraper} />
-          <Route path="/mobile" component={MobileCenter} />
 
           <Route path="/" component={CommandCenter} />
           <Route>

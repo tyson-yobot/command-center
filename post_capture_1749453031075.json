@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-06-09T07:10:31.075Z",
+  "url": "/api/test-batch",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "27"
+  },
+  "body": {
+    "startId": 1,
+    "endId": 10
+  },
+  "query": {}
+}
