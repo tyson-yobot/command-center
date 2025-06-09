@@ -45,7 +45,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '../lib/queryClient';
 // Using placeholder for logo until asset path is fixed
 const yobotLogo = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTgiIGZpbGw9IiM2MzY2ZjEiLz4KPGNpcmNsZSBjeD0iMTQiIGN5PSIxNiIgcj0iMiIgZmlsbD0id2hpdGUiLz4KPGNpcmNsZSBjeD0iMjYiIGN5PSIxNiIgcj0iMiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTE0IDI2IFEyMCAzMCAyNiAyNiIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+Cjwvc3ZnPg==';
-import { LeadScrapingInterface } from '../components/lead-scraping-interface';
+
 import { CallMonitoringPopup } from '../components/call-monitoring-popup';
 import { ZendeskChatWidget } from '../components/zendesk-chat-widget';
 import { SalesOrderProcessor } from '../components/sales-order-processor';
@@ -3606,7 +3606,14 @@ export default function CommandCenter() {
               </Button>
             </div>
             <div className="p-6">
-              <LeadScrapingInterface />
+              <div className="text-center text-white">
+                <p>Lead scraping functionality has been moved to the dedicated Lead Scraper page.</p>
+                <Link href="/lead-scraper">
+                  <Button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white">
+                    Go to Lead Scraper
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
