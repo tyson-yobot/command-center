@@ -21,7 +21,7 @@ import { registerCentralAutomationDispatcher } from "./centralAutomationDispatch
 import { configManager } from "./controlCenterConfig";
 import { airtableLogger } from "./airtableLogger";
 import { automationTester } from "./automationTester";
-import { registerAirtableQATracker } from "./airtableQATracker";
+// Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
 
 // Initialize OpenAI
@@ -4061,7 +4061,7 @@ CRM Data:
   registerScrapingEndpoints(app);
   registerContentCreatorEndpoints(app);
   registerDashboardEndpoints(app);
-  registerAirtableQATracker(app);
+  // Old Airtable QA tracker removed - using new local QA tracker system
 
   const httpServer = createServer(app);
 
