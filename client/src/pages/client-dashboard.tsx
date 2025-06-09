@@ -600,6 +600,51 @@ export default function ClientDashboard() {
     setVoiceStatus(`Automation ${!automationMode ? 'enabled' : 'disabled'}`);
   };
 
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setVoiceStatus('Uploading document...');
+    
+    const formData = new FormData();
+    formData.append('document', file);
+    formData.append('category', 'general');
+    formData.append('tags', JSON.stringify(['uploaded', 'user-content']));
+
+    try {
+      const response = await fetch('/api/rag/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setVoiceStatus(`Document uploaded: ${result.wordCount} words indexed`);
+        setToast({
+          title: "Document Uploaded",
+          description: `${file.name} has been processed and indexed for AI training`,
+        });
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        setVoiceStatus('Document upload failed');
+        setToast({
+          title: "Upload Failed",
+          description: errorData.error || "Please try again or check file format",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      setVoiceStatus('Upload error');
+      setToast({
+        title: "Upload Error",
+        description: "Network error occurred during upload",
+        variant: "destructive"
+      });
+    }
+
+    event.target.value = '';
+  };
+
   const handleGenerateReport = async () => {
     try {
       setVoiceStatus('Generating analytics report...');
@@ -1622,6 +1667,22 @@ export default function ClientDashboard() {
                   >
                     <span className="text-xl mr-3">📊</span>
                     <span>Export Data</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => setActiveModule('content-creator')}
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">📢</span>
+                    <span>Content Creator</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => setActiveModule('mailchimp')}
+                    className="bg-yellow-600 hover:bg-yellow-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">📧</span>
+                    <span>Mailchimp Sync</span>
                   </Button>
                   
                   <Button

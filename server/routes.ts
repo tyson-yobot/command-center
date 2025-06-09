@@ -1332,6 +1332,165 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Content Generation API
+  app.post('/api/content/generate', async (req, res) => {
+    try {
+      const { type, topic, platform, tone, targetAudience, keywords, contentLength, includeHashtags, includeEmojis } = req.body;
+
+      if (!topic || !platform || !tone) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Topic, platform, and tone are required' 
+        });
+      }
+
+      // Build prompt based on content type
+      let prompt = '';
+      if (type === 'social') {
+        prompt = `Create a ${tone} ${platform} post about "${topic}".`;
+        if (targetAudience) prompt += ` Target audience: ${targetAudience}.`;
+        if (keywords && keywords.length > 0) prompt += ` Include these keywords: ${keywords.join(', ')}.`;
+        if (includeHashtags) prompt += ' Include relevant hashtags.';
+        if (includeEmojis) prompt += ' Include appropriate emojis.';
+        prompt += ` Keep it engaging and ${platform}-optimized.`;
+      } else if (type === 'blog') {
+        prompt = `Write a ${contentLength} ${tone} blog post about "${topic}".`;
+        if (targetAudience) prompt += ` Target audience: ${targetAudience}.`;
+        if (keywords && keywords.length > 0) prompt += ` Focus on these keywords: ${keywords.join(', ')}.`;
+        prompt += ' Include a compelling headline and structure with clear sections.';
+      } else if (type === 'email') {
+        prompt = `Write a ${tone} email about "${topic}".`;
+        if (targetAudience) prompt += ` Target audience: ${targetAudience}.`;
+        prompt += ' Include subject line and compelling call-to-action.';
+      }
+
+      // Use OpenAI to generate content
+      const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are a professional content creator specializing in social media, blog posts, and email marketing. Create engaging, high-quality content that resonates with the target audience.'
+            },
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          max_tokens: contentLength === 'long' ? 2000 : contentLength === 'medium' ? 1000 : 500,
+          temperature: 0.7
+        })
+      });
+
+      if (!openaiResponse.ok) {
+        throw new Error(`OpenAI API error: ${openaiResponse.status}`);
+      }
+
+      const openaiData = await openaiResponse.json();
+      const generatedContent = openaiData.choices[0].message.content;
+
+      // Log to Airtable Content Generation table
+      try {
+        await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📝%20Content%20Generation", {
+          method: 'POST',
+          headers: {
+            "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            fields: {
+              'Content Type': type,
+              'Topic': topic,
+              'Platform': platform,
+              'Tone': tone,
+              'Target Audience': targetAudience || '',
+              'Keywords': keywords ? keywords.join(', ') : '',
+              'Generated Content': generatedContent.substring(0, 2000),
+              'Generated At': new Date().toISOString(),
+              'Content Length': contentLength,
+              'Include Hashtags': includeHashtags,
+              'Include Emojis': includeEmojis
+            }
+          })
+        });
+      } catch (logError) {
+        console.error('Content generation logging failed:', logError);
+      }
+
+      res.json({
+        success: true,
+        content: generatedContent,
+        metadata: {
+          type,
+          platform,
+          tone,
+          wordCount: generatedContent.split(/\s+/).length
+        }
+      });
+
+    } catch (error) {
+      console.error('Content generation error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Content generation failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Save Content API
+  app.post('/api/content/save', async (req, res) => {
+    try {
+      const { content, platform, topic, createdAt } = req.body;
+
+      if (!content) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Content is required' 
+        });
+      }
+
+      // Save to Airtable Saved Content table
+      const response = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/💾%20Saved%20Content", {
+        method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          fields: {
+            'Content': content.substring(0, 2000),
+            'Platform': platform || '',
+            'Topic': topic || '',
+            'Saved At': createdAt || new Date().toISOString(),
+            'Word Count': content.split(/\s+/).length,
+            'Status': 'Saved'
+          }
+        })
+      });
+
+      if (response.ok) {
+        res.json({ success: true, message: 'Content saved successfully' });
+      } else {
+        throw new Error(`Airtable save failed: ${response.status}`);
+      }
+
+    } catch (error) {
+      console.error('Content save error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to save content',
+        details: error.message
+      });
+    }
+  });
+
   // AI Support Chat API
   app.post('/api/ai/chat-support', async (req, res) => {
     try {
