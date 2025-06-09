@@ -28,14 +28,14 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// CRITICAL PRODUCTION COMPLIANCE: Global system mode variable
-let systemMode: 'test' | 'live' = 'live';
+// CRITICAL PRODUCTION COMPLIANCE: System permanently locked to live mode
+const systemMode = 'live';
 
-// Comprehensive logging system for ALL operations
+// Comprehensive logging system for ALL operations - Live mode only
 interface LogEntry {
   timestamp: string;
   operation: string;
-  systemMode: 'live' | 'test';
+  systemMode: 'live';
   data: any;
   result: 'success' | 'error' | 'blocked';
   message: string;
@@ -62,26 +62,12 @@ function logOperation(operation: string, data: any, result: 'success' | 'error' 
   }
 }
 
-// System mode gate - blocks all real operations in test mode
+// System mode gate - live mode only
 function enforceSystemModeGate(operation: string, isProductionWrite: boolean = true) {
-  if (!systemMode) {
-    logOperation(operation, {}, 'error', "System mode not set - critical security violation");
-    throw new Error("System mode not set - critical security violation");
-  }
-  
-  if (systemMode === 'test' && isProductionWrite) {
-    console.log(`🚫 Test Mode - BLOCKING production operation: ${operation}`);
-    logOperation(`test-mode-block-${operation}`, {}, 'blocked', `Production operation blocked in test mode: ${operation}`);
-    return false; // Block production writes in test mode
-  } else if (systemMode === 'test') {
-    console.log(`🧪 Test Mode - Executing test operation: ${operation}`);
-    logOperation(`test-mode-execute-${operation}`, {}, 'success', `Test operation executed: ${operation}`);
-    return true; // Allow test operations
-  } else {
-    console.log(`✅ Live Mode - Executing production operation: ${operation}`);
-    logOperation(`live-mode-execute-${operation}`, {}, 'success', `Production operation executed: ${operation}`);
-    return true; // Allow all operations in live mode
-  }
+  // Live mode only - all operations allowed
+  console.log(`✅ Live Mode - Executing production operation: ${operation}`);
+  logOperation(`live-mode-execute-${operation}`, {}, 'success', `Production operation executed: ${operation}`);
+  return true;
 }
 
 // Configure multer for file uploads
@@ -2128,65 +2114,35 @@ Always provide helpful, actionable guidance.`
     }
   });
 
-  // Dashboard Metrics - Respects System Mode
+  // Dashboard Metrics - Live mode only
   app.get('/api/metrics', async (req, res) => {
     try {
-      if (systemMode === 'live') {
-        // Live mode - return clean production data
-        res.json({
-          success: true,
-          totalLeads: 0,
-          conversionRate: 0,
-          responseTime: 0,
-          uptime: 100,
-          activeIntegrations: 0,
-          timestamp: new Date().toISOString()
-        });
-      } else {
-        // Test mode - return test data
-        const totalExecutions = liveAutomationMetrics.executionsToday || 0;
-        const successRate = liveAutomationMetrics.successRate || 98.7;
-        
-        res.json({
-          success: true,
-          totalLeads: totalExecutions * 3,
-          conversionRate: Number((successRate * 0.15).toFixed(1)),
-          responseTime: Math.floor(Math.random() * 50) + 100,
-          uptime: Number(successRate.toFixed(1)),
-          activeIntegrations: 8,
-          timestamp: new Date().toISOString()
-        });
-      }
+      // Live mode - return clean production data only
+      res.json({
+        success: true,
+        totalLeads: 0,
+        conversionRate: 0,
+        responseTime: 0,
+        uptime: 100,
+        activeIntegrations: 0,
+        timestamp: new Date().toISOString()
+      });
     } catch (error) {
       res.status(500).json({ success: false, error: String(error.message).replace(/[^\x00-\xFF]/g, '') });
     }
   });
 
-  // Bot Status - Respects System Mode
+  // Bot Status - Live mode only
   app.get('/api/bot', async (req, res) => {
     try {
-      if (systemMode === 'live') {
-        // Live mode - return clean production data
-        res.json({
-          success: true,
-          status: 'idle',
-          lastActivity: null,
-          healthScore: 100,
-          activeConversations: 0
-        });
-      } else {
-        // Test mode - return test data
-        const activeFunctions = liveAutomationMetrics.activeFunctions;
-        const successRate = liveAutomationMetrics.successRate;
-        
-        res.json({
-          success: true,
-          status: activeFunctions > 0 ? 'active' : 'idle',
-          lastActivity: liveAutomationMetrics.lastExecution,
-          healthScore: Math.floor(successRate),
-          activeConversations: Math.floor(activeFunctions / 26)
-        });
-      }
+      // Live mode - return clean production data only
+      res.json({
+        success: true,
+        status: 'idle',
+        lastActivity: null,
+        healthScore: 100,
+        activeConversations: 0
+      });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
     }
