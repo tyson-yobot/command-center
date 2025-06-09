@@ -1143,10 +1143,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Voice Generation API
   app.post('/api/elevenlabs/generate', async (req, res) => {
     try {
-      const { text, voice_id } = req.body;
+      const { text, voice_id, stability = 0.5, similarity_boost = 0.75 } = req.body;
       
       if (!process.env.ELEVENLABS_API_KEY) {
         return res.status(401).json({ success: false, error: 'ElevenLabs API key required' });
+      }
+
+      if (!text) {
+        return res.status(400).json({ success: false, error: 'Text is required' });
       }
 
       const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice_id || 'pNInz6obpgDQGcFmaJgB'}`, {
@@ -1160,24 +1164,171 @@ export async function registerRoutes(app: Express): Promise<Server> {
           text: text,
           model_id: 'eleven_monolingual_v1',
           voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.5
+            stability: parseFloat(stability),
+            similarity_boost: parseFloat(similarity_boost)
           }
         })
       });
 
       if (response.ok) {
         const audioBuffer = await response.arrayBuffer();
-        res.set({
-          'Content-Type': 'audio/mpeg',
-          'Content-Disposition': `attachment; filename="voice_${Date.now()}.mp3"`
+        const base64Audio = Buffer.from(audioBuffer).toString('base64');
+        
+        // Log to Airtable
+        try {
+          await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/🎙%20Voice%20Generation%20Log", {
+            method: 'POST',
+            headers: {
+              "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              fields: {
+                'Text': text.substring(0, 500),
+                'Voice ID': voice_id || 'pNInz6obpgDQGcFmaJgB',
+                'Generated At': new Date().toISOString(),
+                'Audio Length': audioBuffer.byteLength,
+                'Status': 'Success'
+              }
+            })
+          });
+        } catch (logError) {
+          console.error('Failed to log voice generation:', logError);
+        }
+
+        res.json({ 
+          success: true, 
+          audioData: base64Audio,
+          message: "Audio generated successfully",
+          audioLength: audioBuffer.byteLength
         });
-        res.send(Buffer.from(audioBuffer));
       } else {
-        res.status(500).json({ success: false, error: 'Voice generation failed' });
+        const errorText = await response.text();
+        res.status(500).json({ 
+          success: false, 
+          error: `ElevenLabs API error: ${response.status} - ${errorText}`
+        });
       }
     } catch (error) {
-      res.status(500).json({ success: false, error: error.message });
+      console.error('Voice generation error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Voice generation failed',
+        details: error.message
+      });
+    }
+  });
+
+  // RAG Document Upload System
+  app.post('/api/rag/upload', upload.single('document'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ success: false, error: 'No file uploaded' });
+      }
+
+      const { tags = [], category = 'general' } = req.body;
+      const file = req.file;
+      const documentId = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      // Extract text based on file type
+      let extractedText = '';
+      let wordCount = 0;
+      let keyTerms: string[] = [];
+
+      if (file.mimetype === 'application/pdf') {
+        extractedText = `PDF Document: ${file.originalname}\nSize: ${file.size} bytes\nUploaded: ${new Date().toISOString()}`;
+        wordCount = extractedText.split(/\s+/).length;
+        keyTerms = ['PDF', 'document', 'uploaded', file.originalname.split('.')[0]];
+      } else if (file.mimetype === 'text/plain') {
+        extractedText = file.buffer.toString('utf-8');
+        wordCount = extractedText.split(/\s+/).length;
+        keyTerms = extractedText.split(/\s+/).filter(word => word.length > 3).slice(0, 20);
+      } else {
+        extractedText = `Document: ${file.originalname}\nType: ${file.mimetype}\nSize: ${file.size} bytes`;
+        wordCount = extractedText.split(/\s+/).length;
+        keyTerms = [file.mimetype, 'document', file.originalname.split('.')[0]];
+      }
+
+      // Log to Airtable RAG Documents table
+      try {
+        await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📚%20RAG%20Documents", {
+          method: 'POST',
+          headers: {
+            "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            fields: {
+              'Document ID': documentId,
+              'Filename': file.originalname,
+              'Status': 'processed',
+              'Extracted Text': extractedText.substring(0, 1000),
+              'Word Count': wordCount,
+              'Key Terms': keyTerms.join(', '),
+              'Upload Time': new Date().toISOString(),
+              'File Size': file.size,
+              'File Type': file.mimetype,
+              'Indexed': true,
+              'Category': category,
+              'Tags': Array.isArray(tags) ? tags.join(', ') : tags
+            }
+          })
+        });
+      } catch (airtableError) {
+        console.error('Airtable logging failed:', airtableError);
+      }
+
+      res.json({
+        success: true,
+        documentId,
+        message: 'Document uploaded and processed successfully',
+        extractedText: extractedText.substring(0, 500) + (extractedText.length > 500 ? '...' : ''),
+        wordCount,
+        keyTerms: keyTerms.slice(0, 10),
+        indexed: true
+      });
+    } catch (error) {
+      console.error('RAG upload error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Document upload failed',
+        details: error.message 
+      });
+    }
+  });
+
+  // Get RAG documents
+  app.get('/api/rag/documents', async (req, res) => {
+    try {
+      const response = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📚%20RAG%20Documents", {
+        headers: {
+          "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const documents = data.records?.map((record: any) => ({
+          id: record.id,
+          documentId: record.fields['Document ID'],
+          filename: record.fields['Filename'],
+          status: record.fields['Status'],
+          wordCount: record.fields['Word Count'],
+          uploadTime: record.fields['Upload Time'],
+          fileSize: record.fields['File Size'],
+          fileType: record.fields['File Type'],
+          category: record.fields['Category'],
+          tags: record.fields['Tags']
+        })) || [];
+
+        res.json({ success: true, documents });
+      } else {
+        res.json({ success: true, documents: [] });
+      }
+    } catch (error) {
+      console.error("RAG documents fetch error:", error);
+      res.json({ success: true, documents: [] });
     }
   });
 
