@@ -1482,6 +1482,26 @@ export default function CommandCenter() {
             };
           }
           break;
+        case 'Emergency Data Wipe':
+          endpoint = '/api/emergency-data-wipe';
+          if (!data) {
+            const confirmation = prompt('Enter confirmation code for data wipe:');
+            if (!confirmation) return;
+            requestData = { confirmationCode: confirmation };
+          }
+          break;
+        case 'Live System Diagnostics':
+          endpoint = '/api/live-system-diagnostics';
+          break;
+        case 'Download System Logs':
+          endpoint = '/api/download-system-logs';
+          if (!data) {
+            requestData = {
+              logType: 'all',
+              timeRange: '24h'
+            };
+          }
+          break;
         default:
           // Use central automation dispatcher for other commands
           endpoint = '/api/command-center/execute';
@@ -1859,6 +1879,56 @@ export default function CommandCenter() {
                     <span>Mailchimp Sync</span>
                   </Button>
 
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Critical System Management */}
+            <Card className="bg-red-900/60 backdrop-blur-sm border border-red-500/30">
+              <CardHeader>
+                <CardTitle className="text-white">Critical System Management</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 gap-3">
+                  <Button
+                    onClick={() => executeLiveCommand("Emergency Data Wipe")}
+                    className="bg-red-600 hover:bg-red-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">🚨</span>
+                    <span>Emergency Data Wipe</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => executeLiveCommand("Live System Diagnostics")}
+                    className="bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">🔧</span>
+                    <span>Live System Diagnostics</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => executeLiveCommand("Download System Logs")}
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">📋</span>
+                    <span>Download System Logs</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => executeLiveCommand("Critical Escalation")}
+                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">⚠️</span>
+                    <span>Critical Escalation</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => executeLiveCommand("Upload Documents")}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-start p-3"
+                  >
+                    <span className="text-xl mr-3">📄</span>
+                    <span>Upload Documents</span>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
