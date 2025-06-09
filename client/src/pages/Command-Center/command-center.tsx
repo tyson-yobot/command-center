@@ -68,22 +68,18 @@ export default function CommandCenter() {
   const { data: commandCenterMetrics } = useQuery({ queryKey: ['/api/airtable/command-center-metrics'] });
   const { data: knowledgeStats, refetch: refetchKnowledge } = useQuery({ queryKey: ['/api/knowledge/stats'] });
   const { data: automationMetrics } = useQuery({ 
-    queryKey: ['/api/automation/metrics'],
-    refetchInterval: 30000 // Reduced from 5 seconds to 30 seconds
+    queryKey: ['/api/automation/metrics']
   });
   const { data: liveExecutions } = useQuery({ 
-    queryKey: ['/api/automation/executions'],
-    refetchInterval: 60000 // Reduced from 3 seconds to 60 seconds
+    queryKey: ['/api/automation/executions']
   });
   const { data: functionStatus } = useQuery({ 
-    queryKey: ['/api/automation/functions'],
-    refetchInterval: 120000 // Reduced from 10 seconds to 2 minutes
+    queryKey: ['/api/automation/functions']
   });
   
-  // System mode control
+  // System mode control - no auto-refetch to prevent flashing
   const { data: systemModeData } = useQuery({ 
-    queryKey: ['/api/system-mode'],
-    refetchInterval: 30000 // Reduced from 2 seconds to 30 seconds
+    queryKey: ['/api/system-mode']
   });
   
   const [isListening, setIsListening] = React.useState(false);
@@ -438,18 +434,9 @@ export default function CommandCenter() {
     }
   };
 
-  // Load voices on component mount and retry if failed
+  // Load voices only once on component mount - no automatic retries to prevent flashing
   React.useEffect(() => {
     fetchAvailableVoices();
-    
-    // Retry voice loading if initial load fails
-    const retryTimer = setTimeout(() => {
-      if (availableVoices.length === 0 && !voicesLoading) {
-        fetchAvailableVoices();
-      }
-    }, 2000);
-    
-    return () => clearTimeout(retryTimer);
   }, []);
   
   // Retry voice loading when component regains focus
