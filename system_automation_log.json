@@ -1,27 +1,5 @@
 [
   {
-    "timestamp": "2025-06-08T09:45:00.288Z",
-    "functionId": 152,
-    "functionName": "Failure Categorization",
-    "batch": 16,
-    "category": "Error Handling",
-    "status": "success",
-    "duration": 141,
-    "successCount": 3,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-08T09:45:00.298Z",
-    "functionId": 131,
-    "functionName": "CRM Script Generator",
-    "batch": 14,
-    "category": "CRM",
-    "status": "success",
-    "duration": 151,
-    "successCount": 3,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-08T09:45:00.303Z",
     "functionId": 133,
     "functionName": "Silent Call Detector",
@@ -11268,6 +11246,36 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-09T03:16:46.169Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-09T03:20:04.788Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-09T03:20:04.504Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-09T03:21:51.299Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-09T03:21:50.987Z",
       "automationStatus": "running"
     }
   }

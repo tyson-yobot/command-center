@@ -1,11 +1,9 @@
 import React, { createContext, useContext, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
-import ProfessionalLeadScraper from "./components/professional-lead-scraper";
 import ClientDashboard from "./pages/client-dashboard";
-import SmartSpendDashboard from "./components/smartspend-dashboard";
-import BotalyticsDashboard from "./components/botalytics-dashboard";
-import { LeadScrapingInterface } from "./components/lead-scraping-interface";
+import LeadScrapingPage from "./pages/lead-scraping-page";
+import ControlCenterPage from "./pages/control-center-page";
 
 // Test/Live Mode Context for synchronized mode across all screens
 interface ModeContextType {
@@ -38,10 +36,8 @@ function Router() {
         <Switch>
           <Route path="/" component={ClientDashboard} />
           <Route path="/command-center" component={ClientDashboard} />
-          <Route path="/control-center" component={ProfessionalLeadScraper} />
-          <Route path="/lead-scraping" component={() => <LeadScrapingInterface onScrapingStart={() => {}} onScrapingComplete={() => {}} />} />
-          <Route path="/smartspend" component={SmartSpendDashboard} />
-          <Route path="/botalytics" component={BotalyticsDashboard} />
+          <Route path="/control-center" component={ControlCenterPage} />
+          <Route path="/lead-scraping" component={LeadScrapingPage} />
           <Route>
             <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
               <div className="text-center">

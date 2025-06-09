@@ -1,0 +1,279 @@
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useModeContext } from '../App';
+import { 
+  Search, 
+  Users, 
+  Building2, 
+  Settings, 
+  Play, 
+  Download,
+  Filter,
+  MapPin,
+  Briefcase,
+  Target
+} from 'lucide-react';
+
+export default function LeadScrapingPage() {
+  const { isTestMode } = useModeContext();
+  const [searchTerms, setSearchTerms] = React.useState('');
+  const [location, setLocation] = React.useState('');
+  const [industry, setIndustry] = React.useState('');
+  const [jobTitle, setJobTitle] = React.useState('');
+  const [companySize, setCompanySize] = React.useState('');
+  const [maxResults, setMaxResults] = React.useState('50');
+  const [emailVerified, setEmailVerified] = React.useState(true);
+  const [phoneAvailable, setPhoneAvailable] = React.useState(true);
+
+  const industries = [
+    'Technology', 'Healthcare', 'Finance', 'Education', 'Retail',
+    'Manufacturing', 'Consulting', 'Media & Entertainment', 'Construction',
+    'Hospitality', 'Transportation', 'Real Estate', 'Insurance', 'Nonprofit',
+    'Government', 'Agriculture', 'Marketing', 'Law', 'Recruiting', 'Other'
+  ];
+
+  const companySizes = [
+    '1-10 employees', '11-50 employees', '51-200 employees',
+    '201-500 employees', '501-1000 employees', '1000+ employees'
+  ];
+
+  const maxResultsOptions = [
+    '25 leads', '50 leads', '100 leads', '250 leads', '500 leads', '1000 leads'
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <Search className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-white">Lead Scraping Center</h1>
+              <p className="text-blue-200">Apollo • Apify • PhantomBuster Integration</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <Badge variant={isTestMode ? "secondary" : "default"} className="px-4 py-2">
+              {isTestMode ? "🧪 Test Mode" : "🚀 Live Mode"}
+            </Badge>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <Tabs defaultValue="apollo" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3 bg-slate-800/50 backdrop-blur-sm">
+            <TabsTrigger value="apollo" className="data-[state=active]:bg-blue-600">
+              💙 Apollo
+            </TabsTrigger>
+            <TabsTrigger value="apify" className="data-[state=active]:bg-green-600">
+              💚 Apify
+            </TabsTrigger>
+            <TabsTrigger value="phantombuster" className="data-[state=active]:bg-purple-600">
+              💜 PhantomBuster
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Apollo Tab */}
+          <TabsContent value="apollo" className="space-y-6">
+            <Card className="bg-slate-800/50 backdrop-blur-sm border-blue-500/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center space-x-2">
+                  <Search className="w-5 h-5 text-blue-400" />
+                  <span>Lead Search Configuration</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Contact Filters */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
+                      <Users className="w-5 h-5 text-blue-400" />
+                      <span>🧑 Contact Filters</span>
+                    </h3>
+                    
+                    <div>
+                      <Label htmlFor="searchTerms" className="text-white">Search Terms *</Label>
+                      <Input
+                        id="searchTerms"
+                        placeholder="e.g., CEO, software engineer, marketing director"
+                        value={searchTerms}
+                        onChange={(e) => setSearchTerms(e.target.value)}
+                        className="bg-slate-700 border-slate-600 text-white"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="location" className="text-white">Location</Label>
+                      <Input
+                        id="location"
+                        placeholder="e.g., New York, California"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        className="bg-slate-700 border-slate-600 text-white"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="jobTitle" className="text-white">Job Title</Label>
+                      <Input
+                        id="jobTitle"
+                        placeholder="e.g., CEO, Director, Manager"
+                        value={jobTitle}
+                        onChange={(e) => setJobTitle(e.target.value)}
+                        className="bg-slate-700 border-slate-600 text-white"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Company Filters */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
+                      <Building2 className="w-5 h-5 text-blue-400" />
+                      <span>🏢 Company/Business Filters</span>
+                    </h3>
+
+                    <div>
+                      <Label htmlFor="industry" className="text-white">Industry</Label>
+                      <Select value={industry} onValueChange={setIndustry}>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Select Industry" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {industries.map((ind) => (
+                            <SelectItem key={ind} value={ind}>{ind}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="companySize" className="text-white">Company Size</Label>
+                      <Select value={companySize} onValueChange={setCompanySize}>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Select size" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {companySizes.map((size) => (
+                            <SelectItem key={size} value={size}>{size}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Execution Settings */}
+                <div className="space-y-4 border-t border-slate-700 pt-6">
+                  <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
+                    <Settings className="w-5 h-5 text-blue-400" />
+                    <span>⚙️ Scraping Settings</span>
+                  </h3>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="maxResults" className="text-white">Max Results</Label>
+                      <Select value={maxResults} onValueChange={setMaxResults}>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {maxResultsOptions.map((option) => (
+                            <SelectItem key={option} value={option}>{option}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg">
+                      <Label htmlFor="emailVerified" className="text-white">Email Verified</Label>
+                      <Switch
+                        id="emailVerified"
+                        checked={emailVerified}
+                        onCheckedChange={setEmailVerified}
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg">
+                      <Label htmlFor="phoneAvailable" className="text-white">Phone Available</Label>
+                      <Switch
+                        id="phoneAvailable"
+                        checked={phoneAvailable}
+                        onCheckedChange={setPhoneAvailable}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Apify Tab */}
+          <TabsContent value="apify" className="space-y-6">
+            <Card className="bg-slate-800/50 backdrop-blur-sm border-green-500/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center space-x-2">
+                  <MapPin className="w-5 h-5 text-green-400" />
+                  <span>Google Maps Business Scraping</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <p className="text-green-200">Configure Apify Google Maps scraping parameters...</p>
+                {/* Add Apify-specific controls here */}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* PhantomBuster Tab */}
+          <TabsContent value="phantombuster" className="space-y-6">
+            <Card className="bg-slate-800/50 backdrop-blur-sm border-purple-500/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center space-x-2">
+                  <Target className="w-5 h-5 text-purple-400" />
+                  <span>Social Media Lead Extraction</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <p className="text-purple-200">Configure PhantomBuster LinkedIn and X (formerly Twitter) scraping...</p>
+                {/* Add PhantomBuster-specific controls here */}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+
+        {/* Bottom Action Bar */}
+        <div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-t border-slate-700 p-4">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Badge variant="outline" className="text-blue-300 border-blue-500">
+                <Filter className="w-4 h-4 mr-2" />
+                7 filters applied
+              </Badge>
+              <Badge variant="outline" className="text-green-300 border-green-500">
+                ⏱ ~{maxResults} estimated leads
+              </Badge>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Button variant="outline" className="border-blue-500 text-blue-300 hover:bg-blue-500/20">
+                💾 Save Preset
+              </Button>
+              <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
+                <Play className="w-4 h-4 mr-2" />
+                🚀 Launch Scraping
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
