@@ -39,7 +39,11 @@ import {
   Eye,
   Download,
   Edit,
-  Share2
+  Share2,
+  Camera,
+  Building,
+  MapPin,
+  Globe
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -113,6 +117,15 @@ export default function CommandCenter() {
   const [showMailchimpSync, setShowMailchimpSync] = useState(false);
   const [showSocialContentCreator, setShowSocialContentCreator] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
+  
+  // Business Card Scanner States
+  const [showBusinessCardScanner, setShowBusinessCardScanner] = useState(false);
+  const [isProcessingCard, setIsProcessingCard] = useState(false);
+  const [capturedCardImage, setCapturedCardImage] = useState<string | null>(null);
+  const [extractedContact, setExtractedContact] = useState<any>(null);
+  const [cardProcessingResult, setCardProcessingResult] = useState<any>(null);
+  const [cardScannerStep, setCardScannerStep] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Call monitoring states
   const [showCallMonitoring, setShowCallMonitoring] = useState(false);
@@ -609,6 +622,78 @@ export default function CommandCenter() {
   const handleToggleAutomation = () => {
     setAutomationMode(!automationMode);
     setVoiceStatus(`Automation ${!automationMode ? 'enabled' : 'disabled'}`);
+  };
+
+  // Business Card Scanner Functions
+  const handleCardFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please select an image file",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const base64Image = e.target?.result as string;
+      const base64Data = base64Image.split(',')[1];
+      setCapturedCardImage(base64Image);
+      await processBusinessCard(base64Data);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const processBusinessCard = async (base64Image: string) => {
+    setIsProcessingCard(true);
+    setCardScannerStep('Extracting text from business card...');
+    
+    try {
+      const response = await apiRequest('POST', '/api/business-card-ocr', {
+        imageBase64: base64Image
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setExtractedContact(result.contact);
+        setCardProcessingResult(result);
+        
+        toast({
+          title: "Business card processed successfully",
+          description: `Contact ${result.contact.name} has been added to your CRM`,
+        });
+        
+        setVoiceStatus(`Business card processed: ${result.contact.name} added to CRM`);
+      } else {
+        const error = await response.json();
+        throw new Error(error.details || 'Processing failed');
+      }
+    } catch (error: any) {
+      console.error('Business card processing failed:', error);
+      toast({
+        title: "Processing failed",
+        description: error.message || "Failed to process business card",
+        variant: "destructive"
+      });
+      setVoiceStatus(`Business card processing failed: ${error.message}`);
+    } finally {
+      setIsProcessingCard(false);
+      setCardScannerStep('');
+    }
+  };
+
+  const resetCardCapture = () => {
+    setCapturedCardImage(null);
+    setExtractedContact(null);
+    setCardProcessingResult(null);
+    setCardScannerStep('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -3496,6 +3581,202 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Business Card Scanner */}
+        <Card className="bg-slate-800/80 backdrop-blur-sm border border-green-500/50">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center justify-between">
+              <div className="flex items-center">
+                <Camera className="w-5 h-5 mr-2 text-green-400" />
+                Business Card Scanner
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowBusinessCardScanner(!showBusinessCardScanner)}
+                className="border-green-400/50 text-green-400 hover:bg-green-400/10"
+              >
+                {showBusinessCardScanner ? 'Hide' : 'Show'} Scanner
+              </Button>
+            </CardTitle>
+          </CardHeader>
+          {showBusinessCardScanner && (
+            <CardContent>
+              <div className="space-y-6">
+                {/* Upload Section */}
+                {!capturedCardImage && (
+                  <div className="border-2 border-dashed border-green-400/50 rounded-lg p-8 text-center">
+                    <Camera className="h-12 w-12 text-green-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-white mb-2">
+                      Scan Business Card
+                    </h3>
+                    <p className="text-slate-300 text-sm mb-4">
+                      Upload a photo of a business card to extract contact information
+                    </p>
+                    
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleCardFileUpload}
+                      className="hidden"
+                    />
+                    
+                    <Button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                      disabled={isProcessingCard}
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Choose Photo
+                    </Button>
+                  </div>
+                )}
+
+                {/* Processing Status */}
+                {isProcessingCard && (
+                  <div className="bg-green-900/20 border border-green-400/50 rounded-lg p-4 text-center">
+                    <div className="animate-spin h-6 w-6 border-2 border-green-400 border-t-transparent rounded-full mx-auto mb-3"></div>
+                    <p className="text-green-300 text-sm">{cardScannerStep}</p>
+                  </div>
+                )}
+
+                {/* Captured Image */}
+                {capturedCardImage && !isProcessingCard && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-white font-medium">Captured Image</h4>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={resetCardCapture}
+                        className="border-slate-400 text-slate-300 hover:bg-slate-700"
+                      >
+                        New Scan
+                      </Button>
+                    </div>
+                    <img
+                      src={capturedCardImage}
+                      alt="Business card"
+                      className="w-full max-w-md mx-auto rounded-lg shadow-lg"
+                    />
+                  </div>
+                )}
+
+                {/* Extracted Contact Information */}
+                {extractedContact && (
+                  <div className="bg-slate-700/60 border border-green-400/50 rounded-lg p-4">
+                    <h4 className="text-white font-medium mb-3 flex items-center">
+                      <Building className="h-4 w-4 mr-2" />
+                      Contact Information
+                    </h4>
+                    <div className="space-y-2">
+                      {extractedContact.name && (
+                        <div className="flex items-center text-sm">
+                          <User className="h-3 w-3 mr-2 text-slate-400" />
+                          <span className="text-white font-medium">{extractedContact.name}</span>
+                        </div>
+                      )}
+                      {extractedContact.title && (
+                        <div className="flex items-center text-sm">
+                          <Badge className="h-3 w-3 mr-2 text-slate-400" />
+                          <span className="text-slate-300">{extractedContact.title}</span>
+                        </div>
+                      )}
+                      {extractedContact.company && (
+                        <div className="flex items-center text-sm">
+                          <Building className="h-3 w-3 mr-2 text-slate-400" />
+                          <span className="text-slate-300">{extractedContact.company}</span>
+                        </div>
+                      )}
+                      {extractedContact.email && (
+                        <div className="flex items-center text-sm">
+                          <Mail className="h-3 w-3 mr-2 text-slate-400" />
+                          <a href={`mailto:${extractedContact.email}`} className="text-green-400 hover:underline">
+                            {extractedContact.email}
+                          </a>
+                        </div>
+                      )}
+                      {extractedContact.phone && (
+                        <div className="flex items-center text-sm">
+                          <Phone className="h-3 w-3 mr-2 text-slate-400" />
+                          <a href={`tel:${extractedContact.phone}`} className="text-green-400 hover:underline">
+                            {extractedContact.phone}
+                          </a>
+                        </div>
+                      )}
+                      {extractedContact.website && (
+                        <div className="flex items-center text-sm">
+                          <Globe className="h-3 w-3 mr-2 text-slate-400" />
+                          <a href={extractedContact.website} target="_blank" rel="noopener noreferrer" className="text-green-400 hover:underline">
+                            {extractedContact.website}
+                          </a>
+                        </div>
+                      )}
+                      {extractedContact.address && (
+                        <div className="flex items-center text-sm">
+                          <MapPin className="h-3 w-3 mr-2 text-slate-400" />
+                          <span className="text-slate-300 text-xs">{extractedContact.address}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Automation Results */}
+                {cardProcessingResult && (
+                  <div className="bg-slate-700/60 border border-green-400/50 rounded-lg p-4">
+                    <h4 className="text-white font-medium mb-3 flex items-center">
+                      <Zap className="h-4 w-4 mr-2" />
+                      Automation Pipeline
+                    </h4>
+                    <div className="space-y-2">
+                      {Object.entries(cardProcessingResult.automationsCompleted || {}).map(([key, completed]) => {
+                        const labels = {
+                          ocrExtraction: 'OCR Text Extraction',
+                          duplicateCheck: 'Duplicate Prevention',
+                          hubspotPush: 'HubSpot Contact Creation',
+                          sourceTagging: 'Source Tagging',
+                          followUpTask: 'Follow-up Task Creation',
+                          dealCreation: 'Deal Creation',
+                          workflowEnrollment: 'Workflow Enrollment',
+                          googleSheetsBackup: 'Google Sheets Backup',
+                          airtableLogging: 'Airtable Event Logging',
+                          statusLabeling: 'Status Tracking'
+                        };
+                        
+                        return (
+                          <div key={key} className="flex items-center justify-between p-2 rounded border border-slate-600">
+                            <span className="text-sm text-slate-300">{labels[key] || key}</span>
+                            {completed ? (
+                              <Badge className="bg-green-100 text-green-800 text-xs">
+                                Complete
+                              </Badge>
+                            ) : (
+                              <Badge variant="secondary" className="text-xs">
+                                Skipped
+                              </Badge>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    
+                    {cardProcessingResult.hubspotContactId && (
+                      <div className="mt-4 p-3 bg-green-900/20 border border-green-400/50 rounded-lg">
+                        <p className="text-sm text-green-300">
+                          ✓ Contact successfully added to HubSpot CRM
+                          <br />
+                          <span className="font-mono text-xs">ID: {cardProcessingResult.hubspotContactId}</span>
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          )}
+        </Card>
 
         {/* Footer - Support Contact */}
         <div className="text-center">
