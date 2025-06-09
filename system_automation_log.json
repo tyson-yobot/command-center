@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-08T08:15:00.912Z",
-    "functionId": 204,
-    "functionName": "Duplicate Record Detection",
-    "batch": 21,
-    "category": "Data Validation",
-    "status": "success",
-    "duration": 675,
-    "successCount": 4,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-08T08:15:01.057Z",
     "functionId": 147,
     "functionName": "Full API Health Check",
@@ -11244,6 +11233,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-09T01:46:17.080Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-09T01:48:38.466Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-09T01:48:38.185Z",
       "automationStatus": "running"
     }
   }
