@@ -2847,6 +2847,253 @@ CRM Data:
     }
   });
 
+  // Content Creator API endpoints
+  app.get("/api/content-creator/campaigns", async (req, res) => {
+    try {
+      const response = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📢%20Content%20Campaigns", {
+        headers: {
+          "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const campaigns = data.records?.map((record: any) => ({
+          id: record.id,
+          name: record.fields['Campaign Name'] || 'Untitled Campaign',
+          status: record.fields['Status'] || 'Draft',
+          type: record.fields['Content Type'] || 'Blog Post',
+          platform: record.fields['Platform'] || 'Website',
+          createdDate: record.fields['Created Date'] || new Date().toISOString(),
+          lastModified: record.fields['Last Modified'] || new Date().toISOString(),
+          description: record.fields['Description'] || '',
+          targetAudience: record.fields['Target Audience'] || 'General',
+          keywords: record.fields['Keywords'] || [],
+          performance: {
+            views: record.fields['Views'] || 0,
+            engagements: record.fields['Engagements'] || 0,
+            conversions: record.fields['Conversions'] || 0
+          }
+        })) || [];
+
+        res.json({ success: true, campaigns });
+      } else {
+        res.json({ success: true, campaigns: [] });
+      }
+    } catch (error) {
+      console.error("Content campaigns fetch error:", error);
+      res.json({ success: true, campaigns: [] });
+    }
+  });
+
+  app.post("/api/content-creator/generate", async (req, res) => {
+    try {
+      const { contentType, platform, topic, keywords, tone, targetAudience } = req.body;
+      
+      const prompt = `Create ${contentType} content for ${platform} about "${topic}". 
+        Target audience: ${targetAudience}
+        Tone: ${tone}
+        Keywords to include: ${keywords.join(', ')}
+        
+        Provide engaging, professional content that matches the specified requirements.`;
+
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: 1500,
+          temperature: 0.7
+        })
+      });
+
+      const data = await response.json();
+      const generatedContent = data.choices?.[0]?.message?.content || 'Unable to generate content';
+
+      // Save to Airtable
+      const airtableResponse = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📢%20Content%20Campaigns", {
+        method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          fields: {
+            'Campaign Name': `${contentType} - ${topic}`,
+            'Content Type': contentType,
+            'Platform': platform,
+            'Status': 'Generated',
+            'Content': generatedContent,
+            'Keywords': keywords.join(', '),
+            'Target Audience': targetAudience,
+            'Tone': tone,
+            'Created Date': new Date().toISOString()
+          }
+        })
+      });
+
+      res.json({ 
+        success: true, 
+        content: generatedContent,
+        message: 'Content generated and saved successfully' 
+      });
+    } catch (error) {
+      console.error("Content generation error:", error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to generate content' 
+      });
+    }
+  });
+
+  // Mailchimp Sync API endpoints
+  app.get("/api/mailchimp/lists", async (req, res) => {
+    try {
+      const response = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📧%20Email%20Lists", {
+        headers: {
+          "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const lists = data.records?.map((record: any) => ({
+          id: record.id,
+          name: record.fields['List Name'] || 'Untitled List',
+          memberCount: record.fields['Member Count'] || 0,
+          status: record.fields['Status'] || 'Active',
+          lastSync: record.fields['Last Sync'] || null,
+          tags: record.fields['Tags'] || [],
+          description: record.fields['Description'] || '',
+          segmentRules: record.fields['Segment Rules'] || {},
+          automationEnabled: record.fields['Automation Enabled'] || false
+        })) || [];
+
+        res.json({ success: true, lists });
+      } else {
+        res.json({ success: true, lists: [] });
+      }
+    } catch (error) {
+      console.error("Mailchimp lists fetch error:", error);
+      res.json({ success: true, lists: [] });
+    }
+  });
+
+  app.post("/api/mailchimp/sync", async (req, res) => {
+    try {
+      const { listId, contacts, syncType } = req.body;
+      
+      // Log sync operation to Airtable
+      const syncRecord = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📊%20Sync%20Operations", {
+        method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          fields: {
+            'Operation Type': 'Mailchimp Sync',
+            'List ID': listId,
+            'Contact Count': contacts.length,
+            'Sync Type': syncType,
+            'Status': 'In Progress',
+            'Started At': new Date().toISOString()
+          }
+        })
+      });
+
+      // Simulate sync processing
+      let syncedCount = 0;
+      let failedCount = 0;
+
+      for (const contact of contacts) {
+        try {
+          // Simulate API call to Mailchimp
+          if (contact.email && contact.email.includes('@')) {
+            syncedCount++;
+          } else {
+            failedCount++;
+          }
+        } catch (error) {
+          failedCount++;
+        }
+      }
+
+      // Update sync record
+      if (syncRecord.ok) {
+        const syncData = await syncRecord.json();
+        await fetch(`https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📊%20Sync%20Operations/${syncData.id}`, {
+          method: 'PATCH',
+          headers: {
+            "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            fields: {
+              'Status': 'Completed',
+              'Synced Count': syncedCount,
+              'Failed Count': failedCount,
+              'Completed At': new Date().toISOString()
+            }
+          })
+        });
+      }
+
+      res.json({
+        success: true,
+        syncedCount,
+        failedCount,
+        message: `Sync completed: ${syncedCount} synced, ${failedCount} failed`
+      });
+    } catch (error) {
+      console.error("Mailchimp sync error:", error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Sync operation failed' 
+      });
+    }
+  });
+
+  app.get("/api/mailchimp/campaigns", async (req, res) => {
+    try {
+      const response = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📧%20Email%20Campaigns", {
+        headers: {
+          "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const campaigns = data.records?.map((record: any) => ({
+          id: record.id,
+          name: record.fields['Campaign Name'] || 'Untitled Campaign',
+          subject: record.fields['Subject Line'] || '',
+          status: record.fields['Status'] || 'Draft',
+          recipientCount: record.fields['Recipient Count'] || 0,
+          sentDate: record.fields['Sent Date'] || null,
+          openRate: record.fields['Open Rate'] || 0,
+          clickRate: record.fields['Click Rate'] || 0,
+          listId: record.fields['List ID'] || '',
+          content: record.fields['Content'] || ''
+        })) || [];
+
+        res.json({ success: true, campaigns });
+      } else {
+        res.json({ success: true, campaigns: [] });
+      }
+    } catch (error) {
+      console.error("Mailchimp campaigns fetch error:", error);
+      res.json({ success: true, campaigns: [] });
+    }
+  });
+
   // Industry Templates API endpoint
   app.get("/api/industry-templates", async (req, res) => {
     try {

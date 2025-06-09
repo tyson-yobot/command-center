@@ -3518,6 +3518,16 @@ export default function ClientDashboard() {
         completedCalls={completedCalls}
       />
 
+      {/* Content Creator Dashboard Modal */}
+      {showContentCreator && (
+        <ContentCreatorDashboard onClose={() => setShowContentCreator(false)} />
+      )}
+
+      {/* Mailchimp Sync Dashboard Modal */}
+      {showMailchimpSync && (
+        <MailchimpSyncDashboard onClose={() => setShowMailchimpSync(false)} />
+      )}
+
       {/* Zendesk Live Chat Widget */}
       <ZendeskChatWidget />
     </div>
