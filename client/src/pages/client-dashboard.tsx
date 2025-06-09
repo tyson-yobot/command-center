@@ -377,7 +377,7 @@ export default function ClientDashboard() {
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               YoBot Command Center
             </h1>
-            <p className="text-slate-300 mt-2">Enterprise Automation Platform</p>
+            <p className="text-slate-300 mt-2">Enterprise Automation Platform - replit.dev/command-center</p>
           </div>
           
           <div className="flex items-center space-x-4">
@@ -392,6 +392,55 @@ export default function ClientDashboard() {
             </Badge>
           </div>
         </div>
+
+        {/* Control Center Toggles */}
+        <Card className="bg-slate-800/50 border-slate-700 mb-8">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center space-x-2">
+              <Settings className="w-5 h-5" />
+              <span>Control Center - System Toggles</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                <span className="text-white font-medium">Automation Engine</span>
+                <Switch checked={true} disabled />
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                <span className="text-white font-medium">Voice Pipeline</span>
+                <Switch checked={pipelineRunning} onCheckedChange={(checked) => {
+                  if (checked) startPipelineCalls();
+                  else stopPipelineCalls();
+                }} />
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                <span className="text-white font-medium">Email Notifications</span>
+                <Switch checked={emailNotifications} onCheckedChange={setEmailNotifications} />
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                <span className="text-white font-medium">SMS Notifications</span>
+                <Switch checked={phoneNotifications} onCheckedChange={setPhoneNotifications} />
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                <span className="text-white font-medium">Lead Scraping</span>
+                <Switch checked={true} disabled />
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                <span className="text-white font-medium">AI Content Gen</span>
+                <Switch checked={true} disabled />
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                <span className="text-white font-medium">CRM Integration</span>
+                <Switch checked={true} disabled />
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                <span className="text-white font-medium">System Health</span>
+                <Switch checked={true} disabled />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
