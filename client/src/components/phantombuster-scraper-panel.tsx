@@ -38,7 +38,7 @@ interface PhantomBusterScraperPanelProps {
 export default function PhantomBusterScraperPanel({ onLaunch, isLoading = false }: PhantomBusterScraperPanelProps) {
   const { toast } = useToast();
   const { industries, isLoading: industriesLoading } = useIndustryTemplates();
-  const [isTestMode, setIsTestMode] = useState(false);
+  // Test mode removed - live mode only
   const [estimatedProfiles, setEstimatedProfiles] = useState(0);
   
   const [filters, setFilters] = useState<PhantomBusterFilters>({
@@ -118,22 +118,13 @@ export default function PhantomBusterScraperPanel({ onLaunch, isLoading = false 
 
   useEffect(() => {
     setEstimatedProfiles(calculateEstimatedProfiles());
-  }, [filters, isTestMode]);
+  }, [filters]);
 
   const handleLaunchScraper = async () => {
     try {
       const estimated = calculateEstimatedProfiles();
       
-      if (isTestMode) {
-        toast({
-          title: "Test Mode Activated",
-          description: `PhantomBuster scraper running in test mode. Estimated ${estimated} test profiles.`,
-        });
-        
-        const testFilters = { ...filters, testMode: true };
-        onLaunch(testFilters);
-        return;
-      }
+      // Test mode removed - live scraping only
 
       const response = await apiRequest("POST", "/api/launch-scrape", {
         tool: "phantom",
@@ -183,25 +174,20 @@ export default function PhantomBusterScraperPanel({ onLaunch, isLoading = false 
     <TooltipProvider>
       <div className="space-y-6 p-6 bg-gradient-to-br from-slate-900/80 via-purple-900/60 to-violet-900/80 backdrop-blur-xl rounded-xl border border-slate-700/50 shadow-2xl">
         
-        {/* Test Mode Toggle */}
+        {/* Live Mode Only */}
         <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg border border-slate-600/50">
           <div className="flex items-center space-x-3">
-            <Label htmlFor="test-mode" className="text-purple-200 font-medium">Test Company Mode</Label>
+            <Label className="text-green-400 font-medium">Live Production Mode</Label>
             <Tooltip>
               <TooltipTrigger>
                 <HelpCircle className="h-4 w-4 text-slate-400" />
               </TooltipTrigger>
               <TooltipContent>
-                <p>Toggle between fake test data (instant) vs real PhantomBuster scraping</p>
+                <p>Real PhantomBuster scraping only - no test data</p>
               </TooltipContent>
             </Tooltip>
           </div>
-          <Switch
-            id="test-mode"
-            checked={isTestMode}
-            onCheckedChange={setIsTestMode}
-            className="data-[state=checked]:bg-purple-500"
-          />
+          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">LIVE</Badge>
         </div>
 
         {/* Contact Filters Section */}

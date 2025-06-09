@@ -38,7 +38,7 @@ interface ApolloScraperPanelProps {
 export default function ApolloScraperPanel({ onLaunch, isLoading = false }: ApolloScraperPanelProps) {
   const { toast } = useToast();
   const { industries, isLoading: industriesLoading } = useIndustryTemplates();
-  const [isTestMode, setIsTestMode] = useState(false);
+  // Test mode removed - live mode only
   const [estimatedLeads, setEstimatedLeads] = useState(0);
   
   const [filters, setFilters] = useState<ApolloFilters>({
@@ -98,10 +98,7 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
   };
 
   const calculateEstimatedLeads = () => {
-    if (isTestMode) {
-      return Math.floor(Math.random() * 500) + 100;
-    }
-    
+    // Live mode only - no test data generation
     let baseCount = 10000;
     
     if (filters.jobTitles.length > 0) baseCount *= 0.7;
@@ -121,7 +118,7 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
 
   useEffect(() => {
     setEstimatedLeads(calculateEstimatedLeads());
-  }, [filters, isTestMode]);
+  }, [filters]);
 
   const handleLaunchScraper = async () => {
     try {
