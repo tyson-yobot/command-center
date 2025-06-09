@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-09T01:15:00.760Z",
-    "functionId": 136,
-    "functionName": "Personality Assigner",
-    "batch": 14,
-    "category": "AI",
-    "status": "success",
-    "duration": 587,
-    "successCount": 3,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-09T01:15:00.835Z",
     "functionId": 131,
     "functionName": "CRM Script Generator",
@@ -11356,6 +11345,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-09T06:15:21.312Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-09T06:17:04.567Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-09T06:17:04.205Z",
       "automationStatus": "running"
     }
   }

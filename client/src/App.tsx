@@ -4,7 +4,7 @@ import { Route, Switch } from "wouter";
 import CommandCenter from "./pages/command-center";
 import LeadScraper from "./pages/lead-scraper";
 import ControlCenter from "./pages/control-center";
-import Mobile from "./pages/mobile";
+
 
 // Test/Live Mode Context for synchronized mode across all screens
 interface ModeContextType {
@@ -38,7 +38,7 @@ function Router() {
           <Route path="/command-center" component={CommandCenter} />
           <Route path="/control-center" component={ControlCenter} />
           <Route path="/lead-scraper" component={LeadScraper} />
-          <Route path="/mobile" component={Mobile} />
+
           <Route path="/" component={CommandCenter} />
           <Route>
             <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
