@@ -108,6 +108,7 @@ export default function ClientDashboard() {
   const [showSalesOrderProcessor, setShowSalesOrderProcessor] = useState(false);
   const [showContentCreator, setShowContentCreator] = useState(false);
   const [showMailchimpSync, setShowMailchimpSync] = useState(false);
+  const [showSocialContentCreator, setShowSocialContentCreator] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
   
   // Call monitoring states

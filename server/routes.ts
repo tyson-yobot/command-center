@@ -1595,8 +1595,18 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
           } else if (file.mimetype === 'text/csv') {
             extractedText = file.buffer.toString('utf-8');
           } else if (file.mimetype === 'application/pdf') {
-            // For PDF files, we'll store them and mark for processing
-            extractedText = `PDF document: ${file.originalname}`;
+            // Extract text from PDF using a proper PDF parser
+            try {
+              const { PDFExtract } = await import('pdf.js-extract');
+              const pdfExtract = new PDFExtract();
+              const pdfData = await pdfExtract.extractBuffer(file.buffer);
+              extractedText = pdfData.pages.map(page => 
+                page.content.map(item => item.str).join(' ')
+              ).join('\n');
+            } catch (pdfError) {
+              console.error('PDF extraction failed:', pdfError);
+              extractedText = `PDF document: ${file.originalname} (content extraction failed)`;
+            }
           } else {
             extractedText = `Document: ${file.originalname}`;
           }
