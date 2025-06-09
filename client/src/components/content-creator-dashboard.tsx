@@ -1,22 +1,22 @@
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
-import { apiRequest } from '@/lib/queryClient';
+import React, { useState, useEffect } from 'react';
+import { Button } from '../ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Textarea } from '../ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Switch } from '../ui/switch';
+import { Badge } from '../ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { useToast } from '../../hooks/use-toast';
+import { apiRequest } from '../../lib/queryClient';
 import { ArrowLeft, Wand2, Copy, Download, Share, Eye } from 'lucide-react';
 
 interface ContentCreatorProps {
   onBack: () => void;
 }
 
-export default function ContentCreatorDashboard({ onBack }: ContentCreatorProps) {
+function ContentCreatorDashboard({ onBack }: ContentCreatorProps) {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('social');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -405,3 +405,5 @@ export default function ContentCreatorDashboard({ onBack }: ContentCreatorProps)
     </div>
   );
 }
+
+export { ContentCreatorDashboard };

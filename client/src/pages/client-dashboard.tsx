@@ -3589,6 +3589,25 @@ export default function ClientDashboard() {
         <MailchimpSyncDashboard onClose={() => setShowMailchimpSync(false)} />
       )}
 
+      {/* Hidden File Input for Document Upload */}
+      <input
+        id="document-upload"
+        type="file"
+        accept=".pdf,.doc,.docx,.txt,.md"
+        onChange={handleFileUpload}
+        style={{ display: 'none' }}
+      />
+
+      {/* Content Creator Module */}
+      {activeModule === 'content-creator' && (
+        <ContentCreatorDashboard onBack={() => setActiveModule(null)} />
+      )}
+
+      {/* Mailchimp Module */}
+      {activeModule === 'mailchimp' && (
+        <MailchimpSyncDashboard onBack={() => setActiveModule(null)} />
+      )}
+
       {/* Zendesk Live Chat Widget */}
       <ZendeskChatWidget />
     </div>
