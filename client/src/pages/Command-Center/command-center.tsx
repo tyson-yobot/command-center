@@ -1784,7 +1784,27 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => executeLiveCommand("New Support Ticket")}
+                    onClick={async () => {
+                      try {
+                        console.log('New Support Ticket button clicked');
+                        const response = await fetch('/api/automation/new-support-ticket', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            clientName: 'Command Center User',
+                            subject: 'Support Request from Command Center',
+                            description: 'Support ticket created via Command Center automation',
+                            priority: 'medium'
+                          })
+                        });
+                        const result = await response.json();
+                        console.log('Support ticket result:', result);
+                        alert(result.success ? `Support ticket created: ${result.ticketId}` : 'Support ticket creation failed');
+                      } catch (error) {
+                        console.error('Support ticket error:', error);
+                        alert('Support ticket creation failed');
+                      }
+                    }}
                     className="bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">🆘</span>
@@ -1792,7 +1812,26 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => executeLiveCommand("Manual Follow-up")}
+                    onClick={async () => {
+                      try {
+                        console.log('Manual Follow-up button clicked');
+                        const response = await fetch('/api/automation/manual-followup', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            contactId: 'CONTACT_' + Date.now(),
+                            followupType: 'scheduled_call',
+                            message: 'Follow-up scheduled via Command Center automation'
+                          })
+                        });
+                        const result = await response.json();
+                        console.log('Follow-up result:', result);
+                        alert(result.success ? `Follow-up scheduled: ${result.followupId}` : 'Follow-up scheduling failed');
+                      } catch (error) {
+                        console.error('Follow-up error:', error);
+                        alert('Follow-up scheduling failed');
+                      }
+                    }}
                     className="bg-amber-600 hover:bg-amber-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">🚀</span>
@@ -1800,7 +1839,29 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => setShowSalesOrderProcessor(true)}
+                    onClick={async () => {
+                      try {
+                        console.log('Sales Orders button clicked');
+                        const response = await fetch('/api/automation/sales-orders', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            orderData: {
+                              clientId: 'CLIENT_' + Date.now(),
+                              amount: 500,
+                              productName: 'YoBot Automation Package',
+                              status: 'pending'
+                            }
+                          })
+                        });
+                        const result = await response.json();
+                        console.log('Sales order result:', result);
+                        alert(result.success ? `Sales order processed: ${result.orderId}` : 'Sales order processing failed');
+                      } catch (error) {
+                        console.error('Sales order error:', error);
+                        alert('Sales order processing failed');
+                      }
+                    }}
                     className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">💼</span>
@@ -1808,7 +1869,25 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => executeLiveCommand("Send SMS")}
+                    onClick={async () => {
+                      try {
+                        console.log('Send SMS button clicked');
+                        const response = await fetch('/api/automation/send-sms', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            phoneNumber: '+1234567890',
+                            message: 'SMS notification from YoBot Command Center automation system'
+                          })
+                        });
+                        const result = await response.json();
+                        console.log('SMS result:', result);
+                        alert(result.success ? `SMS sent successfully: ${result.messageId}` : 'SMS sending failed');
+                      } catch (error) {
+                        console.error('SMS error:', error);
+                        alert('SMS sending failed');
+                      }
+                    }}
                     className="bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-start p-3"
                   >
                     <MessageSquare className="w-5 h-5 mr-3" />
@@ -1872,7 +1951,26 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => executeLiveCommand("Initiate Voice Call")}
+                    onClick={async () => {
+                      try {
+                        console.log('Initiate Voice Call button clicked');
+                        const response = await fetch('/api/voicebot/initiate-call', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            phoneNumber: '+1234567890',
+                            callType: 'consultation',
+                            clientId: 'CLIENT_' + Date.now()
+                          })
+                        });
+                        const result = await response.json();
+                        console.log('Voice call initiated:', result);
+                        alert(result.success ? `Voice call initiated: ${result.callId}` : 'Voice call initiation failed');
+                      } catch (error) {
+                        console.error('Voice call error:', error);
+                        alert('Voice call initiation failed');
+                      }
+                    }}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📞</span>
@@ -1925,7 +2023,37 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => executeLiveCommand("Export Data")}
+                    onClick={async () => {
+                      try {
+                        console.log('Export Data button clicked');
+                        const response = await fetch('/api/data/export', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            format: 'csv',
+                            includeData: ['leads', 'calls', 'automation_logs']
+                          })
+                        });
+                        
+                        if (response.ok) {
+                          const blob = await response.blob();
+                          const url = window.URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = `yobot_export_${new Date().toISOString().split('T')[0]}.csv`;
+                          document.body.appendChild(a);
+                          a.click();
+                          document.body.removeChild(a);
+                          window.URL.revokeObjectURL(url);
+                          alert('Data exported successfully');
+                        } else {
+                          alert('Data export failed');
+                        }
+                      } catch (error) {
+                        console.error('Export error:', error);
+                        alert('Data export failed');
+                      }
+                    }}
                     className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📊</span>
@@ -1933,7 +2061,26 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => setShowMailchimpSync(true)}
+                    onClick={async () => {
+                      try {
+                        console.log('Mailchimp Sync button clicked');
+                        const response = await fetch('/api/automation/mailchimp-sync', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            listId: 'mailchimp_list_001',
+                            syncType: 'full_sync',
+                            includeFields: ['email', 'firstName', 'lastName', 'status']
+                          })
+                        });
+                        const result = await response.json();
+                        console.log('Mailchimp sync result:', result);
+                        alert(result.success ? `Mailchimp sync completed: ${result.contactsSynced} contacts synced` : 'Mailchimp sync failed');
+                      } catch (error) {
+                        console.error('Mailchimp sync error:', error);
+                        alert('Mailchimp sync failed');
+                      }
+                    }}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📧</span>
