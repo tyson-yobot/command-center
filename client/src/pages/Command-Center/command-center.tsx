@@ -61,25 +61,48 @@ import ModeToggle from '@/components/mode-toggle';
 
 export default function CommandCenter() {
   const { isTestMode, setTestMode } = useModeContext();
-  const { data: metrics } = useQuery({ queryKey: ['/api/metrics'] });
-  const { data: bot } = useQuery({ queryKey: ['/api/bot'] });
-  const { data: crmData } = useQuery({ queryKey: ['/api/crm'] });
-  const { data: testMetrics } = useQuery({ queryKey: ['/api/airtable/test-metrics'] });
-  const { data: commandCenterMetrics } = useQuery({ queryKey: ['/api/airtable/command-center-metrics'] });
-  const { data: knowledgeStats, refetch: refetchKnowledge } = useQuery({ queryKey: ['/api/knowledge/stats'] });
+  // ALL QUERIES DISABLED TO STOP FLASHING - Manual refresh only
+  const { data: metrics } = useQuery({ 
+    queryKey: ['/api/metrics'],
+    enabled: false // DISABLED
+  });
+  const { data: bot } = useQuery({ 
+    queryKey: ['/api/bot'],
+    enabled: false // DISABLED
+  });
+  const { data: crmData } = useQuery({ 
+    queryKey: ['/api/crm'],
+    enabled: false // DISABLED
+  });
+  const { data: testMetrics } = useQuery({ 
+    queryKey: ['/api/airtable/test-metrics'],
+    enabled: false // DISABLED
+  });
+  const { data: commandCenterMetrics } = useQuery({ 
+    queryKey: ['/api/airtable/command-center-metrics'],
+    enabled: false // DISABLED
+  });
+  const { data: knowledgeStats, refetch: refetchKnowledge } = useQuery({ 
+    queryKey: ['/api/knowledge/stats'],
+    enabled: false // DISABLED
+  });
   const { data: automationMetrics } = useQuery({ 
-    queryKey: ['/api/automation/metrics']
+    queryKey: ['/api/automation/metrics'],
+    enabled: false // DISABLED
   });
   const { data: liveExecutions } = useQuery({ 
-    queryKey: ['/api/automation/executions']
+    queryKey: ['/api/automation/executions'],
+    enabled: false // DISABLED
   });
   const { data: functionStatus } = useQuery({ 
-    queryKey: ['/api/automation/functions']
+    queryKey: ['/api/automation/functions'],
+    enabled: false // DISABLED
   });
   
-  // System mode control - no auto-refetch to prevent flashing
+  // System mode control - DISABLED to prevent flashing
   const { data: systemModeData } = useQuery({ 
-    queryKey: ['/api/system-mode']
+    queryKey: ['/api/system-mode'],
+    enabled: false // DISABLED
   });
   
   const [isListening, setIsListening] = React.useState(false);
