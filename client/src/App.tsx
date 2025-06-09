@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
 import CommandCenter from "./pages/command-center";
-import LeadScrapingPage from "./pages/lead-scraping-page";
+import LeadScraper from "./pages/lead-scraper";
 import ControlCenter from "./pages/control-center";
 import Mobile from "./pages/mobile";
 
@@ -37,7 +37,7 @@ function Router() {
         <Switch>
           <Route path="/command-center" component={CommandCenter} />
           <Route path="/control-center" component={ControlCenter} />
-          <Route path="/lead-scraper" component={LeadScrapingPage} />
+          <Route path="/lead-scraper" component={LeadScraper} />
           <Route path="/mobile" component={Mobile} />
           <Route path="/" component={CommandCenter} />
           <Route>
