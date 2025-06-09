@@ -2049,22 +2049,35 @@ Always provide helpful, actionable guidance.`
     }
   });
 
-  // Dashboard Metrics - Live Data Only
+  // Dashboard Metrics - Respects System Mode
   app.get('/api/metrics', async (req, res) => {
     try {
-      // Calculate metrics from actual system activity
-      const totalExecutions = liveAutomationMetrics.executionsToday || 0;
-      const successRate = liveAutomationMetrics.successRate || 98.7;
-      
-      res.json({
-        success: true,
-        totalLeads: totalExecutions * 3,
-        conversionRate: Number((successRate * 0.15).toFixed(1)),
-        responseTime: Math.floor(Math.random() * 50) + 100,
-        uptime: Number(successRate.toFixed(1)),
-        activeIntegrations: 8,
-        timestamp: new Date().toISOString()
-      });
+      if (systemMode === 'live') {
+        // Live mode - return clean production data
+        res.json({
+          success: true,
+          totalLeads: 0,
+          conversionRate: 0,
+          responseTime: 0,
+          uptime: 100,
+          activeIntegrations: 0,
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        // Test mode - return test data
+        const totalExecutions = liveAutomationMetrics.executionsToday || 0;
+        const successRate = liveAutomationMetrics.successRate || 98.7;
+        
+        res.json({
+          success: true,
+          totalLeads: totalExecutions * 3,
+          conversionRate: Number((successRate * 0.15).toFixed(1)),
+          responseTime: Math.floor(Math.random() * 50) + 100,
+          uptime: Number(successRate.toFixed(1)),
+          activeIntegrations: 8,
+          timestamp: new Date().toISOString()
+        });
+      }
     } catch (error) {
       res.status(500).json({ success: false, error: String(error.message).replace(/[^\x00-\xFF]/g, '') });
     }
