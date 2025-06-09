@@ -1481,6 +1481,13 @@ export default function CommandCenter() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 pt-8 p-8">
+      {/* Test Mode Banner */}
+      {currentSystemMode === 'test' && (
+        <div className="bg-yellow-500 text-black py-3 px-4 text-center font-bold text-lg border-b-2 border-yellow-600 fixed top-0 left-0 right-0 z-50">
+          🧪 TEST MODE ACTIVE - No production data or API calls will be executed
+        </div>
+      )}
+      
       <div className="w-full">
 
 

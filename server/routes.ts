@@ -31,22 +31,57 @@ const openai = new OpenAI({
 // CRITICAL PRODUCTION COMPLIANCE: Global system mode variable
 let systemMode: 'test' | 'live' = 'live';
 
+// Comprehensive logging system for ALL operations
+interface LogEntry {
+  timestamp: string;
+  operation: string;
+  systemMode: 'live' | 'test';
+  data: any;
+  result: 'success' | 'error' | 'blocked';
+  message: string;
+}
+
+const operationLogs: LogEntry[] = [];
+
+function logOperation(operation: string, data: any, result: 'success' | 'error' | 'blocked', message: string) {
+  const logEntry: LogEntry = {
+    timestamp: new Date().toISOString(),
+    operation,
+    systemMode,
+    data: systemMode === 'live' ? data : '[TEST MODE - DATA MASKED]',
+    result,
+    message
+  };
+  
+  operationLogs.push(logEntry);
+  console.log(`[${systemMode.toUpperCase()}] ${operation}: ${message}`, logEntry);
+  
+  // Keep only last 1000 logs to prevent memory issues
+  if (operationLogs.length > 1000) {
+    operationLogs.shift();
+  }
+}
+
 // System mode gate - blocks all real operations in test mode
 function enforceSystemModeGate(operation: string, allowedInTest: boolean = false) {
   if (!systemMode) {
+    logOperation(operation, {}, 'error', "System mode not set - critical security violation");
     throw new Error("System mode not set - critical security violation");
   }
   
   if (systemMode === 'test' && !allowedInTest) {
+    logOperation(operation, {}, 'blocked', "Production operation blocked in test mode");
     console.log(`🧪 Test Mode Active - Blocking production operation: ${operation}`);
     return false;
   }
   
   if (systemMode === 'live') {
+    logOperation(operation, {}, 'success', "Production operation authorized");
     console.log(`✅ Live Mode - Executing production operation: ${operation}`);
     return true;
   }
   
+  logOperation(operation, {}, 'success', "Test operation executed");
   console.log(`🧪 Test Mode - Executing test operation: ${operation}`);
   return true;
 }
