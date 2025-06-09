@@ -410,28 +410,53 @@ export default function ClientDashboard() {
     return () => window.removeEventListener('focus', handleFocus);
   }, [availableVoices.length]);
 
-  // Handle document upload
+  // Document upload handler (consolidated)
   const handleDocumentUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (!files) return;
+    if (!files || files.length === 0) return;
+
+    setDocumentsLoading(true);
+    toast({
+      title: "Uploading Documents",
+      description: `Processing ${files.length} file(s)...`,
+    });
 
     for (const file of Array.from(files)) {
       const formData = new FormData();
       formData.append('document', file);
-      
+      formData.append('category', 'user-upload');
+
       try {
-        const response = await fetch('/api/documents/upload', {
+        const response = await fetch('/api/rag/upload', {
           method: 'POST',
-          body: formData,
+          body: formData
         });
-        
-        const result = await response.json();
-        if (result.success) {
-          setUploadedFiles(prev => [...prev, result.document]);
-          executeLiveCommand(`Document uploaded: ${file.name}`);
+
+        if (response.ok) {
+          const result = await response.json();
+          setUploadedDocuments(prev => [...prev, result]);
+          toast({
+            title: "Document Uploaded",
+            description: `${file.name} processed successfully`,
+          });
+        } else {
+          toast({
+            title: "Upload Failed",
+            description: `Failed to upload ${file.name}`,
+            variant: "destructive"
+          });
         }
       } catch (error) {
-        console.error('Upload failed:', error);
+        toast({
+          title: "Upload Error",
+          description: `Error uploading ${file.name}`,
+          variant: "destructive"
+        });
+      }
+    }
+
+    setDocumentsLoading(false);
+    event.target.value = '';
         executeLiveCommand(`Upload failed: ${file.name}`);
       }
     }
@@ -678,6 +703,173 @@ export default function ClientDashboard() {
       setVoiceStatus(`Analytics: ${data.totalCalls || 0} calls, ${data.successRate || 0}% success`);
     } catch (error) {
       setVoiceStatus('Failed to load analytics');
+    }
+  };
+
+  const handleSendSMS = async () => {
+    try {
+      const phoneNumber = prompt('Enter phone number:');
+      const message = prompt('Enter message:');
+      
+      if (!phoneNumber || !message) {
+        toast({
+          title: "SMS Cancelled",
+          description: "Phone number and message are required",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const response = await apiRequest('POST', '/api/sms/send', {
+        to: phoneNumber,
+        message: message
+      });
+
+      if (response.ok) {
+        toast({
+          title: "SMS Sent",
+          description: `Message sent to ${phoneNumber}`,
+        });
+      } else {
+        toast({
+          title: "SMS Failed",
+          description: "Failed to send SMS message",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "SMS Error",
+        description: "Network error sending SMS",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDocumentUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    setDocumentsLoading(true);
+    toast({
+      title: "Uploading Documents",
+      description: `Processing ${files.length} file(s)...`,
+    });
+
+    for (const file of Array.from(files)) {
+      const formData = new FormData();
+      formData.append('document', file);
+      formData.append('category', 'user-upload');
+
+      try {
+        const response = await fetch('/api/rag/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          setUploadedDocuments(prev => [...prev, result]);
+          toast({
+            title: "Document Uploaded",
+            description: `${file.name} processed successfully`,
+          });
+        } else {
+          toast({
+            title: "Upload Failed",
+            description: `Failed to upload ${file.name}`,
+            variant: "destructive"
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Upload Error",
+          description: `Error uploading ${file.name}`,
+          variant: "destructive"
+        });
+      }
+    }
+
+    setDocumentsLoading(false);
+    event.target.value = '';
+  };
+
+  const handleDownloadPDF = async () => {
+    try {
+      toast({
+        title: "Generating PDF",
+        description: "Creating your report...",
+      });
+
+      const response = await fetch('/api/reports/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'summary', includeMetrics: true })
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `yobot-report-${new Date().toISOString().split('T')[0]}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        toast({
+          title: "PDF Generated",
+          description: "Report downloaded successfully",
+        });
+      } else {
+        toast({
+          title: "PDF Failed",
+          description: "Failed to generate PDF report",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "PDF Error",
+        description: "Error generating PDF report",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const executeLiveCommand = async (command: string) => {
+    try {
+      toast({
+        title: "Executing Command",
+        description: `Running: ${command}`,
+      });
+
+      const response = await apiRequest('POST', '/api/automation/execute', {
+        command: command,
+        mode: isTestMode ? 'test' : 'live',
+        timestamp: new Date().toISOString()
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        toast({
+          title: "Command Executed",
+          description: result.message || `${command} completed successfully`,
+        });
+      } else {
+        toast({
+          title: "Command Failed",
+          description: `Failed to execute: ${command}`,
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Execution Error",
+        description: `Error executing: ${command}`,
+        variant: "destructive"
+      });
     }
   };
 
@@ -1680,59 +1872,35 @@ export default function ClientDashboard() {
                   </Button>
                   
                   <Button
-                    onClick={() => setActiveModule('content-creator')}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                    onClick={() => setShowSocialContentCreator(true)}
+                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
                   >
-                    <span className="text-xl mr-3">📢</span>
-                    <span>Content Creator</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => setActiveModule('mailchimp')}
-                    className="bg-yellow-600 hover:bg-yellow-700 text-white flex items-center justify-start p-3"
-                  >
-                    <span className="text-xl mr-3">📧</span>
-                    <span>Mailchimp Sync</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => document.getElementById('document-upload')?.click()}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
-                  >
-                    <span className="text-xl mr-3">📄</span>
-                    <span>Upload Documents</span>
-                  </Button>
-                  <input
-                    id="document-upload"
-                    type="file"
-                    multiple
-                    accept=".pdf,.doc,.docx,.txt"
-                    className="hidden"
-                    onChange={handleDocumentUpload}
-                  />
-                  
-                  <Button
-                    onClick={() => executeLiveCommand("Send SMS")}
-                    className="bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-start p-3"
-                  >
-                    <MessageSquare className="w-5 h-5 mr-3" />
-                    <span>Send SMS</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => setShowContentCreator(true)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
-                  >
-                    <span className="text-xl mr-3">📢</span>
+                    <Share2 className="w-5 h-5 mr-3" />
                     <span>Content Creator</span>
                   </Button>
                   
                   <Button
                     onClick={() => setShowMailchimpSync(true)}
-                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
                   >
-                    <span className="text-xl mr-3">📧</span>
+                    <Mail className="w-5 h-5 mr-3" />
                     <span>Mailchimp Sync</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => document.getElementById('document-upload')?.click()}
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+                  >
+                    <Upload className="w-5 h-5 mr-3" />
+                    <span>Upload Documents</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={handleSendSMS}
+                    className="bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-start p-3"
+                  >
+                    <MessageSquare className="w-5 h-5 mr-3" />
+                    <span>Send SMS</span>
                   </Button>
                 </div>
               </CardContent>
