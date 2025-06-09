@@ -124,16 +124,7 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
     try {
       const estimated = calculateEstimatedLeads();
       
-      if (isTestMode) {
-        toast({
-          title: "Test Mode Activated",
-          description: `Apollo scraper running in test mode. Estimated ${estimated} test leads.`,
-        });
-        
-        const testFilters = { ...filters, testMode: true };
-        onLaunch(testFilters);
-        return;
-      }
+      // Test mode removed - live scraping only
 
       const response = await apiRequest("POST", "/api/launch-scrape", {
         tool: "apollo",
