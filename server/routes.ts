@@ -672,22 +672,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
               industry: person.organization?.industry,
               source: 'Apollo'
             })) || [];
-          } else if (systemMode === 'test') {
-            // Test mode - return mock data ONLY in test mode
-            results = [
-              {
-                fullName: 'John Smith',
-                email: 'john.smith@test.com',
-                company: 'Test Corp',
-                title: 'CEO',
-                location: 'New York, NY',
-                phone: '+1234567890',
-                industry: 'Technology',
-                source: 'Apollo (Test)'
-              }
-            ];
           } else {
-            // Live mode without API - return empty
+            // No API or live mode without API - return empty
             results = [];
           }
           break;
@@ -719,21 +705,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
               category: place.categoryName,
               source: 'Apify'
             })) || [];
-          } else if (systemMode === 'test') {
-            results = [
-              {
-                businessName: 'Test Business',
-                address: '123 Test St, Test City',
-                phone: '+1234567890',
-                website: 'test.com',
-                rating: '4.5',
-                reviewCount: 150,
-                category: 'Restaurant',
-                source: 'Apify (Test)'
-              }
-            ];
           } else {
-            // Live mode without API - return empty
+            // No API or live mode without API - return empty
             results = [];
           }
           break;
@@ -742,20 +715,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           if (!isTestMode) {
             // PhantomBuster implementation would go here
             results = [];
-          } else if (systemMode === 'test') {
-            results = [
-              {
-                fullName: 'Jane Doe',
-                headline: 'Marketing Director',
-                company: 'Test Marketing Co',
-                location: 'San Francisco, CA',
-                connectionDegree: '2nd',
-                profileUrl: 'linkedin.com/in/jane-doe-test',
-                source: 'PhantomBuster (Test)'
-              }
-            ];
           } else {
-            // Live mode without API - return empty
+            // No API or live mode without API - return empty
             results = [];
           }
           break;
