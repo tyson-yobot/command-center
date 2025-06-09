@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Badge } from './ui/badge';
+import { Progress } from './ui/progress';
 import { Mail, Users, Send, Eye, TrendingUp, Download, Target } from 'lucide-react';
-import { apiRequest } from '@/lib/queryClient';
+import { apiRequest } from '../lib/queryClient';
 import { useQuery } from '@tanstack/react-query';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '../hooks/use-toast';
 
 interface MailchimpSyncProps {
-  onClose: () => void;
+  onBack: () => void;
 }
 
-export function MailchimpSyncDashboard({ onClose }: MailchimpSyncProps) {
+export function MailchimpSyncDashboard({ onBack }: MailchimpSyncProps) {
   const { toast } = useToast();
   const [selectedAudience, setSelectedAudience] = useState('');
   const [selectedSegment, setSelectedSegment] = useState('');
@@ -143,7 +143,7 @@ export function MailchimpSyncDashboard({ onClose }: MailchimpSyncProps) {
             📧 Mailchimp Integration Manager
           </h2>
           <Button
-            onClick={onClose}
+            onClick={onBack}
             variant="ghost"
             className="text-white hover:bg-white/10"
           >
