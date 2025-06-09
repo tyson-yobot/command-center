@@ -1470,13 +1470,13 @@ export default function ClientDashboard() {
                     Control Center
                   </Button>
                 </Link>
-                <Link href="/lead-scraping">
+                <Link href="/lead-scraper">
                   <Button 
                     variant="outline" 
                     className="bg-green-600 hover:bg-green-700 text-white border-green-500"
                   >
                     <Search className="w-4 h-4 mr-2" />
-                    Lead Scraping
+                    Lead Scraper
                   </Button>
                 </Link>
               </div>

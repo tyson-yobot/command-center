@@ -37,8 +37,7 @@ function Router() {
           <Route path="/command-center" component={ClientDashboard} />
           <Route path="/" component={ClientDashboard} />
           <Route path="/control-center" component={ControlCenter} />
-          <Route path="/lead-scraping" component={LeadScrapingPage} />
-          <Route path="/lead-scrape" component={LeadScrapingPage} />
+          <Route path="/lead-scraper" component={LeadScrapingPage} />
           <Route>
             <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
               <div className="text-center">
