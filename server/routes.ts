@@ -51,6 +51,54 @@ const upload = multer({
 // System mode tracking - controls test vs live data isolation
 let systemMode: 'test' | 'live' = 'live';
 
+// Global mode gate function - enforces data isolation
+function enforceSystemModeGate(operation: string, allowedInTest: boolean = true) {
+  if (!systemMode) {
+    throw new Error("System mode not set - critical security violation");
+  }
+  
+  if (systemMode === 'test' && !allowedInTest) {
+    console.log(`🧪 Test Mode Active - Blocking production operation: ${operation}`);
+    return false;
+  }
+  
+  if (systemMode === 'live') {
+    console.log(`✅ Live Mode - Executing production operation: ${operation}`);
+    return true;
+  }
+  
+  console.log(`🧪 Test Mode - Executing test operation: ${operation}`);
+  return true;
+}
+
+// Function to get appropriate Airtable table based on mode
+function getAirtableTable(baseTable: string) {
+  if (systemMode === 'test') {
+    return baseTable + '-QA'; // Test tables have -QA suffix
+  }
+  return baseTable;
+}
+
+// Function to get appropriate API keys based on mode
+function getAPIKeys() {
+  if (systemMode === 'test') {
+    return {
+      stripe: process.env.STRIPE_TEST_KEY,
+      hubspot: process.env.HUBSPOT_TEST_KEY || process.env.HUBSPOT_API_KEY,
+      airtable: process.env.AIRTABLE_TEST_TOKEN || process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN,
+      slack: process.env.SLACK_TEST_WEBHOOK || process.env.SLACK_WEBHOOK_URL,
+      qbo: process.env.QBO_SANDBOX_TOKEN
+    };
+  }
+  return {
+    stripe: process.env.STRIPE_SECRET_KEY,
+    hubspot: process.env.HUBSPOT_API_KEY,
+    airtable: process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN,
+    slack: process.env.SLACK_WEBHOOK_URL,
+    qbo: process.env.QUICKBOOKS_ACCESS_TOKEN
+  };
+}
+
 // Live automation tracking - initialized clean for production
 let liveAutomationMetrics = {
   activeFunctions: 1040,
@@ -2083,20 +2131,31 @@ Always provide helpful, actionable guidance.`
     }
   });
 
-  // Bot Status - Live Data Only
+  // Bot Status - Respects System Mode
   app.get('/api/bot', async (req, res) => {
     try {
-      // Calculate bot metrics from active automation functions
-      const activeFunctions = liveAutomationMetrics.activeFunctions;
-      const successRate = liveAutomationMetrics.successRate;
-      
-      res.json({
-        success: true,
-        status: activeFunctions > 0 ? 'active' : 'idle',
-        lastActivity: liveAutomationMetrics.lastExecution,
-        healthScore: Math.floor(successRate),
-        activeConversations: Math.floor(activeFunctions / 26) // Conversation correlation
-      });
+      if (systemMode === 'live') {
+        // Live mode - return clean production data
+        res.json({
+          success: true,
+          status: 'idle',
+          lastActivity: null,
+          healthScore: 100,
+          activeConversations: 0
+        });
+      } else {
+        // Test mode - return test data
+        const activeFunctions = liveAutomationMetrics.activeFunctions;
+        const successRate = liveAutomationMetrics.successRate;
+        
+        res.json({
+          success: true,
+          status: activeFunctions > 0 ? 'active' : 'idle',
+          lastActivity: liveAutomationMetrics.lastExecution,
+          healthScore: Math.floor(successRate),
+          activeConversations: Math.floor(activeFunctions / 26)
+        });
+      }
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
     }
