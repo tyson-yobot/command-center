@@ -65,47 +65,7 @@ export default function AdminToolsPanel() {
     }
   });
 
-  const injectTestLeadMutation = useMutation({
-    mutationFn: async () => {
-      const response = await fetch('/api/admin-tools/inject-test-lead', {
-        method: 'POST',
-        headers: {
-          'x-admin-password': adminPassword,
-          'x-admin-user': 'Command Center'
-        }
-      });
-      if (!response.ok) throw new Error('Failed to inject test lead');
-      return response.json();
-    },
-    onSuccess: () => {
-      toast({ title: 'Success', description: 'Test lead injected successfully' });
-      queryClient.invalidateQueries({ queryKey: ['/api/admin-tools/action-log'] });
-    },
-    onError: () => {
-      toast({ title: 'Error', description: 'Failed to inject test lead', variant: 'destructive' });
-    }
-  });
-
-  const playTestVoiceMutation = useMutation({
-    mutationFn: async () => {
-      const response = await fetch('/api/admin-tools/play-test-voice', {
-        method: 'POST',
-        headers: {
-          'x-admin-password': adminPassword,
-          'x-admin-user': 'Command Center'
-        }
-      });
-      if (!response.ok) throw new Error('Failed to generate test voice');
-      return response.json();
-    },
-    onSuccess: () => {
-      toast({ title: 'Success', description: 'Test voice generated successfully' });
-      queryClient.invalidateQueries({ queryKey: ['/api/admin-tools/action-log'] });
-    },
-    onError: () => {
-      toast({ title: 'Error', description: 'Failed to generate test voice', variant: 'destructive' });
-    }
-  });
+  // Test injection functions removed - live mode only
 
   const refreshApiKeysMutation = useMutation({
     mutationFn: async () => {
@@ -241,35 +201,7 @@ export default function AdminToolsPanel() {
             <span className="text-sm">Restart Workflow</span>
           </Button>
 
-          {/* Inject Test Lead */}
-          <Button
-            variant="outline"
-            onClick={() => injectTestLeadMutation.mutate()}
-            disabled={injectTestLeadMutation.isPending}
-            className="h-20 flex-col border-slate-600 text-slate-300 hover:bg-slate-700"
-          >
-            {injectTestLeadMutation.isPending ? (
-              <Loader2 className="w-6 h-6 mb-2 animate-spin" />
-            ) : (
-              <TestTube className="w-6 h-6 mb-2" />
-            )}
-            <span className="text-sm">Inject Test Lead</span>
-          </Button>
-
-          {/* Play Test Voice */}
-          <Button
-            variant="outline"
-            onClick={() => playTestVoiceMutation.mutate()}
-            disabled={playTestVoiceMutation.isPending}
-            className="h-20 flex-col border-slate-600 text-slate-300 hover:bg-slate-700"
-          >
-            {playTestVoiceMutation.isPending ? (
-              <Loader2 className="w-6 h-6 mb-2 animate-spin" />
-            ) : (
-              <PlayCircle className="w-6 h-6 mb-2" />
-            )}
-            <span className="text-sm">Play Test Voice</span>
-          </Button>
+          {/* Test injection buttons removed - live mode only */}
 
           {/* Export Logs */}
           <Button
