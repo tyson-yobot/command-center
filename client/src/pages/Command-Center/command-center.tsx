@@ -1814,21 +1814,7 @@ export default function CommandCenter() {
                     <span>Mailchimp Sync</span>
                   </Button>
                   
-                  <Button
-                    onClick={() => document.getElementById('document-upload')?.click()}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
-                  >
-                    <span className="text-xl mr-3">📄</span>
-                    <span>Upload Documents</span>
-                  </Button>
-                  <input
-                    id="document-upload"
-                    type="file"
-                    multiple
-                    accept=".pdf,.doc,.docx,.txt"
-                    className="hidden"
-                    onChange={handleDocumentUpload}
-                  />
+
                   
                   <Button
                     onClick={() => executeLiveCommand("Send SMS")}
