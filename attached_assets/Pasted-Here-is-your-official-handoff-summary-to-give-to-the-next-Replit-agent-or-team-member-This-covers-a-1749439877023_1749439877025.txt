@@ -1,0 +1,148 @@
+Here is your official handoff summary to give to the next Replit agent or team member. This covers all active integration issues, broken automations, missing code, and the exact continuation points not included in the canvas.
+
+✅ YoBot® Replit Dev Handoff Summary
+This is the production-level transition brief for any developer working on the YoBot® system. The canvas already contains the full UI/UX spec and structural directives. The points below are system-level integration issues, keys, and wiring checkpoints not covered there.
+
+🔐 KEYS & API IDs (Confirmed Active)
+Airtable API Key: paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa
+
+Airtable Base ID: appRt8V3tH4g5Z5if
+
+Airtable Table ID (Integration Log): tbldPRZ4nHbtj9opU
+
+Apollo API Key: K5haLlS3oGUe665fQ8xE4w
+
+Apify API Key: apify_api_RH0E0HyvexOfmaoCYXwdT1W8tWar8i3mcjDl
+
+Slack Webhook URL: https://hooks.slack.com/services/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
+
+📥 SALES ORDER PROCESS — CONTINUATION POINT
+Current Status:
+The front-end Tally logic is complete. Backend integrations fail silently or are never triggered.
+
+Where To Resume:
+Start from the webhook endpoint after Tally submission and ensure the following run only when in live mode:
+
+✅ Stripe: Creates invoice with one-time and recurring pricing
+
+✅ QuickBooks: Adds customer + invoice
+
+✅ Airtable: Writes to 🧾 Sales Orders
+
+✅ HubSpot: Logs deal + contact
+
+✅ Slack: Sends success alert
+
+✅ Confirmation screen: Shows full success details
+
+What’s Broken:
+Stripe + QBO wiring not confirmed to fire
+
+Slack and Airtable success logic disconnected
+
+HubSpot not getting correct contact email due to iterator bug
+
+Sales Order confirmation screen shows static success
+
+🧪 TEST MODE – WIRING REQUIREMENTS
+Test Mode is visible but non-functional. The toggle is only UI right now.
+
+What Must Happen:
+Toggle should be stored in global app state or cookie
+
+When flipped ON, all modules (Command Center, Control Center, Scraper, Support) must use test versions of:
+
+API endpoints
+
+Scraper payloads
+
+Airtable logging (Test table)
+
+Stripe/QBO mock billing (or sandbox)
+
+When flipped OFF, return to full production behavior
+
+🧩 LEAD SCRAPER – CURRENT CRITICAL ISSUES
+Not Yet Functional:
+Industry dropdowns show no values — must pull from 📚 Industry Templates table in Airtable
+
+All “Add” buttons (keywords, industries, locations) do not trigger any logic
+
+Email Verified / Phone Verified toggles do not alter payload or filter output
+
+"Start Search" still opens old deprecated Lead Search modal — not wired to Apollo, Apify, or Phantom
+
+📋 FILE ORGANIZATION – FAILURE POINT
+Replit directory has:
+
+Dozens of ungrouped .tsx files
+
+3+ versions of Command Center clones
+
+Modules wired to deprecated dashboards
+
+Instruction:
+Keep only:
+
+command-center
+
+lead-scraping
+
+control-center
+
+Archive everything else in /zzz-deprecated-do-not-use/
+
+All integrations must be wired to these three official pages only.
+
+📨 SUPPORT MODULE – STILL BROKEN
+Support message assistant only replies with generic fallback
+
+Zendesk webhook fires visually but no ticket created
+
+RAG upload accepts file but does not vectorize or ingest
+
+Control Center toggles for support do not actually turn on/off module functions
+
+🔍 QA LOGGING – AIRTABLE MODULE
+Add this Replit-side Airtable log call after any test:
+
+js
+Copy
+Edit
+await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU", {
+  method: "POST",
+  headers: {
+    Authorization: "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    records: [
+      {
+        fields: {
+          "✅ Pass/Fail": "✅ Pass",
+          "🛠 Notes / Debug": "Apollo scraper returned 432 valid leads",
+          "📅 Test Date": new Date().toISOString(),
+          "🧑‍💻 QA Owner": "Daniel Sharpe",
+          "🔁 Retry Attempted?": false,
+          "🔌 Module Type": "Scraper",
+          "🔗 Related Scenario Link": "https://replit.dev/scenario/lead-scraper-apollo"
+        },
+      },
+    ],
+  }),
+});
+🛠 ADDITIONAL NOTES
+All Command Center control toggles must reflect actual backend state
+
+Color theming must match canvas spec (not default Tailwind colors)
+
+The entire scraping module UI must be wired to real actions — no more mock demos
+
+This summary + the full canvas = everything needed to complete and ship. No more placeholder logic, no more mock screens, and no more guessing. You’re ready to hand this off with full confidence. Let me know when you're ready for a progress audit or screen share review.
+
+
+
+
+
+
+

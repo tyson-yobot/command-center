@@ -31,13 +31,32 @@ export default function LeadScrapingPage() {
   const [maxResults, setMaxResults] = React.useState('50');
   const [emailVerified, setEmailVerified] = React.useState(true);
   const [phoneAvailable, setPhoneAvailable] = React.useState(true);
+  const [industries, setIndustries] = React.useState<string[]>([]);
+  const [loading, setLoading] = React.useState(false);
+  const [keywords, setKeywords] = React.useState<string[]>([]);
+  const [locations, setLocations] = React.useState<string[]>([]);
+  const [selectedIndustries, setSelectedIndustries] = React.useState<string[]>([]);
+  const [newKeyword, setNewKeyword] = React.useState('');
+  const [newLocation, setNewLocation] = React.useState('');
+  const [scrapingResults, setScrapingResults] = React.useState<any[]>([]);
 
-  const industries = [
-    'Technology', 'Healthcare', 'Finance', 'Education', 'Retail',
-    'Manufacturing', 'Consulting', 'Media & Entertainment', 'Construction',
-    'Hospitality', 'Transportation', 'Real Estate', 'Insurance', 'Nonprofit',
-    'Government', 'Agriculture', 'Marketing', 'Law', 'Recruiting', 'Other'
-  ];
+  // Load industries from Airtable Industry Templates table
+  React.useEffect(() => {
+    const loadIndustries = async () => {
+      try {
+        const response = await fetch('/api/airtable/industry-templates');
+        const data = await response.json();
+        if (data.success && data.industries) {
+          setIndustries(data.industries);
+        }
+      } catch (error) {
+        console.error('Failed to load industries:', error);
+        // Fallback to basic list if API fails
+        setIndustries(['Technology', 'Healthcare', 'Finance', 'Education', 'Retail']);
+      }
+    };
+    loadIndustries();
+  }, []);
 
   const companySizes = [
     '1-10 employees', '11-50 employees', '51-200 employees',
@@ -47,6 +66,73 @@ export default function LeadScrapingPage() {
   const maxResultsOptions = [
     '25 leads', '50 leads', '100 leads', '250 leads', '500 leads', '1000 leads'
   ];
+
+  // Handler functions for Add buttons
+  const addKeyword = () => {
+    if (newKeyword.trim() && !keywords.includes(newKeyword.trim())) {
+      setKeywords([...keywords, newKeyword.trim()]);
+      setNewKeyword('');
+    }
+  };
+
+  const addLocation = () => {
+    if (newLocation.trim() && !locations.includes(newLocation.trim())) {
+      setLocations([...locations, newLocation.trim()]);
+      setNewLocation('');
+    }
+  };
+
+  const addIndustry = (industryName: string) => {
+    if (!selectedIndustries.includes(industryName)) {
+      setSelectedIndustries([...selectedIndustries, industryName]);
+    }
+  };
+
+  const removeKeyword = (keyword: string) => {
+    setKeywords(keywords.filter(k => k !== keyword));
+  };
+
+  const removeLocation = (location: string) => {
+    setLocations(locations.filter(l => l !== location));
+  };
+
+  const removeIndustry = (industry: string) => {
+    setSelectedIndustries(selectedIndustries.filter(i => i !== industry));
+  };
+
+  const startScraping = async (platform: string) => {
+    setLoading(true);
+    try {
+      const payload = {
+        searchTerms,
+        keywords,
+        locations,
+        industries: selectedIndustries,
+        jobTitle,
+        companySize,
+        maxResults: parseInt(maxResults),
+        emailVerified,
+        phoneAvailable,
+        isTestMode,
+        platform
+      };
+
+      const response = await fetch('/api/scraping/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setScrapingResults(result.results || []);
+      }
+    } catch (error) {
+      console.error('Scraping failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-6">
