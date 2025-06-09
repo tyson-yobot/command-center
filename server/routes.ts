@@ -840,10 +840,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { functionId } = req.params;
       const webhookData = req.body;
-      const isTestMode = req.headers['x-test-mode'] === 'true';
+      // Live mode only - no test mode headers processed
       
       // Process webhook through central automation dispatcher
-      const result = await executeAutomationFunction(functionId, webhookData, { isTestMode });
+      const result = await executeAutomationFunction(functionId, webhookData, { isTestMode: false });
       
       // Log webhook trigger to Airtable
       try {
