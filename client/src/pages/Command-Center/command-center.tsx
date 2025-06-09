@@ -1755,7 +1755,28 @@ export default function CommandCenter() {
               <CardContent>
                 <div className="grid grid-cols-1 gap-3">
                   <Button
-                    onClick={() => executeLiveCommand("New Booking Sync")}
+                    onClick={async () => {
+                      try {
+                        console.log('New Booking Sync button clicked');
+                        const response = await fetch('/api/automation/new-booking-sync', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            bookingData: {
+                              clientId: 'CLIENT_' + Date.now(),
+                              date: new Date().toISOString(),
+                              service: 'consultation'
+                            }
+                          })
+                        });
+                        const result = await response.json();
+                        console.log('Booking sync result:', result);
+                        alert(result.success ? 'Booking synced successfully' : 'Booking sync failed');
+                      } catch (error) {
+                        console.error('Booking sync error:', error);
+                        alert('Booking sync failed');
+                      }
+                    }}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📆</span>
@@ -1828,7 +1849,22 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => executeLiveCommand("Stop Pipeline Calls")}
+                    onClick={async () => {
+                      try {
+                        console.log('Stop Pipeline Calls button clicked');
+                        const response = await fetch('/api/voicebot/stop-pipeline', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ action: 'stop_pipeline_calls' })
+                        });
+                        const result = await response.json();
+                        console.log('Pipeline calls stopped:', result);
+                        alert(result.success ? 'Pipeline calls stopped' : 'Failed to stop pipeline calls');
+                      } catch (error) {
+                        console.error('Pipeline stop error:', error);
+                        alert('Failed to stop pipeline calls');
+                      }
+                    }}
                     className="bg-red-500 hover:bg-red-600 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">⏹️</span>
@@ -1852,7 +1888,10 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => setShowContentCreator(true)}
+                    onClick={() => {
+                      console.log('Content Creator button clicked - opening Publy');
+                      window.open('https://publy.ai', '_blank');
+                    }}
                     className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📢</span>
@@ -1870,7 +1909,7 @@ export default function CommandCenter() {
               <CardContent>
                 <div className="grid grid-cols-1 gap-3">
                   <Button
-                    onClick={() => window.location.href = '/lead-scrape'}
+                    onClick={() => window.location.href = '/lead-scraper'}
                     className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">🧲</span>
