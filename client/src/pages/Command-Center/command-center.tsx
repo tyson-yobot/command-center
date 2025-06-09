@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -105,25 +105,37 @@ export default function CommandCenter() {
   const [memoryText, setMemoryText] = useState('');
   const [memoryCategory, setMemoryCategory] = useState('general');
   const [voiceGenerationText, setVoiceGenerationText] = useState('');
+  const [currentSystemMode, setCurrentSystemMode] = useState('live');
   const { toast } = useToast();
+
+  // Fetch current system mode on load
+  useEffect(() => {
+    fetch('/api/system-mode')
+      .then(res => res.json())
+      .then(data => {
+        if (data.systemMode) {
+          setCurrentSystemMode(data.systemMode);
+        }
+      });
+  }, []);
 
   // System mode toggle function
   const toggleSystemMode = async () => {
     try {
-      const currentMode = systemModeData?.systemMode || 'live';
-      const newMode = currentMode === 'live' ? 'test' : 'live';
+      const newMode = currentSystemMode === 'live' ? 'test' : 'live';
       
       const response = await apiRequest('POST', '/api/system-mode', {
         mode: newMode
       });
       
       if (response.ok) {
+        setCurrentSystemMode(newMode);
         toast({
           title: "System Mode Changed",
           description: `Switched to ${newMode} mode. ${newMode === 'live' ? 'Production data only.' : 'Test data enabled.'}`,
         });
         // Refetch all data to update the dashboard
-        window.location.reload();
+        setTimeout(() => window.location.reload(), 1000);
       }
     } catch (error) {
       toast({
@@ -1529,20 +1541,20 @@ export default function CommandCenter() {
               <div className="flex items-center space-x-4 bg-slate-800/50 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
                 <label className="text-white font-medium">System Mode:</label>
                 <div className="flex items-center space-x-3">
-                  <span className={`text-sm ${systemModeData?.systemMode === 'test' ? 'text-yellow-400' : 'text-gray-400'}`}>
+                  <span className={`text-sm ${currentSystemMode === 'test' ? 'text-yellow-400' : 'text-gray-400'}`}>
                     Test
                   </span>
                   <Switch
-                    checked={systemModeData?.systemMode === 'live'}
+                    checked={currentSystemMode === 'live'}
                     onCheckedChange={toggleSystemMode}
                     className="data-[state=checked]:bg-green-500"
                   />
-                  <span className={`text-sm ${systemModeData?.systemMode === 'live' ? 'text-green-400' : 'text-gray-400'}`}>
+                  <span className={`text-sm ${currentSystemMode === 'live' ? 'text-green-400' : 'text-gray-400'}`}>
                     Live
                   </span>
                 </div>
-                <Badge variant={systemModeData?.systemMode === 'test' ? "secondary" : "default"} className="px-3 py-1">
-                  {systemModeData?.systemMode === 'test' ? "Test Mode - Safe Operations" : "Live Mode - Production Data"}
+                <Badge variant={currentSystemMode === 'test' ? "secondary" : "default"} className="px-3 py-1">
+                  {currentSystemMode === 'test' ? "Test Mode - Safe Operations" : "Live Mode - Production Data"}
                 </Badge>
               </div>
             </div>
