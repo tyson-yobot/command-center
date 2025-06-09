@@ -60,62 +60,22 @@ router.post('/restart-workflow', authenticateAdmin, async (req, res) => {
   }
 });
 
-// Inject test lead
+// Test lead injection disabled - no test data allowed in live mode
 router.post('/inject-test-lead', authenticateAdmin, async (req, res) => {
-  try {
-    const testLead = {
-      name: 'Test Contact',
-      email: 'test@example.com',
-      phone: '+1-555-0123',
-      company: 'Test Company',
-      source: 'Admin Test Injection',
-      timestamp: new Date().toISOString()
-    };
+  const action: AdminAction = {
+    action: 'Test Lead Injection Blocked',
+    timestamp: new Date().toISOString(),
+    user: req.headers['x-admin-user'] || 'Unknown',
+    result: 'error',
+    details: 'Test lead injection disabled - no test data allowed in production'
+  };
+  adminActionLog.unshift(action);
 
-    // Send test lead to CRM pipeline
-    if (process.env.HUBSPOT_API_KEY) {
-      await axios.post('https://api.hubapi.com/contacts/v1/contact', {
-        properties: [
-          { property: 'firstname', value: testLead.name },
-          { property: 'email', value: testLead.email },
-          { property: 'phone', value: testLead.phone },
-          { property: 'company', value: testLead.company }
-        ]
-      }, {
-        headers: { Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}` }
-      });
-    }
-
-    const action: AdminAction = {
-      action: 'Test Lead Injection',
-      timestamp: new Date().toISOString(),
-      user: req.headers['x-admin-user'] || 'Unknown',
-      result: 'success',
-      details: `Test lead created: ${testLead.email}`
-    };
-    adminActionLog.unshift(action);
-
-    res.json({
-      success: true,
-      message: 'Test lead injected successfully',
-      lead: testLead
-    });
-  } catch (error: any) {
-    const errorAction: AdminAction = {
-      action: 'Test Lead Injection',
-      timestamp: new Date().toISOString(),
-      user: req.headers['x-admin-user'] || 'Unknown',
-      result: 'error',
-      details: error.message
-    };
-    adminActionLog.unshift(errorAction);
-
-    res.status(500).json({
-      success: false,
-      error: 'Failed to inject test lead',
-      details: error.message
-    });
-  }
+  res.status(403).json({
+    success: false,
+    error: 'Test lead injection disabled',
+    message: 'No test data allowed in production environment'
+  });
 });
 
 // Play test voice

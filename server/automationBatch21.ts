@@ -203,11 +203,7 @@ async function executeAllBatch21Functions(testMode: boolean = false) {
       { module: "CRM", status: "error" }
     ];
     
-    const testLead = {
-      source: "Phantombuster",
-      email: "test@company.com",
-      interactionCount: 5
-    };
+    // Test data removed - live mode only allows authentic data
     
     const testCall = {
       id: "call_123",
@@ -235,48 +231,12 @@ async function executeAllBatch21Functions(testMode: boolean = false) {
       results.push({ function: 203, status: "success" });
     }
 
-    // Execute Function 204
-    const existingRecords = [{ email: "existing@test.com" }];
-    const newRecord = { email: "new@test.com" };
-    const isDuplicate = isDuplicateRecord(existingRecords, newRecord, "email");
-    results.push({ 
-      function: 204, 
-      status: "success", 
-      result: { isDuplicate }
-    });
-
-    // Execute Function 205
-    const phoneNumbers = ["(555) 123-4567", "1-555-987-6543"];
-    const normalizedPhones = phoneNumbers.map(normalizePhone);
-    results.push({ 
-      function: 205, 
-      status: "success", 
-      result: { original: phoneNumbers, normalized: normalizedPhones }
-    });
-
-    // Execute Function 206
-    const leadScore = calculateLeadScore(testLead);
-    results.push({ 
-      function: 206, 
-      status: "success", 
-      result: { lead: testLead, score: leadScore }
-    });
-
-    // Execute Function 207
-    const errorFreq = getErrorFrequency(testLogs);
-    results.push({ 
-      function: 207, 
-      status: "success", 
-      result: { frequency: errorFreq }
-    });
-
-    // Execute Function 208
-    const flaggedCall = flagCallForReview(testCall, "Escalation requested");
-    results.push({ 
-      function: 208, 
-      status: "success", 
-      result: flaggedCall
-    });
+    // Test functions disabled - live mode requires authentic data only
+    results.push({ function: 204, status: "blocked", message: "Test data removed" });
+    results.push({ function: 205, status: "blocked", message: "Test data removed" });
+    results.push({ function: 206, status: "blocked", message: "Test data removed" });
+    results.push({ function: 207, status: "blocked", message: "Test data removed" });
+    results.push({ function: 208, status: "blocked", message: "Test data removed" });
 
     // Execute Function 209
     const weekendCheck = isWeekend("2025-06-07"); // Saturday
@@ -453,12 +413,14 @@ export function registerBatch21Routes(app: Express) {
 
   app.post('/api/automation-batch-21/function-210', (req, res) => {
     try {
-      const params = req.body.params || {
-        name: "Test Integration",
-        type: "API Sync",
-        status: "Active"
-      };
-      const template = fillIntegrationTemplate(params);
+      if (!req.body.params) {
+        return res.status(400).json({ 
+          success: false, 
+          function: 210, 
+          error: "Live mode requires authentic integration parameters - no test data allowed" 
+        });
+      }
+      const template = fillIntegrationTemplate(req.body.params);
       res.json({ success: true, function: 210, template });
     } catch (error) {
       res.status(500).json({ success: false, function: 210, error: error instanceof Error ? error.message : "Unknown error" });
