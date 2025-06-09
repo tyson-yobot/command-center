@@ -42,7 +42,7 @@ interface ScrapingResult {
 }
 
 // Enterprise UI Components with Command Center Styling
-const Card = ({ children, className = "", onClick }: { 
+const CustomCard = ({ children, className = "", onClick }: { 
   children: React.ReactNode; 
   className?: string;
   onClick?: () => void;
@@ -231,7 +231,7 @@ export default function EnterpriseLeadScraper() {
           {/* Platform Cards */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-16">
             {/* Apollo.io */}
-            <Card 
+            <CustomCard 
               onClick={() => handleToolSelection('apollo')}
               className="group cursor-pointer hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 overflow-hidden p-10 transform hover:scale-105"
             >
@@ -267,10 +267,10 @@ export default function EnterpriseLeadScraper() {
                   </div>
                 </div>
               </div>
-            </Card>
+            </CustomCard>
 
             {/* Apify */}
-            <Card 
+            <CustomCard 
               onClick={() => handleToolSelection('apify')}
               className="group cursor-pointer hover:shadow-2xl hover:shadow-green-500/20 transition-all duration-500 overflow-hidden p-10 transform hover:scale-105"
             >
@@ -306,10 +306,10 @@ export default function EnterpriseLeadScraper() {
                   </div>
                 </div>
               </div>
-            </Card>
+            </CustomCard>
 
             {/* PhantomBuster */}
-            <Card 
+            <CustomCard 
               onClick={() => handleToolSelection('phantombuster')}
               className="group cursor-pointer hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 overflow-hidden p-10 transform hover:scale-105"
             >
@@ -345,7 +345,7 @@ export default function EnterpriseLeadScraper() {
                   </div>
                 </div>
               </div>
-            </Card>
+            </CustomCard>
           </div>
 
           {/* Enterprise Features Bar */}
@@ -414,7 +414,7 @@ export default function EnterpriseLeadScraper() {
             </div>
           )}
 
-          <Card className="p-12">
+          <CustomCard className="p-12">
             {/* Apollo.io Filters */}
             {selectedTool === 'apollo' && (
               <div className="space-y-12">
@@ -986,7 +986,7 @@ export default function EnterpriseLeadScraper() {
                 )}
               </Button>
             </div>
-          </Card>
+          </CustomCard>
         </div>
       </div>
     );
@@ -1028,7 +1028,7 @@ export default function EnterpriseLeadScraper() {
             </div>
           </div>
 
-          <Card className="p-12">
+          <CustomCard className="p-12">
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-2xl font-semibold text-white">
                 Premium Lead Intelligence Preview
@@ -1081,7 +1081,7 @@ export default function EnterpriseLeadScraper() {
                 </p>
               </div>
             )}
-          </Card>
+          </CustomCard>
         </div>
       </div>
     );
