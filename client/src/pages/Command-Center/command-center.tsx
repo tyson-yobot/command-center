@@ -532,7 +532,7 @@ export default function CommandCenter() {
             // Update document list
             setUploadedDocuments(prev => [
               ...prev,
-              ...result.files.map(file => ({
+              ...(result.files || []).map(file => ({
                 id: file.filename,
                 name: file.originalname,
                 size: file.size,
