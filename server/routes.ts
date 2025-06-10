@@ -307,7 +307,6 @@ function clearTestData() {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  
   // Register Command Center routes FIRST to bypass webhook middleware
   registerCommandCenterRoutes(app);
   registerQAValidationRoutes(app);
@@ -10090,9 +10089,6 @@ function registerAutomationEndpoints(app: Express) {
       return false;
     }
   }
-}
-
-
 
   // Batch A30-A39: Functions 601-690 (Final optimization and delivery functions)
   const finalOptimizationFunctions = [];
@@ -10226,6 +10222,9 @@ function registerAutomationEndpoints(app: Express) {
   });
 
   console.log(`🚀 Registered ${allFinalFunctions.length} final automation functions (601-1040)`);
+
+  return httpServer;
+}
 
 // Export for other modules to update metrics
 export function updateAutomationMetrics(update: any) {
