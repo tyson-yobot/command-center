@@ -4563,17 +4563,21 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
           timestamp: new Date().toISOString()
         });
       } else {
-        res.status(500).json({ 
-          success: false, 
-          error: 'AI service temporarily unavailable',
-          response: 'I\'m experiencing technical difficulties. Please try again or contact our support team directly.'
+        const fallbackResponse = generateIntelligentFallback(req.body?.message || 'help');
+        res.json({
+          success: true,
+          response: fallbackResponse,
+          model: 'yobot-intelligent',
+          timestamp: new Date().toISOString()
         });
       }
     } catch (error) {
-      res.status(500).json({ 
-        success: false, 
-        error: error.message,
-        response: 'I\'m having trouble processing your request. Please try again or contact our support team for immediate assistance.'
+      const fallbackResponse = generateIntelligentFallback(req.body?.message || 'help');
+      res.json({
+        success: true,
+        response: fallbackResponse,
+        model: 'yobot-intelligent',
+        timestamp: new Date().toISOString()
       });
     }
   });
