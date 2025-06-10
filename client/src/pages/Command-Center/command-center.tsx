@@ -2355,10 +2355,10 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={() => window.location.href = '/lead-scraper'}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">🧲</span>
-                    <span>Create Lead Scrape</span>
+                    <span>Lead Scraper Tool</span>
                   </Button>
                   
                   <Button
@@ -2401,15 +2401,15 @@ export default function CommandCenter() {
                         alert('Data export failed');
                       }
                     }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📊</span>
-                    <span>View Export Data</span>
+                    <span>Export Data</span>
                   </Button>
                   
                   <Button
                     onClick={() => setShowContentCreator(!showContentCreator)}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-start p-3"
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
                   >
                     <Edit3 className="w-5 h-5 mr-3" />
                     <span>Content Creator</span>
@@ -2417,7 +2417,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={() => setShowMailchimpSync(!showMailchimpSync)}
-                    className="bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-start p-3"
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
                   >
                     <Users className="w-5 h-5 mr-3" />
                     <span>Mailchimp Campaign</span>
