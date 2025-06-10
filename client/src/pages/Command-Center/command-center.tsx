@@ -2766,15 +2766,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Commands Today:</span>
-                  <span className="text-white font-bold">24</span>
+                  <span className="text-white font-bold">{metrics?.voiceCommands || 0}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-green-400 font-bold">94%</span>
+                  <span className="text-green-400 font-bold">{metrics?.voiceSuccessRate || 0}%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Processing:</span>
-                  <span className="text-blue-400 font-bold">2 active</span>
+                  <span className="text-blue-400 font-bold">{metrics?.activeVoiceJobs || 0} active</span>
                 </div>
               </div>
             </CardContent>
@@ -2985,17 +2985,8 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="text-sm text-slate-300 bg-blue-900/60 p-2 rounded border border-cyan-400 shadow-lg shadow-cyan-400/20">
-                  📞 Call completed: Mike Rodriguez - 4m 32s
-                </div>
-                <div className="text-sm text-slate-300 bg-blue-900/60 p-2 rounded border border-cyan-400 shadow-lg shadow-cyan-400/20">
-                  ✅ Lead qualified: Sarah Chen - High Priority
-                </div>
-                <div className="text-sm text-slate-300 bg-blue-900/60 p-2 rounded border border-cyan-400 shadow-lg shadow-cyan-400/20">
-                  🤖 Bot training: Voice model updated +2.3%
-                </div>
-                <div className="text-sm text-slate-300 bg-blue-900/60 p-2 rounded border border-cyan-400 shadow-lg shadow-cyan-400/20">
-                  💰 Deal closed: TechCorp - $45,000
+                <div className="text-center text-slate-400 py-8">
+                  No live activity data available
                 </div>
               </div>
             </CardContent>
@@ -3177,23 +3168,8 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-green-500/20 border border-green-400 rounded-lg">
-                  <div>
-                    <p className="text-green-400 font-medium">Hot Lead Alert</p>
-                    <p className="text-slate-300 text-sm">Sarah Chen - Ready to close</p>
-                  </div>
-                  <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
-                    Call
-                  </Button>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-yellow-500/20 border border-yellow-400 rounded-lg">
-                  <div>
-                    <p className="text-yellow-400 font-medium">Follow-up Due</p>
-                    <p className="text-slate-300 text-sm">Tom Wilson - Demo scheduled</p>
-                  </div>
-                  <Button size="sm" variant="outline" className="border-yellow-400 text-yellow-400">
-                    Review
-                  </Button>
+                <div className="text-center text-slate-400 py-8">
+                  No escalation alerts at this time
                 </div>
                 <Button 
                   onClick={testEscalation}
