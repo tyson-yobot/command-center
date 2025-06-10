@@ -28,7 +28,7 @@ interface VoiceSettings {
 
 export default function ElevenLabsVoiceStudioPro() {
   const [text, setText] = useState('Welcome to YoBot\'s advanced voice synthesis. This text will be converted to natural-sounding speech using ElevenLabs technology.');
-  const [selectedVoice, setSelectedVoice] = useState('21m00Tcm4TlvDq8ikWAM');
+  const [selectedVoice, setSelectedVoice] = useState('');
   const [selectedModel, setSelectedModel] = useState('eleven_multilingual_v2');
   const [voices, setVoices] = useState<Voice[]>([]);
   const [models, setModels] = useState<Model[]>([]);
@@ -40,6 +40,8 @@ export default function ElevenLabsVoiceStudioPro() {
   const [characterLimit, setCharacterLimit] = useState(10000);
   const [apiStatus, setApiStatus] = useState<'checking' | 'connected' | 'error'>('checking');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [selectedVoiceName, setSelectedVoiceName] = useState<string>('');
   
   const [voiceSettings, setVoiceSettings] = useState<VoiceSettings>({
     stability: 0.5,
@@ -127,6 +129,11 @@ export default function ElevenLabsVoiceStudioPro() {
   };
 
   const generateSpeech = async () => {
+    if (!selectedVoice) {
+      setErrorMessage('Please select a voice first');
+      return;
+    }
+
     if (!text.trim()) {
       setErrorMessage('Please enter some text to generate speech');
       return;
@@ -140,6 +147,7 @@ export default function ElevenLabsVoiceStudioPro() {
     setIsGenerating(true);
     setGenerationProgress(0);
     setErrorMessage('');
+    setShowSuccessToast(false);
 
     // Simulate progress
     const progressInterval = setInterval(() => {
@@ -186,7 +194,12 @@ export default function ElevenLabsVoiceStudioPro() {
             setIsPlaying(false);
           };
           
-          setTimeout(() => setGenerationProgress(0), 1000);
+          // Show success notification
+          setShowSuccessToast(true);
+          setTimeout(() => {
+            setShowSuccessToast(false);
+            setGenerationProgress(0);
+          }, 3000);
         } else {
           setErrorMessage(data.error || 'Speech generation failed');
         }
@@ -243,17 +256,64 @@ export default function ElevenLabsVoiceStudioPro() {
   const selectedVoiceInfo = voices.find(v => v.id === selectedVoice);
   const selectedModelInfo = models.find(m => m.id === selectedModel);
 
+  // Helper function to get persona icon
+  const getPersonaIcon = (voiceName: string, description: string) => {
+    const name = voiceName.toLowerCase();
+    const desc = description.toLowerCase();
+    
+    if (desc.includes('female')) {
+      if (desc.includes('young')) return '👩'; // Young Female
+      if (desc.includes('middle')) return '👩‍💼'; // Professional Female
+      return '🎭'; // General Female
+    }
+    
+    if (desc.includes('male')) {
+      if (desc.includes('young')) return '👨'; // Young Male
+      if (desc.includes('middle')) return '🧔‍♂️'; // Middle-aged Male
+      return '👨‍💼'; // Professional Male
+    }
+    
+    return '🎤'; // Default microphone
+  };
+
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-lg">
+      {/* Success Toast Notification */}
+      {showSuccessToast && (
+        <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2">
+          <Volume2 className="w-5 h-5" />
+          🔊 Voice Generated — Ready to Download
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <Volume2 className="w-6 h-6 text-purple-600" />
-            ElevenLabs Voice Studio Pro
+            🎙️ Voice Studio
           </h2>
           <p className="text-gray-600 dark:text-gray-300 mt-1">
-            Professional-grade text-to-speech synthesis
+            Professional voice synthesis workflow
           </p>
+          
+          {/* Workflow Indicator */}
+          <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
+            <span className={selectedVoice ? 'text-green-600 font-medium' : ''}>
+              [ Select Persona ]
+            </span>
+            <span>→</span>
+            <span className={text.trim() ? 'text-green-600 font-medium' : ''}>
+              [ Enter Text ]
+            </span>
+            <span>→</span>
+            <span className={isGenerating ? 'text-blue-600 font-medium' : audioUrl ? 'text-green-600 font-medium' : ''}>
+              [ Generate Voice ]
+            </span>
+            <span>→</span>
+            <span className={audioUrl ? 'text-green-600 font-medium' : 'text-gray-400'}>
+              [ Download ]
+            </span>
+          </div>
         </div>
         
         <div className="flex items-center gap-2">
@@ -308,7 +368,7 @@ export default function ElevenLabsVoiceStudioPro() {
               <div className="flex gap-2">
                 <Button
                   onClick={generateSpeech}
-                  disabled={isGenerating || !text.trim() || apiStatus !== 'connected'}
+                  disabled={isGenerating || !text.trim() || !selectedVoice || apiStatus !== 'connected'}
                   className="bg-purple-600 hover:bg-purple-700"
                 >
                   {isGenerating ? (
@@ -319,9 +379,19 @@ export default function ElevenLabsVoiceStudioPro() {
                   ) : (
                     <>
                       <Play className="w-4 h-4 mr-2" />
-                      Generate Speech
+                      Generate Voice
                     </>
                   )}
+                </Button>
+                
+                <Button
+                  onClick={downloadAudio}
+                  disabled={!audioUrl}
+                  variant="outline"
+                  className={`${!audioUrl ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-50'}`}
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  {audioUrl ? 'Download Audio' : 'Generate First'}
                 </Button>
               </div>
             </div>
@@ -348,21 +418,37 @@ export default function ElevenLabsVoiceStudioPro() {
           <CardContent className="space-y-4">
             {/* Voice Selection */}
             <div>
-              <label className="block text-sm font-medium mb-2">Voice</label>
+              <label className="block text-sm font-medium mb-2">Voice Persona</label>
               <select
                 value={selectedVoice}
-                onChange={(e) => setSelectedVoice(e.target.value)}
+                onChange={(e) => {
+                  const voice = voices.find(v => v.id === e.target.value);
+                  setSelectedVoice(e.target.value);
+                  setSelectedVoiceName(voice ? voice.name : '');
+                }}
                 className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
               >
+                <option value="">🔊 No Voice Selected</option>
                 {voices.map((voice) => (
                   <option key={voice.id} value={voice.id}>
-                    {voice.name} - {voice.description}
+                    {getPersonaIcon(voice.name, voice.description)} {voice.name} - {voice.description}
                   </option>
                 ))}
               </select>
-              {selectedVoiceInfo && (
+              
+              {/* Voice Selection Feedback */}
+              {selectedVoice && selectedVoiceInfo ? (
+                <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-sm text-green-800 font-medium">
+                    ✅ Voice Applied: {selectedVoiceInfo.name}
+                  </p>
+                  <p className="text-xs text-green-600">
+                    {getPersonaIcon(selectedVoiceInfo.name, selectedVoiceInfo.description)} {selectedVoiceInfo.description}
+                  </p>
+                </div>
+              ) : (
                 <p className="text-xs text-gray-500 mt-1">
-                  Category: {selectedVoiceInfo.category}
+                  Select a voice persona to begin
                 </p>
               )}
             </div>
@@ -476,13 +562,13 @@ export default function ElevenLabsVoiceStudioPro() {
         </Card>
       </div>
 
-      {/* Audio Player */}
+      {/* Audio Preview & Download */}
       {audioUrl && (
-        <Card>
+        <Card className="border-green-200 bg-green-50/50">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-green-800">
               <Volume2 className="w-5 h-5" />
-              Generated Audio
+              🎉 Voice Generated Successfully
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -491,34 +577,33 @@ export default function ElevenLabsVoiceStudioPro() {
                 onClick={togglePlayback}
                 variant="outline"
                 size="sm"
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 border-green-300 hover:bg-green-100"
               >
                 {isPlaying ? (
                   <>
                     <Pause className="w-4 h-4" />
-                    Pause
+                    Pause Preview
                   </>
                 ) : (
                   <>
                     <Play className="w-4 h-4" />
-                    Play
+                    🔊 Preview Voice
                   </>
                 )}
               </Button>
 
               <Button
                 onClick={downloadAudio}
-                variant="outline"
+                className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
                 size="sm"
-                className="flex items-center gap-2"
               >
                 <Download className="w-4 h-4" />
-                Download
+                Download Audio
               </Button>
 
               <div className="flex-1 text-center">
-                <Badge variant="secondary">
-                  Ready to play • {selectedVoiceInfo?.name} • {selectedModelInfo?.name}
+                <Badge variant="secondary" className="bg-green-100 text-green-800">
+                  ✅ Ready • {selectedVoiceInfo?.name} • {selectedModelInfo?.name}
                 </Badge>
               </div>
             </div>
