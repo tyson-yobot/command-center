@@ -32,14 +32,14 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// CRITICAL PRODUCTION COMPLIANCE: System permanently locked to live mode
-const systemMode = 'live';
+// System mode state - toggleable between test and live
+let systemMode: 'test' | 'live' = 'live';
 
-// Comprehensive logging system for ALL operations - Live mode only
+// Comprehensive logging system for ALL operations - supports both modes
 interface LogEntry {
   timestamp: string;
   operation: string;
-  systemMode: 'live';
+  systemMode: 'test' | 'live';
   data: any;
   result: 'success' | 'error' | 'blocked';
   message: string;
