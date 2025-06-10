@@ -8,6 +8,7 @@ import {
   Globe,
   Users,
   Play,
+  X,
   Download,
   RefreshCw,
   ArrowLeft,
