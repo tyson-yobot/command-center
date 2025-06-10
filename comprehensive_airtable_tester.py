@@ -23,7 +23,15 @@ def log_integration_test(integration_name: str, passed: bool, notes: str = ""):
     
     payload = {
         "fields": {
-            "🔧 Integration Name": integration_name
+            "🔧 Integration Name": integration_name,
+            "✅ Pass/Fail": "✅" if passed else "❌",
+            "🧠 Notes / Debug": notes,
+            "📅 Test Date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "🧑‍💻 QA Owner": "Tyson Lerfald",
+            "📤 Output Data Populated": True,
+            "🗃️ Record Created?": True,
+            "🧩 Module Type": "Automation Test",
+            "📂 Related Scenario Link": ""
         }
     }
     

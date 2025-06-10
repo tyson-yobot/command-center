@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:00:00.878Z",
-    "functionId": 203,
-    "functionName": "Integration Summary to Slack",
-    "batch": 21,
-    "category": "Communication",
-    "status": "success",
-    "duration": 641,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:02:27.256Z",
     "type": "system_event",
     "level": "info",
@@ -11428,6 +11417,21 @@
       "failedExecutions": 0,
       "systemUptime": 1945.535428797,
       "lastHealthCheck": "2025-06-10T22:49:00.008Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T23:00:00.013Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 2605.538512702,
+      "lastHealthCheck": "2025-06-10T23:00:00.011Z",
       "automationStatus": "paused"
     }
   }
