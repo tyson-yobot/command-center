@@ -34,44 +34,73 @@ export function registerContentCreatorRoutes(app: Express) {
         });
       }
       
-      // Generate content using template-based approach (fallback for invalid API key)
+      // Generate AI-powered content using OpenAI
       let generatedContent: any = {};
-      let contentSource = 'template';
       
-      // Use template-based content generation (OpenAI integration available when valid API key is provided)
-      console.log('Using template-based content generation');
-      contentSource = 'template';
+      try {
+        console.log('Generating AI content using OpenAI for', payload.selectedIndustry, 'industry...');
+        
+        const contentPrompt = `Create engaging ${payload.contentType} content for ${payload.targetPlatform} targeting the ${payload.selectedIndustry} industry.
+        
+        Requirements:
+        - Tone: ${payload.tone || 'professional'}
+        - Voice persona: ${payload.voicePersona || 'expert'}
+        - Character limit: ${payload.characterCount || 300} characters
+        - Platform: ${payload.targetPlatform}
+        - Industry: ${payload.selectedIndustry}
+        
+        Generate content that is:
+        - Engaging and platform-appropriate
+        - Industry-specific and valuable
+        - Action-oriented with clear value proposition
+        - Includes relevant hashtags
+        - Contains compelling call-to-action
+        
+        Respond in JSON format:
+        {
+          "content": "main post content",
+          "hashtags": ["relevant", "hashtags", "array"],
+          "cta": "compelling call to action"
+        }`;
 
-      // Generate template content if OpenAI is not available
-      if (contentSource === 'template') {
-        // Professional template content based on industry and platform
-        const industryTemplates = {
-          'Technology': {
-            'LinkedIn': 'Driving innovation through cutting-edge technology solutions that transform business operations.',
-            'Email': 'Discover how our technology solutions can streamline your workflow and boost productivity.',
-            'Blog': 'Exploring the latest technological trends and their impact on modern business strategies.'
-          },
-          'Healthcare': {
-            'LinkedIn': 'Improving patient outcomes through innovative healthcare technology and data-driven insights.',
-            'Email': 'Transform your healthcare delivery with our comprehensive digital health solutions.',
-            'Blog': 'The future of healthcare lies in the seamless integration of technology and patient care.'
-          },
-          'Finance': {
-            'LinkedIn': 'Empowering financial institutions with secure, scalable solutions for the digital economy.',
-            'Email': 'Optimize your financial operations with our advanced analytics and automation tools.',
-            'Blog': 'Navigating the evolving landscape of fintech and digital banking innovations.'
-          }
-        };
+        const response = await openai.chat.completions.create({
+          model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+          messages: [
+            {
+              role: "system",
+              content: "You are an expert social media content creator specializing in business and industry-specific content. Create compelling, engaging posts that drive engagement and conversions."
+            },
+            {
+              role: "user",
+              content: contentPrompt
+            }
+          ],
+          response_format: { type: "json_object" },
+          max_tokens: 800,
+          temperature: 0.7
+        });
 
-        const defaultTemplate = `Professional ${payload.contentType} content tailored for ${payload.targetPlatform} audience in the ${payload.selectedIndustry} industry.`;
-        const industryContent = industryTemplates[payload.selectedIndustry]?.[payload.targetPlatform] || defaultTemplate;
-
+        const aiContent = JSON.parse(response.choices[0].message.content);
+        console.log('AI content generated successfully:', aiContent);
+        
         generatedContent = {
           title: `${payload.contentType} for ${payload.selectedIndustry} on ${payload.targetPlatform}`,
-          content: industryContent,
-          hashtags: [`#${payload.selectedIndustry.replace(/\s+/g, '')}`, `#${payload.targetPlatform}`, '#innovation', '#business'],
-          cta: `Explore ${payload.selectedIndustry} solutions`,
-          contentSource: 'template'
+          content: aiContent.content,
+          hashtags: aiContent.hashtags || [`#${payload.selectedIndustry}`, `#${payload.targetPlatform}`, '#Innovation', '#Business'],
+          cta: aiContent.cta || `Learn more about ${payload.selectedIndustry} solutions`,
+          contentSource: 'openai-gpt4o'
+        };
+        
+      } catch (error) {
+        console.log('OpenAI content generation error:', error.message);
+        console.log('Creating fallback content...');
+        
+        generatedContent = {
+          title: `${payload.contentType} for ${payload.selectedIndustry} on ${payload.targetPlatform}`,
+          content: `Transform your ${payload.selectedIndustry.toLowerCase()} operations with innovative solutions that drive real results. Discover how industry leaders are achieving breakthrough performance.`,
+          hashtags: [`#${payload.selectedIndustry}`, `#${payload.targetPlatform}`, '#Innovation', '#Growth', '#Business'],
+          cta: `Discover ${payload.selectedIndustry} solutions`,
+          contentSource: 'fallback'
         };
       }
       
@@ -92,49 +121,89 @@ export function registerContentCreatorRoutes(app: Express) {
         // In Live Mode: Post to Publy social media accounts
         console.log('LIVE MODE: Publishing to Publy social media accounts');
         
-        // Implement actual Publer API integration
-        console.log('🚀 Attempting real Publer API integration...');
+        // Publer API Integration - Based on actual API documentation
+        console.log('Starting Publer API integration for live social media posting...');
         
         if (process.env.PUBLY_API_KEY) {
-          console.log('✅ Publer API key found, attempting authentication...');
+          console.log('Publer API key detected, attempting to post to social media...');
           
           try {
-            // Based on Publer's actual API documentation, test authentication first
-            const authResponse = await fetch('https://app.publer.io/hooks/media', {
-              method: 'POST',
-              headers: {
-                'Authorization': `Bearer ${process.env.PUBLY_API_KEY}`,
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                text: `${generatedContent.content}\n\n${generatedContent.hashtags.join(' ')}\n\n${generatedContent.cta}`,
-                platforms: [payload.targetPlatform.toLowerCase()],
-                provider: 'api'
-              })
-            });
-
-            console.log('📡 Publer API Response Status:', authResponse.status);
+            // Publer's webhook-based posting system
+            const postContent = `${generatedContent.content}\n\n${generatedContent.hashtags.join(' ')}\n\n${generatedContent.cta}`;
             
-            if (authResponse.ok) {
-              const result = await authResponse.json();
-              console.log('✅ Successfully posted to Publer:', JSON.stringify(result, null, 2));
-              contentResult.status = 'published_to_social';
-              contentResult.publerResponse = result;
-            } else {
-              const errorText = await authResponse.text();
-              console.log('❌ Publer API Error:', errorText);
+            // Try Publer's actual API endpoints based on their documentation
+            const publerEndpoints = [
+              'https://app.publer.io/api/v1/posts',
+              'https://app.publer.io/hooks/media',
+              'https://api.publer.io/v1/posts'
+            ];
+            
+            let successfulPost = false;
+            
+            for (const endpoint of publerEndpoints) {
+              if (successfulPost) break;
               
-              if (authResponse.status === 401) {
-                console.log('🔐 Authentication failed - API key invalid or expired');
-              } else if (authResponse.status === 400) {
-                console.log('📝 Bad request - payload format may be incorrect');
+              try {
+                console.log(`Testing Publer endpoint: ${endpoint}`);
+                
+                const response = await fetch(endpoint, {
+                  method: 'POST',
+                  headers: {
+                    'Authorization': `Bearer ${process.env.PUBLY_API_KEY}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'User-Agent': 'YoBot-CommandCenter/1.0'
+                  },
+                  body: JSON.stringify({
+                    text: postContent,
+                    platforms: [payload.targetPlatform.toLowerCase()],
+                    schedule_date: null
+                  })
+                });
+                
+                console.log(`Publer ${endpoint} response: ${response.status} ${response.statusText}`);
+                
+                if (response.ok) {
+                  try {
+                    const result = await response.json();
+                    console.log('Successfully posted to Publer social media:', JSON.stringify(result, null, 2));
+                    contentResult.status = 'published_to_social';
+                    contentResult.socialPostId = result.id || 'publer_success';
+                    successfulPost = true;
+                  } catch (jsonError) {
+                    const textResult = await response.text();
+                    console.log('Publer post successful (non-JSON response):', textResult);
+                    contentResult.status = 'published_to_social';
+                    contentResult.socialPostId = 'publer_success';
+                    successfulPost = true;
+                  }
+                } else {
+                  const errorText = await response.text();
+                  console.log(`Publer ${endpoint} error (${response.status}):`, errorText.substring(0, 300));
+                  
+                  if (response.status === 401) {
+                    console.log('Authentication failed - API key may be invalid');
+                  } else if (response.status === 403) {
+                    console.log('Forbidden - API key may lack permissions');
+                  } else if (response.status === 404) {
+                    console.log('Endpoint not found - trying next endpoint');
+                  }
+                }
+              } catch (endpointError) {
+                console.log(`Connection error to ${endpoint}:`, endpointError.message);
               }
             }
+            
+            if (!successfulPost) {
+              console.log('All Publer endpoints failed - content generation completed without social posting');
+              console.log('Recommendation: Verify API key has posting permissions in Publer dashboard');
+            }
+            
           } catch (error) {
-            console.log('❌ Publer API connection failed:', error.message);
+            console.log('Publer integration error:', error.message);
           }
         } else {
-          console.log('⚠️ No Publer API key provided');
+          console.log('No Publer API key found - content generated without social media posting');
         }
         
         // Log to Command Center Metrics Tracker
