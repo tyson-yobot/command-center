@@ -36,6 +36,8 @@ export function registerContentCreatorRoutes(app: Express) {
       
       // Generate AI-powered content using OpenAI
       let generatedContent: any = {};
+      let openaiSuccessful = false;
+      let errorMessage = '';
       
       try {
         console.log('Generating AI content using OpenAI for', payload.selectedIndustry, 'industry...');
@@ -63,12 +65,12 @@ export function registerContentCreatorRoutes(app: Express) {
           "cta": "compelling call to action"
         }`;
 
-        // Initialize fresh OpenAI client with working API key
-        const freshOpenAI = new OpenAI({
-          apiKey: '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'
+        // Use environment OpenAI API key
+        const openaiClient = new OpenAI({
+          apiKey: process.env.OPENAI_API_KEY
         });
         
-        const response = await freshOpenAI.chat.completions.create({
+        const response = await openaiClient.chat.completions.create({
           model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
           messages: [
             {
@@ -87,6 +89,7 @@ export function registerContentCreatorRoutes(app: Express) {
 
         const aiContent = JSON.parse(response.choices[0].message.content);
         console.log('AI content generated successfully:', aiContent);
+        openaiSuccessful = true;
         
         generatedContent = {
           title: `${payload.contentType} for ${payload.selectedIndustry} on ${payload.targetPlatform}`,
