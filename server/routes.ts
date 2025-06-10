@@ -31,6 +31,7 @@ import { configManager } from "./controlCenterConfig";
 import { airtableLogger } from "./airtableLogger";
 import { automationTester } from "./automationTester";
 import { registerZendeskRoutes } from "./zendeskIntegration";
+import { storage } from "./storage";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
 import { generateSocialMediaPost, generateEmailCampaign, postToSocialMedia, sendEmailCampaign } from './contentCreator';
@@ -1315,6 +1316,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
+      // Search in database knowledge base first
+      let databaseResults = [];
+      try {
+        databaseResults = await storage.searchKnowledgeBase(1, query); // Default user 1
+      } catch (dbError) {
+        console.error('Database search failed:', dbError);
+      }
+
       // Filter documents by category if specified
       let searchableDocuments = documentStore;
       if (category !== 'all') {
@@ -1323,8 +1332,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         );
       }
 
-      // Simple text-based search with relevance scoring
-      const searchResults = searchableDocuments.map(doc => {
+      // Convert database results to search format
+      const dbSearchResults = databaseResults.map(kb => ({
+        id: kb.id.toString(),
+        title: kb.name,
+        excerpt: kb.content.substring(0, 200) + '...',
+        relevanceScore: 100, // High relevance for database entries
+        source: 'Knowledge Base',
+        lastModified: kb.createdAt || new Date().toISOString(),
+        keyTerms: kb.tags || [],
+        categories: [kb.category || 'general'],
+        wordCount: kb.content.split(' ').length
+      }));
+
+      // Simple text-based search with relevance scoring for legacy documents
+      const legacySearchResults = searchableDocuments.map(doc => {
         const text = (doc.extractedText || doc.content || '').toLowerCase();
         const searchQuery = query.toLowerCase();
         
