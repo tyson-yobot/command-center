@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 import { getSystemMode } from './systemMode';
 
 const openai = new OpenAI({
-  apiKey: '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',
+  apiKey: process.env.OPENAI_API_KEY || '',
 });
 
 interface ContentCreatorPayload {
@@ -63,7 +63,12 @@ export function registerContentCreatorRoutes(app: Express) {
           "cta": "compelling call to action"
         }`;
 
-        const response = await openai.chat.completions.create({
+        // Initialize fresh OpenAI client with current environment variable
+        const freshOpenAI = new OpenAI({
+          apiKey: process.env.OPENAI_API_KEY || ''
+        });
+        
+        const response = await freshOpenAI.chat.completions.create({
           model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
           messages: [
             {
