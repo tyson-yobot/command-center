@@ -50,7 +50,13 @@ export class LiveDashboardData {
           return { functionName, success, record };
         }).filter(test => actualFunctions.some(af => test.functionName.toLowerCase().includes(af.toLowerCase())));
 
-        // Get unique functions and their latest status
+        // Count ALL executions, not just unique functions
+        const totalExecutions = functionTests.length;
+        const passedExecutions = functionTests.filter(test => test.success).length;
+        const failedExecutions = totalExecutions - passedExecutions;
+        const successRate = totalExecutions > 0 ? ((passedExecutions / totalExecutions) * 100).toFixed(1) : '0';
+        
+        // Get unique functions for top performers
         const uniqueFunctions: any = {};
         functionTests.forEach(test => {
           if (!uniqueFunctions[test.functionName] || test.record.createdTime > uniqueFunctions[test.functionName].createdTime) {
@@ -58,15 +64,10 @@ export class LiveDashboardData {
           }
         });
 
-        const totalFunctions = Object.keys(uniqueFunctions).length;
-        const passedFunctions = Object.values(uniqueFunctions).filter((f: any) => f.success).length;
-        const failedFunctions = totalFunctions - passedFunctions;
-        const successRate = totalFunctions > 0 ? ((passedFunctions / totalFunctions) * 100).toFixed(1) : '0';
-
         return {
-          totalFunctions,
-          activeFunctions: totalFunctions, // All functions that have been tested are considered active
-          executionsToday: todaysRecords.length,
+          totalFunctions: totalExecutions,
+          activeFunctions: Object.keys(uniqueFunctions).length,
+          executionsToday: totalExecutions,
           successRate: `${successRate}%`,
           averageExecutionTime: null,
           topPerformers: Object.values(uniqueFunctions)

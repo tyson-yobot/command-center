@@ -519,6 +519,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register core automation endpoints
   registerCoreAutomationEndpoints(app);
   
+  // Register live automation endpoints with automatic Airtable logging
+  registerLiveAutomationEndpoints(app);
+  
   // Command Button API Endpoints - All Required Functions
   
   // Mailchimp sync endpoint
