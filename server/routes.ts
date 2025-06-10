@@ -3397,7 +3397,7 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
             shouldProcess: extractedText.length > 100 && !!process.env.OPENAI_API_KEY
           });
           
-          if (extractedText.length > 100 && process.env.OPENAI_API_KEY) {
+          if (extractedText.length > 100 && process.env.OPENAI_API_KEY && false) { // Temporarily disabled for fallback testing
             try {
               console.log('Starting OpenAI document analysis...');
               const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -3422,16 +3422,50 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
               
               if (openaiResponse.ok) {
                 const aiResult = await openaiResponse.json();
+                console.log('OpenAI response received:', {
+                  hasChoices: !!aiResult.choices,
+                  choicesLength: aiResult.choices?.length,
+                  hasContent: !!aiResult.choices?.[0]?.message?.content
+                });
                 const analysis = JSON.parse(aiResult.choices[0].message.content);
                 aiSummary = analysis.summary || '';
                 keyTerms = analysis.keyTerms || [];
                 categories = analysis.categories || [];
+                console.log('AI analysis successful:', {
+                  summaryLength: aiSummary.length,
+                  keyTermsCount: keyTerms.length,
+                  categoriesCount: categories.length
+                });
+              } else {
+                console.log('OpenAI API error:', openaiResponse.status, openaiResponse.statusText);
+                const errorText = await openaiResponse.text();
+                console.log('Error details:', errorText);
               }
             } catch (aiError) {
               console.log('AI analysis failed, using fallback:', aiError.message);
-              // Fallback analysis
-              keyTerms = extractedText.match(/\b\w{4,}\b/g)?.slice(0, 10) || [];
-              categories = ['document', 'general'];
+              // Enhanced fallback analysis
+              const words = extractedText.toLowerCase().match(/\b\w{4,}\b/g) || [];
+              const wordCount = {};
+              words.forEach(word => {
+                if (!['this', 'that', 'with', 'from', 'they', 'have', 'will', 'been', 'were', 'said', 'each', 'which', 'their', 'time', 'only', 'many', 'some', 'very', 'when', 'much', 'where', 'your', 'make', 'come', 'most', 'over', 'such', 'take', 'than', 'them', 'well', 'work'].includes(word)) {
+                  wordCount[word] = (wordCount[word] || 0) + 1;
+                }
+              });
+              keyTerms = Object.keys(wordCount)
+                .sort((a, b) => wordCount[b] - wordCount[a])
+                .slice(0, 10);
+              
+              // Smart categorization based on content
+              const contentLower = extractedText.toLowerCase();
+              if (contentLower.includes('automation') || contentLower.includes('workflow')) {
+                categories = ['automation', 'business-process'];
+              } else if (contentLower.includes('api') || contentLower.includes('integration')) {
+                categories = ['technical', 'integration'];
+              } else {
+                categories = ['document', 'general'];
+              }
+              
+              aiSummary = `Document contains ${extractedText.split(' ').length} words focusing on ${keyTerms.slice(0, 3).join(', ')}.`;
             }
           }
 
