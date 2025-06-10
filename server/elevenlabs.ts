@@ -60,6 +60,15 @@ export async function getAllVoices() {
   }
 }
 
+// Available models in ElevenLabs
+export const AVAILABLE_MODELS = [
+  { id: 'eleven_monolingual_v1', name: 'Eleven Monolingual v1', description: 'English only, fastest generation' },
+  { id: 'eleven_multilingual_v1', name: 'Eleven Multilingual v1', description: 'Multiple languages, good quality' },
+  { id: 'eleven_multilingual_v2', name: 'Eleven Multilingual v2', description: 'Latest multilingual, best quality' },
+  { id: 'eleven_turbo_v2', name: 'Eleven Turbo v2', description: 'Fastest generation with good quality' },
+  { id: 'eleven_flash_v2', name: 'Eleven Flash v2', description: 'Ultra-fast generation' }
+];
+
 // Generate speech from text
 export async function generateSpeech(text: string, voiceId: string = '21m00Tcm4TlvDq8ikWAM', options: any = {}) {
   if (!process.env.ELEVENLABS_API_KEY) {
@@ -76,12 +85,12 @@ export async function generateSpeech(text: string, voiceId: string = '21m00Tcm4T
       },
       body: JSON.stringify({
         text: text,
-        model_id: options.model_id || 'eleven_monolingual_v1',
+        model_id: options.model_id || 'eleven_multilingual_v2',
         voice_settings: {
-          stability: options.stability || 0.5,
-          similarity_boost: options.similarity_boost || 0.5,
-          style: options.style || 0.0,
-          use_speaker_boost: options.use_speaker_boost || true
+          stability: parseFloat(options.stability) || 0.5,
+          similarity_boost: parseFloat(options.similarity_boost) || 0.75,
+          style: parseFloat(options.style) || 0.0,
+          use_speaker_boost: options.use_speaker_boost !== false
         }
       })
     });
@@ -90,11 +99,76 @@ export async function generateSpeech(text: string, voiceId: string = '21m00Tcm4T
       const audioBuffer = await response.arrayBuffer();
       return { audio: Buffer.from(audioBuffer), error: null };
     } else {
-      throw new Error(`Speech generation failed: ${response.status} ${response.statusText}`);
+      const errorData = await response.text();
+      throw new Error(`Speech generation failed: ${response.status} - ${errorData}`);
     }
   } catch (error) {
     console.error('Speech generation failed:', error);
     throw new Error(`Speech generation failed: ${error.message}`);
+  }
+}
+
+// Get user's account information and limits  
+export async function getUserAccount() {
+  if (!process.env.ELEVENLABS_API_KEY) {
+    return { error: 'ElevenLabs API key not configured' };
+  }
+
+  try {
+    const response = await fetch('https://api.elevenlabs.io/v1/user', {
+      headers: {
+        'Accept': 'application/json',
+        'xi-api-key': process.env.ELEVENLABS_API_KEY
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return { 
+        subscription: data.subscription,
+        character_count: data.subscription?.character_count || 0,
+        character_limit: data.subscription?.character_limit || 10000,
+        error: null 
+      };
+    } else {
+      return { error: 'Failed to fetch user info' };
+    }
+  } catch (error) {
+    console.error('Failed to fetch user info:', error);
+    return { error: error.message };
+  }
+}
+
+// Stream speech generation for real-time playback
+export async function generateSpeechStream(text: string, voiceId: string, options: any = {}) {
+  if (!process.env.ELEVENLABS_API_KEY) {
+    throw new Error('ElevenLabs API key not configured');
+  }
+
+  try {
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'audio/mpeg',
+        'Content-Type': 'application/json',
+        'xi-api-key': process.env.ELEVENLABS_API_KEY
+      },
+      body: JSON.stringify({
+        text: text,
+        model_id: options.model_id || 'eleven_multilingual_v2',
+        voice_settings: {
+          stability: parseFloat(options.stability) || 0.5,
+          similarity_boost: parseFloat(options.similarity_boost) || 0.75,
+          style: parseFloat(options.style) || 0.0,
+          use_speaker_boost: options.use_speaker_boost !== false
+        }
+      })
+    });
+
+    return response;
+  } catch (error) {
+    console.error('Speech streaming failed:', error);
+    throw error;
   }
 }
 
@@ -225,8 +299,8 @@ export async function updateVoiceSettings(voiceId: string, settings: any) {
   }
 }
 
-// Get user subscription info
-export async function getUserInfo() {
+// Get user subscription details
+export async function getUserSubscription() {
   if (!process.env.ELEVENLABS_API_KEY) {
     return { user: null, error: 'ElevenLabs API key not configured' };
   }

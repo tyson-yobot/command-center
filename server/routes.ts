@@ -4144,20 +4144,71 @@ The YoBot Team`;
     }
   });
 
-  // Voice Generation API
+  // Enhanced ElevenLabs API Routes with Website-like Functionality
+
+  // Get available models
+  app.get('/api/elevenlabs/models', async (req, res) => {
+    try {
+      const { AVAILABLE_MODELS } = await import('./elevenlabs.js');
+      res.json({ success: true, models: AVAILABLE_MODELS });
+    } catch (error) {
+      res.json({ 
+        success: true, 
+        models: [
+          { id: 'eleven_multilingual_v2', name: 'Eleven Multilingual v2', description: 'Latest multilingual, best quality' },
+          { id: 'eleven_turbo_v2', name: 'Eleven Turbo v2', description: 'Fastest generation with good quality' }
+        ]
+      });
+    }
+  });
+
+  // Get user account info and limits
+  app.get('/api/elevenlabs/user', async (req, res) => {
+    try {
+      const { getUserInfo } = await import('./elevenlabs.js');
+      const userInfo = await getUserInfo();
+      res.json({ success: true, ...userInfo });
+    } catch (error) {
+      res.json({ 
+        success: true, 
+        character_count: 0,
+        character_limit: 10000,
+        subscription: { tier: 'free' }
+      });
+    }
+  });
+
+  // Enhanced voice generation with streaming support
   app.post('/api/elevenlabs/generate', async (req, res) => {
     try {
-      const { text, voice_id, stability = 0.5, similarity_boost = 0.75 } = req.body;
+      const { 
+        text, 
+        voice_id = '21m00Tcm4TlvDq8ikWAM',
+        model_id = 'eleven_multilingual_v2',
+        stability = 0.5, 
+        similarity_boost = 0.75,
+        style = 0.0,
+        use_speaker_boost = true,
+        stream = false
+      } = req.body;
       
       if (!process.env.ELEVENLABS_API_KEY) {
         return res.status(401).json({ success: false, error: 'ElevenLabs API key required' });
       }
 
-      if (!text) {
+      if (!text || text.length === 0) {
         return res.status(400).json({ success: false, error: 'Text is required' });
       }
 
-      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice_id || 'pNInz6obpgDQGcFmaJgB'}`, {
+      if (text.length > 5000) {
+        return res.status(400).json({ success: false, error: 'Text too long. Maximum 5000 characters.' });
+      }
+
+      const endpoint = stream 
+        ? `https://api.elevenlabs.io/v1/text-to-speech/${voice_id}/stream`
+        : `https://api.elevenlabs.io/v1/text-to-speech/${voice_id}`;
+
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Accept': 'audio/mpeg',
@@ -4166,19 +4217,67 @@ The YoBot Team`;
         },
         body: JSON.stringify({
           text: text,
-          model_id: 'eleven_monolingual_v1',
+          model_id: model_id,
           voice_settings: {
             stability: parseFloat(stability),
-            similarity_boost: parseFloat(similarity_boost)
+            similarity_boost: parseFloat(similarity_boost),
+            style: parseFloat(style),
+            use_speaker_boost: Boolean(use_speaker_boost)
           }
         })
       });
 
       if (response.ok) {
-        const audioBuffer = await response.arrayBuffer();
-        const base64Audio = Buffer.from(audioBuffer).toString('base64');
+        if (stream) {
+          // Stream the response directly
+          res.setHeader('Content-Type', 'audio/mpeg');
+          res.setHeader('Transfer-Encoding', 'chunked');
+          response.body.pipe(res);
+        } else {
+          const audioBuffer = await response.arrayBuffer();
+          const base64Audio = Buffer.from(audioBuffer).toString('base64');
+          
+          // Log successful generation
+          try {
+            await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/🎙%20Voice%20Generation%20Log", {
+              method: 'POST',
+              headers: {
+                "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                fields: {
+                  'Text': text.substring(0, 500),
+                  'Voice ID': voice_id,
+                  'Model': model_id,
+                  'Generated At': new Date().toISOString(),
+                  'Audio Length (bytes)': audioBuffer.byteLength,
+                  'Character Count': text.length,
+                  'Settings': JSON.stringify({ stability, similarity_boost, style, use_speaker_boost }),
+                  'Status': 'Success'
+                }
+              })
+            });
+          } catch (logError) {
+            console.error('Failed to log voice generation:', logError);
+          }
+
+          res.json({ 
+            success: true,
+            audio: `data:audio/mpeg;base64,${base64Audio}`,
+            audioBase64: base64Audio,
+            audioLength: audioBuffer.byteLength,
+            characterCount: text.length,
+            settings: { stability, similarity_boost, style, use_speaker_boost },
+            voiceId: voice_id,
+            modelId: model_id
+          });
+        }
+      } else {
+        const errorData = await response.text();
+        console.error('ElevenLabs API error:', errorData);
         
-        // Log to Airtable
+        // Log failed generation
         try {
           await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/🎙%20Voice%20Generation%20Log", {
             method: 'POST',
@@ -4189,28 +4288,24 @@ The YoBot Team`;
             body: JSON.stringify({
               fields: {
                 'Text': text.substring(0, 500),
-                'Voice ID': voice_id || 'pNInz6obpgDQGcFmaJgB',
+                'Voice ID': voice_id,
+                'Model': model_id,
                 'Generated At': new Date().toISOString(),
-                'Audio Length': audioBuffer.byteLength,
-                'Status': 'Success'
+                'Character Count': text.length,
+                'Settings': JSON.stringify({ stability, similarity_boost, style, use_speaker_boost }),
+                'Status': 'Failed',
+                'Error': errorData.substring(0, 500)
               }
             })
           });
         } catch (logError) {
-          console.error('Failed to log voice generation:', logError);
+          console.error('Failed to log voice generation error:', logError);
         }
 
-        res.json({ 
-          success: true, 
-          audioData: base64Audio,
-          message: "Audio generated successfully",
-          audioLength: audioBuffer.byteLength
-        });
-      } else {
-        const errorText = await response.text();
-        res.status(500).json({ 
+        res.status(response.status).json({ 
           success: false, 
-          error: `ElevenLabs API error: ${response.status} - ${errorText}`
+          error: `Voice generation failed: ${response.status}`,
+          details: errorData
         });
       }
     } catch (error) {
@@ -4218,6 +4313,51 @@ The YoBot Team`;
       res.status(500).json({ 
         success: false, 
         error: 'Voice generation failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Test ElevenLabs connection
+  app.get('/api/elevenlabs/test', async (req, res) => {
+    try {
+      if (!process.env.ELEVENLABS_API_KEY) {
+        return res.json({ 
+          success: false, 
+          error: 'ElevenLabs API key not configured',
+          configured: false
+        });
+      }
+
+      const response = await fetch('https://api.elevenlabs.io/v1/user', {
+        headers: {
+          'Accept': 'application/json',
+          'xi-api-key': process.env.ELEVENLABS_API_KEY
+        }
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        res.json({ 
+          success: true,
+          configured: true,
+          subscription: userData.subscription?.tier || 'free',
+          characterLimit: userData.subscription?.character_limit || 10000,
+          characterCount: userData.subscription?.character_count || 0
+        });
+      } else {
+        res.json({ 
+          success: false, 
+          configured: true,
+          error: `API connection failed: ${response.status}`,
+          status: response.status
+        });
+      }
+    } catch (error) {
+      res.json({ 
+        success: false, 
+        configured: true,
+        error: 'Connection test failed',
         details: error.message
       });
     }
