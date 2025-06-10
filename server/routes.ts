@@ -4363,6 +4363,85 @@ The YoBot Team`;
     }
   });
 
+  // ElevenLabs API Endpoints
+  app.get('/api/elevenlabs/test', async (req, res) => {
+    try {
+      const { getUserAccount } = await import('./elevenlabs');
+      const result = await getUserAccount();
+      
+      if (result.error) {
+        res.json({ 
+          success: false, 
+          configured: false,
+          error: result.error 
+        });
+      } else {
+        res.json({ 
+          success: true, 
+          configured: true,
+          characterLimit: result.character_limit
+        });
+      }
+    } catch (error) {
+      res.json({
+        success: false,
+        configured: false,
+        error: 'ElevenLabs connection failed'
+      });
+    }
+  });
+
+  app.get('/api/elevenlabs/voices', async (req, res) => {
+    try {
+      const { getAllVoices } = await import('./elevenlabs');
+      const voices = await getAllVoices();
+      res.json({ success: true, voices });
+    } catch (error) {
+      res.json({ success: false, error: error.message });
+    }
+  });
+
+  app.get('/api/elevenlabs/models', async (req, res) => {
+    try {
+      const { getModels } = await import('./elevenlabs');
+      const models = await getModels();
+      res.json({ success: true, models });
+    } catch (error) {
+      res.json({ success: false, error: error.message });
+    }
+  });
+
+  app.post('/api/elevenlabs/generate', async (req, res) => {
+    try {
+      const { generateSpeech } = await import('./elevenlabs');
+      const { text, voice_id, model_id, stability, similarity_boost, style, use_speaker_boost } = req.body;
+      
+      const audioBuffer = await generateSpeech(text, voice_id, {
+        model_id,
+        voice_settings: {
+          stability,
+          similarity_boost,
+          style,
+          use_speaker_boost
+        }
+      });
+
+      // Convert buffer to base64 data URL
+      const base64Audio = audioBuffer.toString('base64');
+      const audioUrl = `data:audio/mpeg;base64,${base64Audio}`;
+
+      res.json({ 
+        success: true, 
+        audio: audioUrl 
+      });
+    } catch (error) {
+      res.json({ 
+        success: false, 
+        error: error.message 
+      });
+    }
+  });
+  
   // RAG Document Upload System
   app.post('/api/rag/upload', upload.single('document'), async (req, res) => {
     try {

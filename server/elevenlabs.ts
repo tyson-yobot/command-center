@@ -1,25 +1,49 @@
 // ElevenLabs Voice Synthesis Service
 
-// Default voices available in ElevenLabs
+// Complete ElevenLabs voice library with all available default voices
 export const DEFAULT_VOICES = [
-  { id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel', category: 'Premade', description: 'Young Adult Female, Narration' },
-  { id: 'AZnzlk1XvdvUeBnXmlld', name: 'Domi', category: 'Premade', description: 'Young Adult Female, Narration' },
-  { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Bella', category: 'Premade', description: 'Young Adult Female, Narration' },
-  { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni', category: 'Premade', description: 'Young Adult Male, Narration' },
-  { id: 'MF3mGyEYCl7XYWbV9V6O', name: 'Elli', category: 'Premade', description: 'Young Adult Female, Narration' },
-  { id: 'TxGEqnHWrfWFTfGW9XjX', name: 'Josh', category: 'Premade', description: 'Young Adult Male, Narration' },
-  { id: 'VR6AewLTigWG4xSOukaG', name: 'Arnold', category: 'Premade', description: 'Middle-aged Male, Narration' },
-  { id: 'pNInz6obpgDQGcFmaJgB', name: 'Adam', category: 'Premade', description: 'Middle-aged Male, Narration' },
-  { id: 'yoZ06aMxZJJ28mfd3POQ', name: 'Sam', category: 'Premade', description: 'Young Adult Male, Narration' },
-  { id: 'CYw3kZ02Hs0563khs1Fj', name: 'Dave', category: 'Premade', description: 'Young Adult Male, Conversation' },
-  { id: 'N2lVS1w4EtoT3dr4eOWO', name: 'Fin', category: 'Premade', description: 'Old Male, Narration' },
-  { id: 'ThT5KcBeYPX3keUQqHPh', name: 'Sarah', category: 'Premade', description: 'Young Adult Female, News' },
-  { id: 'XB0fDUnXU5powFXDhCwa', name: 'Charlotte', category: 'Premade', description: 'Middle-aged Female, Narration' },
-  { id: 'pMsXgVXv3BLzUgSXRplE', name: 'Matilda', category: 'Premade', description: 'Young Adult Female, Narration' },
-  { id: 'XrExE9yKIg1WjnnlVkGX', name: 'Matthew', category: 'Premade', description: 'Middle-aged Male, Narration' },
-  { id: 'g5CIjZEefAph4nQFvHAz', name: 'James', category: 'Premade', description: 'Young Adult Male, News' },
-  { id: 'oWAxZDx7w5VEj9dCyTzz', name: 'Grace', category: 'Premade', description: 'Young Adult Female, Narration' },
-  { id: 'bVMeCyTHy58xNoL34h3p', name: 'Daniel', category: 'Premade', description: 'Middle-aged Male, Deep' }
+  // Premium Female Voices
+  { id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel', category: 'Premade', description: 'Young Adult Female, Narration', accent: 'American', use_case: 'Narration, Audiobooks' },
+  { id: 'AZnzlk1XvdvUeBnXmlld', name: 'Domi', category: 'Premade', description: 'Young Adult Female, Narration', accent: 'American', use_case: 'Strong, Confident' },
+  { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Bella', category: 'Premade', description: 'Young Adult Female, Narration', accent: 'American', use_case: 'Soft, Pleasant' },
+  { id: 'MF3mGyEYCl7XYWbV9V6O', name: 'Elli', category: 'Premade', description: 'Young Adult Female, Emotional', accent: 'American', use_case: 'Expressive, Storytelling' },
+  { id: 'XrExE9yKIg1WjnnlVkGX', name: 'Matilda', category: 'Premade', description: 'Young Adult Female, Warm', accent: 'American', use_case: 'Friendly, Welcoming' },
+  { id: 'oWAxZDx7w5VEj9dCyTzz', name: 'Grace', category: 'Premade', description: 'Young Adult Female, Elegant', accent: 'American', use_case: 'Sophisticated, Professional' },
+  { id: 'cjVigY5qzO86Huf0OWal', name: 'Stella', category: 'Premade', description: 'Middle-aged Female, Authoritative', accent: 'American', use_case: 'Business, Educational' },
+  { id: 'XB0fDUnXU5powFXDhCwa', name: 'Charlotte', category: 'Premade', description: 'Middle-aged Female, Sophisticated', accent: 'English', use_case: 'Refined, Elegant' },
+  { id: 'IKne3meq5aSn9XLyUdCD', name: 'Alice', category: 'Premade', description: 'Middle-aged Female, Clear', accent: 'British', use_case: 'Clear, Articulate' },
+  { id: 'ThT5KcBeYPX3keUQqHPh', name: 'Sarah', category: 'Premade', description: 'Young Adult Female, News', accent: 'American', use_case: 'News, Broadcasting' },
+  
+  // Premium Male Voices
+  { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni', category: 'Premade', description: 'Young Adult Male, Well-rounded', accent: 'American', use_case: 'Versatile, Natural' },
+  { id: 'TxGEqnHWrfWFTfGW9XjX', name: 'Josh', category: 'Premade', description: 'Young Adult Male, Casual', accent: 'American', use_case: 'Casual, Friendly' },
+  { id: 'pNInz6obpgDQGcFmaJgB', name: 'Adam', category: 'Premade', description: 'Middle-aged Male, Narration', accent: 'American', use_case: 'Deep, Authoritative' },
+  { id: 'yoZ06aMxZJJ28mfd3POQ', name: 'Sam', category: 'Premade', description: 'Young Adult Male, Raspy', accent: 'American', use_case: 'Unique, Character' },
+  { id: 'VR6AewLTigWG4xSOukaG', name: 'Arnold', category: 'Premade', description: 'Middle-aged Male, Crisp', accent: 'American', use_case: 'Clear, Professional' },
+  { id: 'CYw3kZ02Hs0563khs1Fj', name: 'Dave', category: 'Premade', description: 'Young Adult Male, Conversational', accent: 'British-Essex', use_case: 'Conversational, Relatable' },
+  { id: 'N2lVS1w4EtoT3dr4eOWO', name: 'Callum', category: 'Premade', description: 'Middle-aged Male, Hoarse', accent: 'American', use_case: 'Character, Distinctive' },
+  { id: 'bVMeCyTHy58xNoL34h3p', name: 'Jeremy', category: 'Premade', description: 'Young Adult Male, Excited', accent: 'American-Irish', use_case: 'Energetic, Enthusiastic' },
+  { id: 'onwK4e9ZLuTAKqWW03F9', name: 'Daniel', category: 'Premade', description: 'Middle-aged Male, Deep', accent: 'British', use_case: 'Deep, Resonant' },
+  { id: 'rGKVfvBBpNxMgKHwF3sB', name: 'Bill', category: 'Premade', description: 'Middle-aged Male, Strong', accent: 'American', use_case: 'Strong, Commanding' },
+  { id: 'JBFqnCBsd6RMkjVDRZzb', name: 'George', category: 'Premade', description: 'Middle-aged Male, Warm', accent: 'British', use_case: 'Warm, Trustworthy' },
+  { id: 'g5CIjZEefAph4nQFvHAz', name: 'James', category: 'Premade', description: 'Young Adult Male, Calm', accent: 'Australian', use_case: 'Calm, Measured' },
+  
+  // Multilingual Voices  
+  { id: 'FGY2WhTYpPnrIDTdsKH5', name: 'Laura', category: 'Multilingual', description: 'Young Adult Female, Upbeat', accent: 'American', use_case: 'Multilingual, Upbeat' },
+  { id: 'jBpfuIE2acCO8z3wKNLl', name: 'Gigi', category: 'Multilingual', description: 'Young Adult Female, Childlish', accent: 'American', use_case: 'Playful, Young' },
+  { id: 'jsCqWAovK2LkecY7zXl4', name: 'Freya', category: 'Multilingual', description: 'Young Adult Female, Overly Dramatic', accent: 'American', use_case: 'Dramatic, Expressive' },
+  { id: 'piTKgcLEGmPE4e6mEKli', name: 'Nicole', category: 'Multilingual', description: 'Young Adult Female, Whisper', accent: 'American', use_case: 'Soft, Intimate' },
+  { id: 'SOYHLrjzK2X1ezoPC6cr', name: 'Harry', category: 'Multilingual', description: 'Young Adult Male, Anxious', accent: 'American', use_case: 'Nervous, Uncertain' },
+  { id: 'TX3LPaxmHKxFdv7VOQHJ', name: 'Liam', category: 'Multilingual', description: 'Young Adult Male, Articulate', accent: 'American', use_case: 'Clear, Articulate' },
+  { id: 'flq6f7yk4E4fJM5XTYuZ', name: 'Michael', category: 'Multilingual', description: 'Old Adult Male, Experienced', accent: 'American', use_case: 'Wise, Experienced' },
+  
+  // Character & Unique Voices
+  { id: 'pqHfZKP75CvOlQylNhV4', name: 'Clyde', category: 'Characters', description: 'Middle-aged Male, War Veteran', accent: 'American', use_case: 'Rough, Veteran' },
+  { id: 'iP95p4xoKVk53GoZ742B', name: 'River', category: 'Characters', description: 'Young Adult Male, Confident', accent: 'American', use_case: 'Confident, Smooth' },
+  { id: 'nPczCjzI2devNBz1zQrb', name: 'Brian', category: 'Characters', description: 'Middle-aged Male, Authoritative', accent: 'American', use_case: 'Authoritative, Leader' },
+  { id: 'ODq5zmih8GrVes37Dizd', name: 'Patrick', category: 'Characters', description: 'Middle-aged Male, Shouty', accent: 'American', use_case: 'Energetic, Loud' },
+  { id: 'GBv7mTt0atIp3Br8iCZE', name: 'Thomas', category: 'Characters', description: 'Young Adult Male, Calm', accent: 'American', use_case: 'Meditative, Calm' },
+  { id: 'Zlb1dXrM653N07WRdFW3', name: 'Emily', category: 'Characters', description: 'Young Adult Female, Excited', accent: 'American', use_case: 'Excited, Energetic' }
 ];
 
 // Get all available voices (default + custom if API available)
