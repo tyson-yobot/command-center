@@ -48,9 +48,17 @@
   background: hsl(var(--card-background));
   border: 1px solid rgba(59, 130, 246, 0.2);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  color: hsl(var(--text-primary));
+}
+
+/* Fix dropdown option visibility */
+select option {
+  background-color: rgb(51 65 85) !important;
+  color: white !important;
+}
+
+select option:hover {
+  background-color: rgb(59 130 246) !important;
+  color: white !important;
 }
 
 .card:hover {

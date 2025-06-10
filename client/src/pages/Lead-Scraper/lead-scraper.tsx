@@ -105,6 +105,10 @@ const Select = ({ value, onChange, children, className = "" }: {
     value={value}
     onChange={onChange}
     className={`flex h-12 w-full rounded-xl border-2 border-slate-600/50 bg-gradient-to-r from-slate-700/80 to-slate-800/80 backdrop-blur-sm px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 ${className}`}
+    style={{
+      color: 'white',
+      backgroundColor: 'rgb(51 65 85 / 0.8)',
+    }}
   >
     {children}
   </select>
