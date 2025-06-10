@@ -10,13 +10,18 @@ export class LiveDashboardData {
       // Get metrics from Airtable Integration Test Log Table
       const airtableResponse = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbly0fjE2M5uHET9X", {
         headers: {
-          "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_TOKEN}`,
+          "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
           "Content-Type": "application/json"
         }
       });
 
       if (airtableResponse.ok) {
         const airtableData = await airtableResponse.json();
+        console.log('Airtable response status:', airtableResponse.status);
+        if (!airtableResponse.ok) {
+          console.log('Airtable error:', airtableData);
+          throw new Error(`Airtable API error: ${airtableData.error?.message || 'Unknown error'}`);
+        }
         const records = airtableData.records || [];
         
         // Parse integration test records to get real automation function status
