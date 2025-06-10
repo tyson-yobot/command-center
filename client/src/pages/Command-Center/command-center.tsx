@@ -3015,15 +3015,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Today's Meetings:</span>
-                  <span className="text-white font-bold">{metrics?.todaysMeetings || 0}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Auto-Scheduled:</span>
-                  <span className="text-green-400 font-bold">{metrics?.autoScheduled || 0}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Follow-ups Due:</span>
-                  <span className="text-orange-400 font-bold">{automationPerformance?.activeFunctions || 0}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
@@ -3041,15 +3041,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Commands Today:</span>
-                  <span className="text-white font-bold">{metrics?.voiceCommands || 0}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-green-400 font-bold">{metrics?.voiceSuccessRate || 0}%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Processing:</span>
-                  <span className="text-blue-400 font-bold">{metrics?.activeVoiceJobs || 0} active</span>
+                  <span className="text-slate-400 font-bold">-- active</span>
                 </div>
               </div>
             </CardContent>
@@ -3067,15 +3067,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Active Clones:</span>
-                  <span className="text-white font-bold">3</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Deployed Today:</span>
-                  <span className="text-green-400 font-bold">7</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-green-400 font-bold">96%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
@@ -3093,15 +3093,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Positive:</span>
-                  <span className="text-green-400 font-bold">72%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Neutral:</span>
-                  <span className="text-slate-400 font-bold">21%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Negative:</span>
-                  <span className="text-red-400 font-bold">7%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
@@ -3231,17 +3231,17 @@ export default function CommandCenter() {
               
               <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-cyan-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-purple-400 mb-2">{currentSystemMode === 'test' ? '340%' : '0%'}</div>
-                  <div className="text-purple-300 text-sm">ROI</div>
-                  <div className="text-purple-200 text-xs mt-1">12-month period</div>
+                  <div className="text-3xl font-black text-slate-400 mb-2">--</div>
+                  <div className="text-slate-300 text-sm">ROI</div>
+                  <div className="text-slate-400 text-xs mt-1">No data available</div>
                 </div>
               </div>
               
               <div className="bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 border border-cyan-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-yellow-400 mb-2">{currentSystemMode === 'test' ? '21' : '0'}</div>
-                  <div className="text-yellow-300 text-sm">Payback Days</div>
-                  <div className="text-yellow-200 text-xs mt-1">Industry: 90+ days</div>
+                  <div className="text-3xl font-black text-slate-400 mb-2">--</div>
+                  <div className="text-slate-300 text-sm">Payback Days</div>
+                  <div className="text-slate-400 text-xs mt-1">No data available</div>
                 </div>
               </div>
             </div>
