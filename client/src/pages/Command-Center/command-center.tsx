@@ -2264,7 +2264,7 @@ export default function CommandCenter() {
                     onClick={handleNewBookingSync}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
-                    <Calendar className="w-5 h-5 mr-3" />
+                    <span className="text-xl mr-3">📅</span>
                     <span>Create Booking</span>
                   </Button>
                   
@@ -2272,7 +2272,7 @@ export default function CommandCenter() {
                     onClick={handleNewSupportTicket}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
-                    <Headphones className="w-5 h-5 mr-3" />
+                    <span className="text-xl mr-3">🎧</span>
                     <span>Create Support Ticket</span>
                   </Button>
                   
@@ -2280,7 +2280,7 @@ export default function CommandCenter() {
                     onClick={handleManualFollowUp}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
-                    <Phone className="w-5 h-5 mr-3" />
+                    <span className="text-xl mr-3">📞</span>
                     <span>Create Follow-up</span>
                   </Button>
                   
@@ -2288,7 +2288,7 @@ export default function CommandCenter() {
                     onClick={handleSalesOrder}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
-                    <DollarSign className="w-5 h-5 mr-3" />
+                    <span className="text-xl mr-3">💰</span>
                     <span>Create Sales Order</span>
                   </Button>
                   
@@ -2296,7 +2296,7 @@ export default function CommandCenter() {
                     onClick={handleSendSMS}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
-                    <MessageSquare className="w-5 h-5 mr-3" />
+                    <span className="text-xl mr-3">💬</span>
                     <span>Send SMS</span>
                   </Button>
 
@@ -2315,7 +2315,7 @@ export default function CommandCenter() {
                     onClick={handleStartPipelineCalls}
                     className="bg-lime-500 hover:bg-lime-600 text-white flex items-center justify-start p-3 font-semibold border-2 border-lime-400 shadow-lg shadow-lime-500/25"
                   >
-                    <Phone className="w-5 h-5 mr-3" />
+                    <span className="text-xl mr-3">🚀</span>
                     <span>Start Pipeline Calls</span>
                   </Button>
                   
@@ -2323,7 +2323,7 @@ export default function CommandCenter() {
                     onClick={handleStopPipelineCalls}
                     className="bg-red-500 hover:bg-red-600 text-white flex items-center justify-start p-3 border-2 border-red-400 shadow-lg shadow-red-500/25"
                   >
-                    <PhoneOff className="w-5 h-5 mr-3" />
+                    <span className="text-xl mr-3">🛑</span>
                     <span>End Pipeline Calls</span>
                   </Button>
                   
@@ -2331,7 +2331,7 @@ export default function CommandCenter() {
                     onClick={handleInitiateVoiceCall}
                     className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
                   >
-                    <Phone className="w-5 h-5 mr-3" />
+                    <span className="text-xl mr-3">📲</span>
                     <span>Create Voice Call</span>
                   </Button>
                   
@@ -2339,7 +2339,7 @@ export default function CommandCenter() {
                     onClick={handleVoiceToggle}
                     className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
                   >
-                    <Mic className="w-5 h-5 mr-3" />
+                    <span className="text-xl mr-3">🎤</span>
                     <span>Voice Input</span>
                   </Button>
                 </div>
@@ -2365,7 +2365,7 @@ export default function CommandCenter() {
                     onClick={handleDownloadPDF}
                     className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
                   >
-                    <FileText className="w-5 h-5 mr-3" />
+                    <span className="text-xl mr-3">📄</span>
                     <span>View PDF Report</span>
                   </Button>
                   
@@ -2411,7 +2411,7 @@ export default function CommandCenter() {
                     onClick={() => setShowContentCreator(!showContentCreator)}
                     className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
                   >
-                    <Edit3 className="w-5 h-5 mr-3" />
+                    <span className="text-xl mr-3">✨</span>
                     <span>Content Creator</span>
                   </Button>
                   
@@ -2419,7 +2419,7 @@ export default function CommandCenter() {
                     onClick={() => setShowMailchimpSync(!showMailchimpSync)}
                     className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
                   >
-                    <Users className="w-5 h-5 mr-3" />
+                    <span className="text-xl mr-3">📧</span>
                     <span>Mailchimp Campaign</span>
                   </Button>
                   
