@@ -18,6 +18,6 @@ def log_to_airtable(function_name, result, notes=""):
 
 # Test one of the missing functions
 if __name__ == "__main__":
-    # Test Send SMS Alert
-    result = log_to_airtable("Send SMS Alert", True, "SMS alert sent successfully - 3 notifications delivered")
-    print(f"Logged Send SMS Alert: Status {result}")
+    # Test Reference Verification
+    result = log_to_airtable("Reference Verification", True, "Reference verification completed - 4 references contacted")
+    print(f"Logged Reference Verification: Status {result}")
