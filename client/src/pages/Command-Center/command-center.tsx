@@ -2613,19 +2613,19 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Client NPS:</span>
-                  <span className="text-green-400 font-bold">72/100</span>
+                  <span className="text-slate-400 font-bold">0/100</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Churn Risk Flags:</span>
-                  <span className="text-orange-400 font-bold">3 accounts</span>
+                  <span className="text-slate-400 font-bold">0 accounts</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Last Login:</span>
-                  <span className="text-blue-400 font-bold">2.1 days ago</span>
+                  <span className="text-slate-400 font-bold">No Activity</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Bot Utilization Rate:</span>
-                  <span className="text-green-400 font-bold">78% usage</span>
+                  <span className="text-slate-400 font-bold">0% usage</span>
                 </div>
               </div>
             </CardContent>
@@ -2688,11 +2688,11 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Success Rate</span>
-                  <span className="text-green-400 font-bold">97.8%</span>
+                  <span className="text-slate-400 font-bold">0%</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Avg Completion Time</span>
-                  <span className="text-blue-400 font-bold">3.2 min</span>
+                  <span className="text-slate-400 font-bold">N/A</span>
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Next Automation</div>
