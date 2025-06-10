@@ -1,27 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Phone, PhoneCall, Activity, Users, Clock } from 'lucide-react';
+import { Phone, PhoneCall, Activity, Users, Clock, Play, Square } from 'lucide-react';
+
+interface CallDetails {
+  activeCalls: Array<{
+    id: string;
+    client: string;
+    duration: string;
+    status: string;
+  }>;
+  todayStats: {
+    totalCalls: number;
+    averageDuration: string;
+    successRate: string;
+    conversionRate: string;
+  };
+  recentCalls: Array<{
+    time: string;
+    client: string;
+    outcome: string;
+    duration: string;
+  }>;
+}
 
 export function CallMonitoringPopup() {
   const [isMonitoring, setIsMonitoring] = useState(true);
-  const [activeCallsCount, setActiveCallsCount] = useState(3);
+  const [callDetails, setCallDetails] = useState<CallDetails | null>(null);
+  const [loading, setLoading] = useState(true);
   
-  const handleToggleMonitoring = () => {
-    setIsMonitoring(!isMonitoring);
-  };
+  useEffect(() => {
+    fetchCallDetails();
+  }, []);
 
-  const handleViewDetails = async () => {
+  const fetchCallDetails = async () => {
     try {
       const response = await fetch('/api/call-monitoring/details');
       if (response.ok) {
         const data = await response.json();
-        console.log('Call monitoring details:', data);
+        if (data.success) {
+          setCallDetails(data.data);
+        }
       }
     } catch (error) {
       console.error('Failed to fetch call details:', error);
+    } finally {
+      setLoading(false);
     }
+  };
+  
+  const handleToggleMonitoring = async () => {
+    try {
+      const action = isMonitoring ? 'stop' : 'start';
+      const response = await fetch('/api/call-monitoring/toggle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action })
+      });
+      
+      if (response.ok) {
+        setIsMonitoring(!isMonitoring);
+        await fetchCallDetails(); // Refresh data
+      }
+    } catch (error) {
+      console.error('Failed to toggle monitoring:', error);
+    }
+  };
+
+  const handleViewDetails = async () => {
+    await fetchCallDetails();
   };
 
   return (
@@ -43,7 +91,7 @@ export function CallMonitoringPopup() {
             </Badge>
             <div className="flex items-center text-white text-sm">
               <Activity className="w-4 h-4 mr-1" />
-              <span>{activeCallsCount} Active Calls</span>
+              <span>{callDetails?.activeCalls?.length || 0} Active Calls</span>
             </div>
           </div>
           

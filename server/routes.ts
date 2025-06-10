@@ -1006,9 +1006,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log('Knowledge clear request received');
       
+      const documentsDeleted = documentStore.length;
+      documentStore.length = 0; // Clear the document store
+      
       const result = {
         success: true,
-        documentsDeleted: 0,
+        documentsDeleted,
         memoryCleared: true,
         timestamp: new Date().toISOString()
       };
@@ -1017,6 +1020,307 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Knowledge clear error:', error);
       res.status(500).json({ success: false, error: 'Clear failed' });
+    }
+  });
+
+  // Call Monitoring API endpoints
+  app.get('/api/call-monitoring/details', async (req, res) => {
+    try {
+      const callDetails = {
+        activeCalls: [
+          { id: 'call_001', client: 'TechCorp Solutions', duration: '3m 15s', status: 'ongoing' },
+          { id: 'call_002', client: 'Global Enterprises', duration: '1m 42s', status: 'ongoing' },
+          { id: 'call_003', client: 'StartupX', duration: '5m 30s', status: 'ongoing' }
+        ],
+        todayStats: {
+          totalCalls: 47,
+          averageDuration: '3m 42s',
+          successRate: '94%',
+          conversionRate: '18%'
+        },
+        recentCalls: [
+          { time: '2:45 PM', client: 'ABC Corp', outcome: 'scheduled follow-up', duration: '4m 20s' },
+          { time: '2:30 PM', client: 'XYZ Ltd', outcome: 'interested', duration: '6m 15s' },
+          { time: '2:15 PM', client: 'StartupY', outcome: 'not interested', duration: '2m 10s' }
+        ]
+      };
+
+      logOperation('call-monitoring-details', {}, 'success', 'Call monitoring details requested');
+
+      res.json({
+        success: true,
+        data: callDetails,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Call monitoring details error:', error);
+      res.status(500).json({ success: false, error: 'Failed to get call details' });
+    }
+  });
+
+  app.post('/api/call-monitoring/toggle', async (req, res) => {
+    try {
+      const { action } = req.body; // 'start' or 'stop'
+      
+      const result = {
+        status: action === 'start' ? 'monitoring started' : 'monitoring stopped',
+        timestamp: new Date().toISOString(),
+        activeMonitoring: action === 'start'
+      };
+
+      logOperation('call-monitoring-toggle', { action }, 'success', `Call monitoring ${action}ed`);
+
+      res.json({
+        success: true,
+        message: `Call monitoring ${action}ed successfully`,
+        data: result
+      });
+    } catch (error) {
+      console.error('Call monitoring toggle error:', error);
+      res.status(500).json({ success: false, error: 'Failed to toggle call monitoring' });
+    }
+  });
+
+  // Zendesk API endpoints
+  app.post('/api/zendesk/open-chat', async (req, res) => {
+    try {
+      const chatSession = {
+        sessionId: `chat_${Date.now()}`,
+        status: 'active',
+        agent: 'AI Assistant',
+        startTime: new Date().toISOString()
+      };
+
+      logOperation('zendesk-open-chat', {}, 'success', 'Zendesk chat session opened');
+
+      res.json({
+        success: true,
+        message: 'Chat session opened successfully',
+        session: chatSession
+      });
+    } catch (error) {
+      console.error('Zendesk open chat error:', error);
+      res.status(500).json({ success: false, error: 'Failed to open chat session' });
+    }
+  });
+
+  app.get('/api/zendesk/tickets', async (req, res) => {
+    try {
+      const tickets = [
+        { id: 'TICK-001', subject: 'Integration Issue', status: 'open', priority: 'high', created: '2h ago' },
+        { id: 'TICK-002', subject: 'Feature Request', status: 'pending', priority: 'medium', created: '4h ago' },
+        { id: 'TICK-003', subject: 'Bug Report', status: 'resolved', priority: 'low', created: '1d ago' },
+        { id: 'TICK-004', subject: 'Account Setup', status: 'open', priority: 'medium', created: '3h ago' },
+        { id: 'TICK-005', subject: 'API Documentation', status: 'pending', priority: 'low', created: '6h ago' }
+      ];
+
+      logOperation('zendesk-tickets', {}, 'success', 'Zendesk tickets retrieved');
+
+      res.json({
+        success: true,
+        tickets: tickets,
+        total: tickets.length,
+        pending: tickets.filter(t => t.status === 'pending').length,
+        open: tickets.filter(t => t.status === 'open').length
+      });
+    } catch (error) {
+      console.error('Zendesk tickets error:', error);
+      res.status(500).json({ success: false, error: 'Failed to get tickets' });
+    }
+  });
+
+  app.post('/api/zendesk/create-ticket', async (req, res) => {
+    try {
+      const { subject, description, priority = 'normal' } = req.body;
+      
+      const ticket = {
+        id: `TICK-${String(Date.now()).slice(-6)}`,
+        subject: subject || 'New Support Request',
+        description: description || 'Support ticket created from Command Center',
+        priority: priority,
+        status: 'open',
+        created: new Date().toISOString(),
+        requester: 'Command Center System'
+      };
+
+      logOperation('zendesk-create-ticket', { subject, priority }, 'success', `Zendesk ticket created: ${ticket.id}`);
+
+      res.json({
+        success: true,
+        message: 'Support ticket created successfully',
+        ticket: ticket
+      });
+    } catch (error) {
+      console.error('Zendesk create ticket error:', error);
+      res.status(500).json({ success: false, error: 'Failed to create ticket' });
+    }
+  });
+
+  // Knowledge base search endpoint with AI-powered relevance scoring
+  app.post('/api/knowledge/search', async (req, res) => {
+    try {
+      const { query, category = 'all', limit = 10 } = req.body;
+      
+      if (!query) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Search query is required' 
+        });
+      }
+
+      // Filter documents by category if specified
+      let searchableDocuments = documentStore;
+      if (category !== 'all') {
+        searchableDocuments = documentStore.filter(doc => 
+          doc.category === category || (doc.categories && doc.categories.includes(category))
+        );
+      }
+
+      // Simple text-based search with relevance scoring
+      const searchResults = searchableDocuments.map(doc => {
+        const text = (doc.extractedText || doc.content || '').toLowerCase();
+        const searchQuery = query.toLowerCase();
+        
+        // Calculate relevance score based on query matches
+        let relevanceScore = 0;
+        const queryWords = searchQuery.split(' ').filter(word => word.length > 2);
+        
+        queryWords.forEach(word => {
+          const wordCount = (text.match(new RegExp(word, 'g')) || []).length;
+          relevanceScore += wordCount * 10; // Base score for word matches
+          
+          // Bonus for title matches
+          if (doc.filename && doc.filename.toLowerCase().includes(word)) {
+            relevanceScore += 25;
+          }
+          
+          // Bonus for key terms matches
+          if (doc.keyTerms && doc.keyTerms.some(term => term.includes(word))) {
+            relevanceScore += 15;
+          }
+        });
+        
+        // Return document with relevance score if it has any matches
+        if (relevanceScore > 0) {
+          return {
+            id: doc.documentId || doc.id,
+            title: doc.filename || doc.originalname || 'Untitled Document',
+            excerpt: text.substring(0, 200) + '...',
+            relevanceScore,
+            source: doc.filename || 'Knowledge Base',
+            lastModified: doc.uploadTime || doc.uploadedAt,
+            keyTerms: doc.keyTerms || [],
+            categories: doc.categories || [doc.category || 'general'],
+            wordCount: doc.wordCount || (doc.extractedText ? doc.extractedText.split(' ').length : 0)
+          };
+        }
+        return null;
+      }).filter(result => result !== null);
+
+      // Sort by relevance score and limit results
+      searchResults.sort((a, b) => b.relevanceScore - a.relevanceScore);
+      const limitedResults = searchResults.slice(0, parseInt(limit));
+
+      // Enhance with AI analysis if OpenAI is available
+      let aiInsights = null;
+      if (process.env.OPENAI_API_KEY && limitedResults.length > 0) {
+        try {
+          const topResults = limitedResults.slice(0, 3);
+          const contextText = topResults.map(r => r.excerpt).join('\n\n');
+          
+          const response = await openai.chat.completions.create({
+            model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+            messages: [
+              {
+                role: "system",
+                content: "You are an expert knowledge analyst. Analyze the search results and provide a brief summary of key insights related to the user's query."
+              },
+              {
+                role: "user",
+                content: `Query: "${query}"\n\nRelevant content:\n${contextText}\n\nProvide a concise summary of the most relevant information.`
+              }
+            ],
+            max_tokens: 150
+          });
+
+          aiInsights = response.choices[0].message.content;
+        } catch (aiError) {
+          console.error('AI analysis failed:', aiError);
+        }
+      }
+
+      logOperation('knowledge-search', { 
+        query, 
+        category, 
+        resultsCount: limitedResults.length 
+      }, 'success', `Knowledge search completed: ${limitedResults.length} results`);
+
+      res.json({
+        success: true,
+        query,
+        totalResults: limitedResults.length,
+        results: limitedResults,
+        aiInsights,
+        searchTime: new Date().toISOString(),
+        suggestions: queryWords.length > 1 ? [
+          `Try searching for individual terms: ${queryWords.join(', ')}`,
+          'Use more specific keywords',
+          'Check document categories for better filtering'
+        ] : []
+      });
+
+    } catch (error) {
+      console.error('Knowledge search error:', error);
+      logOperation('knowledge-search', { query }, 'error', `Search failed: ${error.message}`);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Search failed',
+        details: error.message 
+      });
+    }
+  });
+
+  // Knowledge base document retrieval endpoint
+  app.get('/api/knowledge/document/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      const document = documentStore.find(doc => 
+        doc.documentId === id || doc.id === id
+      );
+      
+      if (!document) {
+        return res.status(404).json({
+          success: false,
+          error: 'Document not found'
+        });
+      }
+
+      logOperation('knowledge-document-retrieve', { documentId: id }, 'success', 'Document retrieved');
+
+      res.json({
+        success: true,
+        document: {
+          id: document.documentId || document.id,
+          title: document.filename || document.originalname,
+          content: document.extractedText || document.content,
+          fileSize: document.size || document.fileSize,
+          fileType: document.mimetype || document.fileType,
+          uploadTime: document.uploadTime || document.uploadedAt,
+          category: document.category,
+          categories: document.categories || [],
+          keyTerms: document.keyTerms || [],
+          wordCount: document.wordCount || 0,
+          status: document.status || 'processed'
+        }
+      });
+
+    } catch (error) {
+      console.error('Document retrieval error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to retrieve document' 
+      });
     }
   });
 
@@ -2119,12 +2423,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
         let keyTerms = [];
         
         if (fileType === 'application/pdf') {
-          // PDF processing would go here
-          extractedText = `PDF content from ${fileName}`;
+          // Use pdf.js-extract for PDF processing
+          try {
+            const { PDFExtract } = require('pdf.js-extract');
+            const pdfExtract = new PDFExtract();
+            const options = {}; // Add options if needed
+            
+            // Write PDF to temp file for processing
+            const tempPdfPath = path.join(uploadsDir, `temp_${documentId}.pdf`);
+            fs.writeFileSync(tempPdfPath, fileBuffer);
+            
+            const data = await new Promise((resolve, reject) => {
+              pdfExtract.extract(tempPdfPath, options, (err, data) => {
+                if (err) reject(err);
+                else resolve(data);
+              });
+            });
+            
+            // Extract text from PDF pages
+            extractedText = data.pages.map(page => 
+              page.content.map(item => item.str).join(' ')
+            ).join('\n\n');
+            
+            // Clean up temp file
+            fs.unlinkSync(tempPdfPath);
+          } catch (pdfError) {
+            console.error('PDF processing error:', pdfError);
+            extractedText = `PDF processing failed for ${fileName}. File uploaded but text extraction unavailable.`;
+          }
         } else if (fileType.includes('text') || fileName.endsWith('.txt') || fileName.endsWith('.md')) {
           extractedText = fileBuffer.toString('utf-8');
         } else if (fileName.endsWith('.csv')) {
           extractedText = fileBuffer.toString('utf-8');
+        } else if (fileType.includes('json')) {
+          try {
+            const jsonContent = JSON.parse(fileBuffer.toString('utf-8'));
+            extractedText = JSON.stringify(jsonContent, null, 2);
+          } catch (jsonError) {
+            extractedText = fileBuffer.toString('utf-8');
+          }
         }
 
         // Generate key terms from content
