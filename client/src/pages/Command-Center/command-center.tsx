@@ -38,6 +38,7 @@ import {
   Upload,
   RefreshCw,
   Trash2,
+  Send,
   Eye,
   Download,
   Edit,
@@ -2198,6 +2199,7 @@ export default function CommandCenter() {
                   className="bg-green-600 hover:bg-green-700 text-white"
                   size="sm"
                 >
+                  <Send className="w-4 h-4 mr-1" />
                   Send
                 </Button>
               </div>
@@ -2221,19 +2223,12 @@ export default function CommandCenter() {
                   📂 View Reports
                 </Button>
                 <Button 
+                  onClick={() => window.location.href = '/admin'}
                   size="sm"
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   <Settings className="w-4 h-4 mr-1" />
                   Admin
-                </Button>
-                <Button 
-                  onClick={handleSubmitTicket}
-                  size="sm"
-                  variant="outline"
-                  className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-                >
-                  Submit Ticket
                 </Button>
               </div>
               
