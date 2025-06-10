@@ -18,7 +18,7 @@ import { registerScrapingEndpoints } from "./scrapingApiEndpoints";
 import { registerContentCreatorEndpoints } from "./contentCreatorEndpoints";
 import { registerDashboardEndpoints } from "./dashboardEndpoints";
 import { registerCoreAutomationEndpoints } from "./coreAutomationEndpoints";
-import { executeAutomationFunction } from "./automationHandler";
+import { executeAutomationFunction, registerAutomationEndpoints } from "./automationHandler";
 import { registerCentralAutomationDispatcher } from "./centralAutomationDispatcher";
 import { registerCommandCenterRoutes } from "./commandCenterRoutes";
 import { registerQAValidationRoutes } from "./qaValidationSystem";
