@@ -147,54 +147,10 @@ const dealDataStore: DealData[] = [];
 const followUpDataStore: FollowUpData[] = [];
 const processingDataStore: ProcessingData[] = [];
 
-// Knowledge management stores
-let documentStore: any[] = [
-  {
-    id: 'doc_001',
-    documentId: 'doc_001',
-    filename: 'test-knowledge.txt',
-    originalname: 'test-knowledge.txt',
-    size: 1024,
-    mimetype: 'text/plain',
-    uploadTime: new Date().toISOString(),
-    category: 'general',
-    status: 'processed',
-    extractedText: 'This is sample knowledge content for testing the RAG system. It contains information about automation and AI integration.',
-    keyTerms: ['automation', 'AI', 'integration', 'testing'],
-    wordCount: 20
-  },
-  {
-    id: 'doc_002',
-    documentId: 'doc_002',
-    filename: 'YoBot_Documentation.pdf',
-    originalname: 'YoBot_Documentation.pdf',
-    size: 2048,
-    mimetype: 'application/pdf',
-    uploadTime: new Date(Date.now() - 3600000).toISOString(),
-    category: 'documentation',
-    status: 'processed',
-    extractedText: 'YoBot is an advanced automation platform that provides AI-powered solutions for business processes.',
-    keyTerms: ['YoBot', 'automation', 'platform', 'business'],
-    wordCount: 15
-  }
-];
+// Knowledge management stores - real data only
+let documentStore: any[] = [];
 
-const memoryStore: any[] = [
-  {
-    id: 'mem_001',
-    content: 'System configured for live mode operation with Airtable integration active.',
-    category: 'system-config',
-    timestamp: new Date().toISOString(),
-    wordCount: 10
-  },
-  {
-    id: 'mem_002',
-    content: 'ElevenLabs voice synthesis successfully tested with 1500ms response time.',
-    category: 'voice-system',
-    timestamp: new Date(Date.now() - 1800000).toISOString(),
-    wordCount: 10
-  }
-];
+const memoryStore: any[] = [];
 
 // Comprehensive logging system for ALL operations - supports both modes
 interface LogEntry {
@@ -1547,18 +1503,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Memory insertion endpoint
   app.post('/api/memory/insert', async (req, res) => {
     try {
-      const { text, category } = req.body;
-      console.log('Memory insertion:', { category, textLength: text?.length });
+      const { text, category, inputType = 'text', source = 'user' } = req.body;
+      console.log('Memory insertion:', { category, textLength: text?.length, inputType });
       
       if (!text || !text.trim()) {
         return res.status(400).json({ success: false, error: 'Text is required' });
       }
+
+      // Determine entry type based on input method
+      const entryType = inputType === 'voice' ? 'voice' : 'text';
+      const displayName = inputType === 'voice' ? 'Voice Entry' : 'Text Entry';
 
       // Store in memory store
       const memoryEntry = {
         id: 'MEM_' + Date.now(),
         content: text.trim(),
         category: category || 'general',
+        inputType: entryType,
+        displayName: displayName,
+        source: source,
         timestamp: new Date().toISOString(),
         wordCount: text.trim().split(/\s+/).length
       };
@@ -1569,6 +1532,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: true,
         memoryId: memoryEntry.id,
         category: memoryEntry.category,
+        inputType: entryType,
+        displayName: displayName,
         status: 'inserted',
         timestamp: memoryEntry.timestamp,
         wordCount: memoryEntry.wordCount

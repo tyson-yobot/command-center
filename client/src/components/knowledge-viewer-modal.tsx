@@ -58,8 +58,7 @@ export function KnowledgeViewerModal({
           <div>
             <h3 className="text-xl font-bold text-white">Knowledge Base Contents</h3>
             <p className="text-sm text-slate-400 mt-1">
-              Documents and system memories used by the AI for intelligent responses. 
-              Tags below show key topics found in each item.
+              Documents and system memories used by the AI for intelligent responses.
             </p>
           </div>
           <Button
@@ -68,6 +67,15 @@ export function KnowledgeViewerModal({
           >
             <X className="w-4 h-4" />
           </Button>
+        </div>
+        
+        <div className="bg-blue-900/30 border border-blue-600/30 rounded-lg p-3 mb-4">
+          <h4 className="text-blue-400 font-medium text-sm mb-2">🏷️ About Search Tags</h4>
+          <p className="text-slate-300 text-xs leading-relaxed">
+            Tags are clickable keywords that help you find related content quickly. They show the main topics in each document or memory. 
+            Hover over any tag to see what it means - for example, "automation" shows content about automated processes, 
+            "AI" indicates artificial intelligence topics, and "integration" marks system connection information.
+          </p>
         </div>
         
         <div className="space-y-4">
@@ -108,10 +116,16 @@ export function KnowledgeViewerModal({
                 
                 {item.keyTerms && item.keyTerms.length > 0 && (
                   <div className="mt-3">
-                    <div className="text-xs text-slate-400 mb-1">Key Terms:</div>
+                    <div className="text-xs text-slate-400 mb-1">
+                      🏷️ Search Tags (click to search for similar content):
+                    </div>
                     <div className="flex flex-wrap gap-1">
                       {item.keyTerms.slice(0, 8).map((term, i) => (
-                        <span key={i} className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded transition-colors">
+                        <span 
+                          key={i} 
+                          className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded transition-colors cursor-pointer"
+                          title={getTagExplanation(term)}
+                        >
                           {term}
                         </span>
                       ))}
