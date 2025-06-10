@@ -2280,52 +2280,7 @@ export default function CommandCenter() {
           onChange={handleFileUpload}
         />
 
-        {/* Top Right Control Buttons - LIVE MODE ONLY */}
-        <div className="fixed top-4 right-4 z-40 flex gap-3">
-          <Button
-            onClick={async () => {
-              if (confirm('Are you sure you want to clear ALL test data? This action cannot be undone.')) {
-                try {
-                  const response = await fetch('/api/clear-test-data', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ confirmAction: true })
-                  });
-                  const result = await response.json();
-                  if (result.success) {
-                    setToast({
-                      title: "Test Data Cleared",
-                      description: `Removed ${result.recordsDeleted || 0} test records`,
-                    });
-                  } else {
-                    setToast({
-                      title: "Clear Failed",
-                      description: result.error || "Failed to clear test data",
-                      variant: "destructive"
-                    });
-                  }
-                } catch (error) {
-                  setToast({
-                    title: "Clear Error",
-                    description: "Network error during test data clearing",
-                    variant: "destructive"
-                  });
-                }
-              }
-            }}
-            className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-4 py-2"
-          >
-            <Trash2 className="w-4 h-4 mr-2" />
-            Clear Test Data
-          </Button>
-          <Button
-            onClick={() => setShowEscalation(true)}
-            className="bg-red-500 hover:bg-red-600 text-white font-bold px-4 py-2"
-          >
-            <AlertTriangle className="w-4 h-4 mr-2" />
-            Critical Escalation
-          </Button>
-        </div>
+        {/* Live Mode - No test controls */}
 
         {/* Key Performance Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
@@ -3401,13 +3356,6 @@ export default function CommandCenter() {
                 <div className="text-center text-slate-400 py-8">
                   No escalation alerts at this time
                 </div>
-                <Button 
-                  onClick={testEscalation}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white"
-                >
-                  <AlertTriangle className="w-4 h-4 mr-2" />
-                  Test Critical Escalation
-                </Button>
               </div>
             </CardContent>
           </Card>

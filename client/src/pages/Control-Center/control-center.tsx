@@ -1429,7 +1429,7 @@ export default function SystemControls() {
         </DialogContent>
       </Dialog>
 
-      {/* Critical System Management Section - moved from Command Center */}
+      {/* Critical System Management Section - Live Mode Only */}
       <Card className="bg-red-900/60 backdrop-blur-sm border border-red-500/30 mt-6">
         <CardHeader className="pb-3">
           <CardTitle className="text-white text-base flex items-center space-x-2">
@@ -1438,27 +1438,9 @@ export default function SystemControls() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <Button
-            onClick={async () => {
-              try {
-                console.log('🧹 Clear Test Data button clicked');
-                const response = await fetch('/api/wipe-test-data', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' }
-                });
-                const result = await response.json();
-                console.log('Test data wipe result:', result);
-                alert(`Test data cleared: ${result.wipe?.totalRecordsDeleted || 0} records deleted`);
-              } catch (error) {
-                console.error('Test data wipe failed:', error);
-                alert('Test data wipe failed');
-              }
-            }}
-            className="w-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-start p-3"
-          >
-            <span className="text-xl mr-3">🧹</span>
-            <span>Clear Test Data</span>
-          </Button>
+          <div className="text-center text-slate-400 py-4">
+            Live mode - Test controls disabled
+          </div>
           
           <Button
             onClick={async () => {
