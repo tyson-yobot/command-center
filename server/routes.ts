@@ -22,6 +22,7 @@ import { executeAutomationFunction, registerAutomationEndpoints } from "./automa
 import { registerCentralAutomationDispatcher } from "./centralAutomationDispatcher";
 import { registerCommandCenterRoutes } from "./commandCenterRoutes";
 import { registerQAValidationRoutes } from "./qaValidationSystem";
+import { registerQALoggingEndpoints } from "./qaLoggingEndpoints";
 import { configManager } from "./controlCenterConfig";
 import { airtableLogger } from "./airtableLogger";
 import { automationTester } from "./automationTester";
@@ -10380,41 +10381,6 @@ CRM Data:
     }
   });
 
-  // QA Logging endpoint for Airtable sync
-  app.post('/api/qa-log', async (req, res) => {
-    try {
-      const { testName, data, systemMode, timestamp } = req.body;
-      
-      // Log to Airtable Integration Test Log
-      await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/Integration%20Test%20Log", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          fields: {
-            "🧪 Integration Name": testName,
-            "✅ Pass/Fail": true,
-            "📝 Notes / Debug": JSON.stringify(data),
-            "📅 Test Date": timestamp,
-            "👤 QA Owner": "YoBot System",
-            "📤 Output Data Populated?": true,
-            "📁 Record Created?": true,
-            "🔁 Retry Attempted?": false,
-            "⚙️ Module Type": "Command Center",
-            "🔗 Related Scenario Link": "Command Center Test"
-          }
-        })
-      });
-      
-      res.json({ success: true, logged: true });
-    } catch (error) {
-      console.error('QA logging error:', error);
-      res.status(500).json({ success: false, error: 'QA logging failed' });
-    }
-  });
-
   // Register all automation function endpoints
   registerAutomationEndpoints(app);
   
@@ -10422,6 +10388,242 @@ CRM Data:
   registerScrapingEndpoints(app);
   registerContentCreatorEndpoints(app);
   registerDashboardEndpoints(app);
+  
+  // Register QA logging system
+  registerQALoggingEndpoints(app);
+
+  // Command Center Required Endpoints
+  
+  // System Mode Toggle with proper isolation
+  app.post('/api/system-mode', async (req, res) => {
+    try {
+      const { mode } = req.body;
+      
+      if (!['test', 'live'].includes(mode)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid system mode. Must be "test" or "live"'
+        });
+      }
+
+      // Log mode change
+      logOperation('system-mode-change', { newMode: mode, previousMode: process.env.SYSTEM_MODE || 'test' }, 'success', `System mode changed to ${mode}`);
+
+      // Update environment variable for this session
+      process.env.SYSTEM_MODE = mode;
+
+      res.json({
+        success: true,
+        systemMode: mode,
+        message: `System switched to ${mode} mode`,
+        timestamp: new Date().toISOString()
+      });
+
+    } catch (error: any) {
+      console.error('System mode toggle error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to toggle system mode'
+      });
+    }
+  });
+
+  // Lead Scraper Launch
+  app.post('/api/launch-scrape', async (req, res) => {
+    try {
+      const { tool, filters } = req.body;
+      const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'test';
+
+      if (systemMode === 'test') {
+        // Test mode - return mock data
+        res.json({
+          success: true,
+          leadCount: 5,
+          tool,
+          message: 'Test scrape completed',
+          leads: [
+            { name: 'Test Lead 1', email: 'test1@example.com', company: 'Test Corp' },
+            { name: 'Test Lead 2', email: 'test2@example.com', company: 'Test Inc' }
+          ]
+        });
+      } else {
+        // Live mode - trigger actual scraping
+        const scrapingResult = await executeAutomationFunction('apollo-io-lead-scraper', {
+          searchQuery: filters.query,
+          filters: filters
+        });
+
+        res.json({
+          success: true,
+          leadCount: scrapingResult.data?.leads?.length || 0,
+          tool,
+          message: 'Live scrape completed',
+          leads: scrapingResult.data?.leads || []
+        });
+      }
+
+    } catch (error: any) {
+      console.error('Lead scraper error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Lead scraper failed'
+      });
+    }
+  });
+
+  // Content Generator
+  app.post('/api/generate-content', async (req, res) => {
+    try {
+      const { platform, prompt } = req.body;
+      const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'test';
+
+      if (systemMode === 'test') {
+        // Test mode - return mock content
+        res.json({
+          success: true,
+          platform,
+          content: `Test content for ${platform}: ${prompt.substring(0, 50)}...`,
+          message: 'Test content generated'
+        });
+      } else {
+        // Live mode - generate actual content
+        const contentResult = await executeAutomationFunction('ai-content-generator', {
+          platform,
+          prompt,
+          contentType: 'post'
+        });
+
+        res.json({
+          success: true,
+          platform,
+          content: contentResult.data?.content || '',
+          message: 'Live content generated'
+        });
+      }
+
+    } catch (error: any) {
+      console.error('Content generation error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Content generation failed'
+      });
+    }
+  });
+
+  // Call Monitoring Control
+  app.post('/api/call-monitoring', async (req, res) => {
+    try {
+      const { action } = req.body;
+      const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'test';
+
+      if (systemMode === 'test') {
+        // Test mode - simulate call monitoring
+        res.json({
+          success: true,
+          action,
+          activeCalls: action === 'start' ? 3 : 0,
+          message: `Call monitoring ${action}ed (test mode)`
+        });
+      } else {
+        // Live mode - actual call monitoring
+        const callResult = await executeAutomationFunction('call-monitoring-system', {
+          action,
+          timestamp: new Date().toISOString()
+        });
+
+        res.json({
+          success: true,
+          action,
+          activeCalls: callResult.data?.activeCalls || 0,
+          message: `Call monitoring ${action}ed (live mode)`
+        });
+      }
+
+    } catch (error: any) {
+      console.error('Call monitoring error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Call monitoring failed'
+      });
+    }
+  });
+
+  // Sales Order Processing
+  app.post('/api/process-sales-order', async (req, res) => {
+    try {
+      const orderData = req.body;
+      const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'test';
+
+      if (systemMode === 'test') {
+        // Test mode - simulate order processing
+        res.json({
+          success: true,
+          orderId: orderData.orderId || 'test-order-' + Date.now(),
+          message: 'Test order processed',
+          status: 'completed'
+        });
+      } else {
+        // Live mode - actual order processing
+        const orderResult = await executeAutomationFunction('sales-order-processor', orderData);
+
+        res.json({
+          success: true,
+          orderId: orderResult.data?.orderId || orderData.orderId,
+          message: 'Live order processed',
+          status: orderResult.data?.status || 'completed'
+        });
+      }
+
+    } catch (error: any) {
+      console.error('Sales order processing error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Sales order processing failed'
+      });
+    }
+  });
+
+  // System Health Check
+  app.get('/api/system-health', async (req, res) => {
+    try {
+      const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'test';
+
+      if (systemMode === 'test') {
+        // Test mode - return mock health data
+        res.json({
+          success: true,
+          overall: 'healthy',
+          components: {
+            database: 'healthy',
+            api: 'healthy',
+            automations: 'healthy',
+            integrations: 'healthy'
+          },
+          mode: 'test'
+        });
+      } else {
+        // Live mode - actual health check
+        const healthResult = await executeAutomationFunction('system-health-monitor', {
+          checkAll: true
+        });
+
+        res.json({
+          success: true,
+          overall: healthResult.data?.overall || 'healthy',
+          components: healthResult.data?.components || {},
+          mode: 'live'
+        });
+      }
+
+    } catch (error: any) {
+      console.error('System health check error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'System health check failed',
+        overall: 'unhealthy'
+      });
+    }
+  });
   // Old Airtable QA tracker removed - using new local QA tracker system
 
   // New Booking Sync endpoint
