@@ -3369,11 +3369,18 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
   // Knowledge Management APIs with AI-powered processing
   app.post('/api/knowledge/upload', upload.array('documents'), async (req, res) => {
     try {
+      console.log('RAG Upload request received');
+      console.log('req.files:', req.files);
+      console.log('req.body:', req.body);
+      
       const files = req.files as Express.Multer.File[];
       
       if (!files || files.length === 0) {
+        console.log('No files found in request');
         return res.status(400).json({ success: false, error: 'No files uploaded' });
       }
+      
+      console.log('Found', files.length, 'files for processing');
 
       const processedFiles = [];
       
@@ -3392,6 +3399,7 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
           if (file.mimetype === 'text/plain') {
             extractedText = file.buffer.toString('utf-8');
             console.log('Text file extracted, length:', extractedText.length);
+            console.log('First 100 chars:', extractedText.substring(0, 100));
           } else if (file.mimetype === 'text/csv') {
             extractedText = file.buffer.toString('utf-8');
           } else if (file.mimetype === 'application/pdf') {
