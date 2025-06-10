@@ -60,13 +60,12 @@ import { useToast } from '@/hooks/use-toast';
 
 
 export default function CommandCenter() {
-  // System mode state - must be defined first
+  // System mode state
   const [currentSystemMode, setCurrentSystemMode] = useState(() => {
-    // Try to get from localStorage first, fallback to 'live'
     return localStorage.getItem('systemMode') || 'live';
   });
   
-  // Live dashboard metrics with proper headers
+  // Dashboard metrics queries
   const { data: metrics } = useQuery({ 
     queryKey: ['/api/dashboard-metrics', currentSystemMode],
     queryFn: () => fetch('/api/dashboard-metrics', {
