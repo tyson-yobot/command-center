@@ -34,6 +34,7 @@ import { automationTester } from "./automationTester";
 import { registerZendeskRoutes } from "./zendeskIntegration";
 import { registerAutomationTestEndpoint } from "./automationTestEndpoint";
 import { registerAutomationLogsEndpoint } from "./automationLogsEndpoint";
+import { registerLiveAutomationEndpoints } from "./liveAutomationEndpoints";
 import { storage } from "./storage";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
