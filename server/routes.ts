@@ -380,12 +380,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date().toISOString()
       };
       
-      await logToAirtableQA('automation_logs', {
-        action: 'mailchimp_sync',
-        result: 'success',
-        contactsSynced: result.contactsSynced,
-        source,
-        timestamp: new Date().toISOString()
+      await logToAirtableQA({
+        integrationName: 'Mailchimp Sync',
+        passFail: 'PASS',
+        notes: `Synced ${result.contactsSynced} contacts from ${source}`,
+        qaOwner: 'System',
+        outputDataPopulated: true,
+        recordCreated: true,
+        retryAttempted: false,
+        moduleType: 'crm'
       });
       
       res.json(result);
@@ -421,7 +424,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         outputDataPopulated: true,
         recordCreated: true,
         retryAttempted: false,
-        testDate: new Date().toISOString()
+        moduleType: 'sales'
       });
       
       res.json(result);
@@ -456,7 +459,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         outputDataPopulated: true,
         recordCreated: true,
         retryAttempted: false,
-        testDate: new Date().toISOString()
+        moduleType: 'messaging'
       });
       
       res.json(result);
@@ -484,12 +487,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date().toISOString()
       };
       
-      await logToAirtableQA('voicebot_logs', {
-        pipelineId,
-        action: 'start_pipeline',
-        status: 'started',
-        callsQueued: 15,
-        timestamp: new Date().toISOString()
+      await logToAirtableQA({
+        integrationName: 'VoiceBot Pipeline Start',
+        passFail: 'PASS',
+        notes: `Pipeline ${pipelineId} started with 15 calls queued`,
+        qaOwner: 'System',
+        outputDataPopulated: true,
+        recordCreated: true,
+        retryAttempted: false,
+        moduleType: 'voicebot'
       });
       
       res.json(result);
@@ -514,11 +520,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date().toISOString()
       };
       
-      await logToAirtableQA('voicebot_logs', {
-        action: 'stop_pipeline',
-        status: 'stopped',
-        callsCancelled: 8,
-        timestamp: new Date().toISOString()
+      await logToAirtableQA({
+        integrationName: 'VoiceBot Pipeline Stop',
+        passFail: 'PASS',
+        notes: `Pipeline stopped with 8 calls cancelled`,
+        qaOwner: 'System',
+        outputDataPopulated: true,
+        recordCreated: true,
+        retryAttempted: false,
+        moduleType: 'voicebot'
       });
       
       res.json(result);
@@ -545,13 +555,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date().toISOString()
       };
       
-      await logToAirtableQA('call_logs', {
-        callId,
-        phoneNumber,
-        callType,
-        clientId,
-        status: 'initiated',
-        timestamp: new Date().toISOString()
+      await logToAirtableQA({
+        integrationName: 'Call Logging',
+        passFail: 'PASS',
+        notes: `Call ${callId} initiated to ${phoneNumber}`,
+        qaOwner: 'System',
+        outputDataPopulated: true,
+        recordCreated: true,
+        retryAttempted: false,
+        moduleType: 'telephony'
       });
       
       res.json(result);
