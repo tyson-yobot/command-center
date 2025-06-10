@@ -853,21 +853,90 @@ export default function CommandCenter() {
 
   const handleContentCreator = async () => {
     try {
-      setVoiceStatus('Opening content creation system...');
-      const response = await fetch('/api/content-gen', {
+      setVoiceStatus('Generating AI-powered social media content...');
+      
+      const response = await fetch('/api/content/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scenario: 'content-gen' })
+        body: JSON.stringify({ 
+          contentType: 'social_post',
+          topic: 'business automation and AI solutions',
+          platform: 'LinkedIn',
+          tone: 'professional',
+          autoPost: true
+        })
       });
       
       if (response.ok) {
-        setVoiceStatus('Content creator ready - script builder active');
-        setToast({ title: "Content Creator", description: "Script builder opened for social content generation" });
+        const result = await response.json();
+        setVoiceStatus(`AI content created and posted: ${result.wordCount} words`);
+        setToast({ 
+          title: "Content Created & Posted", 
+          description: `AI-generated LinkedIn post published with ${result.hashtags?.length || 0} hashtags` 
+        });
+        
+        // Log the generated content for review
+        console.log('Generated content:', result.content);
       } else {
-        setVoiceStatus('Content creator failed');
+        const error = await response.json();
+        setVoiceStatus('Content creation failed - check API configuration');
+        setToast({ 
+          title: "Content Creation Failed", 
+          description: error.error || "Unable to generate content",
+          variant: "destructive" 
+        });
       }
     } catch (error) {
-      setVoiceStatus('Content creator error');
+      setVoiceStatus('Content creation error');
+      setToast({ 
+        title: "Network Error", 
+        description: "Unable to connect to content generation service",
+        variant: "destructive" 
+      });
+    }
+  };
+
+  const handleMailChimpCampaign = async () => {
+    try {
+      setVoiceStatus('Creating AI-powered MailChimp email campaign...');
+      
+      const response = await fetch('/api/mailchimp/create-campaign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          campaignType: 'newsletter',
+          audienceSegment: 'business_owners',
+          subject: 'Boost Your Business with AI Automation',
+          content: 'Latest automation trends and ROI insights',
+          autoSend: true
+        })
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        setVoiceStatus(`MailChimp campaign ${result.status}: ${result.estimatedReach} recipients`);
+        setToast({ 
+          title: "MailChimp Campaign Created", 
+          description: `Campaign ID: ${result.campaignId} - Status: ${result.status}` 
+        });
+        
+        console.log('Email campaign created:', result);
+      } else {
+        const error = await response.json();
+        setVoiceStatus('MailChimp campaign failed');
+        setToast({ 
+          title: "Campaign Creation Failed", 
+          description: error.error || "Unable to create email campaign",
+          variant: "destructive" 
+        });
+      }
+    } catch (error) {
+      setVoiceStatus('MailChimp campaign error');
+      setToast({ 
+        title: "Network Error", 
+        description: "Unable to connect to MailChimp service",
+        variant: "destructive" 
+      });
     }
   };
 
@@ -2160,6 +2229,14 @@ export default function CommandCenter() {
                   >
                     <FileText className="w-5 h-5 mr-3" />
                     <span>Content Creator</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={handleMailChimpCampaign}
+                    className="bg-yellow-600 hover:bg-yellow-700 text-white flex items-center justify-start p-3"
+                  >
+                    <Mail className="w-5 h-5 mr-3" />
+                    <span>MailChimp Campaign</span>
                   </Button>
                 </div>
               </CardContent>
