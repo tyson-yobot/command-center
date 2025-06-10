@@ -3521,7 +3521,7 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
             categoriesCount: categories.length
           });
           
-          processedFiles.push({
+          const docData = {
             documentId: documentId,
             filename: file.originalname,
             originalname: file.originalname,
@@ -3536,7 +3536,10 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
             type: file.mimetype,
             indexed: true,
             ragIndexed: true
-          });
+          };
+          
+          processedFiles.push(docData);
+          documentStore.push(docData);
           
           logOperation('knowledge-upload', { 
             filename: file.originalname, 

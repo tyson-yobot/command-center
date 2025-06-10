@@ -442,48 +442,125 @@ export default function EnterpriseLeadScraper() {
                     <h4 className="text-2xl font-semibold text-white border-b-2 border-blue-400/30 pb-4">Executive Targeting</h4>
                     
                     <div className="space-y-3">
-                      <Label>Job Titles (Select Multiple)</Label>
-                      <select
-                        multiple
-                        value={apolloFilters.personTitles ? apolloFilters.personTitles.split(',') : []}
-                        onChange={(e) => {
-                          const selected = Array.from(e.target.selectedOptions, option => option.value).join(',');
-                          setApolloFilters(prev => ({ ...prev, personTitles: selected }));
-                        }}
-                        className="w-full min-h-[180px] px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      >
-                        <option value="ceo">Chief Executive Officer</option>
-                        <option value="cto">Chief Technology Officer</option>
-                        <option value="cfo">Chief Financial Officer</option>
-                        <option value="cmo">Chief Marketing Officer</option>
-                        <option value="coo">Chief Operating Officer</option>
-                        <option value="founder">Founder</option>
-                        <option value="president">President</option>
-                        <option value="owner">Business Owner</option>
-                        <option value="partner">Partner</option>
-                        <option value="vp_sales">VP of Sales</option>
-                        <option value="vp_marketing">VP of Marketing</option>
-                        <option value="vp_operations">VP of Operations</option>
-                        <option value="director_sales">Director of Sales</option>
-                        <option value="director_marketing">Director of Marketing</option>
-                        <option value="sales_manager">Sales Manager</option>
-                        <option value="marketing_manager">Marketing Manager</option>
-                        <option value="operations_manager">Operations Manager</option>
-                        <option value="general_manager">General Manager</option>
-                        <option value="project_manager">Project Manager</option>
-                        <option value="account_executive">Account Executive</option>
-                        <option value="business_development">Business Development Manager</option>
-                        <option value="product_manager">Product Manager</option>
-                        <option value="regional_manager">Regional Manager</option>
-                        <option value="superintendent">Superintendent</option>
-                        <option value="foreman">Foreman</option>
-                        <option value="estimator">Estimator</option>
-                        <option value="service_manager">Service Manager</option>
-                        <option value="technician">Lead Technician</option>
-                        <option value="installer">Installer</option>
-                        <option value="contractor">Contractor</option>
-                      </select>
-                      <p className="text-sm text-slate-400">Hold Ctrl/Cmd to select multiple titles</p>
+                      <Label>Job Titles (Click to Select Multiple)</Label>
+                      <div className="w-full max-h-[200px] overflow-y-auto px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl">
+                        {[
+                          { value: "ceo", label: "Chief Executive Officer" },
+                          { value: "cto", label: "Chief Technology Officer" },
+                          { value: "cfo", label: "Chief Financial Officer" },
+                          { value: "cmo", label: "Chief Marketing Officer" },
+                          { value: "coo", label: "Chief Operating Officer" },
+                          { value: "founder", label: "Founder" },
+                          { value: "president", label: "President" },
+                          { value: "owner", label: "Business Owner" },
+                          { value: "partner", label: "Partner" },
+                          { value: "vp_sales", label: "VP of Sales" },
+                          { value: "vp_marketing", label: "VP of Marketing" },
+                          { value: "vp_operations", label: "VP of Operations" },
+                          { value: "director_sales", label: "Director of Sales" },
+                          { value: "director_marketing", label: "Director of Marketing" },
+                          { value: "sales_manager", label: "Sales Manager" },
+                          { value: "marketing_manager", label: "Marketing Manager" },
+                          { value: "operations_manager", label: "Operations Manager" },
+                          { value: "general_manager", label: "General Manager" },
+                          { value: "project_manager", label: "Project Manager" },
+                          { value: "account_executive", label: "Account Executive" },
+                          { value: "business_development", label: "Business Development Manager" },
+                          { value: "product_manager", label: "Product Manager" },
+                          { value: "regional_manager", label: "Regional Manager" },
+                          { value: "superintendent", label: "Superintendent" },
+                          { value: "foreman", label: "Foreman" },
+                          { value: "estimator", label: "Estimator" },
+                          { value: "service_manager", label: "Service Manager" },
+                          { value: "technician", label: "Lead Technician" },
+                          { value: "installer", label: "Installer" },
+                          { value: "contractor", label: "Contractor" }
+                        ].map((title) => {
+                          const selectedTitles = apolloFilters.personTitles ? apolloFilters.personTitles.split(',') : [];
+                          const isSelected = selectedTitles.includes(title.value);
+                          
+                          return (
+                            <div
+                              key={title.value}
+                              className={`flex items-center p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-700/50 ${
+                                isSelected ? 'bg-blue-600/30 border border-blue-400/50' : ''
+                              }`}
+                              onClick={() => {
+                                const currentTitles = apolloFilters.personTitles ? apolloFilters.personTitles.split(',').filter(t => t) : [];
+                                let newTitles;
+                                
+                                if (isSelected) {
+                                  newTitles = currentTitles.filter(t => t !== title.value);
+                                } else {
+                                  newTitles = [...currentTitles, title.value];
+                                }
+                                
+                                setApolloFilters(prev => ({ ...prev, personTitles: newTitles.join(',') }));
+                              }}
+                            >
+                              <div className={`w-4 h-4 rounded border-2 mr-3 flex items-center justify-center ${
+                                isSelected ? 'bg-blue-500 border-blue-500' : 'border-slate-500'
+                              }`}>
+                                {isSelected && (
+                                  <CheckCircle className="w-3 h-3 text-white" />
+                                )}
+                              </div>
+                              <span className="text-white text-sm">{title.label}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {apolloFilters.personTitles && apolloFilters.personTitles.split(',').filter(t => t).map((titleValue) => {
+                          const titleLabel = [
+                            { value: "ceo", label: "CEO" },
+                            { value: "cto", label: "CTO" },
+                            { value: "cfo", label: "CFO" },
+                            { value: "cmo", label: "CMO" },
+                            { value: "coo", label: "COO" },
+                            { value: "founder", label: "Founder" },
+                            { value: "president", label: "President" },
+                            { value: "owner", label: "Owner" },
+                            { value: "partner", label: "Partner" },
+                            { value: "vp_sales", label: "VP Sales" },
+                            { value: "vp_marketing", label: "VP Marketing" },
+                            { value: "vp_operations", label: "VP Operations" },
+                            { value: "director_sales", label: "Dir. Sales" },
+                            { value: "director_marketing", label: "Dir. Marketing" },
+                            { value: "sales_manager", label: "Sales Mgr" },
+                            { value: "marketing_manager", label: "Marketing Mgr" },
+                            { value: "operations_manager", label: "Ops Mgr" },
+                            { value: "general_manager", label: "GM" },
+                            { value: "project_manager", label: "PM" },
+                            { value: "account_executive", label: "AE" },
+                            { value: "business_development", label: "BD Mgr" },
+                            { value: "product_manager", label: "Product Mgr" },
+                            { value: "regional_manager", label: "Regional Mgr" },
+                            { value: "superintendent", label: "Superintendent" },
+                            { value: "foreman", label: "Foreman" },
+                            { value: "estimator", label: "Estimator" },
+                            { value: "service_manager", label: "Service Mgr" },
+                            { value: "technician", label: "Technician" },
+                            { value: "installer", label: "Installer" },
+                            { value: "contractor", label: "Contractor" }
+                          ].find(t => t.value === titleValue)?.label || titleValue;
+                          
+                          return (
+                            <Badge
+                              key={titleValue}
+                              className="bg-blue-600/20 text-blue-200 border border-blue-400/30 px-2 py-1 text-xs cursor-pointer hover:bg-red-600/20 hover:text-red-200 hover:border-red-400/30"
+                              onClick={() => {
+                                const currentTitles = apolloFilters.personTitles.split(',').filter(t => t);
+                                const newTitles = currentTitles.filter(t => t !== titleValue);
+                                setApolloFilters(prev => ({ ...prev, personTitles: newTitles.join(',') }));
+                              }}
+                            >
+                              {titleLabel} ×
+                            </Badge>
+                          );
+                        })}
+                      </div>
+                      <p className="text-sm text-slate-400">Click titles to select, click badges to remove</p>
                     </div>
 
                     <div className="space-y-3">
@@ -557,107 +634,190 @@ export default function EnterpriseLeadScraper() {
                     <h4 className="text-2xl font-semibold text-white border-b-2 border-purple-400/30 pb-4">Enterprise Company Targeting</h4>
                     
                     <div className="space-y-3">
-                      <Label>Industry Vertical (Select Multiple)</Label>
-                      <select
-                        multiple
-                        value={apolloFilters.industry ? apolloFilters.industry.split(',') : []}
-                        onChange={(e) => {
-                          const selected = Array.from(e.target.selectedOptions, option => option.value).join(',');
-                          setApolloFilters(prev => ({ ...prev, industry: selected }));
-                        }}
-                        className="w-full min-h-[300px] px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      >
-                        <optgroup label="🧰 Trades & Services">
-                          <option value="hvac">HVAC</option>
-                          <option value="plumbing">Plumbing</option>
-                          <option value="electrical">Electrical</option>
-                          <option value="roofing">Roofing</option>
-                          <option value="landscaping">Landscaping</option>
-                          <option value="general_contracting">General Contracting</option>
-                          <option value="pest_control">Pest Control</option>
-                          <option value="pool_services">Pool Services</option>
-                          <option value="cleaning_services">Cleaning Services</option>
-                          <option value="appliance_repair">Appliance Repair</option>
-                        </optgroup>
-                        <optgroup label="🏥 Medical & Wellness">
-                          <option value="chiropractors">Chiropractors</option>
-                          <option value="dentists">Dentists</option>
-                          <option value="physical_therapists">Physical Therapists</option>
-                          <option value="mental_health_clinics">Mental Health Clinics</option>
-                          <option value="medspas">MedSpas</option>
-                          <option value="primary_care">Primary Care</option>
-                          <option value="dermatologists">Dermatologists</option>
-                          <option value="holistic_health">Holistic Health</option>
-                          <option value="weight_loss_clinics">Weight Loss Clinics</option>
-                        </optgroup>
-                        <optgroup label="💼 Professional Services">
-                          <option value="law_firms">Law Firms</option>
-                          <option value="accountants_cpas">Accountants / CPAs</option>
-                          <option value="insurance_agencies">Insurance Agencies</option>
-                          <option value="real_estate_brokers">Real Estate Brokers</option>
-                          <option value="mortgage_lenders">Mortgage Lenders</option>
-                          <option value="financial_advisors">Financial Advisors</option>
-                          <option value="business_consultants">Business Consultants</option>
-                        </optgroup>
-                        <optgroup label="🛍️ Local Retail & Consumer">
-                          <option value="auto_dealerships">Auto Dealerships</option>
-                          <option value="furniture_stores">Furniture Stores</option>
-                          <option value="jewelry_stores">Jewelry Stores</option>
-                          <option value="boutiques">Boutiques</option>
-                          <option value="vape_shops">Vape Shops</option>
-                          <option value="gun_shops">Gun Shops</option>
-                          <option value="nutrition_supplement_stores">Nutrition & Supplement Stores</option>
-                        </optgroup>
-                        <optgroup label="🧑‍🎓 Education & Training">
-                          <option value="tutoring_centers">Tutoring Centers</option>
-                          <option value="test_prep">Test Prep</option>
-                          <option value="trade_schools">Trade Schools</option>
-                          <option value="driving_schools">Driving Schools</option>
-                          <option value="online_course_creators">Online Course Creators</option>
-                          <option value="coaching_businesses">Coaching Businesses</option>
-                        </optgroup>
-                        <optgroup label="🖥️ Tech, SaaS & Digital">
-                          <option value="saas_startups">SaaS Startups</option>
-                          <option value="marketing_agencies">Marketing Agencies</option>
-                          <option value="web_design_firms">Web Design Firms</option>
-                          <option value="it_support_msps">IT Support & MSPs</option>
-                          <option value="ecommerce_brands">eCommerce Brands</option>
-                          <option value="cybersecurity_consultants">Cybersecurity Consultants</option>
-                          <option value="data_analytics_firms">Data & Analytics Firms</option>
-                        </optgroup>
-                        <optgroup label="🧰 Home & Commercial Services">
-                          <option value="garage_door_companies">Garage Door Companies</option>
-                          <option value="flooring_installers">Flooring Installers</option>
-                          <option value="window_tinting">Window Tinting</option>
-                          <option value="solar_installers">Solar Installers</option>
-                          <option value="security_system_installers">Security System Installers</option>
-                          <option value="commercial_janitorial">Commercial Janitorial</option>
-                          <option value="pressure_washing">Pressure Washing</option>
-                        </optgroup>
-                        <optgroup label="🏗️ Construction & Manufacturing">
-                          <option value="construction_firms">Construction Firms</option>
-                          <option value="fabricators">Fabricators</option>
-                          <option value="welders">Welders</option>
-                          <option value="machining_cnc">Machining & CNC</option>
-                          <option value="custom_metalworks">Custom Metalworks</option>
-                          <option value="modular_building">Modular Building</option>
-                        </optgroup>
-                        <optgroup label="🚚 Transportation & Logistics">
-                          <option value="trucking_companies">Trucking Companies</option>
-                          <option value="freight_brokers">Freight Brokers</option>
-                          <option value="3pl_providers">3PL Providers</option>
-                          <option value="moving_companies">Moving Companies</option>
-                          <option value="auto_transporters">Auto Transporters</option>
-                        </optgroup>
-                        <optgroup label="🏦 Financial Services & Lending">
-                          <option value="merchant_services">Merchant Services</option>
-                          <option value="business_loan_brokers">Business Loan Brokers</option>
-                          <option value="credit_repair_firms">Credit Repair Firms</option>
-                          <option value="funding_specialists">Funding Specialists</option>
-                          <option value="tax_resolution_firms">Tax Resolution Firms</option>
-                        </optgroup>
-                      </select>
-                      <p className="text-sm text-slate-400">Hold Ctrl/Cmd to select multiple industries</p>
+                      <Label>Industry Vertical (Click to Select Multiple)</Label>
+                      <div className="w-full max-h-[300px] overflow-y-auto px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl">
+                        {[
+                          { category: "🧰 Trades & Services", options: [
+                            { value: "hvac", label: "HVAC" },
+                            { value: "plumbing", label: "Plumbing" },
+                            { value: "electrical", label: "Electrical" },
+                            { value: "roofing", label: "Roofing" },
+                            { value: "landscaping", label: "Landscaping" },
+                            { value: "general_contracting", label: "General Contracting" },
+                            { value: "pest_control", label: "Pest Control" },
+                            { value: "pool_services", label: "Pool Services" },
+                            { value: "cleaning_services", label: "Cleaning Services" },
+                            { value: "appliance_repair", label: "Appliance Repair" }
+                          ]},
+                          { category: "🏥 Medical & Wellness", options: [
+                            { value: "chiropractors", label: "Chiropractors" },
+                            { value: "dentists", label: "Dentists" },
+                            { value: "physical_therapists", label: "Physical Therapists" },
+                            { value: "mental_health_clinics", label: "Mental Health Clinics" },
+                            { value: "medspas", label: "MedSpas" },
+                            { value: "primary_care", label: "Primary Care" },
+                            { value: "dermatologists", label: "Dermatologists" },
+                            { value: "holistic_health", label: "Holistic Health" },
+                            { value: "weight_loss_clinics", label: "Weight Loss Clinics" }
+                          ]},
+                          { category: "💼 Professional Services", options: [
+                            { value: "law_firms", label: "Law Firms" },
+                            { value: "accountants_cpas", label: "Accountants / CPAs" },
+                            { value: "insurance_agencies", label: "Insurance Agencies" },
+                            { value: "real_estate_brokers", label: "Real Estate Brokers" },
+                            { value: "mortgage_lenders", label: "Mortgage Lenders" },
+                            { value: "financial_advisors", label: "Financial Advisors" },
+                            { value: "business_consultants", label: "Business Consultants" },
+                            { value: "marketing_agencies", label: "Marketing Agencies" },
+                            { value: "it_services", label: "IT Services" },
+                            { value: "web_developers", label: "Web Developers" }
+                          ]},
+                          { category: "🍽️ Food & Hospitality", options: [
+                            { value: "restaurants", label: "Restaurants" },
+                            { value: "cafes", label: "Cafes" },
+                            { value: "bars_lounges", label: "Bars & Lounges" },
+                            { value: "hotels", label: "Hotels" },
+                            { value: "catering", label: "Catering Services" },
+                            { value: "food_trucks", label: "Food Trucks" },
+                            { value: "event_venues", label: "Event Venues" },
+                            { value: "wedding_venues", label: "Wedding Venues" }
+                          ]},
+                          { category: "🛒 Retail & E-commerce", options: [
+                            { value: "clothing_stores", label: "Clothing Stores" },
+                            { value: "electronics", label: "Electronics" },
+                            { value: "home_goods", label: "Home Goods" },
+                            { value: "automotive", label: "Automotive" },
+                            { value: "sports_outdoors", label: "Sports & Outdoors" },
+                            { value: "jewelry", label: "Jewelry" },
+                            { value: "beauty_cosmetics", label: "Beauty & Cosmetics" },
+                            { value: "pet_stores", label: "Pet Stores" }
+                          ]},
+                          { category: "🏢 Technology & Software", options: [
+                            { value: "saas", label: "SaaS Companies" },
+                            { value: "software_development", label: "Software Development" },
+                            { value: "cybersecurity", label: "Cybersecurity" },
+                            { value: "ai_ml", label: "AI & Machine Learning" },
+                            { value: "fintech", label: "FinTech" },
+                            { value: "edtech", label: "EdTech" },
+                            { value: "healthtech", label: "HealthTech" },
+                            { value: "proptech", label: "PropTech" }
+                          ]}
+                        ].map((categoryGroup) => (
+                          <div key={categoryGroup.category} className="mb-4">
+                            <div className="text-xs font-semibold text-slate-400 mb-2 px-2">{categoryGroup.category}</div>
+                            {categoryGroup.options.map((industry) => {
+                              const selectedIndustries = apolloFilters.industry ? apolloFilters.industry.split(',') : [];
+                              const isSelected = selectedIndustries.includes(industry.value);
+                              
+                              return (
+                                <div
+                                  key={industry.value}
+                                  className={`flex items-center p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-700/50 ${
+                                    isSelected ? 'bg-purple-600/30 border border-purple-400/50' : ''
+                                  }`}
+                                  onClick={() => {
+                                    const currentIndustries = apolloFilters.industry ? apolloFilters.industry.split(',').filter(i => i) : [];
+                                    let newIndustries;
+                                    
+                                    if (isSelected) {
+                                      newIndustries = currentIndustries.filter(i => i !== industry.value);
+                                    } else {
+                                      newIndustries = [...currentIndustries, industry.value];
+                                    }
+                                    
+                                    setApolloFilters(prev => ({ ...prev, industry: newIndustries.join(',') }));
+                                  }}
+                                >
+                                  <div className={`w-4 h-4 rounded border-2 mr-3 flex items-center justify-center ${
+                                    isSelected ? 'bg-purple-500 border-purple-500' : 'border-slate-500'
+                                  }`}>
+                                    {isSelected && (
+                                      <CheckCircle className="w-3 h-3 text-white" />
+                                    )}
+                                  </div>
+                                  <span className="text-white text-sm">{industry.label}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {apolloFilters.industry && apolloFilters.industry.split(',').filter(i => i).map((industryValue) => {
+                          const allIndustries = [
+                            { value: "hvac", label: "HVAC" },
+                            { value: "plumbing", label: "Plumbing" },
+                            { value: "electrical", label: "Electrical" },
+                            { value: "roofing", label: "Roofing" },
+                            { value: "landscaping", label: "Landscaping" },
+                            { value: "general_contracting", label: "General Contracting" },
+                            { value: "pest_control", label: "Pest Control" },
+                            { value: "pool_services", label: "Pool Services" },
+                            { value: "cleaning_services", label: "Cleaning Services" },
+                            { value: "appliance_repair", label: "Appliance Repair" },
+                            { value: "chiropractors", label: "Chiropractors" },
+                            { value: "dentists", label: "Dentists" },
+                            { value: "physical_therapists", label: "Physical Therapists" },
+                            { value: "mental_health_clinics", label: "Mental Health" },
+                            { value: "medspas", label: "MedSpas" },
+                            { value: "primary_care", label: "Primary Care" },
+                            { value: "dermatologists", label: "Dermatologists" },
+                            { value: "holistic_health", label: "Holistic Health" },
+                            { value: "weight_loss_clinics", label: "Weight Loss" },
+                            { value: "law_firms", label: "Law Firms" },
+                            { value: "accountants_cpas", label: "CPAs" },
+                            { value: "insurance_agencies", label: "Insurance" },
+                            { value: "real_estate_brokers", label: "Real Estate" },
+                            { value: "mortgage_lenders", label: "Mortgage" },
+                            { value: "financial_advisors", label: "Financial" },
+                            { value: "business_consultants", label: "Consulting" },
+                            { value: "marketing_agencies", label: "Marketing" },
+                            { value: "it_services", label: "IT Services" },
+                            { value: "web_developers", label: "Web Dev" },
+                            { value: "restaurants", label: "Restaurants" },
+                            { value: "cafes", label: "Cafes" },
+                            { value: "bars_lounges", label: "Bars" },
+                            { value: "hotels", label: "Hotels" },
+                            { value: "catering", label: "Catering" },
+                            { value: "food_trucks", label: "Food Trucks" },
+                            { value: "event_venues", label: "Event Venues" },
+                            { value: "wedding_venues", label: "Wedding Venues" },
+                            { value: "clothing_stores", label: "Clothing" },
+                            { value: "electronics", label: "Electronics" },
+                            { value: "home_goods", label: "Home Goods" },
+                            { value: "automotive", label: "Automotive" },
+                            { value: "sports_outdoors", label: "Sports" },
+                            { value: "jewelry", label: "Jewelry" },
+                            { value: "beauty_cosmetics", label: "Beauty" },
+                            { value: "pet_stores", label: "Pet Stores" },
+                            { value: "saas", label: "SaaS" },
+                            { value: "software_development", label: "Software Dev" },
+                            { value: "cybersecurity", label: "Cybersecurity" },
+                            { value: "ai_ml", label: "AI/ML" },
+                            { value: "fintech", label: "FinTech" },
+                            { value: "edtech", label: "EdTech" },
+                            { value: "healthtech", label: "HealthTech" },
+                            { value: "proptech", label: "PropTech" }
+                          ];
+                          
+                          const industryLabel = allIndustries.find(i => i.value === industryValue)?.label || industryValue;
+                          
+                          return (
+                            <Badge
+                              key={industryValue}
+                              className="bg-purple-600/20 text-purple-200 border border-purple-400/30 px-2 py-1 text-xs cursor-pointer hover:bg-red-600/20 hover:text-red-200 hover:border-red-400/30"
+                              onClick={() => {
+                                const currentIndustries = apolloFilters.industry.split(',').filter(i => i);
+                                const newIndustries = currentIndustries.filter(i => i !== industryValue);
+                                setApolloFilters(prev => ({ ...prev, industry: newIndustries.join(',') }));
+                              }}
+                            >
+                              {industryLabel} ×
+                            </Badge>
+                          );
+                        })}
+                      </div>
+                      <p className="text-sm text-slate-400">Click industries to select, click badges to remove</p>
                     </div>
 
                     <div className="space-y-3">
