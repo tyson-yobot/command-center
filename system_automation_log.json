@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-09T10:55:00.156Z",
-    "functionId": 140,
-    "functionName": "Live Error Push",
-    "batch": 14,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 68,
-    "successCount": 8,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-09T10:55:00.179Z",
     "functionId": 134,
     "functionName": "QA Failure Alert",
@@ -11325,6 +11314,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-10T06:10:23.827Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T06:13:51.986Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-10T06:13:51.631Z",
       "automationStatus": "running"
     }
   }

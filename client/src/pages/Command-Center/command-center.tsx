@@ -670,34 +670,41 @@ export default function CommandCenter() {
 
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
 
-    setVoiceStatus('Uploading document...');
+    setVoiceStatus('Uploading documents to RAG system...');
     
     const formData = new FormData();
-    formData.append('document', file);
-    formData.append('category', 'general');
-    formData.append('tags', JSON.stringify(['uploaded', 'user-content']));
+    Array.from(files).forEach(file => {
+      formData.append('files', file);
+    });
 
     try {
-      const response = await fetch('/api/rag/upload', {
+      const response = await fetch('/api/knowledge/upload', {
         method: 'POST',
         body: formData
       });
 
       if (response.ok) {
         const result = await response.json();
-        setVoiceStatus(`Document uploaded: ${result.wordCount} words indexed`);
+        const successCount = result.files?.filter(f => f.status === 'processed').length || 0;
+        const errorCount = result.files?.filter(f => f.status === 'error').length || 0;
+        
+        setVoiceStatus(`RAG Upload Complete: ${successCount} documents processed${errorCount > 0 ? `, ${errorCount} failed` : ''}`);
         setToast({
-          title: "Document Uploaded",
-          description: `${file.name} has been processed and indexed for AI training`,
+          title: "Documents Uploaded",
+          description: `${successCount} files processed and indexed for RAG system`,
         });
+        
+        // Refresh knowledge stats
+        refetchKnowledge();
+        loadDocuments();
       } else {
         const errorData = await response.json().catch(() => ({}));
-        setVoiceStatus('Document upload failed');
+        setVoiceStatus('RAG upload failed');
         setToast({
-          title: "Upload Failed",
+          title: "RAG Upload Failed",
           description: errorData.error || "Please try again or check file format",
           variant: "destructive"
         });
@@ -711,6 +718,7 @@ export default function CommandCenter() {
       });
     }
 
+    // Reset input
     event.target.value = '';
   };
 
