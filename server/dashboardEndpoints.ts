@@ -16,9 +16,11 @@ export function registerDashboardEndpoints(app: Express) {
     try {
       const timestamp = new Date().toISOString();
       
-      // Get system mode from shared module
-      const { getSystemMode } = await import('./systemMode');
-      const currentSystemMode = getSystemMode();
+      // Get system mode from shared module with explicit import
+      const systemModeModule = await import('./systemMode');
+      const currentSystemMode = systemModeModule.getSystemMode();
+      
+      console.log(`Dashboard endpoint executing in ${currentSystemMode} mode`);
       
       let metrics;
       
