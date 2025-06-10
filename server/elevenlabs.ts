@@ -438,3 +438,141 @@ export async function advancedTextToSpeech(options: {
     use_speaker_boost: useSpeakerBoost
   });
 }
+
+// Professional Voice Cloning with enhanced features
+export async function professionalVoiceClone(name: string, description: string, files: Buffer[], labels?: string[]) {
+  if (!process.env.ELEVENLABS_API_KEY) {
+    throw new Error('ElevenLabs API key not configured');
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('description', description);
+    
+    if (labels && labels.length > 0) {
+      formData.append('labels', JSON.stringify({ usecase: labels }));
+    }
+    
+    files.forEach((file, index) => {
+      formData.append('files', new Blob([file]), `voice_sample_${index}.wav`);
+    });
+
+    const response = await fetch('https://api.elevenlabs.io/v1/voices/add', {
+      method: 'POST',
+      headers: {
+        'xi-api-key': process.env.ELEVENLABS_API_KEY
+      },
+      body: formData
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      return { success: true, voice_id: result.voice_id, message: 'Voice cloned successfully' };
+    } else {
+      const errorText = await response.text();
+      throw new Error(`Voice cloning failed: ${response.status} - ${errorText}`);
+    }
+  } catch (error) {
+    throw new Error(`Voice cloning failed: ${error.message}`);
+  }
+}
+
+// Sound Effects Generation
+export async function generateSoundEffect(prompt: string, duration?: number) {
+  if (!process.env.ELEVENLABS_API_KEY) {
+    throw new Error('ElevenLabs API key not configured');
+  }
+
+  try {
+    const requestBody: any = {
+      text: prompt,
+      duration_seconds: duration || 10,
+      prompt_influence: 0.3
+    };
+
+    const response = await fetch('https://api.elevenlabs.io/v1/sound-generation', {
+      method: 'POST',
+      headers: {
+        'Accept': 'audio/mpeg',
+        'Content-Type': 'application/json',
+        'xi-api-key': process.env.ELEVENLABS_API_KEY
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (response.ok) {
+      const audioBuffer = await response.arrayBuffer();
+      return Buffer.from(audioBuffer);
+    } else {
+      const errorText = await response.text();
+      throw new Error(`Sound effect generation failed: ${response.status} - ${errorText}`);
+    }
+  } catch (error) {
+    throw new Error(`Sound effect generation failed: ${error.message}`);
+  }
+}
+
+// Speech-to-Speech Voice Conversion
+export async function speechToSpeech(audioFile: Buffer, targetVoiceId: string, model?: string) {
+  if (!process.env.ELEVENLABS_API_KEY) {
+    throw new Error('ElevenLabs API key not configured');
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('audio', new Blob([audioFile]), 'input_audio.wav');
+    formData.append('model_id', model || 'eleven_english_sts_v2');
+    
+    const response = await fetch(`https://api.elevenlabs.io/v1/speech-to-speech/${targetVoiceId}`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'audio/mpeg',
+        'xi-api-key': process.env.ELEVENLABS_API_KEY
+      },
+      body: formData
+    });
+
+    if (response.ok) {
+      const audioBuffer = await response.arrayBuffer();
+      return Buffer.from(audioBuffer);
+    } else {
+      const errorText = await response.text();
+      throw new Error(`Speech-to-speech conversion failed: ${response.status} - ${errorText}`);
+    }
+  } catch (error) {
+    throw new Error(`Speech-to-speech conversion failed: ${error.message}`);
+  }
+}
+
+// Voice Dubbing (ElevenLabs feature)
+export async function dubVoice(audioFile: Buffer, targetVoiceId: string, targetLanguage: string) {
+  if (!process.env.ELEVENLABS_API_KEY) {
+    throw new Error('ElevenLabs API key not configured');
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('audio', new Blob([audioFile]), 'input_audio.wav');
+    formData.append('target_lang', targetLanguage);
+    
+    const response = await fetch(`https://api.elevenlabs.io/v1/dubbing`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'xi-api-key': process.env.ELEVENLABS_API_KEY
+      },
+      body: formData
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      return { success: true, dubbing_id: result.dubbing_id, message: 'Dubbing started successfully' };
+    } else {
+      const errorText = await response.text();
+      throw new Error(`Voice dubbing failed: ${response.status} - ${errorText}`);
+    }
+  } catch (error) {
+    throw new Error(`Voice dubbing failed: ${error.message}`);
+  }
+}
