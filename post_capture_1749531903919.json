@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-06-10T05:05:03.919Z",
+  "url": "/api/send-sms",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "86"
+  },
+  "body": {
+    "to": "+1234567890",
+    "message": "Test SMS notification from YoBot automation system"
+  },
+  "query": {}
+}

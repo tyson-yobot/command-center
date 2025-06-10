@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-06-10T05:05:08.743Z",
+  "url": "/api/send-email",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "128"
+  },
+  "body": {
+    "to": "test@example.com",
+    "subject": "YoBot Automation Test",
+    "body": "This is a test email from the YoBot automation system."
+  },
+  "query": {}
+}
