@@ -439,12 +439,16 @@ export default function EnterpriseLeadScraper() {
                     <h4 className="text-2xl font-semibold text-white border-b-2 border-blue-400/30 pb-4">Executive Targeting</h4>
                     
                     <div className="space-y-3">
-                      <Label>Executive Job Titles</Label>
-                      <Select
-                        value={apolloFilters.personTitles}
-                        onChange={(e) => setApolloFilters(prev => ({ ...prev, personTitles: e.target.value }))}
+                      <Label>Job Titles (Select Multiple)</Label>
+                      <select
+                        multiple
+                        value={apolloFilters.personTitles ? apolloFilters.personTitles.split(',') : []}
+                        onChange={(e) => {
+                          const selected = Array.from(e.target.selectedOptions, option => option.value).join(',');
+                          setApolloFilters(prev => ({ ...prev, personTitles: selected }));
+                        }}
+                        className="w-full min-h-[180px] px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       >
-                        <option value="">Select Executive Title</option>
                         <option value="ceo">Chief Executive Officer</option>
                         <option value="cto">Chief Technology Officer</option>
                         <option value="cfo">Chief Financial Officer</option>
@@ -452,6 +456,8 @@ export default function EnterpriseLeadScraper() {
                         <option value="coo">Chief Operating Officer</option>
                         <option value="founder">Founder</option>
                         <option value="president">President</option>
+                        <option value="owner">Business Owner</option>
+                        <option value="partner">Partner</option>
                         <option value="vp_sales">VP of Sales</option>
                         <option value="vp_marketing">VP of Marketing</option>
                         <option value="vp_operations">VP of Operations</option>
@@ -459,11 +465,22 @@ export default function EnterpriseLeadScraper() {
                         <option value="director_marketing">Director of Marketing</option>
                         <option value="sales_manager">Sales Manager</option>
                         <option value="marketing_manager">Marketing Manager</option>
+                        <option value="operations_manager">Operations Manager</option>
+                        <option value="general_manager">General Manager</option>
+                        <option value="project_manager">Project Manager</option>
                         <option value="account_executive">Account Executive</option>
                         <option value="business_development">Business Development Manager</option>
                         <option value="product_manager">Product Manager</option>
                         <option value="regional_manager">Regional Manager</option>
-                      </Select>
+                        <option value="superintendent">Superintendent</option>
+                        <option value="foreman">Foreman</option>
+                        <option value="estimator">Estimator</option>
+                        <option value="service_manager">Service Manager</option>
+                        <option value="technician">Lead Technician</option>
+                        <option value="installer">Installer</option>
+                        <option value="contractor">Contractor</option>
+                      </select>
+                      <p className="text-sm text-slate-400">Hold Ctrl/Cmd to select multiple titles</p>
                     </div>
 
                     <div className="space-y-3">
@@ -537,34 +554,107 @@ export default function EnterpriseLeadScraper() {
                     <h4 className="text-2xl font-semibold text-white border-b-2 border-purple-400/30 pb-4">Enterprise Company Targeting</h4>
                     
                     <div className="space-y-3">
-                      <Label>Industry Vertical</Label>
-                      <Select
-                        value={apolloFilters.industry}
-                        onChange={(e) => setApolloFilters(prev => ({ ...prev, industry: e.target.value }))}
+                      <Label>Industry Vertical (Select Multiple)</Label>
+                      <select
+                        multiple
+                        value={apolloFilters.industry ? apolloFilters.industry.split(',') : []}
+                        onChange={(e) => {
+                          const selected = Array.from(e.target.selectedOptions, option => option.value).join(',');
+                          setApolloFilters(prev => ({ ...prev, industry: selected }));
+                        }}
+                        className="w-full min-h-[300px] px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       >
-                        <option value="">Select Industry</option>
-                        <option value="computer_software">Computer Software & SaaS</option>
-                        <option value="information_technology">Information Technology Services</option>
-                        <option value="saas">Software as a Service (SaaS)</option>
-                        <option value="financial_services">Financial Services & FinTech</option>
-                        <option value="marketing_advertising">Marketing & Advertising Technology</option>
-                        <option value="consulting">Management Consulting</option>
-                        <option value="healthcare">Healthcare & Medical Technology</option>
-                        <option value="real_estate">Real Estate & PropTech</option>
-                        <option value="ecommerce">E-commerce & Retail Technology</option>
-                        <option value="manufacturing">Manufacturing & Industrial</option>
-                        <option value="education">Education Technology (EdTech)</option>
-                        <option value="telecommunications">Telecommunications</option>
-                        <option value="automotive">Automotive & Transportation</option>
-                        <option value="media">Media & Entertainment</option>
-                        <option value="biotechnology">Biotechnology & Life Sciences</option>
-                        <option value="aerospace">Aerospace & Defense</option>
-                        <option value="energy">Energy & CleanTech</option>
-                        <option value="banking">Banking & Investment</option>
-                        <option value="insurance">Insurance & InsurTech</option>
-                        <option value="logistics">Logistics & Supply Chain</option>
-                        <option value="cybersecurity">Cybersecurity & Data Protection</option>
-                      </Select>
+                        <optgroup label="🧰 Trades & Services">
+                          <option value="hvac">HVAC</option>
+                          <option value="plumbing">Plumbing</option>
+                          <option value="electrical">Electrical</option>
+                          <option value="roofing">Roofing</option>
+                          <option value="landscaping">Landscaping</option>
+                          <option value="general_contracting">General Contracting</option>
+                          <option value="pest_control">Pest Control</option>
+                          <option value="pool_services">Pool Services</option>
+                          <option value="cleaning_services">Cleaning Services</option>
+                          <option value="appliance_repair">Appliance Repair</option>
+                        </optgroup>
+                        <optgroup label="🏥 Medical & Wellness">
+                          <option value="chiropractors">Chiropractors</option>
+                          <option value="dentists">Dentists</option>
+                          <option value="physical_therapists">Physical Therapists</option>
+                          <option value="mental_health_clinics">Mental Health Clinics</option>
+                          <option value="medspas">MedSpas</option>
+                          <option value="primary_care">Primary Care</option>
+                          <option value="dermatologists">Dermatologists</option>
+                          <option value="holistic_health">Holistic Health</option>
+                          <option value="weight_loss_clinics">Weight Loss Clinics</option>
+                        </optgroup>
+                        <optgroup label="💼 Professional Services">
+                          <option value="law_firms">Law Firms</option>
+                          <option value="accountants_cpas">Accountants / CPAs</option>
+                          <option value="insurance_agencies">Insurance Agencies</option>
+                          <option value="real_estate_brokers">Real Estate Brokers</option>
+                          <option value="mortgage_lenders">Mortgage Lenders</option>
+                          <option value="financial_advisors">Financial Advisors</option>
+                          <option value="business_consultants">Business Consultants</option>
+                        </optgroup>
+                        <optgroup label="🛍️ Local Retail & Consumer">
+                          <option value="auto_dealerships">Auto Dealerships</option>
+                          <option value="furniture_stores">Furniture Stores</option>
+                          <option value="jewelry_stores">Jewelry Stores</option>
+                          <option value="boutiques">Boutiques</option>
+                          <option value="vape_shops">Vape Shops</option>
+                          <option value="gun_shops">Gun Shops</option>
+                          <option value="nutrition_supplement_stores">Nutrition & Supplement Stores</option>
+                        </optgroup>
+                        <optgroup label="🧑‍🎓 Education & Training">
+                          <option value="tutoring_centers">Tutoring Centers</option>
+                          <option value="test_prep">Test Prep</option>
+                          <option value="trade_schools">Trade Schools</option>
+                          <option value="driving_schools">Driving Schools</option>
+                          <option value="online_course_creators">Online Course Creators</option>
+                          <option value="coaching_businesses">Coaching Businesses</option>
+                        </optgroup>
+                        <optgroup label="🖥️ Tech, SaaS & Digital">
+                          <option value="saas_startups">SaaS Startups</option>
+                          <option value="marketing_agencies">Marketing Agencies</option>
+                          <option value="web_design_firms">Web Design Firms</option>
+                          <option value="it_support_msps">IT Support & MSPs</option>
+                          <option value="ecommerce_brands">eCommerce Brands</option>
+                          <option value="cybersecurity_consultants">Cybersecurity Consultants</option>
+                          <option value="data_analytics_firms">Data & Analytics Firms</option>
+                        </optgroup>
+                        <optgroup label="🧰 Home & Commercial Services">
+                          <option value="garage_door_companies">Garage Door Companies</option>
+                          <option value="flooring_installers">Flooring Installers</option>
+                          <option value="window_tinting">Window Tinting</option>
+                          <option value="solar_installers">Solar Installers</option>
+                          <option value="security_system_installers">Security System Installers</option>
+                          <option value="commercial_janitorial">Commercial Janitorial</option>
+                          <option value="pressure_washing">Pressure Washing</option>
+                        </optgroup>
+                        <optgroup label="🏗️ Construction & Manufacturing">
+                          <option value="construction_firms">Construction Firms</option>
+                          <option value="fabricators">Fabricators</option>
+                          <option value="welders">Welders</option>
+                          <option value="machining_cnc">Machining & CNC</option>
+                          <option value="custom_metalworks">Custom Metalworks</option>
+                          <option value="modular_building">Modular Building</option>
+                        </optgroup>
+                        <optgroup label="🚚 Transportation & Logistics">
+                          <option value="trucking_companies">Trucking Companies</option>
+                          <option value="freight_brokers">Freight Brokers</option>
+                          <option value="3pl_providers">3PL Providers</option>
+                          <option value="moving_companies">Moving Companies</option>
+                          <option value="auto_transporters">Auto Transporters</option>
+                        </optgroup>
+                        <optgroup label="🏦 Financial Services & Lending">
+                          <option value="merchant_services">Merchant Services</option>
+                          <option value="business_loan_brokers">Business Loan Brokers</option>
+                          <option value="credit_repair_firms">Credit Repair Firms</option>
+                          <option value="funding_specialists">Funding Specialists</option>
+                          <option value="tax_resolution_firms">Tax Resolution Firms</option>
+                        </optgroup>
+                      </select>
+                      <p className="text-sm text-slate-400">Hold Ctrl/Cmd to select multiple industries</p>
                     </div>
 
                     <div className="space-y-3">
@@ -703,28 +793,107 @@ export default function EnterpriseLeadScraper() {
                     </div>
 
                     <div className="space-y-3">
-                      <Label>Industry Category</Label>
-                      <Select
-                        value={apifyFilters.industry}
-                        onChange={(e) => setApifyFilters(prev => ({ ...prev, industry: e.target.value }))}
+                      <Label>Industry Categories (Select Multiple)</Label>
+                      <select
+                        multiple
+                        value={apifyFilters.industry ? apifyFilters.industry.split(',') : []}
+                        onChange={(e) => {
+                          const selected = Array.from(e.target.selectedOptions, option => option.value).join(',');
+                          setApifyFilters(prev => ({ ...prev, industry: selected }));
+                        }}
+                        className="w-full min-h-[280px] px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       >
-                        <option value="">All Categories</option>
-                        <option value="restaurants">Restaurants & Food Services</option>
-                        <option value="retail">Retail & Shopping</option>
-                        <option value="healthcare">Healthcare & Medical</option>
-                        <option value="professional_services">Professional Services</option>
-                        <option value="automotive">Automotive Services</option>
-                        <option value="beauty_wellness">Beauty & Wellness</option>
-                        <option value="home_garden">Home & Garden Services</option>
-                        <option value="entertainment">Entertainment & Recreation</option>
-                        <option value="education">Education & Training</option>
-                        <option value="real_estate">Real Estate</option>
-                        <option value="financial_services">Financial Services</option>
-                        <option value="technology">Technology Services</option>
-                        <option value="construction">Construction & Contractors</option>
-                        <option value="legal">Legal Services</option>
-                        <option value="consulting">Business Consulting</option>
-                      </Select>
+                        <optgroup label="🧰 Trades & Services">
+                          <option value="hvac">HVAC</option>
+                          <option value="plumbing">Plumbing</option>
+                          <option value="electrical">Electrical</option>
+                          <option value="roofing">Roofing</option>
+                          <option value="landscaping">Landscaping</option>
+                          <option value="general_contracting">General Contracting</option>
+                          <option value="pest_control">Pest Control</option>
+                          <option value="pool_services">Pool Services</option>
+                          <option value="cleaning_services">Cleaning Services</option>
+                          <option value="appliance_repair">Appliance Repair</option>
+                        </optgroup>
+                        <optgroup label="🏥 Medical & Wellness">
+                          <option value="chiropractors">Chiropractors</option>
+                          <option value="dentists">Dentists</option>
+                          <option value="physical_therapists">Physical Therapists</option>
+                          <option value="mental_health_clinics">Mental Health Clinics</option>
+                          <option value="medspas">MedSpas</option>
+                          <option value="primary_care">Primary Care</option>
+                          <option value="dermatologists">Dermatologists</option>
+                          <option value="holistic_health">Holistic Health</option>
+                          <option value="weight_loss_clinics">Weight Loss Clinics</option>
+                        </optgroup>
+                        <optgroup label="💼 Professional Services">
+                          <option value="law_firms">Law Firms</option>
+                          <option value="accountants_cpas">Accountants / CPAs</option>
+                          <option value="insurance_agencies">Insurance Agencies</option>
+                          <option value="real_estate_brokers">Real Estate Brokers</option>
+                          <option value="mortgage_lenders">Mortgage Lenders</option>
+                          <option value="financial_advisors">Financial Advisors</option>
+                          <option value="business_consultants">Business Consultants</option>
+                        </optgroup>
+                        <optgroup label="🛍️ Local Retail & Consumer">
+                          <option value="auto_dealerships">Auto Dealerships</option>
+                          <option value="furniture_stores">Furniture Stores</option>
+                          <option value="jewelry_stores">Jewelry Stores</option>
+                          <option value="boutiques">Boutiques</option>
+                          <option value="vape_shops">Vape Shops</option>
+                          <option value="gun_shops">Gun Shops</option>
+                          <option value="nutrition_supplement_stores">Nutrition & Supplement Stores</option>
+                        </optgroup>
+                        <optgroup label="🧑‍🎓 Education & Training">
+                          <option value="tutoring_centers">Tutoring Centers</option>
+                          <option value="test_prep">Test Prep</option>
+                          <option value="trade_schools">Trade Schools</option>
+                          <option value="driving_schools">Driving Schools</option>
+                          <option value="online_course_creators">Online Course Creators</option>
+                          <option value="coaching_businesses">Coaching Businesses</option>
+                        </optgroup>
+                        <optgroup label="🖥️ Tech, SaaS & Digital">
+                          <option value="saas_startups">SaaS Startups</option>
+                          <option value="marketing_agencies">Marketing Agencies</option>
+                          <option value="web_design_firms">Web Design Firms</option>
+                          <option value="it_support_msps">IT Support & MSPs</option>
+                          <option value="ecommerce_brands">eCommerce Brands</option>
+                          <option value="cybersecurity_consultants">Cybersecurity Consultants</option>
+                          <option value="data_analytics_firms">Data & Analytics Firms</option>
+                        </optgroup>
+                        <optgroup label="🧰 Home & Commercial Services">
+                          <option value="garage_door_companies">Garage Door Companies</option>
+                          <option value="flooring_installers">Flooring Installers</option>
+                          <option value="window_tinting">Window Tinting</option>
+                          <option value="solar_installers">Solar Installers</option>
+                          <option value="security_system_installers">Security System Installers</option>
+                          <option value="commercial_janitorial">Commercial Janitorial</option>
+                          <option value="pressure_washing">Pressure Washing</option>
+                        </optgroup>
+                        <optgroup label="🏗️ Construction & Manufacturing">
+                          <option value="construction_firms">Construction Firms</option>
+                          <option value="fabricators">Fabricators</option>
+                          <option value="welders">Welders</option>
+                          <option value="machining_cnc">Machining & CNC</option>
+                          <option value="custom_metalworks">Custom Metalworks</option>
+                          <option value="modular_building">Modular Building</option>
+                        </optgroup>
+                        <optgroup label="🚚 Transportation & Logistics">
+                          <option value="trucking_companies">Trucking Companies</option>
+                          <option value="freight_brokers">Freight Brokers</option>
+                          <option value="3pl_providers">3PL Providers</option>
+                          <option value="moving_companies">Moving Companies</option>
+                          <option value="auto_transporters">Auto Transporters</option>
+                        </optgroup>
+                        <optgroup label="🏦 Financial Services & Lending">
+                          <option value="merchant_services">Merchant Services</option>
+                          <option value="business_loan_brokers">Business Loan Brokers</option>
+                          <option value="credit_repair_firms">Credit Repair Firms</option>
+                          <option value="funding_specialists">Funding Specialists</option>
+                          <option value="tax_resolution_firms">Tax Resolution Firms</option>
+                        </optgroup>
+                      </select>
+                      <p className="text-sm text-slate-400">Hold Ctrl/Cmd to select multiple categories</p>
                     </div>
 
                     <div className="space-y-3">
@@ -855,20 +1024,48 @@ export default function EnterpriseLeadScraper() {
                     </div>
 
                     <div className="space-y-3">
-                      <Label>Executive Seniority Level</Label>
-                      <Select
-                        value={phantombusterFilters.seniorityLevel}
-                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, seniorityLevel: e.target.value }))}
+                      <Label>Job Titles (Select Multiple)</Label>
+                      <select
+                        multiple
+                        value={phantombusterFilters.seniorityLevel ? phantombusterFilters.seniorityLevel.split(',') : []}
+                        onChange={(e) => {
+                          const selected = Array.from(e.target.selectedOptions, option => option.value).join(',');
+                          setPhantombusterFilters(prev => ({ ...prev, seniorityLevel: selected }));
+                        }}
+                        className="w-full min-h-[180px] px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       >
-                        <option value="">All Seniority Levels</option>
+                        <option value="ceo">Chief Executive Officer</option>
+                        <option value="cto">Chief Technology Officer</option>
+                        <option value="cfo">Chief Financial Officer</option>
+                        <option value="cmo">Chief Marketing Officer</option>
+                        <option value="coo">Chief Operating Officer</option>
+                        <option value="founder">Founder</option>
+                        <option value="president">President</option>
                         <option value="owner">Business Owner</option>
-                        <option value="founder">Founder/Co-Founder</option>
-                        <option value="cxo">C-Level Executive</option>
-                        <option value="vp">Vice President</option>
-                        <option value="director">Director</option>
-                        <option value="senior_manager">Senior Manager</option>
-                        <option value="manager">Manager</option>
-                      </Select>
+                        <option value="partner">Partner</option>
+                        <option value="vp_sales">VP of Sales</option>
+                        <option value="vp_marketing">VP of Marketing</option>
+                        <option value="vp_operations">VP of Operations</option>
+                        <option value="director_sales">Director of Sales</option>
+                        <option value="director_marketing">Director of Marketing</option>
+                        <option value="sales_manager">Sales Manager</option>
+                        <option value="marketing_manager">Marketing Manager</option>
+                        <option value="operations_manager">Operations Manager</option>
+                        <option value="general_manager">General Manager</option>
+                        <option value="project_manager">Project Manager</option>
+                        <option value="account_executive">Account Executive</option>
+                        <option value="business_development">Business Development Manager</option>
+                        <option value="product_manager">Product Manager</option>
+                        <option value="regional_manager">Regional Manager</option>
+                        <option value="superintendent">Superintendent</option>
+                        <option value="foreman">Foreman</option>
+                        <option value="estimator">Estimator</option>
+                        <option value="service_manager">Service Manager</option>
+                        <option value="technician">Lead Technician</option>
+                        <option value="installer">Installer</option>
+                        <option value="contractor">Contractor</option>
+                      </select>
+                      <p className="text-sm text-slate-400">Hold Ctrl/Cmd to select multiple titles</p>
                     </div>
 
                     <div className="space-y-3">
@@ -906,23 +1103,107 @@ export default function EnterpriseLeadScraper() {
                     </div>
 
                     <div className="space-y-3">
-                      <Label>Industry Focus</Label>
-                      <Select
-                        value={phantombusterFilters.industry}
-                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, industry: e.target.value }))}
+                      <Label>Industry Focus (Select Multiple)</Label>
+                      <select
+                        multiple
+                        value={phantombusterFilters.industry ? phantombusterFilters.industry.split(',') : []}
+                        onChange={(e) => {
+                          const selected = Array.from(e.target.selectedOptions, option => option.value).join(',');
+                          setPhantombusterFilters(prev => ({ ...prev, industry: selected }));
+                        }}
+                        className="w-full min-h-[250px] px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       >
-                        <option value="">All Industries</option>
-                        <option value="technology">Technology & Software</option>
-                        <option value="finance">Finance & FinTech</option>
-                        <option value="healthcare">Healthcare & MedTech</option>
-                        <option value="consulting">Consulting & Professional Services</option>
-                        <option value="marketing">Marketing & AdTech</option>
-                        <option value="sales">Sales & CRM</option>
-                        <option value="startups">Startups & Venture Capital</option>
-                        <option value="saas">SaaS & Cloud</option>
-                        <option value="ecommerce">E-commerce & Retail</option>
-                        <option value="manufacturing">Manufacturing & Industrial</option>
-                      </Select>
+                        <optgroup label="🧰 Trades & Services">
+                          <option value="hvac">HVAC</option>
+                          <option value="plumbing">Plumbing</option>
+                          <option value="electrical">Electrical</option>
+                          <option value="roofing">Roofing</option>
+                          <option value="landscaping">Landscaping</option>
+                          <option value="general_contracting">General Contracting</option>
+                          <option value="pest_control">Pest Control</option>
+                          <option value="pool_services">Pool Services</option>
+                          <option value="cleaning_services">Cleaning Services</option>
+                          <option value="appliance_repair">Appliance Repair</option>
+                        </optgroup>
+                        <optgroup label="🏥 Medical & Wellness">
+                          <option value="chiropractors">Chiropractors</option>
+                          <option value="dentists">Dentists</option>
+                          <option value="physical_therapists">Physical Therapists</option>
+                          <option value="mental_health_clinics">Mental Health Clinics</option>
+                          <option value="medspas">MedSpas</option>
+                          <option value="primary_care">Primary Care</option>
+                          <option value="dermatologists">Dermatologists</option>
+                          <option value="holistic_health">Holistic Health</option>
+                          <option value="weight_loss_clinics">Weight Loss Clinics</option>
+                        </optgroup>
+                        <optgroup label="💼 Professional Services">
+                          <option value="law_firms">Law Firms</option>
+                          <option value="accountants_cpas">Accountants / CPAs</option>
+                          <option value="insurance_agencies">Insurance Agencies</option>
+                          <option value="real_estate_brokers">Real Estate Brokers</option>
+                          <option value="mortgage_lenders">Mortgage Lenders</option>
+                          <option value="financial_advisors">Financial Advisors</option>
+                          <option value="business_consultants">Business Consultants</option>
+                        </optgroup>
+                        <optgroup label="🛍️ Local Retail & Consumer">
+                          <option value="auto_dealerships">Auto Dealerships</option>
+                          <option value="furniture_stores">Furniture Stores</option>
+                          <option value="jewelry_stores">Jewelry Stores</option>
+                          <option value="boutiques">Boutiques</option>
+                          <option value="vape_shops">Vape Shops</option>
+                          <option value="gun_shops">Gun Shops</option>
+                          <option value="nutrition_supplement_stores">Nutrition & Supplement Stores</option>
+                        </optgroup>
+                        <optgroup label="🧑‍🎓 Education & Training">
+                          <option value="tutoring_centers">Tutoring Centers</option>
+                          <option value="test_prep">Test Prep</option>
+                          <option value="trade_schools">Trade Schools</option>
+                          <option value="driving_schools">Driving Schools</option>
+                          <option value="online_course_creators">Online Course Creators</option>
+                          <option value="coaching_businesses">Coaching Businesses</option>
+                        </optgroup>
+                        <optgroup label="🖥️ Tech, SaaS & Digital">
+                          <option value="saas_startups">SaaS Startups</option>
+                          <option value="marketing_agencies">Marketing Agencies</option>
+                          <option value="web_design_firms">Web Design Firms</option>
+                          <option value="it_support_msps">IT Support & MSPs</option>
+                          <option value="ecommerce_brands">eCommerce Brands</option>
+                          <option value="cybersecurity_consultants">Cybersecurity Consultants</option>
+                          <option value="data_analytics_firms">Data & Analytics Firms</option>
+                        </optgroup>
+                        <optgroup label="🧰 Home & Commercial Services">
+                          <option value="garage_door_companies">Garage Door Companies</option>
+                          <option value="flooring_installers">Flooring Installers</option>
+                          <option value="window_tinting">Window Tinting</option>
+                          <option value="solar_installers">Solar Installers</option>
+                          <option value="security_system_installers">Security System Installers</option>
+                          <option value="commercial_janitorial">Commercial Janitorial</option>
+                          <option value="pressure_washing">Pressure Washing</option>
+                        </optgroup>
+                        <optgroup label="🏗️ Construction & Manufacturing">
+                          <option value="construction_firms">Construction Firms</option>
+                          <option value="fabricators">Fabricators</option>
+                          <option value="welders">Welders</option>
+                          <option value="machining_cnc">Machining & CNC</option>
+                          <option value="custom_metalworks">Custom Metalworks</option>
+                          <option value="modular_building">Modular Building</option>
+                        </optgroup>
+                        <optgroup label="🚚 Transportation & Logistics">
+                          <option value="trucking_companies">Trucking Companies</option>
+                          <option value="freight_brokers">Freight Brokers</option>
+                          <option value="3pl_providers">3PL Providers</option>
+                          <option value="moving_companies">Moving Companies</option>
+                          <option value="auto_transporters">Auto Transporters</option>
+                        </optgroup>
+                        <optgroup label="🏦 Financial Services & Lending">
+                          <option value="merchant_services">Merchant Services</option>
+                          <option value="business_loan_brokers">Business Loan Brokers</option>
+                          <option value="credit_repair_firms">Credit Repair Firms</option>
+                          <option value="funding_specialists">Funding Specialists</option>
+                          <option value="tax_resolution_firms">Tax Resolution Firms</option>
+                        </optgroup>
+                      </select>
+                      <p className="text-sm text-slate-400">Hold Ctrl/Cmd to select multiple industries</p>
                     </div>
 
                     <div className="space-y-3">
