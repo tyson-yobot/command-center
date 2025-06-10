@@ -2140,29 +2140,8 @@ export default function CommandCenter() {
           onChange={handleFileUpload}
         />
 
-        {/* Top Right Control Buttons */}
+        {/* Top Right Control Buttons - LIVE MODE ONLY */}
         <div className="fixed top-4 right-4 z-40 flex gap-3">
-          <Button
-            onClick={async () => {
-              if (window.confirm('This will permanently delete ALL test data. Are you sure?')) {
-                try {
-                  const response = await fetch('/api/test-data/clear', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                  });
-                  const result = await response.json();
-                  alert(result.success ? `Test data cleared: ${result.tablesWiped} tables wiped` : 'Clear test data failed');
-                } catch (error) {
-                  console.error('Clear test data error:', error);
-                  alert('Clear test data failed');
-                }
-              }
-            }}
-            className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-4 py-2"
-          >
-            Clear Test Data
-          </Button>
-          
           <Button
             onClick={() => setShowEscalation(true)}
             className="bg-red-500 hover:bg-red-600 text-white font-bold px-4 py-2"
@@ -4370,55 +4349,7 @@ export default function CommandCenter() {
         </div>
       )}
 
-      {/* Document Upload Interface */}
-      <div className="fixed bottom-4 right-4 z-40">
-        <Button
-          onClick={() => document.getElementById('knowledge-upload')?.click()}
-          className="bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/25 flex items-center"
-        >
-          <Upload className="w-4 h-4 mr-2" />
-          Upload Knowledge
-        </Button>
-        <input
-          id="knowledge-upload"
-          type="file"
-          accept=".pdf,.doc,.docx,.txt,.md,.csv"
-          multiple
-          onChange={async (e) => {
-            const files = e.target.files;
-            if (files && files.length > 0) {
-              const formData = new FormData();
-              Array.from(files).forEach(file => {
-                formData.append('documents', file);
-              });
-              formData.append('category', 'knowledge');
-              
-              try {
-                const response = await fetch('/api/knowledge/upload', {
-                  method: 'POST',
-                  body: formData
-                });
-                const result = await response.json();
-                if (result.success) {
-                  alert(`Successfully uploaded ${files.length} document(s) to knowledge base`);
-                  // Refresh knowledge stats after upload
-                  const statsResponse = await fetch('/api/knowledge/stats');
-                  if (statsResponse.ok) {
-                    const stats = await statsResponse.json();
-                    setKnowledgeStats(stats);
-                  }
-                } else {
-                  alert('Upload failed: ' + result.error);
-                }
-              } catch (error) {
-                console.error('Upload error:', error);
-                alert('Upload failed');
-              }
-            }
-          }}
-          style={{ display: 'none' }}
-        />
-      </div>
+
 
       {/* Zendesk Live Chat Widget */}
       <ZendeskChatWidget />

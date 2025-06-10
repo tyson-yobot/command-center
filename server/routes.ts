@@ -10143,34 +10143,32 @@ CRM Data:
 
 // Helper function to extract contact information from OCR text
 function extractContactInfo(text: string) {
+  // LIVE MODE ONLY - No fake data generation
+  if (systemMode !== 'live') {
+    throw new Error('OCR processing only available in live mode');
+  }
+  
   const contact: any = {};
   
-  // Extract email
+  // Only extract actual data from real OCR text - no fallbacks to fake data
   const emailMatch = text.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/);
   if (emailMatch) contact.email = emailMatch[0];
   
-  // Extract phone numbers
   const phoneMatch = text.match(/(\+?1?[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/);
   if (phoneMatch) contact.phone = phoneMatch[0];
   
-  // Extract website
   const webMatch = text.match(/(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(?:\/[^\s]*)?/);
   if (webMatch) contact.website = webMatch[0];
   
-  // Extract name (typically the largest or first text block)
   const lines = text.split('\n').filter(line => line.trim().length > 0);
   if (lines.length > 0) {
-    // Look for name patterns (usually contains first and last name)
     const namePattern = /^[A-Z][a-z]+ [A-Z][a-z]+/;
     const nameMatch = lines.find(line => namePattern.test(line.trim()));
     if (nameMatch) {
       contact.name = nameMatch.trim();
-    } else if (lines[0]) {
-      contact.name = lines[0].trim();
     }
   }
   
-  // Extract company (look for common business words)
   const companyIndicators = ['LLC', 'Inc', 'Corp', 'Company', 'Ltd', 'Corporation'];
   const companyLine = lines.find(line => 
     companyIndicators.some(indicator => line.includes(indicator))
@@ -10179,7 +10177,6 @@ function extractContactInfo(text: string) {
     contact.company = companyLine.trim();
   }
   
-  // Extract title (common job titles)
   const titleKeywords = ['CEO', 'President', 'Manager', 'Director', 'VP', 'Vice President', 'Engineer', 'Developer', 'Consultant', 'Specialist'];
   const titleLine = lines.find(line => 
     titleKeywords.some(keyword => line.toLowerCase().includes(keyword.toLowerCase()))
@@ -10188,7 +10185,6 @@ function extractContactInfo(text: string) {
     contact.title = titleLine.trim();
   }
   
-  // Extract address (look for street patterns)
   const addressPattern = /\d+\s+[A-Za-z\s]+(?:Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Lane|Ln|Boulevard|Blvd)/i;
   const addressMatch = text.match(addressPattern);
   if (addressMatch) {
@@ -10200,8 +10196,13 @@ function extractContactInfo(text: string) {
 
 // Helper function to process contact through automation pipeline
 async function processContactAutomation(contact: any) {
+  // LIVE MODE ONLY - No test data, no mock data, no simulated responses
+  if (systemMode !== 'live') {
+    throw new Error('Contact automation only available in live mode');
+  }
+  
   const automationsCompleted = {
-    ocrExtraction: true,
+    ocrExtraction: false,
     duplicateCheck: false,
     hubspotPush: false,
     sourceTagging: false,
@@ -10213,35 +10214,12 @@ async function processContactAutomation(contact: any) {
     statusLabeling: false
   };
   
-  try {
-    // Simulate automation steps with realistic delays
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // Duplicate check
-    automationsCompleted.duplicateCheck = true;
-    
-    // HubSpot contact creation (if valid contact data)
-    if (contact.email || contact.phone) {
-      automationsCompleted.hubspotPush = true;
-      automationsCompleted.sourceTagging = true;
-      automationsCompleted.followUpTask = true;
-      automationsCompleted.dealCreation = true;
-      automationsCompleted.workflowEnrollment = true;
-    }
-    
-    // Backup and logging
-    automationsCompleted.googleSheetsBackup = true;
-    automationsCompleted.airtableLogging = true;
-    automationsCompleted.statusLabeling = true;
-    
-    return {
-      automationsCompleted,
-      hubspotContactId: contact.email ? `hs_${Date.now()}` : undefined
-    };
-  } catch (error) {
-    console.error('Automation processing error:', error);
-    return { automationsCompleted };
-  }
+  // PRODUCTION ONLY - Real API integrations required
+  return {
+    automationsCompleted,
+    hubspotContactId: undefined,
+    error: 'Production integrations required - no test data in live mode'
+  };
 }
 
 // Register all 1040+ automation function endpoints
