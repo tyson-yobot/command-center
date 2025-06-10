@@ -1257,21 +1257,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({
         success: true,
-        query,
+        query: query,
         totalResults: limitedResults.length,
         results: limitedResults,
         aiInsights,
         searchTime: new Date().toISOString(),
-        suggestions: queryWords.length > 1 ? [
-          `Try searching for individual terms: ${queryWords.join(', ')}`,
-          'Use more specific keywords',
+        suggestions: limitedResults.length === 0 ? [
+          'Try using different keywords',
+          'Use more specific search terms',
           'Check document categories for better filtering'
         ] : []
       });
 
     } catch (error) {
       console.error('Knowledge search error:', error);
-      logOperation('knowledge-search', { query }, 'error', `Search failed: ${error.message}`);
+      logOperation('knowledge-search', { query: query }, 'error', `Search failed: ${error.message}`);
       res.status(500).json({ 
         success: false, 
         error: 'Search failed',
