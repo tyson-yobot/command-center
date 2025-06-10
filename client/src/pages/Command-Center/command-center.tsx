@@ -2049,9 +2049,9 @@ export default function CommandCenter() {
           <div className="text-center mb-6">
             <h1 className="text-6xl font-bold text-white mb-3 flex items-center justify-center">
               <img 
-                src={yobotLogo} 
-                alt="YoBot Logo" 
-                className="w-28 h-28 mr-3 inline-block"
+                src={yobotRobotHead} 
+                alt="YoBot" 
+                className="w-16 h-16 mr-3 inline-block"
                 style={{ marginTop: '-4px' }}
               />
               YoBot® Command Center
