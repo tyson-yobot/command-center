@@ -33,6 +33,7 @@ import { automationTester } from "./automationTester";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
 import { generateSocialMediaPost, generateEmailCampaign, postToSocialMedia, sendEmailCampaign } from './contentCreator';
+import * as ElevenLabs from './elevenlabs';
 
 // Initialize OpenAI
 const openai = new OpenAI({
@@ -12808,6 +12809,368 @@ export function registerContentCreationEndpoints(app: Express) {
       });
     }
   });
+
+  // ==================== ElevenLabs Voice Synthesis API Endpoints ====================
+  
+  // Get all available voices
+  app.get('/api/elevenlabs/voices', async (req, res) => {
+    try {
+      const voicesResult = await ElevenLabs.getAllVoices();
+      
+      logOperation('elevenlabs-get-voices', {}, voicesResult.error ? 'error' : 'success', 
+        voicesResult.error || `Retrieved ${voicesResult.voices.length} voices`);
+      
+      res.json({
+        success: !voicesResult.error,
+        voices: voicesResult.voices,
+        error: voicesResult.error,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      logOperation('elevenlabs-get-voices', {}, 'error', `Failed to get voices: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to retrieve voices',
+        details: error.message
+      });
+    }
+  });
+
+  // Generate speech from text
+  app.post('/api/elevenlabs/generate', async (req, res) => {
+    try {
+      const { text, voiceId, options = {} } = req.body;
+      
+      if (!text) {
+        return res.status(400).json({
+          success: false,
+          error: 'Text is required for speech generation'
+        });
+      }
+
+      const audioResult = await ElevenLabs.generateSpeech(text, voiceId, options);
+      
+      logOperation('elevenlabs-generate', { 
+        textLength: text.length, 
+        voiceId: voiceId || 'default',
+        options 
+      }, 'success', `Generated speech for ${text.length} characters`);
+
+      // Convert audio buffer to base64 for response
+      const audioBase64 = Buffer.from(audioResult.audio).toString('base64');
+      
+      res.json({
+        success: true,
+        audioData: audioBase64,
+        voiceId: voiceId || '21m00Tcm4TlvDq8ikWAM',
+        textLength: text.length,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      logOperation('elevenlabs-generate', req.body, 'error', `Speech generation failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Speech generation failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Stream speech generation
+  app.post('/api/elevenlabs/stream', async (req, res) => {
+    try {
+      const { text, voiceId, options = {} } = req.body;
+      
+      if (!text) {
+        return res.status(400).json({
+          success: false,
+          error: 'Text is required for speech streaming'
+        });
+      }
+
+      const audioStream = await ElevenLabs.streamSpeech(text, voiceId, options);
+      
+      res.setHeader('Content-Type', 'audio/mpeg');
+      res.setHeader('Content-Disposition', 'attachment; filename="speech.mp3"');
+      
+      audioStream.pipe(res);
+      
+      logOperation('elevenlabs-stream', { 
+        textLength: text.length, 
+        voiceId: voiceId || 'default'
+      }, 'success', `Streamed speech for ${text.length} characters`);
+      
+    } catch (error) {
+      logOperation('elevenlabs-stream', req.body, 'error', `Speech streaming failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Speech streaming failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Get voice settings
+  app.get('/api/elevenlabs/voices/:voiceId/settings', async (req, res) => {
+    try {
+      const { voiceId } = req.params;
+      const settingsResult = await ElevenLabs.getVoiceSettings(voiceId);
+      
+      logOperation('elevenlabs-get-settings', { voiceId }, 
+        settingsResult.error ? 'error' : 'success', 
+        settingsResult.error || `Retrieved settings for voice ${voiceId}`);
+      
+      res.json({
+        success: !settingsResult.error,
+        settings: settingsResult.settings,
+        voiceId,
+        error: settingsResult.error
+      });
+    } catch (error) {
+      logOperation('elevenlabs-get-settings', { voiceId: req.params.voiceId }, 'error', 
+        `Failed to get voice settings: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to get voice settings',
+        details: error.message
+      });
+    }
+  });
+
+  // Update voice settings
+  app.put('/api/elevenlabs/voices/:voiceId/settings', async (req, res) => {
+    try {
+      const { voiceId } = req.params;
+      const { settings } = req.body;
+      
+      const updateResult = await ElevenLabs.updateVoiceSettings(voiceId, settings);
+      
+      logOperation('elevenlabs-update-settings', { voiceId, settings }, 
+        updateResult.error ? 'error' : 'success',
+        updateResult.error || `Updated settings for voice ${voiceId}`);
+      
+      res.json({
+        success: updateResult.success,
+        voiceId,
+        error: updateResult.error
+      });
+    } catch (error) {
+      logOperation('elevenlabs-update-settings', { voiceId: req.params.voiceId, settings: req.body.settings }, 
+        'error', `Failed to update voice settings: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to update voice settings',
+        details: error.message
+      });
+    }
+  });
+
+  // Clone voice from audio samples
+  app.post('/api/elevenlabs/voices/clone', upload.array('samples'), async (req, res) => {
+    try {
+      const { name, description } = req.body;
+      const files = req.files as Express.Multer.File[];
+      
+      if (!files || files.length === 0) {
+        return res.status(400).json({
+          success: false,
+          error: 'Audio samples are required for voice cloning'
+        });
+      }
+
+      if (!name) {
+        return res.status(400).json({
+          success: false,
+          error: 'Voice name is required'
+        });
+      }
+
+      const audioBuffers = files.map(file => file.buffer);
+      const cloneResult = await ElevenLabs.cloneVoice(name, description || '', audioBuffers);
+      
+      logOperation('elevenlabs-clone-voice', { 
+        name, 
+        samplesCount: files.length,
+        description 
+      }, 'success', `Cloned voice: ${name}`);
+      
+      res.json({
+        success: true,
+        voiceId: cloneResult.voiceId,
+        name,
+        description,
+        samplesProcessed: files.length
+      });
+    } catch (error) {
+      logOperation('elevenlabs-clone-voice', { 
+        name: req.body.name, 
+        samplesCount: req.files?.length || 0 
+      }, 'error', `Voice cloning failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Voice cloning failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Delete custom voice
+  app.delete('/api/elevenlabs/voices/:voiceId', async (req, res) => {
+    try {
+      const { voiceId } = req.params;
+      const deleteResult = await ElevenLabs.deleteVoice(voiceId);
+      
+      logOperation('elevenlabs-delete-voice', { voiceId }, 
+        deleteResult.error ? 'error' : 'success',
+        deleteResult.error || `Deleted voice ${voiceId}`);
+      
+      res.json({
+        success: deleteResult.success,
+        voiceId,
+        error: deleteResult.error
+      });
+    } catch (error) {
+      logOperation('elevenlabs-delete-voice', { voiceId: req.params.voiceId }, 'error', 
+        `Failed to delete voice: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to delete voice',
+        details: error.message
+      });
+    }
+  });
+
+  // Get user subscription info
+  app.get('/api/elevenlabs/user', async (req, res) => {
+    try {
+      const userResult = await ElevenLabs.getUserInfo();
+      
+      logOperation('elevenlabs-get-user', {}, 
+        userResult.error ? 'error' : 'success',
+        userResult.error || 'Retrieved user subscription info');
+      
+      res.json({
+        success: !userResult.error,
+        user: userResult.user,
+        error: userResult.error
+      });
+    } catch (error) {
+      logOperation('elevenlabs-get-user', {}, 'error', `Failed to get user info: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to get user info',
+        details: error.message
+      });
+    }
+  });
+
+  // Get available models
+  app.get('/api/elevenlabs/models', async (req, res) => {
+    try {
+      const modelsResult = await ElevenLabs.getModels();
+      
+      logOperation('elevenlabs-get-models', {}, 
+        modelsResult.error ? 'error' : 'success',
+        modelsResult.error || `Retrieved ${modelsResult.models.length} models`);
+      
+      res.json({
+        success: !modelsResult.error,
+        models: modelsResult.models,
+        error: modelsResult.error
+      });
+    } catch (error) {
+      logOperation('elevenlabs-get-models', {}, 'error', `Failed to get models: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to get models',
+        details: error.message
+      });
+    }
+  });
+
+  // Advanced text-to-speech with full options
+  app.post('/api/elevenlabs/advanced-tts', async (req, res) => {
+    try {
+      const {
+        text,
+        voiceId,
+        model,
+        stability,
+        similarityBoost,
+        style,
+        useSpeakerBoost,
+        outputFormat
+      } = req.body;
+      
+      if (!text) {
+        return res.status(400).json({
+          success: false,
+          error: 'Text is required for advanced TTS'
+        });
+      }
+
+      const options = {
+        text,
+        voiceId,
+        model,
+        stability,
+        similarityBoost,
+        style,
+        useSpeakerBoost,
+        outputFormat
+      };
+
+      const audioResult = await ElevenLabs.advancedTextToSpeech(options);
+      
+      logOperation('elevenlabs-advanced-tts', { 
+        textLength: text.length, 
+        voiceId: voiceId || 'default',
+        model: model || 'default',
+        outputFormat: outputFormat || 'mp3'
+      }, 'success', `Generated advanced TTS for ${text.length} characters`);
+
+      // Convert audio buffer to base64
+      const audioBase64 = Buffer.from(audioResult.audio).toString('base64');
+      
+      res.json({
+        success: true,
+        audioData: audioBase64,
+        options: options,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      logOperation('elevenlabs-advanced-tts', req.body, 'error', 
+        `Advanced TTS failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Advanced TTS failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Test ElevenLabs connection
+  app.get('/api/elevenlabs/test', async (req, res) => {
+    try {
+      const testResult = await ElevenLabs.getAllVoices();
+      
+      res.json({
+        success: !testResult.error,
+        connected: !testResult.error,
+        voiceCount: testResult.voices.length,
+        error: testResult.error,
+        message: testResult.error ? 'ElevenLabs connection failed' : 'ElevenLabs connected successfully'
+      });
+    } catch (error) {
+      res.json({
+        success: false,
+        connected: false,
+        error: error.message,
+        message: 'ElevenLabs connection test failed'
+      });
+    }
+  });
+
 }
 
 // Export for other modules to update metrics
