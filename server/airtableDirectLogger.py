@@ -14,7 +14,16 @@ def log_integration_test(integration_name, passed, notes="", qa_owner="Tyson Ler
     
     payload = {
         "fields": {
-            "🔧 Integration Name": integration_name
+            "🔧 Integration Name": integration_name,
+            "✅ Pass/Fail": "✅" if passed else "❌",
+            "📝 Notes / Debug": notes,
+            "📅 Test Date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "👤 QA Owner": qa_owner,
+            "📊 Output Data Populated?": output_populated,
+            "📝 Record Created?": record_created,
+            "🔁 Retry Attempted?": retry_attempted,
+            "🧩 Module Type": module_type,
+            "🔗 Related Scenario Link": scenario_link
         }
     }
     
