@@ -36,15 +36,15 @@ class IntegrationTestLogger {
         body: JSON.stringify({
           fields: {
             '🔧 Integration Name': testData.integrationName,
-            '✅ Pass/Fail': PASS_FAIL_OPTIONS[testData.passFail],
-            '🧠 Notes / Debug': testData.notes,
-            '🗓️ Test Date': testData.testDate,
-            '👤 QA Owner': testData.qaOwner,
-            '📤 Output Data Pop...': testData.outputDataPopulated,
-            '🆕 Record Created?': testData.recordCreated,
-            '🔁 Retry Attempted?': testData.retryAttempted,
-            '🧩 Module Type': testData.moduleType,
-            '📁 Related Scenario Link': testData.relatedScenario
+            'Pass/Fail': PASS_FAIL_OPTIONS[testData.passFail],
+            'Notes / Debug': testData.notes,
+            'Test Date': testData.testDate,
+            'QA Owner': testData.qaOwner,
+            'Output Data Populated': testData.outputDataPopulated,
+            'Record Created': testData.recordCreated,
+            'Retry Attempted': testData.retryAttempted,
+            'Module Type': testData.moduleType,
+            'Related Scenario Link': testData.relatedScenario
           }
         })
       });
@@ -55,7 +55,7 @@ class IntegrationTestLogger {
         console.error('Response status:', response.status);
         console.error('Request body:', JSON.stringify({
           fields: {
-            '🔧 Integration Name': testData.integrationName,
+            '🔌 Integration Name': testData.integrationName,
             '✅ Pass/Fail': PASS_FAIL_OPTIONS[testData.passFail],
             '🧠 Notes / Debug': testData.notes,
             '🗓️ Test Date': testData.testDate,
