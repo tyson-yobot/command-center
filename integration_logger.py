@@ -29,7 +29,7 @@ def log_integration_test_to_airtable(
 
     payload = {
         "fields": {
-            "Integration Name": integration_name,
+            "🔧 Integration Name": integration_name,
             "Pass/Fail": PASS_FAIL_OPTIONS[passed],
             "Notes / Debug": notes,
             "Test Date": datetime.now().isoformat(),
