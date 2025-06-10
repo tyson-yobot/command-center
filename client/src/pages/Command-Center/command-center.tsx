@@ -2007,11 +2007,11 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => setShowPublyDashboard(true)}
+                    onClick={() => window.location.href = '/publy'}
                     className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📢</span>
-                    <span>Publy Dashboard</span>
+                    <span>Content Creator</span>
                   </Button>
                 </div>
               </CardContent>
@@ -2079,11 +2079,11 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => setShowMailchimpDashboard(true)}
+                    onClick={() => window.location.href = '/mailchimp'}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📧</span>
-                    <span>Mailchimp Dashboard</span>
+                    <span>Mailchimp</span>
                   </Button>
 
                 </div>
@@ -4317,14 +4317,19 @@ export default function CommandCenter() {
               formData.append('category', 'knowledge');
               
               try {
-                const response = await fetch('/api/upload-documents', {
+                const response = await fetch('/api/knowledge/upload', {
                   method: 'POST',
                   body: formData
                 });
                 const result = await response.json();
                 if (result.success) {
                   alert(`Successfully uploaded ${files.length} document(s) to knowledge base`);
-                  loadDocuments(); // Refresh document list
+                  // Refresh knowledge stats after upload
+                  const statsResponse = await fetch('/api/knowledge/stats');
+                  if (statsResponse.ok) {
+                    const stats = await statsResponse.json();
+                    setKnowledgeStats(stats);
+                  }
                 } else {
                   alert('Upload failed: ' + result.error);
                 }
