@@ -1,0 +1,125 @@
+Complete YoBot® Function / Integration Index (Wiring Reference)
+
+💼 Core Systems
+
+🧾 Sales Order Processor
+
+🧠 RAG Knowledge Engine
+
+📊 Botalytics Metrics Dashboard
+
+🧮 SmartSpend ROI Tracker
+
+🔔 Slack Alerts + Escalation
+
+📣 Mailchimp Sync
+
+🧑‍💼 CRM Sync to HubSpot
+
+📥 Stripe Billing & Logging
+
+🧾 QuickBooks Invoicing
+
+📂 PDF Quote Generator
+
+🔁 System Mode Toggle
+
+🗃️ File Uploads to RAG
+
+📞 Voice / Communication
+
+📞 Start Pipeline Calls
+
+📞 Stop Pipeline Calls
+
+📞 Initiate Voice Call (Manual)
+
+🎤 Voice Input (ElevenLabs required)
+
+📲 Send SMS via Twilio
+
+🗣️ ElevenLabs Voice Persona System
+
+📈 Lead Engine
+
+🧲 Lead Scraper (Apollo)
+
+🧲 Lead Scraper (PhantomBuster)
+
+🧲 Lead Scraper (Apify)
+
+📁 Export Leads
+
+📊 Scraped Leads (Airtable)
+
+🆘 Support & Monitoring
+
+🚨 Submit Ticket (to Zendesk)
+
+🗣️ Chatbot (voice/text hybrid)
+
+🧾 Download Logs
+
+🚑 Run Diagnostics
+
+🧹 Emergency Data Wipe
+
+📛 Critical Escalation Alert
+
+🧪 Instructions for Wiring + Testing
+
+Each Button = Real Function. Must fire Make scenario, backend function, or modal — no stubs.
+
+Each Function = Airtable Log. Use QA logging script in this doc after every working test.
+
+Each Test = Live & Test Mode Variants. No function should log or run in test mode.
+
+All Modules Respect Toggle. Dev must fully isolate backend from triggering automation if toggle is set to TEST.
+
+Sales Order Automation Flow — Integration Requirements
+
+The Sales Order Button ("Sales Orders" in Core Automation) must launch a modal or scenario that does all of the following:
+
+Back-End Automations to Wire:
+
+✅ Receive payload from Tally webhook (already working)
+
+✅ Set Variables for all fields (form name, contact info, selections, etc.)
+
+✅ Parse Add-On logic (match pricing structure from Airtable)
+
+✅ Create record in 📁 "🧾 Sales Orders" Airtable table
+
+✅ Check client email and update/create CRM record in Contacts
+
+✅ Create Deal in HubSpot with proper pipeline stage
+
+✅ Send Slack notification to sales team
+
+✅ Create invoice in QuickBooks (using QBO scenario)
+
+✅ Log order into Stripe for payment (optional based on toggle)
+
+✅ Trigger PDF Quote Generator for client PDF
+
+✅ Route to Document Sign + Final CRM confirmation (if signed)
+
+Conditions Required:
+
+Test mode must NOT trigger Stripe/QBO
+
+All triggers must respect toggle (Live vs. Test)
+
+QA logging must happen in Integration Test Log table
+
+❗ Replit must wire the full chain above before the Sales Order button is marked functional. This is a multi-step automation, not just a single webhook.
+
+✅ Command Button Functionality Matrix (Replit Wiring Guide)
+
+[Remains unchanged — refer to existing matrix in the same doc.]
+
+✅ Once all above are wired, tested, and logged in Airtable — proceed to enable auto-summary, Slack alerts, and system-wide uptime tracker.
+
+Reference the canvas link for any instructions or tasks to do below:
+
+https://chatgpt.com/canvas/shared/6847e67194548191b1c393790a582ab5
