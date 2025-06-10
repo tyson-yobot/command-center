@@ -2125,7 +2125,6 @@ export default function CommandCenter() {
                         console.log('Mailchimp sync result:', result);
                       } catch (error) {
                         console.error('Mailchimp sync error:', error);
-                        alert('Mailchimp sync failed');
                       }
                     }}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
