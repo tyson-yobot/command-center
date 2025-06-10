@@ -58,6 +58,10 @@ export function registerMailchimpRoutes(app: Express) {
         systemMode: currentSystemMode
       };
 
+      // Track email API success for accurate status reporting
+      let emailApiSuccessful = false;
+      let emailErrorMessage = '';
+      
       // Conditional logic for campaign execution
       if (currentSystemMode === 'live') {
         // Live Mode: Create and send/schedule via SendGrid + Mailchimp API
@@ -89,6 +93,7 @@ export function registerMailchimpRoutes(app: Express) {
             
             console.log('✅ Email sent via SendGrid');
             campaignResult.status = 'sent';
+            emailApiSuccessful = true;
           } else if (payload.scheduledTime) {
             console.log(`✅ Campaign scheduled for ${payload.scheduledTime} via Mailchimp`);
             campaignResult.status = 'scheduled';
@@ -127,16 +132,19 @@ export function registerMailchimpRoutes(app: Express) {
           
         } catch (emailError) {
           console.error('SendGrid email sending failed:', emailError);
+          emailApiSuccessful = false;
+          emailErrorMessage = emailError.message;
         }
         
-        // Log to Command Center Metrics Tracker
+        // Log to Command Center Metrics Tracker with accurate status
         const metricsEntry = {
           button: 'Mailchimp Campaign',
           scenario: `${payload.campaignType} to ${payload.audienceSegment}`,
-          passFail: 'Pass',
+          passFail: emailApiSuccessful || !payload.sendNow ? 'Pass' : 'Fail',
           timestamp: new Date().toISOString(),
           user: 'system',
-          systemMode: 'live'
+          systemMode: 'live',
+          errorDetails: emailApiSuccessful || !payload.sendNow ? null : emailErrorMessage
         };
         
         console.log('✅ Metrics logged to Command Center');

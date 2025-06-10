@@ -101,12 +101,14 @@ export function registerContentCreatorRoutes(app: Express) {
         
       } catch (error) {
         console.log('OpenAI content generation error:', error.message);
+        openaiSuccessful = false;
+        errorMessage = error.message;
         
         // Enhanced error handling and intelligent fallback
         if (error.message.includes('401') || error.message.includes('API key')) {
           console.log('API key issue detected - preparing intelligent content structure...');
-        } else if (error.message.includes('rate limit')) {
-          console.log('Rate limit reached - implementing retry logic...');
+        } else if (error.message.includes('rate limit') || error.message.includes('quota')) {
+          console.log('Rate limit or quota exceeded - implementing fallback content...');
         } else {
           console.log('Network or service issue - creating structured content...');
         }
@@ -356,14 +358,15 @@ export function registerContentCreatorRoutes(app: Express) {
           };
         }
         
-        // Log to Command Center Metrics Tracker
+        // Log to Command Center Metrics Tracker with accurate status
         const metricsEntry = {
           button: 'Content Creator',
           scenario: `${payload.contentType} for ${payload.targetPlatform}`,
-          passFail: 'Pass',
+          passFail: openaiSuccessful ? 'Pass' : 'Fail',
           timestamp: new Date().toISOString(),
           user: 'system',
-          systemMode: 'live'
+          systemMode: 'live',
+          errorDetails: openaiSuccessful ? null : errorMessage
         };
         
         console.log('✅ Content logged to Airtable Content Queue');
@@ -375,11 +378,18 @@ export function registerContentCreatorRoutes(app: Express) {
         console.log('TEST MODE: Content generated but not logged to external systems');
       }
 
+      // Return accurate status message based on AI generation success
+      const statusMessage = openaiSuccessful 
+        ? `AI content generated successfully in ${currentSystemMode} mode`
+        : `Content generated using fallback template in ${currentSystemMode} mode (AI API ${errorMessage.includes('quota') ? 'quota exceeded' : 'unavailable'})`;
+      
       res.json({
         success: true,
         content: contentResult,
         preview: generatedContent,
-        message: `Content generated successfully in ${currentSystemMode} mode`
+        message: statusMessage,
+        aiGenerationStatus: openaiSuccessful ? 'success' : 'failed',
+        fallbackUsed: !openaiSuccessful
       });
 
     } catch (error) {
