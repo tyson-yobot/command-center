@@ -48,11 +48,18 @@ class IntegrationTestLogger {
         console.error('Failed to log integration test:', errorText);
         console.error('Response status:', response.status);
         console.error('Request body:', JSON.stringify({
-          records: [{
-            fields: {
-              '🔧 Integration Name': `${testData.integrationName} - ${testData.passFail} - ${testData.notes} - Module: ${testData.moduleType} - QA: ${testData.qaOwner} - Date: ${testData.testDate}`
-            }
-          }]
+          fields: {
+            '🔌 Integration Name': testData.integrationName,
+            '✅ Pass/Fail': testData.passFail,
+            '🧠 Notes / Debug': testData.notes,
+            '🗓️ Test Date': testData.testDate,
+            '👤 QA Owner': testData.qaOwner,
+            '📤 Output Data Pop...': testData.outputDataPopulated,
+            '🆕 Record Created?': testData.recordCreated,
+            '🔁 Retry Attempted?': testData.retryAttempted,
+            '🧩 Module Type': testData.moduleType,
+            '📁 Related Scenario Link': testData.relatedScenario
+          }
         }, null, 2));
         return false;
       }
