@@ -16,32 +16,66 @@ export function registerDashboardEndpoints(app: Express) {
     try {
       const timestamp = new Date().toISOString();
       
-      // Check system mode from headers
-      const systemMode = req.headers['x-system-mode'] || 'live';
+      // Get system mode from global state
+      const currentSystemMode = req.app.get('systemMode') || 'live';
       
-      // LIVE MODE - Production metrics ONLY
-      const metrics = {
-        totalLeads: leadScrapingResults.length,
-        totalCampaigns: 0,
-        activeAutomations: 0,
-        successRate: "0%",
-        monthlyGrowth: "0%",
-        recentActivity: [],
-        platformStats: {
-          apollo: { 
-            leadsScraped: apolloResults.length,
-            successRate: apolloResults.length > 0 ? "Active" : "No Data"
-          },
-          apify: { 
-            listingsFound: apifyResults.length,
-            successRate: apifyResults.length > 0 ? "Active" : "No Data"
-          },
-          phantom: { 
-            profilesConnected: phantomResults.length,
-            successRate: phantomResults.length > 0 ? "Active" : "No Data"
+      let metrics;
+      
+      if (currentSystemMode === 'test') {
+        // TEST MODE - Hardcoded realistic test data
+        metrics = {
+          totalLeads: 1247,
+          totalCampaigns: 8,
+          activeAutomations: 42,
+          successRate: "94.7%",
+          monthlyGrowth: "23.5%",
+          recentActivity: [
+            { action: "New lead captured", company: "TechCorp Solutions", time: "2 min ago" },
+            { action: "Campaign launched", company: "Global Logistics Inc", time: "15 min ago" },
+            { action: "Deal closed", company: "StartupX", time: "1 hour ago" },
+            { action: "Support ticket resolved", company: "Enterprise Co", time: "2 hours ago" },
+            { action: "Voice call completed", company: "Local Business LLC", time: "3 hours ago" }
+          ],
+          platformStats: {
+            apollo: { 
+              leadsScraped: 324,
+              successRate: "96.2% Active"
+            },
+            apify: { 
+              listingsFound: 589,
+              successRate: "91.8% Active"
+            },
+            phantom: { 
+              profilesConnected: 167,
+              successRate: "88.4% Active"
+            }
           }
-        }
-      };
+        };
+      } else {
+        // LIVE MODE - Production metrics ONLY
+        metrics = {
+          totalLeads: leadScrapingResults.length,
+          totalCampaigns: 0,
+          activeAutomations: 0,
+          successRate: "0%",
+          monthlyGrowth: "0%",
+          recentActivity: [],
+          platformStats: {
+            apollo: { 
+              leadsScraped: apolloResults.length,
+              successRate: apolloResults.length > 0 ? "Active" : "No Data"
+            },
+            apify: { 
+              listingsFound: apifyResults.length,
+              successRate: apifyResults.length > 0 ? "Active" : "No Data"
+            },
+            phantom: { 
+              profilesConnected: phantomResults.length,
+              successRate: phantomResults.length > 0 ? "Active" : "No Data"
+            }
+          }
+        };
+      }
 
       // Log dashboard access to Airtable
       try {

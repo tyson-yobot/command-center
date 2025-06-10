@@ -2408,6 +2408,9 @@ Report generated in Live Mode
       const previousMode = systemMode;
       systemMode = systemMode === 'live' ? 'test' : 'live';
       
+      // Store system mode in Express app for global access
+      app.set('systemMode', systemMode);
+      
       // Synchronize mode with all modules
       const { updateSystemMode } = await import('./commandCenterRoutes');
       updateSystemMode(systemMode);
