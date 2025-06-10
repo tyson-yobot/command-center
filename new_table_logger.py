@@ -9,7 +9,7 @@ import json
 from datetime import datetime
 
 # New table configuration - waiting for Table ID
-NEW_BASE_ID = "appfdtDIqB2WiRN2VH"
+NEW_BASE_ID = "appbFDTqB2WtRNV1H"
 NEW_TABLE_ID = "tbl7K5RthCtD69BE1"  # User's new Integration Test Log table
 API_KEY = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
 
@@ -36,19 +36,19 @@ def log_integration_test_new_table(
         'Content-Type': 'application/json'
     }
     
-    # Map to exact field names from user's screenshots
+    # Map to exact emoji field names from table schema
     payload = {
         'fields': {
-            'Integration Name': integration_name,
-            'Pass/Fail': 'Pass' if passed else 'Fail',
-            'Notes / Debug': notes,
-            'Test Date': datetime.now().isoformat(),
-            'QA Owner': qa_owner,
-            'Output Data Populated': output_data_populated,
-            'Record Created?': record_created,
-            'Retry Attempted?': retry_attempted,
-            'Module Type': module_type,
-            'Related Scenario Link': related_scenario_link
+            '🔧 Integration Name': integration_name,
+            '✅ Pass/Fail': '✅ Pass' if passed else '❌ Fail',
+            '🧠 Notes / Debug': notes,
+            '📅 Test Date': datetime.now().isoformat(),
+            '🧑‍💻 QA Owner': qa_owner,
+            '📤 Output Data Populated?': output_data_populated,
+            '🗃️ Record Created?': record_created,
+            '🔁 Retry Attempted?': retry_attempted,
+            '🧩 Module Type': module_type,
+            '📂 Related Scenario Link': related_scenario_link
         }
     }
     
