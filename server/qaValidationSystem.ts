@@ -67,3 +67,33 @@ export async function runQAChecks(): Promise<ValidationResult[]> {
   
   return results;
 }
+
+export function registerQAValidationRoutes(app: any) {
+  app.get('/api/qa/health', async (req: any, res: any) => {
+    try {
+      const result = await validateSystemHealth();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post('/api/qa/validate-function', async (req: any, res: any) => {
+    try {
+      const { functionName } = req.body;
+      const result = await validateAutomationFunction(functionName);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get('/api/qa/run-checks', async (req: any, res: any) => {
+    try {
+      const results = await runQAChecks();
+      res.json(results);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+}
