@@ -9,7 +9,7 @@ import { generatePDFReport } from "./pdfReport";
 import { registerQATracker } from "./qaTracker";
 import { officialQATracker } from "./officialQATracker";
 import { registerQATestEndpoints } from "./qaTestEndpoints";
-import { registerPublerRoutes } from "./publerIntegration";
+import { registerPublerRoutes } from "./publerIntegrationNew";
 
 const app = express();
 app.use(express.json());
@@ -254,6 +254,9 @@ print(json.dumps(result))
   // Register Twilio SMS automation routes (Functions 301-310)
   const twilioRoutes = await import('./twilioRoutes');
   app.use('/api/automation-twilio', twilioRoutes.default);
+  
+  // Register Publer social media integration routes
+  registerPublerRoutes(app);
   
   // Start complete system automation
   console.log("🤖 Starting Complete System Automation...");
