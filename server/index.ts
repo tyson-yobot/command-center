@@ -11,6 +11,7 @@ import { officialQATracker } from "./officialQATracker";
 import { registerQATestEndpoints } from "./qaTestEndpoints";
 import { registerPublerRoutes } from "./publerIntegrationNew";
 import { registerAirtableTestLogger } from "./airtableTestLogger";
+import { testRoutes } from "./testRoutes";
 
 const app = express();
 app.use(express.json());
