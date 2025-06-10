@@ -220,12 +220,12 @@ class PublerIntegration {
         'Publer Account Status Check',
         true,
         `Retrieved ${accounts.length} connected accounts`,
-        'YoBot System',
+        'Daniel Sharpe',
+        true,
         true,
         false,
-        false,
         'Social Media Integration',
-        'account-status-success'
+        'Function: getAccountStatus in publerIntegrationNew.ts'
       );
 
       return {
@@ -238,12 +238,12 @@ class PublerIntegration {
         'Publer Account Status Check',
         false,
         `Account status check failed: ${error.message}`,
-        'YoBot System',
+        'Daniel Sharpe',
         false,
         false,
-        false,
+        true,
         'Social Media Integration',
-        'account-status-failure'
+        'Function: getAccountStatus in publerIntegrationNew.ts'
       );
 
       return {
