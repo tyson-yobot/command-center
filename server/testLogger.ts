@@ -12,10 +12,7 @@ interface TestResult {
 interface AirtableRecord {
   id: string;
   fields: {
-    '🧠 Function Name': string;
-    '✅ Passed?': string;
-    '📅 Date Tested': string;
-    '📝 Notes': string;
+    '🔧 Integration Name': string;
   };
 }
 
@@ -40,9 +37,14 @@ class TestLogger {
       
       if (response.data && response.data.records) {
         for (const record of response.data.records) {
-          const functionName = record.fields['🧠 Function Name'];
-          if (functionName) {
-            this.existingRecords.set(functionName, record.id);
+          const integrationName = record.fields['🔧 Integration Name'];
+          if (integrationName) {
+            // Extract function name from the integration name field
+            const functionMatch = integrationName.match(/^([^:]+):/);
+            if (functionMatch) {
+              const functionName = functionMatch[1].trim();
+              this.existingRecords.set(functionName, record.id);
+            }
           }
         }
         console.log(`📊 Loaded ${this.existingRecords.size} existing test records`);
@@ -55,12 +57,16 @@ class TestLogger {
   async logTestResult(result: TestResult): Promise<boolean> {
     try {
       const recordId = this.existingRecords.get(result.functionName);
+      const status = result.passed ? "✅" : "❌";
+      const timestamp = new Date().toISOString();
+      const notes = result.notes || (result.error ? `Error: ${result.error}` : "System test completed");
+      
+      // Format as single field matching Airtable structure
+      const integrationName = `${result.functionName}: ${status} - ${notes} - ${timestamp}`;
+      
       const payload = {
         fields: {
-          "🧠 Function Name": result.functionName,
-          "✅ Passed?": result.passed ? "✅" : "❌",
-          "📅 Date Tested": new Date().toISOString().split('T')[0],
-          "📝 Notes": result.notes || (result.error ? `Error: ${result.error}` : "")
+          "🔧 Integration Name": integrationName
         }
       };
 
