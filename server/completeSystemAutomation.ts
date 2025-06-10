@@ -384,11 +384,12 @@ class CompleteSystemAutomation {
   private appendToLogFile(entry: any) {
     try {
       const logPath = path.join(process.cwd(), this.logFile);
-      let existingLogs = [];
+      let existingLogs: any[] = [];
       
       if (fs.existsSync(logPath)) {
         const fileContent = fs.readFileSync(logPath, 'utf8');
-        existingLogs = JSON.parse(fileContent);
+        const parsed = JSON.parse(fileContent);
+        existingLogs = Array.isArray(parsed) ? parsed : [];
       }
       
       existingLogs.push(entry);
