@@ -8,9 +8,9 @@ import requests
 from datetime import datetime
 import json
 
-# Airtable Configuration - PLEASE PROVIDE CORRECT VALUES
-AIRTABLE_BASE_ID = "NEED_CORRECT_BASE_ID"  
-AIRTABLE_TABLE_NAME = "NEED_CORRECT_TABLE_NAME"
+# Airtable Configuration - From working bulkLogger.ts
+AIRTABLE_BASE_ID = "appRt8V3tH4g5Z5if"  
+AIRTABLE_TABLE_NAME = "tbly0fjE2M5uHET9X"
 AIRTABLE_TOKEN = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
 
 class IntegrationLogger:
@@ -33,19 +33,20 @@ class IntegrationLogger:
             if response.status_code == 200:
                 print("✅ READ access confirmed")
                 data = response.json()
-                print(f"Found {len(data.get('records', []))} existing records")
+                records = data.get('records', [])
+                print(f"Found {len(records)} existing records")
                 
-                # Now try to create a test record
+                # Show actual field names from first record
+                if records:
+                    first_record = records[0]
+                    field_names = list(first_record.get('fields', {}).keys())
+                    print(f"Available fields: {field_names}")
+                
+                # Now try to create a test record using the correct field name
                 print("Testing WRITE access...")
                 test_data = {
                     "fields": {
-                        "🔧 Integration Name": "CONNECTION_TEST",
-                        "⚡ Status": "testing",
-                        "🔢 Status Code": 200,
-                        "⏱️ Response Time": 0.1,
-                        "📅 Last Tested": datetime.now().isoformat(),
-                        "🔗 Endpoint": "test://connection",
-                        "📊 Response Size": 100
+                        "🔧 Integration Name": "CONNECTION_TEST"
                     }
                 }
                 
@@ -91,7 +92,8 @@ def main():
     
     if logger.test_connection():
         print("✅ Logger connection confirmed - ready for integration")
-        # Keep test record for now - will delete when user confirms
+        # Delete test record as instructed
+        logger.delete_test_data()
     else:
         print("❌ Logger connection failed")
 
