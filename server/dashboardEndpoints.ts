@@ -24,30 +24,7 @@ export function registerDashboardEndpoints(app: Express) {
       
       let metrics;
       
-      if (currentSystemMode === 'test') {
-        // TEST MODE - Hardcoded realistic test data
-        metrics = {
-          totalLeads: 1247,
-          totalCampaigns: 8,
-          activeAutomations: 42,
-          successRate: "94.7%",
-          monthlyGrowth: "23.5%",
-          recentActivity: [
-            { action: "New lead captured", company: "TechCorp Solutions", time: "2 min ago" },
-            { action: "Campaign launched", company: "Global Logistics Inc", time: "15 min ago" },
-            { action: "Deal closed", company: "StartupX", time: "1 hour ago" },
-            { action: "Support ticket resolved", company: "Enterprise Co", time: "2 hours ago" },
-            { action: "Voice call completed", company: "Local Business LLC", time: "3 hours ago" }
-          ],
-          platformStats: {
-            apollo: { 
-              leadsScraped: 324,
-              successRate: "96.2% Active"
-            },
-            apify: { 
-              listingsFound: 589,
-              successRate: "91.8% Active"
-            },
+      // LIVE MODE ONLY - No test data, only real production metrics
             phantom: { 
               profilesConnected: 167,
               successRate: "88.4% Active"
