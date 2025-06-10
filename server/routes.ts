@@ -10877,6 +10877,44 @@ CRM Data:
     }
   });
 
+  // Set System Mode - Toggle between test and live
+  app.post('/api/system-mode', async (req, res) => {
+    try {
+      const { mode } = req.body;
+      
+      if (!mode || !['test', 'live'].includes(mode)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid mode. Must be "test" or "live"'
+        });
+      }
+
+      const previousMode = systemMode;
+      systemMode = mode;
+      
+      // Clear test data when switching to live mode
+      if (mode === 'live' && previousMode === 'test') {
+        clearTestData();
+      }
+      
+      logOperation('system-mode-change', { previousMode, newMode: mode }, 'success', `System mode changed from ${previousMode} to ${mode}`);
+      
+      res.json({
+        success: true,
+        previousMode,
+        newMode: systemMode,
+        message: `System mode set to ${systemMode}`
+      });
+    } catch (error: any) {
+      logOperation('system-mode-change', { error: error.message }, 'error', `Failed to set system mode: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to set system mode',
+        details: error.message
+      });
+    }
+  });
+
   // Get Operation Logs - View all system operations
   app.get('/api/operation-logs', async (req, res) => {
     try {

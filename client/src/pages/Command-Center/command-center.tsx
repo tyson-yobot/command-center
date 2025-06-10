@@ -2853,11 +2853,11 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Uptime</span>
-                  <span className="text-green-400 font-bold">99.7%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Response Time</span>
-                  <span className="text-green-400 font-bold">0.3s</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Active Connections</span>
@@ -2865,7 +2865,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Last Maintenance</div>
-                  <div className="text-white font-medium">2 days ago</div>
+                  <div className="text-slate-400 font-medium">Not configured</div>
                 </div>
               </div>
             </CardContent>
@@ -2878,9 +2878,9 @@ export default function CommandCenter() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-white">🎉 Live Automation Active</h3>
-                  <p className="text-green-300">Your conversion rate is 15% above industry average</p>
-                  <p className="text-blue-300">Ready to expand to email automation? Your ROI supports it!</p>
+                  <h3 className="text-xl font-bold text-white">Live Automation Active</h3>
+                  <p className="text-slate-300">System ready for live data connections</p>
+                  <p className="text-slate-300">Configure your integrations to begin tracking</p>
                 </div>
                 <div className="flex space-x-3">
                   <Button 
