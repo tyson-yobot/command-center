@@ -18,6 +18,6 @@ def log_to_airtable(function_name, result, notes=""):
 
 # Test one of the missing functions
 if __name__ == "__main__":
-    # Test Reference Verification
-    result = log_to_airtable("Reference Verification", True, "Reference verification completed - 4 references contacted")
-    print(f"Logged Reference Verification: Status {result}")
+    # Test Document Management
+    result = log_to_airtable("Document Management", True, "Document management completed - 12 files processed")
+    print(f"Logged Document Management: Status {result}")
