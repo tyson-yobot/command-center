@@ -1,49 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:00:00.671Z",
-    "functionId": 145,
-    "functionName": "Role Assignment by Domain",
-    "batch": 15,
-    "category": "User Management",
-    "status": "success",
-    "duration": 438,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-10T16:00:00.702Z",
-    "functionId": 154,
-    "functionName": "Broken Link Detection",
-    "batch": 16,
-    "category": "Data Integrity",
-    "status": "success",
-    "duration": 467,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-10T16:00:00.704Z",
-    "functionId": 159,
-    "functionName": "Auto-Complete Task",
-    "batch": 16,
-    "category": "Task Management",
-    "status": "success",
-    "duration": 470,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-10T16:00:00.706Z",
-    "functionId": 209,
-    "functionName": "Weekend Date Checker",
-    "batch": 21,
-    "category": "Utilities",
-    "status": "success",
-    "duration": 466,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:00:00.739Z",
     "functionId": 142,
     "functionName": "Cold Start Logger",
@@ -11384,6 +11340,66 @@
       "failedExecutions": 0,
       "systemUptime": 276.35232024,
       "lastHealthCheck": "2025-06-10T20:40:00.010Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T20:50:00.016Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 816.353146706,
+      "lastHealthCheck": "2025-06-10T20:49:00.011Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T21:00:00.011Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 1416.350922921,
+      "lastHealthCheck": "2025-06-10T20:59:00.008Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T21:10:00.010Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 2016.353130075,
+      "lastHealthCheck": "2025-06-10T21:09:00.011Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T21:20:00.018Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 2616.348355229,
+      "lastHealthCheck": "2025-06-10T21:19:00.006Z",
       "automationStatus": "paused"
     }
   }
