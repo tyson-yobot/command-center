@@ -26,6 +26,7 @@ import { registerContentCreatorRoutes } from "./contentCreatorRoutes";
 import { registerMailchimpRoutes } from "./mailchimpRoutes";
 import { registerIntegrationTestRoutes } from "./integrationTestLogger";
 import { registerPublerRoutes } from "./publerIntegration";
+import { registerLocalTestLoggerRoutes, localTestLogger } from "./localTestLogger";
 import { configManager } from "./controlCenterConfig";
 import { airtableLogger } from "./airtableLogger";
 import { automationTester } from "./automationTester";
@@ -420,6 +421,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register integration test logging system - CRITICAL: Must be active before any testing
   registerIntegrationTestRoutes(app);
+  
+  // Register local test logger - Primary test tracking system
+  registerLocalTestLoggerRoutes(app);
   
   // Register Publer social media integration - Required for automated posting
   registerPublerRoutes(app);
