@@ -2225,7 +2225,7 @@ export default function CommandCenter() {
                 <Button 
                   onClick={() => window.location.href = '/admin'}
                   size="sm"
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  className="bg-purple-600 hover:bg-purple-700 text-white"
                 >
                   <Settings className="w-4 h-4 mr-1" />
                   Admin
@@ -2262,26 +2262,26 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={handleNewBookingSync}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
                   >
                     <Calendar className="w-5 h-5 mr-3" />
-                    <span>New Booking Sync</span>
+                    <span>Create Booking</span>
                   </Button>
                   
                   <Button
                     onClick={handleNewSupportTicket}
-                    className="bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-start p-3"
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
                   >
                     <Headphones className="w-5 h-5 mr-3" />
-                    <span>New Support Ticket</span>
+                    <span>Create Support Ticket</span>
                   </Button>
                   
                   <Button
                     onClick={handleManualFollowUp}
-                    className="bg-amber-600 hover:bg-amber-700 text-white flex items-center justify-start p-3"
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
                   >
                     <Phone className="w-5 h-5 mr-3" />
-                    <span>Manual Follow-up</span>
+                    <span>Create Follow-up</span>
                   </Button>
                   
                   <Button
@@ -2289,12 +2289,12 @@ export default function CommandCenter() {
                     className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
                   >
                     <DollarSign className="w-5 h-5 mr-3" />
-                    <span>Sales Orders</span>
+                    <span>Create Sales Order</span>
                   </Button>
                   
                   <Button
                     onClick={handleSendSMS}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
                   >
                     <MessageSquare className="w-5 h-5 mr-3" />
                     <span>Send SMS</span>
@@ -2313,7 +2313,7 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={handleStartPipelineCalls}
-                    className="bg-lime-500 hover:bg-lime-600 text-black flex items-center justify-start p-3 font-semibold"
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3 font-semibold"
                   >
                     <Phone className="w-5 h-5 mr-3" />
                     <span>Start Pipeline Calls</span>
@@ -2329,15 +2329,15 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleInitiateVoiceCall}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
                   >
                     <Phone className="w-5 h-5 mr-3" />
-                    <span>Initiate Voice Call</span>
+                    <span>Create Voice Call</span>
                   </Button>
                   
                   <Button
                     onClick={handleVoiceToggle}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
                   >
                     <Mic className="w-5 h-5 mr-3" />
                     <span>Voice Input</span>
@@ -2355,18 +2355,18 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={() => window.location.href = '/lead-scraper'}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-start p-3"
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">🧲</span>
-                    <span>Run Lead Scrape</span>
+                    <span>Create Lead Scrape</span>
                   </Button>
                   
                   <Button
                     onClick={handleDownloadPDF}
-                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <FileText className="w-5 h-5 mr-3" />
-                    <span>PDF Report</span>
+                    <span>View PDF Report</span>
                   </Button>
                   
                   <Button
@@ -2401,10 +2401,10 @@ export default function CommandCenter() {
                         alert('Data export failed');
                       }
                     }}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📊</span>
-                    <span>Export Data</span>
+                    <span>View Export Data</span>
                   </Button>
                   
                   <Button
