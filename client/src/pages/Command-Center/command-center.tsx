@@ -2636,7 +2636,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">System Uptime:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'live' ? '99.9%' : '--'}</span>
+                  <span className="text-green-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
@@ -2655,28 +2655,26 @@ export default function CommandCenter() {
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">MRR:</span>
                   <div className="text-right">
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'live' ? '$47,250' : '--'}</span>
-                    {currentSystemMode === 'live' && <div className="text-xs text-green-300">+12.3%</div>}
+                    <span className="text-green-400 font-bold">--</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">ROI This Quarter:</span>
                   <div className="text-right">
-                    <span className="text-emerald-400 font-bold">{currentSystemMode === 'live' ? '312%' : '--'}</span>
-                    {currentSystemMode === 'live' && <div className="text-xs text-emerald-300">+8.7% vs Q3</div>}
+                    <span className="text-emerald-400 font-bold">--</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Pipeline Value:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'live' ? '$186,500' : '--'}</span>
+                  <span className="text-blue-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Close Rate:</span>
-                  <span className="text-cyan-400 font-bold">{currentSystemMode === 'live' ? '73.2%' : '--'}</span>
+                  <span className="text-cyan-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Sales Velocity:</span>
-                  <span className="text-purple-400 font-bold">{currentSystemMode === 'live' ? '18.5 days' : '--'}</span>
+                  <span className="text-purple-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
@@ -2702,20 +2700,20 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Churn Risk Flags:</span>
-                  <span className="text-red-400 font-bold">{currentSystemMode === 'live' ? '2 flagged' : '--'}</span>
+                  <span className="text-red-400 font-bold">{automationPerformance?.errorCount || 0} flagged</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Last Login:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'live' ? '2 hrs ago' : '--'}</span>
+                  <span className="text-green-400 font-bold">--</span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Bot Utilization Rate:</span>
-                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'live' ? '87%' : '--'}</span>
+                    <span className="text-cyan-400 font-bold">{automationPerformance?.successRate || '--'}%</span>
                   </div>
-                  {currentSystemMode === 'live' && (
+                  {automationPerformance?.successRate && (
                     <div className="w-full bg-slate-700 rounded-full h-2">
-                      <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300" style={{width: '87%'}}></div>
+                      <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300" style={{width: `${automationPerformance.successRate}%`}}></div>
                     </div>
                   )}
                 </div>
@@ -2807,16 +2805,16 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
-                    <span className="text-green-400 font-bold">$187</span>
+                    <span className="text-green-400 font-bold">--</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '73%' }}></div>
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
-                    <span className="text-blue-400 font-bold">8.2/10</span>
+                    <span className="text-blue-400 font-bold">--</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
                     <div className="bg-blue-400 h-1 rounded-full" style={{ width: '82%' }}></div>
@@ -2968,15 +2966,15 @@ export default function CommandCenter() {
                   <span className="text-slate-300">Bot Utilization Rate</span>
                   <div className="flex items-center space-x-2">
                     <div className="w-16 bg-slate-700 rounded-full h-2">
-                      <div className="bg-green-400 h-2 rounded-full" style={{ width: '87%' }}></div>
+                      <div className="bg-green-400 h-2 rounded-full" style={{ width: `${automationPerformance?.successRate || 0}%` }}></div>
                     </div>
-                    <span className="text-green-400 font-bold">87%</span>
+                    <span className="text-green-400 font-bold">{automationPerformance?.successRate || '--'}%</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Bots Impacted</span>
                   <div className="flex items-center space-x-2">
-                    <span className="text-red-400 font-bold">2 bots</span>
+                    <span className="text-red-400 font-bold">{automationPerformance?.errorCount || 0} bots</span>
                     <Button 
                       size="sm" 
                       variant="outline"
