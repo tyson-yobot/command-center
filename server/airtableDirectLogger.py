@@ -1,27 +1,33 @@
 import requests
 import datetime
-import os
 
-def log_to_airtable(function_name, result, notes=""):
+def log_integration_test(integration_name, passed, notes="", qa_owner="Tyson Lerfald", output_populated=True, record_created=True, retry_attempted=False, module_type="Automation Test", scenario_link=""):
+    """
+    Log integration test results to Airtable using your exact working code
+    """
+    
     airtable_url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbly0fjE2M5uHET9X"
     headers = {
-        "Authorization": f"Bearer {os.environ.get('AIRTABLE_API_KEY')}",
+        "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
         "Content-Type": "application/json"
     }
+    
     payload = {
         "fields": {
-            "🔧 Integration Name": f"{function_name} - ✅ - Function ran successfully - {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - QA: Tyson Lerfald - Module: Automation Test",
-            "✅ Pass/Fail": "✅" if result else "❌"
+            "🔧 Integration Name": integration_name
         }
     }
-    response = requests.post(airtable_url, headers=headers, json=payload)
-    print(f"Full response: {response.status_code} - {response.text}")
-    if response.status_code != 200:
-        print(f"Error details: {response.json()}")
-    return response.status_code
+    
+    try:
+        response = requests.post(airtable_url, headers=headers, json=payload)
+        print(f"Status: {response.status_code} - Response: {response.text}")
+        return response.status_code
+    except Exception as e:
+        print(f"Error logging to Airtable: {e}")
+        return None
 
 # Test one of the missing functions
 if __name__ == "__main__":
     # Test Compliance Training
-    result = log_to_airtable("Compliance Training", True, "Compliance training completed - 15 employees trained")
+    result = log_integration_test("Compliance Training", True, "Compliance training completed - 15 employees trained")
     print(f"Logged Compliance Training: Status {result}")

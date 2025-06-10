@@ -1,0 +1,52 @@
+import requests
+import datetime
+
+def log_integration_test(integration_name, passed, notes="", qa_owner="", output_populated=True, record_created=True, retry_attempted=False, module_type="", scenario_link=""):
+    """
+    Log integration test results to Airtable
+    
+    Args:
+        integration_name (str): Name of the integration being tested
+        passed (bool): True if test passed, False if failed
+        notes (str): Debug notes or additional information
+        qa_owner (str): Person responsible for QA
+        output_populated (bool): Whether output data was populated
+        record_created (bool): Whether record was created successfully
+        retry_attempted (bool): Whether a retry was attempted
+        module_type (str): Type of module being tested
+        scenario_link (str): Link to related scenario
+    
+    Returns:
+        int: HTTP status code from Airtable API
+    """
+    
+    airtable_url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbly0fjE2M5uHET9X"
+    headers = {
+        "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+        "Content-Type": "application/json"
+    }
+    
+    payload = {
+        "fields": {
+            "Integration Name": integration_name,
+            "✅ Pass/Fail": "✅" if passed else "❌",
+            "📝 Notes / Debug": notes,
+            "📅 Test Date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "👤 QA Owner": qa_owner,
+            "📊 Output Data Populated?": output_populated,
+            "📝 Record Created?": record_created,
+            "🔁 Retry Attempted?": retry_attempted,
+            "🧩 Module Type": module_type,
+            "🔗 Related Scenario Link": scenario_link
+        }
+    }
+    
+    try:
+        response = requests.post(airtable_url, headers=headers, json=payload)
+        return response.status_code
+    except Exception as e:
+        print(f"Error logging to Airtable: {e}")
+        return None
+
+# Example usage:
+# status = log_integration_test("Email Automation", True, "Test completed successfully", "Tyson Lerfald", True, True, False, "Python Batch", "")

@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:00:00.809Z",
-    "functionId": 157,
-    "functionName": "New Lead Notification",
-    "batch": 16,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 566,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:00:00.878Z",
     "functionId": 203,
     "functionName": "Integration Summary to Slack",
@@ -11424,6 +11413,21 @@
       "failedExecutions": 0,
       "systemUptime": 1345.533325475,
       "lastHealthCheck": "2025-06-10T22:39:00.006Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T22:50:00.012Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 1945.535428797,
+      "lastHealthCheck": "2025-06-10T22:49:00.008Z",
       "automationStatus": "paused"
     }
   }
