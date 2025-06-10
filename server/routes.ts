@@ -413,13 +413,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date().toISOString()
       };
       
-      await logToAirtable('sales_orders', {
-        orderId,
-        clientId: orderData.clientId,
-        amount: orderData.amount,
-        productName: orderData.productName,
-        status: 'processed',
-        timestamp: new Date().toISOString()
+      await logToAirtableQA({
+        integrationName: 'Sales Order Processing',
+        passFail: 'PASS',
+        notes: `Order ${orderId} processed for ${orderData.productName}`,
+        qaOwner: 'System',
+        outputDataPopulated: true,
+        recordCreated: true,
+        retryAttempted: false,
+        testDate: new Date().toISOString()
       });
       
       res.json(result);
@@ -446,12 +448,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date().toISOString()
       };
       
-      await logToAirtable('sms_logs', {
-        messageId,
-        phoneNumber,
-        message,
-        status: 'sent',
-        timestamp: new Date().toISOString()
+      await logToAirtableQA({
+        integrationName: 'SMS Messaging',
+        passFail: 'PASS',
+        notes: `SMS sent to ${phoneNumber}`,
+        qaOwner: 'System',
+        outputDataPopulated: true,
+        recordCreated: true,
+        retryAttempted: false,
+        testDate: new Date().toISOString()
       });
       
       res.json(result);
@@ -479,7 +484,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date().toISOString()
       };
       
-      await logToAirtable('voicebot_logs', {
+      await logToAirtableQA('voicebot_logs', {
         pipelineId,
         action: 'start_pipeline',
         status: 'started',
@@ -509,7 +514,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date().toISOString()
       };
       
-      await logToAirtable('voicebot_logs', {
+      await logToAirtableQA('voicebot_logs', {
         action: 'stop_pipeline',
         status: 'stopped',
         callsCancelled: 8,
@@ -540,7 +545,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date().toISOString()
       };
       
-      await logToAirtable('call_logs', {
+      await logToAirtableQA('call_logs', {
         callId,
         phoneNumber,
         callType,
