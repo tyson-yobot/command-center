@@ -249,15 +249,9 @@ print(json.dumps(result))
   // Register document management routes
   app.use('/api/documents', documentRoutes);
   
-  // Register QA tracking system
-  registerQATracker(app);
+  // QA testing disabled in live mode
   
-  // Register official QA test endpoints
-  registerQATestEndpoints(app);
-  
-  // Register Batch 21 automation routes
-  const { registerBatch21Routes } = await import('./automationBatch21');
-  registerBatch21Routes(app);
+  // Test automation batches disabled in live mode
   
   // Register Twilio SMS automation routes (Functions 301-310)
   const twilioRoutes = await import('./twilioRoutes');
@@ -266,11 +260,9 @@ print(json.dumps(result))
   // Register Publer social media integration routes
   registerPublerRoutes(app);
   
-  // Register Airtable test logger with exact field mappings
-  registerAirtableTestLogger(app);
+  // Airtable logging disabled in live mode
   
-  // Complete system automation disabled - no real functions defined yet
-  console.log("⚠️  Mock automation system disabled - awaiting real function definitions");
+  console.log("🚀 Live production system - all test automation disabled");
   
   // Add automation management endpoints
   app.get('/api/automation/status', (req, res) => {

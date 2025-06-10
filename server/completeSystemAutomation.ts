@@ -57,55 +57,8 @@ class CompleteSystemAutomation {
   }
 
   private initializeAllFunctions() {
-    const allFunctions: Omit<AutomationFunction, 'lastRun' | 'successCount' | 'errorCount'>[] = [
-      // Batch 14 (131-140)
-      { id: 131, name: "CRM Script Generator", description: "Generates CRM follow-up scripts", batch: 14, category: "CRM", endpoint: "/api/automation-batch-14/function-131", priority: "medium", status: "active" },
-      { id: 132, name: "Intake Form Validator", description: "Validates form data completeness", batch: 14, category: "Forms", endpoint: "/api/automation-batch-14/function-132", priority: "high", status: "active" },
-      { id: 133, name: "Silent Call Detector", description: "Detects calls with no activity", batch: 14, category: "Voice", endpoint: "/api/automation-batch-14/function-133", priority: "medium", status: "active" },
-      { id: 134, name: "QA Failure Alert", description: "Sends alerts when QA tests fail", batch: 14, category: "QA", endpoint: "/api/automation-batch-14/function-134", priority: "high", status: "active" },
-      { id: 135, name: "ISO Date Formatter", description: "Formats dates to ISO standard", batch: 14, category: "Data", endpoint: "/api/automation-batch-14/function-135", priority: "low", status: "active" },
-      { id: 136, name: "Personality Assigner", description: "Assigns AI personality by industry", batch: 14, category: "AI", endpoint: "/api/automation-batch-14/function-136", priority: "medium", status: "active" },
-      { id: 137, name: "SmartSpend Entry Creator", description: "Creates budget tracking entries", batch: 14, category: "Financial", endpoint: "/api/automation-batch-14/function-137", priority: "medium", status: "active" },
-      { id: 138, name: "Voice Session ID Generator", description: "Generates unique voice session IDs", batch: 14, category: "Voice", endpoint: "/api/automation-batch-14/function-138", priority: "low", status: "active" },
-      { id: 139, name: "Call Digest Poster", description: "Posts call summaries to channels", batch: 14, category: "Communication", endpoint: "/api/automation-batch-14/function-139", priority: "medium", status: "active" },
-      { id: 140, name: "Live Error Push", description: "Pushes real-time errors to monitoring", batch: 14, category: "Monitoring", endpoint: "/api/automation-batch-14/function-140", priority: "high", status: "active" },
-
-      // Batch 15 (141-150)
-      { id: 141, name: "Bot Training Prompt Generator", description: "Auto-generates training prompts", batch: 15, category: "AI", endpoint: "/api/automation-batch-15/function-141", priority: "medium", status: "active" },
-      { id: 142, name: "Cold Start Logger", description: "Logs system cold start events", batch: 15, category: "Monitoring", endpoint: "/api/automation-batch-15/function-142", priority: "low", status: "active" },
-      { id: 143, name: "Markdown Converter", description: "Converts notes to markdown format", batch: 15, category: "Content", endpoint: "/api/automation-batch-15/function-143", priority: "low", status: "active" },
-      { id: 144, name: "QBO Invoice Summary", description: "Parses QuickBooks invoices", batch: 15, category: "Financial", endpoint: "/api/automation-batch-15/function-144", priority: "medium", status: "active" },
-      { id: 145, name: "Role Assignment by Domain", description: "Auto-assigns roles by email domain", batch: 15, category: "User Management", endpoint: "/api/automation-batch-15/function-145", priority: "medium", status: "active" },
-      { id: 146, name: "Customer Reconciliation", description: "Reconciles customer records", batch: 15, category: "Data", endpoint: "/api/automation-batch-15/function-146", priority: "high", status: "active" },
-      { id: 147, name: "Full API Health Check", description: "Runs system-wide health checks", batch: 15, category: "Monitoring", endpoint: "/api/automation-batch-15/function-147", priority: "high", status: "active" },
-      { id: 148, name: "ROI Summary Generator", description: "Generates client ROI summaries", batch: 15, category: "Analytics", endpoint: "/api/automation-batch-15/function-148", priority: "medium", status: "active" },
-      { id: 149, name: "Manual Override Logger", description: "Logs manual system overrides", batch: 15, category: "Audit", endpoint: "/api/automation-batch-15/function-149", priority: "high", status: "active" },
-      { id: 150, name: "Slack Message Formatter", description: "Formats messages with emoji tags", batch: 15, category: "Communication", endpoint: "/api/automation-batch-15/function-150", priority: "low", status: "active" },
-
-      // Batch 16 (151-160)
-      { id: 151, name: "VoiceBot Escalation Detection", description: "Detects escalation intent in transcripts", batch: 16, category: "Voice", endpoint: "/api/automation-batch-16/function-151", priority: "high", status: "active" },
-      { id: 152, name: "Failure Categorization", description: "Auto-categorizes integration failures", batch: 16, category: "Error Handling", endpoint: "/api/automation-batch-16/function-152", priority: "medium", status: "active" },
-      { id: 153, name: "System Health Metric Update", description: "Updates live health metrics", batch: 16, category: "Monitoring", endpoint: "/api/automation-batch-16/function-153", priority: "high", status: "active" },
-      { id: 154, name: "Broken Link Detection", description: "Detects broken linked records", batch: 16, category: "Data Integrity", endpoint: "/api/automation-batch-16/function-154", priority: "medium", status: "active" },
-      { id: 155, name: "AI Script Expansion", description: "Expands prompts into full scripts", batch: 16, category: "AI", endpoint: "/api/automation-batch-16/function-155", priority: "medium", status: "active" },
-      { id: 156, name: "Google Drive Backup", description: "Triggers backup exports", batch: 16, category: "Backup", endpoint: "/api/automation-batch-16/function-156", priority: "high", status: "active" },
-      { id: 157, name: "New Lead Notification", description: "Sends notifications for new leads", batch: 16, category: "Lead Management", endpoint: "/api/automation-batch-16/function-157", priority: "high", status: "active" },
-      { id: 158, name: "Domain Extraction", description: "Extracts clean domains from URLs", batch: 16, category: "Data Processing", endpoint: "/api/automation-batch-16/function-158", priority: "low", status: "active" },
-      { id: 159, name: "Auto-Complete Task", description: "Auto-marks tasks as complete", batch: 16, category: "Task Management", endpoint: "/api/automation-batch-16/function-159", priority: "medium", status: "active" },
-      { id: 160, name: "Test Snapshot Creation", description: "Creates test snapshot records", batch: 16, category: "Testing", endpoint: "/api/automation-batch-16/function-160", priority: "low", status: "active" },
-
-      // Batch 21 (201-210)
-      { id: 201, name: "Auto-create Airtable Record", description: "Auto-creates records from log objects", batch: 21, category: "Data Creation", endpoint: "/api/automation-batch-21/function-201", priority: "medium", status: "active" },
-      { id: 202, name: "Strip HTML Tags", description: "Removes HTML tags from text", batch: 21, category: "Content Processing", endpoint: "/api/automation-batch-21/function-202", priority: "low", status: "active" },
-      { id: 203, name: "Integration Summary to Slack", description: "Sends summaries to Slack", batch: 21, category: "Communication", endpoint: "/api/automation-batch-21/function-203", priority: "medium", status: "active" },
-      { id: 204, name: "Duplicate Record Detection", description: "Detects duplicate records", batch: 21, category: "Data Validation", endpoint: "/api/automation-batch-21/function-204", priority: "high", status: "active" },
-      { id: 205, name: "Phone Number Normalizer", description: "Normalizes phone numbers", batch: 21, category: "Data Processing", endpoint: "/api/automation-batch-21/function-205", priority: "medium", status: "active" },
-      { id: 206, name: "Lead Score Calculator", description: "Auto-populates lead scores", batch: 21, category: "Lead Management", endpoint: "/api/automation-batch-21/function-206", priority: "high", status: "active" },
-      { id: 207, name: "Error Frequency Tracker", description: "Tracks error frequency by module", batch: 21, category: "Analytics", endpoint: "/api/automation-batch-21/function-207", priority: "medium", status: "active" },
-      { id: 208, name: "Call Review Flagging", description: "Flags calls for manual review", batch: 21, category: "Quality Control", endpoint: "/api/automation-batch-21/function-208", priority: "medium", status: "active" },
-      { id: 209, name: "Weekend Date Checker", description: "Checks if date falls on weekend", batch: 21, category: "Utilities", endpoint: "/api/automation-batch-21/function-209", priority: "low", status: "active" },
-      { id: 210, name: "Integration Template Filler", description: "Auto-fills integration templates", batch: 21, category: "Templates", endpoint: "/api/automation-batch-21/function-210", priority: "low", status: "active" }
-    ];
+    // Mock automation functions removed - awaiting real business automation function definitions
+    const allFunctions: Omit<AutomationFunction, 'lastRun' | 'successCount' | 'errorCount'>[] = [];
 
     allFunctions.forEach(func => {
       this.functions.set(func.id, {

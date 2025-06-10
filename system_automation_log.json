@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:00:00.619Z",
-    "functionId": 156,
-    "functionName": "Google Drive Backup",
-    "batch": 16,
-    "category": "Backup",
-    "status": "success",
-    "duration": 391,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:00:00.645Z",
     "functionId": 133,
     "functionName": "Silent Call Detector",
@@ -11365,6 +11354,21 @@
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-10T20:00:13.469Z",
       "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T20:02:23.404Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation stopped",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 108.116713845,
+      "lastHealthCheck": "2025-06-10T20:02:00.015Z",
+      "automationStatus": "paused"
     }
   }
 ]

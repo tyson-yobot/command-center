@@ -1,0 +1,87 @@
+FINAL REPLIT INSTRUCTIONS — NO MODIFICATIONS
+Subject: Wire and Launch YoBot® Integration Runner – LIVE MODE
+Status: 🔴 LIVE Automation – No test mode, no sandbox
+This system runs real Airtable logging, Slack alerts, and email notifications
+
+🧷 WHAT YOU MUST DO
+You are not creating new files.
+I (Tyson) am providing the .py files directly. Do not write your own logic or create your own runners.
+
+Paste the code I gave you from the file Wiring Batch 1 and 2.py directly into Replit.
+
+Run the file as-is — it contains:
+
+20+ working functions
+
+Real Airtable logger (API key hardcoded)
+
+Slack alerts (webhook provided)
+
+Email alerts using noreply@yobot.bot
+
+You are in live production mode.
+These are not test functions. Logging and notifications must fire in real time.
+
+✅ EXPECTED SYSTEM BEHAVIOR
+Each function returns True and prints a ✅ confirmation (e.g. “📩 CRM synced”).
+
+Airtable should log:
+
+Function Name
+
+✅ or ❌
+
+Date
+
+Notes field (optional for debug)
+
+If a function fails:
+
+🔔 Slack alert should be sent
+
+📧 Email alert should go to tyson@yobot.bot and daniel@yobot.bot
+
+🧪 HOW TO VERIFY SUCCESS
+✅ You’ve completed the job ONLY if:
+
+Replit terminal shows ✅ or ❌ after each function
+
+Slack receives alerts (if any fail)
+
+Airtable table gets populated (API key already in code)
+
+Emails are triggered if there’s an exception
+
+🔒 DO NOT
+❌ Do NOT say “40 functions are running” unless they actually ran and logged
+
+❌ Do NOT replace hardcoded Airtable auth with environment variables
+
+❌ Do NOT modify log_to_airtable() or send_slack_alert()
+
+❌ Do NOT skip or stub out any function
+
+❌ Do NOT combine batches — run one file at a time
+
+🧷 CREDENTIALS ALREADY INCLUDED (DO NOT MODIFY)
+Airtable API Key ✅
+
+Slack Webhook ✅
+
+Gmail App Password ✅
+
+Target Table ID ✅
+
+You are NOT being asked to secure, abstract, or refactor any of this. This system is already wired — just run it.
+
+✅ FINAL VERIFICATION REQUIRED
+Once run, report back:
+
+📊 Number of rows added to Airtable
+
+📣 Slack alerts that triggered (if any)
+
+📧 Email notifications sent (if any)
+
+🟢 Confirmation of successful execution
+
