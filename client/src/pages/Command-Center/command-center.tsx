@@ -2648,11 +2648,11 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">API Usage:</span>
-                  <span className="text-blue-400 font-bold">68% of plan</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Bot Processing Load:</span>
-                  <span className="text-green-400 font-bold">{automationPerformance?.activeFunctions || 0} tasks</span>
+                  <span className="text-slate-400 font-bold">{automationPerformance?.activeFunctions || 0} tasks</span>
                 </div>
               </div>
             </CardContent>
@@ -2673,15 +2673,15 @@ export default function CommandCenter() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Active Workflows</span>
-                  <Badge className="bg-green-600 text-white">{automationPerformance?.activeFunctions || 0}</Badge>
+                  <Badge className="bg-slate-600 text-slate-400">{automationPerformance?.activeFunctions || 0}</Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Tasks Completed</span>
-                  <span className="text-green-400 font-bold">{automationPerformance?.completedTasks || 0}</span>
+                  <span className="text-slate-400 font-bold">{automationPerformance?.completedTasks || 0}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Success Rate</span>
-                  <span className="text-slate-400 font-bold">0%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Avg Completion Time</span>
@@ -2705,35 +2705,35 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
-                    <span className="text-slate-400 font-bold">$0.00</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                 </div>
-                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
-                    <span className="text-slate-400 font-bold">0%</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                 </div>
-                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Percentage of leads that become paying customers">Close Rate</span>
-                    <span className="text-slate-400 font-bold">0%</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                 </div>
-                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Return on investment from automation">ROI</span>
-                    <span className="text-slate-400 font-bold">0%</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                 </div>
-                <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-slate-400 font-bold">$0.00</div>
-                    <Badge className="bg-slate-600 text-slate-400">0%</Badge>
+                    <div className="text-slate-400 font-bold">--</div>
+                    <Badge className="bg-slate-600 text-slate-400">--</Badge>
                   </div>
                 </div>
               </div>
@@ -2750,38 +2750,38 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Budget Utilization</span>
-                    <span className="text-slate-400 font-bold">0%</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                 </div>
-                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-slate-400 font-bold">$0.00</span>
-                      <Badge className="bg-slate-600 text-slate-400 text-xs">0%</Badge>
+                      <span className="text-slate-400 font-bold">--</span>
+                      <Badge className="bg-slate-600 text-slate-400 text-xs">--</Badge>
                     </div>
                   </div>
                 </div>
-                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Time until positive return on investment">Payback Period</span>
-                    <span className="text-slate-400 font-bold">N/A</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                 </div>
-                <div className="bg-blue-900/80 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Automation Coverage</span>
-                    <span className="text-slate-400 font-bold">0% tasks</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                 </div>
-                <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="text-slate-300 text-sm mb-1">Monthly Savings vs Manual</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-white font-bold">${metrics?.totalRevenue || 0}</div>
-                    <Badge className="bg-slate-600 text-slate-400">0 hours saved</Badge>
+                    <div className="text-slate-400 font-bold">--</div>
+                    <Badge className="bg-slate-600 text-slate-400">--</Badge>
                   </div>
                 </div>
               </div>
@@ -3120,7 +3120,7 @@ export default function CommandCenter() {
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
               {/* Cost Per Lead */}
-              <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
                   <div className="text-2xl font-black text-slate-400 mb-1">--</div>
                   <div className="text-slate-300 text-sm">Cost Per Lead</div>
@@ -3130,13 +3130,12 @@ export default function CommandCenter() {
                     <span className="text-slate-400">Last Month</span>
                     <span className="text-slate-400">--</span>
                   </div>
-                  <Progress value={0} className="h-1" />
                   <div className="text-center text-xs text-slate-400">No data available</div>
                 </div>
               </div>
 
               {/* Interaction Quality */}
-              <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
                   <div className="text-2xl font-black text-slate-400 mb-1">--</div>
                   <div className="text-slate-300 text-sm">Accuracy Rate</div>
@@ -3146,13 +3145,12 @@ export default function CommandCenter() {
                     <span className="text-slate-400">Target</span>
                     <span className="text-slate-400">--</span>
                   </div>
-                  <Progress value={0} className="h-1" />
                   <div className="text-center text-xs text-slate-400">No data available</div>
                 </div>
               </div>
 
               {/* Learning Rate */}
-              <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
                   <div className="text-2xl font-black text-slate-400 mb-1">--</div>
                   <div className="text-slate-300 text-sm">Learning Rate</div>
@@ -3162,13 +3160,12 @@ export default function CommandCenter() {
                     <span className="text-slate-400">Weekly</span>
                     <span className="text-slate-400">--</span>
                   </div>
-                  <Progress value={0} className="h-1" />
                   <div className="text-center text-xs text-slate-400">No data available</div>
                 </div>
               </div>
 
               {/* Total Interactions */}
-              <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
                   <div className="text-2xl font-black text-slate-400 mb-1">--</div>
                   <div className="text-slate-300 text-sm">Interactions</div>
@@ -3178,13 +3175,12 @@ export default function CommandCenter() {
                     <span className="text-slate-400">Today</span>
                     <span className="text-slate-400">--</span>
                   </div>
-                  <Progress value={0} className="h-1" />
                   <div className="text-center text-xs text-slate-400">No data available</div>
                 </div>
               </div>
 
               {/* Conversion Rate */}
-              <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
                   <div className="text-2xl font-black text-slate-400 mb-1">--</div>
                   <div className="text-slate-300 text-sm">Close Rate</div>
@@ -3194,7 +3190,6 @@ export default function CommandCenter() {
                     <span className="text-slate-400">Industry Avg</span>
                     <span className="text-slate-400">--</span>
                   </div>
-                  <Progress value={0} className="h-1" />
                   <div className="text-center text-xs text-slate-400">No data available</div>
                 </div>
               </div>
