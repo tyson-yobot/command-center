@@ -31,13 +31,23 @@ export class LiveDashboardData {
           return createdTime.startsWith(today);
         });
 
-        // Extract function names and statuses from the integration name field
+        // Define the actual 22 automation functions you have
+        const actualFunctions = [
+          'Log To CRM', 'Create Invoice', 'Send Slack Notification', 'Send Email Receipt',
+          'Record Call Log', 'Score Call', 'Run Voicebot Script', 'Sync To Smartspend',
+          'Generate ROI Snapshot', 'Trigger Quote PDF', 'Sync To Hubspot', 'Sync To Quickbooks',
+          'Log Voice Sentiment', 'Store Transcription', 'Send SMS Alert', 'Candidate Screening',
+          'Background Checks', 'Reference Verification', 'Onboarding Automation', 'Document Management',
+          'Policy Distribution', 'Compliance Training'
+        ];
+
+        // Extract function names and statuses from the integration name field - only count actual functions
         const functionTests = records.map(record => {
           const integrationName = record.fields['🔧 Integration Name'] || '';
           const success = integrationName.includes('✅');
           const functionName = integrationName.split(' - ')[0];
           return { functionName, success, record };
-        });
+        }).filter(test => actualFunctions.includes(test.functionName));
 
         // Get unique functions and their latest status
         const uniqueFunctions: any = {};
