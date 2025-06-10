@@ -82,6 +82,13 @@ export default function CommandCenter() {
       headers: { 'x-system-mode': currentSystemMode }
     }).then(res => res.json())
   });
+
+  const { data: liveActivityData } = useQuery({ 
+    queryKey: ['/api/live-activity', currentSystemMode],
+    queryFn: () => fetch('/api/live-activity', {
+      headers: { 'x-system-mode': currentSystemMode }
+    }).then(res => res.json())
+  });
   
   const { data: knowledgeStats, refetch: refetchKnowledge } = useQuery({ 
     queryKey: ['/api/knowledge/stats', currentSystemMode],
@@ -2987,15 +2994,21 @@ export default function CommandCenter() {
             <CardContent>
               <div className="space-y-3">
                 {/* Live activity feed - populated by webhook data only */
-                [].map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                    <div>
-                      <p className="text-white font-medium">{item.action}</p>
-                      <p className="text-slate-300 text-sm">{item.company} • {item.time}</p>
+                {liveActivityData?.length > 0 ? (
+                  liveActivityData.map((item, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                      <div>
+                        <p className="text-white font-medium">{item.action}</p>
+                        <p className="text-slate-300 text-sm">{item.company} • {item.time}</p>
+                      </div>
+                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                     </div>
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  ))
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-slate-400 text-sm">--</p>
                   </div>
-                ))}
+                )}
               </div>
             </CardContent>
           </Card>
