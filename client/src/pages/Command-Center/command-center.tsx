@@ -2817,7 +2817,7 @@ export default function CommandCenter() {
                     <span className="text-blue-400 font-bold">--</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: '82%' }}></div>
+                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
@@ -2865,50 +2865,50 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Budget Utilization</span>
-                    <span className="text-green-400 font-bold">87%</span>
+                    <span className="text-green-400 font-bold">--</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '87%' }}></div>
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-green-400 font-bold">-12%</span>
+                      <span className="text-green-400 font-bold">--</span>
                       <Badge className="bg-green-600 text-white text-xs">Improving</Badge>
                     </div>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '78%' }}></div>
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Time until positive return on investment">Payback Period</span>
-                    <span className="text-blue-400 font-bold">2.3 months</span>
+                    <span className="text-blue-400 font-bold">--</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: '68%' }}></div>
+                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Automation Coverage</span>
-                    <span className="text-purple-400 font-bold">94%</span>
+                    <span className="text-purple-400 font-bold">--</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: '94%' }}></div>
+                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="text-slate-300 text-sm mb-1">Monthly Savings vs Manual</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-green-400 font-bold">$18,430</div>
-                    <Badge className="bg-green-600 text-white">+23%</Badge>
+                    <div className="text-green-400 font-bold">--</div>
+                    <Badge className="bg-slate-600 text-white">--</Badge>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '91%' }}></div>
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
               </div>
