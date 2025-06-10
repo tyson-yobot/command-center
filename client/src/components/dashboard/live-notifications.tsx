@@ -10,7 +10,7 @@ import type { Notification } from "@shared/schema";
 
 export default function LiveNotifications() {
   const { toast } = useToast();
-  const [filter, setFilter] = useState<"all" | "escalations" | "meetings">("all");
+  const [filter, setFilter] = useState<"all" | "escalations" | "quotes" | "meetings">("all");
 
   const { data: notifications = [], isLoading } = useQuery<Notification[]>({
     queryKey: ["/api/notifications"],
@@ -85,6 +85,8 @@ export default function LiveNotifications() {
     switch (filter) {
       case "escalations":
         return notification.type === "call_escalation";
+      case "quotes":
+        return notification.type === "quote_sent" || notification.type === "quote_approved";
       case "meetings":
         return notification.type === "meeting_booked";
       default:
@@ -133,31 +135,39 @@ export default function LiveNotifications() {
           </div>
         </div>
         
-        {/* Filter Buttons */}
-        <div className="flex flex-col space-y-2 mt-4">
-          <Button
-            size="sm"
-            variant={filter === "all" ? "default" : "outline"}
-            onClick={() => setFilter("all")}
-            className={`text-xs px-4 py-2 w-full ${filter === "all" ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
-          >
-            🔔 All Notifications
-          </Button>
+        {/* Quick Filter Buttons */}
+        <div className="flex space-x-1 mt-4">
           <Button
             size="sm"
             variant={filter === "escalations" ? "default" : "outline"}
             onClick={() => setFilter("escalations")}
-            className={`text-xs px-4 py-2 w-full ${filter === "escalations" ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
+            className={`text-xs px-3 py-1 ${filter === "escalations" ? "bg-red-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
           >
-            📣 Call Escalations
+            🔴 Escalations
+          </Button>
+          <Button
+            size="sm"
+            variant={filter === "quotes" ? "default" : "outline"}
+            onClick={() => setFilter("quotes")}
+            className={`text-xs px-3 py-1 ${filter === "quotes" ? "bg-green-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
+          >
+            🟩 Quotes
           </Button>
           <Button
             size="sm"
             variant={filter === "meetings" ? "default" : "outline"}
             onClick={() => setFilter("meetings")}
-            className={`text-xs px-4 py-2 w-full ${filter === "meetings" ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
+            className={`text-xs px-3 py-1 ${filter === "meetings" ? "bg-yellow-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
           >
-            📅 Meeting Bookings
+            🟨 Meetings
+          </Button>
+          <Button
+            size="sm"
+            variant={filter === "all" ? "default" : "outline"}
+            onClick={() => setFilter("all")}
+            className={`text-xs px-3 py-1 ${filter === "all" ? "bg-blue-600 text-white" : "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600"}`}
+          >
+            All
           </Button>
         </div>
       </CardHeader>
