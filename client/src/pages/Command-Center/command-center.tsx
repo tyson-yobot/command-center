@@ -2096,7 +2096,7 @@ export default function CommandCenter() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800/60 to-slate-900 pt-8 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-8 p-8">
       {/* Test Mode Banner */}
       {currentSystemMode === 'test' && (
         <div className="bg-yellow-500 text-black py-3 px-4 text-center font-bold text-lg border-b-2 border-yellow-600 fixed top-0 left-0 right-0 z-50">
@@ -2254,7 +2254,7 @@ export default function CommandCenter() {
         <div className="mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Core Automation */}
-            <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
+            <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
               <CardHeader>
                 <CardTitle className="text-white">Core Automation</CardTitle>
               </CardHeader>
@@ -2305,7 +2305,7 @@ export default function CommandCenter() {
             </Card>
 
             {/* Voice & Communication */}
-            <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
+            <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
               <CardHeader>
                 <CardTitle className="text-white">Voice & Communication</CardTitle>
               </CardHeader>
