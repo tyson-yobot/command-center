@@ -1068,7 +1068,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
           };
           documentDataStore.push(documentData);
           
-          // Also store in knowledge store for search
+          // Store in database knowledge base
+          try {
+            await storage.createKnowledgeBase({
+              userId: 1, // Default user for now
+              name: file.originalname,
+              content: extractedText,
+              category: category || 'documents',
+              tags: keyTerms,
+              priority: parseInt(priority) || 1,
+              confidence: 0.9,
+              enabled: true,
+              triggerConditions: {
+                textContains: keyTerms,
+                eventType: ['document_query', 'knowledge_search'],
+                intent: ['information', 'help', 'support']
+              }
+            });
+          } catch (dbError) {
+            console.error('Failed to store in database:', dbError);
+          }
+          
+          // Also store in knowledge store for backward compatibility
           const knowledgeData: KnowledgeData = {
             id: documentId,
             title: file.originalname,
