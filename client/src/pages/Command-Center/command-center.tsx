@@ -2883,7 +2883,7 @@ export default function CommandCenter() {
                     <div className="bg-yellow-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Time until positive return on investment">Payback Period</span>
                     <span className="text-blue-400 font-bold">--</span>
@@ -2892,7 +2892,7 @@ export default function CommandCenter() {
                     <div className="bg-blue-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Automation Coverage</span>
                     <span className="text-purple-400 font-bold">--</span>
@@ -2901,11 +2901,11 @@ export default function CommandCenter() {
                     <div className="bg-purple-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <div className="text-slate-300 text-sm mb-1">Monthly Savings vs Manual</div>
                   <div className="flex items-center justify-between">
                     <div className="text-green-400 font-bold">--</div>
-                    <Badge className="bg-slate-600 text-white">--</Badge>
+                    <Badge className="bg-green-600 text-white">--</Badge>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
                     <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>

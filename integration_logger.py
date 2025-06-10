@@ -58,10 +58,10 @@ def log_integration_test_to_airtable(
         "Content-Type": "application/json"
     }
 
-    # Match exact field names from your Airtable screenshot
+    # Match exact field names from Airtable (with emoji prefix)
     payload = {
         "fields": {
-            "Integration Name": integration_name,
+            "🔧 Integration Name": integration_name,
             "Pass/Fail": PASS_FAIL_OPTIONS[passed],
             "Notes / Debug": notes,
             "Test Date": datetime.now().isoformat(),
