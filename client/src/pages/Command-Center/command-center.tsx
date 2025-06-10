@@ -2196,7 +2196,7 @@ export default function CommandCenter() {
                 <Button
                   onClick={sendVoiceCommand}
                   disabled={!voiceCommand.trim()}
-                  className="bg-green-600 hover:bg-green-700 text-white"
+                  className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
                   size="sm"
                 >
                   <Send className="w-4 h-4 mr-1" />
@@ -2217,7 +2217,7 @@ export default function CommandCenter() {
                 <Button 
                   onClick={handleDownloadPDF}
                   size="sm"
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
                 >
                   <FileText className="w-4 h-4 mr-1" />
                   📂 View Reports
@@ -2225,7 +2225,7 @@ export default function CommandCenter() {
                 <Button 
                   onClick={() => window.location.href = '/admin'}
                   size="sm"
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                  className="bg-purple-600 hover:bg-purple-700 text-white border border-purple-500"
                 >
                   <Settings className="w-4 h-4 mr-1" />
                   Admin
@@ -2262,7 +2262,7 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={handleNewBookingSync}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
                   >
                     <span className="text-xl mr-3">📅</span>
                     <span>Create Booking</span>
@@ -2270,7 +2270,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleNewSupportTicket}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
                   >
                     <span className="text-xl mr-3">🎧</span>
                     <span>Create Support Ticket</span>
@@ -2278,7 +2278,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleManualFollowUp}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
                   >
                     <span className="text-xl mr-3">📞</span>
                     <span>Create Follow-up</span>
@@ -2286,7 +2286,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleSalesOrder}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
                   >
                     <span className="text-xl mr-3">💰</span>
                     <span>Create Sales Order</span>
@@ -2294,7 +2294,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleSendSMS}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
                   >
                     <span className="text-xl mr-3">💬</span>
                     <span>Send SMS</span>
