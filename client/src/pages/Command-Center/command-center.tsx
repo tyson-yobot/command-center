@@ -2847,8 +2847,8 @@ export default function CommandCenter() {
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">System Health</span>
                   <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    <span className="text-green-400 font-bold">Excellent</span>
+                    <div className="w-2 h-2 bg-slate-400 rounded-full"></div>
+                    <span className="text-slate-400 font-bold">Unknown</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
