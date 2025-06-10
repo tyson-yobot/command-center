@@ -3654,7 +3654,7 @@ export default function CommandCenter() {
                       <Mic className="w-4 h-4" />
                     </Button>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Button 
                       onClick={queryKnowledgeBase}
                       className="bg-purple-600 hover:bg-purple-700 text-white"
@@ -3675,6 +3675,13 @@ export default function CommandCenter() {
                     >
                       <FileText className="w-4 h-4 mr-2" />
                       Context Search
+                    </Button>
+                    <Button 
+                      onClick={() => document.getElementById('file-upload')?.click()}
+                      className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      Upload Documents
                     </Button>
                   </div>
                 </div>
