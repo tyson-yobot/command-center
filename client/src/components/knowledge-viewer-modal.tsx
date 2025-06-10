@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Trash2, CheckCircle, XCircle, AlertTriangle, Eye, RefreshCw } from 'lucide-react';
 
@@ -54,6 +54,13 @@ interface KnowledgeViewerModalProps {
   onDeleteSelected: () => void;
 }
 
+// Document preview modal state
+interface DocumentPreview {
+  document: any;
+  content: string;
+  isOpen: boolean;
+}
+
 export function KnowledgeViewerModal({
   isOpen,
   onClose,
@@ -62,6 +69,58 @@ export function KnowledgeViewerModal({
   onItemSelect,
   onDeleteSelected
 }: KnowledgeViewerModalProps) {
+  const [documentPreview, setDocumentPreview] = useState<DocumentPreview>({
+    document: null,
+    content: '',
+    isOpen: false
+  });
+  const [isReindexing, setIsReindexing] = useState<string | null>(null);
+
+  const handlePreviewDocument = async (document: any) => {
+    try {
+      const response = await fetch(`/api/knowledge/preview/${document.id}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setDocumentPreview({
+          document,
+          content: data.content || data.extractedText || 'No content available',
+          isOpen: true
+        });
+      } else {
+        console.error('Failed to preview document');
+      }
+    } catch (error) {
+      console.error('Error previewing document:', error);
+    }
+  };
+
+  const handleReindexDocument = async (document: any) => {
+    if (isReindexing === document.id) return;
+    
+    setIsReindexing(document.id);
+    try {
+      const response = await fetch(`/api/knowledge/reindex/${document.id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (response.ok) {
+        console.log('Document reindexed successfully');
+        // Refresh the knowledge items list
+        window.location.reload();
+      } else {
+        console.error('Failed to reindex document');
+      }
+    } catch (error) {
+      console.error('Error reindexing document:', error);
+    } finally {
+      setIsReindexing(null);
+    }
+  };
   if (!isOpen) return null;
 
   return (
@@ -203,6 +262,41 @@ export function KnowledgeViewerModal({
           </Button>
         </div>
       </div>
+      
+      {/* Document Preview Modal */}
+      {documentPreview.isOpen && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-60">
+          <div className="bg-slate-800 border border-blue-400/50 rounded-lg max-w-4xl w-full mx-4 max-h-[80vh] overflow-hidden">
+            <div className="sticky top-0 bg-slate-800 border-b border-blue-400/30 p-4 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-white flex items-center">
+                <Eye className="w-5 h-5 mr-2 text-blue-400" />
+                Document Preview: {documentPreview.document?.filename || documentPreview.document?.name || 'Untitled'}
+              </h3>
+              <Button
+                onClick={() => setDocumentPreview(prev => ({ ...prev, isOpen: false }))}
+                className="text-white hover:bg-white/10 p-1"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              <div className="bg-slate-900/60 rounded-lg p-4 border border-slate-600/50">
+                <pre className="text-slate-300 whitespace-pre-wrap text-sm leading-relaxed">
+                  {documentPreview.content}
+                </pre>
+              </div>
+            </div>
+            <div className="sticky bottom-0 bg-slate-800 border-t border-blue-400/30 p-4 flex justify-end">
+              <Button
+                onClick={() => setDocumentPreview(prev => ({ ...prev, isOpen: false }))}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Close Preview
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

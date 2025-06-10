@@ -1342,6 +1342,109 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Document preview endpoint
+  app.get('/api/knowledge/preview/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      // Try to find document in knowledge base first
+      const dbDocument = await storage.getKnowledgeBase(parseInt(id));
+      if (dbDocument) {
+        return res.json({
+          success: true,
+          content: dbDocument.content,
+          extractedText: dbDocument.content,
+          metadata: {
+            name: dbDocument.name,
+            category: dbDocument.category,
+            tags: dbDocument.tags
+          }
+        });
+      }
+      
+      // Fallback to document store
+      const document = documentStore.find(doc => doc.id === id || doc.documentId === id);
+      if (!document) {
+        return res.status(404).json({
+          success: false,
+          error: 'Document not found'
+        });
+      }
+      
+      res.json({
+        success: true,
+        content: document.extractedText || document.content || 'No content available',
+        extractedText: document.extractedText,
+        metadata: {
+          filename: document.filename,
+          category: document.category,
+          keyTerms: document.keyTerms
+        }
+      });
+    } catch (error) {
+      console.error('Document preview error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to preview document'
+      });
+    }
+  });
+
+  // Document reindex endpoint
+  app.post('/api/knowledge/reindex/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      // Find document in store
+      const documentIndex = documentStore.findIndex(doc => doc.id === id || doc.documentId === id);
+      if (documentIndex === -1) {
+        return res.status(404).json({
+          success: false,
+          error: 'Document not found'
+        });
+      }
+      
+      const document = documentStore[documentIndex];
+      
+      // Reprocess the document through RAG engine
+      if (document.extractedText) {
+        const ragResult = await ragEngine.indexDocument({
+          id: document.id,
+          content: document.extractedText,
+          metadata: {
+            filename: document.filename,
+            category: document.category || 'general'
+          }
+        });
+        
+        // Update document status
+        documentStore[documentIndex] = {
+          ...document,
+          ragIndexed: true,
+          lastReindexed: new Date().toISOString(),
+          indexingResult: ragResult
+        };
+        
+        res.json({
+          success: true,
+          message: 'Document reindexed successfully',
+          ragResult
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          error: 'Document has no content to reindex'
+        });
+      }
+    } catch (error) {
+      console.error('Document reindex error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to reindex document'
+      });
+    }
+  });
+
   // Knowledge base search endpoint with AI-powered relevance scoring
   app.post('/api/knowledge/search', async (req, res) => {
     try {
