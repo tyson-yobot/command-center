@@ -57,7 +57,7 @@ class CompleteSystemAutomation {
   }
 
   private initializeAllFunctions() {
-    // Mock automation functions removed - awaiting real business automation function definitions
+    // All mock functions removed - system disabled
     const allFunctions: Omit<AutomationFunction, 'lastRun' | 'successCount' | 'errorCount'>[] = [];
 
     allFunctions.forEach(func => {
