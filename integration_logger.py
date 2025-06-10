@@ -115,9 +115,14 @@ def send_email_alert(integration_name: str, notes: str):
         
         msg.attach(MIMEText(body, 'plain'))
         
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(SMTP_USER, SMTP_PASS)
+        # Use Google Workspace SMTP settings
+        if SMTP_USER and SMTP_PASS:
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASS)
+        else:
+            print("❌ Email credentials not configured - skipping email alert")
+            return
         text = msg.as_string()
         server.sendmail(SMTP_USER, ALERT_EMAILS, text)
         server.quit()
