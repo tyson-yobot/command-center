@@ -4634,9 +4634,7 @@ export default function CommandCenter() {
 
 
 
-      {/* Zendesk Live Chat Widget */}
-      <ZendeskChatWidget />
-      
+
 
     </div>
   );

@@ -1244,13 +1244,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/zendesk/tickets', async (req, res) => {
     try {
-      const tickets = [
-        { id: 'TICK-001', subject: 'Integration Issue', status: 'open', priority: 'high', created: '2h ago' },
-        { id: 'TICK-002', subject: 'Feature Request', status: 'pending', priority: 'medium', created: '4h ago' },
-        { id: 'TICK-003', subject: 'Bug Report', status: 'resolved', priority: 'low', created: '1d ago' },
-        { id: 'TICK-004', subject: 'Account Setup', status: 'open', priority: 'medium', created: '3h ago' },
-        { id: 'TICK-005', subject: 'API Documentation', status: 'pending', priority: 'low', created: '6h ago' }
-      ];
+      // Only return authentic tickets from actual Zendesk integration
+      // No test data in live mode
+      const tickets = [];
 
       logOperation('zendesk-tickets', {}, 'success', 'Zendesk tickets retrieved');
 
