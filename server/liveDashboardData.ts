@@ -4,37 +4,74 @@ import path from 'path';
 // Live data aggregator - pulls only from actual running systems
 export class LiveDashboardData {
   
-  // Get real automation metrics from log files and running instances
+  // Get real automation metrics from Airtable Integration Test Log
   static async getAutomationMetrics() {
     try {
-      // First try to get live metrics from running automation system
-      try {
-        const { completeAutomation } = await import('./completeSystemAutomation');
-        const metrics = completeAutomation.getSystemMetrics();
-        
-        if (metrics && metrics.totalFunctions > 0) {
-          const successRate = metrics.successfulExecutions + metrics.failedExecutions > 0 ? 
-            ((metrics.successfulExecutions / (metrics.successfulExecutions + metrics.failedExecutions)) * 100).toFixed(1) : null;
-          
-          return {
-            totalFunctions: metrics.totalFunctions || 0,
-            activeFunctions: metrics.activeFunctions || 0,
-            executionsToday: metrics.successfulExecutions + metrics.failedExecutions || 0,
-            successRate: successRate ? `${successRate}%` : null,
-            averageExecutionTime: null,
-            topPerformers: [],
-            recentErrors: [],
-            healthChecks: {
-              airtable: "healthy",
-              slack: "healthy", 
-              apis: "healthy",
-              database: "healthy"
-            }
-          };
+      // Get metrics from Airtable Integration Test Log Table
+      const airtableResponse = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbly0fjE2M5uHET9X", {
+        headers: {
+          "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_TOKEN}`,
+          "Content-Type": "application/json"
         }
-      } catch (importError) {
-        console.log('Could not import automation system, falling back to log files:', importError);
+      });
+
+      if (airtableResponse.ok) {
+        const airtableData = await airtableResponse.json();
+        const records = airtableData.records || [];
+        
+        // Parse integration test records to get real automation function status
+        const today = new Date().toISOString().split('T')[0];
+        const todaysRecords = records.filter(record => {
+          const createdTime = record.createdTime || '';
+          return createdTime.startsWith(today);
+        });
+
+        // Extract function names and statuses from the integration name field
+        const functionTests = records.map(record => {
+          const integrationName = record.fields['🔧 Integration Name'] || '';
+          const success = integrationName.includes('✅');
+          const functionName = integrationName.split(' - ')[0];
+          return { functionName, success, record };
+        });
+
+        // Get unique functions and their latest status
+        const uniqueFunctions = {};
+        functionTests.forEach(test => {
+          if (!uniqueFunctions[test.functionName] || test.record.createdTime > uniqueFunctions[test.functionName].createdTime) {
+            uniqueFunctions[test.functionName] = test;
+          }
+        });
+
+        const totalFunctions = Object.keys(uniqueFunctions).length;
+        const passedFunctions = Object.values(uniqueFunctions).filter(f => f.success).length;
+        const failedFunctions = totalFunctions - passedFunctions;
+        const successRate = totalFunctions > 0 ? ((passedFunctions / totalFunctions) * 100).toFixed(1) : '0';
+
+        return {
+          totalFunctions,
+          activeFunctions: totalFunctions, // All functions that have been tested are considered active
+          executionsToday: todaysRecords.length,
+          successRate: `${successRate}%`,
+          averageExecutionTime: null,
+          topPerformers: Object.values(uniqueFunctions)
+            .filter(f => f.success)
+            .slice(0, 5)
+            .map(f => f.functionName),
+          recentErrors: Object.values(uniqueFunctions)
+            .filter(f => !f.success)
+            .slice(0, 3)
+            .map(f => ({ name: f.functionName, errorCount: 1, category: 'Automation' })),
+          healthChecks: {
+            airtable: "healthy",
+            slack: "healthy", 
+            apis: "healthy",
+            database: "healthy"
+          }
+        };
       }
+    } catch (error) {
+      console.error('Error reading automation data from Airtable:', error);
+    }
 
       // Fallback to reading log files
       const logPath = path.join(process.cwd(), 'system_automation_log.json');

@@ -14,6 +14,7 @@ import { registerBatch29 } from "./automationBatch29";
 import { registerBatch30 } from "./automationBatch30";
 import { registerRealScrapingRoutes } from "./realScrapingRoutes";
 import { registerRealSalesOrderRoutes } from "./realSalesOrderRoutes";
+import { registerRealAutomationEndpoints } from "./realAutomationRunner";
 import { registerScrapingEndpoints } from "./scrapingApiEndpoints";
 import { registerContentCreatorEndpoints } from "./contentCreatorEndpoints";
 import { registerDashboardEndpoints } from "./dashboardEndpoints";
@@ -450,6 +451,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register local test logger - Primary test tracking system
   registerLocalTestLoggerRoutes(app);
+  
+  // Register real automation endpoints - Connect Python functions to web interface
+  registerRealAutomationEndpoints(app);
   
   // Register Publer social media integration - Required for automated posting
   registerPublerRoutes(app);

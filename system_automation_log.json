@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:00:00.651Z",
-    "functionId": 201,
-    "functionName": "Auto-create Airtable Record",
-    "batch": 21,
-    "category": "Data Creation",
-    "status": "success",
-    "duration": 416,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:00:00.665Z",
     "functionId": 139,
     "functionName": "Call Digest Poster",
@@ -11376,6 +11365,21 @@
       "failedExecutions": 0,
       "systemUptime": 172.720141015,
       "lastHealthCheck": "2025-06-10T20:20:00.021Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T20:30:00.017Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 136.170073266,
+      "lastHealthCheck": "2025-06-10T20:29:00.008Z",
       "automationStatus": "paused"
     }
   }
