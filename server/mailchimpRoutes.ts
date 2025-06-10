@@ -167,10 +167,18 @@ export function registerMailchimpRoutes(app: Express) {
         console.log('✅ Test campaign logged locally (no external API calls)');
       }
 
+      // Return accurate status message based on email API success
+      const statusMessage = currentSystemMode === 'live' 
+        ? (emailApiSuccessful || !payload.sendNow 
+          ? 'Campaign created and processed successfully' 
+          : `Campaign created but email sending failed (${emailErrorMessage.includes('API key') ? 'API key required' : 'email service unavailable'})`)
+        : 'Campaign created in test mode';
+      
       res.json({
         success: true,
         campaign: campaignResult,
-        message: `Campaign ${currentSystemMode === 'live' ? 'created and processed' : 'created in test mode'}`
+        message: statusMessage,
+        emailStatus: currentSystemMode === 'live' ? (emailApiSuccessful || !payload.sendNow ? 'success' : 'failed') : 'test_mode'
       });
 
     } catch (error) {
