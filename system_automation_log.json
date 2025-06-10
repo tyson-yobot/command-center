@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:00:00.756Z",
-    "functionId": 204,
-    "functionName": "Duplicate Record Detection",
-    "batch": 21,
-    "category": "Data Validation",
-    "status": "success",
-    "duration": 512,
-    "successCount": 2,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:00:00.784Z",
     "functionId": 134,
     "functionName": "QA Failure Alert",
@@ -11408,6 +11397,21 @@
       "failedExecutions": 0,
       "systemUptime": 567.08776105,
       "lastHealthCheck": "2025-06-10T21:59:00.010Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T22:10:00.014Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 162.259525602,
+      "lastHealthCheck": "2025-06-10T22:09:00.006Z",
       "automationStatus": "paused"
     }
   }

@@ -18,6 +18,6 @@ def log_to_airtable(function_name, result, notes=""):
 
 # Test one of the missing functions
 if __name__ == "__main__":
-    # Test Sync To Quickbooks
-    result = log_to_airtable("Sync To Quickbooks", True, "QuickBooks sync completed successfully - 8 invoices updated")
-    print(f"Logged Sync To Quickbooks: Status {result}")
+    # Test Onboarding Automation
+    result = log_to_airtable("Onboarding Automation", True, "Employee onboarding completed - 3 new hires processed")
+    print(f"Logged Onboarding Automation: Status {result}")
