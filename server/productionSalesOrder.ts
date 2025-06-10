@@ -6,15 +6,15 @@ import { updateAutomationMetrics } from "./routes";
 export function registerProductionSalesOrder(app: Express) {
   console.log("🚀 Registering production sales order webhook");
   
-  // Global POST capture middleware for debugging
+  // Specific POST capture middleware for sales order debugging only
   app.use((req: any, res: any, next: any) => {
-    if (req.method === 'POST') {
+    if (req.method === 'POST' && req.url.includes('/api/sales-order')) {
       const timestamp = new Date().toISOString();
       console.log(`🔍 POST REQUEST DETECTED: ${req.url} at ${timestamp}`);
       console.log(`📋 Headers:`, JSON.stringify(req.headers, null, 2));
       console.log(`📊 Body:`, JSON.stringify(req.body, null, 2));
       
-      // Save ALL POST requests
+      // Save only sales order POST requests
       writeFileSync(`post_capture_${Date.now()}.json`, JSON.stringify({
         timestamp,
         url: req.url,

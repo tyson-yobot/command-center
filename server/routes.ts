@@ -3391,8 +3391,15 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
           let keyTerms = [];
           let categories = [];
           
+          console.log('AI Analysis check:', {
+            textLength: extractedText.length,
+            hasOpenAIKey: !!process.env.OPENAI_API_KEY,
+            shouldProcess: extractedText.length > 100 && !!process.env.OPENAI_API_KEY
+          });
+          
           if (extractedText.length > 100 && process.env.OPENAI_API_KEY) {
             try {
+              console.log('Starting OpenAI document analysis...');
               const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
