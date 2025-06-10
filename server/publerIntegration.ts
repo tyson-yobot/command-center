@@ -30,7 +30,7 @@ class PublerIntegration {
         throw new Error('Publer API key not configured');
       }
 
-      const response = await fetch(`${this.baseUrl}/job_complete`, {
+      const response = await fetch(`${this.baseUrl}/posts`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${this.apiKey}`,
@@ -39,11 +39,11 @@ class PublerIntegration {
         body: JSON.stringify({
           text: postData.text,
           media_urls: postData.media || [],
-          social_accounts: postData.platforms.map(platform => ({
-            platform: platform.toLowerCase(),
-            account_id: this.getPlatformAccountId(platform)
-          })),
-          schedule_date: postData.scheduleDate || null
+          social_accounts: postData.platforms.map(platform => 
+            this.getPlatformAccountId(platform)
+          ),
+          schedule_date: postData.scheduleDate || null,
+          timezone: 'UTC'
         })
       });
 
@@ -132,15 +132,16 @@ class PublerIntegration {
   }
 
   private getPlatformAccountId(platform: string): string {
-    // Platform-specific account IDs would be configured based on connected accounts
+    // These should be actual account IDs from your Publer connected accounts
+    // You can get these from the Publer dashboard or API
     const platformMapping = {
-      'linkedin': process.env.PUBLER_LINKEDIN_ACCOUNT_ID || 'linkedin_default',
-      'twitter': process.env.PUBLER_TWITTER_ACCOUNT_ID || 'twitter_default',
-      'facebook': process.env.PUBLER_FACEBOOK_ACCOUNT_ID || 'facebook_default',
-      'instagram': process.env.PUBLER_INSTAGRAM_ACCOUNT_ID || 'instagram_default'
+      'linkedin': process.env.PUBLER_LINKEDIN_ACCOUNT_ID || '12345', // Replace with actual LinkedIn account ID
+      'twitter': process.env.PUBLER_TWITTER_ACCOUNT_ID || '67890',   // Replace with actual Twitter account ID  
+      'facebook': process.env.PUBLER_FACEBOOK_ACCOUNT_ID || '11111', // Replace with actual Facebook account ID
+      'instagram': process.env.PUBLER_INSTAGRAM_ACCOUNT_ID || '22222' // Replace with actual Instagram account ID
     };
 
-    return platformMapping[platform.toLowerCase()] || platform.toLowerCase();
+    return platformMapping[platform.toLowerCase()] || '12345'; // Default to LinkedIn if platform not found
   }
 }
 
@@ -174,6 +175,41 @@ export function registerPublerRoutes(app: Express) {
         'Social Media Integration',
         error.message,
         'api-endpoint-error'
+      );
+
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // Alternative endpoint for create-post
+  app.post('/api/publer/create-post', async (req, res) => {
+    try {
+      const { content, platforms, schedule } = req.body;
+
+      if (!content || !platforms || !Array.isArray(platforms)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Content and platforms array are required'
+        });
+      }
+
+      const result = await publerIntegration.postToSocialMedia({
+        text: content,
+        platforms,
+        scheduleDate: schedule
+      });
+
+      res.json(result);
+
+    } catch (error) {
+      await integrationLogger.logFailure(
+        'Publer Create Post Endpoint',
+        'Social Media Integration',
+        error.message,
+        'create-post-error'
       );
 
       res.status(500).json({

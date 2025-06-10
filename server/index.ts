@@ -9,6 +9,7 @@ import { generatePDFReport } from "./pdfReport";
 import { registerQATracker } from "./qaTracker";
 import { officialQATracker } from "./officialQATracker";
 import { registerQATestEndpoints } from "./qaTestEndpoints";
+import { registerPublerRoutes } from "./publerIntegration";
 
 const app = express();
 app.use(express.json());
