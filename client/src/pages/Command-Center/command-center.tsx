@@ -2455,10 +2455,10 @@ export default function CommandCenter() {
               <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Executions Today</div>
-                  <div className="text-2xl font-bold text-white">
-                    {automationPerformance?.executionsToday || 0}
+                  <div className="text-2xl font-bold text-slate-400">
+                    --
                   </div>
-                  <div className="text-xs text-green-400">Live tracking</div>
+                  <div className="text-xs text-slate-400">No data</div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Success Rate</div>
