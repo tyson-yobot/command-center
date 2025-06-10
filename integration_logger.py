@@ -51,8 +51,8 @@ def log_integration_test_to_airtable(
 ):
     import os
     
-    # Use environment variable for API key, fallback to hardcoded if needed
-    airtable_api_key = os.getenv('AIRTABLE_API_KEY', 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa')
+    # Use the working hardcoded API key
+    airtable_api_key = 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa'
     base_id = "appRt8V3tH4g5Z5if"
     table_id = "tbly0fjE2M5uHET9X"
     url = f"https://api.airtable.com/v0/{base_id}/{table_id}"
