@@ -1,1 +1,0 @@
-Test knowledge document content for YoBot automation functions. This document covers the complete automation system with 1040+ functions including lead generation, voice processing, and CRM integration capabilities.
