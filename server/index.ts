@@ -17,6 +17,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Register test logging routes FIRST (before any other middleware)
+app.use('/api/test', testRoutes);
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
