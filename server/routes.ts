@@ -1499,18 +1499,278 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { text, category } = req.body;
       console.log('Memory insertion:', { category, textLength: text?.length });
       
+      if (!text || !text.trim()) {
+        return res.status(400).json({ success: false, error: 'Text is required' });
+      }
+
+      // Store in memory store
+      const memoryEntry = {
+        id: 'MEM_' + Date.now(),
+        content: text.trim(),
+        category: category || 'general',
+        timestamp: new Date().toISOString(),
+        wordCount: text.trim().split(/\s+/).length
+      };
+
+      memoryStore.push(memoryEntry);
+
       const result = {
         success: true,
-        memoryId: 'MEM_' + Date.now(),
-        category,
+        memoryId: memoryEntry.id,
+        category: memoryEntry.category,
         status: 'inserted',
-        timestamp: new Date().toISOString()
+        timestamp: memoryEntry.timestamp,
+        wordCount: memoryEntry.wordCount
       };
       
       res.json(result);
     } catch (error) {
       console.error('Memory insertion error:', error);
       res.status(500).json({ success: false, error: 'Memory insertion failed' });
+    }
+  });
+
+  // Knowledge reindex endpoint
+  app.post('/api/knowledge/reindex', async (req, res) => {
+    try {
+      console.log('Reindexing knowledge base...');
+      
+      // Process all documents in documentStore
+      let reindexedCount = 0;
+      const errors = [];
+
+      for (const doc of documentStore) {
+        try {
+          // Re-extract key terms if extractedText exists
+          if (doc.extractedText) {
+            const words = doc.extractedText.toLowerCase().split(/\s+/);
+            const keyTerms = [...new Set(words.filter(word => word.length > 3))].slice(0, 10);
+            doc.keyTerms = keyTerms;
+            doc.wordCount = words.length;
+            reindexedCount++;
+          }
+        } catch (error) {
+          errors.push(`Failed to reindex ${doc.filename}: ${error.message}`);
+        }
+      }
+
+      logOperation('knowledge-reindex', { count: reindexedCount }, 'success', 'Knowledge base reindexed');
+
+      res.json({
+        success: true,
+        message: `Reindexed ${reindexedCount} documents`,
+        reindexedCount,
+        totalDocuments: documentStore.length,
+        errors: errors.length > 0 ? errors : undefined,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Knowledge reindex error:', error);
+      res.status(500).json({ success: false, error: 'Failed to reindex knowledge base' });
+    }
+  });
+
+  // Knowledge list/view endpoint
+  app.get('/api/knowledge/list', async (req, res) => {
+    try {
+      const { category, limit = 50 } = req.query;
+
+      let documents = [...documentStore];
+      let memories = [...memoryStore];
+
+      // Filter by category if specified
+      if (category && category !== 'all') {
+        documents = documents.filter(doc => doc.category === category);
+        memories = memories.filter(mem => mem.category === category);
+      }
+
+      // Limit results
+      const limitNum = parseInt(limit as string);
+      documents = documents.slice(0, limitNum);
+      memories = memories.slice(0, limitNum);
+
+      // Format documents for display
+      const formattedDocuments = documents.map(doc => ({
+        id: doc.documentId || doc.id,
+        type: 'document',
+        title: doc.filename || doc.originalname || 'Untitled',
+        content: (doc.extractedText || '').substring(0, 200) + '...',
+        category: doc.category || 'general',
+        uploadTime: doc.uploadTime || doc.uploadedAt,
+        fileSize: doc.size || doc.fileSize,
+        fileType: doc.mimetype || doc.fileType,
+        keyTerms: doc.keyTerms || [],
+        wordCount: doc.wordCount || 0,
+        status: doc.status || 'processed'
+      }));
+
+      // Format memories for display
+      const formattedMemories = memories.map(mem => ({
+        id: mem.id,
+        type: 'memory',
+        title: `Memory Entry - ${mem.category}`,
+        content: mem.content.substring(0, 200) + (mem.content.length > 200 ? '...' : ''),
+        category: mem.category,
+        uploadTime: mem.timestamp,
+        fileSize: mem.content.length,
+        fileType: 'text/plain',
+        keyTerms: [],
+        wordCount: mem.wordCount || 0,
+        status: 'processed'
+      }));
+
+      // Combine and sort by upload time
+      const allItems = [...formattedDocuments, ...formattedMemories]
+        .sort((a, b) => new Date(b.uploadTime || 0).getTime() - new Date(a.uploadTime || 0).getTime());
+
+      logOperation('knowledge-list', { count: allItems.length, category }, 'success', 'Knowledge items listed');
+
+      res.json({
+        success: true,
+        items: allItems,
+        total: allItems.length,
+        documents: formattedDocuments.length,
+        memories: formattedMemories.length,
+        categories: [...new Set([...documents.map(d => d.category), ...memories.map(m => m.category)].filter(Boolean))]
+      });
+    } catch (error) {
+      console.error('Knowledge list error:', error);
+      res.status(500).json({ success: false, error: 'Failed to list knowledge items' });
+    }
+  });
+
+  // Knowledge clear endpoint
+  app.delete('/api/knowledge/clear', async (req, res) => {
+    try {
+      const documentsCleared = documentStore.length;
+      const memoriesCleared = memoryStore.length;
+
+      // Clear all knowledge data
+      documentStore.length = 0;
+      memoryStore.length = 0;
+
+      logOperation('knowledge-clear', { documentsCleared, memoriesCleared }, 'success', 'Knowledge base cleared');
+
+      res.json({
+        success: true,
+        message: 'Knowledge base cleared successfully',
+        documentsCleared,
+        memoriesCleared,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Knowledge clear error:', error);
+      res.status(500).json({ success: false, error: 'Failed to clear knowledge base' });
+    }
+  });
+
+  // Individual knowledge item deletion
+  app.delete('/api/knowledge/item/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      let found = false;
+      let itemType = '';
+
+      // Try to find and remove from documents
+      const docIndex = documentStore.findIndex(doc => (doc.documentId || doc.id) === id);
+      if (docIndex !== -1) {
+        const removedDoc = documentStore.splice(docIndex, 1)[0];
+        found = true;
+        itemType = 'document';
+        console.log(`Removed document: ${removedDoc.filename || removedDoc.originalname}`);
+      }
+
+      // Try to find and remove from memories
+      if (!found) {
+        const memIndex = memoryStore.findIndex(mem => mem.id === id);
+        if (memIndex !== -1) {
+          const removedMem = memoryStore.splice(memIndex, 1)[0];
+          found = true;
+          itemType = 'memory';
+          console.log(`Removed memory: ${removedMem.category}`);
+        }
+      }
+
+      if (!found) {
+        return res.status(404).json({
+          success: false,
+          error: 'Knowledge item not found'
+        });
+      }
+
+      logOperation('knowledge-item-delete', { id, itemType }, 'success', `${itemType} deleted`);
+
+      res.json({
+        success: true,
+        message: `${itemType} deleted successfully`,
+        deletedId: id,
+        itemType
+      });
+    } catch (error) {
+      console.error('Knowledge item deletion error:', error);
+      res.status(500).json({ success: false, error: 'Failed to delete knowledge item' });
+    }
+  });
+
+  // Voice recordings list endpoint
+  app.get('/api/voice/recordings', async (req, res) => {
+    try {
+      // Mock voice recordings data since we don't have actual voice storage
+      const recordings = [
+        {
+          id: 'rec_001',
+          filename: 'voice_command_001.mp3',
+          duration: 15,
+          format: 'mp3',
+          created: new Date(Date.now() - 3600000).toISOString(),
+          size: 1024 * 45
+        },
+        {
+          id: 'rec_002', 
+          filename: 'rag_query_002.mp3',
+          duration: 8,
+          format: 'mp3',
+          created: new Date(Date.now() - 7200000).toISOString(),
+          size: 1024 * 32
+        }
+      ];
+
+      res.json({
+        success: true,
+        recordings,
+        total: recordings.length
+      });
+    } catch (error) {
+      console.error('Voice recordings list error:', error);
+      res.status(500).json({ success: false, error: 'Failed to load voice recordings' });
+    }
+  });
+
+  // Load documents endpoint
+  app.get('/api/knowledge/documents', async (req, res) => {
+    try {
+      const documents = documentStore.map(doc => ({
+        id: doc.documentId || doc.id,
+        originalname: doc.filename || doc.originalname || 'Untitled',
+        filename: doc.filename || doc.originalname || 'Untitled',
+        size: doc.size || doc.fileSize || 0,
+        mimetype: doc.mimetype || doc.fileType || 'application/octet-stream',
+        uploadTime: doc.uploadTime || doc.uploadedAt || new Date().toISOString(),
+        category: doc.category || 'general',
+        status: doc.status || 'processed',
+        extractedText: doc.extractedText || '',
+        keyTerms: doc.keyTerms || [],
+        wordCount: doc.wordCount || 0
+      }));
+
+      res.json({
+        success: true,
+        documents,
+        total: documents.length
+      });
+    } catch (error) {
+      console.error('Load documents error:', error);
+      res.status(500).json({ success: false, error: 'Failed to load documents' });
     }
   });
 

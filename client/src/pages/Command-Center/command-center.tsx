@@ -179,6 +179,9 @@ export default function CommandCenter() {
   const [voiceRecordings, setVoiceRecordings] = useState<any[]>([]);
   const [selectedRecordings, setSelectedRecordings] = useState<string[]>([]);
   const [showRecordingList, setShowRecordingList] = useState(false);
+  const [knowledgeItems, setKnowledgeItems] = useState<any[]>([]);
+  const [showKnowledgeViewer, setShowKnowledgeViewer] = useState(false);
+  const [selectedKnowledgeItems, setSelectedKnowledgeItems] = useState<string[]>([]);
   const [editingRecording, setEditingRecording] = useState<any>(null);
   const [showLeadScraping, setShowLeadScraping] = useState(false);
   const [activeModule, setActiveModule] = useState<string | null>(null);
@@ -589,11 +592,33 @@ export default function CommandCenter() {
 
   const handleViewKnowledge = async () => {
     try {
-      const response = await fetch('/api/knowledge/stats');
-      const data = await response.json();
-      setVoiceStatus(`Knowledge base: ${data.documentCount || 0} documents`);
+      setVoiceStatus('Loading knowledge base contents...');
+      const response = await fetch('/api/knowledge/list');
+      
+      if (response.ok) {
+        const data = await response.json();
+        setKnowledgeItems(data.items || []);
+        setShowKnowledgeViewer(true);
+        setVoiceStatus(`Loaded ${data.total || 0} knowledge items: ${data.documents || 0} documents, ${data.memories || 0} memories`);
+        setToast({
+          title: "Knowledge Loaded",
+          description: `Found ${data.total || 0} items in knowledge base`,
+        });
+      } else {
+        setVoiceStatus('Failed to load knowledge contents');
+        setToast({
+          title: "Load Failed",
+          description: "Unable to load knowledge base contents",
+          variant: "destructive"
+        });
+      }
     } catch (error) {
-      setVoiceStatus('Failed to load knowledge stats');
+      setVoiceStatus('Error loading knowledge base');
+      setToast({
+        title: "Error",
+        description: "Network error while loading knowledge base",
+        variant: "destructive"
+      });
     }
   };
 
