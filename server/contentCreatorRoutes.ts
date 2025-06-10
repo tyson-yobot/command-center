@@ -105,12 +105,13 @@ export function registerContentCreatorRoutes(app: Express) {
           };
 
           console.log('🚀 Posting to Publy with payload:', JSON.stringify(publyPayload, null, 2));
+          console.log('🔑 Using Publy API Key:', process.env.PUBLY_API_KEY ? 'Present' : 'Missing');
           
           const publyResponse = await fetch('https://api.publy.co/v1/posts', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${process.env.PUBLY_API_KEY || 'demo-key'}`,
+              'Authorization': `Bearer ${process.env.PUBLY_API_KEY}`,
               'User-Agent': 'YoBot-Command-Center/1.0'
             },
             body: JSON.stringify(publyPayload)
