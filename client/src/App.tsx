@@ -12,6 +12,7 @@ import Scanner from "@/pages/scanner";
 
 import ClientDashboard from "@/pages/client-dashboard";
 import DemoMode from "@/pages/demo";
+import DesktopCommandCenter from "@/components/desktop-command-center";
 
 import Header from "@/components/layout/header";
 import BottomNav from "@/components/layout/bottom-nav";
@@ -30,7 +31,7 @@ function Router() {
           <ClientDashboard />
         </Route>
         <Route path="/admin">
-          <ClientDashboard />
+          <DesktopCommandCenter />
         </Route>
         <Route path="/dashboard">
           <ClientDashboard />
