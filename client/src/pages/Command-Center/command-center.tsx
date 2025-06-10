@@ -3301,7 +3301,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Conversion Rate:</span>
-                  <span className="text-blue-400 font-bold">34%</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '34%' : '0%'}</span>
                 </div>
               </div>
             </CardContent>
@@ -3337,15 +3337,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">New Leads:</span>
-                  <span className="text-green-400 font-bold">23</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '23' : '0'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Conversions:</span>
-                  <span className="text-blue-400 font-bold">8</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '8' : '0'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Escalations:</span>
-                  <span className="text-orange-400 font-bold">2</span>
+                  <span className="text-orange-400 font-bold">{currentSystemMode === 'test' ? '2' : '0'}</span>
                 </div>
               </div>
             </CardContent>
@@ -3366,15 +3366,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Tasks Automated:</span>
-                  <span className="text-white font-bold">156</span>
+                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '156' : '0'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Hours Saved:</span>
-                  <span className="text-green-400 font-bold">23.4</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '23.4' : '0'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Efficiency:</span>
-                  <span className="text-blue-400 font-bold">89%</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '89%' : '0%'}</span>
                 </div>
               </div>
             </CardContent>

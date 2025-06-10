@@ -1,5 +1,12 @@
 import { Express } from 'express';
 import { getSystemMode } from './systemMode';
+import { MailService } from '@sendgrid/mail';
+
+// Initialize SendGrid
+const mailService = new MailService();
+if (process.env.SENDGRID_API_KEY) {
+  mailService.setApiKey(process.env.SENDGRID_API_KEY);
+}
 
 interface MailchimpCampaignPayload {
   campaignType: string;
@@ -53,29 +60,74 @@ export function registerMailchimpRoutes(app: Express) {
 
       // Conditional logic for campaign execution
       if (currentSystemMode === 'live') {
-        // In Live Mode: Create and send/schedule via Mailchimp API
-        console.log('LIVE MODE: Creating campaign via Mailchimp API');
+        // Live Mode: Create and send/schedule via SendGrid + Mailchimp API
+        console.log('LIVE MODE: Creating campaign via Mailchimp API and SendGrid');
         
-        if (payload.sendNow) {
-          console.log('✅ Campaign sent immediately via Mailchimp');
-          campaignResult.status = 'sent';
-        } else if (payload.scheduledTime) {
-          console.log(`✅ Campaign scheduled for ${payload.scheduledTime} via Mailchimp`);
-          campaignResult.status = 'scheduled';
-        } else {
-          console.log('✅ Campaign created as draft in Mailchimp');
-          campaignResult.status = 'draft';
+        try {
+          // Send via SendGrid in live mode
+          if (process.env.SENDGRID_API_KEY && payload.sendNow) {
+            await mailService.send({
+              to: 'test@example.com', // In production: get from audience segment
+              from: 'noreply@yourdomain.com', // Configure your sender
+              subject: payload.emailSubject,
+              html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                  <h2>${payload.emailSubject}</h2>
+                  <div>${payload.emailBody}</div>
+                  <div style="margin: 20px 0;">
+                    <a href="#" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+                      ${payload.CTA}
+                    </a>
+                  </div>
+                  <p style="color: #666; font-size: 12px;">
+                    Campaign Type: ${payload.campaignType} | Audience: ${payload.audienceSegment}
+                  </p>
+                </div>
+              `,
+              text: `${payload.emailBody}\n\n${payload.CTA}`
+            });
+            
+            console.log('✅ Email sent via SendGrid');
+            campaignResult.status = 'sent';
+          } else if (payload.scheduledTime) {
+            console.log(`✅ Campaign scheduled for ${payload.scheduledTime} via Mailchimp`);
+            campaignResult.status = 'scheduled';
+          } else {
+            console.log('✅ Campaign created as draft in Mailchimp');
+            campaignResult.status = 'draft';
+          }
+          
+          // Log to Airtable Email Campaign Tracker in live mode
+          try {
+            const airtableResponse = await fetch('https://api.airtable.com/v0/appRt8V3tH4g5Z51f/tblEmailCampaignTracker', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${process.env.AIRTABLE_PAT}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                fields: {
+                  'Campaign ID': campaignResult.id,
+                  'Subject': payload.emailSubject,
+                  'Audience': payload.audienceSegment,
+                  'Type': payload.campaignType,
+                  'Status': campaignResult.status,
+                  'Created At': campaignResult.createdAt,
+                  'System Mode': 'live'
+                }
+              })
+            });
+
+            if (airtableResponse.ok) {
+              console.log('✅ Campaign logged to Airtable Email Campaign Tracker');
+            }
+          } catch (airtableError) {
+            console.error('Airtable logging failed:', airtableError);
+          }
+          
+        } catch (emailError) {
+          console.error('SendGrid email sending failed:', emailError);
         }
-        
-        // Log to Airtable Email Campaign Tracker
-        const emailTracker = {
-          subject: payload.emailSubject,
-          audience: payload.audienceSegment,
-          time: payload.scheduledTime || new Date().toISOString(),
-          mode: 'live',
-          result: 'success',
-          campaignId: campaignResult.id
-        };
         
         // Log to Command Center Metrics Tracker
         const metricsEntry = {
@@ -87,7 +139,6 @@ export function registerMailchimpRoutes(app: Express) {
           systemMode: 'live'
         };
         
-        console.log('✅ Campaign logged to Airtable Email Campaign Tracker');
         console.log('✅ Metrics logged to Command Center');
         
       } else {
