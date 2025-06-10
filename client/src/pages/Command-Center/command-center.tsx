@@ -2449,7 +2449,7 @@ export default function CommandCenter() {
 
         {/* Key Performance Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-slate-700/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Active Calls</CardTitle>
               <Phone className="h-4 w-4 text-green-400" />
@@ -2464,7 +2464,7 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-slate-700/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Bot Processing</CardTitle>
               <Brain className="h-4 w-4 text-blue-400" />
@@ -2479,7 +2479,7 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-slate-700/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Success Rate</CardTitle>
               <DollarSign className="h-4 w-4 text-emerald-400" />
@@ -2793,7 +2793,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Botalytics™ */}
-          <Card className="bg-slate-900/90 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <BarChart3 className="w-5 h-5 mr-2 text-blue-400" />
@@ -2853,7 +2853,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* SmartSpend™ */}
-          <Card className="bg-slate-900/90 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <PieChart className="w-5 h-5 mr-2 text-green-400" />
