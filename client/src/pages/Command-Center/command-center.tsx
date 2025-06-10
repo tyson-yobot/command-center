@@ -4099,18 +4099,11 @@ export default function CommandCenter() {
               <div className="space-y-4">
                 <div className="flex gap-3">
                   <Button 
-                    onClick={loadDocuments}
-                    disabled={documentsLoading}
-                    className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
-                  >
-                    {documentsLoading ? 'Loading...' : 'Load Documents'}
-                  </Button>
-                  <Button 
                     onClick={() => document.getElementById('file-upload')?.click()}
                     className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
                   >
                     <Upload className="w-4 h-4 mr-2" />
-                    Upload Documents
+                    Upload & Program Documents
                   </Button>
                   <Button 
                     onClick={deleteSelectedDocuments}
@@ -4153,7 +4146,7 @@ export default function CommandCenter() {
                   ))}
                   {uploadedDocuments.length === 0 && (
                     <div className="text-slate-400 text-center py-4">
-                      Click "Load Documents" to view uploaded files
+                      Upload documents to program knowledge to view uploaded files
                     </div>
                   )}
                 </div>

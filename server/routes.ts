@@ -207,17 +207,32 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
   fileFilter: (req, file, cb) => {
+    console.log('File upload attempt:', { 
+      originalname: file.originalname, 
+      mimetype: file.mimetype, 
+      size: file.size 
+    });
+    
     const allowedTypes = [
       'text/plain',
       'text/csv',
       'application/pdf',
       'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.ms-word',
+      'application/octet-stream' // Allow binary uploads for Word docs
     ];
-    if (allowedTypes.includes(file.mimetype)) {
+    
+    // Also check file extensions for additional validation
+    const allowedExtensions = ['.txt', '.csv', '.pdf', '.doc', '.docx'];
+    const fileExtension = file.originalname.toLowerCase().substring(file.originalname.lastIndexOf('.'));
+    
+    if (allowedTypes.includes(file.mimetype) || allowedExtensions.includes(fileExtension)) {
+      console.log('File accepted:', file.originalname);
       cb(null, true);
     } else {
-      cb(new Error('Unsupported file type'), false);
+      console.log('File rejected:', { mimetype: file.mimetype, extension: fileExtension });
+      cb(new Error(`Unsupported file type: ${file.mimetype} (${fileExtension})`), false);
     }
   }
 });
