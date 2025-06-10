@@ -14,6 +14,12 @@ interface TestLogEntry {
   errorDetails?: string;
 }
 
+// Mapping to Airtable Single Select options as shown in screenshot
+const PASS_FAIL_OPTIONS = {
+  'PASS': '✅',    // Green check icon
+  'FAIL': '❌'     // Red X icon
+};
+
 class IntegrationTestLogger {
   private airtableApiKey = 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa';
   private integrationTestLogBase = 'appRt8V3tH4g5Z5if';
@@ -30,7 +36,7 @@ class IntegrationTestLogger {
         body: JSON.stringify({
           fields: {
             '🔌 Integration Name': testData.integrationName,
-            '✅ Pass/Fail': testData.passFail,
+            '✅ Pass/Fail': PASS_FAIL_OPTIONS[testData.passFail],
             '🧠 Notes / Debug': testData.notes,
             '🗓️ Test Date': testData.testDate,
             '👤 QA Owner': testData.qaOwner,
@@ -50,7 +56,7 @@ class IntegrationTestLogger {
         console.error('Request body:', JSON.stringify({
           fields: {
             '🔌 Integration Name': testData.integrationName,
-            '✅ Pass/Fail': testData.passFail,
+            '✅ Pass/Fail': PASS_FAIL_OPTIONS[testData.passFail],
             '🧠 Notes / Debug': testData.notes,
             '🗓️ Test Date': testData.testDate,
             '👤 QA Owner': testData.qaOwner,
