@@ -1080,9 +1080,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         temperature: 0.7
       });
 
-      const generatedContent = response.choices[0].message.content;
+      const generatedContent = response.choices[0].message.content || '';
       
-      const result = {
+      const result: any = {
         success: true,
         content: generatedContent,
         contentType,
@@ -1140,9 +1140,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         temperature: 0.6
       });
 
-      const emailContent = response.choices[0].message.content;
+      const emailContent = response.choices[0].message.content || '';
       
-      const result = {
+      const result: any = {
         success: true,
         campaignId: `CAMP_${Date.now()}`,
         campaignType,
