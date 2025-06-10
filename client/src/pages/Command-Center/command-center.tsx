@@ -2542,11 +2542,11 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Current Errors:</span>
-                  <span className="text-orange-400 font-bold">{metrics?.errorCount || 0} errors</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Active Sessions:</span>
-                  <span className="text-blue-400 font-bold">{metrics?.activeSessions || 0}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Uptime Status:</span>
@@ -2568,23 +2568,23 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">MRR:</span>
-                  <span className="text-white font-bold">${(metrics?.monthlyRevenue || 0).toLocaleString()}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Pipeline Value:</span>
-                  <span className="text-green-400 font-bold">${(metrics?.pipelineValue || 0).toLocaleString()}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Active Deals:</span>
-                  <span className="text-blue-400 font-bold">{metrics?.activeDeals || 0}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Close Rate:</span>
-                  <span className="text-green-400 font-bold">{metrics?.closeRate || 0}%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Sales Velocity:</span>
-                  <span className="text-blue-400 font-bold">{metrics?.salesVelocity || '0'} deals/week</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
@@ -2606,19 +2606,19 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Client NPS:</span>
-                  <span className="text-slate-400 font-bold">0/100</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Churn Risk Flags:</span>
-                  <span className="text-slate-400 font-bold">0 accounts</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Last Login:</span>
-                  <span className="text-slate-400 font-bold">No Activity</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Bot Utilization Rate:</span>
-                  <span className="text-slate-400 font-bold">0% usage</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
@@ -2652,7 +2652,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Bot Processing Load:</span>
-                  <span className="text-slate-400 font-bold">{automationPerformance?.activeFunctions || 0} tasks</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
