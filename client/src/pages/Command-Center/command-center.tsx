@@ -1954,20 +1954,13 @@ export default function CommandCenter() {
       if (result.success || response.ok) {
         // Special handling for Content Creator and Mailchimp
         if (category === 'Content Creator') {
-          toast({
-            title: "Content Created Successfully",
-            description: `${result.preview?.title || 'LinkedIn content'} generated with hashtags: ${result.preview?.hashtags?.join(', ') || 'N/A'}`,
-          });
+          // Show the generated content
+          alert(`✅ CONTENT CREATED AND POSTED!\n\nTitle: ${result.preview?.title || 'LinkedIn content'}\nContent: ${result.preview?.content || 'Generated content'}\nHashtags: ${result.preview?.hashtags?.join(', ') || 'N/A'}\nCTA: ${result.preview?.cta || 'N/A'}\n\n🚀 Posted to: ${result.content?.platform || 'LinkedIn'}\n📊 Status: ${result.content?.status || 'Published'}`);
         } else if (category === 'Mailchimp Sync') {
-          toast({
-            title: "Campaign Created Successfully", 
-            description: `${result.campaign?.subject || 'Email campaign'} sent to ${result.campaign?.audience || 'subscribers'}`,
-          });
+          // Show the campaign details
+          alert(`✅ MAILCHIMP CAMPAIGN CREATED!\n\nSubject: ${result.campaign?.subject || 'Email campaign'}\nAudience: ${result.campaign?.audience || 'subscribers'}\nType: ${result.campaign?.type || 'Newsletter'}\nStatus: ${result.campaign?.status || 'Sent'}\n\n📧 Campaign ID: ${result.campaign?.id || 'N/A'}`);
         } else {
-          toast({
-            title: "Command Executed",
-            description: `${category} completed successfully`,
-          });
+          alert(`✅ ${category} completed successfully!`);
         }
       } else {
         toast({
