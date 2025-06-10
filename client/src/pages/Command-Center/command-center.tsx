@@ -9,6 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { 
   TrendingUp, 
   Phone, 
+  PhoneOff,
   Users, 
   DollarSign,
   Clock,
@@ -2122,79 +2123,26 @@ export default function CommandCenter() {
               <CardContent>
                 <div className="grid grid-cols-1 gap-3">
                   <Button
-                    onClick={async () => {
-                      try {
-                        console.log('Start Pipeline Calls button clicked');
-                        const response = await fetch('/api/start-pipeline-calls', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ 
-                            phoneNumbers: ['+1234567890', '+0987654321'],
-                            script: 'YoBot automated call script for pipeline testing',
-                            voiceId: 'professional'
-                          })
-                        });
-                        const result = await response.json();
-                        console.log('Pipeline calls started:', result);
-                        alert(result.success ? 'Pipeline calls started' : 'Failed to start pipeline calls');
-                      } catch (error) {
-                        console.error('Pipeline start error:', error);
-                        alert('Failed to start pipeline calls');
-                      }
-                    }}
+                    onClick={handleStartPipelineCalls}
                     className="bg-lime-500 hover:bg-lime-600 text-black flex items-center justify-start p-3 font-semibold"
                   >
-                    <span className="text-xl mr-3">📞</span>
+                    <Phone className="w-5 h-5 mr-3" />
                     <span>Start Pipeline Calls</span>
                   </Button>
                   
                   <Button
-                    onClick={async () => {
-                      try {
-                        console.log('Stop Pipeline Calls button clicked');
-                        const response = await fetch('/api/voicebot/stop-pipeline', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ action: 'stop_pipeline_calls' })
-                        });
-                        const result = await response.json();
-                        console.log('Pipeline calls stopped:', result);
-                        alert(result.success ? 'Pipeline calls stopped' : 'Failed to stop pipeline calls');
-                      } catch (error) {
-                        console.error('Pipeline stop error:', error);
-                        alert('Failed to stop pipeline calls');
-                      }
-                    }}
+                    onClick={handleStopPipelineCalls}
                     className="bg-red-500 hover:bg-red-600 text-white flex items-center justify-start p-3"
                   >
-                    <span className="text-xl mr-3">⏹️</span>
+                    <PhoneOff className="w-5 h-5 mr-3" />
                     <span>Stop Pipeline Calls</span>
                   </Button>
                   
                   <Button
-                    onClick={async () => {
-                      try {
-                        console.log('Initiate Voice Call button clicked');
-                        const response = await fetch('/api/voicebot/initiate-call', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            phoneNumber: '+1234567890',
-                            callType: 'consultation',
-                            clientId: 'CLIENT_' + Date.now()
-                          })
-                        });
-                        const result = await response.json();
-                        console.log('Voice call initiated:', result);
-                        alert(result.success ? `Voice call initiated: ${result.callId}` : 'Voice call initiation failed');
-                      } catch (error) {
-                        console.error('Voice call error:', error);
-                        alert('Voice call initiation failed');
-                      }
-                    }}
+                    onClick={handleInitiateVoiceCall}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
-                    <span className="text-xl mr-3">📞</span>
+                    <Phone className="w-5 h-5 mr-3" />
                     <span>Initiate Voice Call</span>
                   </Button>
                   
@@ -2207,10 +2155,10 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => window.location.href = '/publy'}
+                    onClick={handleContentCreator}
                     className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
                   >
-                    <span className="text-xl mr-3">📢</span>
+                    <FileText className="w-5 h-5 mr-3" />
                     <span>Content Creator</span>
                   </Button>
                 </div>
