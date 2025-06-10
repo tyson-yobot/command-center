@@ -4753,6 +4753,69 @@ Always provide helpful, actionable guidance.`
     }
   });
 
+  // Control Center module toggle endpoint
+  app.post('/api/control-center/toggle-module', async (req, res) => {
+    try {
+      const { module, enabled, userRole = 'admin' } = req.body;
+      
+      if (!module) {
+        return res.status(400).json({
+          success: false,
+          error: 'Module name is required'
+        });
+      }
+
+      logOperation('control-center-toggle', { module, enabled, userRole }, 'success', `Module ${module} ${enabled ? 'enabled' : 'disabled'} by ${userRole}`);
+
+      // Store module state in memory (could be enhanced with database persistence)
+      if (!global.moduleStates) {
+        global.moduleStates = {};
+      }
+      global.moduleStates[module] = enabled;
+
+      res.json({
+        success: true,
+        module,
+        enabled,
+        timestamp: new Date().toISOString(),
+        message: `Module ${module} ${enabled ? 'enabled' : 'disabled'} successfully`
+      });
+    } catch (error) {
+      console.error('Control Center toggle error:', error);
+      logOperation('control-center-toggle', req.body, 'error', `Toggle failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Module toggle failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Get module states endpoint
+  app.get('/api/control-center/module-states', async (req, res) => {
+    try {
+      logOperation('control-center-states', {}, 'success', 'Module states requested');
+
+      const moduleStates = global.moduleStates || {};
+      
+      res.json({
+        success: true,
+        moduleStates,
+        totalModules: Object.keys(moduleStates).length,
+        activeModules: Object.values(moduleStates).filter(Boolean).length,
+        lastUpdate: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Get module states error:', error);
+      logOperation('control-center-states', {}, 'error', `Get states failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to retrieve module states',
+        details: error.message
+      });
+    }
+  });
+
   // Performance optimization endpoint
   app.post('/api/performance-optimization', async (req, res) => {
     try {

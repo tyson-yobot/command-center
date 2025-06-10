@@ -262,11 +262,44 @@ export default function SystemControls() {
     setAuthError("");
   };
 
-  const toggleModule = (module: string) => {
+  const toggleModule = async (module: string) => {
+    const newState = !moduleStates[module];
+    
+    // Optimistically update UI
     setModuleStates(prev => ({
       ...prev,
-      [module]: !prev[module]
+      [module]: newState
     }));
+
+    try {
+      const response = await fetch('/api/control-center/toggle-module', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          module,
+          enabled: newState,
+          userRole
+        }),
+      });
+
+      if (!response.ok) {
+        // Revert on failure
+        setModuleStates(prev => ({
+          ...prev,
+          [module]: !newState
+        }));
+        console.error('Failed to toggle module:', module);
+      }
+    } catch (error) {
+      // Revert on error
+      setModuleStates(prev => ({
+        ...prev,
+        [module]: !newState
+      }));
+      console.error('Error toggling module:', error);
+    }
   };
 
   const getStatusColor = (isActive: boolean) => {
