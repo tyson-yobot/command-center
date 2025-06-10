@@ -1260,6 +1260,7 @@ export default function CommandCenter() {
         
         // Store recognition instance for cleanup
         setCurrentRecognition(recognition);
+        recognitionRef.current = recognition;
         
         recognition.onstart = () => {
           setIsListening(true);
@@ -1302,18 +1303,34 @@ export default function CommandCenter() {
         
         recognition.onend = () => {
           console.log('Voice recognition ended');
-          // Continuously restart if still listening
-          if (currentRecognition && isListening) {
-            setTimeout(() => {
+          // Use ref to check current state instead of closure values
+          setTimeout(() => {
+            if (recognitionRef.current && !recognitionRef.current._stopped) {
               try {
-                currentRecognition.start();
-                console.log('Voice recognition restarted');
+                const newRecognition = new SpeechRecognition();
+                newRecognition.continuous = true;
+                newRecognition.interimResults = true;
+                newRecognition.lang = 'en-US';
+                newRecognition.maxAlternatives = 1;
+                
+                // Copy all handlers
+                newRecognition.onstart = recognition.onstart;
+                newRecognition.onresult = recognition.onresult;
+                newRecognition.onerror = recognition.onerror;
+                newRecognition.onend = recognition.onend;
+                
+                recognitionRef.current = newRecognition;
+                setCurrentRecognition(newRecognition);
+                newRecognition.start();
+                console.log('Voice recognition restarted with new instance');
               } catch (error) {
                 console.error('Failed to restart recognition:', error);
                 setIsListening(false);
+                setCurrentRecognition(null);
+                recognitionRef.current = null;
               }
-            }, 500);
-          }
+            }
+          }, 300);
         };
         
         try {
@@ -1339,12 +1356,17 @@ export default function CommandCenter() {
       setIsListening(false);
       if (currentRecognition) {
         try {
+          currentRecognition._stopped = true;
           currentRecognition.stop();
           currentRecognition.abort();
           setCurrentRecognition(null);
         } catch (error) {
           console.error('Error stopping recognition:', error);
         }
+      }
+      if (recognitionRef.current) {
+        recognitionRef.current._stopped = true;
+        recognitionRef.current = null;
       }
       setVoiceCommand('');
     }
