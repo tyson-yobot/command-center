@@ -41,6 +41,7 @@ import {
   Eye,
   Download,
   Edit,
+  Edit3,
   Share2,
   Camera,
   Building,
@@ -1279,8 +1280,18 @@ export default function CommandCenter() {
         
         recognition.onerror = (event) => {
           console.error('Speech recognition error:', event.error);
-          setIsListening(false);
-          if (event.error !== 'aborted') {
+          
+          // Handle network errors by attempting restart
+          if (event.error === 'network') {
+            console.log('Network error - will restart automatically');
+            // Don't stop listening, let onend handle restart
+            return;
+          }
+          
+          // Stop for other critical errors
+          if (event.error !== 'aborted' && event.error !== 'no-speech') {
+            setIsListening(false);
+            setCurrentRecognition(null);
             setToast({
               title: "Voice Recognition Error",
               description: `Error: ${event.error}. Please check microphone permissions.`,
@@ -2389,15 +2400,7 @@ export default function CommandCenter() {
                   
 
 
-                  <Button
-                    onClick={() => {
-                      document.getElementById('file-upload')?.click();
-                    }}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
-                  >
-                    <Upload className="w-5 h-5 mr-3" />
-                    <span>Upload Documents</span>
-                  </Button>
+
 
                 </div>
               </CardContent>
@@ -3448,19 +3451,48 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          {/* Data & Reports */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+          {/* Data & Reports - Enhanced with Content Creator and Mailchimp */}
+          <Card className="bg-gradient-to-br from-emerald-900/60 via-teal-900/60 to-cyan-900/60 backdrop-blur-sm border border-emerald-400/50 shadow-lg shadow-emerald-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <FileText className="w-5 h-5 mr-2 text-cyan-400" />
+                <FileText className="w-5 h-5 mr-2 text-emerald-400" />
                 Data & Reports
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Last Export:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+              <div className="space-y-4">
+                {/* Content Creator Button */}
+                <Button
+                  onClick={() => setShowContentCreator(!showContentCreator)}
+                  className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white flex items-center justify-center p-3 border border-emerald-400/30"
+                >
+                  <Edit3 className="w-5 h-5 mr-3" />
+                  <span>Content Creator Dashboard</span>
+                </Button>
+
+                {/* Mailchimp Sync Button */}
+                <Button
+                  onClick={() => setShowMailchimpSync(!showMailchimpSync)}
+                  className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white flex items-center justify-center p-3 border border-teal-400/30"
+                >
+                  <Users className="w-5 h-5 mr-3" />
+                  <span>Mailchimp Sync Dashboard</span>
+                </Button>
+
+                {/* Document Upload - Moved here */}
+                <Button
+                  onClick={() => {
+                    document.getElementById('file-upload')?.click();
+                  }}
+                  className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white flex items-center justify-center p-3 border border-cyan-400/30"
+                >
+                  <Upload className="w-5 h-5 mr-3" />
+                  <span>Upload Documents</span>
+                </Button>
+
+                <div className="flex justify-between pt-2 border-t border-emerald-400/20">
+                  <span className="text-emerald-200 text-sm">Last Export:</span>
+                  <span className="text-emerald-300 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
