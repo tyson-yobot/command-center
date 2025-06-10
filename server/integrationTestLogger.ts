@@ -28,20 +28,18 @@ class IntegrationTestLogger {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          records: [{
-            fields: {
-              '🔌 Integration Name': testData.integrationName,
-              '✅ Pass/Fail': testData.passFail === 'PASS',
-              '🧠 Notes / Debug': testData.notes,
-              '🗓️ Test Date': testData.testDate,
-              '👤 QA Owner': testData.qaOwner,
-              '📤 Output Data Pop...': testData.outputDataPopulated,
-              '🆕 Record Created?': testData.recordCreated,
-              '🔁 Retry Attempted?': testData.retryAttempted,
-              '🧩 Module Type': testData.moduleType,
-              '📁 Related Scenario Link': testData.relatedScenario
-            }
-          }]
+          fields: {
+            '🔌 Integration Name': testData.integrationName,
+            '✅ Pass/Fail': testData.passFail,
+            '🧠 Notes / Debug': testData.notes,
+            '🗓️ Test Date': testData.testDate,
+            '👤 QA Owner': testData.qaOwner,
+            '📤 Output Data Pop...': testData.outputDataPopulated,
+            '🆕 Record Created?': testData.recordCreated,
+            '🔁 Retry Attempted?': testData.retryAttempted,
+            '🧩 Module Type': testData.moduleType,
+            '📁 Related Scenario Link': testData.relatedScenario
+          }
         })
       });
 
@@ -73,7 +71,7 @@ class IntegrationTestLogger {
       passFail: 'PASS',
       notes,
       testDate: new Date().toISOString(),
-      qaOwner: 'YoBot System',
+      qaOwner: 'Daniel Sharpe',
       outputDataPopulated: true,
       recordCreated: true,
       retryAttempted: false,
@@ -88,7 +86,7 @@ class IntegrationTestLogger {
       passFail: 'FAIL',
       notes: `Integration failed: ${errorDetails}`,
       testDate: new Date().toISOString(),
-      qaOwner: 'YoBot System',
+      qaOwner: 'Daniel Sharpe',
       outputDataPopulated: false,
       recordCreated: false,
       retryAttempted: false,
