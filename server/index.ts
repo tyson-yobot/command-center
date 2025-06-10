@@ -1,14 +1,14 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
-import orchestrator from "./systemAutomationOrchestrator";
-import completeAutomation from "./completeSystemAutomation";
-import documentRoutes from "./documentManager";
+import orchestrator from "./workflow-automation/systemAutomationOrchestrator";
+import completeAutomation from "./workflow-automation/completeSystemAutomation";
+import documentRoutes from "./utilities/documentManager";
 import { setupVite, serveStatic, log } from "./vite";
-import { sendSlackAlert } from "./alerts";
-import { generatePDFReport } from "./pdfReport";
-import { registerQATracker } from "./qaTracker";
-import { officialQATracker } from "./officialQATracker";
-import { registerQATestEndpoints } from "./qaTestEndpoints";
+import { sendSlackAlert } from "./monitoring/alerts";
+import { generatePDFReport } from "./utilities/pdfReport";
+import { registerQATracker } from "./monitoring/qaTracker";
+import { officialQATracker } from "./monitoring/officialQATracker";
+import { registerQATestEndpoints } from "./core-routes/qaTestEndpoints";
 
 const app = express();
 app.use(express.json());
@@ -247,11 +247,11 @@ print(json.dumps(result))
   registerQATestEndpoints(app);
   
   // Register Batch 21 automation routes
-  const { registerBatch21Routes } = await import('./automationBatch21');
+  const { registerBatch21Routes } = await import('./automation/automationBatch21');
   registerBatch21Routes(app);
   
   // Register Twilio SMS automation routes (Functions 301-310)
-  const twilioRoutes = await import('./twilioRoutes');
+  const twilioRoutes = await import('./external-apis/twilioRoutes');
   app.use('/api/automation-twilio', twilioRoutes.default);
   
   // Start complete system automation
