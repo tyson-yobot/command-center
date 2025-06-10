@@ -60,33 +60,31 @@ import { useToast } from '@/hooks/use-toast';
 
 
 export default function CommandCenter() {
-  // System mode control - LIVE MODE ENFORCED
-  const { data: systemModeData } = useQuery({ 
-    queryKey: ['/api/system-mode'],
-    refetchInterval: 5000
+  // System mode state - must be defined first
+  const [currentSystemMode, setCurrentSystemMode] = useState(() => {
+    // Try to get from localStorage first, fallback to 'live'
+    return localStorage.getItem('systemMode') || 'live';
   });
-  
-  const systemMode = systemModeData?.systemMode || 'live';
   
   // Live dashboard metrics with proper headers
   const { data: metrics } = useQuery({ 
-    queryKey: ['/api/dashboard-metrics', systemMode],
+    queryKey: ['/api/dashboard-metrics', currentSystemMode],
     queryFn: () => fetch('/api/dashboard-metrics', {
-      headers: { 'x-system-mode': systemMode }
+      headers: { 'x-system-mode': currentSystemMode }
     }).then(res => res.json())
   });
   
   const { data: automationPerformance } = useQuery({ 
-    queryKey: ['/api/automation-performance', systemMode],
+    queryKey: ['/api/automation-performance', currentSystemMode],
     queryFn: () => fetch('/api/automation-performance', {
-      headers: { 'x-system-mode': systemMode }
+      headers: { 'x-system-mode': currentSystemMode }
     }).then(res => res.json())
   });
   
   const { data: knowledgeStats, refetch: refetchKnowledge } = useQuery({ 
-    queryKey: ['/api/knowledge/stats', systemMode],
+    queryKey: ['/api/knowledge/stats', currentSystemMode],
     queryFn: () => fetch('/api/knowledge/stats', {
-      headers: { 'x-system-mode': systemMode }
+      headers: { 'x-system-mode': currentSystemMode }
     }).then(res => res.json())
   });
   
@@ -110,10 +108,6 @@ export default function CommandCenter() {
   const [memoryText, setMemoryText] = useState('');
   const [memoryCategory, setMemoryCategory] = useState('general');
   const [voiceGenerationText, setVoiceGenerationText] = useState('');
-  const [currentSystemMode, setCurrentSystemMode] = useState(() => {
-    // Try to get from localStorage first, fallback to 'live'
-    return localStorage.getItem('systemMode') || 'live';
-  });
   const [showPublyDashboard, setShowPublyDashboard] = useState(false);
   const [showMailchimpDashboard, setShowMailchimpDashboard] = useState(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
@@ -1732,41 +1726,12 @@ export default function CommandCenter() {
                 >
                   Submit Ticket
                 </Button>
-                {/* Test mode buttons removed - live mode only */}
-                <Button 
-                  onClick={async () => {
-                    try {
-                      console.log('Critical Escalation button clicked');
-                      const response = await fetch('/api/automation/critical-escalation', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                          escalationType: 'critical',
-                          source: 'command_center',
-                          timestamp: new Date().toISOString(),
-                          severity: 'high'
-                        })
-                      });
-                      const result = await response.json();
-                      console.log('Critical escalation result:', result);
-                      setShowEscalation(true);
-                      alert(result.success ? `Critical escalation triggered: ${result.escalationId}` : 'Critical escalation failed');
-                    } catch (error) {
-                      console.error('Critical escalation error:', error);
-                      alert('Critical escalation failed');
-                    }
-                  }}
-                  size="sm"
-                  className="bg-red-600 hover:bg-red-700 text-white border border-red-400"
-                >
-                  Critical Escalation
-                </Button>
               </div>
               
               <div className="flex items-center space-x-3">
-                <div className={`w-3 h-3 rounded-full ${systemMode === 'live' ? 'bg-green-400 status-active' : 'bg-amber-400'}`}></div>
+                <div className={`w-3 h-3 rounded-full ${currentSystemMode === 'live' ? 'bg-green-400 status-active' : 'bg-amber-400'}`}></div>
                 <span className="text-white text-sm">
-                  System Status: {systemMode === 'live' ? 'Live Production' : 'Test Mode'}
+                  System Status: {currentSystemMode === 'live' ? 'Live Production' : 'Test Mode'}
                 </span>
               </div>
             </div>
