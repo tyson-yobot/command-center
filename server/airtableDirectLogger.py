@@ -14,10 +14,13 @@ def log_to_airtable(function_name, result, notes=""):
         }
     }
     response = requests.post(airtable_url, headers=headers, json=payload)
+    print(f"Full response: {response.status_code} - {response.text}")
+    if response.status_code != 200:
+        print(f"Error details: {response.json()}")
     return response.status_code
 
 # Test one of the missing functions
 if __name__ == "__main__":
-    # Test Document Management
-    result = log_to_airtable("Document Management", True, "Document management completed - 12 files processed")
-    print(f"Logged Document Management: Status {result}")
+    # Test Policy Distribution
+    result = log_to_airtable("Policy Distribution", True, "Policy distribution completed - 8 policies distributed")
+    print(f"Logged Policy Distribution: Status {result}")
