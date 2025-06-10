@@ -21,6 +21,6 @@ def log_to_airtable(function_name, result, notes=""):
 
 # Test one of the missing functions
 if __name__ == "__main__":
-    # Test Policy Distribution
-    result = log_to_airtable("Policy Distribution", True, "Policy distribution completed - 8 policies distributed")
-    print(f"Logged Policy Distribution: Status {result}")
+    # Test Compliance Training
+    result = log_to_airtable("Compliance Training", True, "Compliance training completed - 15 employees trained")
+    print(f"Logged Compliance Training: Status {result}")
