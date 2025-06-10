@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
+import yobotRobotHead from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749548179437.png';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -2534,7 +2535,8 @@ export default function CommandCenter() {
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-green-400" />
-                🤖 Bot Health Monitor
+                <img src={yobotRobotHead} alt="YoBot" className="w-6 h-6 mr-2" />
+                Bot Health Monitor
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -2788,7 +2790,7 @@ export default function CommandCenter() {
                   <div className="text-slate-300 text-sm mb-1">Monthly Savings vs Manual</div>
                   <div className="flex items-center justify-between">
                     <div className="text-white font-bold">${metrics?.totalRevenue || 0}</div>
-                    <Badge className="bg-green-600 text-white">384 hours saved</Badge>
+                    <Badge className="bg-slate-600 text-slate-400">0 hours saved</Badge>
                   </div>
                 </div>
               </div>
@@ -2810,7 +2812,7 @@ export default function CommandCenter() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Confidence Score</span>
-                  <span className="text-green-400 font-bold">94.2%</span>
+                  <span className="text-slate-400 font-bold">0%</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Learning Status</span>
@@ -2818,15 +2820,15 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Percentage of conversations that needed human assistance">Escalation Rate</span>
-                  <span className="text-yellow-400 font-bold">5.8%</span>
+                  <span className="text-slate-400 font-bold">0%</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Response Accuracy</span>
-                  <span className="text-green-400 font-bold">96.1%</span>
+                  <span className="text-slate-400 font-bold">0%</span>
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Latest Learning</div>
-                  <div className="text-white font-medium">Product pricing updates</div>
+                  <div className="text-slate-400 font-medium">No recent activity</div>
                 </div>
               </div>
             </CardContent>
