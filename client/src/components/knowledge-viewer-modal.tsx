@@ -55,7 +55,13 @@ export function KnowledgeViewerModal({
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-slate-900 border border-blue-400 rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-white">Knowledge Base Contents</h3>
+          <div>
+            <h3 className="text-xl font-bold text-white">Knowledge Base Contents</h3>
+            <p className="text-sm text-slate-400 mt-1">
+              Documents and system memories used by the AI for intelligent responses. 
+              Tags below show key topics found in each item.
+            </p>
+          </div>
           <Button
             onClick={onClose}
             className="bg-red-600 hover:bg-red-700"
@@ -93,23 +99,23 @@ export function KnowledgeViewerModal({
                     />
                   </div>
                 </div>
-                {item.content && (
-                  <div className="text-slate-300 text-sm mt-2 max-h-20 overflow-y-auto">
-                    {item.content.substring(0, 200)}...
-                  </div>
-                )}
-                {item.extractedText && (
-                  <div className="text-slate-300 text-sm mt-2 max-h-20 overflow-y-auto">
-                    {item.extractedText.substring(0, 200)}...
-                  </div>
-                )}
+                <div className="text-slate-300 text-sm mt-2 max-h-20 overflow-y-auto">
+                  {item.type === 'memory' 
+                    ? getMemorySummary(item.content || '', item.category || '')
+                    : (item.extractedText?.substring(0, 200) + '...' || item.content?.substring(0, 200) + '...' || 'No content available')
+                  }
+                </div>
+                
                 {item.keyTerms && item.keyTerms.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {item.keyTerms.slice(0, 5).map((term, i) => (
-                      <span key={i} className="bg-blue-600 text-white text-xs px-2 py-1 rounded">
-                        {term}
-                      </span>
-                    ))}
+                  <div className="mt-3">
+                    <div className="text-xs text-slate-400 mb-1">Key Terms:</div>
+                    <div className="flex flex-wrap gap-1">
+                      {item.keyTerms.slice(0, 8).map((term, i) => (
+                        <span key={i} className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded transition-colors">
+                          {term}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
