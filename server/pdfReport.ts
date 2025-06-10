@@ -1,37 +1,20 @@
-import { spawn } from 'child_process';
+import puppeteer from 'puppeteer';
 
 export async function generatePDFReport(html: string) {
-  // Use your existing Flask PDF system instead of Puppeteer
-  const python = spawn('python3', ['server/flaskSalesOrderProcessor.py'], {
-    stdio: ['pipe', 'pipe', 'pipe']
+  const browser = await puppeteer.launch({
+    headless: 'new',
+    args: ['--no-sandbox']
   });
 
-  const pdfData = {
-    html_content: html,
-    report_type: 'general'
-  };
+  const page = await browser.newPage();
+  await page.setContent(html, { waitUntil: 'networkidle0' });
 
-  python.stdin.write(JSON.stringify(pdfData));
-  python.stdin.end();
-
-  let result = '';
-  let error = '';
-
-  python.stdout.on('data', (chunk) => {
-    result += chunk.toString();
+  const pdfBuffer = await page.pdf({
+    format: 'A4',
+    printBackground: true,
+    margin: { top: '20px', bottom: '20px', left: '20px', right: '20px' }
   });
 
-  python.stderr.on('data', (chunk) => {
-    error += chunk.toString();
-  });
-
-  return new Promise((resolve, reject) => {
-    python.on('close', (code) => {
-      if (code === 0) {
-        resolve(Buffer.from(result, 'base64'));
-      } else {
-        reject(new Error(error || 'PDF generation failed'));
-      }
-    });
-  });
+  await browser.close();
+  return pdfBuffer;
 }

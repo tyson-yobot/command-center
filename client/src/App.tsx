@@ -1,39 +1,111 @@
-import React, { createContext, useContext, useState } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Route, Switch } from "wouter";
-import CommandCenter from "./pages/Command-Center/command-center";
-import ControlCenter from "./pages/Control-Center/control-center";
-import LeadScraper from "./pages/Lead-Scraper/lead-scraper";
-
-
-
-
-
-// Live mode only - no test mode context needed
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      retry: 1,
-    },
-  },
-});
+import { Switch, Route } from "wouter";
+import { queryClient } from "./lib/queryClient";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import Dashboard from "@/pages/dashboard";
+import Conversations from "@/pages/conversations";
+import Controls from "@/pages/controls";
+import CRM from "@/pages/crm";
+import Reports from "@/pages/reports";
+import Scanner from "@/pages/scanner";
+import AdminConsole from "@/pages/admin";
+import ClientDashboard from "@/pages/client-dashboard";
+import DemoMode from "@/pages/demo";
+import DesktopCommandCenter from "@/components/desktop-command-center";
+import Header from "@/components/layout/header";
+import BottomNav from "@/components/layout/bottom-nav";
+import InstallPrompt from "@/components/pwa/install-prompt";
+import CriticalAlertOverlay from "@/components/critical-alert-overlay";
+import { PWAProvider } from "@/hooks/use-pwa";
+import { WebSocketProvider } from "@/hooks/use-websocket";
+import { ThemeProvider } from "@/hooks/use-theme";
+import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <Switch>
-        <Route path="/command-center" component={CommandCenter} />
-        <Route path="/control-center" component={ControlCenter} />
-        <Route path="/lead-scraper" component={LeadScraper} />
-        <Route path="/" component={CommandCenter} />
-        <Route>
-          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold text-white mb-4">404 - Page Not Found</h1>
-              <p className="text-blue-200">The page you're looking for doesn't exist.</p>
-            </div>
+        <Route path="/">
+          <ClientDashboard />
+        </Route>
+        <Route path="/admin">
+          <DesktopCommandCenter />
+        </Route>
+        <Route path="/dashboard">
+          <ClientDashboard />
+        </Route>
+        <Route path="/demo">
+          <DemoMode />
+        </Route>
+        <Route path="/mobile">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <Header />
+            <main className="pt-36 pb-20">
+              <Dashboard />
+            </main>
+            <BottomNav />
+            <InstallPrompt />
+          </div>
+        </Route>
+        <Route path="/mobile/conversations">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <Header />
+            <main className="pt-36 pb-20">
+              <Conversations />
+            </main>
+            <BottomNav />
+            <InstallPrompt />
+          </div>
+        </Route>
+        <Route path="/mobile/controls">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <Header />
+            <main className="pt-36 pb-20">
+              <Controls />
+            </main>
+            <BottomNav />
+            <InstallPrompt />
+          </div>
+        </Route>
+        <Route path="/mobile/crm">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <Header />
+            <main className="pt-36 pb-20">
+              <CRM />
+            </main>
+            <BottomNav />
+            <InstallPrompt />
+          </div>
+        </Route>
+        <Route path="/mobile/reports">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <Header />
+            <main className="pt-36 pb-20">
+              <Reports />
+            </main>
+            <BottomNav />
+            <InstallPrompt />
+          </div>
+        </Route>
+        <Route path="/mobile/scanner">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <Header />
+            <main className="pt-36 pb-20">
+              <Scanner />
+            </main>
+            <BottomNav />
+            <InstallPrompt />
+          </div>
+        </Route>
+        <Route path="/mobile/*">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            <Header />
+            <main className="pt-36 pb-20">
+              <NotFound />
+            </main>
+            <BottomNav />
+            <InstallPrompt />
           </div>
         </Route>
       </Switch>
@@ -44,7 +116,17 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router />
+      <TooltipProvider>
+        <ThemeProvider defaultTheme="light" storageKey="yobot-ui-theme">
+          <PWAProvider>
+            <WebSocketProvider>
+              <Toaster />
+              <CriticalAlertOverlay />
+              <Router />
+            </WebSocketProvider>
+          </PWAProvider>
+        </ThemeProvider>
+      </TooltipProvider>
     </QueryClientProvider>
   );
 }

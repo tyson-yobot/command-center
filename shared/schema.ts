@@ -23,9 +23,6 @@ export const bots = pgTable("bots", {
   status: text("status").notNull().default("active"), // active, paused, offline
   tone: text("tone").notNull().default("professional"), // professional, friendly, casual, formal
   routingMode: text("routing_mode").notNull().default("auto-assign"),
-  hoursSaved: integer("hours_saved").default(0),
-  revenueGenerated: integer("revenue_generated").default(0),
-  conversations: integer("conversations").default(0),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -102,61 +99,6 @@ export const scannedContacts = pgTable("scanned_contacts", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const knowledgeBase = pgTable("knowledge_base", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
-  name: text("name").notNull(),
-  content: text("content").notNull(),
-  triggerConditions: jsonb("trigger_conditions"), // Structured logic for when to use
-  tags: text("tags").array(), // Multi-tiered metadata tags
-  source: text("source").notNull().default("manual"), // manual, scraped, generated, transcript
-  sourceUrl: text("source_url"), // Reference URL if applicable
-  createdBy: text("created_by").notNull(),
-  lastReviewedBy: text("last_reviewed_by"),
-  lastReviewedAt: timestamp("last_reviewed_at"),
-  confidence: integer("confidence").default(85), // 0-100 confidence score
-  status: text("status").notNull().default("enabled"), // enabled, disabled, review_needed
-  roleVisibility: text("role_visibility").array(), // Which roles can see this
-  overrideBehavior: text("override_behavior").default("append"), // append, replace, conditional
-  priority: integer("priority").default(50), // 1-100 priority for retrieval
-  usageCount: integer("usage_count").default(0),
-  lastUsedAt: timestamp("last_used_at"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-export const knowledgeUsageLog = pgTable("knowledge_usage_log", {
-  id: serial("id").primaryKey(),
-  knowledgeId: integer("knowledge_id").notNull(),
-  usedBy: text("used_by").notNull(), // "VoiceBot", "ZendeskBot", "ChatBot", etc.
-  triggerSource: text("trigger_source").notNull(), // "voice", "chat", "form", "intent_match"
-  confidence: integer("confidence").notNull(),
-  successful: boolean("successful").default(true), // Did it lead to escalation?
-  conversationId: text("conversation_id"), // Link to conversation if available
-  usedAt: timestamp("used_at").defaultNow(),
-});
-
-export const phantombusterLeads = pgTable("phantombuster_leads", {
-  id: serial("id").primaryKey(),
-  leadOwner: text("lead_owner").notNull(),
-  source: text("source").notNull().default("Phantombuster"),
-  campaignId: text("campaign_id"),
-  platform: text("platform").notNull(), // LinkedIn, Instagram, etc.
-  name: text("name").notNull(),
-  email: text("email"),
-  phone: text("phone"),
-  company: text("company"),
-  website: text("website"),
-  title: text("title"),
-  location: text("location"),
-  status: text("status").default("New"),
-  syncedHubspot: boolean("synced_hubspot").default(false),
-  syncedYobot: boolean("synced_yobot").default(false),
-  score: integer("score").default(0),
-  dateAdded: text("date_added"),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -201,19 +143,6 @@ export const insertScannedContactSchema = createInsertSchema(scannedContacts).om
   createdAt: true,
 });
 
-export const insertKnowledgeBaseSchema = createInsertSchema(knowledgeBase).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  usageCount: true,
-  lastUsedAt: true,
-});
-
-export const insertPhantombusterLeadSchema = createInsertSchema(phantombusterLeads).omit({
-  id: true,
-  createdAt: true,
-});
-
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Bot = typeof bots.$inferSelect;
@@ -223,8 +152,6 @@ export type Metrics = typeof metrics.$inferSelect;
 export type CrmData = typeof crmData.$inferSelect;
 export type ClientCompany = typeof clientCompanies.$inferSelect;
 export type ScannedContact = typeof scannedContacts.$inferSelect;
-export type KnowledgeBase = typeof knowledgeBase.$inferSelect;
-export type PhantombusterLead = typeof phantombusterLeads.$inferSelect;
 export type InsertBot = z.infer<typeof insertBotSchema>;
 export type InsertConversation = z.infer<typeof insertConversationSchema>;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
@@ -232,5 +159,3 @@ export type InsertMetrics = z.infer<typeof insertMetricsSchema>;
 export type InsertCrmData = z.infer<typeof insertCrmDataSchema>;
 export type InsertClientCompany = z.infer<typeof insertClientCompanySchema>;
 export type InsertScannedContact = z.infer<typeof insertScannedContactSchema>;
-export type InsertKnowledgeBase = z.infer<typeof insertKnowledgeBaseSchema>;
-export type InsertPhantombusterLead = z.infer<typeof insertPhantombusterLeadSchema>;

@@ -62,8 +62,6 @@ export default function CrmSnapshot() {
     );
   }
 
-  const numericValue = Number(crmData?.pipelineValue?.replace('$', '') || 0);
-  
   const crmMetrics = [
     {
       title: "Hot Leads",
@@ -71,7 +69,6 @@ export default function CrmSnapshot() {
       description: "Requiring immediate attention",
       icon: AlertCircle,
       color: "text-red-600",
-      highlight: false,
     },
     {
       title: "Follow-ups Due",
@@ -79,16 +76,17 @@ export default function CrmSnapshot() {
       description: "Scheduled for today",
       icon: Clock,
       color: "text-yellow-600",
-      highlight: false,
     },
     {
       title: "Pipeline Value",
-      value: numericValue === 0 ? '$0K ⚠️' : `$${Math.round(numericValue / 1000)}K`,
-      description: numericValue === 0 ? "No active pipeline – check CRM!" : "Monthly active deals in progress",
+      value: (() => {
+        const numericValue = Number(crmData?.pipelineValue?.replace('$', '') || 0);
+        return numericValue ? `$${Math.round(numericValue / 1000)}K` : '$0K';
+      })(),
+      description: "Monthly active deals in progress",
       icon: DollarSign,
-      color: numericValue === 0 ? "text-yellow-600" : "text-green-600",
+      color: "text-green-600",
       highlight: true,
-      warning: numericValue === 0,
     },
   ];
 
