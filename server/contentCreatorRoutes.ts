@@ -92,44 +92,73 @@ export function registerContentCreatorRoutes(app: Express) {
         // In Live Mode: Post to Publy social media accounts
         console.log('LIVE MODE: Publishing to Publy social media accounts');
         
-        // Post to Publy.co for actual social media publishing
+        // Post to Publer for actual social media publishing
         try {
-          const publyPayload = {
-            content: generatedContent.content,
-            hashtags: generatedContent.hashtags.join(' '),
-            platforms: [payload.targetPlatform.toLowerCase()],
-            industry: payload.selectedIndustry,
-            cta: generatedContent.cta,
-            schedule: 'immediate',
-            campaign_type: payload.contentType
+          // Publer requires specific account IDs, not platform names
+          // For now, we'll attempt the API call and show detailed error info
+          const publerPayload = {
+            text: `${generatedContent.content}\n\n${generatedContent.hashtags.join(' ')}\n\n${generatedContent.cta}`,
+            social_accounts: [], // Will need actual account IDs from user's Publer setup
+            schedule_date: null,
+            media_urls: []
           };
 
-          console.log('🚀 Posting to Publy with payload:', JSON.stringify(publyPayload, null, 2));
-          console.log('🔑 Using Publy API Key:', process.env.PUBLY_API_KEY ? 'Present' : 'Missing');
+          console.log('🚀 Attempting Publer API call with payload:', JSON.stringify(publerPayload, null, 2));
+          console.log('🔑 API Key status:', process.env.PUBLY_API_KEY ? 'Present (length: ' + process.env.PUBLY_API_KEY.length + ')' : 'Missing');
           
-          const publyResponse = await fetch('https://api.publy.co/v1/posts', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${process.env.PUBLY_API_KEY}`,
-              'User-Agent': 'YoBot-Command-Center/1.0'
-            },
-            body: JSON.stringify(publyPayload)
-          });
+          // Test multiple possible Publer API endpoints
+          const endpoints = [
+            'https://app.publer.io/api/v1/posts',
+            'https://api.publer.io/v1/posts',
+            'https://publer.io/api/v1/posts'
+          ];
+          
+          let successfulPost = false;
+          
+          for (const endpoint of endpoints) {
+            try {
+              console.log(`📡 Testing endpoint: ${endpoint}`);
+              
+              const publerResponse = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${process.env.PUBLY_API_KEY}`,
+                  'User-Agent': 'YoBot-Command-Center/1.0'
+                },
+                body: JSON.stringify(publerPayload)
+              });
 
-          if (publyResponse.ok) {
-            const publyResult = await publyResponse.json();
-            console.log('✅ Content successfully posted to Publy:', publyResult);
-            contentResult.publyPostId = publyResult.post_id;
-            contentResult.publishedUrls = publyResult.published_urls;
-            contentResult.status = 'published_to_social';
-          } else {
-            const error = await publyResponse.text();
-            console.log('⚠️ Publy API error:', error);
-            console.log('📝 Content logged locally as fallback');
+              console.log(`📡 Response from ${endpoint}: Status ${publerResponse.status}`);
+              const responseText = await publerResponse.text();
+              console.log(`📡 Response body:`, responseText);
+
+              if (publerResponse.ok) {
+                const publerResult = JSON.parse(responseText);
+                console.log('✅ Content successfully posted to Publer via', endpoint, ':', publerResult);
+                contentResult.status = 'published_to_social';
+                contentResult.publerPostId = publerResult.id || 'success';
+                successfulPost = true;
+                break;
+              } else if (publerResponse.status === 401) {
+                console.log('🔐 Authentication failed - API key may be invalid or expired');
+              } else if (publerResponse.status === 400) {
+                console.log('📝 Bad request - likely missing social account IDs or invalid payload format');
+              } else {
+                console.log(`⚠️ API error from ${endpoint} (${publerResponse.status}):`, responseText);
+              }
+            } catch (endpointError) {
+              console.log(`❌ Failed to connect to ${endpoint}:`, endpointError.message);
+            }
           }
+          
+          if (!successfulPost) {
+            console.log('📝 All Publer endpoints failed - content logged locally as fallback');
+            console.log('💡 Note: Publer requires social account IDs to be configured in your Publer dashboard');
+          }
+          
         } catch (error) {
-          console.log('⚠️ Publy API connection failed:', error.message);
+          console.log('⚠️ Publer integration error:', error.message);
           console.log('📝 Content logged locally as fallback');
         }
         
