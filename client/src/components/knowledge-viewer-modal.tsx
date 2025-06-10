@@ -90,7 +90,9 @@ export function KnowledgeViewerModal({
                   <div>
                     <h4 className="text-white font-medium">
                       {item.filename || item.name || item.title || 
-                       (item.type === 'memory' ? `Memory Entry - ${item.category}` : 'Untitled')}
+                       (item.type === 'memory' ? 
+                         (item.category === 'voice' ? 'Voice Entry' : 'Text Entry') : 
+                         'Untitled')}
                     </h4>
                     <div className="text-sm text-slate-400">
                       Type: {item.type || 'document'} • 
@@ -137,8 +139,8 @@ export function KnowledgeViewerModal({
           )}
         </div>
         
-        {selectedItems.length > 0 && (
-          <div className="mt-4 flex gap-2">
+        <div className="mt-4 flex gap-2">
+          {selectedItems.length > 0 && (
             <Button
               onClick={onDeleteSelected}
               className="bg-red-600 hover:bg-red-700"
@@ -146,8 +148,23 @@ export function KnowledgeViewerModal({
               <Trash2 className="w-4 h-4 mr-2" />
               Delete Selected ({selectedItems.length})
             </Button>
-          </div>
-        )}
+          )}
+          <Button
+            onClick={async () => {
+              try {
+                const response = await fetch('/api/knowledge/clear', { method: 'POST' });
+                if (response.ok) {
+                  window.location.reload();
+                }
+              } catch (error) {
+                console.error('Failed to clear knowledge:', error);
+              }
+            }}
+            className="bg-orange-600 hover:bg-orange-700"
+          >
+            Clear All Knowledge
+          </Button>
+        </div>
       </div>
     </div>
   );

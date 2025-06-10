@@ -1064,7 +1064,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
           const documentId = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
           
-          // Store document in persistent store
+          // Store document in both stores
           const documentData: DocumentData = {
             documentId,
             fileName: file.originalname,
@@ -1076,15 +1076,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
           };
           documentDataStore.push(documentData);
           
+          // Also store in documentStore for knowledge list compatibility
+          documentStore.push({
+            id: documentId,
+            documentId: documentId,
+            filename: file.originalname,
+            originalname: file.originalname,
+            size: file.size,
+            mimetype: file.mimetype,
+            uploadTime: new Date().toISOString(),
+            category: 'uploaded',
+            status: 'processed',
+            extractedText,
+            keyTerms,
+            wordCount: extractedText.split(' ').length
+          });
+          
           // Store in database knowledge base
           try {
             await storage.createKnowledgeBase({
               userId: 1, // Default user for now
               name: file.originalname,
               content: extractedText,
-              category: category || 'documents',
+              category: 'documents',
               tags: keyTerms,
-              priority: parseInt(priority) || 1,
+              priority: 1,
               confidence: 0.9,
               enabled: true,
               triggerConditions: {
@@ -1496,6 +1512,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ 
         success: false, 
         error: 'Failed to retrieve document' 
+      });
+    }
+  });
+
+  // Clear all knowledge endpoint
+  app.post('/api/knowledge/clear', async (req, res) => {
+    try {
+      // Clear all data stores
+      knowledgeDataStore.length = 0;
+      documentDataStore.length = 0;
+      documentStore.length = 0;
+      
+      // Clear database knowledge
+      try {
+        await storage.clearAllKnowledge();
+      } catch (dbError) {
+        console.error('Failed to clear database knowledge:', dbError);
+      }
+      
+      logOperation('knowledge-clear-all', {}, 'success', 'All knowledge cleared');
+      
+      res.json({
+        success: true,
+        message: 'All knowledge data cleared successfully'
+      });
+      
+    } catch (error) {
+      console.error('Knowledge clear error:', error);
+      logOperation('knowledge-clear-all', {}, 'error', `Failed to clear knowledge: ${error.message}`);
+      
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to clear knowledge data' 
       });
     }
   });
