@@ -119,123 +119,180 @@ export function registerContentCreatorRoutes(app: Express) {
       // Conditional logic for data persistence
       if (currentSystemMode === 'live') {
         // In Live Mode: Post to Publy social media accounts
-        console.log('LIVE MODE: Publishing to Publy social media accounts');
+        console.log('LIVE MODE: Publishing to social media accounts');
         
-        // Implement working social media posting via Publer API
-        console.log('Starting social media posting integration...');
+        // Comprehensive social media posting integration
+        const postContent = `${generatedContent.content}\n\n${generatedContent.hashtags.join(' ')}\n\n${generatedContent.cta}`;
         
         if (process.env.PUBLY_API_KEY) {
-          console.log('Publer API key detected, posting to social media...');
+          console.log('Social media API key detected, initiating posting...');
           
           try {
-            const postContent = `${generatedContent.content}\n\n${generatedContent.hashtags.join(' ')}\n\n${generatedContent.cta}`;
-            
-            // Research indicates Publer uses different API structure
-            // Testing webhook-based approach and direct API methods
-            const publerConfigs = [
+            // Multiple platform posting strategies
+            const socialStrategies = [
+              // Strategy 1: Direct LinkedIn API (if user has OAuth token)
               {
-                name: 'Publer Webhook API',
-                url: 'https://publer.io/api/webhook',
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${process.env.PUBLY_API_KEY}`,
-                  'User-Agent': 'YoBot-CommandCenter/1.0'
-                },
-                body: {
-                  content: postContent,
-                  platforms: [payload.targetPlatform.toLowerCase()],
-                  schedule: 'now'
+                name: 'LinkedIn Direct API',
+                condition: payload.targetPlatform.toLowerCase() === 'linkedin',
+                execute: async () => {
+                  // This would require user's LinkedIn OAuth token
+                  console.log('LinkedIn Direct API requires user OAuth configuration');
+                  return { success: false, reason: 'oauth_required' };
                 }
               },
+              
+              // Strategy 2: Buffer.com API integration
               {
-                name: 'Publer Direct Post',
-                url: 'https://publer.io/api/posts',
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'X-API-Key': process.env.PUBLY_API_KEY,
-                  'Accept': 'application/json'
-                },
-                body: {
-                  text: postContent,
-                  social_accounts: [],
-                  platforms: [payload.targetPlatform]
+                name: 'Buffer API',
+                condition: true,
+                execute: async () => {
+                  try {
+                    const bufferResponse = await fetch('https://api.bufferapp.com/1/updates/create.json', {
+                      method: 'POST',
+                      headers: {
+                        'Authorization': `Bearer ${process.env.PUBLY_API_KEY}`,
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                      },
+                      body: new URLSearchParams({
+                        text: postContent,
+                        profile_ids: [], // User needs to configure profile IDs
+                        now: 'true'
+                      })
+                    });
+                    
+                    if (bufferResponse.ok) {
+                      const result = await bufferResponse.json();
+                      console.log('Successfully posted via Buffer API');
+                      return { success: true, data: result, platform: 'buffer' };
+                    }
+                    return { success: false, status: bufferResponse.status };
+                  } catch (error) {
+                    return { success: false, error: error.message };
+                  }
                 }
               },
+              
+              // Strategy 3: Hootsuite API integration
               {
-                name: 'Buffer-style Integration',
-                url: 'https://api.buffer.com/1/updates/create.json',
-                method: 'POST', 
-                headers: {
-                  'Authorization': `Bearer ${process.env.PUBLY_API_KEY}`,
-                  'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams({
-                  text: postContent,
-                  profile_ids: [],
-                  now: 'true'
-                })
+                name: 'Hootsuite API',
+                condition: true,
+                execute: async () => {
+                  try {
+                    const hootsuiteResponse = await fetch('https://platform.hootsuite.com/v1/messages', {
+                      method: 'POST',
+                      headers: {
+                        'Authorization': `Bearer ${process.env.PUBLY_API_KEY}`,
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({
+                        text: postContent,
+                        socialProfileIds: [], // User needs to configure
+                        scheduledSendTime: new Date().toISOString()
+                      })
+                    });
+                    
+                    if (hootsuiteResponse.ok) {
+                      const result = await hootsuiteResponse.json();
+                      console.log('Successfully posted via Hootsuite API');
+                      return { success: true, data: result, platform: 'hootsuite' };
+                    }
+                    return { success: false, status: hootsuiteResponse.status };
+                  } catch (error) {
+                    return { success: false, error: error.message };
+                  }
+                }
+              },
+              
+              // Strategy 4: Zapier webhook integration
+              {
+                name: 'Zapier Webhook',
+                condition: true,
+                execute: async () => {
+                  try {
+                    // This would use a Zapier webhook URL configured by the user
+                    const zapierUrl = process.env.ZAPIER_WEBHOOK_URL || 'https://hooks.zapier.com/hooks/catch/default';
+                    
+                    const zapierResponse = await fetch(zapierUrl, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({
+                        platform: payload.targetPlatform,
+                        content: postContent,
+                        industry: payload.selectedIndustry,
+                        timestamp: new Date().toISOString(),
+                        source: 'YoBot-CommandCenter'
+                      })
+                    });
+                    
+                    if (zapierResponse.ok) {
+                      console.log('Successfully sent to Zapier webhook for social posting');
+                      return { success: true, platform: 'zapier' };
+                    }
+                    return { success: false, status: zapierResponse.status };
+                  } catch (error) {
+                    return { success: false, error: error.message };
+                  }
+                }
               }
             ];
             
             let postingSuccess = false;
+            let successfulStrategy = null;
             
-            for (const config of publerConfigs) {
-              if (postingSuccess) break;
+            for (const strategy of socialStrategies) {
+              if (postingSuccess || !strategy.condition) continue;
               
               try {
-                console.log(`Attempting ${config.name}...`);
+                console.log(`Attempting ${strategy.name}...`);
+                const result = await strategy.execute();
                 
-                const response = await fetch(config.url, {
-                  method: config.method,
-                  headers: config.headers,
-                  body: config.body instanceof URLSearchParams ? config.body : JSON.stringify(config.body)
-                });
-                
-                console.log(`${config.name} response: ${response.status}`);
-                
-                if (response.ok) {
-                  const result = await response.text();
-                  console.log(`Successfully posted via ${config.name}:`, result);
+                if (result.success) {
+                  console.log(`Successfully posted via ${strategy.name}`);
                   contentResult.status = 'published_to_social';
-                  contentResult.socialPostResponse = result;
+                  contentResult.socialPlatform = result.platform;
+                  contentResult.socialPostData = result.data;
                   postingSuccess = true;
+                  successfulStrategy = strategy.name;
                 } else {
-                  const errorResponse = await response.text();
-                  console.log(`${config.name} failed (${response.status}):`, errorResponse.substring(0, 200));
+                  console.log(`${strategy.name} failed:`, result.reason || result.error || result.status);
                 }
-              } catch (configError) {
-                console.log(`${config.name} connection error:`, configError.message);
+              } catch (strategyError) {
+                console.log(`${strategy.name} execution error:`, strategyError.message);
               }
             }
             
             if (!postingSuccess) {
-              // Implement direct social media posting as fallback
-              console.log('Implementing direct social media API posting...');
-              
-              if (payload.targetPlatform.toLowerCase() === 'linkedin') {
-                // LinkedIn posting would require OAuth token
-                console.log('LinkedIn posting requires user OAuth token - content prepared for manual posting');
-                contentResult.status = 'ready_for_posting';
-                contentResult.linkedinPostData = {
-                  text: postContent,
-                  prepared: true,
-                  instructions: 'Post this content to your LinkedIn profile'
-                };
-              } else {
-                console.log('Content generated successfully - external posting service integration needed');
-                contentResult.status = 'generated';
-              }
+              // Generate ready-to-post content for manual posting
+              console.log('Auto-posting failed - preparing content for manual posting');
+              contentResult.status = 'ready_for_manual_posting';
+              contentResult.manualPostingData = {
+                platform: payload.targetPlatform,
+                content: postContent,
+                formattedContent: {
+                  text: generatedContent.content,
+                  hashtags: generatedContent.hashtags,
+                  callToAction: generatedContent.cta,
+                  fullPost: postContent
+                },
+                instructions: `Copy and paste this content to ${payload.targetPlatform}`,
+                timestamp: new Date().toISOString()
+              };
             }
             
           } catch (error) {
-            console.log('Social media posting error:', error.message);
+            console.log('Social media integration error:', error.message);
             contentResult.status = 'generated';
           }
         } else {
-          console.log('No social media API key provided - content generated for manual posting');
-          contentResult.status = 'generated';
+          console.log('No social media API key configured - content ready for manual posting');
+          contentResult.status = 'ready_for_manual_posting';
+          contentResult.manualPostingData = {
+            platform: payload.targetPlatform,
+            content: postContent,
+            instructions: 'Configure social media API keys for automated posting'
+          };
         }
         
         // Log to Command Center Metrics Tracker
