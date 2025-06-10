@@ -58,19 +58,19 @@ def log_integration_test_to_airtable(
         "Content-Type": "application/json"
     }
 
-    # Match exact field names from Airtable (with emoji prefix)
+    # Match exact field names from Airtable (with emoji prefixes)
     payload = {
         "fields": {
             "🔧 Integration Name": integration_name,
-            "Pass/Fail": PASS_FAIL_OPTIONS[passed],
-            "Notes / Debug": notes,
-            "Test Date": datetime.now().isoformat(),
-            "QA Owner": qa_owner,
-            "Output Data Populated": output_data_populated,
-            "Record Created?": record_created,
-            "Retry Attempted?": retry_attempted,
-            "Module Type": module_type,
-            "Related Scenario Link": related_scenario_link
+            "✅ Pass/Fail": PASS_FAIL_OPTIONS[passed],
+            "🧠 Notes / Debug": notes,
+            "📅 Test Date": datetime.now().isoformat(),
+            "🧑‍💻 QA Owner": qa_owner,
+            "📤 Output Data Populated": output_data_populated,
+            "🗃️ Record Created?": record_created,
+            "🔁 Retry Attempted?": retry_attempted,
+            "🧩 Module Type": module_type,
+            "📂 Related Scenario Link": related_scenario_link
         }
     }
 
