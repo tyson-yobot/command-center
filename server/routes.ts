@@ -4794,20 +4794,20 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
     try {
       logOperation('knowledge-documents', {}, 'success', 'Documents list requested');
       
-      // Return actual uploaded documents from documentStore
-      const documents = documentStore.map(doc => ({
+      // Return actual uploaded documents from documentDataStore
+      const documents = documentDataStore.map(doc => ({
         id: doc.documentId || `doc_${Date.now()}`,
-        name: doc.filename || doc.originalname || 'Unknown Document',
-        createdTime: doc.uploadTime || new Date().toISOString(),
-        size: doc.size || 0,
-        mimeType: doc.type || 'unknown',
-        status: doc.status || 'processed',
-        wordCount: doc.wordCount || 0,
+        name: doc.fileName || 'Unknown Document',
+        createdTime: new Date().toISOString(),
+        size: doc.fileSize || 0,
+        mimeType: doc.fileType || 'unknown',
+        status: 'processed',
+        wordCount: doc.extractedText ? doc.extractedText.split(' ').length : 0,
         keyTerms: doc.keyTerms || [],
-        categories: doc.categories || [],
-        aiSummary: doc.aiSummary ? doc.aiSummary.substring(0, 200) + '...' : '',
-        indexed: doc.indexed || true,
-        ragIndexed: doc.ragIndexed || true
+        categories: [doc.category] || ['uploaded'],
+        aiSummary: doc.extractedText ? doc.extractedText.substring(0, 200) + '...' : '',
+        indexed: true,
+        ragIndexed: true
       }));
 
       res.json({
@@ -9419,8 +9419,8 @@ Always provide helpful, actionable guidance.`
     try {
       logOperation('knowledge-stats', {}, 'success', 'Knowledge stats requested');
       
-      // Calculate stats from actual uploaded documents in documentStore
-      const totalDocuments = documentStore.length;
+      // Calculate stats from actual uploaded documents in both stores
+      const totalDocuments = Math.max(documentDataStore.length, knowledgeDataStore.length);
       
       // Count recent uploads (last 24 hours)
       const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
