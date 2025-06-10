@@ -10,6 +10,7 @@ import { registerQATracker } from "./qaTracker";
 import { officialQATracker } from "./officialQATracker";
 import { registerQATestEndpoints } from "./qaTestEndpoints";
 import { registerPublerRoutes } from "./publerIntegrationNew";
+import { registerAirtableTestLogger } from "./airtableTestLogger";
 
 const app = express();
 app.use(express.json());
@@ -257,6 +258,9 @@ print(json.dumps(result))
   
   // Register Publer social media integration routes
   registerPublerRoutes(app);
+  
+  // Register Airtable test logger with exact field mappings
+  registerAirtableTestLogger(app);
   
   // Start complete system automation
   console.log("🤖 Starting Complete System Automation...");
