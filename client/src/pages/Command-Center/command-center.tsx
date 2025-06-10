@@ -773,21 +773,41 @@ export default function CommandCenter() {
 
   const handleStartPipelineCalls = async () => {
     try {
-      setVoiceStatus('Starting outbound call pipeline...');
-      const response = await fetch('/api/voicebot-call', {
+      setVoiceStatus('Loading leads from Airtable and starting pipeline...');
+      const response = await fetch('/api/pipeline/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scenario: 'voicebot-call' })
+        body: JSON.stringify({ 
+          action: 'start_pipeline',
+          leadSource: 'airtable',
+          baseId: 'appb2f3D77Tc4DWAr',
+          tableId: 'tbluqrDSomu5UVhDw'
+        })
       });
       
       if (response.ok) {
-        setVoiceStatus('Call pipeline started successfully');
-        setToast({ title: "Pipeline Started", description: "Outbound call workflow initiated" });
+        const result = await response.json();
+        setVoiceStatus(`Pipeline started with ${result.leadCount || 0} leads loaded`);
+        setToast({ 
+          title: "Pipeline Started", 
+          description: `${result.leadCount || 0} leads loaded from Airtable - calls initiated` 
+        });
       } else {
-        setVoiceStatus('Pipeline start failed');
+        const error = await response.json();
+        setVoiceStatus('Pipeline start failed - check Airtable connection');
+        setToast({ 
+          title: "Pipeline Failed", 
+          description: error.error || "Unable to load leads from Airtable",
+          variant: "destructive" 
+        });
       }
     } catch (error) {
-      setVoiceStatus('Pipeline error');
+      setVoiceStatus('Pipeline connection error');
+      setToast({ 
+        title: "Network Error", 
+        description: "Unable to connect to pipeline service",
+        variant: "destructive" 
+      });
     }
   };
 

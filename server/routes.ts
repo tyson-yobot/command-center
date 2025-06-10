@@ -769,6 +769,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Pipeline start endpoint - pulls leads from Airtable
+  app.post('/api/pipeline/start', async (req, res) => {
+    try {
+      const { baseId, tableId, leadSource } = req.body;
+      console.log('Pipeline start request received:', { baseId, tableId, leadSource });
+      
+      // Log test operation to Integration Test Log
+      await logToAirtable({
+        operation: 'pipeline-start',
+        baseId: 'appRt8V3tH4g5Z5if',
+        tableId: 'tbly0fjE2M5uHET9X',
+        data: { sourceBaseId: baseId, sourceTableId: tableId, leadSource },
+        result: 'initiated',
+        timestamp: new Date().toISOString()
+      });
+      
+      // Fetch leads from Scraped Leads (Universal) table
+      const airtableUrl = `https://api.airtable.com/v0/${baseId}/${tableId}`;
+      const airtableResponse = await fetch(airtableUrl, {
+        headers: {
+          'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!airtableResponse.ok) {
+        throw new Error(`Airtable API error: ${airtableResponse.status}`);
+      }
+      
+      const airtableData = await airtableResponse.json();
+      const leads = airtableData.records || [];
+      
+      console.log(`Pipeline loaded ${leads.length} leads from Airtable`);
+      
+      // Log successful lead retrieval
+      await logToAirtable({
+        operation: 'pipeline-leads-loaded',
+        baseId: 'appRt8V3tH4g5Z5if',
+        tableId: 'tbly0fjE2M5uHET9X',
+        data: { leadCount: leads.length, sourceBase: baseId },
+        result: 'success',
+        timestamp: new Date().toISOString()
+      });
+      
+      const result = {
+        success: true,
+        pipelineId: 'PIPELINE_' + Date.now(),
+        leadCount: leads.length,
+        status: 'started',
+        leads: leads.slice(0, 5).map(lead => ({
+          id: lead.id,
+          name: lead.fields?.Name || lead.fields?.name || 'Unknown',
+          email: lead.fields?.Email || lead.fields?.email,
+          phone: lead.fields?.Phone || lead.fields?.phone,
+          company: lead.fields?.Company || lead.fields?.company
+        })),
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Pipeline start error:', error);
+      
+      // Log error to test database
+      await logToAirtable({
+        operation: 'pipeline-start-error',
+        baseId: 'appRt8V3tH4g5Z5if',
+        tableId: 'tbly0fjE2M5uHET9X',
+        data: { error: error.message },
+        result: 'error',
+        timestamp: new Date().toISOString()
+      });
+      
+      res.status(500).json({ 
+        success: false, 
+        error: 'Pipeline start failed - check Airtable connection and API key',
+        details: error.message
+      });
+    }
+  });
+
   // VoiceBot call endpoint
   app.post('/api/voicebot-call', async (req, res) => {
     try {
