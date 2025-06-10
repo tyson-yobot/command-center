@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-06-10T11:51:36.955Z",
+  "url": "/webhook/sales-order",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "358"
+  },
+  "raw_payload": {
+    "formName": "YoBot Service Order",
+    "customerInfo": {
+      "name": "Test Client",
+      "email": "test@example.com",
+      "company": "Test Company",
+      "phone": "555-0123"
+    },
+    "services": [
+      {
+        "name": "Lead Generation Setup",
+        "price": 2500
+      },
+      {
+        "name": "Voice Bot Integration",
+        "price": 1500
+      }
+    ],
+    "systemMode": "test"
+  }
+}
