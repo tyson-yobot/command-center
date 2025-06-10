@@ -2,6 +2,36 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Trash2 } from 'lucide-react';
 
+// Helper function to explain tags
+const getTagExplanation = (tag: string): string => {
+  const explanations: { [key: string]: string } = {
+    'automation': 'Content related to automated processes and workflows',
+    'AI': 'Artificial intelligence and machine learning content',
+    'integration': 'System integrations and API connections',
+    'testing': 'Testing procedures and quality assurance',
+    'YoBot': 'YoBot platform-specific information',
+    'platform': 'Platform architecture and infrastructure',
+    'business': 'Business processes and operations',
+    'voice-system': 'Voice synthesis and audio processing',
+    'system-config': 'System configuration and settings'
+  };
+  return explanations[tag] || `Information tagged as: ${tag}`;
+};
+
+// Helper function to create better memory summaries
+const getMemorySummary = (content: string, category: string): string => {
+  if (category === 'system-config') {
+    return 'System configuration and operational settings';
+  }
+  if (category === 'voice-system') {
+    return 'Voice synthesis performance and testing data';
+  }
+  if (content.length > 80) {
+    return content.substring(0, 80) + '...';
+  }
+  return content;
+};
+
 interface KnowledgeViewerModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -44,7 +74,10 @@ export function KnowledgeViewerModal({
               <div key={item.id || index} className="bg-slate-800 border border-slate-600 rounded-lg p-4">
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <h4 className="text-white font-medium">{item.name || item.title || 'Untitled'}</h4>
+                    <h4 className="text-white font-medium">
+                      {item.filename || item.name || item.title || 
+                       (item.type === 'memory' ? `Memory Entry - ${item.category}` : 'Untitled')}
+                    </h4>
                     <div className="text-sm text-slate-400">
                       Type: {item.type || 'document'} • 
                       Category: {item.category || 'general'} • 
