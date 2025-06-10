@@ -12,7 +12,7 @@ import Scanner from "@/pages/scanner";
 import AdminConsole from "@/pages/admin";
 import ClientDashboard from "@/pages/client-dashboard";
 import DemoMode from "@/pages/demo";
-// import DesktopCommandCenter from "@/components/desktop-command-center";
+import CommandCenter from "@/components/command-center";
 import Header from "@/components/layout/header";
 import BottomNav from "@/components/layout/bottom-nav";
 import InstallPrompt from "@/components/pwa/install-prompt";
@@ -30,12 +30,7 @@ function Router() {
           <ClientDashboard />
         </Route>
         <Route path="/admin">
-          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
-            <div className="text-white text-center">
-              <h1 className="text-4xl font-bold mb-4">Command Center</h1>
-              <p>Searching for your original Command Center...</p>
-            </div>
-          </div>
+          <CommandCenter />
         </Route>
         <Route path="/dashboard">
           <ClientDashboard />
