@@ -3122,80 +3122,80 @@ export default function CommandCenter() {
               {/* Cost Per Lead */}
               <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-cyan-400 mb-1">${metrics?.totalRevenue || 0}</div>
-                  <div className="text-cyan-300 text-sm">Cost Per Lead</div>
+                  <div className="text-2xl font-black text-slate-400 mb-1">--</div>
+                  <div className="text-slate-300 text-sm">Cost Per Lead</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Last Month</span>
-                    <span className="text-green-400">$62</span>
+                    <span className="text-slate-400">--</span>
                   </div>
-                  <Progress value={76} className="h-1" />
-                  <div className="text-center text-xs text-green-400">-24% improvement</div>
+                  <Progress value={0} className="h-1" />
+                  <div className="text-center text-xs text-slate-400">No data available</div>
                 </div>
               </div>
 
               {/* Interaction Quality */}
               <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-green-400 mb-1">96.2%</div>
-                  <div className="text-green-300 text-sm">Accuracy Rate</div>
+                  <div className="text-2xl font-black text-slate-400 mb-1">--</div>
+                  <div className="text-slate-300 text-sm">Accuracy Rate</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Target</span>
-                    <span className="text-blue-400">95%</span>
+                    <span className="text-slate-400">--</span>
                   </div>
-                  <Progress value={96} className="h-1" />
-                  <div className="text-center text-xs text-green-400">Above target</div>
+                  <Progress value={0} className="h-1" />
+                  <div className="text-center text-xs text-slate-400">No data available</div>
                 </div>
               </div>
 
               {/* Learning Rate */}
               <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-blue-400 mb-1">+{metrics?.conversionRate || 0}%</div>
-                  <div className="text-blue-300 text-sm">Learning Rate</div>
+                  <div className="text-2xl font-black text-slate-400 mb-1">--</div>
+                  <div className="text-slate-300 text-sm">Learning Rate</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Weekly</span>
-                    <span className="text-green-400">+3%</span>
+                    <span className="text-slate-400">--</span>
                   </div>
-                  <Progress value={88} className="h-1" />
-                  <div className="text-center text-xs text-blue-400">Accelerating</div>
+                  <Progress value={0} className="h-1" />
+                  <div className="text-center text-xs text-slate-400">No data available</div>
                 </div>
               </div>
 
               {/* Total Interactions */}
               <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-purple-400 mb-1">{metrics?.totalInteractions || 0}</div>
-                  <div className="text-purple-300 text-sm">Interactions</div>
+                  <div className="text-2xl font-black text-slate-400 mb-1">--</div>
+                  <div className="text-slate-300 text-sm">Interactions</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Today</span>
-                    <span className="text-green-400">{metrics?.todayInteractions || 0}</span>
+                    <span className="text-slate-400">--</span>
                   </div>
-                  <Progress value={67} className="h-1" />
-                  <div className="text-center text-xs text-purple-400">Peak: 2-4 PM</div>
+                  <Progress value={0} className="h-1" />
+                  <div className="text-center text-xs text-slate-400">No data available</div>
                 </div>
               </div>
 
               {/* Conversion Rate */}
               <div className="bg-blue-900/60 rounded-lg p-4 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-yellow-400 mb-1">{metrics?.closeRate || 0}%</div>
-                  <div className="text-yellow-300 text-sm">Close Rate</div>
+                  <div className="text-2xl font-black text-slate-400 mb-1">--</div>
+                  <div className="text-slate-300 text-sm">Close Rate</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Industry Avg</span>
-                    <span className="text-red-400">{metrics?.industryAverage || 0}%</span>
+                    <span className="text-slate-400">--</span>
                   </div>
-                  <Progress value={82} className="h-1" />
-                  <div className="text-center text-xs text-green-400">+73% vs avg</div>
+                  <Progress value={0} className="h-1" />
+                  <div className="text-center text-xs text-slate-400">No data available</div>
                 </div>
               </div>
             </div>
@@ -3287,11 +3287,11 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Last Sync:</span>
-                  <span className="text-white font-bold">2m ago</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Records:</span>
-                  <span className="text-blue-400 font-bold">1,247</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
@@ -3316,11 +3316,11 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Avg Duration:</span>
-                  <span className="text-green-400 font-bold">4m 23s</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Conversion Rate:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '34%' : '0%'}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
@@ -3356,15 +3356,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">New Leads:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '23' : '0'}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Conversions:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '8' : '0'}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Escalations:</span>
-                  <span className="text-orange-400 font-bold">{currentSystemMode === 'test' ? '2' : '0'}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
@@ -3385,15 +3385,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Tasks Automated:</span>
-                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '156' : '0'}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Hours Saved:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '23.4' : '0'}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Efficiency:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '89%' : '0%'}</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
@@ -3411,7 +3411,7 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Last Export:</span>
-                  <span className="text-blue-400 font-bold">2h ago</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
