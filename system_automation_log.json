@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-09T11:00:01.315Z",
-    "functionId": 157,
-    "functionName": "New Lead Notification",
-    "batch": 16,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 1013,
-    "successCount": 9,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-09T11:00:01.352Z",
     "functionId": 138,
     "functionName": "Voice Session ID Generator",
@@ -11340,6 +11329,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-10T06:22:01.377Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T06:23:57.506Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-10T06:23:57.003Z",
       "automationStatus": "running"
     }
   }

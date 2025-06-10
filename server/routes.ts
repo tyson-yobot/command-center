@@ -2538,43 +2538,7 @@ The YoBot Team`;
     }
   });
 
-  // Document Upload and Processing API
-  app.post('/api/knowledge/upload', async (req, res) => {
-    try {
-      const { filename, content, documentType } = req.body;
-      
-      // Process actual document content with Google Drive
-      const driveResponse = await fetch(`https://www.googleapis.com/drive/v3/files`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.GOOGLE_ACCESS_TOKEN}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: filename,
-          parents: [process.env.GOOGLE_DRIVE_FOLDER_ID]
-        })
-      });
 
-      const driveData = await driveResponse.json();
-      
-      const processingResult = {
-        documentId: driveData.id || `doc_${Date.now()}`,
-        filename: filename,
-        status: 'processed',
-        extractedText: content,
-        wordCount: content ? content.split(' ').length : 0,
-        keyTerms: content ? content.match(/\b\w{4,}\b/g)?.slice(0, 5) || [] : [],
-        uploadTime: new Date().toISOString(),
-        indexed: true,
-        driveFileId: driveData.id
-      };
-
-      res.json({ success: true, data: processingResult });
-    } catch (error) {
-      res.status(500).json({ success: false, error: error.message });
-    }
-  });
 
   // Enhanced SMS sending endpoint with comprehensive tracking
   app.post('/api/send-sms', async (req, res) => {
@@ -3367,9 +3331,12 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
   });
 
   // Knowledge Management APIs with AI-powered processing
-  app.post('/api/knowledge/upload', upload.array('documents'), async (req, res) => {
+  app.post('/api/knowledge/upload', (req, res, next) => {
+    console.log('RAG Upload middleware hit - before multer');
+    next();
+  }, upload.array('documents'), async (req, res) => {
     try {
-      console.log('RAG Upload request received');
+      console.log('RAG Upload request received - after multer');
       console.log('req.files:', req.files);
       console.log('req.body:', req.body);
       
