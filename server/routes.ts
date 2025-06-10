@@ -3367,7 +3367,7 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
   });
 
   // Knowledge Management APIs with AI-powered processing
-  app.post('/api/knowledge/upload', upload.array('files'), async (req, res) => {
+  app.post('/api/knowledge/upload', upload.array('documents'), async (req, res) => {
     try {
       const files = req.files as Express.Multer.File[];
       
@@ -3379,11 +3379,19 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
       
       for (const file of files) {
         try {
+          console.log('Processing file:', {
+            originalname: file.originalname,
+            mimetype: file.mimetype,
+            size: file.size,
+            hasBuffer: !!file.buffer
+          });
+          
           // Extract text content based on file type
           let extractedText = '';
           
           if (file.mimetype === 'text/plain') {
             extractedText = file.buffer.toString('utf-8');
+            console.log('Text file extracted, length:', extractedText.length);
           } else if (file.mimetype === 'text/csv') {
             extractedText = file.buffer.toString('utf-8');
           } else if (file.mimetype === 'application/pdf') {
@@ -3447,33 +3455,17 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
 
           const documentId = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
           
-          // Store in Airtable RAG Documents table
-          try {
-            await fetch('http://localhost:5000/api/airtable/sync', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                table: 'RAG Documents',
-                operation: 'create',
-                data: {
-                  'Document ID': documentId,
-                  'File Name': file.originalname,
-                  'File Size': file.size,
-                  'File Type': file.mimetype,
-                  'Upload Date': new Date().toISOString(),
-                  'Content Preview': extractedText.substring(0, 500),
-                  'AI Summary': aiSummary,
-                  'Key Terms': keyTerms.join(', '),
-                  'Categories': categories.join(', '),
-                  'Word Count': extractedText.split(' ').length,
-                  'Processing Status': 'Complete',
-                  'RAG Indexed': true
-                }
-              })
-            });
-          } catch (airtableError) {
-            console.log('Airtable sync warning:', airtableError.message);
-          }
+          // Log document processing locally
+          console.log('RAG Document processed:', {
+            documentId,
+            fileName: file.originalname,
+            fileSize: file.size,
+            fileType: file.mimetype,
+            wordCount: extractedText.split(' ').length,
+            aiProcessed: !!aiSummary,
+            keyTermsCount: keyTerms.length,
+            categoriesCount: categories.length
+          });
           
           processedFiles.push({
             documentId: documentId,
