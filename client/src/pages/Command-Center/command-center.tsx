@@ -3204,7 +3204,7 @@ export default function CommandCenter() {
               
               <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-cyan-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-blue-400 mb-2">47%</div>
+                  <div className="text-3xl font-black text-blue-400 mb-2">{currentSystemMode === 'test' ? '47%' : '0%'}</div>
                   <div className="text-blue-300 text-sm">Cost Reduction</div>
                   <div className="text-blue-200 text-xs mt-1">vs Manual Process</div>
                 </div>
@@ -3212,7 +3212,7 @@ export default function CommandCenter() {
               
               <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-cyan-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-purple-400 mb-2">340%</div>
+                  <div className="text-3xl font-black text-purple-400 mb-2">{currentSystemMode === 'test' ? '340%' : '0%'}</div>
                   <div className="text-purple-300 text-sm">ROI</div>
                   <div className="text-purple-200 text-xs mt-1">12-month period</div>
                 </div>
@@ -3220,7 +3220,7 @@ export default function CommandCenter() {
               
               <div className="bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 border border-cyan-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-yellow-400 mb-2">21</div>
+                  <div className="text-3xl font-black text-yellow-400 mb-2">{currentSystemMode === 'test' ? '21' : '0'}</div>
                   <div className="text-yellow-300 text-sm">Payback Days</div>
                   <div className="text-yellow-200 text-xs mt-1">Industry: 90+ days</div>
                 </div>
