@@ -88,12 +88,12 @@ class PublerIntegration {
           'Publer Social Media Posting',
           false,
           'Publer API key not configured in environment variables',
-          'YoBot System',
+          'Daniel Sharpe',
           false,
           false,
           false,
           'Social Media Integration',
-          'publer-api-key-missing'
+          'Module: publerIntegrationNew.ts'
         );
         throw new Error('Publer API key not configured');
       }
@@ -121,12 +121,12 @@ class PublerIntegration {
           'Publer Social Media Posting',
           false,
           `Publer API error: ${response.status} - ${errorText}`,
-          'YoBot System',
+          'Daniel Sharpe',
           false,
           false,
           true,
           'Social Media Integration',
-          'publer-api-error'
+          'Function: postToSocialMedia in publerIntegrationNew.ts'
         );
         throw new Error(`Publer API error: ${response.status} - ${errorText}`);
       }
@@ -137,12 +137,12 @@ class PublerIntegration {
         'Publer Social Media Posting',
         true,
         `Successfully posted to ${postData.platforms.join(', ')} - Post ID: ${result.id}`,
-        'YoBot System',
+        'Daniel Sharpe',
         true,
         true,
         false,
         'Social Media Integration',
-        result.id || 'successful-post'
+        'Module: publerIntegrationNew.ts'
       );
 
       return {
@@ -160,12 +160,12 @@ class PublerIntegration {
         'Publer Social Media Posting',
         false,
         `Integration failed: ${error.message}`,
-        'YoBot System',
+        'Daniel Sharpe',
         false,
         false,
         false,
         'Social Media Integration',
-        'publer-post-failure'
+        'Function: postToSocialMedia in publerIntegrationNew.ts'
       );
 
       return {
@@ -182,12 +182,12 @@ class PublerIntegration {
           'Publer Account Status Check',
           false,
           'Publer API key not configured',
-          'YoBot System',
+          'Daniel Sharpe',
           false,
           false,
           false,
           'Social Media Integration',
-          'account-status-api-key-missing'
+          'Function: getAccountStatus in publerIntegrationNew.ts'
         );
         throw new Error('Publer API key not configured');
       }
@@ -204,12 +204,12 @@ class PublerIntegration {
           'Publer Account Status Check',
           false,
           `Failed to fetch accounts: ${response.status} - ${errorText}`,
-          'YoBot System',
+          'Daniel Sharpe',
           false,
           false,
           true,
           'Social Media Integration',
-          'account-status-fetch-error'
+          'Function: getAccountStatus in publerIntegrationNew.ts'
         );
         throw new Error(`Failed to fetch accounts: ${response.status}`);
       }
