@@ -227,7 +227,7 @@ async function wipeTestData() {
 
     for (const tableName of tablesToWipe) {
       try {
-        const deletedCount = await airtableWipeTable(tableName);
+        const deletedCount = await airtableWipeTableDuplicate(tableName);
         totalRecordsDeleted += deletedCount;
         wipedTables.push({ table: tableName, recordsDeleted: deletedCount });
         console.log(`✅ Wiped ${deletedCount} test records from ${tableName}`);
@@ -4708,6 +4708,47 @@ Always provide helpful, actionable guidance.`
         success: false, 
         error: 'Pipeline tracking failed',
         details: error.message 
+      });
+    }
+  });
+
+  // Clear Test Data endpoint - required by functionality matrix
+  app.post('/api/clear-test-data', async (req, res) => {
+    try {
+      const { confirmAction } = req.body;
+      
+      if (!confirmAction) {
+        return res.status(400).json({
+          success: false,
+          error: 'Confirmation required for test data clearing'
+        });
+      }
+
+      logOperation('clear-test-data', { confirmAction }, 'success', 'Test data clearing initiated');
+
+      const wipeResult = await wipeTestData();
+      
+      if (wipeResult.success) {
+        res.json({
+          success: true,
+          recordsDeleted: wipeResult.recordsDeleted,
+          tablesWiped: wipeResult.tablesWiped?.length || 0,
+          message: wipeResult.message
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          error: wipeResult.error,
+          message: 'Failed to clear test data'
+        });
+      }
+    } catch (error) {
+      console.error('Clear test data error:', error);
+      logOperation('clear-test-data', req.body, 'error', `Clear test data failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Test data clearing failed',
+        details: error.message
       });
     }
   });

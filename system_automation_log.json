@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-09T11:35:00.199Z",
-    "functionId": 140,
-    "functionName": "Live Error Push",
-    "batch": 14,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 138,
-    "successCount": 6,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-09T11:35:00.204Z",
     "functionId": 146,
     "functionName": "Customer Reconciliation",
@@ -11368,6 +11357,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-10T06:56:29.721Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T06:59:27.689Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-10T06:59:27.365Z",
       "automationStatus": "running"
     }
   }

@@ -1295,6 +1295,48 @@ export default function EnterpriseLeadScraper() {
 
                     <div className="space-y-3">
                       <Label>Job Titles (Select Multiple)</Label>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-3">
+                        {phantombusterFilters.seniorityLevel?.split(',').filter(title => title).map((titleValue) => {
+                          const allTitles = [
+                            { value: "ceo", label: "CEO" },
+                            { value: "founder", label: "Founder" },
+                            { value: "president", label: "President" },
+                            { value: "vp", label: "VP" },
+                            { value: "director", label: "Director" },
+                            { value: "manager", label: "Manager" },
+                            { value: "lead", label: "Lead" },
+                            { value: "head", label: "Head of" },
+                            { value: "chief", label: "Chief" },
+                            { value: "senior", label: "Senior" },
+                            { value: "principal", label: "Principal" },
+                            { value: "specialist", label: "Specialist" },
+                            { value: "coordinator", label: "Coordinator" },
+                            { value: "analyst", label: "Analyst" },
+                            { value: "consultant", label: "Consultant" },
+                            { value: "engineer", label: "Engineer" },
+                            { value: "developer", label: "Developer" },
+                            { value: "architect", label: "Architect" },
+                            { value: "designer", label: "Designer" },
+                            { value: "strategist", label: "Strategist" }
+                          ];
+                          
+                          const titleLabel = allTitles.find(t => t.value === titleValue)?.label || titleValue;
+                          
+                          return (
+                            <Badge
+                              key={titleValue}
+                              className="bg-purple-600/20 text-purple-200 border border-purple-400/30 px-2 py-1 text-xs cursor-pointer hover:bg-red-600/20 hover:text-red-200 hover:border-red-400/30"
+                              onClick={() => {
+                                const currentTitles = phantombusterFilters.seniorityLevel?.split(',').filter(t => t) || [];
+                                const newTitles = currentTitles.filter(t => t !== titleValue);
+                                setPhantombusterFilters(prev => ({ ...prev, seniorityLevel: newTitles.join(',') }));
+                              }}
+                            >
+                              {titleLabel} ×
+                            </Badge>
+                          );
+                        })}
+                      </div>
                       <select
                         multiple
                         value={phantombusterFilters.seniorityLevel ? phantombusterFilters.seniorityLevel.split(',') : []}
