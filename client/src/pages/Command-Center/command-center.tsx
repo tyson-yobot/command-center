@@ -2993,7 +2993,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {/* Live activity feed - populated by webhook data only */
+                {/* Live activity feed - populated by webhook data only */}
                 {liveActivityData && Array.isArray(liveActivityData) && liveActivityData.length > 0 ? (
                   liveActivityData.map((item: any, index: number) => (
                     <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
