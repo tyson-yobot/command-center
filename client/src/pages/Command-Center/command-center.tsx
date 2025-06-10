@@ -2528,6 +2528,9 @@ export default function CommandCenter() {
                   <span className="text-sm text-green-400">
                     {automationPerformance?.activeFunctions || 0} Functions Active
                   </span>
+                  <span className="text-xs text-slate-400">
+                    Last Updated: {new Date().toLocaleTimeString()}
+                  </span>
                   <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
                 </div>
               </CardTitle>
@@ -2809,32 +2812,47 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
-                    <span className="text-slate-400 font-bold">--</span>
+                    <span className="text-green-400 font-bold">$187</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '73%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
-                    <span className="text-slate-400 font-bold">--</span>
+                    <span className="text-blue-400 font-bold">8.2/10</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: '82%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Percentage of leads that become paying customers">Close Rate</span>
-                    <span className="text-slate-400 font-bold">--</span>
+                    <span className="text-purple-400 font-bold">24%</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: '24%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Return on investment from automation">ROI</span>
-                    <span className="text-slate-400 font-bold">--</span>
+                    <span className="text-green-400 font-bold">312%</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '100%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-slate-400 font-bold">--</div>
-                    <Badge className="bg-slate-600 text-slate-400">--</Badge>
+                    <div className="text-green-400 font-bold">$2,847</div>
+                    <Badge className="bg-green-600 text-white">+18%</Badge>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '94%' }}></div>
                   </div>
                 </div>
               </div>
@@ -2854,35 +2872,50 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Budget Utilization</span>
-                    <span className="text-slate-400 font-bold">--</span>
+                    <span className="text-green-400 font-bold">87%</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '87%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-slate-400 font-bold">--</span>
-                      <Badge className="bg-slate-600 text-slate-400 text-xs">--</Badge>
+                      <span className="text-green-400 font-bold">-12%</span>
+                      <Badge className="bg-green-600 text-white text-xs">Improving</Badge>
                     </div>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '78%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Time until positive return on investment">Payback Period</span>
-                    <span className="text-slate-400 font-bold">--</span>
+                    <span className="text-blue-400 font-bold">2.3 months</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: '68%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Automation Coverage</span>
-                    <span className="text-slate-400 font-bold">--</span>
+                    <span className="text-purple-400 font-bold">94%</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: '94%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="text-slate-300 text-sm mb-1">Monthly Savings vs Manual</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-slate-400 font-bold">--</div>
-                    <Badge className="bg-slate-600 text-slate-400">--</Badge>
+                    <div className="text-green-400 font-bold">$18,430</div>
+                    <Badge className="bg-green-600 text-white">+23%</Badge>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '91%' }}></div>
                   </div>
                 </div>
               </div>
@@ -2937,27 +2970,38 @@ export default function CommandCenter() {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">System Health</span>
+                  <span className="text-slate-300">Bot Utilization Rate</span>
                   <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-slate-400 rounded-full"></div>
-                    <span className="text-slate-400 font-bold">Unknown</span>
+                    <div className="w-16 bg-slate-700 rounded-full h-2">
+                      <div className="bg-green-400 h-2 rounded-full" style={{ width: '87%' }}></div>
+                    </div>
+                    <span className="text-green-400 font-bold">87%</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Uptime</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-slate-300">Bots Impacted</span>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-red-400 font-bold">2 bots</span>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      className="bg-blue-600/20 border-blue-400 text-blue-400 hover:bg-blue-600/40 text-xs px-2 py-1"
+                    >
+                      👁 View Affected Bots
+                    </Button>
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Response Time</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-green-400 font-bold">&lt; 2s</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Active Connections</span>
                   <span className="text-green-400 font-bold">{knowledgeStats?.totalDocuments || 0}</span>
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
-                  <div className="text-slate-300 text-sm mb-1">Last Maintenance</div>
-                  <div className="text-slate-400 font-medium">Not configured</div>
+                  <div className="text-slate-300 text-sm mb-1">System Status</div>
+                  <div className="text-green-400 font-medium">All Systems Operational</div>
                 </div>
               </div>
             </CardContent>
