@@ -2241,7 +2241,7 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={handleContentCreator}
+                    onClick={() => window.open('https://publy.co', '_blank')}
                     className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
                   >
                     <FileText className="w-5 h-5 mr-3" />
@@ -2249,7 +2249,7 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={handleMailChimpCampaign}
+                    onClick={() => window.open('https://mailchimp.com', '_blank')}
                     className="bg-yellow-600 hover:bg-yellow-700 text-white flex items-center justify-start p-3"
                   >
                     <Mail className="w-5 h-5 mr-3" />
@@ -2320,31 +2320,7 @@ export default function CommandCenter() {
                     <span>Export Data</span>
                   </Button>
                   
-                  <Button
-                    onClick={async () => {
-                      try {
-                        console.log('Mailchimp Sync button clicked');
-                        const response = await fetch('/api/mailchimp/sync', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            action: 'sync_contacts',
-                            source: 'command_center'
-                          })
-                        });
-                        const result = await response.json();
-                        console.log('Mailchimp sync result:', result);
-                        alert(result.success ? `Mailchimp sync completed: ${result.contactsSynced} contacts` : 'Mailchimp sync failed');
-                      } catch (error) {
-                        console.error('Mailchimp sync error:', error);
-                        alert('Mailchimp sync failed');
-                      }
-                    }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
-                  >
-                    <span className="text-xl mr-3">📧</span>
-                    <span>Mailchimp Sync</span>
-                  </Button>
+
 
                   <Button
                     onClick={() => {
@@ -3415,14 +3391,14 @@ export default function CommandCenter() {
             <CardContent>
               <div className="space-y-3">
                 <Button
-                  onClick={() => setShowSocialContentCreator(true)}
+                  onClick={() => window.open('https://publy.co', '_blank')}
                   className="w-full bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-center"
                 >
                   <Share2 className="w-4 h-4 mr-2" />
                   📢 Content Creator
                 </Button>
                 <Button
-                  onClick={() => setShowMailchimpSync(true)}
+                  onClick={() => window.open('https://mailchimp.com', '_blank')}
                   className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-center"
                 >
                   <Mail className="w-4 h-4 mr-2" />

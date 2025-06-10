@@ -25,22 +25,22 @@ function logOperation(operation: string, data: any, result: 'success' | 'error' 
   console.log(`[${systemMode.toUpperCase()}] ${operation}: ${message}`, logEntry);
 }
 
-// System mode gate - enforces proper data isolation
+// System mode gate - enforces proper data isolation per user specification
 function enforceSystemModeGate(operation: string, isProductionWrite: boolean = true) {
   if (systemMode === 'test' && isProductionWrite) {
-    console.log(`🚫 Test Mode - Blocking production operation: ${operation}`);
-    logOperation(`test-mode-block-${operation}`, {}, 'blocked', `Production operation blocked in test mode: ${operation}`);
+    console.log(`🚫 Test Mode enabled: no data logged. Operation blocked: ${operation}`);
+    logOperation(`test-mode-block-${operation}`, {}, 'blocked', `Test Mode enabled: no data logged.`);
     return false;
   }
   
-  if (systemMode === 'live') {
-    console.log(`✅ Live Mode - Executing production operation: ${operation}`);
-    logOperation(`live-mode-execute-${operation}`, {}, 'success', `Production operation executed: ${operation}`);
+  if (systemMode === 'live' && isProductionWrite) {
+    console.log(`✅ Live Mode - Production Data: Executing ${operation}`);
+    logOperation(`live-mode-execute-${operation}`, {}, 'success', `Live mode production operation: ${operation}`);
     return true;
   }
   
-  console.log(`✅ Test Mode - Allowing test operation: ${operation}`);
-  logOperation(`test-mode-execute-${operation}`, {}, 'success', `Test operation executed: ${operation}`);
+  // Non-production operations (reads, etc.) allowed in both modes
+  logOperation(`${systemMode}-mode-read-${operation}`, {}, 'success', `Read operation in ${systemMode} mode: ${operation}`);
   return true;
 }
 
