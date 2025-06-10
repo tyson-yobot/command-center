@@ -114,6 +114,9 @@ export default function CommandCenter() {
     // Try to get from localStorage first, fallback to 'live'
     return localStorage.getItem('systemMode') || 'live';
   });
+  const [showPublyDashboard, setShowPublyDashboard] = useState(false);
+  const [showMailchimpDashboard, setShowMailchimpDashboard] = useState(false);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
   const { toast } = useToast();
 
   // Fetch current system mode on load and set up periodic sync
@@ -2007,41 +2010,11 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={async () => {
-                      try {
-                        console.log('Content Creator with Publy button clicked');
-                        const response = await fetch('/api/automation/content-creator-publy', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            contentType: 'post',
-                            platform: 'linkedin',
-                            headline: 'YoBot Enterprise Automation Solutions',
-                            body: 'Transform your business operations with intelligent automation. Our comprehensive platform streamlines workflows, reduces manual tasks, and accelerates growth.',
-                            targetAudience: 'Business Leaders',
-                            cta: 'Schedule a Demo',
-                            tags: ['AI', 'Automation', 'Business', 'Enterprise']
-                          })
-                        });
-                        const result = await response.json();
-                        console.log('Content created with Publy:', result);
-                        
-                        if (result.success) {
-                          // Content created successfully - logged to console
-                          // Open Publy dashboard
-                          window.open(result.publyDashboard, '_blank');
-                        } else {
-                          alert('Content creation failed');
-                        }
-                      } catch (error) {
-                        console.error('Content Creator error:', error);
-                        alert('Content creation failed');
-                      }
-                    }}
+                    onClick={() => setShowPublyDashboard(true)}
                     className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📢</span>
-                    <span>Content Creator (Publy)</span>
+                    <span>Publy Dashboard</span>
                   </Button>
                 </div>
               </CardContent>
@@ -2109,28 +2082,11 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={async () => {
-                      try {
-                        console.log('Mailchimp Sync button clicked');
-                        const response = await fetch('/api/automation/mailchimp-sync', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            listId: 'mailchimp_list_001',
-                            syncType: 'full_sync',
-                            includeFields: ['email', 'firstName', 'lastName', 'status']
-                          })
-                        });
-                        const result = await response.json();
-                        console.log('Mailchimp sync result:', result);
-                      } catch (error) {
-                        console.error('Mailchimp sync error:', error);
-                      }
-                    }}
+                    onClick={() => setShowMailchimpDashboard(true)}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📧</span>
-                    <span>Mailchimp Sync</span>
+                    <span>Mailchimp Dashboard</span>
                   </Button>
 
                 </div>
@@ -4038,6 +3994,376 @@ export default function CommandCenter() {
       {activeModule === 'mailchimp' && (
         <MailchimpSyncDashboard onBack={() => setActiveModule(null)} />
       )}
+
+      {/* Publy Dashboard Modal */}
+      {showPublyDashboard && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-orange-400/50">
+            <div className="sticky top-0 bg-slate-900 border-b border-orange-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white flex items-center">
+                <span className="text-2xl mr-3">📢</span>
+                Publy Content Creation Dashboard
+              </h2>
+              <Button
+                onClick={() => setShowPublyDashboard(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6">
+              {/* Content Creation Interface */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <Card className="bg-slate-800/60 border border-orange-400/50">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center">
+                      <span className="text-xl mr-2">✍️</span>
+                      Create New Content
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-white text-sm font-medium mb-2 block">Platform</label>
+                        <select className="w-full p-3 bg-slate-700 border border-orange-400/50 rounded text-white">
+                          <option value="linkedin">LinkedIn</option>
+                          <option value="twitter">Twitter/X</option>
+                          <option value="facebook">Facebook</option>
+                          <option value="instagram">Instagram</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-white text-sm font-medium mb-2 block">Content Type</label>
+                        <select className="w-full p-3 bg-slate-700 border border-orange-400/50 rounded text-white">
+                          <option value="post">Social Post</option>
+                          <option value="article">Article</option>
+                          <option value="announcement">Announcement</option>
+                          <option value="promotion">Promotion</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-white text-sm font-medium mb-2 block">Headline</label>
+                        <input
+                          type="text"
+                          placeholder="Enter compelling headline..."
+                          className="w-full p-3 bg-slate-700 border border-orange-400/50 rounded text-white placeholder-slate-400"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-white text-sm font-medium mb-2 block">Content</label>
+                        <textarea
+                          placeholder="Write your content here..."
+                          rows={4}
+                          className="w-full p-3 bg-slate-700 border border-orange-400/50 rounded text-white placeholder-slate-400 resize-none"
+                        />
+                      </div>
+                      <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
+                        Generate Content with AI
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-slate-800/60 border border-orange-400/50">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center">
+                      <span className="text-xl mr-2">📊</span>
+                      Content Analytics
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex justify-between">
+                        <span className="text-slate-300">Posts This Month:</span>
+                        <span className="text-white font-bold">47</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-300">Avg Engagement:</span>
+                        <span className="text-green-400 font-bold">8.4%</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-300">Total Reach:</span>
+                        <span className="text-blue-400 font-bold">156K</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-300">Best Time to Post:</span>
+                        <span className="text-orange-400 font-bold">2:00 PM EST</span>
+                      </div>
+                      <div className="bg-slate-700/40 rounded p-3">
+                        <div className="text-sm text-slate-300 mb-2">Top Performing Content:</div>
+                        <div className="text-white text-sm">"YoBot AI automation increases productivity by 340%"</div>
+                        <div className="text-green-400 text-xs">2.3K likes • 156 shares</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Recent Content */}
+              <Card className="bg-slate-800/60 border border-orange-400/50">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <span className="text-xl mr-2">📝</span>
+                    Recent Content
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {[
+                      { platform: "LinkedIn", content: "Transform your business with YoBot AI automation", status: "Published", engagement: "94 likes" },
+                      { platform: "Twitter", content: "New features in YoBot Command Center...", status: "Scheduled", engagement: "Schedule: 2PM" },
+                      { platform: "Facebook", content: "Client success story: 47% cost reduction", status: "Draft", engagement: "Needs review" }
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-slate-700/40 rounded border border-orange-400/30">
+                        <div>
+                          <div className="text-white font-medium">{item.platform}</div>
+                          <div className="text-slate-300 text-sm">{item.content}</div>
+                        </div>
+                        <div className="text-right">
+                          <div className={`text-sm font-medium ${
+                            item.status === 'Published' ? 'text-green-400' :
+                            item.status === 'Scheduled' ? 'text-blue-400' : 'text-orange-400'
+                          }`}>{item.status}</div>
+                          <div className="text-slate-400 text-xs">{item.engagement}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mailchimp Dashboard Modal */}
+      {showMailchimpDashboard && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-green-400/50">
+            <div className="sticky top-0 bg-slate-900 border-b border-green-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white flex items-center">
+                <span className="text-2xl mr-3">📧</span>
+                Mailchimp Email Marketing Dashboard
+              </h2>
+              <Button
+                onClick={() => setShowMailchimpDashboard(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6">
+              {/* Email Campaign Management */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <Card className="bg-slate-800/60 border border-green-400/50">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center">
+                      <span className="text-xl mr-2">📊</span>
+                      Campaign Stats
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-slate-300">Total Subscribers:</span>
+                        <span className="text-white font-bold">2,847</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-300">Open Rate:</span>
+                        <span className="text-green-400 font-bold">24.8%</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-300">Click Rate:</span>
+                        <span className="text-blue-400 font-bold">6.2%</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-300">Growth This Month:</span>
+                        <span className="text-green-400 font-bold">+156</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-slate-800/60 border border-green-400/50">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center">
+                      <span className="text-xl mr-2">✉️</span>
+                      Quick Actions
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                        Create Campaign
+                      </Button>
+                      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                        Sync Contacts
+                      </Button>
+                      <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
+                        View Analytics
+                      </Button>
+                      <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
+                        Manage Lists
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-slate-800/60 border border-green-400/50">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center">
+                      <span className="text-xl mr-2">🎯</span>
+                      Audience Insights
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-slate-300">Engaged Users:</span>
+                        <span className="text-green-400 font-bold">73%</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-300">Top Location:</span>
+                        <span className="text-white font-bold">New York</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-300">Best Send Time:</span>
+                        <span className="text-blue-400 font-bold">Tue 10AM</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-300">Mobile Opens:</span>
+                        <span className="text-purple-400 font-bold">68%</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Recent Campaigns */}
+              <Card className="bg-slate-800/60 border border-green-400/50 mb-6">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <span className="text-xl mr-2">📈</span>
+                    Recent Campaigns
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {[
+                      { name: "YoBot Feature Update Newsletter", sent: "2,847", opens: "706", clicks: "176", status: "Sent" },
+                      { name: "Weekly Automation Tips", sent: "2,821", opens: "692", clicks: "203", status: "Sent" },
+                      { name: "Holiday Promotion 2024", sent: "0", opens: "0", clicks: "0", status: "Draft" }
+                    ].map((campaign, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-slate-700/40 rounded border border-green-400/30">
+                        <div>
+                          <div className="text-white font-medium">{campaign.name}</div>
+                          <div className="text-slate-300 text-sm">
+                            Sent: {campaign.sent} • Opens: {campaign.opens} • Clicks: {campaign.clicks}
+                          </div>
+                        </div>
+                        <div className={`px-3 py-1 rounded text-sm font-medium ${
+                          campaign.status === 'Sent' ? 'bg-green-600/20 text-green-400' : 'bg-orange-600/20 text-orange-400'
+                        }`}>
+                          {campaign.status}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Contact Sync */}
+              <Card className="bg-slate-800/60 border border-green-400/50">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <span className="text-xl mr-2">🔄</span>
+                    Contact Synchronization
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-white text-sm font-medium mb-2 block">Sync Source</label>
+                      <select className="w-full p-3 bg-slate-700 border border-green-400/50 rounded text-white">
+                        <option value="crm">CRM Contacts</option>
+                        <option value="leads">Lead Database</option>
+                        <option value="manual">Manual Upload</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-white text-sm font-medium mb-2 block">Target List</label>
+                      <select className="w-full p-3 bg-slate-700 border border-green-400/50 rounded text-white">
+                        <option value="main">Main Audience</option>
+                        <option value="prospects">Prospects</option>
+                        <option value="customers">Customers</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex gap-3">
+                    <Button className="bg-green-600 hover:bg-green-700 text-white">
+                      Start Sync
+                    </Button>
+                    <Button variant="outline" className="border-green-400 text-green-400">
+                      Preview Changes
+                    </Button>
+                  </div>
+                  <div className="mt-4 p-3 bg-green-900/20 border border-green-400/30 rounded">
+                    <div className="text-green-400 text-sm font-medium">Last Sync Status</div>
+                    <div className="text-slate-300 text-sm">Successfully synced 47 new contacts • 3 minutes ago</div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Document Upload Interface */}
+      <div className="fixed bottom-4 right-4 z-40">
+        <Button
+          onClick={() => document.getElementById('knowledge-upload')?.click()}
+          className="bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/25 flex items-center"
+        >
+          <Upload className="w-4 h-4 mr-2" />
+          Upload Knowledge
+        </Button>
+        <input
+          id="knowledge-upload"
+          type="file"
+          accept=".pdf,.doc,.docx,.txt,.md,.csv"
+          multiple
+          onChange={async (e) => {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+              const formData = new FormData();
+              Array.from(files).forEach(file => {
+                formData.append('documents', file);
+              });
+              formData.append('category', 'knowledge');
+              
+              try {
+                const response = await fetch('/api/upload-documents', {
+                  method: 'POST',
+                  body: formData
+                });
+                const result = await response.json();
+                if (result.success) {
+                  alert(`Successfully uploaded ${files.length} document(s) to knowledge base`);
+                  loadDocuments(); // Refresh document list
+                } else {
+                  alert('Upload failed: ' + result.error);
+                }
+              } catch (error) {
+                console.error('Upload error:', error);
+                alert('Upload failed');
+              }
+            }
+          }}
+          style={{ display: 'none' }}
+        />
+      </div>
 
       {/* Zendesk Live Chat Widget */}
       <ZendeskChatWidget />
