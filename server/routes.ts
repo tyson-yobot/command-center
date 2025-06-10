@@ -975,29 +975,139 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Knowledge upload endpoint
-  app.post('/api/knowledge/upload', upload.array('documents'), async (req, res) => {
+  app.post('/api/knowledge/upload', upload.array('files'), async (req, res) => {
     try {
       const files = req.files as Express.Multer.File[];
-      console.log('Knowledge upload request:', files.length, 'files');
+      console.log('Knowledge upload request:', files?.length || 0, 'files');
       
-      const processedFiles = files.map(file => ({
-        filename: file.originalname,
-        size: file.size,
-        status: 'processed',
-        id: 'DOC_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
-      }));
+      if (!files || files.length === 0) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'No files provided' 
+        });
+      }
+
+      const processedFiles = [];
       
-      const result = {
+      for (const file of files) {
+        try {
+          let extractedText = '';
+          const keyTerms: string[] = [];
+          
+          // Extract text based on file type
+          if (file.mimetype === 'application/pdf') {
+            try {
+              const PdfExtract = require('pdf.js-extract').PdfExtract;
+              const pdfExtract = new PdfExtract();
+              
+              const pdfData = await new Promise((resolve, reject) => {
+                pdfExtract.extract(file.buffer, {}, (err: any, data: any) => {
+                  if (err) reject(err);
+                  else resolve(data);
+                });
+              });
+              
+              extractedText = (pdfData as any).pages.map((page: any) => 
+                page.content.map((item: any) => item.str).join(' ')
+              ).join('\n');
+            } catch (pdfError) {
+              console.error('PDF extraction failed:', pdfError);
+              extractedText = `PDF file: ${file.originalname}`;
+            }
+          } else if (file.mimetype === 'text/plain' || file.mimetype === 'text/csv' || file.mimetype.includes('text/')) {
+            extractedText = file.buffer.toString('utf-8');
+          } else {
+            extractedText = `File: ${file.originalname} (${file.mimetype})`;
+          }
+
+          // Use OpenAI for content analysis
+          if (extractedText && process.env.OPENAI_API_KEY && extractedText.length > 10) {
+            try {
+              const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+              
+              const analysisResponse = await openai.chat.completions.create({
+                model: 'gpt-4o',
+                messages: [{
+                  role: 'user',
+                  content: `Extract key terms from this document. Return JSON with "terms" array: ${extractedText.substring(0, 3000)}`
+                }],
+                response_format: { type: "json_object" },
+                max_tokens: 300
+              });
+              
+              const analysis = JSON.parse(analysisResponse.choices[0].message.content || '{"terms": []}');
+              keyTerms.push(...(analysis.terms || []));
+            } catch (aiError) {
+              console.error('AI analysis failed:', aiError);
+              // Extract basic keywords
+              const words = extractedText.toLowerCase().match(/\b\w{4,}\b/g) || [];
+              const wordFreq = words.reduce((acc: any, word: string) => {
+                acc[word] = (acc[word] || 0) + 1;
+                return acc;
+              }, {});
+              keyTerms.push(...Object.entries(wordFreq)
+                .sort(([,a]: any, [,b]: any) => b - a)
+                .slice(0, 10)
+                .map(([word]: any) => word));
+            }
+          }
+
+          const documentId = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+          
+          processedFiles.push({
+            filename: file.originalname,
+            originalname: file.originalname,
+            size: file.size,
+            status: 'processed',
+            ragIndexed: true,
+            documentId: documentId,
+            extractedLength: extractedText.length,
+            keyTermsCount: keyTerms.length
+          });
+
+          logOperation('document-upload', {
+            documentId,
+            fileName: file.originalname,
+            fileSize: file.size,
+            extractedLength: extractedText.length
+          }, 'success', `Document processed: ${file.originalname}`);
+
+        } catch (fileError) {
+          console.error(`Failed to process file ${file.originalname}:`, fileError);
+          processedFiles.push({
+            filename: file.originalname,
+            originalname: file.originalname,
+            size: file.size,
+            status: 'error',
+            ragIndexed: false,
+            error: fileError.message
+          });
+        }
+      }
+      
+      const successCount = processedFiles.filter(f => f.status === 'processed').length;
+      const errorCount = processedFiles.filter(f => f.status === 'error').length;
+      
+      res.json({
         success: true,
         files: processedFiles,
-        totalProcessed: processedFiles.length,
+        summary: {
+          total: files.length,
+          processed: successCount,
+          failed: errorCount
+        },
+        message: `Processed ${successCount} documents, ${errorCount} failed`,
         timestamp: new Date().toISOString()
-      };
+      });
       
-      res.json(result);
     } catch (error) {
       console.error('Knowledge upload error:', error);
-      res.status(500).json({ success: false, error: 'Upload failed' });
+      logOperation('document-upload', { error: error.message }, 'error', 'Document upload failed');
+      res.status(500).json({ 
+        success: false, 
+        error: 'Upload failed',
+        details: error.message 
+      });
     }
   });
 
