@@ -13525,6 +13525,49 @@ export function registerContentCreationEndpoints(app: Express) {
     }
   });
 
+  // Test voice generation endpoint
+  app.post('/api/elevenlabs/test-voice', async (req, res) => {
+    try {
+      const testText = "Hello from YoBot Command Center. Your enterprise automation platform is now speaking with professional voice synthesis.";
+      
+      if (!process.env.ELEVENLABS_API_KEY) {
+        return res.status(401).json({
+          success: false,
+          error: 'ElevenLabs API key required'
+        });
+      }
+
+      // Generate speech using the same function as the main endpoint
+      const audioResult = await ElevenLabs.generateSpeech(testText, '21m00Tcm4TlvDq8ikWAM');
+      
+      if (audioResult.error) {
+        throw new Error(audioResult.error);
+      }
+
+      // Convert audio buffer to base64 for response
+      const audioBase64 = Buffer.from(audioResult.audio).toString('base64');
+      
+      logOperation('elevenlabs-test-voice', { testText }, 'success', 'Voice test completed successfully');
+
+      res.json({
+        success: true,
+        audioData: audioBase64,
+        voiceId: '21m00Tcm4TlvDq8ikWAM',
+        textLength: testText.length,
+        timestamp: new Date().toISOString(),
+        message: 'Voice test completed successfully'
+      });
+    } catch (error) {
+      console.error('Voice test error:', error);
+      logOperation('elevenlabs-test-voice', {}, 'error', `Voice test failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Voice test failed',
+        details: error.message
+      });
+    }
+  });
+
   // ElevenLabs Voice Synthesis API endpoints
   app.get('/api/elevenlabs/voices', async (req, res) => {
     try {
