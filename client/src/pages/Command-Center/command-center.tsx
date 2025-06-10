@@ -1861,23 +1861,33 @@ export default function CommandCenter() {
           }
           break;
         case 'Content Creator':
-          setShowContentCreator(true);
-          toast({
-            title: "Content Creator",
-            description: "Opening AI content generation dashboard",
-          });
-          return;
+          endpoint = '/webhook/content-creator';
+          requestData = {
+            selectedIndustry: 'Technology',
+            targetPlatform: 'LinkedIn',
+            contentType: 'value post',
+            characterCount: 500,
+            tone: 'professional',
+            voicePersona: 'expert',
+            systemMode: currentSystemMode
+          };
+          break;
         case 'Export Data':
           endpoint = '/api/export-data';
           requestData = { format: 'csv', dataType: 'all' };
           break;
         case 'Mailchimp Sync':
-          setShowMailchimpSync(true);
-          toast({
-            title: "Mailchimp Sync",
-            description: "Opening email marketing sync dashboard",
-          });
-          return;
+          endpoint = '/webhook/mailchimp-campaign';
+          requestData = {
+            campaignType: 'Newsletter',
+            audienceSegment: 'Technology Professionals',
+            emailSubject: 'Latest Tech Innovations',
+            emailBody: 'Discover cutting-edge technology trends shaping the future of business.',
+            CTA: 'Read More',
+            sendNow: true,
+            systemMode: currentSystemMode
+          };
+          break;
         case 'Upload Documents':
           endpoint = '/api/upload-documents';
           if (!data) {
@@ -2243,7 +2253,7 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={handleContentCreator}
+                    onClick={() => executeLiveCommand('Content Creator')}
                     className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
                   >
                     <FileText className="w-5 h-5 mr-3" />
@@ -2251,7 +2261,7 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={handleMailchimpCampaign}
+                    onClick={() => executeLiveCommand('Mailchimp Sync')}
                     className="bg-yellow-600 hover:bg-yellow-700 text-white flex items-center justify-start p-3"
                   >
                     <Mail className="w-5 h-5 mr-3" />
