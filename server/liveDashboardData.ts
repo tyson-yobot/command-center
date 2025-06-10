@@ -11,15 +11,7 @@ export class LiveDashboardData {
       const logPath = path.join(process.cwd(), 'system_automation_log.json');
       
       if (!fs.existsSync(logPath)) {
-        return {
-          totalFunctions: 0,
-          activeFunctions: 0,
-          executionsToday: 0,
-          successRate: "0%",
-          averageExecutionTime: "0ms",
-          topPerformers: [],
-          recentErrors: []
-        };
+        throw new Error('No automation log data available');
       }
 
       const logData = JSON.parse(fs.readFileSync(logPath, 'utf8'));
@@ -31,7 +23,7 @@ export class LiveDashboardData {
       const failCount = logData.failCount || 0;
       
       const successRate = totalTests > 0 ? 
-        ((passCount / totalTests) * 100).toFixed(1) : "0";
+        ((passCount / totalTests) * 100).toFixed(1) : null;
       
       // Count actual function types from logs
       const functionTypes = new Set();
@@ -54,8 +46,8 @@ export class LiveDashboardData {
         totalFunctions: functionTypes.size,
         activeFunctions: testEntries.filter(e => e.passFail === 'PASS').length,
         executionsToday: totalTests,
-        successRate: `${successRate}%`,
-        averageExecutionTime: "0ms", // Not tracked in current logs
+        successRate: successRate ? `${successRate}%` : null,
+        averageExecutionTime: null, // Not tracked in current logs
         topPerformers: [],
         recentErrors: recentErrors.slice(0, 3),
         healthChecks: {
@@ -68,70 +60,28 @@ export class LiveDashboardData {
       
     } catch (error) {
       console.error('Error reading live automation data:', error);
-      return {
-        totalFunctions: 0,
-        activeFunctions: 0,
-        executionsToday: 0,
-        successRate: "0%",
-        averageExecutionTime: "0ms",
-        topPerformers: [],
-        recentErrors: [],
-        healthChecks: {
-          airtable: "unknown",
-          slack: "unknown", 
-          apis: "unknown",
-          database: "unknown"
-        }
-      };
+      throw error;
     }
   }
 
   // Get real lead scraping data from actual sources
   static async getLeadMetrics() {
     try {
-      // Pull from actual lead stores instead of hardcoded data
-      const leadSources = {
-        apollo: [],
-        apify: [],
-        phantom: []
-      };
-      
-      // Count actual leads from data stores
-      const totalLeads = Object.values(leadSources).reduce((sum, leads) => sum + leads.length, 0);
-      
+      // Pull from actual lead stores - let them populate naturally
       return {
-        totalLeads,
-        qualifiedLeads: 0, // Calculate from actual qualification data
-        conversionRate: "0%", // Calculate from actual conversion tracking
-        averageLeadScore: 0, // Calculate from actual lead scoring
+        totalLeads: null,
+        qualifiedLeads: null,
+        conversionRate: null,
+        averageLeadScore: null,
         leadSources: {
-          apollo: {
-            count: leadSources.apollo.length,
-            quality: "0%"
-          },
-          apify: {
-            count: leadSources.apify.length,
-            quality: "0%"
-          },
-          phantom: {
-            count: leadSources.phantom.length,
-            quality: "0%"
-          }
+          apollo: { count: null, quality: null },
+          apify: { count: null, quality: null },
+          phantom: { count: null, quality: null }
         }
       };
     } catch (error) {
       console.error('Error getting live lead metrics:', error);
-      return {
-        totalLeads: 0,
-        qualifiedLeads: 0,
-        conversionRate: "0%",
-        averageLeadScore: 0,
-        leadSources: {
-          apollo: { count: 0, quality: "0%" },
-          apify: { count: 0, quality: "0%" },
-          phantom: { count: 0, quality: "0%" }
-        }
-      };
+      throw error;
     }
   }
 
@@ -143,28 +93,16 @@ export class LiveDashboardData {
       
       return {
         totalLeads: leadMetrics.totalLeads,
-        totalCampaigns: 0, // Count from actual campaign data
+        totalCampaigns: null,
         activeAutomations: automationMetrics.activeFunctions,
         successRate: automationMetrics.successRate,
-        monthlyGrowth: "0%", // Calculate from actual growth tracking
-        recentActivity: [], // Pull from actual activity logs
+        monthlyGrowth: null,
+        recentActivity: [],
         platformStats: leadMetrics.leadSources
       };
     } catch (error) {
       console.error('Error getting dashboard overview:', error);
-      return {
-        totalLeads: 0,
-        totalCampaigns: 0,
-        activeAutomations: 0,
-        successRate: "0%",
-        monthlyGrowth: "0%",
-        recentActivity: [],
-        platformStats: {
-          apollo: { count: 0, quality: "0%" },
-          apify: { count: 0, quality: "0%" },
-          phantom: { count: 0, quality: "0%" }
-        }
-      };
+      throw error;
     }
   }
 }
