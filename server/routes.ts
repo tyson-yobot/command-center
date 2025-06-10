@@ -1796,7 +1796,7 @@ New York, NY 10001`;
       // Log scraping operation
       logOperation('lead-scraper', req.body, 'success', `${platform} scraping completed: ${leads.length} leads found`);
 
-      // Auto-sync to Airtable
+      // Auto-sync to Airtable - Session tracking
       await fetch('http://localhost:5000/api/airtable/sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1813,6 +1813,33 @@ New York, NY 10001`;
           }
         })
       }).catch(err => console.log('Airtable sync warning:', err.message));
+
+      // Auto-sync individual leads to CRM Leads table
+      for (const lead of leads) {
+        await fetch('http://localhost:5000/api/airtable/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            table: 'CRM Leads',
+            operation: 'create',
+            data: {
+              'Full Name': lead.fullName,
+              'Email': lead.email,
+              'Phone': lead.phone,
+              'Company': lead.company,
+              'Title': lead.title,
+              'Location': lead.location,
+              'Score': lead.score,
+              'LinkedIn URL': lead.linkedinUrl,
+              'Source Platform': platform,
+              'Scrape ID': scrapeId,
+              'Date Added': startTime,
+              'Status': 'New Lead',
+              'Lead Quality': lead.score > 70 ? 'High' : lead.score > 40 ? 'Medium' : 'Low'
+            }
+          })
+        }).catch(err => console.log('CRM sync warning:', err.message));
+      }
 
       res.json(result);
     } catch (error) {
