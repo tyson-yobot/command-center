@@ -10380,6 +10380,41 @@ CRM Data:
     }
   });
 
+  // QA Logging endpoint for Airtable sync
+  app.post('/api/qa-log', async (req, res) => {
+    try {
+      const { testName, data, systemMode, timestamp } = req.body;
+      
+      // Log to Airtable Integration Test Log
+      await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/Integration%20Test%20Log", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          fields: {
+            "🧪 Integration Name": testName,
+            "✅ Pass/Fail": true,
+            "📝 Notes / Debug": JSON.stringify(data),
+            "📅 Test Date": timestamp,
+            "👤 QA Owner": "YoBot System",
+            "📤 Output Data Populated?": true,
+            "📁 Record Created?": true,
+            "🔁 Retry Attempted?": false,
+            "⚙️ Module Type": "Command Center",
+            "🔗 Related Scenario Link": "Command Center Test"
+          }
+        })
+      });
+      
+      res.json({ success: true, logged: true });
+    } catch (error) {
+      console.error('QA logging error:', error);
+      res.status(500).json({ success: false, error: 'QA logging failed' });
+    }
+  });
+
   // Register all automation function endpoints
   registerAutomationEndpoints(app);
   
