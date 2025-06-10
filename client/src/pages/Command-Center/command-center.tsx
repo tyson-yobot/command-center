@@ -3390,20 +3390,6 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <Button
-                  onClick={() => window.open('https://publy.co', '_blank')}
-                  className="w-full bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-center"
-                >
-                  <Share2 className="w-4 h-4 mr-2" />
-                  📢 Content Creator
-                </Button>
-                <Button
-                  onClick={() => window.open('https://mailchimp.com', '_blank')}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-center"
-                >
-                  <Mail className="w-4 h-4 mr-2" />
-                  📧 Mailchimp Sync
-                </Button>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Last Export:</span>
                   <span className="text-blue-400 font-bold">2h ago</span>

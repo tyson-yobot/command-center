@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-06-10T10:46:16.182Z",
+  "url": "/webhook/content-creator",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "226"
+  },
+  "raw_payload": {
+    "selectedIndustry": "Technology",
+    "targetPlatform": "LinkedIn",
+    "contentType": "carousel",
+    "characterCount": 500,
+    "tone": "professional",
+    "voicePersona": "thought leader",
+    "systemMode": "test"
+  }
+}

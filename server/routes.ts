@@ -22,6 +22,8 @@ import { registerAutomationEndpoints, executeAutomationFunction } from "./automa
 import { registerCentralAutomationDispatcher } from "./centralAutomationDispatcher";
 import { registerCommandCenterRoutes } from "./commandCenterRoutes";
 import { registerQAValidationRoutes } from "./qaValidationSystem";
+import { registerContentCreatorRoutes } from "./contentCreatorRoutes";
+import { registerMailchimpRoutes } from "./mailchimpRoutes";
 import { configManager } from "./controlCenterConfig";
 import { airtableLogger } from "./airtableLogger";
 import { automationTester } from "./automationTester";
@@ -413,6 +415,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register Command Center routes FIRST to bypass webhook middleware
   registerCommandCenterRoutes(app);
   registerQAValidationRoutes(app);
+  
+  // Register Content Creator and Mailchimp webhook routes
+  registerContentCreatorRoutes(app);
+  registerMailchimpRoutes(app);
   
   // Complete Test Data Wipe - CRITICAL FOR DATA INTEGRITY
   app.post('/api/wipe-test-data', async (req, res) => {
