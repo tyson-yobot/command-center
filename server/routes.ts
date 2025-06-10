@@ -13259,6 +13259,130 @@ export function registerContentCreationEndpoints(app: Express) {
     }
   });
 
+  // ElevenLabs Voice Synthesis API endpoints
+  app.get('/api/elevenlabs/voices', async (req, res) => {
+    try {
+      const result = await ElevenLabs.getAllVoices();
+      res.json({
+        success: true,
+        voices: result.voices,
+        error: result.error
+      });
+    } catch (error) {
+      console.error('ElevenLabs voices error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  app.post('/api/elevenlabs/generate', async (req, res) => {
+    try {
+      const { text, voiceId, options } = req.body;
+      const result = await ElevenLabs.generateSpeech(text, voiceId, options);
+      
+      res.setHeader('Content-Type', 'audio/mpeg');
+      res.setHeader('Content-Disposition', 'attachment; filename="speech.mp3"');
+      res.send(result.audio);
+    } catch (error) {
+      console.error('ElevenLabs generation error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  app.post('/api/elevenlabs/clone', async (req, res) => {
+    try {
+      const { name, description } = req.body;
+      const files = req.files as Express.Multer.File[];
+      
+      if (!files || files.length === 0) {
+        return res.status(400).json({ success: false, error: 'No audio files provided' });
+      }
+
+      const audioBuffers = files.map(file => file.buffer);
+      const result = await ElevenLabs.cloneVoice(name, description, audioBuffers);
+      
+      res.json({
+        success: true,
+        voiceId: result.voiceId,
+        error: result.error
+      });
+    } catch (error) {
+      console.error('ElevenLabs cloning error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  app.get('/api/elevenlabs/user', async (req, res) => {
+    try {
+      const result = await ElevenLabs.getUserInfo();
+      res.json({
+        success: true,
+        user: result.user,
+        error: result.error
+      });
+    } catch (error) {
+      console.error('ElevenLabs user info error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  app.get('/api/elevenlabs/models', async (req, res) => {
+    try {
+      const result = await ElevenLabs.getModels();
+      res.json({
+        success: true,
+        models: result.models,
+        error: result.error
+      });
+    } catch (error) {
+      console.error('ElevenLabs models error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  app.get('/api/elevenlabs/voices/:voiceId/settings', async (req, res) => {
+    try {
+      const { voiceId } = req.params;
+      const result = await ElevenLabs.getVoiceSettings(voiceId);
+      res.json({
+        success: true,
+        settings: result.settings,
+        error: result.error
+      });
+    } catch (error) {
+      console.error('ElevenLabs voice settings error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  app.post('/api/elevenlabs/voices/:voiceId/settings', async (req, res) => {
+    try {
+      const { voiceId } = req.params;
+      const { settings } = req.body;
+      const result = await ElevenLabs.updateVoiceSettings(voiceId, settings);
+      res.json({
+        success: result.success,
+        error: result.error
+      });
+    } catch (error) {
+      console.error('ElevenLabs update settings error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  app.delete('/api/elevenlabs/voices/:voiceId', async (req, res) => {
+    try {
+      const { voiceId } = req.params;
+      const result = await ElevenLabs.deleteVoice(voiceId);
+      res.json({
+        success: result.success,
+        error: result.error
+      });
+    } catch (error) {
+      console.error('ElevenLabs delete voice error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
   // Register Zendesk integration routes
   registerZendeskRoutes(app);
 
