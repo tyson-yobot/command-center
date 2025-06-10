@@ -17,7 +17,7 @@ interface TestLogEntry {
 class IntegrationTestLogger {
   private airtableApiKey = 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa';
   private integrationTestLogBase = 'appRt8V3tH4g5Z5if';
-  private integrationTestLogTable = 'tblIntegrationTestLog';
+  private integrationTestLogTable = 'tbly0fjE2M5uHET9X';
 
   async logTest(testData: TestLogEntry): Promise<boolean> {
     try {
@@ -30,17 +30,14 @@ class IntegrationTestLogger {
         body: JSON.stringify({
           records: [{
             fields: {
-              '✅ Integration Name': testData.integrationName,
-              '✅ Pass/Fail': testData.passFail,
-              '📝 Notes / Debug': testData.notes,
-              '📅 Test Date': testData.testDate,
-              '👤 QA Owner': testData.qaOwner,
-              '☑️ Output Data Populated?': testData.outputDataPopulated,
-              '🗂 Record Created?': testData.recordCreated,
-              '🔁 Retry Attempted?': testData.retryAttempted,
-              '⚙️ Module Type': testData.moduleType,
-              '📁 Related Scenario': testData.relatedScenario,
-              '❌ Error Details': testData.errorDetails || ''
+              'Pass/Fail': testData.passFail,
+              'Notes / Debug': testData.notes,
+              'Test Date': testData.testDate,
+              'QA Owner': testData.qaOwner,
+              'Output Data Populated?': testData.outputDataPopulated,
+              'Record Created?': testData.recordCreated,
+              'Retry Attempted?': testData.retryAttempted,
+              'Module Type': testData.moduleType
             }
           }]
         })

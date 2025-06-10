@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2025-06-10T11:58:44.728Z",
-  "totalTests": 3,
-  "passCount": 3,
-  "failCount": 0,
+  "lastUpdated": "2025-06-10T12:00:13.876Z",
+  "totalTests": 7,
+  "passCount": 6,
+  "failCount": 1,
   "testLogs": [
     {
       "integrationName": "Local Test Logger System",
@@ -45,6 +45,63 @@
       "relatedScenario": "duplicate-detection-validation",
       "id": "test_1749556724728_ik8kijvta",
       "timestamp": "2025-06-10T11:58:44.728Z"
+    },
+    {
+      "integrationName": "Automation Function 204 - Duplicate Detection",
+      "passFail": "PASS",
+      "notes": "Function 204 executed successfully and returned proper response format",
+      "testDate": "2025-06-10T11:59:11+00:00",
+      "qaOwner": "YoBot System",
+      "outputDataPopulated": true,
+      "recordCreated": true,
+      "retryAttempted": false,
+      "moduleType": "Lead Engine",
+      "relatedScenario": "batch-21-function-validation",
+      "id": "test_1749556751183_86ziov3wa",
+      "timestamp": "2025-06-10T11:59:11.183Z"
+    },
+    {
+      "integrationName": "Airtable Integration Test Logger",
+      "passFail": "FAIL",
+      "notes": "Airtable API permissions error - table access denied. Using local logger as primary until resolved",
+      "testDate": "2025-06-10T11:59:52+00:00",
+      "qaOwner": "YoBot System",
+      "outputDataPopulated": false,
+      "recordCreated": false,
+      "retryAttempted": false,
+      "moduleType": "System Infrastructure",
+      "relatedScenario": "airtable-permissions-issue",
+      "errorDetails": "INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND",
+      "id": "test_1749556792318_225n0e3l5",
+      "timestamp": "2025-06-10T11:59:52.318Z"
+    },
+    {
+      "integrationName": "New Lead Notification (Function 157)",
+      "passFail": "PASS",
+      "notes": "Lead notification system successfully triggered for new lead processing",
+      "testDate": "2025-06-10T12:00:02+00:00",
+      "qaOwner": "YoBot System",
+      "outputDataPopulated": true,
+      "recordCreated": true,
+      "retryAttempted": false,
+      "moduleType": "Lead Engine",
+      "relatedScenario": "lead-notification-validation",
+      "id": "test_1749556802944_jola7xt2y",
+      "timestamp": "2025-06-10T12:00:02.944Z"
+    },
+    {
+      "integrationName": "VoiceBot Escalation Detection (Function 151)",
+      "passFail": "PASS",
+      "notes": "Voice escalation detection successfully identified customer frustration patterns",
+      "testDate": "2025-06-10T12:00:13+00:00",
+      "qaOwner": "YoBot System",
+      "outputDataPopulated": true,
+      "recordCreated": true,
+      "retryAttempted": false,
+      "moduleType": "Voice Communication",
+      "relatedScenario": "voice-escalation-validation",
+      "id": "test_1749556813876_y8qimjzr2",
+      "timestamp": "2025-06-10T12:00:13.876Z"
     }
   ]
 }
