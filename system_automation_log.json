@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-09T12:05:00.318Z",
-    "functionId": 151,
-    "functionName": "VoiceBot Escalation Detection",
-    "batch": 16,
-    "category": "Voice",
-    "status": "success",
-    "duration": 236,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-09T12:05:00.324Z",
     "functionId": 204,
     "functionName": "Duplicate Record Detection",
@@ -11384,6 +11373,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-10T07:25:25.132Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T07:28:17.775Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-10T07:28:17.416Z",
       "automationStatus": "running"
     }
   }

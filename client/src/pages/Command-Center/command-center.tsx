@@ -588,16 +588,21 @@ export default function CommandCenter() {
 
   const handleExportData = async () => {
     try {
-      const response = await fetch('/api/export/data');
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'yobot-data-export.csv';
-      a.click();
-      setVoiceStatus('Data exported successfully');
+      setVoiceStatus('Exporting Airtable data...');
+      const response = await fetch('/api/airtable-export', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'airtable-export' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Data exported - file linked in dashboard');
+        setToast({ title: "Data Exported", description: "Airtable rows exported to CSV/XLSX format" });
+      } else {
+        setVoiceStatus('Data export failed');
+      }
     } catch (error) {
-      setVoiceStatus('Export failed');
+      setVoiceStatus('Export error');
     }
   };
 
@@ -905,25 +910,7 @@ export default function CommandCenter() {
     }
   };
 
-  const handleExportData = async () => {
-    try {
-      setVoiceStatus('Exporting Airtable data...');
-      const response = await fetch('/api/airtable-export', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scenario: 'airtable-export' })
-      });
-      
-      if (response.ok) {
-        setVoiceStatus('Data exported - file linked in dashboard');
-        setToast({ title: "Data Exported", description: "Airtable rows exported to CSV/XLSX format" });
-      } else {
-        setVoiceStatus('Data export failed');
-      }
-    } catch (error) {
-      setVoiceStatus('Export error');
-    }
-  };
+
 
   const handleMailchimpSync = async () => {
     try {
@@ -2084,144 +2071,45 @@ export default function CommandCenter() {
               <CardContent>
                 <div className="grid grid-cols-1 gap-3">
                   <Button
-                    onClick={async () => {
-                      try {
-                        console.log('New Booking Sync button clicked');
-                        const response = await fetch('/api/new-booking-sync', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            bookingData: {
-                              clientId: 'CLIENT_' + Date.now(),
-                              date: new Date().toISOString(),
-                              service: 'consultation'
-                            }
-                          })
-                        });
-                        const result = await response.json();
-                        console.log('Booking sync result:', result);
-                        alert(result.success ? 'Booking synced successfully' : 'Booking sync failed');
-                      } catch (error) {
-                        console.error('Booking sync error:', error);
-                        alert('Booking sync failed');
-                      }
-                    }}
+                    onClick={handleNewBookingSync}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
-                    <span className="text-xl mr-3">📆</span>
+                    <Calendar className="w-5 h-5 mr-3" />
                     <span>New Booking Sync</span>
                   </Button>
                   
                   <Button
-                    onClick={async () => {
-                      try {
-                        console.log('New Support Ticket button clicked');
-                        const response = await fetch('/api/new-support-ticket', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            clientName: 'Command Center User',
-                            subject: 'Support Request from Command Center',
-                            description: 'Support ticket created via Command Center automation',
-                            priority: 'medium'
-                          })
-                        });
-                        const result = await response.json();
-                        console.log('Support ticket result:', result);
-                        alert(result.success ? `Support ticket created: ${result.ticketId}` : 'Support ticket creation failed');
-                      } catch (error) {
-                        console.error('Support ticket error:', error);
-                        alert('Support ticket creation failed');
-                      }
-                    }}
+                    onClick={handleNewSupportTicket}
                     className="bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-start p-3"
                   >
-                    <span className="text-xl mr-3">🆘</span>
+                    <Headphones className="w-5 h-5 mr-3" />
                     <span>New Support Ticket</span>
                   </Button>
                   
                   <Button
-                    onClick={async () => {
-                      try {
-                        console.log('Manual Follow-up button clicked');
-                        const response = await fetch('/api/manual-follow-up', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            contactId: 'CONTACT_' + Date.now(),
-                            followupType: 'scheduled_call',
-                            message: 'Follow-up scheduled via Command Center automation'
-                          })
-                        });
-                        const result = await response.json();
-                        console.log('Follow-up result:', result);
-                        alert(result.success ? `Follow-up scheduled: ${result.followupId}` : 'Follow-up scheduling failed');
-                      } catch (error) {
-                        console.error('Follow-up error:', error);
-                        alert('Follow-up scheduling failed');
-                      }
-                    }}
+                    onClick={handleManualFollowUp}
                     className="bg-amber-600 hover:bg-amber-700 text-white flex items-center justify-start p-3"
                   >
-                    <span className="text-xl mr-3">🚀</span>
+                    <Phone className="w-5 h-5 mr-3" />
                     <span>Manual Follow-up</span>
                   </Button>
                   
                   <Button
-                    onClick={async () => {
-                      try {
-                        console.log('Sales Orders button clicked');
-                        const response = await fetch('/api/sales-orders', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            orderData: {
-                              clientId: 'CLIENT_' + Date.now(),
-                              amount: 500,
-                              productName: 'YoBot Automation Package',
-                              status: 'pending'
-                            }
-                          })
-                        });
-                        const result = await response.json();
-                        console.log('Sales order result:', result);
-                        alert(result.success ? `Sales order processed: ${result.orderId}` : 'Sales order processing failed');
-                      } catch (error) {
-                        console.error('Sales order error:', error);
-                        alert('Sales order processing failed');
-                      }
-                    }}
+                    onClick={handleSalesOrder}
                     className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
                   >
-                    <span className="text-xl mr-3">💼</span>
+                    <DollarSign className="w-5 h-5 mr-3" />
                     <span>Sales Orders</span>
                   </Button>
                   
                   <Button
-                    onClick={async () => {
-                      try {
-                        console.log('Send SMS button clicked');
-                        const response = await fetch('/api/send-sms', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            phoneNumber: '+1234567890',
-                            message: 'SMS notification from YoBot Command Center automation system'
-                          })
-                        });
-                        const result = await response.json();
-                        console.log('SMS result:', result);
-                        alert(result.success ? `SMS sent successfully: ${result.messageId}` : 'SMS sending failed');
-                      } catch (error) {
-                        console.error('SMS error:', error);
-                        alert('SMS sending failed');
-                      }
-                    }}
-                    className="bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-start p-3"
+                    onClick={handleSendSMS}
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
                   >
                     <MessageSquare className="w-5 h-5 mr-3" />
                     <span>Send SMS</span>
                   </Button>
+
                 </div>
               </CardContent>
             </Card>
