@@ -3731,24 +3731,67 @@ The YoBot Team`;
 
       const apolloData = await apolloResponse.json();
       
+      const leads = apolloData.people?.slice(0, 10).map(person => ({
+        company: person.organization?.name || 'Unknown Company',
+        contact: `${person.first_name} ${person.last_name}`,
+        email: person.email || '',
+        title: person.title || '',
+        phone: person.phone_numbers?.[0]?.sanitized_number || '',
+        linkedIn: person.linkedin_url || '',
+        score: Math.floor(Math.random() * 30) + 70
+      })) || [];
+
+      // Dump scraped leads into Scraped Leads (Universal) Airtable
+      const airtableInserts = [];
+      for (const lead of leads) {
+        if (lead.contact && lead.contact !== 'undefined undefined') {
+          try {
+            const insertResponse = await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Scraped%20Leads%20(Universal)`, {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                fields: {
+                  'Full Name': lead.contact,
+                  'Email': lead.email,
+                  'Phone': lead.phone,
+                  'Company': lead.company,
+                  'Title': lead.title,
+                  'LinkedIn URL': lead.linkedIn,
+                  'Lead Score': lead.score,
+                  'Source': 'Apollo API',
+                  'Date Scraped': new Date().toISOString().split('T')[0],
+                  'Search Query': searchTerms
+                }
+              })
+            });
+            
+            if (insertResponse.ok) {
+              airtableInserts.push(lead.contact);
+            }
+          } catch (insertError) {
+            console.error('Failed to insert lead into Airtable:', insertError);
+          }
+        }
+      }
+
       const scrapingResults = {
         searchQuery: searchTerms,
         resultsFound: apolloData.pagination?.total_entries || 0,
         companiesFound: apolloData.organizations?.length || 0,
         contactsFound: apolloData.people?.length || 0,
-        leads: apolloData.people?.slice(0, 10).map(person => ({
-          company: person.organization?.name || 'Unknown Company',
-          contact: `${person.first_name} ${person.last_name}`,
-          email: person.email || '',
-          title: person.title || '',
-          phone: person.phone_numbers?.[0]?.sanitized_number || '',
-          linkedIn: person.linkedin_url || '',
-          score: Math.floor(Math.random() * 30) + 70
-        })) || [],
+        leads,
+        insertedToAirtable: airtableInserts.length,
         timestamp: new Date().toISOString()
       };
 
-      res.json({ success: true, data: scrapingResults });
+      res.json({ 
+        success: true, 
+        data: scrapingResults,
+        message: `${leads.length} leads scraped, ${airtableInserts.length} inserted into Scraped Leads table`
+      });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
     }
@@ -6399,19 +6442,49 @@ Always provide helpful, actionable guidance.`
     }
   });
 
-  // Start Pipeline Calls endpoint - required by functionality matrix
+  // Start Pipeline Calls endpoint - pulls from Scraped Leads (Universal) table
   app.post('/api/start-pipeline-calls', async (req, res) => {
     try {
-      const { campaignId, phoneNumbers = [], script, voiceId = 'default' } = req.body;
+      const { campaignId, script, voiceId = 'default', leadFilters = {} } = req.body;
       
-      if (!phoneNumbers.length || !script) {
+      if (!script) {
         return res.status(400).json({
           success: false,
-          error: 'Phone numbers and script are required'
+          error: 'Script is required for pipeline calls'
         });
       }
 
-      logOperation('start-pipeline-calls', { campaignId, callCount: phoneNumbers.length }, 'success', 'Pipeline calls initiated');
+      // Pull leads from Scraped Leads (Universal) Airtable
+      const airtableResponse = await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Scraped%20Leads%20(Universal)`, {
+        headers: {
+          'Authorization': `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!airtableResponse.ok) {
+        throw new Error('Failed to fetch leads from Scraped Leads table');
+      }
+
+      const leadsData = await airtableResponse.json();
+      const phoneNumbers = leadsData.records
+        .filter(record => record.fields['Phone'] && record.fields['Phone'].trim())
+        .map(record => ({
+          phone: record.fields['Phone'],
+          name: record.fields['Full Name'] || 'Unknown',
+          company: record.fields['Company'] || '',
+          email: record.fields['Email'] || '',
+          recordId: record.id
+        }));
+
+      if (!phoneNumbers.length) {
+        return res.status(400).json({
+          success: false,
+          error: 'No valid phone numbers found in Scraped Leads table'
+        });
+      }
+
+      logOperation('start-pipeline-calls', { campaignId, callCount: phoneNumbers.length, source: 'Scraped Leads (Universal)' }, 'success', 'Pipeline calls initiated from Scraped Leads');
 
       const pipelineId = `pipeline_${Date.now()}`;
       const callPipeline = {
@@ -6424,7 +6497,8 @@ Always provide helpful, actionable guidance.`
         script,
         voiceId,
         startedAt: new Date().toISOString(),
-        phoneNumbers
+        phoneNumbers,
+        source: 'Scraped Leads (Universal)'
       };
 
       // Store pipeline state globally

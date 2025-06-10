@@ -1126,12 +1126,16 @@ export default function CommandCenter() {
         const result = await response.json();
         const successCount = result.files?.filter(f => f.status === 'processed').length || 0;
         const errorCount = result.files?.filter(f => f.status === 'error').length || 0;
+        const fileNames = result.files?.map(f => f.filename).join(', ') || '';
         
-        setVoiceStatus(`RAG Upload Complete: ${successCount} documents processed${errorCount > 0 ? `, ${errorCount} failed` : ''}`);
+        setVoiceStatus(`Documents Processed: ${fileNames}`);
         setToast({
           title: "Documents Uploaded",
-          description: `${successCount} files processed and indexed for RAG system`,
+          description: `${successCount} files processed: ${fileNames}`,
         });
+        
+        // Store uploaded files for display
+        setUploadedFiles(prev => [...prev, ...result.files]);
         
         // Refresh knowledge stats
         refetchKnowledge();
@@ -3916,13 +3920,6 @@ export default function CommandCenter() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                  <Button 
-                    onClick={handleUploadDocs}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white"
-                  >
-                    <Upload className="w-4 h-4 mr-2" />
-                    Upload Docs
-                  </Button>
                   <Button 
                     onClick={handleReindexKnowledge}
                     className="bg-purple-600 hover:bg-purple-700 text-white"
