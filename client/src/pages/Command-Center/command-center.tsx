@@ -2404,6 +2404,22 @@ export default function CommandCenter() {
                     <span>Export Data</span>
                   </Button>
                   
+                  <Button
+                    onClick={() => setShowContentCreator(!showContentCreator)}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-start p-3"
+                  >
+                    <Edit3 className="w-5 h-5 mr-3" />
+                    <span>Content Creator</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => setShowMailchimpSync(!showMailchimpSync)}
+                    className="bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-start p-3"
+                  >
+                    <Users className="w-5 h-5 mr-3" />
+                    <span>Mailchimp Campaign</span>
+                  </Button>
+                  
 
 
 
@@ -3457,52 +3473,7 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          {/* Data & Reports - Enhanced with Content Creator and Mailchimp */}
-          <Card className="bg-gradient-to-br from-emerald-900/60 via-teal-900/60 to-cyan-900/60 backdrop-blur-sm border border-emerald-400/50 shadow-lg shadow-emerald-400/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <FileText className="w-5 h-5 mr-2 text-emerald-400" />
-                Data & Reports
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {/* Content Creator Button */}
-                <Button
-                  onClick={() => setShowContentCreator(!showContentCreator)}
-                  className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white flex items-center justify-center p-3 border border-emerald-400/30"
-                >
-                  <Edit3 className="w-5 h-5 mr-3" />
-                  <span>Content Creator Dashboard</span>
-                </Button>
 
-                {/* Mailchimp Sync Button */}
-                <Button
-                  onClick={() => setShowMailchimpSync(!showMailchimpSync)}
-                  className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white flex items-center justify-center p-3 border border-teal-400/30"
-                >
-                  <Users className="w-5 h-5 mr-3" />
-                  <span>Mailchimp Sync Dashboard</span>
-                </Button>
-
-                {/* Document Upload - Moved here */}
-                <Button
-                  onClick={() => {
-                    document.getElementById('file-upload')?.click();
-                  }}
-                  className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white flex items-center justify-center p-3 border border-cyan-400/30"
-                >
-                  <Upload className="w-5 h-5 mr-3" />
-                  <span>Upload Documents</span>
-                </Button>
-
-                <div className="flex justify-between pt-2 border-t border-emerald-400/20">
-                  <span className="text-emerald-200 text-sm">Last Export:</span>
-                  <span className="text-emerald-300 font-bold">--</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Escalation Alerts */}
