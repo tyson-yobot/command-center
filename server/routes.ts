@@ -3573,21 +3573,37 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
 
   app.get('/api/knowledge/documents', async (req, res) => {
     try {
-      const driveResponse = await fetch(`https://www.googleapis.com/drive/v3/files?q=parents+in+'${process.env.GOOGLE_DRIVE_FOLDER_ID}'&fields=files(id,name,createdTime,size,mimeType)`, {
-        headers: { 'Authorization': `Bearer ${process.env.GOOGLE_ACCESS_TOKEN}` }
-      });
+      logOperation('knowledge-documents', {}, 'success', 'Documents list requested');
+      
+      // Return actual uploaded documents from documentStore
+      const documents = documentStore.map(doc => ({
+        id: doc.documentId || `doc_${Date.now()}`,
+        name: doc.filename || doc.originalname || 'Unknown Document',
+        createdTime: doc.uploadTime || new Date().toISOString(),
+        size: doc.size || 0,
+        mimeType: doc.type || 'unknown',
+        status: doc.status || 'processed',
+        wordCount: doc.wordCount || 0,
+        keyTerms: doc.keyTerms || [],
+        categories: doc.categories || [],
+        aiSummary: doc.aiSummary ? doc.aiSummary.substring(0, 200) + '...' : '',
+        indexed: doc.indexed || true,
+        ragIndexed: doc.ragIndexed || true
+      }));
 
-      if (driveResponse.ok) {
-        const driveData = await driveResponse.json();
-        res.json({
-          success: true,
-          documents: driveData.files || []
-        });
-      } else {
-        res.json({ success: true, documents: [] });
-      }
+      res.json({
+        success: true,
+        documents: documents,
+        total: documents.length,
+        lastUpdate: new Date().toISOString()
+      });
     } catch (error) {
-      res.json({ success: true, documents: [] });
+      logOperation('knowledge-documents', {}, 'error', `Documents list failed: ${error.message}`);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message,
+        documents: [] 
+      });
     }
   });
 
@@ -3595,54 +3611,99 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
     try {
       const { query, type } = req.body;
       
+      if (!query || query.trim().length === 0) {
+        return res.json({
+          success: true,
+          results: [],
+          query: '',
+          type: type || 'general',
+          searchPerformed: false,
+          totalResults: 0,
+          message: 'Please provide a search query'
+        });
+      }
+      
       logOperation('knowledge-search', { query, type }, 'success', `Knowledge search performed: "${query}"`);
       
-      // Search in stored documents
+      // Search through uploaded documents in documentStore
       const results = [];
+      const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 2);
       
-      if (query && query.length > 0) {
-        // Simulate semantic search through uploaded documents
-        const searchTerms = query.toLowerCase().split(' ');
+      // Search in uploaded documents
+      for (const doc of documentStore) {
+        let relevanceScore = 0;
+        const docText = (doc.extractedText || '').toLowerCase();
+        const docTitle = (doc.filename || doc.originalname || '').toLowerCase();
         
-        // Add mock results for demonstration
-        const mockResults = [
-          {
-            id: 'doc_001',
-            title: 'Company Policies and Procedures',
-            excerpt: `Document containing information about ${query}...`,
-            relevanceScore: 0.95,
-            source: 'uploaded_documents',
-            lastModified: new Date().toISOString()
-          },
-          {
-            id: 'doc_002', 
-            title: 'Technical Documentation',
-            excerpt: `Technical guide covering ${query} implementation...`,
-            relevanceScore: 0.87,
-            source: 'knowledge_base',
-            lastModified: new Date().toISOString()
+        // Calculate relevance based on term matches
+        for (const term of searchTerms) {
+          if (docTitle.includes(term)) relevanceScore += 0.3;
+          if (docText.includes(term)) relevanceScore += 0.2;
+          
+          // Check key terms
+          if (doc.keyTerms && doc.keyTerms.some(keyTerm => 
+            keyTerm.toLowerCase().includes(term) || term.includes(keyTerm.toLowerCase())
+          )) {
+            relevanceScore += 0.4;
           }
-        ];
+          
+          // Check categories
+          if (doc.categories && doc.categories.some(cat => 
+            cat.toLowerCase().includes(term) || term.includes(cat.toLowerCase())
+          )) {
+            relevanceScore += 0.3;
+          }
+        }
         
-        results.push(...mockResults);
+        if (relevanceScore > 0) {
+          // Extract relevant excerpt
+          const words = docText.split(' ');
+          let excerptStart = 0;
+          for (const term of searchTerms) {
+            const termIndex = words.findIndex(word => word.includes(term));
+            if (termIndex !== -1) {
+              excerptStart = Math.max(0, termIndex - 10);
+              break;
+            }
+          }
+          
+          const excerpt = words.slice(excerptStart, excerptStart + 30).join(' ') + '...';
+          
+          results.push({
+            id: doc.documentId || `doc_${Date.now()}`,
+            title: doc.filename || doc.originalname || 'Uploaded Document',
+            excerpt: excerpt || 'Document content available',
+            relevanceScore: Math.min(1, relevanceScore),
+            source: 'uploaded_documents',
+            lastModified: doc.uploadTime || new Date().toISOString(),
+            keyTerms: doc.keyTerms || [],
+            categories: doc.categories || [],
+            wordCount: doc.wordCount || 0
+          });
+        }
       }
+      
+      // Sort by relevance score
+      results.sort((a, b) => b.relevanceScore - a.relevanceScore);
       
       res.json({
         success: true,
-        results: results,
+        results: results.slice(0, 10), // Return top 10 results
         query: query,
-        type: type,
+        type: type || 'general',
         searchPerformed: true,
-        totalResults: results.length
+        totalResults: results.length,
+        documentsSearched: documentStore.length
       });
     } catch (error) {
-      logOperation('knowledge-search', { query, type }, 'error', `Search failed: ${error.message}`);
+      logOperation('knowledge-search', { query: req.body.query, type: req.body.type }, 'error', `Search failed: ${error.message}`);
       res.status(500).json({ 
         success: false, 
         error: 'Search failed',
+        details: error.message,
         results: [], 
-        query: query, 
-        type: type 
+        query: req.body.query || '', 
+        type: req.body.type || 'general'
       });
     }
   });
@@ -7461,23 +7522,77 @@ Always provide helpful, actionable guidance.`
   // Knowledge Stats - Live Data Only
   app.get('/api/knowledge/stats', async (req, res) => {
     try {
-      const driveResponse = await fetch(`https://www.googleapis.com/drive/v3/files?q=parents+in+'${process.env.GOOGLE_DRIVE_FOLDER_ID}'`, {
-        headers: { 'Authorization': `Bearer ${process.env.GOOGLE_ACCESS_TOKEN}` }
+      logOperation('knowledge-stats', {}, 'success', 'Knowledge stats requested');
+      
+      // Calculate stats from actual uploaded documents in documentStore
+      const totalDocuments = documentStore.length;
+      
+      // Count recent uploads (last 24 hours)
+      const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const recentUploads = documentStore.filter(doc => {
+        if (doc.uploadTime) {
+          const uploadDate = new Date(doc.uploadTime);
+          return uploadDate > dayAgo;
+        }
+        return false;
+      }).length;
+      
+      // Calculate total size
+      const totalSize = documentStore.reduce((sum, doc) => {
+        return sum + (doc.size || 0);
+      }, 0);
+      
+      // Calculate processed documents with AI analysis
+      const processedDocuments = documentStore.filter(doc => 
+        doc.status === 'processed' && doc.aiSummary
+      ).length;
+      
+      // Get categories distribution
+      const categoriesCount = {};
+      documentStore.forEach(doc => {
+        if (doc.categories) {
+          doc.categories.forEach(cat => {
+            categoriesCount[cat] = (categoriesCount[cat] || 0) + 1;
+          });
+        }
       });
-      const driveData = await driveResponse.json();
+      
+      // Get recent documents for activity feed
+      const recentDocuments = documentStore
+        .filter(doc => doc.uploadTime)
+        .sort((a, b) => new Date(b.uploadTime) - new Date(a.uploadTime))
+        .slice(0, 5)
+        .map(doc => ({
+          filename: doc.filename || doc.originalname,
+          uploadTime: doc.uploadTime,
+          status: doc.status,
+          wordCount: doc.wordCount || 0
+        }));
       
       res.json({
         success: true,
-        totalDocuments: driveData.files?.length || 0,
-        recentUploads: driveData.files?.filter(f => {
-          const created = new Date(f.createdTime);
-          const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-          return created > dayAgo;
-        }).length || 0,
-        totalSize: driveData.files?.reduce((sum, f) => sum + (parseInt(f.size) || 0), 0) || 0
+        totalDocuments,
+        recentUploads,
+        totalSize,
+        processedDocuments,
+        categories: Object.keys(categoriesCount).length,
+        documentsWithAI: processedDocuments,
+        averageWordCount: totalDocuments > 0 ? 
+          Math.round(documentStore.reduce((sum, doc) => sum + (doc.wordCount || 0), 0) / totalDocuments) : 0,
+        recentDocuments,
+        categoriesBreakdown: categoriesCount,
+        systemHealth: 'operational',
+        lastUpdate: new Date().toISOString()
       });
     } catch (error) {
-      res.status(500).json({ success: false, error: error.message });
+      logOperation('knowledge-stats', {}, 'error', `Knowledge stats failed: ${error.message}`);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message,
+        totalDocuments: 0,
+        recentUploads: 0,
+        totalSize: 0
+      });
     }
   });
 
