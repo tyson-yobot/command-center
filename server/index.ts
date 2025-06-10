@@ -269,9 +269,8 @@ print(json.dumps(result))
   // Register Airtable test logger with exact field mappings
   registerAirtableTestLogger(app);
   
-  // Start complete system automation
-  console.log("🤖 Starting Complete System Automation...");
-  completeAutomation.startCompleteAutomation();
+  // Complete system automation disabled - no real functions defined yet
+  console.log("⚠️  Mock automation system disabled - awaiting real function definitions");
   
   // Add automation management endpoints
   app.get('/api/automation/status', (req, res) => {
