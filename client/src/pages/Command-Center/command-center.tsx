@@ -2802,7 +2802,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
                     <span className="text-green-400 font-bold">--</span>
@@ -2811,7 +2811,7 @@ export default function CommandCenter() {
                     <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
                     <span className="text-blue-400 font-bold">--</span>
@@ -2820,32 +2820,32 @@ export default function CommandCenter() {
                     <div className="bg-blue-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Percentage of leads that become paying customers">Close Rate</span>
-                    <span className="text-slate-400 font-bold">--</span>
+                    <span className="text-purple-400 font-bold">--</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-slate-600 h-1 rounded-full" style={{ width: '0%' }}></div>
+                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-orange-400 shadow-lg shadow-orange-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Return on investment from automation">ROI</span>
-                    <span className="text-slate-400 font-bold">--</span>
+                    <span className="text-orange-400 font-bold">--</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-slate-600 h-1 rounded-full" style={{ width: '0%' }}></div>
+                    <div className="bg-orange-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-slate-400 font-bold">--</div>
-                    <Badge className="bg-slate-600 text-slate-400">--</Badge>
+                    <div className="text-cyan-400 font-bold">--</div>
+                    <Badge className="bg-cyan-600 text-white">--</Badge>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-slate-600 h-1 rounded-full" style={{ width: '0%' }}></div>
+                    <div className="bg-cyan-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
               </div>
@@ -2862,7 +2862,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Budget Utilization</span>
                     <span className="text-green-400 font-bold">--</span>
@@ -2871,16 +2871,16 @@ export default function CommandCenter() {
                     <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-yellow-400 shadow-lg shadow-yellow-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-slate-400 font-bold">--</span>
-                      <Badge className="bg-slate-600 text-slate-400 text-xs">--</Badge>
+                      <span className="text-yellow-400 font-bold">--</span>
+                      <Badge className="bg-yellow-600 text-white text-xs">--</Badge>
                     </div>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
+                    <div className="bg-yellow-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
