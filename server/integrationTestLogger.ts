@@ -30,14 +30,7 @@ class IntegrationTestLogger {
         body: JSON.stringify({
           records: [{
             fields: {
-              'Pass/Fail': testData.passFail,
-              'Notes / Debug': testData.notes,
-              'Test Date': testData.testDate,
-              'QA Owner': testData.qaOwner,
-              'Output Data Populated?': testData.outputDataPopulated,
-              'Record Created?': testData.recordCreated,
-              'Retry Attempted?': testData.retryAttempted,
-              'Module Type': testData.moduleType
+              '🔧 Integration Name': `${testData.integrationName} - ${testData.passFail} - ${testData.notes} - Module: ${testData.moduleType} - QA: ${testData.qaOwner} - Date: ${testData.testDate}`
             }
           }]
         })
