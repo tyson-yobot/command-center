@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 import { getSystemMode } from './systemMode';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || 'invalid-key',
+  apiKey: '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',
 });
 
 interface ContentCreatorPayload {
