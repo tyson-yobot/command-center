@@ -12,7 +12,7 @@ import Scanner from "@/pages/scanner";
 import AdminConsole from "@/pages/admin";
 import ClientDashboard from "@/pages/client-dashboard";
 import DemoMode from "@/pages/demo";
-import CommandCenter from "@/components/command-center";
+import DesktopCommandCenter from "@/components/desktop-command-center";
 import Header from "@/components/layout/header";
 import BottomNav from "@/components/layout/bottom-nav";
 import InstallPrompt from "@/components/pwa/install-prompt";
@@ -30,7 +30,7 @@ function Router() {
           <ClientDashboard />
         </Route>
         <Route path="/admin">
-          <CommandCenter />
+          <DesktopCommandCenter />
         </Route>
         <Route path="/dashboard">
           <ClientDashboard />
