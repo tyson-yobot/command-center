@@ -2930,23 +2930,23 @@ export default function CommandCenter() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Confidence Score</span>
-                  <span className="text-slate-400 font-bold">0%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Learning Status</span>
-                  <Badge className="bg-blue-600 text-white">Active</Badge>
+                  <Badge className="bg-slate-600 text-white">--</Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Percentage of conversations that needed human assistance">Escalation Rate</span>
-                  <span className="text-slate-400 font-bold">0%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Response Accuracy</span>
-                  <span className="text-slate-400 font-bold">0%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Latest Learning</div>
-                  <div className="text-slate-400 font-medium">No recent activity</div>
+                  <div className="text-slate-400 font-medium">--</div>
                 </div>
               </div>
             </CardContent>
@@ -2980,7 +2980,7 @@ export default function CommandCenter() {
                       variant="outline"
                       className="bg-blue-600/20 border-blue-400 text-blue-400 hover:bg-blue-600/40 text-xs px-2 py-1"
                     >
-                      👁 View Affected Bots
+                      👁 View Details
                     </Button>
                   </div>
                 </div>
@@ -3015,13 +3015,12 @@ export default function CommandCenter() {
                   <Button 
                     className="bg-blue-600 hover:bg-blue-700 text-white"
                   >
-                    Share Results
+                    View Reports
                   </Button>
                   <Button 
-                    variant="outline"
-                    className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                    className="bg-green-600 hover:bg-green-700 text-white"
                   >
-                    Expand Services
+                    Create Campaign
                   </Button>
                 </div>
               </div>
