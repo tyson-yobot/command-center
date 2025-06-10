@@ -19,7 +19,7 @@ interface CallMonitoringPopupProps {
   onClose: () => void;
 }
 
-export default function CallMonitoringPopup({ isOpen, onClose }: CallMonitoringPopupProps) {
+function CallMonitoringPopup({ isOpen, onClose }: CallMonitoringPopupProps) {
   const [activeCalls, setActiveCalls] = useState<CallData[]>([
     {
       id: '1',
@@ -152,3 +152,6 @@ export default function CallMonitoringPopup({ isOpen, onClose }: CallMonitoringP
     </div>
   );
 }
+
+export { CallMonitoringPopup };
+export default CallMonitoringPopup;

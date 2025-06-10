@@ -15,7 +15,7 @@ interface ZendeskTicket {
   messages: number;
 }
 
-export default function ZendeskChatWidget() {
+function ZendeskChatWidget() {
   const [tickets, setTickets] = useState<ZendeskTicket[]>([
     {
       id: 'ZD-001',
@@ -121,3 +121,6 @@ export default function ZendeskChatWidget() {
     </Card>
   );
 }
+
+export { ZendeskChatWidget };
+export default ZendeskChatWidget;

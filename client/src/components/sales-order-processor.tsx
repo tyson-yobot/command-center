@@ -14,7 +14,7 @@ interface SalesOrder {
   priority: 'low' | 'normal' | 'high' | 'urgent';
 }
 
-export default function SalesOrderProcessor() {
+function SalesOrderProcessor() {
   const [orders, setOrders] = useState<SalesOrder[]>([
     {
       id: 'SO-001',
@@ -179,3 +179,6 @@ export default function SalesOrderProcessor() {
     </Card>
   );
 }
+
+export { SalesOrderProcessor };
+export default SalesOrderProcessor;
