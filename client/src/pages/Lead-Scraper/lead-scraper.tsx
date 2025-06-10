@@ -1083,12 +1083,16 @@ export default function EnterpriseLeadScraper() {
                     <h4 className="text-2xl font-semibold text-white border-b-2 border-violet-400/30 pb-4">Professional Filters</h4>
                     
                     <div className="space-y-3">
-                      <Label>Department/Function</Label>
-                      <Select
-                        value={phantombusterFilters.department}
-                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, department: e.target.value }))}
+                      <Label>Department/Function (Select Multiple)</Label>
+                      <select
+                        multiple
+                        value={phantombusterFilters.department ? phantombusterFilters.department.split(',') : []}
+                        onChange={(e) => {
+                          const selected = Array.from(e.target.selectedOptions, option => option.value).join(',');
+                          setPhantombusterFilters(prev => ({ ...prev, department: selected }));
+                        }}
+                        className="w-full min-h-[150px] px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       >
-                        <option value="">All Departments</option>
                         <option value="sales">Sales & Revenue</option>
                         <option value="marketing">Marketing & Growth</option>
                         <option value="operations">Operations & Strategy</option>
@@ -1099,7 +1103,13 @@ export default function EnterpriseLeadScraper() {
                         <option value="engineering">Engineering & Development</option>
                         <option value="business_development">Business Development</option>
                         <option value="customer_success">Customer Success</option>
-                      </Select>
+                        <option value="legal">Legal & Compliance</option>
+                        <option value="procurement">Procurement & Supply Chain</option>
+                        <option value="quality_assurance">Quality Assurance</option>
+                        <option value="research_development">Research & Development</option>
+                        <option value="training">Training & Development</option>
+                      </select>
+                      <p className="text-sm text-slate-400">Hold Ctrl/Cmd to select multiple departments</p>
                     </div>
 
                     <div className="space-y-3">
