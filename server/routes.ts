@@ -776,13 +776,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log('Pipeline start request received:', { baseId, tableId, leadSource });
       
       // Log test operation to Integration Test Log
-      await logToAirtable({
-        operation: 'pipeline-start',
-        baseId: 'appRt8V3tH4g5Z5if',
-        tableId: 'tbly0fjE2M5uHET9X',
-        data: { sourceBaseId: baseId, sourceTableId: tableId, leadSource },
-        result: 'initiated',
-        timestamp: new Date().toISOString()
+      await logToAirtableQA({
+        integrationName: 'Pipeline Start',
+        passFail: 'Pass',
+        notes: `Starting pipeline with source ${baseId}/${tableId}`,
+        qaOwner: 'YoBot System',
+        outputDataPopulated: true,
+        recordCreated: true,
+        retryAttempted: false,
+        moduleType: 'Pipeline'
       });
       
       // Fetch leads from Scraped Leads (Universal) table
@@ -804,13 +806,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log(`Pipeline loaded ${leads.length} leads from Airtable`);
       
       // Log successful lead retrieval
-      await logToAirtable({
-        operation: 'pipeline-leads-loaded',
-        baseId: 'appRt8V3tH4g5Z5if',
-        tableId: 'tbly0fjE2M5uHET9X',
-        data: { leadCount: leads.length, sourceBase: baseId },
-        result: 'success',
-        timestamp: new Date().toISOString()
+      await logToAirtableQA({
+        integrationName: 'Pipeline Leads Loaded',
+        passFail: 'Pass',
+        notes: `Successfully loaded ${leads.length} leads from ${baseId}`,
+        qaOwner: 'YoBot System',
+        outputDataPopulated: true,
+        recordCreated: true,
+        retryAttempted: false,
+        moduleType: 'Pipeline'
       });
       
       const result = {
@@ -833,13 +837,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('Pipeline start error:', error);
       
       // Log error to test database
-      await logToAirtable({
-        operation: 'pipeline-start-error',
-        baseId: 'appRt8V3tH4g5Z5if',
-        tableId: 'tbly0fjE2M5uHET9X',
-        data: { error: error.message },
-        result: 'error',
-        timestamp: new Date().toISOString()
+      await logToAirtableQA({
+        integrationName: 'pipeline-start-error',
+        passFail: 'Fail',
+        notes: `Error: ${error.message}`,
+        qaOwner: 'YoBot System',
+        outputDataPopulated: false,
+        recordCreated: false,
+        retryAttempted: false,
+        moduleType: 'Pipeline'
       });
       
       res.status(500).json({ 

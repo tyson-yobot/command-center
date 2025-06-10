@@ -19,32 +19,26 @@ export function registerDashboardEndpoints(app: Express) {
       // Check system mode from headers
       const systemMode = req.headers['x-system-mode'] || 'live';
       
-      // LIVE MODE - Real automation metrics
+      // LIVE MODE - Production metrics ONLY
       const metrics = {
-        totalLeads: 0, // Only real API-sourced leads
-        totalCampaigns: 0, // Only real campaign data
-        activeAutomations: 1040,
-        successRate: "100%",
-        monthlyGrowth: "12.5%", // Real system growth
-        recentActivity: [
-          { action: "System Health Check", timestamp: new Date().toISOString(), status: "success" },
-          { action: "Automation Functions Active", timestamp: new Date().toISOString(), status: "running" },
-          { action: "QA Validation Complete", timestamp: new Date().toISOString(), status: "passed" },
-          { action: "Real-time Monitoring", timestamp: new Date().toISOString(), status: "active" },
-          { action: "API Connections Verified", timestamp: new Date().toISOString(), status: "healthy" }
-        ],
+        totalLeads: leadScrapingResults.length,
+        totalCampaigns: 0,
+        activeAutomations: 0,
+        successRate: "0%",
+        monthlyGrowth: "0%",
+        recentActivity: [],
         platformStats: {
           apollo: { 
-            leadsScraped: 0, // Only real API data
-            successRate: "Ready" 
+            leadsScraped: apolloResults.length,
+            successRate: apolloResults.length > 0 ? "Active" : "No Data"
           },
           apify: { 
-            listingsFound: 0, // Only real API data
-            successRate: "Ready" 
+            listingsFound: apifyResults.length,
+            successRate: apifyResults.length > 0 ? "Active" : "No Data"
           },
           phantom: { 
-            profilesConnected: 0, // Only real API data
-            successRate: "Ready" 
+            profilesConnected: phantomResults.length,
+            successRate: phantomResults.length > 0 ? "Active" : "No Data"
           }
         }
       };
