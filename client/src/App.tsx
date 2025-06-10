@@ -5,6 +5,8 @@ import CommandCenter from "./pages/Command-Center/command-center";
 import LeadScraper from "./pages/Lead-Scraper/lead-scraper";
 import ControlCenter from "./pages/Control-Center/control-center";
 import Mobile from "./pages/Mobile/mobile";
+import Publy from "./pages/publy";
+import Mailchimp from "./pages/mailchimp";
 
 
 
@@ -28,8 +30,8 @@ function Router() {
         <Route path="/control-center" component={ControlCenter} />
         <Route path="/lead-scraper" component={LeadScraper} />
         <Route path="/mobile" component={Mobile} />
-
-
+        <Route path="/publy" component={Publy} />
+        <Route path="/mailchimp" component={Mailchimp} />
         <Route path="/" component={CommandCenter} />
         <Route>
           <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">

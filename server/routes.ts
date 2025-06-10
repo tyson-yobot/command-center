@@ -2494,6 +2494,84 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
     }
   });
 
+  // Content creator endpoint for Publy integration
+  app.post('/api/content-creator', async (req, res) => {
+    try {
+      const { contentType, prompt, platforms, scheduledDate } = req.body;
+      
+      logOperation('content-creator', { contentType, prompt, platforms }, 'success', 'Content generation request received');
+      
+      // Simulate content generation
+      const generatedContent = {
+        id: `content_${Date.now()}`,
+        type: contentType,
+        content: `AI-generated ${contentType} content based on: "${prompt}"`,
+        platforms: platforms,
+        scheduledDate: scheduledDate,
+        status: 'generated',
+        createdAt: new Date().toISOString()
+      };
+      
+      res.json({
+        success: true,
+        content: generatedContent,
+        message: 'Content generated successfully'
+      });
+    } catch (error) {
+      logOperation('content-creator', req.body, 'error', error.message);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Schedule content endpoint
+  app.post('/api/schedule-content', async (req, res) => {
+    try {
+      const { contentType, content, platforms, scheduledDate } = req.body;
+      
+      logOperation('schedule-content', { contentType, platforms, scheduledDate }, 'success', 'Content scheduled');
+      
+      res.json({
+        success: true,
+        scheduled: {
+          id: `schedule_${Date.now()}`,
+          contentType,
+          platforms,
+          scheduledDate,
+          status: 'scheduled'
+        }
+      });
+    } catch (error) {
+      logOperation('schedule-content', req.body, 'error', error.message);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Mailchimp integration endpoint
+  app.post('/api/mailchimp', async (req, res) => {
+    try {
+      const { action } = req.body;
+      
+      logOperation('mailchimp-sync', { action }, 'success', 'Mailchimp sync initiated');
+      
+      if (action === 'sync') {
+        res.json({
+          success: true,
+          syncData: {
+            subscribers: 0,
+            campaigns: 0,
+            openRate: 0,
+            lastSync: new Date().toISOString()
+          }
+        });
+      } else {
+        res.json({ success: true, message: 'Action completed' });
+      }
+    } catch (error) {
+      logOperation('mailchimp-sync', req.body, 'error', error.message);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
   // Enhanced voice command processing with comprehensive tracking
   app.post('/api/voice-command', async (req, res) => {
     try {

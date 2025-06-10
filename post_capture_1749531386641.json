@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-06-10T04:56:26.640Z",
+  "url": "/api/content-creator",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "100"
+  },
+  "body": {
+    "contentType": "blog",
+    "prompt": "test content generation",
+    "platforms": [
+      "facebook",
+      "instagram"
+    ]
+  },
+  "query": {}
+}
