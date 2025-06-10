@@ -2,10 +2,10 @@ import React, { createContext, useContext, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
 import CommandCenter from "./pages/Command-Center/command-center";
-import LeadScraper from "./pages/lead-scraper";
+import LeadScraper from "./pages/Lead-Scraper/lead-scraper";
 import ControlCenter from "./pages/Control-Center/control-center";
 import Mobile from "./pages/Mobile/mobile";
-import DemoMode from "./pages/demo-mode";
+
 
 
 
@@ -28,7 +28,7 @@ function Router() {
         <Route path="/control-center" component={ControlCenter} />
         <Route path="/lead-scraper" component={LeadScraper} />
         <Route path="/mobile" component={Mobile} />
-        <Route path="/demo" component={DemoMode} />
+
 
         <Route path="/" component={CommandCenter} />
         <Route>
