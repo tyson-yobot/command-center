@@ -3397,7 +3397,7 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
             shouldProcess: extractedText.length > 100 && !!process.env.OPENAI_API_KEY
           });
           
-          if (extractedText.length > 100 && process.env.OPENAI_API_KEY && false) { // Temporarily disabled for fallback testing
+          if (extractedText.length > 100 && process.env.OPENAI_API_KEY) {
             try {
               console.log('Starting OpenAI document analysis...');
               const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -3468,6 +3468,44 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
               aiSummary = `Document contains ${extractedText.split(' ').length} words focusing on ${keyTerms.slice(0, 3).join(', ')}.`;
             }
           }
+
+          // Enhanced fallback analysis - always run to ensure functionality
+          console.log('Running enhanced fallback analysis...');
+          
+          if (!keyTerms.length) {
+            const words = extractedText.toLowerCase().match(/\b\w{4,}\b/g) || [];
+            const wordCount = {};
+            words.forEach(word => {
+              if (!['this', 'that', 'with', 'from', 'they', 'have', 'will', 'been', 'were', 'said', 'each', 'which', 'their', 'time', 'only', 'many', 'some', 'very', 'when', 'much', 'where', 'your', 'make', 'come', 'most', 'over', 'such', 'take', 'than', 'them', 'well', 'work'].includes(word)) {
+                wordCount[word] = (wordCount[word] || 0) + 1;
+              }
+            });
+            keyTerms = Object.keys(wordCount)
+              .sort((a, b) => wordCount[b] - wordCount[a])
+              .slice(0, 10);
+          }
+          
+          if (!categories.length) {
+            // Smart categorization based on content
+            const contentLower = extractedText.toLowerCase();
+            if (contentLower.includes('automation') || contentLower.includes('workflow')) {
+              categories = ['automation', 'business-process'];
+            } else if (contentLower.includes('api') || contentLower.includes('integration')) {
+              categories = ['technical', 'integration'];
+            } else {
+              categories = ['document', 'general'];
+            }
+          }
+          
+          if (!aiSummary) {
+            aiSummary = `Document contains ${extractedText.split(' ').length} words focusing on ${keyTerms.slice(0, 3).join(', ')}.`;
+          }
+          
+          console.log('Fallback analysis completed:', {
+            keyTermsFound: keyTerms.length,
+            categoriesAssigned: categories.length,
+            summaryGenerated: !!aiSummary
+          });
 
           const documentId = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
           
