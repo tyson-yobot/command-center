@@ -1055,6 +1055,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
           const documentId = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
           
+          // Store document in persistent store
+          const documentData: DocumentData = {
+            documentId,
+            fileName: file.originalname,
+            fileSize: file.size,
+            fileType: file.mimetype,
+            category: 'uploaded',
+            extractedText,
+            keyTerms
+          };
+          documentDataStore.push(documentData);
+          
+          // Also store in knowledge store for search
+          const knowledgeData: KnowledgeData = {
+            id: documentId,
+            title: file.originalname,
+            excerpt: extractedText.substring(0, 200) + '...',
+            relevanceScore: 1.0,
+            source: 'uploaded',
+            lastModified: new Date().toISOString(),
+            keyTerms,
+            categories: ['documents'],
+            wordCount: extractedText.split(' ').length
+          };
+          knowledgeDataStore.push(knowledgeData);
+          
           processedFiles.push({
             filename: file.originalname,
             originalname: file.originalname,
