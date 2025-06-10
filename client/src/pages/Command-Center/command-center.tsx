@@ -2423,9 +2423,13 @@ export default function CommandCenter() {
                     <span>Mailchimp Campaign</span>
                   </Button>
                   
-
-
-
+                  <Button
+                    onClick={() => document.getElementById('file-upload')?.click()}
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
+                  >
+                    <span className="text-xl mr-3">📂</span>
+                    <span>Upload Documents</span>
+                  </Button>
 
                 </div>
               </CardContent>
