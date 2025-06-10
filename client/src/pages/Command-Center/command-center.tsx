@@ -2262,7 +2262,7 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={handleNewBookingSync}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <Calendar className="w-5 h-5 mr-3" />
                     <span>Create Booking</span>
@@ -2270,7 +2270,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleNewSupportTicket}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <Headphones className="w-5 h-5 mr-3" />
                     <span>Create Support Ticket</span>
@@ -2278,7 +2278,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleManualFollowUp}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <Phone className="w-5 h-5 mr-3" />
                     <span>Create Follow-up</span>
@@ -2286,7 +2286,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleSalesOrder}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <DollarSign className="w-5 h-5 mr-3" />
                     <span>Create Sales Order</span>
@@ -2294,7 +2294,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleSendSMS}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <MessageSquare className="w-5 h-5 mr-3" />
                     <span>Send SMS</span>
@@ -2313,7 +2313,7 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={handleStartPipelineCalls}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3 font-semibold"
+                    className="bg-lime-500 hover:bg-lime-600 text-white flex items-center justify-start p-3 font-semibold border-2 border-lime-400 shadow-lg shadow-lime-500/25"
                   >
                     <Phone className="w-5 h-5 mr-3" />
                     <span>Start Pipeline Calls</span>
@@ -2321,10 +2321,10 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleStopPipelineCalls}
-                    className="bg-red-500 hover:bg-red-600 text-white flex items-center justify-start p-3"
+                    className="bg-red-500 hover:bg-red-600 text-white flex items-center justify-start p-3 border-2 border-red-400 shadow-lg shadow-red-500/25"
                   >
                     <PhoneOff className="w-5 h-5 mr-3" />
-                    <span>Stop Pipeline Calls</span>
+                    <span>End Pipeline Calls</span>
                   </Button>
                   
                   <Button
@@ -2355,7 +2355,7 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={() => window.location.href = '/lead-scraper'}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">🧲</span>
                     <span>Create Lead Scrape</span>
@@ -2363,7 +2363,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleDownloadPDF}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
                   >
                     <FileText className="w-5 h-5 mr-3" />
                     <span>View PDF Report</span>
