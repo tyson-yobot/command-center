@@ -1,0 +1,32 @@
+{
+  "timestamp": "2025-06-10T05:03:53.325Z",
+  "url": "/api/scraping/start",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "255"
+  },
+  "body": {
+    "platform": "apollo",
+    "searchTerms": "CEO",
+    "keywords": [
+      "business"
+    ],
+    "locations": [
+      "New York"
+    ],
+    "industries": [
+      "technology"
+    ],
+    "jobTitle": "CEO",
+    "companySize": "1-50",
+    "maxResults": 10,
+    "emailVerified": true,
+    "phoneAvailable": true,
+    "isTestMode": false
+  },
+  "query": {}
+}

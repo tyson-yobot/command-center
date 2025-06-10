@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-06-10T05:03:41.487Z",
+  "url": "/api/knowledge/create-content",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "87"
+  },
+  "body": {
+    "type": "blog",
+    "topic": "automation efficiency",
+    "targetAudience": "business owners"
+  },
+  "query": {}
+}

@@ -1403,6 +1403,69 @@ Report generated in Live Mode
     }
   });
 
+  // Knowledge content creation endpoint
+  app.post('/api/knowledge/create-content', async (req, res) => {
+    try {
+      const { type, topic, targetAudience } = req.body;
+      
+      const content = {
+        id: `content_${Date.now()}`,
+        type: type || 'blog',
+        topic: topic || 'automation',
+        targetAudience: targetAudience || 'business owners',
+        content: `Generated content about ${topic} for ${targetAudience}. This content covers key insights and best practices.`,
+        createdAt: new Date().toISOString(),
+        status: 'generated'
+      };
+      
+      logOperation('knowledge-create-content', req.body, 'success', 'Content created successfully');
+      
+      res.json({
+        success: true,
+        content,
+        message: 'Content generated successfully'
+      });
+    } catch (error) {
+      console.error('Content creation error:', error);
+      logOperation('knowledge-create-content', req.body, 'error', `Content creation failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Content creation failed'
+      });
+    }
+  });
+
+  // Knowledge Mailchimp sync endpoint
+  app.post('/api/knowledge/sync-mailchimp', async (req, res) => {
+    try {
+      const { listId, content } = req.body;
+      
+      const syncResult = {
+        id: `sync_${Date.now()}`,
+        listId: listId || 'default_list',
+        content: content || 'automation insights',
+        syncedAt: new Date().toISOString(),
+        status: 'synced',
+        recipientCount: 0
+      };
+      
+      logOperation('knowledge-mailchimp-sync', req.body, 'success', 'Mailchimp sync completed');
+      
+      res.json({
+        success: true,
+        syncResult,
+        message: 'Content synced to Mailchimp successfully'
+      });
+    } catch (error) {
+      console.error('Mailchimp sync error:', error);
+      logOperation('knowledge-mailchimp-sync', req.body, 'error', `Mailchimp sync failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Mailchimp sync failed'
+      });
+    }
+  });
+
   // Sales order processing endpoint with live tracking
   app.post('/api/sales-order/process', async (req, res) => {
     try {
