@@ -1,35 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:02:27.256Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "System automation started",
-    "metrics": {
-      "totalFunctions": 40,
-      "activeFunctions": 40,
-      "successfulExecutions": 0,
-      "failedExecutions": 0,
-      "systemUptime": 0,
-      "lastHealthCheck": "2025-06-10T16:02:26.887Z",
-      "automationStatus": "running"
-    }
-  },
-  {
-    "timestamp": "2025-06-10T16:03:49.701Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "System automation started",
-    "metrics": {
-      "totalFunctions": 40,
-      "activeFunctions": 40,
-      "successfulExecutions": 0,
-      "failedExecutions": 0,
-      "systemUptime": 0,
-      "lastHealthCheck": "2025-06-10T16:03:49.353Z",
-      "automationStatus": "running"
-    }
-  },
-  {
     "timestamp": "2025-06-10T16:04:23.740Z",
     "type": "system_event",
     "level": "info",
@@ -11432,6 +11402,36 @@
       "failedExecutions": 0,
       "systemUptime": 2605.538512702,
       "lastHealthCheck": "2025-06-10T23:00:00.011Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T23:10:00.012Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 3145.534794518,
+      "lastHealthCheck": "2025-06-10T23:09:00.007Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T23:20:00.013Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 3805.539836877,
+      "lastHealthCheck": "2025-06-10T23:20:00.012Z",
       "automationStatus": "paused"
     }
   }
