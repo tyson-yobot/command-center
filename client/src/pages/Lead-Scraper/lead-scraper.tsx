@@ -565,24 +565,87 @@ export default function EnterpriseLeadScraper() {
                     </div>
 
                     <div className="space-y-3">
-                      <Label>Executive Seniority Level</Label>
-                      <Select
-                        value={apolloFilters.seniorityLevel}
-                        onChange={(e) => setApolloFilters(prev => ({ ...prev, seniorityLevel: e.target.value }))}
-                      >
-                        <option value="">All Executive Levels</option>
-                        <option value="owner">Business Owner</option>
-                        <option value="founder">Founder/Co-Founder</option>
-                        <option value="cxo">C-Level Executive</option>
-                        <option value="partner">Partner/Principal</option>
-                        <option value="vp">Vice President</option>
-                        <option value="svp">Senior Vice President</option>
-                        <option value="evp">Executive Vice President</option>
-                        <option value="director">Director</option>
-                        <option value="senior_director">Senior Director</option>
-                        <option value="senior_manager">Senior Manager</option>
-                        <option value="manager">Manager</option>
-                      </Select>
+                      <Label>Executive Seniority Level (Click to Select Multiple)</Label>
+                      <div className="w-full max-h-[200px] overflow-y-auto px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl">
+                        {[
+                          { value: "owner", label: "Business Owner" },
+                          { value: "founder", label: "Founder/Co-Founder" },
+                          { value: "cxo", label: "C-Level Executive" },
+                          { value: "partner", label: "Partner/Principal" },
+                          { value: "vp", label: "Vice President" },
+                          { value: "svp", label: "Senior Vice President" },
+                          { value: "evp", label: "Executive Vice President" },
+                          { value: "director", label: "Director" },
+                          { value: "senior_director", label: "Senior Director" },
+                          { value: "senior_manager", label: "Senior Manager" },
+                          { value: "manager", label: "Manager" }
+                        ].map((level) => {
+                          const selectedLevels = apolloFilters.seniorityLevel ? apolloFilters.seniorityLevel.split(',') : [];
+                          const isSelected = selectedLevels.includes(level.value);
+                          
+                          return (
+                            <div
+                              key={level.value}
+                              className={`flex items-center p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-700/50 ${
+                                isSelected ? 'bg-blue-600/30 border border-blue-400/50' : ''
+                              }`}
+                              onClick={() => {
+                                const currentLevels = apolloFilters.seniorityLevel ? apolloFilters.seniorityLevel.split(',').filter(l => l) : [];
+                                let newLevels;
+                                
+                                if (isSelected) {
+                                  newLevels = currentLevels.filter(l => l !== level.value);
+                                } else {
+                                  newLevels = [...currentLevels, level.value];
+                                }
+                                
+                                setApolloFilters(prev => ({ ...prev, seniorityLevel: newLevels.join(',') }));
+                              }}
+                            >
+                              <div className={`w-4 h-4 rounded border-2 mr-3 flex items-center justify-center ${
+                                isSelected ? 'bg-blue-500 border-blue-500' : 'border-slate-500'
+                              }`}>
+                                {isSelected && (
+                                  <CheckCircle className="w-3 h-3 text-white" />
+                                )}
+                              </div>
+                              <span className="text-white text-sm">{level.label}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {apolloFilters.seniorityLevel && apolloFilters.seniorityLevel.split(',').filter(l => l).map((levelValue) => {
+                          const levelLabel = [
+                            { value: "owner", label: "Business Owner" },
+                            { value: "founder", label: "Founder/Co-Founder" },
+                            { value: "cxo", label: "C-Level Executive" },
+                            { value: "partner", label: "Partner/Principal" },
+                            { value: "vp", label: "Vice President" },
+                            { value: "svp", label: "Senior Vice President" },
+                            { value: "evp", label: "Executive Vice President" },
+                            { value: "director", label: "Director" },
+                            { value: "senior_director", label: "Senior Director" },
+                            { value: "senior_manager", label: "Senior Manager" },
+                            { value: "manager", label: "Manager" }
+                          ].find(l => l.value === levelValue)?.label || levelValue;
+                          
+                          return (
+                            <Badge
+                              key={levelValue}
+                              className="bg-blue-600/20 text-blue-200 border border-blue-400/30 px-2 py-1 text-xs cursor-pointer hover:bg-red-600/20 hover:text-red-200 hover:border-red-400/30"
+                              onClick={() => {
+                                const currentLevels = apolloFilters.seniorityLevel.split(',').filter(l => l);
+                                const newLevels = currentLevels.filter(l => l !== levelValue);
+                                setApolloFilters(prev => ({ ...prev, seniorityLevel: newLevels.join(',') }));
+                              }}
+                            >
+                              {levelLabel} ×
+                            </Badge>
+                          );
+                        })}
+                      </div>
+                      <p className="text-sm text-slate-400">Click levels to select, click badges to remove</p>
                     </div>
 
                     <div className="space-y-3">
@@ -1375,47 +1438,74 @@ export default function EnterpriseLeadScraper() {
                           );
                         })}
                       </div>
-                      <select
-                        multiple
-                        value={phantombusterFilters.seniorityLevel ? phantombusterFilters.seniorityLevel.split(',') : []}
-                        onChange={(e) => {
-                          const selected = Array.from(e.target.selectedOptions, option => option.value).join(',');
-                          setPhantombusterFilters(prev => ({ ...prev, seniorityLevel: selected }));
-                        }}
-                        className="w-full min-h-[180px] px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      >
-                        <option value="ceo">Chief Executive Officer</option>
-                        <option value="cto">Chief Technology Officer</option>
-                        <option value="cfo">Chief Financial Officer</option>
-                        <option value="cmo">Chief Marketing Officer</option>
-                        <option value="coo">Chief Operating Officer</option>
-                        <option value="founder">Founder</option>
-                        <option value="president">President</option>
-                        <option value="owner">Business Owner</option>
-                        <option value="partner">Partner</option>
-                        <option value="vp_sales">VP of Sales</option>
-                        <option value="vp_marketing">VP of Marketing</option>
-                        <option value="vp_operations">VP of Operations</option>
-                        <option value="director_sales">Director of Sales</option>
-                        <option value="director_marketing">Director of Marketing</option>
-                        <option value="sales_manager">Sales Manager</option>
-                        <option value="marketing_manager">Marketing Manager</option>
-                        <option value="operations_manager">Operations Manager</option>
-                        <option value="general_manager">General Manager</option>
-                        <option value="project_manager">Project Manager</option>
-                        <option value="account_executive">Account Executive</option>
-                        <option value="business_development">Business Development Manager</option>
-                        <option value="product_manager">Product Manager</option>
-                        <option value="regional_manager">Regional Manager</option>
-                        <option value="superintendent">Superintendent</option>
-                        <option value="foreman">Foreman</option>
-                        <option value="estimator">Estimator</option>
-                        <option value="service_manager">Service Manager</option>
-                        <option value="technician">Lead Technician</option>
-                        <option value="installer">Installer</option>
-                        <option value="contractor">Contractor</option>
-                      </select>
-                      <p className="text-sm text-slate-400">Hold Ctrl/Cmd to select multiple titles</p>
+                      <div className="w-full max-h-[180px] overflow-y-auto px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl">
+                        {[
+                          { value: "ceo", label: "Chief Executive Officer" },
+                          { value: "cto", label: "Chief Technology Officer" },
+                          { value: "cfo", label: "Chief Financial Officer" },
+                          { value: "cmo", label: "Chief Marketing Officer" },
+                          { value: "coo", label: "Chief Operating Officer" },
+                          { value: "founder", label: "Founder" },
+                          { value: "president", label: "President" },
+                          { value: "owner", label: "Business Owner" },
+                          { value: "partner", label: "Partner" },
+                          { value: "vp_sales", label: "VP of Sales" },
+                          { value: "vp_marketing", label: "VP of Marketing" },
+                          { value: "vp_operations", label: "VP of Operations" },
+                          { value: "director_sales", label: "Director of Sales" },
+                          { value: "director_marketing", label: "Director of Marketing" },
+                          { value: "sales_manager", label: "Sales Manager" },
+                          { value: "marketing_manager", label: "Marketing Manager" },
+                          { value: "operations_manager", label: "Operations Manager" },
+                          { value: "general_manager", label: "General Manager" },
+                          { value: "project_manager", label: "Project Manager" },
+                          { value: "account_executive", label: "Account Executive" },
+                          { value: "business_development", label: "Business Development Manager" },
+                          { value: "product_manager", label: "Product Manager" },
+                          { value: "regional_manager", label: "Regional Manager" },
+                          { value: "superintendent", label: "Superintendent" },
+                          { value: "foreman", label: "Foreman" },
+                          { value: "estimator", label: "Estimator" },
+                          { value: "service_manager", label: "Service Manager" },
+                          { value: "technician", label: "Lead Technician" },
+                          { value: "installer", label: "Installer" },
+                          { value: "contractor", label: "Contractor" }
+                        ].map((title) => {
+                          const selectedTitles = phantombusterFilters.seniorityLevel ? phantombusterFilters.seniorityLevel.split(',') : [];
+                          const isSelected = selectedTitles.includes(title.value);
+                          
+                          return (
+                            <div
+                              key={title.value}
+                              className={`flex items-center p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-700/50 ${
+                                isSelected ? 'bg-purple-600/30 border border-purple-400/50' : ''
+                              }`}
+                              onClick={() => {
+                                const currentTitles = phantombusterFilters.seniorityLevel ? phantombusterFilters.seniorityLevel.split(',').filter(t => t) : [];
+                                let newTitles;
+                                
+                                if (isSelected) {
+                                  newTitles = currentTitles.filter(t => t !== title.value);
+                                } else {
+                                  newTitles = [...currentTitles, title.value];
+                                }
+                                
+                                setPhantombusterFilters(prev => ({ ...prev, seniorityLevel: newTitles.join(',') }));
+                              }}
+                            >
+                              <div className={`w-4 h-4 rounded border-2 mr-3 flex items-center justify-center ${
+                                isSelected ? 'bg-purple-500 border-purple-500' : 'border-slate-500'
+                              }`}>
+                                {isSelected && (
+                                  <CheckCircle className="w-3 h-3 text-white" />
+                                )}
+                              </div>
+                              <span className="text-white text-sm">{title.label}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <p className="text-sm text-slate-400">Click titles to select, click badges to remove</p>
                     </div>
 
                     <div className="space-y-3">

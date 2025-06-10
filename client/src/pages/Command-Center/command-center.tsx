@@ -1256,6 +1256,19 @@ export default function CommandCenter() {
         recognition.lang = 'en-US';
         recognition.maxAlternatives = 1;
         
+        // Prevent automatic timeout
+        const keepAlive = setInterval(() => {
+          if (isListening) {
+            try {
+              recognition.start();
+            } catch (e) {
+              // Already started, ignore
+            }
+          } else {
+            clearInterval(keepAlive);
+          }
+        }, 4000);
+        
         recognition.onstart = () => {
           setIsListening(true);
           console.log('Voice recognition started');
