@@ -2937,19 +2937,19 @@ export default function CommandCenter() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Sentiment Score</span>
-                  <span className="text-green-400 font-bold">87% Positive</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Avg Call Duration</span>
-                  <span className="text-blue-400 font-bold">4m 32s</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Resolution Rate</span>
-                  <span className="text-green-400 font-bold">91.5%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Top Intent</div>
-                  <div className="text-white font-medium">Product Demo Request</div>
+                  <div className="text-slate-400 font-medium">No data available</div>
                 </div>
               </div>
             </CardContent>
@@ -3215,15 +3215,15 @@ export default function CommandCenter() {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
               <div className="bg-gradient-to-br from-green-600/20 to-green-800/20 border border-cyan-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-green-400 mb-2">${metrics?.monthlySavings || 0}</div>
-                  <div className="text-green-300 text-sm">Monthly Savings</div>
-                  <div className="text-green-200 text-xs mt-1">↑ 23% vs last month</div>
+                  <div className="text-3xl font-black text-slate-400 mb-2">--</div>
+                  <div className="text-slate-300 text-sm">Monthly Savings</div>
+                  <div className="text-slate-400 text-xs mt-1">No data available</div>
                 </div>
               </div>
               
               <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-cyan-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-blue-400 mb-2">{currentSystemMode === 'test' ? '47%' : '0%'}</div>
+                  <div className="text-3xl font-black text-slate-400 mb-2">--</div>
                   <div className="text-blue-300 text-sm">Cost Reduction</div>
                   <div className="text-blue-200 text-xs mt-1">vs Manual Process</div>
                 </div>
