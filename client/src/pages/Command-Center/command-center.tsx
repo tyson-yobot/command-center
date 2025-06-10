@@ -2215,10 +2215,10 @@ export default function CommandCenter() {
                 <Button 
                   onClick={handleDownloadPDF}
                   size="sm"
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   <FileText className="w-4 h-4 mr-1" />
-                  PDF Report
+                  📂 View Reports
                 </Button>
                 <Button 
                   size="sm"
@@ -2926,12 +2926,12 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          {/* System Monitor */}
+          {/* Bot Health Monitor */}
           <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Monitor className="w-5 h-5 mr-2 text-cyan-400" />
-                System Status (Read-Only)
+                Bot Health Monitor
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -3002,6 +3002,9 @@ export default function CommandCenter() {
               </CardTitle>
             </CardHeader>
             <CardContent>
+              <div className="mb-3 pb-2 border-b border-slate-600">
+                <h4 className="text-slate-200 font-medium text-sm">Suggested Prompts</h4>
+              </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                   <span className="text-slate-300">"Show me today's leads"</span>
