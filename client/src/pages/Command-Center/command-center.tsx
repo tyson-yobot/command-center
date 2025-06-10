@@ -2254,7 +2254,7 @@ export default function CommandCenter() {
         <div className="mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Core Automation */}
-            <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+            <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
               <CardHeader>
                 <CardTitle className="text-white">Core Automation</CardTitle>
               </CardHeader>
@@ -2305,7 +2305,7 @@ export default function CommandCenter() {
             </Card>
 
             {/* Voice & Communication */}
-            <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+            <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
               <CardHeader>
                 <CardTitle className="text-white">Voice & Communication</CardTitle>
               </CardHeader>
@@ -2347,7 +2347,7 @@ export default function CommandCenter() {
             </Card>
 
             {/* Data & Reports */}
-            <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+            <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
               <CardHeader>
                 <CardTitle className="text-white">Data & Reports</CardTitle>
               </CardHeader>
@@ -2449,7 +2449,7 @@ export default function CommandCenter() {
 
         {/* Key Performance Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          <Card className="bg-slate-700/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Active Calls</CardTitle>
               <Phone className="h-4 w-4 text-green-400" />
@@ -2464,7 +2464,7 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-700/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Bot Processing</CardTitle>
               <Brain className="h-4 w-4 text-blue-400" />
@@ -2479,7 +2479,7 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-700/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Success Rate</CardTitle>
               <DollarSign className="h-4 w-4 text-emerald-400" />
@@ -2494,7 +2494,7 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">System Health</CardTitle>
               <Gauge className="h-4 w-4 text-amber-400" />
@@ -2601,7 +2601,7 @@ export default function CommandCenter() {
         {/* Essential Business Modules */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
           {/* Bot Health Monitor */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-green-400" />
@@ -2643,7 +2643,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Revenue Forecast */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <TrendingUp className="w-5 h-5 mr-2 text-blue-400" />
@@ -2681,7 +2681,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Client Pulse Summary */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Users className="w-5 h-5 mr-2 text-purple-400" />
@@ -2722,7 +2722,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Ops Metrics */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Gauge className="w-5 h-5 mr-2 text-yellow-400" />
@@ -2759,7 +2759,7 @@ export default function CommandCenter() {
         {/* Main Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
           {/* Automation Engine */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Zap className="w-5 h-5 mr-2 text-yellow-400" />
@@ -2793,7 +2793,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Botalytics™ */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <BarChart3 className="w-5 h-5 mr-2 text-blue-400" />
@@ -2853,7 +2853,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* SmartSpend™ */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <PieChart className="w-5 h-5 mr-2 text-green-400" />
@@ -2919,7 +2919,7 @@ export default function CommandCenter() {
         {/* Second Row - Bot Intelligence & System Monitor */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Bot Intelligence */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Brain className="w-5 h-5 mr-2 text-purple-400" />
@@ -2953,7 +2953,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Bot Health Monitor */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Monitor className="w-5 h-5 mr-2 text-cyan-400" />
@@ -3030,7 +3030,7 @@ export default function CommandCenter() {
 
         {/* Voice & Conversation Analytics */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Mic className="w-5 h-5 mr-2" />
@@ -3066,7 +3066,7 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <MessageSquare className="w-5 h-5 mr-2 text-blue-400" />
@@ -3098,7 +3098,7 @@ export default function CommandCenter() {
 
         {/* Smart Calendar & Live Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Calendar className="w-5 h-5 mr-2 text-purple-400" />
@@ -3117,7 +3117,7 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-orange-400" />
@@ -3150,7 +3150,7 @@ export default function CommandCenter() {
         {/* Advanced Intelligence & Analytics Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
           {/* Smart Calendar */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Calendar className="w-5 h-5 mr-2 text-blue-400" />
@@ -3176,7 +3176,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Voice Command Center */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Headphones className="w-5 h-5 mr-2 text-purple-400" />
@@ -3228,7 +3228,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Sentiment Analysis */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Brain className="w-5 h-5 mr-2 text-green-400" />
@@ -3392,7 +3392,7 @@ export default function CommandCenter() {
         {/* Live Activity & System Monitoring */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Live Activity Feed */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-green-400" />
@@ -3515,7 +3515,7 @@ export default function CommandCenter() {
         {/* AI & Automation Engine Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* AI Automation Engine */}
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Zap className="w-5 h-5 mr-2 text-yellow-400" />
@@ -3545,7 +3545,7 @@ export default function CommandCenter() {
 
         {/* Escalation Alerts */}
         <div className="mb-12">
-          <Card className="bg-blue-900/60 backdrop-blur-sm border border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Bell className="w-5 h-5 mr-2" />
