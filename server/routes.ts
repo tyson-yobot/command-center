@@ -13503,6 +13503,126 @@ export function registerContentCreationEndpoints(app: Express) {
     }
   });
 
+  // Voice cloning endpoint
+  app.post('/api/elevenlabs/clone-voice', async (req, res) => {
+    try {
+      const { name, description, files, labels } = req.body;
+      
+      if (!name || !files || !Array.isArray(files)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Voice name and audio files are required'
+        });
+      }
+
+      const audioBuffers = files.map((file: string) => Buffer.from(file, 'base64'));
+      const result = await ElevenLabs.cloneVoice(name, description, audioBuffers, labels);
+      
+      logOperation('elevenlabs-clone-voice', { name, description }, 'success', 
+        `Voice cloned successfully: ${result.voiceId}`);
+
+      res.json({
+        success: true,
+        voiceId: result.voiceId,
+        name: result.name,
+        description: result.description
+      });
+    } catch (error) {
+      logOperation('elevenlabs-clone-voice', req.body, 'error', 
+        `Voice cloning failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Voice cloning failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Voice details endpoint
+  app.get('/api/elevenlabs/voice/:voiceId', async (req, res) => {
+    try {
+      const { voiceId } = req.params;
+      const result = await ElevenLabs.getVoiceDetails(voiceId);
+      
+      logOperation('elevenlabs-voice-details', { voiceId }, 
+        result.error ? 'error' : 'success',
+        result.error || 'Voice details retrieved');
+
+      if (result.error) {
+        return res.status(404).json({
+          success: false,
+          error: result.error
+        });
+      }
+
+      res.json({
+        success: true,
+        voice: result.voice
+      });
+    } catch (error) {
+      logOperation('elevenlabs-voice-details', req.params, 'error', 
+        `Failed to get voice details: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to get voice details',
+        details: error.message
+      });
+    }
+  });
+
+  // Voice settings endpoint
+  app.get('/api/elevenlabs/voice/:voiceId/settings', async (req, res) => {
+    try {
+      const { voiceId } = req.params;
+      const result = await ElevenLabs.getVoiceSettings(voiceId);
+      
+      logOperation('elevenlabs-voice-settings', { voiceId }, 
+        result.error ? 'error' : 'success',
+        result.error || 'Voice settings retrieved');
+
+      res.json({
+        success: !result.error,
+        settings: result.settings,
+        error: result.error
+      });
+    } catch (error) {
+      logOperation('elevenlabs-voice-settings', req.params, 'error', 
+        `Failed to get voice settings: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to get voice settings',
+        details: error.message
+      });
+    }
+  });
+
+  // Update voice settings endpoint
+  app.post('/api/elevenlabs/voice/:voiceId/settings', async (req, res) => {
+    try {
+      const { voiceId } = req.params;
+      const settings = req.body;
+      
+      const result = await ElevenLabs.updateVoiceSettings(voiceId, settings);
+      
+      logOperation('elevenlabs-update-voice-settings', { voiceId, settings }, 
+        result.error ? 'error' : 'success',
+        result.error || 'Voice settings updated');
+
+      res.json({
+        success: result.success,
+        error: result.error
+      });
+    } catch (error) {
+      logOperation('elevenlabs-update-voice-settings', { ...req.params, ...req.body }, 'error', 
+        `Failed to update voice settings: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to update voice settings',
+        details: error.message
+      });
+    }
+  });
+
   // Test ElevenLabs connection
   app.get('/api/elevenlabs/test', async (req, res) => {
     try {

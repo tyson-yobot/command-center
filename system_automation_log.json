@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T14:15:00.577Z",
-    "functionId": 133,
-    "functionName": "Silent Call Detector",
-    "batch": 14,
-    "category": "Voice",
-    "status": "success",
-    "duration": 390,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T14:15:00.579Z",
     "functionId": 136,
     "functionName": "Personality Assigner",
@@ -11320,6 +11309,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-10T18:20:57.651Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T18:23:56.603Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-10T18:23:55.751Z",
       "automationStatus": "running"
     }
   }

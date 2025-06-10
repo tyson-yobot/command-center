@@ -93,6 +93,44 @@ export const AVAILABLE_MODELS = [
   { id: 'eleven_flash_v2', name: 'Eleven Flash v2', description: 'Ultra-fast generation' }
 ];
 
+// Get all available models from ElevenLabs API
+export async function getModels() {
+  if (!process.env.ELEVENLABS_API_KEY) {
+    return { 
+      models: AVAILABLE_MODELS, 
+      error: 'ElevenLabs API key not configured - showing default models' 
+    };
+  }
+
+  try {
+    const response = await fetch('https://api.elevenlabs.io/v1/models', {
+      headers: {
+        'Accept': 'application/json',
+        'xi-api-key': process.env.ELEVENLABS_API_KEY
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const models = data.map((model: any) => ({
+        id: model.model_id,
+        name: model.name,
+        description: model.description,
+        languages: model.languages || [],
+        max_characters_request_free_user: model.max_characters_request_free_user || 0,
+        max_characters_request_subscribed_user: model.max_characters_request_subscribed_user || 0
+      }));
+
+      return { models, error: null };
+    } else {
+      return { models: AVAILABLE_MODELS, error: 'Failed to fetch models from API' };
+    }
+  } catch (error) {
+    console.error('Failed to fetch models:', error);
+    return { models: AVAILABLE_MODELS, error: error.message };
+  }
+}
+
 // Generate speech from text
 export async function generateSpeech(text: string, voiceId: string = '21m00Tcm4TlvDq8ikWAM', options: any = {}) {
   if (!process.env.ELEVENLABS_API_KEY) {
@@ -196,6 +234,245 @@ export async function generateSpeechStream(text: string, voiceId: string, option
   }
 }
 
+// Advanced text-to-speech with full options
+export async function advancedTextToSpeech(options: {
+  text: string;
+  voiceId?: string;
+  model?: string;
+  stability?: number;
+  similarityBoost?: number;
+  style?: number;
+  useSpeakerBoost?: boolean;
+  outputFormat?: string;
+}) {
+  if (!process.env.ELEVENLABS_API_KEY) {
+    throw new Error('ElevenLabs API key not configured');
+  }
+
+  const {
+    text,
+    voiceId = '21m00Tcm4TlvDq8ikWAM',
+    model = 'eleven_multilingual_v2',
+    stability = 0.5,
+    similarityBoost = 0.75,
+    style = 0.0,
+    useSpeakerBoost = true,
+    outputFormat = 'mp3_44100_128'
+  } = options;
+
+  try {
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'audio/mpeg',
+        'Content-Type': 'application/json',
+        'xi-api-key': process.env.ELEVENLABS_API_KEY
+      },
+      body: JSON.stringify({
+        text: text,
+        model_id: model,
+        voice_settings: {
+          stability: parseFloat(stability.toString()),
+          similarity_boost: parseFloat(similarityBoost.toString()),
+          style: parseFloat(style.toString()),
+          use_speaker_boost: useSpeakerBoost
+        },
+        output_format: outputFormat
+      })
+    });
+
+    if (response.ok) {
+      const audioBuffer = await response.arrayBuffer();
+      return { audio: Buffer.from(audioBuffer), error: null };
+    } else {
+      const errorData = await response.text();
+      throw new Error(`Advanced TTS failed: ${response.status} - ${errorData}`);
+    }
+  } catch (error) {
+    console.error('Advanced TTS failed:', error);
+    throw new Error(`Advanced TTS failed: ${error.message}`);
+  }
+}
+
+// Voice cloning functionality
+export async function cloneVoice(name: string, description: string, files: Buffer[], labels?: { [key: string]: string }) {
+  if (!process.env.ELEVENLABS_API_KEY) {
+    throw new Error('ElevenLabs API key not configured');
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('description', description);
+    
+    if (labels) {
+      formData.append('labels', JSON.stringify(labels));
+    }
+
+    // Add audio files
+    files.forEach((file, index) => {
+      formData.append('files', new Blob([file], { type: 'audio/mpeg' }), `sample_${index}.mp3`);
+    });
+
+    const response = await fetch('https://api.elevenlabs.io/v1/voices/add', {
+      method: 'POST',
+      headers: {
+        'xi-api-key': process.env.ELEVENLABS_API_KEY
+      },
+      body: formData
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return { 
+        voiceId: data.voice_id, 
+        name: data.name,
+        description: data.description,
+        error: null 
+      };
+    } else {
+      const errorData = await response.text();
+      throw new Error(`Voice cloning failed: ${response.status} - ${errorData}`);
+    }
+  } catch (error) {
+    console.error('Voice cloning failed:', error);
+    throw new Error(`Voice cloning failed: ${error.message}`);
+  }
+}
+
+// Edit voice settings
+export async function editVoice(voiceId: string, name?: string, description?: string, labels?: { [key: string]: string }) {
+  if (!process.env.ELEVENLABS_API_KEY) {
+    throw new Error('ElevenLabs API key not configured');
+  }
+
+  try {
+    const body: any = {};
+    if (name) body.name = name;
+    if (description) body.description = description;
+    if (labels) body.labels = labels;
+
+    const response = await fetch(`https://api.elevenlabs.io/v1/voices/${voiceId}/edit`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'xi-api-key': process.env.ELEVENLABS_API_KEY
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (response.ok) {
+      return { success: true, error: null };
+    } else {
+      const errorData = await response.text();
+      throw new Error(`Voice editing failed: ${response.status} - ${errorData}`);
+    }
+  } catch (error) {
+    console.error('Voice editing failed:', error);
+    throw new Error(`Voice editing failed: ${error.message}`);
+  }
+}
+
+// Delete voice
+export async function deleteVoice(voiceId: string) {
+  if (!process.env.ELEVENLABS_API_KEY) {
+    throw new Error('ElevenLabs API key not configured');
+  }
+
+  try {
+    const response = await fetch(`https://api.elevenlabs.io/v1/voices/${voiceId}`, {
+      method: 'DELETE',
+      headers: {
+        'xi-api-key': process.env.ELEVENLABS_API_KEY
+      }
+    });
+
+    if (response.ok) {
+      return { success: true, error: null };
+    } else {
+      const errorData = await response.text();
+      throw new Error(`Voice deletion failed: ${response.status} - ${errorData}`);
+    }
+  } catch (error) {
+    console.error('Voice deletion failed:', error);
+    throw new Error(`Voice deletion failed: ${error.message}`);
+  }
+}
+
+// Get voice details
+export async function getVoiceDetails(voiceId: string) {
+  if (!process.env.ELEVENLABS_API_KEY) {
+    return { 
+      voice: null, 
+      error: 'ElevenLabs API key not configured' 
+    };
+  }
+
+  try {
+    const response = await fetch(`https://api.elevenlabs.io/v1/voices/${voiceId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'xi-api-key': process.env.ELEVENLABS_API_KEY
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return { 
+        voice: {
+          id: data.voice_id,
+          name: data.name,
+          description: data.description,
+          category: data.category,
+          labels: data.labels,
+          samples: data.samples,
+          settings: data.settings,
+          preview_url: data.preview_url
+        }, 
+        error: null 
+      };
+    } else {
+      return { voice: null, error: 'Failed to fetch voice details' };
+    }
+  } catch (error) {
+    console.error('Failed to fetch voice details:', error);
+    return { voice: null, error: error.message };
+  }
+}
+
+// Generate voice history
+export async function getVoiceHistory(voiceId: string) {
+  if (!process.env.ELEVENLABS_API_KEY) {
+    return { 
+      history: [], 
+      error: 'ElevenLabs API key not configured' 
+    };
+  }
+
+  try {
+    const response = await fetch(`https://api.elevenlabs.io/v1/history?voice_id=${voiceId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'xi-api-key': process.env.ELEVENLABS_API_KEY
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return { 
+        history: data.history || [], 
+        error: null 
+      };
+    } else {
+      return { history: [], error: 'Failed to fetch voice history' };
+    }
+  } catch (error) {
+    console.error('Failed to fetch voice history:', error);
+    return { history: [], error: error.message };
+  }
+}
+
 // Stream speech generation
 export async function streamSpeech(text: string, voiceId: string = '21m00Tcm4TlvDq8ikWAM', options: any = {}) {
   if (!process.env.ELEVENLABS_API_KEY) {
@@ -233,41 +510,7 @@ export async function streamSpeech(text: string, voiceId: string = '21m00Tcm4Tlv
   }
 }
 
-// Clone a voice from audio samples
-export async function cloneVoice(name: string, description: string, files: Buffer[]) {
-  if (!process.env.ELEVENLABS_API_KEY) {
-    throw new Error('ElevenLabs API key not configured');
-  }
-
-  try {
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('description', description);
-    
-    files.forEach((file, index) => {
-      formData.append('files', new Blob([file]), `sample_${index}.wav`);
-    });
-
-    const response = await fetch('https://api.elevenlabs.io/v1/voices/add', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'xi-api-key': process.env.ELEVENLABS_API_KEY
-      },
-      body: formData
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      return { voiceId: data.voice_id, error: null };
-    } else {
-      throw new Error(`Voice cloning failed: ${response.status} ${response.statusText}`);
-    }
-  } catch (error) {
-    console.error('Voice cloning failed:', error);
-    throw new Error(`Voice cloning failed: ${error.message}`);
-  }
-}
+// Clone a voice from audio samples (duplicate removed)
 
 // Get voice settings
 export async function getVoiceSettings(voiceId: string) {
@@ -357,10 +600,10 @@ export async function getUserSubscription() {
   }
 }
 
-// Get available models
-export async function getModels() {
+// Get available models from API (duplicate function removed)
+export async function getAPIModels() {
   if (!process.env.ELEVENLABS_API_KEY) {
-    return { models: [], error: 'ElevenLabs API key not configured' };
+    return { models: AVAILABLE_MODELS, error: 'ElevenLabs API key not configured' };
   }
 
   try {
@@ -383,61 +626,7 @@ export async function getModels() {
   }
 }
 
-// Delete a custom voice
-export async function deleteVoice(voiceId: string) {
-  if (!process.env.ELEVENLABS_API_KEY) {
-    return { success: false, error: 'ElevenLabs API key not configured' };
-  }
-
-  try {
-    const response = await fetch(`https://api.elevenlabs.io/v1/voices/${voiceId}`, {
-      method: 'DELETE',
-      headers: {
-        'Accept': 'application/json',
-        'xi-api-key': process.env.ELEVENLABS_API_KEY
-      }
-    });
-
-    if (response.ok) {
-      return { success: true, error: null };
-    } else {
-      return { success: false, error: `Failed to delete voice: ${response.status}` };
-    }
-  } catch (error) {
-    console.error('Failed to delete voice:', error);
-    return { success: false, error: error.message };
-  }
-}
-
-// Advanced text-to-speech with full options
-export async function advancedTextToSpeech(options: {
-  text: string;
-  voiceId?: string;
-  model?: string;
-  stability?: number;
-  similarityBoost?: number;
-  style?: number;
-  useSpeakerBoost?: boolean;
-  outputFormat?: string;
-}) {
-  const {
-    text,
-    voiceId = '21m00Tcm4TlvDq8ikWAM',
-    model = 'eleven_monolingual_v1',
-    stability = 0.5,
-    similarityBoost = 0.5,
-    style = 0.0,
-    useSpeakerBoost = true
-  } = options;
-
-  return await generateSpeech(text, voiceId, {
-    model_id: model,
-    stability,
-    similarity_boost: similarityBoost,
-    style,
-    use_speaker_boost: useSpeakerBoost
-  });
-}
+// Duplicate functions removed - using implementations above
 
 // Professional Voice Cloning with enhanced features
 export async function professionalVoiceClone(name: string, description: string, files: Buffer[], labels?: string[]) {
