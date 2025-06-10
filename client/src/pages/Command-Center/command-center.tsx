@@ -2339,22 +2339,6 @@ export default function CommandCenter() {
                     <Mic className="w-5 h-5 mr-3" />
                     <span>Voice Input</span>
                   </Button>
-                  
-                  <Button
-                    onClick={() => executeLiveCommand('Content Creator')}
-                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3"
-                  >
-                    <FileText className="w-5 h-5 mr-3" />
-                    <span>Content Creator</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => executeLiveCommand('Mailchimp Sync')}
-                    className="bg-yellow-600 hover:bg-yellow-700 text-white flex items-center justify-start p-3"
-                  >
-                    <Mail className="w-5 h-5 mr-3" />
-                    <span>MailChimp Campaign</span>
-                  </Button>
                 </div>
               </CardContent>
             </Card>
