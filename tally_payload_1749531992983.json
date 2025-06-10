@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-06-10T05:06:32.984Z",
+  "url": "/webhook/tally",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "95"
+  },
+  "raw_payload": {
+    "orderId": "test_webhook_123",
+    "client": "test_client",
+    "amount": 2500,
+    "status": "completed"
+  }
+}
