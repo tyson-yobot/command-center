@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-06-10T05:01:21.172Z",
+  "url": "/api/knowledge/upload",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-length": "538",
+    "content-type": "multipart/form-data; boundary=------------------------2UTrufV61clYm0XEOD6XN6"
+  },
+  "body": {},
+  "query": {}
+}

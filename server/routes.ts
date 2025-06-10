@@ -1362,13 +1362,8 @@ System Status: Operational
 Report generated in Live Mode
       `.trim();
       
-      // Return text-based report
-      res.setHeader('Content-Type', 'text/plain');
-      res.setHeader('Content-Disposition', 'attachment; filename="yobot-report.txt"');
-      res.send(pdfContent);
-
       const reportId = `report_${Date.now()}`;
-
+      
       // Log to Airtable
       try {
         await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📊%20Command%20Center%20·%20Metrics%20Tracker", {
@@ -1381,13 +1376,7 @@ Report generated in Live Mode
             fields: {
               "Report ID": reportId,
               "Report Type": reportType,
-              "Date Range": dateRange,
-              "File Path": filePath,
-              "Total Leads": metrics.totalLeads || 0,
-              "Total Campaigns": metrics.totalCampaigns || 0,
-              "Voice Commands": metrics.voiceCommands || 0,
               "Generated At": new Date().toISOString(),
-              "File Size": pdfBuffer.length,
               "Status": "Generated"
             }
           })
@@ -1396,11 +1385,12 @@ Report generated in Live Mode
         console.error('Airtable report logging failed:', airtableError);
       }
 
-      logOperation('generate-pdf-report', { reportType, dateRange }, 'success', `PDF report generated: ${reportId}`);
+      logOperation('generate-pdf-report', { reportType }, 'success', `Text report generated: ${reportId}`);
 
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename="YoBot_Report_${reportId}.pdf"`);
-      res.send(pdfBuffer);
+      // Return text-based report
+      res.setHeader('Content-Type', 'text/plain');
+      res.setHeader('Content-Disposition', 'attachment; filename="yobot-report.txt"');
+      res.send(pdfContent);
 
     } catch (error) {
       console.error('PDF generation error:', error);
