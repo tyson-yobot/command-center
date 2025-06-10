@@ -35,7 +35,7 @@ export class LiveDashboardData {
         });
 
         // Get unique functions and their latest status
-        const uniqueFunctions = {};
+        const uniqueFunctions: any = {};
         functionTests.forEach(test => {
           if (!uniqueFunctions[test.functionName] || test.record.createdTime > uniqueFunctions[test.functionName].createdTime) {
             uniqueFunctions[test.functionName] = test;
@@ -43,7 +43,7 @@ export class LiveDashboardData {
         });
 
         const totalFunctions = Object.keys(uniqueFunctions).length;
-        const passedFunctions = Object.values(uniqueFunctions).filter(f => f.success).length;
+        const passedFunctions = Object.values(uniqueFunctions).filter((f: any) => f.success).length;
         const failedFunctions = totalFunctions - passedFunctions;
         const successRate = totalFunctions > 0 ? ((passedFunctions / totalFunctions) * 100).toFixed(1) : '0';
 
@@ -54,13 +54,13 @@ export class LiveDashboardData {
           successRate: `${successRate}%`,
           averageExecutionTime: null,
           topPerformers: Object.values(uniqueFunctions)
-            .filter(f => f.success)
+            .filter((f: any) => f.success)
             .slice(0, 5)
-            .map(f => f.functionName),
+            .map((f: any) => f.functionName),
           recentErrors: Object.values(uniqueFunctions)
-            .filter(f => !f.success)
+            .filter((f: any) => !f.success)
             .slice(0, 3)
-            .map(f => ({ name: f.functionName, errorCount: 1, category: 'Automation' })),
+            .map((f: any) => ({ name: f.functionName, errorCount: 1, category: 'Automation' })),
           healthChecks: {
             airtable: "healthy",
             slack: "healthy", 
@@ -72,84 +72,23 @@ export class LiveDashboardData {
     } catch (error) {
       console.error('Error reading automation data from Airtable:', error);
     }
-
-      // Fallback to reading log files
-      const logPath = path.join(process.cwd(), 'system_automation_log.json');
-      
-      if (!fs.existsSync(logPath)) {
-        return {
-          totalFunctions: 0,
-          activeFunctions: 0,
-          executionsToday: 0,
-          successRate: null,
-          averageExecutionTime: null,
-          topPerformers: [],
-          recentErrors: [],
-          healthChecks: {
-            airtable: "healthy",
-            slack: "healthy", 
-            apis: "healthy",
-            database: "healthy"
-          }
-        };
+    
+    // Fallback to default values if Airtable unavailable
+    return {
+      totalFunctions: 0,
+      activeFunctions: 0,
+      executionsToday: 0,
+      successRate: "0%",
+      averageExecutionTime: null,
+      topPerformers: [],
+      recentErrors: [],
+      healthChecks: {
+        airtable: "unavailable",
+        slack: "healthy", 
+        apis: "healthy",
+        database: "healthy"
       }
-
-      const logData = JSON.parse(fs.readFileSync(logPath, 'utf8'));
-      
-      // Parse automation log format
-      const functionExecutions = logData.filter(entry => entry.functionId && entry.status);
-      const systemEvents = logData.filter(entry => entry.type === 'system_event');
-      
-      const totalFunctions = new Set(functionExecutions.map(e => e.functionId)).size;
-      const successfulExecutions = functionExecutions.filter(e => e.status === 'success').length;
-      const failedExecutions = functionExecutions.filter(e => e.status === 'error').length;
-      
-      const successRate = successfulExecutions + failedExecutions > 0 ? 
-        ((successfulExecutions / (successfulExecutions + failedExecutions)) * 100).toFixed(1) : null;
-      
-      const recentErrors = functionExecutions
-        .filter(e => e.status === 'error')
-        .slice(-3)
-        .map(e => ({
-          name: e.functionName,
-          errorCount: 1,
-          category: e.category || 'Unknown'
-        }));
-      
-      return {
-        totalFunctions,
-        activeFunctions: totalFunctions, // Assume all are active if running
-        executionsToday: successfulExecutions + failedExecutions,
-        successRate: successRate ? `${successRate}%` : null,
-        averageExecutionTime: null,
-        topPerformers: [],
-        recentErrors,
-        healthChecks: {
-          airtable: failedExecutions > 0 ? "degraded" : "healthy",
-          slack: "healthy", 
-          apis: "healthy",
-          database: "healthy"
-        }
-      };
-      
-    } catch (error) {
-      console.error('Error reading live automation data:', error);
-      return {
-        totalFunctions: 0,
-        activeFunctions: 0,
-        executionsToday: 0,
-        successRate: null,
-        averageExecutionTime: null,
-        topPerformers: [],
-        recentErrors: [],
-        healthChecks: {
-          airtable: "healthy",
-          slack: "healthy", 
-          apis: "healthy",
-          database: "healthy"
-        }
-      };
-    }
+    };
   }
 
   // Get real lead scraping data from actual sources
