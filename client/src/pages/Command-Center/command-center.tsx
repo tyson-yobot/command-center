@@ -62,6 +62,7 @@ import { MailchimpSyncDashboard } from '@/components/mailchimp-sync-dashboard';
 import { SocialContentCreator } from '@/components/social-content-creator';
 import { useToast } from '@/hooks/use-toast';
 import { Toast, ToastTitle, ToastDescription } from '@/components/ui/toast';
+import { KnowledgeViewerModal } from '@/components/knowledge-viewer-modal';
 
 
 export default function CommandCenter() {
