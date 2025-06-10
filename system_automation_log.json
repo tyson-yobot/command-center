@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:00:00.648Z",
-    "functionId": 137,
-    "functionName": "SmartSpend Entry Creator",
-    "batch": 14,
-    "category": "Financial",
-    "status": "success",
-    "duration": 417,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:00:00.651Z",
     "functionId": 201,
     "functionName": "Auto-create Airtable Record",
@@ -11372,6 +11361,21 @@
       "failedExecutions": 0,
       "systemUptime": 20.753863956,
       "lastHealthCheck": "2025-06-10T20:09:00.009Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T20:20:00.024Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 172.720141015,
+      "lastHealthCheck": "2025-06-10T20:20:00.021Z",
       "automationStatus": "paused"
     }
   }
