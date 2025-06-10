@@ -49,7 +49,10 @@ def log_integration_test_to_airtable(
     module_type: str = "Webhook",
     related_scenario_link: str = ""
 ):
-    airtable_api_key = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
+    import os
+    
+    # Use environment variable for API key, fallback to hardcoded if needed
+    airtable_api_key = os.getenv('AIRTABLE_API_KEY', 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa')
     base_id = "appRt8V3tH4g5Z5if"
     table_id = "tbly0fjE2M5uHET9X"
     url = f"https://api.airtable.com/v0/{base_id}/{table_id}"
@@ -59,15 +62,12 @@ def log_integration_test_to_airtable(
         "Content-Type": "application/json"
     }
 
-    # Format as single concatenated string to match existing records
-    status_emoji = PASS_FAIL_OPTIONS[passed]
-    timestamp = datetime.now().isoformat()
-    
-    combined_value = f"{integration_name} - {status_emoji} - {notes} - {timestamp} - QA: {qa_owner} - Module: {module_type}"
-
     payload = {
         "fields": {
-            "🔧 Integration Name": combined_value
+            "🧠 Integration Name": integration_name,
+            "✅ Passed?": "✅" if passed else "❌",
+            "📅 Test Date": datetime.now().strftime("%Y-%m-%d"),
+            "📝 Notes / Debug": notes
         }
     }
 
@@ -76,15 +76,14 @@ def log_integration_test_to_airtable(
     print("🌐 Response:", response.status_code, response.text)
 
     if response.status_code in [200, 201]:
-        print("✅ Logged.")
+        print("✅ Logged to Airtable.")
+        if not passed:
+            slack_msg = f"🚨 *FAILED INTEGRATION:* {integration_name}\n{notes}"
+            email_subject = f"FAILED: {integration_name}"
+            email_body = f"Failure logged for {integration_name}\n\n{notes}"
+            send_slack_alert(slack_msg)
+            send_email_alert(email_subject, email_body)
         return True
     else:
-        print("❌ Log failed.")
+        print("❌ Airtable log failed.")
         return False
-
-    if not passed:
-        slack_msg = f"🚨 *FAILED INTEGRATION:* {integration_name}\n{notes}"
-        email_subject = f"FAILED: {integration_name}"
-        email_body = f"Failure logged for {integration_name}\n\n{notes}"
-        send_slack_alert(slack_msg)
-        send_email_alert(email_subject, email_body)
