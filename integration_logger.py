@@ -27,18 +27,13 @@ def log_integration_test_to_airtable(
         "Content-Type": "application/json"
     }
 
+    # Format all data into the single available field
+    status = PASS_FAIL_OPTIONS[passed]
+    formatted_entry = f"{integration_name} - {status} - {notes} - {datetime.now().isoformat()} - QA: {qa_owner} - Module: {module_type}"
+    
     payload = {
         "fields": {
-            "🔧 Integration Name": integration_name,
-            "Pass/Fail": PASS_FAIL_OPTIONS[passed],
-            "Notes / Debug": notes,
-            "Test Date": datetime.now().isoformat(),
-            "QA Owner": qa_owner,
-            "Output Data Pop...": output_data_populated,
-            "Record Created?": record_created,
-            "Retry Attempted?": retry_attempted,
-            "Module Type": module_type,
-            "Related Scenario Link": related_scenario_link
+            "🔧 Integration Name": formatted_entry
         }
     }
 
