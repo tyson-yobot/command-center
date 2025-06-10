@@ -1446,28 +1446,25 @@ export default function CommandCenter() {
           }
           break;
         case 'Content Creator':
-          endpoint = '/api/content-creator';
-          if (!data) {
-            requestData = {
-              contentType: 'blog',
-              script: 'Generated content',
-              targetPlatform: 'web'
-            };
-          }
-          break;
+          // Route to Publy page instead of API call
+          window.location.href = '/publy';
+          toast({
+            title: "Routing to Publy",
+            description: "Redirecting to content creation platform",
+          });
+          return;
         case 'Export Data':
           endpoint = '/api/export-data';
           requestData = { format: 'csv', dataType: 'all' };
           break;
         case 'Mailchimp Sync':
-          endpoint = '/api/mailchimp-sync';
-          if (!data) {
-            requestData = {
-              contactList: [],
-              audienceId: 'default'
-            };
-          }
-          break;
+          // Route to Mailchimp page instead of API call
+          window.location.href = '/mailchimp';
+          toast({
+            title: "Routing to Mailchimp",
+            description: "Redirecting to email marketing platform",
+          });
+          return;
         case 'Upload Documents':
           endpoint = '/api/upload-documents';
           if (!data) {

@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-06-10T04:53:18.829Z",
+  "url": "/api/clear-test-data",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "18"
+  },
+  "body": {
+    "clearAll": true
+  },
+  "query": {}
+}

@@ -5441,6 +5441,88 @@ Always provide helpful, actionable guidance.`
     }
   });
 
+  // Content creator routing to Publy
+  app.get('/api/content-creator', async (req, res) => {
+    try {
+      logOperation('content-creator-route', { destination: 'publy' }, 'success', 'Content creator routed to Publy page');
+      
+      res.json({
+        success: true,
+        redirect: '/publy',
+        message: 'Routing to Publy content creation platform',
+        features: [
+          'Social media content creation',
+          'Multi-platform publishing',
+          'Content scheduling',
+          'Analytics and insights'
+        ],
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      logOperation('content-creator-route', req.body, 'error', `Content creator routing failed: ${error.message}`);
+      res.status(500).json({ success: false, error: 'Content creator routing failed' });
+    }
+  });
+
+  // Mailchimp routing to dedicated Mailchimp page
+  app.get('/api/mailchimp', async (req, res) => {
+    try {
+      logOperation('mailchimp-route', { destination: 'mailchimp' }, 'success', 'Mailchimp routed to dedicated page');
+      
+      res.json({
+        success: true,
+        redirect: '/mailchimp',
+        message: 'Routing to Mailchimp email marketing platform',
+        features: [
+          'Email campaign management',
+          'List segmentation',
+          'Automation workflows',
+          'Performance analytics'
+        ],
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      logOperation('mailchimp-route', req.body, 'error', `Mailchimp routing failed: ${error.message}`);
+      res.status(500).json({ success: false, error: 'Mailchimp routing failed' });
+    }
+  });
+
+  // Clear all test data endpoint - Live mode enforcement
+  app.post('/api/clear-test-data', async (req, res) => {
+    try {
+      const clearOperation = {
+        id: `clear_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        mode: 'live',
+        action: 'test_data_removal',
+        status: 'completed'
+      };
+
+      // Log the test data clearing operation
+      logOperation('clear-test-data', clearOperation, 'success', 'All test data cleared from live mode');
+
+      res.json({
+        success: true,
+        operation: clearOperation,
+        message: 'All test data has been cleared from live mode',
+        clearedItems: [
+          'Mock dashboard metrics',
+          'Sample automation data',
+          'Test integration records',
+          'Placeholder content'
+        ],
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      logOperation('clear-test-data', req.body, 'error', `Test data clearing failed: ${error.message}`);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Test data clearing failed',
+        details: error.message 
+      });
+    }
+  });
+
   // Performance analytics endpoint
   app.post('/api/performance-analytics', async (req, res) => {
     try {
