@@ -1787,7 +1787,7 @@ export default function CommandCenter() {
                     onClick={async () => {
                       try {
                         console.log('New Booking Sync button clicked');
-                        const response = await fetch('/api/automation/new-booking-sync', {
+                        const response = await fetch('/api/new-booking-sync', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({
@@ -1816,7 +1816,7 @@ export default function CommandCenter() {
                     onClick={async () => {
                       try {
                         console.log('New Support Ticket button clicked');
-                        const response = await fetch('/api/automation/new-support-ticket', {
+                        const response = await fetch('/api/new-support-ticket', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({
@@ -1844,7 +1844,7 @@ export default function CommandCenter() {
                     onClick={async () => {
                       try {
                         console.log('Manual Follow-up button clicked');
-                        const response = await fetch('/api/automation/manual-followup', {
+                        const response = await fetch('/api/manual-follow-up', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({
@@ -1871,7 +1871,7 @@ export default function CommandCenter() {
                     onClick={async () => {
                       try {
                         console.log('Sales Orders button clicked');
-                        const response = await fetch('/api/automation/sales-orders', {
+                        const response = await fetch('/api/sales-orders', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({
@@ -1901,7 +1901,7 @@ export default function CommandCenter() {
                     onClick={async () => {
                       try {
                         console.log('Send SMS button clicked');
-                        const response = await fetch('/api/automation/send-sms', {
+                        const response = await fetch('/api/send-sms', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({
@@ -1937,10 +1937,14 @@ export default function CommandCenter() {
                     onClick={async () => {
                       try {
                         console.log('Start Pipeline Calls button clicked');
-                        const response = await fetch('/api/voicebot/start-pipeline', {
+                        const response = await fetch('/api/start-pipeline-calls', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ action: 'start_pipeline_calls' })
+                          body: JSON.stringify({ 
+                            phoneNumbers: ['+1234567890', '+0987654321'],
+                            script: 'YoBot automated call script for pipeline testing',
+                            voiceId: 'professional'
+                          })
                         });
                         const result = await response.json();
                         console.log('Pipeline calls started:', result);
