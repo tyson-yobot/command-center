@@ -2079,11 +2079,39 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => window.location.href = '/mailchimp'}
+                    onClick={async () => {
+                      try {
+                        console.log('Mailchimp Sync button clicked');
+                        const response = await fetch('/api/mailchimp/sync', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            action: 'sync_contacts',
+                            source: 'command_center'
+                          })
+                        });
+                        const result = await response.json();
+                        console.log('Mailchimp sync result:', result);
+                        alert(result.success ? `Mailchimp sync completed: ${result.contactsSynced} contacts` : 'Mailchimp sync failed');
+                      } catch (error) {
+                        console.error('Mailchimp sync error:', error);
+                        alert('Mailchimp sync failed');
+                      }
+                    }}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
                   >
                     <span className="text-xl mr-3">📧</span>
-                    <span>Mailchimp</span>
+                    <span>Mailchimp Sync</span>
+                  </Button>
+
+                  <Button
+                    onClick={() => {
+                      document.getElementById('file-upload')?.click();
+                    }}
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                  >
+                    <Upload className="w-5 h-5 mr-3" />
+                    <span>Upload Documents</span>
                   </Button>
 
                 </div>
@@ -2092,6 +2120,47 @@ export default function CommandCenter() {
 
 
           </div>
+        </div>
+
+        {/* Hidden File Upload Input */}
+        <input
+          id="file-upload"
+          type="file"
+          multiple
+          style={{ display: 'none' }}
+          accept=".pdf,.doc,.docx,.txt,.csv,.xlsx,.ppt,.pptx"
+          onChange={handleFileUpload}
+        />
+
+        {/* Top Right Control Buttons */}
+        <div className="fixed top-4 right-4 z-40 flex gap-3">
+          <Button
+            onClick={async () => {
+              if (window.confirm('This will permanently delete ALL test data. Are you sure?')) {
+                try {
+                  const response = await fetch('/api/test-data/clear', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                  });
+                  const result = await response.json();
+                  alert(result.success ? `Test data cleared: ${result.tablesWiped} tables wiped` : 'Clear test data failed');
+                } catch (error) {
+                  console.error('Clear test data error:', error);
+                  alert('Clear test data failed');
+                }
+              }
+            }}
+            className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-4 py-2"
+          >
+            Clear Test Data
+          </Button>
+          
+          <Button
+            onClick={() => setShowEscalation(true)}
+            className="bg-red-500 hover:bg-red-600 text-white font-bold px-4 py-2"
+          >
+            Critical Escalation
+          </Button>
         </div>
 
         {/* Key Performance Metrics */}
