@@ -140,22 +140,20 @@ export default function CommandCenter() {
   // System mode toggle function
   const toggleSystemMode = async () => {
     try {
-      const newMode = currentSystemMode === 'live' ? 'test' : 'live';
-      
-      const response = await apiRequest('POST', '/api/system-mode', {
-        mode: newMode
+      const response = await apiRequest('POST', '/api/system-mode-toggle', {
+        userId: 'command-center-user'
       });
       
-      if (response.success) {
-        setCurrentSystemMode(response.systemMode); // Use server response for accurate state
+      if (response.success && response.modeChange) {
+        setCurrentSystemMode(response.modeChange.newMode);
         toast({
           title: "System Mode Changed",
-          description: `Switched to ${response.systemMode} mode. ${response.systemMode === 'live' ? 'Production data only.' : 'Test data enabled.'}`,
+          description: `Switched to ${response.modeChange.newMode} mode. ${response.modeChange.newMode === 'live' ? 'Production data active.' : 'Test mode - safe operations only.'}`,
         });
-        // Refresh to ensure all components update with new mode
-        setTimeout(() => window.location.reload(), 500);
+        console.log(`Mode changed: ${response.modeChange.previousMode} → ${response.modeChange.newMode}`);
       }
     } catch (error) {
+      console.error('Toggle failed:', error);
       toast({
         title: "Error",
         description: "Failed to toggle system mode",
@@ -1861,11 +1859,10 @@ export default function CommandCenter() {
           }
           break;
         case 'Content Creator':
-          // Route to Publy page instead of API call
-          window.location.href = '/publy';
+          setShowContentCreator(true);
           toast({
-            title: "Routing to Publy",
-            description: "Redirecting to content creation platform",
+            title: "Content Creator",
+            description: "Opening AI content generation dashboard",
           });
           return;
         case 'Export Data':
@@ -1873,11 +1870,10 @@ export default function CommandCenter() {
           requestData = { format: 'csv', dataType: 'all' };
           break;
         case 'Mailchimp Sync':
-          // Route to Mailchimp page instead of API call
-          window.location.href = '/mailchimp';
+          setShowMailchimpSync(true);
           toast({
-            title: "Routing to Mailchimp",
-            description: "Redirecting to email marketing platform",
+            title: "Mailchimp Sync",
+            description: "Opening email marketing sync dashboard",
           });
           return;
         case 'Upload Documents':
