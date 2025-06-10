@@ -35,7 +35,7 @@ class IntegrationTestLogger {
         },
         body: JSON.stringify({
           fields: {
-            '🔌 Integration Name': testData.integrationName,
+            '🔧 Integration Name': testData.integrationName,
             '✅ Pass/Fail': PASS_FAIL_OPTIONS[testData.passFail],
             '🧠 Notes / Debug': testData.notes,
             '🗓️ Test Date': testData.testDate,
@@ -55,7 +55,7 @@ class IntegrationTestLogger {
         console.error('Response status:', response.status);
         console.error('Request body:', JSON.stringify({
           fields: {
-            '🔌 Integration Name': testData.integrationName,
+            '🔧 Integration Name': testData.integrationName,
             '✅ Pass/Fail': PASS_FAIL_OPTIONS[testData.passFail],
             '🧠 Notes / Debug': testData.notes,
             '🗓️ Test Date': testData.testDate,
