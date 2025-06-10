@@ -1,9 +1,12 @@
 import type { Express } from "express";
 
+// Import system mode from main routes
+let systemMode: 'test' | 'live' = 'live';
+
 interface LogEntry {
   timestamp: string;
   operation: string;
-  systemMode: 'live';
+  systemMode: 'test' | 'live';
   data: any;
   result: 'success' | 'error' | 'blocked';
   message: string;
@@ -13,16 +16,59 @@ function logOperation(operation: string, data: any, result: 'success' | 'error' 
   const logEntry: LogEntry = {
     timestamp: new Date().toISOString(),
     operation,
-    systemMode: 'live',
-    data,
+    systemMode,
+    data: systemMode === 'live' ? data : '[TEST MODE - DATA MASKED]',
     result,
     message
   };
   
-  console.log(`[LIVE] ${operation}: ${message}`, logEntry);
+  console.log(`[${systemMode.toUpperCase()}] ${operation}: ${message}`, logEntry);
 }
 
-// QA Logger for Airtable Integration Test Log
+// System mode gate - enforces proper data isolation
+function enforceSystemModeGate(operation: string, isProductionWrite: boolean = true) {
+  if (systemMode === 'test' && isProductionWrite) {
+    console.log(`🚫 Test Mode - Blocking production operation: ${operation}`);
+    logOperation(`test-mode-block-${operation}`, {}, 'blocked', `Production operation blocked in test mode: ${operation}`);
+    return false;
+  }
+  
+  if (systemMode === 'live') {
+    console.log(`✅ Live Mode - Executing production operation: ${operation}`);
+    logOperation(`live-mode-execute-${operation}`, {}, 'success', `Production operation executed: ${operation}`);
+    return true;
+  }
+  
+  console.log(`✅ Test Mode - Allowing test operation: ${operation}`);
+  logOperation(`test-mode-execute-${operation}`, {}, 'success', `Test operation executed: ${operation}`);
+  return true;
+}
+
+// Data pollution blocking - reject test data in live mode
+function isTestData(data: any): boolean {
+  if (typeof data === 'object' && data !== null) {
+    const email = data.email || data.clientEmail || '';
+    const jobId = data.jobId || data.id || data.bookingId || '';
+    const clientName = data.clientName || data.name || '';
+    
+    // Block test patterns
+    if (email.toLowerCase().includes('test@') || 
+        email.toLowerCase().includes('@test') ||
+        jobId.toString().toUpperCase().includes('TEST') ||
+        clientName.toLowerCase().includes('test')) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// Update system mode from main routes
+export function updateSystemMode(mode: 'test' | 'live') {
+  systemMode = mode;
+  console.log(`System mode updated to: ${mode}`);
+}
+
+// QA Logger for Airtable Integration Test Log with System Mode Control
 async function logToAirtableQA(testData: {
   integrationName: string;
   passFail: string;
@@ -35,6 +81,20 @@ async function logToAirtableQA(testData: {
   scenarioLink?: string;
 }) {
   try {
+    // Check for test data pollution in live mode
+    if (systemMode === 'live' && isTestData(testData)) {
+      console.log('🚫 Data Pollution Blocked - Test data rejected in live mode:', testData.integrationName);
+      logOperation('data-pollution-block', testData, 'blocked', 'Test data blocked in live mode');
+      return;
+    }
+
+    // Block production Airtable writes in test mode
+    if (!enforceSystemModeGate(`airtable-qa-log-${testData.integrationName}`, true)) {
+      console.log('🧪 Test Mode - Airtable write blocked, using local logging only');
+      return;
+    }
+
+    // Production Airtable logging (only in live mode)
     await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU", {
       method: "POST",
       headers: {
@@ -46,20 +106,24 @@ async function logToAirtableQA(testData: {
           fields: {
             "Integration Name": testData.integrationName,
             "✅ Pass/Fail": testData.passFail,
-            "📝 Notes / Debug": testData.notes,
+            "📝 Notes / Debug": `[${systemMode.toUpperCase()}] ${testData.notes}`,
             "📅 Test Date": new Date().toISOString(),
             "👤 QA Owner": testData.qaOwner,
             "📤 Output Data Populated?": testData.outputDataPopulated,
             "📁 Record Created?": testData.recordCreated,
             "🔁 Retry Attempted?": testData.retryAttempted,
             "⚙️ Module Type": testData.moduleType,
-            "🔗 Related Scenario Link": testData.scenarioLink || ""
+            "🔗 Related Scenario Link": testData.scenarioLink || "",
+            "System Mode": systemMode
           }
         }]
       })
     });
+
+    logOperation('airtable-qa-log', testData, 'success', `QA log written to Airtable in ${systemMode} mode`);
   } catch (error) {
     console.log('Airtable QA logging failed, using fallback logging');
+    logOperation('airtable-qa-log', testData, 'error', `Airtable logging failed: ${error.message}`);
   }
 }
 

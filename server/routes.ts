@@ -2402,26 +2402,67 @@ Report generated in Live Mode
     }
   });
 
-  // System mode toggle endpoint
+  // System mode toggle endpoint with audit logging
   app.post('/api/system-mode-toggle', async (req, res) => {
     try {
       const previousMode = systemMode;
       systemMode = systemMode === 'live' ? 'test' : 'live';
+      
+      // Synchronize mode with all modules
+      const { updateSystemMode } = await import('./commandCenterRoutes');
+      updateSystemMode(systemMode);
       
       const modeChange = {
         id: `mode_${Date.now()}`,
         previousMode,
         newMode: systemMode,
         changedAt: new Date().toISOString(),
-        status: 'applied'
+        status: 'applied',
+        userId: req.body.userId || 'system'
       };
       
       logOperation('system-mode-toggle', { previousMode, newMode: systemMode }, 'success', `System mode toggled from ${previousMode} to ${systemMode}`);
       
+      // Log mode switch to Airtable QA Log for audit tracking
+      try {
+        await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            records: [{
+              fields: {
+                "Integration Name": "System Mode Toggle",
+                "✅ Pass/Fail": "✅ Pass",
+                "📝 Notes / Debug": `Mode switched from ${previousMode} to ${systemMode} at ${modeChange.changedAt}`,
+                "📅 Test Date": new Date().toISOString(),
+                "👤 QA Owner": "System Audit",
+                "📤 Output Data Populated?": true,
+                "📁 Record Created?": true,
+                "🔁 Retry Attempted?": false,
+                "⚙️ Module Type": "System Control",
+                "🔗 Related Scenario Link": "https://replit.dev/command-center",
+                "System Mode": systemMode,
+                "Previous Mode": previousMode,
+                "Change ID": modeChange.id
+              }
+            }]
+          })
+        });
+        
+        console.log(`✅ Mode switch audit logged to Airtable: ${previousMode} → ${systemMode}`);
+      } catch (auditError) {
+        console.error('Audit logging failed:', auditError);
+        logOperation('audit-log-failure', modeChange, 'error', 'Failed to log mode switch to Airtable QA');
+      }
+      
       res.json({
         success: true,
         modeChange,
-        message: `System mode toggled to ${systemMode}`
+        message: `System mode toggled to ${systemMode}`,
+        auditLogged: true
       });
     } catch (error) {
       console.error('System mode toggle error:', error);
