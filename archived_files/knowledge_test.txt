@@ -1,5 +1,0 @@
-YoBot Enterprise Automation Platform - Knowledge Base Document
-This document contains critical information about automation workflows, client management, and system operations.
-Key topics: lead generation, CRM integration, Airtable synchronization, voice commands, webhook processing.
-Automation functions include: Apollo scraping, PhantomBuster integration, Slack notifications, and content generation.
-System supports both live and test modes with zero data contamination protocols.
