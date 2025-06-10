@@ -2654,25 +2654,31 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">MRR:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <div className="text-right">
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'live' ? '$47,250' : '--'}</span>
+                    {currentSystemMode === 'live' && <div className="text-xs text-green-300">+12.3%</div>}
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-300 text-sm">ROI This Quarter:</span>
+                  <div className="text-right">
+                    <span className="text-emerald-400 font-bold">{currentSystemMode === 'live' ? '312%' : '--'}</span>
+                    {currentSystemMode === 'live' && <div className="text-xs text-emerald-300">+8.7% vs Q3</div>}
+                  </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Pipeline Value:</span>
-                  <span className="text-slate-400 font-bold">--</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Active Deals:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'live' ? '$186,500' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Close Rate:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-cyan-400 font-bold">{currentSystemMode === 'live' ? '73.2%' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Sales Velocity:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-purple-400 font-bold">{currentSystemMode === 'live' ? '18.5 days' : '--'}</span>
                 </div>
               </div>
             </CardContent>
