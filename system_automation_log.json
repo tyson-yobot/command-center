@@ -1,135 +1,17 @@
-{
-  "lastUpdated": "2025-06-10T12:11:01.291Z",
-  "totalTests": 9,
-  "passCount": 8,
-  "failCount": 1,
-  "testLogs": [
-    {
-      "integrationName": "Local Test Logger System",
-      "passFail": "PASS",
-      "notes": "Local test logging system successfully initialized and ready for comprehensive test tracking",
-      "testDate": "2025-06-10T11:58:21+00:00",
-      "qaOwner": "YoBot System",
-      "outputDataPopulated": true,
-      "recordCreated": true,
-      "retryAttempted": false,
-      "moduleType": "System Infrastructure",
-      "relatedScenario": "test-logging-system-initialization",
-      "id": "test_1749556702306_vq7wp2b2c",
-      "timestamp": "2025-06-10T11:58:22.306Z"
-    },
-    {
-      "integrationName": "Sales Order Processing System",
-      "passFail": "PASS",
-      "notes": "Sales order automation successfully processed $5,290 test order with Airtable logging and CRM sync",
-      "testDate": "2025-06-10T11:58:33+00:00",
-      "qaOwner": "YoBot System",
-      "outputDataPopulated": true,
-      "recordCreated": true,
-      "retryAttempted": false,
-      "moduleType": "Sales Automation",
-      "relatedScenario": "sales-order-processing-test",
-      "id": "test_1749556713722_smtvsg7le",
-      "timestamp": "2025-06-10T11:58:33.722Z"
-    },
-    {
-      "integrationName": "Duplicate Record Detection (Function 204)",
-      "passFail": "PASS",
-      "notes": "Duplicate detection algorithm successfully identified and flagged potential duplicate records",
-      "testDate": "2025-06-10T11:58:44+00:00",
-      "qaOwner": "YoBot System",
-      "outputDataPopulated": true,
-      "recordCreated": true,
-      "retryAttempted": false,
-      "moduleType": "Lead Engine",
-      "relatedScenario": "duplicate-detection-validation",
-      "id": "test_1749556724728_ik8kijvta",
-      "timestamp": "2025-06-10T11:58:44.728Z"
-    },
-    {
-      "integrationName": "Automation Function 204 - Duplicate Detection",
-      "passFail": "PASS",
-      "notes": "Function 204 executed successfully and returned proper response format",
-      "testDate": "2025-06-10T11:59:11+00:00",
-      "qaOwner": "YoBot System",
-      "outputDataPopulated": true,
-      "recordCreated": true,
-      "retryAttempted": false,
-      "moduleType": "Lead Engine",
-      "relatedScenario": "batch-21-function-validation",
-      "id": "test_1749556751183_86ziov3wa",
-      "timestamp": "2025-06-10T11:59:11.183Z"
-    },
-    {
-      "integrationName": "Airtable Integration Test Logger",
-      "passFail": "FAIL",
-      "notes": "Airtable API permissions error - table access denied. Using local logger as primary until resolved",
-      "testDate": "2025-06-10T11:59:52+00:00",
-      "qaOwner": "YoBot System",
-      "outputDataPopulated": false,
-      "recordCreated": false,
-      "retryAttempted": false,
-      "moduleType": "System Infrastructure",
-      "relatedScenario": "airtable-permissions-issue",
-      "errorDetails": "INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND",
-      "id": "test_1749556792318_225n0e3l5",
-      "timestamp": "2025-06-10T11:59:52.318Z"
-    },
-    {
-      "integrationName": "New Lead Notification (Function 157)",
-      "passFail": "PASS",
-      "notes": "Lead notification system successfully triggered for new lead processing",
-      "testDate": "2025-06-10T12:00:02+00:00",
-      "qaOwner": "YoBot System",
-      "outputDataPopulated": true,
-      "recordCreated": true,
-      "retryAttempted": false,
-      "moduleType": "Lead Engine",
-      "relatedScenario": "lead-notification-validation",
-      "id": "test_1749556802944_jola7xt2y",
-      "timestamp": "2025-06-10T12:00:02.944Z"
-    },
-    {
-      "integrationName": "VoiceBot Escalation Detection (Function 151)",
-      "passFail": "PASS",
-      "notes": "Voice escalation detection successfully identified customer frustration patterns",
-      "testDate": "2025-06-10T12:00:13+00:00",
-      "qaOwner": "YoBot System",
-      "outputDataPopulated": true,
-      "recordCreated": true,
-      "retryAttempted": false,
-      "moduleType": "Voice Communication",
-      "relatedScenario": "voice-escalation-validation",
-      "id": "test_1749556813876_y8qimjzr2",
-      "timestamp": "2025-06-10T12:00:13.876Z"
-    },
-    {
-      "integrationName": "Local Test Logger Verification",
-      "passFail": "PASS",
-      "notes": "Confirming local test logging system is operational and synchronized with Airtable integration",
-      "testDate": "2025-06-10T12:05:27+00:00",
-      "qaOwner": "YoBot System",
-      "outputDataPopulated": true,
-      "recordCreated": true,
-      "retryAttempted": false,
-      "moduleType": "System Infrastructure",
-      "relatedScenario": "dual-logging-verification",
-      "id": "test_1749557127793_qfrjnm8nk",
-      "timestamp": "2025-06-10T12:05:27.793Z"
-    },
-    {
-      "integrationName": "System Test Validation",
-      "passFail": "PASS",
-      "notes": "Verifying complete system operation with 1040 automation functions active",
-      "testDate": "2025-06-10T12:11:01+00:00",
-      "qaOwner": "YoBot System",
-      "outputDataPopulated": true,
-      "recordCreated": true,
-      "retryAttempted": false,
-      "moduleType": "Complete System",
-      "relatedScenario": "full-system-validation",
-      "id": "test_1749557461291_wato4mu7z",
-      "timestamp": "2025-06-10T12:11:01.291Z"
+[
+  {
+    "timestamp": "2025-06-10T14:01:40.986Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-10T14:01:40.529Z",
+      "automationStatus": "running"
     }
-  ]
-}
+  }
+]
