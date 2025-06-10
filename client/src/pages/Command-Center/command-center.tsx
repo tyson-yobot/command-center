@@ -4711,6 +4711,60 @@ export default function CommandCenter() {
 
 
 
+      <KnowledgeViewerModal
+        isOpen={showKnowledgeViewer}
+        onClose={() => setShowKnowledgeViewer(false)}
+        knowledgeItems={knowledgeItems}
+        selectedItems={selectedKnowledgeItems}
+        onItemSelect={(id) => {
+          setSelectedKnowledgeItems(prev => 
+            prev.includes(id) 
+              ? prev.filter(itemId => itemId !== id)
+              : [...prev, id]
+          );
+        }}
+        onDeleteSelected={async () => {
+          if (selectedKnowledgeItems.length === 0) {
+            setToast({
+              title: "No Selection",
+              description: "Please select items to delete",
+              variant: "destructive"
+            });
+            return;
+          }
+          
+          if (confirm(`Delete ${selectedKnowledgeItems.length} selected items?`)) {
+            try {
+              const response = await fetch('/api/knowledge/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ids: selectedKnowledgeItems })
+              });
+              
+              if (response.ok) {
+                setKnowledgeItems(prev => prev.filter(item => !selectedKnowledgeItems.includes(item.id)));
+                setSelectedKnowledgeItems([]);
+                setToast({
+                  title: "Items Deleted",
+                  description: `Removed ${selectedKnowledgeItems.length} items from knowledge base`,
+                });
+              } else {
+                setToast({
+                  title: "Delete Failed",
+                  description: "Unable to delete selected items",
+                  variant: "destructive"
+                });
+              }
+            } catch (error) {
+              setToast({
+                title: "Delete Error",
+                description: "Network error while deleting items",
+                variant: "destructive"
+              });
+            }
+          }
+        }}
+      />
     </div>
   );
 }

@@ -1712,6 +1712,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Bulk knowledge items deletion endpoint
+  app.post('/api/knowledge/delete', async (req, res) => {
+    try {
+      const { ids } = req.body;
+      
+      if (!Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid request: ids array is required'
+        });
+      }
+
+      let deletedDocuments = 0;
+      let deletedMemories = 0;
+      const deletedItems = [];
+
+      // Delete documents
+      for (const id of ids) {
+        const docIndex = documentStore.findIndex(doc => (doc.documentId || doc.id) === id);
+        if (docIndex !== -1) {
+          const removedDoc = documentStore.splice(docIndex, 1)[0];
+          deletedDocuments++;
+          deletedItems.push({
+            id,
+            type: 'document',
+            name: removedDoc.filename || removedDoc.originalname
+          });
+        }
+      }
+
+      // Delete memories
+      for (const id of ids) {
+        const memIndex = memoryStore.findIndex(mem => mem.id === id);
+        if (memIndex !== -1) {
+          const removedMem = memoryStore.splice(memIndex, 1)[0];
+          deletedMemories++;
+          deletedItems.push({
+            id,
+            type: 'memory',
+            name: `Memory - ${removedMem.category}`
+          });
+        }
+      }
+
+      logOperation('knowledge-bulk-delete', { 
+        requestedIds: ids.length,
+        deletedDocuments,
+        deletedMemories 
+      }, 'success', `Bulk deletion completed: ${deletedItems.length} items removed`);
+
+      res.json({
+        success: true,
+        message: `Successfully deleted ${deletedItems.length} items`,
+        deletedItems,
+        deletedDocuments,
+        deletedMemories,
+        notFound: ids.length - deletedItems.length
+      });
+    } catch (error) {
+      console.error('Bulk knowledge deletion error:', error);
+      res.status(500).json({ success: false, error: 'Failed to delete knowledge items' });
+    }
+  });
+
   // Voice recordings list endpoint
   app.get('/api/voice/recordings', async (req, res) => {
     try {

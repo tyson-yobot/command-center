@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T14:30:00.594Z",
-    "functionId": 203,
-    "functionName": "Integration Summary to Slack",
-    "batch": 21,
-    "category": "Communication",
-    "status": "success",
-    "duration": 420,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T14:35:00.084Z",
     "functionId": 204,
     "functionName": "Duplicate Record Detection",
@@ -11332,6 +11321,21 @@
       "failedExecutions": 0,
       "systemUptime": 0,
       "lastHealthCheck": "2025-06-10T18:42:53.180Z",
+      "automationStatus": "running"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T18:44:05.625Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "System automation started",
+    "metrics": {
+      "totalFunctions": 40,
+      "activeFunctions": 40,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-10T18:44:05.142Z",
       "automationStatus": "running"
     }
   }
