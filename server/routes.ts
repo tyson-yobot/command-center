@@ -147,6 +147,55 @@ const dealDataStore: DealData[] = [];
 const followUpDataStore: FollowUpData[] = [];
 const processingDataStore: ProcessingData[] = [];
 
+// Knowledge management stores
+let documentStore: any[] = [
+  {
+    id: 'doc_001',
+    documentId: 'doc_001',
+    filename: 'test-knowledge.txt',
+    originalname: 'test-knowledge.txt',
+    size: 1024,
+    mimetype: 'text/plain',
+    uploadTime: new Date().toISOString(),
+    category: 'general',
+    status: 'processed',
+    extractedText: 'This is sample knowledge content for testing the RAG system. It contains information about automation and AI integration.',
+    keyTerms: ['automation', 'AI', 'integration', 'testing'],
+    wordCount: 20
+  },
+  {
+    id: 'doc_002',
+    documentId: 'doc_002',
+    filename: 'YoBot_Documentation.pdf',
+    originalname: 'YoBot_Documentation.pdf',
+    size: 2048,
+    mimetype: 'application/pdf',
+    uploadTime: new Date(Date.now() - 3600000).toISOString(),
+    category: 'documentation',
+    status: 'processed',
+    extractedText: 'YoBot is an advanced automation platform that provides AI-powered solutions for business processes.',
+    keyTerms: ['YoBot', 'automation', 'platform', 'business'],
+    wordCount: 15
+  }
+];
+
+const memoryStore: any[] = [
+  {
+    id: 'mem_001',
+    content: 'System configured for live mode operation with Airtable integration active.',
+    category: 'system-config',
+    timestamp: new Date().toISOString(),
+    wordCount: 10
+  },
+  {
+    id: 'mem_002',
+    content: 'ElevenLabs voice synthesis successfully tested with 1500ms response time.',
+    category: 'voice-system',
+    timestamp: new Date(Date.now() - 1800000).toISOString(),
+    wordCount: 10
+  }
+];
+
 // Comprehensive logging system for ALL operations - supports both modes
 interface LogEntry {
   timestamp: string;
@@ -353,6 +402,9 @@ async function wipeTestData() {
     global.testData = {};
     global.qaResults = [];
     global.testMetrics = {};
+    
+    // Clear document store (reference the const declaration)
+    documentStore.length = 0;
 
     console.log(`✅ COMPLETE DATA WIPE: ${totalRecordsDeleted} records deleted from ${wipedTables.length} tables`);
     return { 
@@ -387,7 +439,6 @@ let apolloResults: any[] = [];
 let phantomResults: any[] = [];
 let apifyResults: any[] = [];
 let processingTasks: any[] = [];
-let documentStore: any[] = [];
 let knowledgeStore: any[] = [];
 let voiceBotMetrics = { activeCalls: 0, totalCalls: 0, avgDuration: 0 };
 let salesOrderData: any[] = [];
