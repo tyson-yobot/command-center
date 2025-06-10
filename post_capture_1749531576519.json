@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-06-10T04:59:36.519Z",
+  "url": "/api/generate-pdf-report",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "51"
+  },
+  "body": {
+    "reportType": "knowledge",
+    "includeMetrics": true
+  },
+  "query": {}
+}
