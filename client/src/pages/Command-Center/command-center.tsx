@@ -2823,29 +2823,29 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Percentage of leads that become paying customers">Close Rate</span>
-                    <span className="text-purple-400 font-bold">24%</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: '24%' }}></div>
+                    <div className="bg-slate-600 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Return on investment from automation">ROI</span>
-                    <span className="text-green-400 font-bold">312%</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '100%' }}></div>
+                    <div className="bg-slate-600 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
                   <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-green-400 font-bold">$2,847</div>
-                    <Badge className="bg-green-600 text-white">+18%</Badge>
+                    <div className="text-slate-400 font-bold">--</div>
+                    <Badge className="bg-slate-600 text-slate-400">--</Badge>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '94%' }}></div>
+                    <div className="bg-slate-600 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
               </div>
@@ -2875,8 +2875,8 @@ export default function CommandCenter() {
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-green-400 font-bold">--</span>
-                      <Badge className="bg-green-600 text-white text-xs">Improving</Badge>
+                      <span className="text-slate-400 font-bold">--</span>
+                      <Badge className="bg-slate-600 text-slate-400 text-xs">--</Badge>
                     </div>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">

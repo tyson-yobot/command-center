@@ -1165,22 +1165,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/call-monitoring/details', async (req, res) => {
     try {
       const callDetails = {
-        activeCalls: [
-          { id: 'call_001', client: 'TechCorp Solutions', duration: '3m 15s', status: 'ongoing' },
-          { id: 'call_002', client: 'Global Enterprises', duration: '1m 42s', status: 'ongoing' },
-          { id: 'call_003', client: 'StartupX', duration: '5m 30s', status: 'ongoing' }
-        ],
+        activeCalls: [],
         todayStats: {
-          totalCalls: 47,
-          averageDuration: '3m 42s',
-          successRate: '94%',
-          conversionRate: '18%'
+          totalCalls: 0,
+          averageDuration: '0m 0s',
+          successRate: '0%',
+          conversionRate: '0%'
         },
-        recentCalls: [
-          { time: '2:45 PM', client: 'ABC Corp', outcome: 'scheduled follow-up', duration: '4m 20s' },
-          { time: '2:30 PM', client: 'XYZ Ltd', outcome: 'interested', duration: '6m 15s' },
-          { time: '2:15 PM', client: 'StartupY', outcome: 'not interested', duration: '2m 10s' }
-        ]
+        recentCalls: []
       };
 
       logOperation('call-monitoring-details', {}, 'success', 'Call monitoring details requested');
