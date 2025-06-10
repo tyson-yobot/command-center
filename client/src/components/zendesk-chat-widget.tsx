@@ -2,12 +2,43 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MessageCircle, Users, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { MessageCircle, Users, Clock, CheckCircle, AlertCircle, Plus } from 'lucide-react';
+
+interface TicketData {
+  tickets: Array<{
+    id: string;
+    subject: string;
+    status: string;
+    priority: string;
+    created: string;
+  }>;
+  total: number;
+  pending: number;
+  open: number;
+}
 
 export function ZendeskChatWidget() {
   const [isConnected, setIsConnected] = useState(true);
-  const [activeChats, setActiveChats] = useState(2);
-  const [pendingTickets, setPendingTickets] = useState(5);
+  const [ticketData, setTicketData] = useState<TicketData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTickets();
+  }, []);
+
+  const fetchTickets = async () => {
+    try {
+      const response = await fetch('/api/zendesk/tickets');
+      if (response.ok) {
+        const data = await response.json();
+        setTicketData(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch tickets:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   
   const handleOpenChat = async () => {
     try {
@@ -48,7 +79,7 @@ export function ZendeskChatWidget() {
       });
       if (response.ok) {
         console.log('Zendesk ticket created successfully');
-        setPendingTickets(prev => prev + 1);
+        await fetchTickets(); // Refresh ticket data
       }
     } catch (error) {
       console.error('Failed to create ticket:', error);
@@ -84,7 +115,7 @@ export function ZendeskChatWidget() {
             </Badge>
             <div className="flex items-center text-white text-sm">
               <Users className="w-4 h-4 mr-1" />
-              <span>{activeChats} Active Chats</span>
+              <span>{loading ? "..." : ticketData?.total || 0} Total Tickets</span>
             </div>
           </div>
           
@@ -94,7 +125,9 @@ export function ZendeskChatWidget() {
                 <Clock className="w-4 h-4 mr-1" />
                 <span>Pending</span>
               </div>
-              <div className="text-white font-semibold">{pendingTickets} tickets</div>
+              <div className="text-white font-semibold">
+                {loading ? "..." : ticketData?.pending || 0} tickets
+              </div>
             </div>
             <div className="bg-slate-800/50 rounded p-2">
               <div className="flex items-center text-green-300">

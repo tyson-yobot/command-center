@@ -101,14 +101,18 @@ export function CallMonitoringPopup() {
                 <PhoneCall className="w-4 h-4 mr-1" />
                 <span>Today</span>
               </div>
-              <div className="text-white font-semibold">47 calls</div>
+              <div className="text-white font-semibold">
+                {loading ? "..." : callDetails?.todayStats?.totalCalls || 0} calls
+              </div>
             </div>
             <div className="bg-slate-800/50 rounded p-2">
               <div className="flex items-center text-green-300">
                 <Clock className="w-4 h-4 mr-1" />
                 <span>Avg Duration</span>
               </div>
-              <div className="text-white font-semibold">3m 42s</div>
+              <div className="text-white font-semibold">
+                {loading ? "..." : callDetails?.todayStats?.averageDuration || "0m 0s"}
+              </div>
             </div>
           </div>
           
