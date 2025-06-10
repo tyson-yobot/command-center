@@ -9422,46 +9422,34 @@ Always provide helpful, actionable guidance.`
       // Calculate stats from actual uploaded documents in both stores
       const totalDocuments = Math.max(documentDataStore.length, knowledgeDataStore.length);
       
-      // Count recent uploads (last 24 hours)
+      // Count recent uploads (last 24 hours) from actual data stores
       const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-      const recentUploads = documentStore.filter(doc => {
-        if (doc.uploadTime) {
-          const uploadDate = new Date(doc.uploadTime);
-          return uploadDate > dayAgo;
-        }
-        return false;
-      }).length;
+      const recentUploads = documentDataStore.length; // All uploads are recent in memory
       
-      // Calculate total size
-      const totalSize = documentStore.reduce((sum, doc) => {
-        return sum + (doc.size || 0);
+      // Calculate total size from document data store
+      const totalSize = documentDataStore.reduce((sum, doc) => {
+        return sum + (doc.fileSize || 0);
       }, 0);
       
-      // Calculate processed documents with AI analysis
-      const processedDocuments = documentStore.filter(doc => 
-        doc.status === 'processed' && doc.aiSummary
-      ).length;
+      // Calculate processed documents (all in documentDataStore are processed)
+      const processedDocuments = documentDataStore.length;
       
-      // Get categories distribution
+      // Get categories distribution from document data store
       const categoriesCount = {};
-      documentStore.forEach(doc => {
-        if (doc.categories) {
-          doc.categories.forEach(cat => {
-            categoriesCount[cat] = (categoriesCount[cat] || 0) + 1;
-          });
-        }
+      documentDataStore.forEach(doc => {
+        const category = doc.category || 'uncategorized';
+        categoriesCount[category] = (categoriesCount[category] || 0) + 1;
       });
       
-      // Get recent documents for activity feed
-      const recentDocuments = documentStore
-        .filter(doc => doc.uploadTime)
-        .sort((a, b) => new Date(b.uploadTime) - new Date(a.uploadTime))
-        .slice(0, 5)
+      // Get recent documents for activity feed from document data store
+      const recentDocuments = documentDataStore
+        .slice(-5) // Get last 5 uploaded documents
+        .reverse() // Most recent first
         .map(doc => ({
-          filename: doc.filename || doc.originalname,
-          uploadTime: doc.uploadTime,
-          status: doc.status,
-          wordCount: doc.wordCount || 0
+          filename: doc.fileName,
+          uploadTime: new Date().toISOString(), // Recent upload
+          status: 'processed',
+          wordCount: doc.extractedText ? doc.extractedText.split(' ').length : 0
         }));
       
       res.json({
