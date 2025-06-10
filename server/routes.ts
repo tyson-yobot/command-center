@@ -66,11 +66,22 @@ function logOperation(operation: string, data: any, result: 'success' | 'error' 
   }
 }
 
-// System mode gate - live mode only
+// System mode gate - enforces proper data isolation
 function enforceSystemModeGate(operation: string, isProductionWrite: boolean = true) {
-  // Live mode only - all operations allowed
-  console.log(`✅ Live Mode - Executing production operation: ${operation}`);
-  logOperation(`live-mode-execute-${operation}`, {}, 'success', `Production operation executed: ${operation}`);
+  if (systemMode === 'test' && isProductionWrite) {
+    console.log(`🚫 Test Mode - Blocking production operation: ${operation}`);
+    logOperation(`test-mode-block-${operation}`, {}, 'blocked', `Production operation blocked in test mode: ${operation}`);
+    return false;
+  }
+  
+  if (systemMode === 'live') {
+    console.log(`✅ Live Mode - Executing production operation: ${operation}`);
+    logOperation(`live-mode-execute-${operation}`, {}, 'success', `Production operation executed: ${operation}`);
+    return true;
+  }
+  
+  console.log(`✅ Test Mode - Allowing test operation: ${operation}`);
+  logOperation(`test-mode-execute-${operation}`, {}, 'success', `Test operation executed: ${operation}`);
   return true;
 }
 
@@ -94,8 +105,11 @@ const upload = multer({
   }
 });
 
-// Function to get appropriate Airtable table - live mode only
+// Function to get appropriate Airtable table based on system mode
 function getAirtableTable(baseTable: string) {
+  if (systemMode === 'test') {
+    return `${baseTable}_TEST`;
+  }
   return baseTable;
 }
 
@@ -1499,24 +1513,25 @@ Report generated in Live Mode
   });
 
   // System mode toggle endpoint
-  app.post('/api/system-mode/toggle', async (req, res) => {
+  app.post('/api/system-mode-toggle', async (req, res) => {
     try {
-      const { mode } = req.body;
+      const previousMode = systemMode;
+      systemMode = systemMode === 'live' ? 'test' : 'live';
       
       const modeChange = {
         id: `mode_${Date.now()}`,
-        previousMode: 'live',
-        newMode: mode || 'test',
+        previousMode,
+        newMode: systemMode,
         changedAt: new Date().toISOString(),
         status: 'applied'
       };
       
-      logOperation('system-mode-toggle', req.body, 'success', `System mode changed to ${mode}`);
+      logOperation('system-mode-toggle', { previousMode, newMode: systemMode }, 'success', `System mode toggled from ${previousMode} to ${systemMode}`);
       
       res.json({
         success: true,
         modeChange,
-        message: `System mode changed to ${mode}`
+        message: `System mode toggled to ${systemMode}`
       });
     } catch (error) {
       console.error('System mode toggle error:', error);
