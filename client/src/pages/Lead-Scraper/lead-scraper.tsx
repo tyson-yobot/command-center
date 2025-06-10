@@ -139,7 +139,8 @@ export default function EnterpriseLeadScraper() {
     keywords: "",
     revenueRange: "",
     fundingStage: "",
-    lastUpdated: "30_days"
+    lastUpdated: "30_days",
+    zipCodes: ""
   });
 
   const [apifyFilters, setApifyFilters] = useState({
@@ -151,7 +152,8 @@ export default function EnterpriseLeadScraper() {
     maxListings: "1000",
     ratingThreshold: "4",
     excludeKeywords: "",
-    requestDelay: "2000"
+    requestDelay: "2000",
+    zipCodes: ""
   });
 
   const [phantombusterFilters, setPhantombusterFilters] = useState({
@@ -164,7 +166,8 @@ export default function EnterpriseLeadScraper() {
     location: "",
     companySize: "",
     dailyLimit: "100",
-    messageTemplate: ""
+    messageTemplate: "",
+    zipCodes: ""
   });
 
   const handleToolSelection = (tool: 'apollo' | 'apify' | 'phantombuster') => {
@@ -682,24 +685,79 @@ export default function EnterpriseLeadScraper() {
                         onChange={(e) => setApolloFilters(prev => ({ ...prev, location: e.target.value }))}
                       >
                         <option value="">Select Location</option>
-                        <option value="united_states">United States</option>
-                        <option value="california">California</option>
-                        <option value="new_york">New York</option>
-                        <option value="texas">Texas</option>
-                        <option value="florida">Florida</option>
-                        <option value="illinois">Illinois</option>
-                        <option value="massachusetts">Massachusetts</option>
-                        <option value="washington">Washington</option>
-                        <option value="san_francisco">San Francisco Bay Area</option>
-                        <option value="new_york_city">New York Metropolitan Area</option>
-                        <option value="los_angeles">Greater Los Angeles</option>
-                        <option value="chicago">Chicago Metropolitan</option>
-                        <option value="boston">Boston-Cambridge</option>
-                        <option value="seattle">Seattle Metropolitan</option>
-                        <option value="austin">Austin-Round Rock</option>
-                        <option value="denver">Denver-Boulder</option>
-                        <option value="atlanta">Atlanta Metropolitan</option>
+                        <optgroup label="🌎 National Regions">
+                          <option value="united_states">United States</option>
+                          <option value="midwest">Midwest</option>
+                          <option value="northeast">Northeast</option>
+                          <option value="southeast">Southeast</option>
+                          <option value="southwest">Southwest</option>
+                          <option value="pacific_northwest">Pacific Northwest</option>
+                          <option value="southern_california">Southern California</option>
+                          <option value="central_texas">Central Texas</option>
+                          <option value="gulf_coast">Gulf Coast</option>
+                          <option value="mid_atlantic">Mid-Atlantic</option>
+                        </optgroup>
+                        <optgroup label="🏙️ Major Metro Areas">
+                          <option value="new_york_city">New York Metropolitan Area</option>
+                          <option value="los_angeles">Greater Los Angeles</option>
+                          <option value="chicago">Chicago Metropolitan</option>
+                          <option value="san_francisco">San Francisco Bay Area</option>
+                          <option value="boston">Boston-Cambridge</option>
+                          <option value="seattle">Seattle Metropolitan</option>
+                          <option value="atlanta">Atlanta Metropolitan</option>
+                          <option value="denver">Denver-Boulder</option>
+                          <option value="austin">Austin-Round Rock</option>
+                          <option value="minneapolis_st_paul">Minneapolis–St. Paul</option>
+                          <option value="st_louis">St. Louis Metro</option>
+                          <option value="nashville">Nashville Metro</option>
+                          <option value="phoenix">Phoenix Metro</option>
+                          <option value="las_vegas">Las Vegas Metro</option>
+                          <option value="tampa_bay">Tampa Bay Metro</option>
+                          <option value="orlando">Orlando Metro</option>
+                          <option value="charlotte">Charlotte Metro</option>
+                          <option value="indianapolis">Indianapolis Metro</option>
+                          <option value="cincinnati">Cincinnati Metro</option>
+                          <option value="raleigh_durham">Raleigh–Durham</option>
+                          <option value="salt_lake_city">Salt Lake City</option>
+                          <option value="oklahoma_city">Oklahoma City</option>
+                          <option value="kansas_city">Kansas City Metro</option>
+                          <option value="san_antonio">San Antonio Metro</option>
+                          <option value="pittsburgh">Pittsburgh Metro</option>
+                          <option value="columbus">Columbus Metro</option>
+                        </optgroup>
+                        <optgroup label="🏛️ State-Level">
+                          <option value="california">California</option>
+                          <option value="new_york">New York</option>
+                          <option value="texas">Texas</option>
+                          <option value="florida">Florida</option>
+                          <option value="illinois">Illinois</option>
+                          <option value="massachusetts">Massachusetts</option>
+                          <option value="washington">Washington</option>
+                          <option value="colorado">Colorado</option>
+                          <option value="georgia">Georgia</option>
+                          <option value="north_carolina">North Carolina</option>
+                          <option value="virginia">Virginia</option>
+                          <option value="arizona">Arizona</option>
+                          <option value="nevada">Nevada</option>
+                          <option value="utah">Utah</option>
+                          <option value="tennessee">Tennessee</option>
+                          <option value="ohio">Ohio</option>
+                          <option value="pennsylvania">Pennsylvania</option>
+                          <option value="michigan">Michigan</option>
+                          <option value="minnesota">Minnesota</option>
+                          <option value="missouri">Missouri</option>
+                        </optgroup>
                       </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>ZIP Code Targeting (Optional)</Label>
+                      <Input
+                        placeholder="85260, 85032, 85018"
+                        value={apolloFilters.zipCodes || ''}
+                        onChange={(e) => setApolloFilters(prev => ({ ...prev, zipCodes: e.target.value }))}
+                      />
+                      <p className="text-xs text-slate-400">Enter ZIP code(s) to hyper-target local businesses. Use commas to separate multiple codes.</p>
                     </div>
 
                     <div className="space-y-3">
@@ -769,27 +827,79 @@ export default function EnterpriseLeadScraper() {
                         onChange={(e) => setApifyFilters(prev => ({ ...prev, location: e.target.value }))}
                       >
                         <option value="">Select Location</option>
-                        <option value="new_york_ny">New York, NY</option>
-                        <option value="los_angeles_ca">Los Angeles, CA</option>
-                        <option value="chicago_il">Chicago, IL</option>
-                        <option value="houston_tx">Houston, TX</option>
-                        <option value="phoenix_az">Phoenix, AZ</option>
-                        <option value="philadelphia_pa">Philadelphia, PA</option>
-                        <option value="san_antonio_tx">San Antonio, TX</option>
-                        <option value="san_diego_ca">San Diego, CA</option>
-                        <option value="dallas_tx">Dallas, TX</option>
-                        <option value="san_jose_ca">San Jose, CA</option>
-                        <option value="austin_tx">Austin, TX</option>
-                        <option value="jacksonville_fl">Jacksonville, FL</option>
-                        <option value="fort_worth_tx">Fort Worth, TX</option>
-                        <option value="columbus_oh">Columbus, OH</option>
-                        <option value="indianapolis_in">Indianapolis, IN</option>
-                        <option value="charlotte_nc">Charlotte, NC</option>
-                        <option value="seattle_wa">Seattle, WA</option>
-                        <option value="denver_co">Denver, CO</option>
-                        <option value="boston_ma">Boston, MA</option>
-                        <option value="nashville_tn">Nashville, TN</option>
+                        <optgroup label="🌎 National Regions">
+                          <option value="united_states">United States</option>
+                          <option value="midwest">Midwest</option>
+                          <option value="northeast">Northeast</option>
+                          <option value="southeast">Southeast</option>
+                          <option value="southwest">Southwest</option>
+                          <option value="pacific_northwest">Pacific Northwest</option>
+                          <option value="southern_california">Southern California</option>
+                          <option value="central_texas">Central Texas</option>
+                          <option value="gulf_coast">Gulf Coast</option>
+                          <option value="mid_atlantic">Mid-Atlantic</option>
+                        </optgroup>
+                        <optgroup label="🏙️ Major Metro Areas">
+                          <option value="new_york_city">New York Metropolitan Area</option>
+                          <option value="los_angeles">Greater Los Angeles</option>
+                          <option value="chicago">Chicago Metropolitan</option>
+                          <option value="san_francisco">San Francisco Bay Area</option>
+                          <option value="boston">Boston-Cambridge</option>
+                          <option value="seattle">Seattle Metropolitan</option>
+                          <option value="atlanta">Atlanta Metropolitan</option>
+                          <option value="denver">Denver-Boulder</option>
+                          <option value="austin">Austin-Round Rock</option>
+                          <option value="minneapolis_st_paul">Minneapolis–St. Paul</option>
+                          <option value="st_louis">St. Louis Metro</option>
+                          <option value="nashville">Nashville Metro</option>
+                          <option value="phoenix">Phoenix Metro</option>
+                          <option value="las_vegas">Las Vegas Metro</option>
+                          <option value="tampa_bay">Tampa Bay Metro</option>
+                          <option value="orlando">Orlando Metro</option>
+                          <option value="charlotte">Charlotte Metro</option>
+                          <option value="indianapolis">Indianapolis Metro</option>
+                          <option value="cincinnati">Cincinnati Metro</option>
+                          <option value="raleigh_durham">Raleigh–Durham</option>
+                          <option value="salt_lake_city">Salt Lake City</option>
+                          <option value="oklahoma_city">Oklahoma City</option>
+                          <option value="kansas_city">Kansas City Metro</option>
+                          <option value="san_antonio">San Antonio Metro</option>
+                          <option value="pittsburgh">Pittsburgh Metro</option>
+                          <option value="columbus">Columbus Metro</option>
+                        </optgroup>
+                        <optgroup label="🏛️ State-Level">
+                          <option value="california">California</option>
+                          <option value="new_york">New York</option>
+                          <option value="texas">Texas</option>
+                          <option value="florida">Florida</option>
+                          <option value="illinois">Illinois</option>
+                          <option value="massachusetts">Massachusetts</option>
+                          <option value="washington">Washington</option>
+                          <option value="colorado">Colorado</option>
+                          <option value="georgia">Georgia</option>
+                          <option value="north_carolina">North Carolina</option>
+                          <option value="virginia">Virginia</option>
+                          <option value="arizona">Arizona</option>
+                          <option value="nevada">Nevada</option>
+                          <option value="utah">Utah</option>
+                          <option value="tennessee">Tennessee</option>
+                          <option value="ohio">Ohio</option>
+                          <option value="pennsylvania">Pennsylvania</option>
+                          <option value="michigan">Michigan</option>
+                          <option value="minnesota">Minnesota</option>
+                          <option value="missouri">Missouri</option>
+                        </optgroup>
                       </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>ZIP Code Targeting (Optional)</Label>
+                      <Input
+                        placeholder="85260, 85032, 85018"
+                        value={apifyFilters.zipCodes || ''}
+                        onChange={(e) => setApifyFilters(prev => ({ ...prev, zipCodes: e.target.value }))}
+                      />
+                      <p className="text-xs text-slate-400">Enter ZIP code(s) to hyper-target local businesses. Use commas to separate multiple codes.</p>
                     </div>
 
                     <div className="space-y-3">
@@ -1223,17 +1333,79 @@ export default function EnterpriseLeadScraper() {
                         onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, location: e.target.value }))}
                       >
                         <option value="">All Locations</option>
-                        <option value="san_francisco">San Francisco Bay Area</option>
-                        <option value="new_york">New York Metropolitan</option>
-                        <option value="los_angeles">Greater Los Angeles</option>
-                        <option value="chicago">Chicago Metropolitan</option>
-                        <option value="boston">Boston-Cambridge</option>
-                        <option value="seattle">Seattle Metropolitan</option>
-                        <option value="austin">Austin-Round Rock</option>
-                        <option value="denver">Denver-Boulder</option>
-                        <option value="atlanta">Atlanta Metropolitan</option>
-                        <option value="miami">Miami-Fort Lauderdale</option>
+                        <optgroup label="🌎 National Regions">
+                          <option value="united_states">United States</option>
+                          <option value="midwest">Midwest</option>
+                          <option value="northeast">Northeast</option>
+                          <option value="southeast">Southeast</option>
+                          <option value="southwest">Southwest</option>
+                          <option value="pacific_northwest">Pacific Northwest</option>
+                          <option value="southern_california">Southern California</option>
+                          <option value="central_texas">Central Texas</option>
+                          <option value="gulf_coast">Gulf Coast</option>
+                          <option value="mid_atlantic">Mid-Atlantic</option>
+                        </optgroup>
+                        <optgroup label="🏙️ Major Metro Areas">
+                          <option value="new_york_city">New York Metropolitan Area</option>
+                          <option value="los_angeles">Greater Los Angeles</option>
+                          <option value="chicago">Chicago Metropolitan</option>
+                          <option value="san_francisco">San Francisco Bay Area</option>
+                          <option value="boston">Boston-Cambridge</option>
+                          <option value="seattle">Seattle Metropolitan</option>
+                          <option value="atlanta">Atlanta Metropolitan</option>
+                          <option value="denver">Denver-Boulder</option>
+                          <option value="austin">Austin-Round Rock</option>
+                          <option value="minneapolis_st_paul">Minneapolis–St. Paul</option>
+                          <option value="st_louis">St. Louis Metro</option>
+                          <option value="nashville">Nashville Metro</option>
+                          <option value="phoenix">Phoenix Metro</option>
+                          <option value="las_vegas">Las Vegas Metro</option>
+                          <option value="tampa_bay">Tampa Bay Metro</option>
+                          <option value="orlando">Orlando Metro</option>
+                          <option value="charlotte">Charlotte Metro</option>
+                          <option value="indianapolis">Indianapolis Metro</option>
+                          <option value="cincinnati">Cincinnati Metro</option>
+                          <option value="raleigh_durham">Raleigh–Durham</option>
+                          <option value="salt_lake_city">Salt Lake City</option>
+                          <option value="oklahoma_city">Oklahoma City</option>
+                          <option value="kansas_city">Kansas City Metro</option>
+                          <option value="san_antonio">San Antonio Metro</option>
+                          <option value="pittsburgh">Pittsburgh Metro</option>
+                          <option value="columbus">Columbus Metro</option>
+                        </optgroup>
+                        <optgroup label="🏛️ State-Level">
+                          <option value="california">California</option>
+                          <option value="new_york">New York</option>
+                          <option value="texas">Texas</option>
+                          <option value="florida">Florida</option>
+                          <option value="illinois">Illinois</option>
+                          <option value="massachusetts">Massachusetts</option>
+                          <option value="washington">Washington</option>
+                          <option value="colorado">Colorado</option>
+                          <option value="georgia">Georgia</option>
+                          <option value="north_carolina">North Carolina</option>
+                          <option value="virginia">Virginia</option>
+                          <option value="arizona">Arizona</option>
+                          <option value="nevada">Nevada</option>
+                          <option value="utah">Utah</option>
+                          <option value="tennessee">Tennessee</option>
+                          <option value="ohio">Ohio</option>
+                          <option value="pennsylvania">Pennsylvania</option>
+                          <option value="michigan">Michigan</option>
+                          <option value="minnesota">Minnesota</option>
+                          <option value="missouri">Missouri</option>
+                        </optgroup>
                       </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>ZIP Code Targeting (Optional)</Label>
+                      <Input
+                        placeholder="85260, 85032, 85018"
+                        value={phantombusterFilters.zipCodes || ''}
+                        onChange={(e) => setPhantombusterFilters(prev => ({ ...prev, zipCodes: e.target.value }))}
+                      />
+                      <p className="text-xs text-slate-400">Enter ZIP code(s) to hyper-target local businesses. Use commas to separate multiple codes.</p>
                     </div>
 
                     <div className="space-y-3">
