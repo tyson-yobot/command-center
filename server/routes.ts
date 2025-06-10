@@ -29,9 +29,10 @@ import { registerIntegrationTestRoutes } from "./integrationTestLogger";
 import { registerPublerRoutes } from "./publerIntegration";
 import { registerLocalTestLoggerRoutes, localTestLogger } from "./localTestLogger";
 import { configManager } from "./controlCenterConfig";
-import { airtableLogger } from "./airtableLogger";
+import { logToAirtable } from "./airtableLogger";
 import { automationTester } from "./automationTester";
 import { registerZendeskRoutes } from "./zendeskIntegration";
+import { registerAutomationTestEndpoint } from "./automationTestEndpoint";
 import { storage } from "./storage";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";

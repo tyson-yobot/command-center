@@ -1,27 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:00:00.739Z",
-    "functionId": 142,
-    "functionName": "Cold Start Logger",
-    "batch": 15,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 501,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-10T16:00:00.750Z",
-    "functionId": 143,
-    "functionName": "Markdown Converter",
-    "batch": 15,
-    "category": "Content",
-    "status": "success",
-    "duration": 511,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:00:00.756Z",
     "functionId": 204,
     "functionName": "Duplicate Record Detection",
@@ -11400,6 +11378,36 @@
       "failedExecutions": 0,
       "systemUptime": 2616.348355229,
       "lastHealthCheck": "2025-06-10T21:19:00.006Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T21:50:00.016Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 27.092679957,
+      "lastHealthCheck": "2025-06-10T21:50:00.015Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T22:00:00.012Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 567.08776105,
+      "lastHealthCheck": "2025-06-10T21:59:00.010Z",
       "automationStatus": "paused"
     }
   }
