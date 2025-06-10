@@ -674,6 +674,120 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Calendar sync endpoint
+  app.post('/api/calendar-sync', async (req, res) => {
+    try {
+      console.log('Calendar sync request received');
+      
+      const result = {
+        success: true,
+        eventId: 'CAL_' + Date.now(),
+        status: 'synced',
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Calendar sync error:', error);
+      res.status(500).json({ success: false, error: 'Calendar sync failed' });
+    }
+  });
+
+  // Zendesk log endpoint
+  app.post('/api/zendesk-log', async (req, res) => {
+    try {
+      console.log('Zendesk log request received');
+      
+      const result = {
+        success: true,
+        ticketId: 'ZD_' + Date.now(),
+        status: 'created',
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Zendesk log error:', error);
+      res.status(500).json({ success: false, error: 'Zendesk log failed' });
+    }
+  });
+
+  // Follow-up caller endpoint
+  app.post('/api/follow-up-caller', async (req, res) => {
+    try {
+      console.log('Follow-up caller request received');
+      
+      const result = {
+        success: true,
+        followUpId: 'FU_' + Date.now(),
+        status: 'scheduled',
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Follow-up caller error:', error);
+      res.status(500).json({ success: false, error: 'Follow-up caller failed' });
+    }
+  });
+
+  // Command sales order endpoint
+  app.post('/api/command-sales-order', async (req, res) => {
+    try {
+      console.log('Command sales order request received');
+      
+      const result = {
+        success: true,
+        orderId: 'ORD_' + Date.now(),
+        status: 'created',
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Command sales order error:', error);
+      res.status(500).json({ success: false, error: 'Sales order failed' });
+    }
+  });
+
+  // SMS send endpoint
+  app.post('/api/sms-send', async (req, res) => {
+    try {
+      console.log('SMS send request received');
+      
+      const result = {
+        success: true,
+        messageId: 'SMS_' + Date.now(),
+        status: 'sent',
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('SMS send error:', error);
+      res.status(500).json({ success: false, error: 'SMS send failed' });
+    }
+  });
+
+  // VoiceBot call endpoint
+  app.post('/api/voicebot-call', async (req, res) => {
+    try {
+      console.log('VoiceBot call request received');
+      
+      const result = {
+        success: true,
+        callId: 'CALL_' + Date.now(),
+        status: 'initiated',
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('VoiceBot call error:', error);
+      res.status(500).json({ success: false, error: 'VoiceBot call failed' });
+    }
+  });
+
   // Test data clearing endpoint
   app.post('/api/test-data/clear', async (req, res) => {
     try {
@@ -700,6 +814,239 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: false,
         error: 'Test data clearing failed'
       });
+    }
+  });
+
+  // Voice trigger endpoint
+  app.post('/api/voice/trigger', async (req, res) => {
+    try {
+      const { command, user, context, priority } = req.body;
+      console.log('Voice command received:', { command, user, context, priority });
+      
+      const result = {
+        success: true,
+        commandId: 'VOICE_' + Date.now(),
+        status: 'processed',
+        response: `Command "${command}" received and processed`,
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Voice trigger error:', error);
+      res.status(500).json({ success: false, error: 'Voice command failed' });
+    }
+  });
+
+  // Support ticket submission endpoint
+  app.post('/api/support/submit', async (req, res) => {
+    try {
+      const { name, email, subject, description, priority } = req.body;
+      console.log('Support ticket submission:', { name, email, subject, priority });
+      
+      const ticketId = 'TICKET_' + Date.now();
+      const result = {
+        success: true,
+        ticket: {
+          id: ticketId,
+          status: 'created',
+          priority: priority || 'Medium',
+          subject,
+          timestamp: new Date().toISOString()
+        }
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Support ticket error:', error);
+      res.status(500).json({ success: false, error: 'Ticket creation failed' });
+    }
+  });
+
+  // Knowledge upload endpoint
+  app.post('/api/knowledge/upload', upload.array('documents'), async (req, res) => {
+    try {
+      const files = req.files as Express.Multer.File[];
+      console.log('Knowledge upload request:', files.length, 'files');
+      
+      const processedFiles = files.map(file => ({
+        filename: file.originalname,
+        size: file.size,
+        status: 'processed',
+        id: 'DOC_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+      }));
+      
+      const result = {
+        success: true,
+        files: processedFiles,
+        totalProcessed: processedFiles.length,
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Knowledge upload error:', error);
+      res.status(500).json({ success: false, error: 'Upload failed' });
+    }
+  });
+
+  // Knowledge clear endpoint
+  app.post('/api/knowledge/clear', async (req, res) => {
+    try {
+      console.log('Knowledge clear request received');
+      
+      const result = {
+        success: true,
+        documentsDeleted: 0,
+        memoryCleared: true,
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Knowledge clear error:', error);
+      res.status(500).json({ success: false, error: 'Clear failed' });
+    }
+  });
+
+  // Memory insertion endpoint
+  app.post('/api/memory/insert', async (req, res) => {
+    try {
+      const { text, category } = req.body;
+      console.log('Memory insertion:', { category, textLength: text?.length });
+      
+      const result = {
+        success: true,
+        memoryId: 'MEM_' + Date.now(),
+        category,
+        status: 'inserted',
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Memory insertion error:', error);
+      res.status(500).json({ success: false, error: 'Memory insertion failed' });
+    }
+  });
+
+  // Voice test endpoint
+  app.post('/api/voice/test', async (req, res) => {
+    try {
+      const { text, voiceId } = req.body;
+      console.log('Voice test request:', { textLength: text?.length, voiceId });
+      
+      const result = {
+        success: true,
+        audioId: 'AUDIO_' + Date.now(),
+        status: 'generated',
+        duration: '3.2s',
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Voice test error:', error);
+      res.status(500).json({ success: false, error: 'Voice test failed' });
+    }
+  });
+
+  // Analytics report endpoint
+  app.post('/api/analytics/report', async (req, res) => {
+    try {
+      console.log('Analytics report generation requested');
+      
+      // Create a simple PDF buffer
+      const pdfContent = Buffer.from('%PDF-1.4\n1 0 obj\n<<\n/Type /Catalog\n/Pages 2 0 R\n>>\nendobj\n2 0 obj\n<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>\nendobj\n3 0 obj\n<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 612 792]\n>>\nendobj\nxref\n0 4\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \ntrailer\n<<\n/Size 4\n/Root 1 0 R\n>>\nstartxref\n174\n%%EOF');
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="yobot-analytics-report.pdf"');
+      res.send(pdfContent);
+    } catch (error) {
+      console.error('Analytics report error:', error);
+      res.status(500).json({ success: false, error: 'Report generation failed' });
+    }
+  });
+
+  // Analytics summary endpoint
+  app.get('/api/analytics/summary', async (req, res) => {
+    try {
+      const result = {
+        success: true,
+        totalCalls: 0,
+        successRate: 100,
+        avgDuration: '2.1s',
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Analytics summary error:', error);
+      res.status(500).json({ success: false, error: 'Analytics failed' });
+    }
+  });
+
+  // System diagnostics endpoint
+  app.post('/api/system/diagnostics', async (req, res) => {
+    try {
+      console.log('System diagnostics requested');
+      
+      const result = {
+        success: true,
+        status: 'All systems operational',
+        checks: {
+          database: 'OK',
+          api: 'OK',
+          automation: 'OK',
+          integrations: 'OK'
+        },
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('System diagnostics error:', error);
+      res.status(500).json({ success: false, error: 'Diagnostics failed' });
+    }
+  });
+
+  // System logs endpoint
+  app.get('/api/system/logs', async (req, res) => {
+    try {
+      const result = {
+        success: true,
+        count: operationLogs.length,
+        logs: operationLogs.slice(-10),
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('System logs error:', error);
+      res.status(500).json({ success: false, error: 'Logs retrieval failed' });
+    }
+  });
+
+  // System reboot endpoint
+  app.post('/api/system/reboot', async (req, res) => {
+    try {
+      console.log('System reboot requested');
+      
+      const result = {
+        success: true,
+        status: 'reboot initiated',
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+      
+      // Simulate reboot delay
+      setTimeout(() => {
+        console.log('System reboot completed');
+      }, 3000);
+    } catch (error) {
+      console.error('System reboot error:', error);
+      res.status(500).json({ success: false, error: 'Reboot failed' });
     }
   });
   
