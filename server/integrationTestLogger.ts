@@ -37,7 +37,16 @@ class IntegrationTestLogger {
       });
 
       if (!response.ok) {
-        console.error('Failed to log integration test:', await response.text());
+        const errorText = await response.text();
+        console.error('Failed to log integration test:', errorText);
+        console.error('Response status:', response.status);
+        console.error('Request body:', JSON.stringify({
+          records: [{
+            fields: {
+              '🔧 Integration Name': `${testData.integrationName} - ${testData.passFail} - ${testData.notes} - Module: ${testData.moduleType} - QA: ${testData.qaOwner} - Date: ${testData.testDate}`
+            }
+          }]
+        }, null, 2));
         return false;
       }
 
