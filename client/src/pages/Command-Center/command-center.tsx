@@ -4146,7 +4146,7 @@ export default function CommandCenter() {
                   ))}
                   {uploadedDocuments.length === 0 && (
                     <div className="text-slate-400 text-center py-4">
-                      Upload documents to program knowledge to view uploaded files
+                      Upload documents to program knowledge
                     </div>
                   )}
                 </div>
