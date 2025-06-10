@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:00:00.665Z",
-    "functionId": 139,
-    "functionName": "Call Digest Poster",
-    "batch": 14,
-    "category": "Communication",
-    "status": "success",
-    "duration": 433,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:00:00.671Z",
     "functionId": 145,
     "functionName": "Role Assignment by Domain",
@@ -11380,6 +11369,21 @@
       "failedExecutions": 0,
       "systemUptime": 136.170073266,
       "lastHealthCheck": "2025-06-10T20:29:00.008Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T20:40:00.011Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 276.35232024,
+      "lastHealthCheck": "2025-06-10T20:40:00.010Z",
       "automationStatus": "paused"
     }
   }
