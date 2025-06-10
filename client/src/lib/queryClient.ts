@@ -9,23 +9,18 @@ export const queryClient = new QueryClient({
   },
 });
 
-export const apiRequest = async (method: string, url: string, data?: any) => {
-  const options: RequestInit = {
-    method,
+export const apiRequest = async (url: string, options: RequestInit = {}) => {
+  const response = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
+      ...options.headers,
     },
-  };
+    ...options,
+  });
 
-  if (data && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
-    options.body = JSON.stringify(data);
-  }
-
-  const response = await fetch(url, options);
-  
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    throw new Error(`API request failed: ${response.statusText}`);
   }
-  
+
   return response.json();
 };

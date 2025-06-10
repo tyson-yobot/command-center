@@ -1951,10 +1951,23 @@ export default function CommandCenter() {
       console.log('Response data:', result);
 
       if (result.success || response.ok) {
-        toast({
-          title: "Command Executed",
-          description: `${category} completed successfully`,
-        });
+        // Special handling for Content Creator and Mailchimp
+        if (category === 'Content Creator') {
+          toast({
+            title: "Content Created Successfully",
+            description: `${result.preview?.title || 'LinkedIn content'} generated with hashtags: ${result.preview?.hashtags?.join(', ') || 'N/A'}`,
+          });
+        } else if (category === 'Mailchimp Sync') {
+          toast({
+            title: "Campaign Created Successfully", 
+            description: `${result.campaign?.subject || 'Email campaign'} sent to ${result.campaign?.audience || 'subscribers'}`,
+          });
+        } else {
+          toast({
+            title: "Command Executed",
+            description: `${category} completed successfully`,
+          });
+        }
       } else {
         toast({
           title: "Command Failed",
