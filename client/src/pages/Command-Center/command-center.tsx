@@ -2329,7 +2329,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleInitiateVoiceCall}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3 border border-green-500"
                   >
                     <span className="text-xl mr-3">📲</span>
                     <span>Create Voice Call</span>
@@ -2337,7 +2337,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleVoiceToggle}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3 border border-green-500"
                   >
                     <span className="text-xl mr-3">🎤</span>
                     <span>Voice Input</span>
@@ -2355,7 +2355,7 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={() => window.location.href = '/lead-scraper'}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
                   >
                     <span className="text-xl mr-3">🧲</span>
                     <span>Lead Scraper Tool</span>
@@ -2363,7 +2363,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleDownloadPDF}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
                   >
                     <span className="text-xl mr-3">📄</span>
                     <span>View PDF Report</span>
@@ -2401,7 +2401,7 @@ export default function CommandCenter() {
                         alert('Data export failed');
                       }
                     }}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
                   >
                     <span className="text-xl mr-3">📊</span>
                     <span>Export Data</span>
@@ -2409,7 +2409,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={() => setShowContentCreator(!showContentCreator)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
                   >
                     <span className="text-xl mr-3">✨</span>
                     <span>Content Creator</span>
@@ -2417,7 +2417,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={() => setShowMailchimpSync(!showMailchimpSync)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
                   >
                     <span className="text-xl mr-3">📧</span>
                     <span>Mailchimp Campaign</span>
@@ -3013,12 +3013,12 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex space-x-3">
                   <Button 
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                    className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
                   >
                     View Reports
                   </Button>
                   <Button 
-                    className="bg-green-600 hover:bg-green-700 text-white"
+                    className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
                   >
                     Create Campaign
                   </Button>
@@ -3660,7 +3660,7 @@ export default function CommandCenter() {
                     </Button>
                     <Button 
                       onClick={smartSearch}
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                      className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
                     >
                       <Brain className="w-4 h-4 mr-2" />
                       Smart Search
@@ -3724,7 +3724,7 @@ export default function CommandCenter() {
                       </Button>
                       <Button 
                         onClick={processVoiceProgramming}
-                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
                         disabled={!programmingText.trim()}
                       >
                         <Brain className="w-4 h-4 mr-2" />
@@ -3871,14 +3871,14 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-2 gap-3">
                       <Button 
                         onClick={testVoicePersona}
-                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
                       >
                         <Headphones className="w-4 h-4 mr-2" />
                         Test Voice
                       </Button>
                       <Button 
                         onClick={handleApplyPersona}
-                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
                       >
                         <Settings className="w-4 h-4 mr-2" />
                         Apply Persona
@@ -4067,7 +4067,7 @@ export default function CommandCenter() {
                   <Button 
                     onClick={loadDocuments}
                     disabled={documentsLoading}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                    className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
                   >
                     {documentsLoading ? 'Loading...' : 'Load Documents'}
                   </Button>
@@ -4185,7 +4185,7 @@ export default function CommandCenter() {
             <p className="text-slate-300 mb-4">Our team is here to help optimize your automation</p>
             <Button 
               onClick={handleContactSupport}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+              className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
             >
               <Headphones className="w-4 h-4 mr-2" />
               Contact Support
@@ -4653,7 +4653,7 @@ export default function CommandCenter() {
                     </div>
                   </div>
                   <div className="mt-4 flex gap-3">
-                    <Button className="bg-green-600 hover:bg-green-700 text-white">
+                    <Button className="bg-green-600 hover:bg-green-700 text-white border border-green-500">
                       Start Sync
                     </Button>
                     <Button variant="outline" className="border-green-400 text-green-400">
