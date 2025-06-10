@@ -2197,7 +2197,7 @@ export default function CommandCenter() {
                 {automationPerformance?.successRate || '0%'}
               </div>
               <p className="text-xs text-emerald-400">
-                {currentSystemMode === 'live' ? 'Live automation rate' : 'Test automation rate'}
+                Live automation rate
               </p>
             </CardContent>
           </Card>
@@ -2212,7 +2212,7 @@ export default function CommandCenter() {
                 {metrics?.systemHealth || 100}%
               </div>
               <p className="text-xs text-amber-400">
-                {currentSystemMode === 'live' ? 'Production systems' : 'Test environment'}
+                Production systems
               </p>
             </CardContent>
           </Card>

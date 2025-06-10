@@ -270,17 +270,17 @@ let liveAutomationMetrics = {
 // Test automation metrics removed - live mode only
 
 // Data stores with proper test/live isolation
-let leadScrapingResults = [];
-let apolloResults = [];
-let phantomResults = [];
-let apifyResults = [];
-let processingTasks = [];
-let documentStore = [];
-let knowledgeStore = [];
+let leadScrapingResults: any[] = [];
+let apolloResults: any[] = [];
+let phantomResults: any[] = [];
+let apifyResults: any[] = [];
+let processingTasks: any[] = [];
+let documentStore: any[] = [];
+let knowledgeStore: any[] = [];
 let voiceBotMetrics = { activeCalls: 0, totalCalls: 0, avgDuration: 0 };
-let salesOrderData = [];
-let crmData = [];
-let automationActivity = [];
+let salesOrderData: any[] = [];
+let crmData: any[] = [];
+let automationActivity: any[] = [];
 
 
 
@@ -380,7 +380,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date().toISOString()
       };
       
-      await logToAirtable('automation_logs', {
+      await logToAirtableQA('automation_logs', {
         action: 'mailchimp_sync',
         result: 'success',
         contactsSynced: result.contactsSynced,
