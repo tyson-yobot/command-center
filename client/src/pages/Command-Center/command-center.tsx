@@ -2027,7 +2027,7 @@ export default function CommandCenter() {
                         console.log('Content created with Publy:', result);
                         
                         if (result.success) {
-                          alert(`Content created successfully! SEO Score: ${result.content.optimizations.seoScore}%\nEngagement Prediction: ${result.content.optimizations.engagementPrediction}%\nPubly Dashboard: ${result.publyDashboard}`);
+                          // Content created successfully - logged to console
                           // Open Publy dashboard
                           window.open(result.publyDashboard, '_blank');
                         } else {
@@ -2123,7 +2123,6 @@ export default function CommandCenter() {
                         });
                         const result = await response.json();
                         console.log('Mailchimp sync result:', result);
-                        alert(result.success ? `Mailchimp sync completed: ${result.contactsSynced} contacts synced` : 'Mailchimp sync failed');
                       } catch (error) {
                         console.error('Mailchimp sync error:', error);
                         alert('Mailchimp sync failed');

@@ -1,0 +1,112 @@
+**YoBot® Command Center Demo Script + Layout Guide (CEO-Ready Edition)**
+
+**Demo Objective:**
+This is your first and most important demo ever — the official video that will define YoBot® as a product and a brand. The goal is to close 10 high-ticket sales in 25 days using this one flagship demo video. This script is written from a high-impact CEO perspective, includes full sales logic, and is built to be delivered with AI-generated voice and Tyson on screen for key moments. This demo should run 12–15 minutes max.
+
+---
+
+## 🧾 FULL SCRIPT TO COPY INTO ELEVENLABS (Word-for-Word)
+
+"Hi, I’m Tyson — founder of YoBot®. You’re looking at a real command center that runs sales, support, reports, lead scraping, voice calls, and ROI — all from one screen. We built this to automate every part of your business. Let me show you what it can do.
+
+Let’s start with Core Automation. These buttons aren’t shortcuts — they’re full workflows. One click handles multiple systems behind the scenes. But more than that, they eliminate the decision fatigue of bouncing between platforms. It’s built to be used by anyone — no training needed.
+
+Booking Sync automatically captures lead form data, adds it into Airtable, assigns the rep, sends a Slack ping, and stores everything in the CRM. You’re notified instantly.
+
+Support Ticket creates a new Zendesk ticket, attaches the relevant client details, and updates their record. No logging in to multiple apps — support is now fully tracked.
+
+Manual Follow-up? It doesn’t just create a task — it schedules a reminder, alerts your rep, and connects back to your smart calendar.
+
+Sales Orders? That’s an entire flow: invoice triggered, Stripe activated, QuickBooks updated, client notified.
+
+SMS? You’re not copy/pasting. This button sends the right text to the right lead using live data tags — fully integrated with Twilio.
+
+Now to Communication.
+
+Start Pipeline Calls to queue outbound dials through your voice engine. These aren’t static lists — YoBot® personalizes each call using lead data and tracks the results.
+
+Initiate Voice Call gives you manual control when you want to hop in and speak.
+
+Voice Input is your shortcut for command-based automation. Just say, “Schedule follow-up with Brian next Thursday” — and it’s done.
+
+Now let’s slow it down and dig into something you’ll love: the Content Creator.
+
+Click this, and YoBot® becomes your writer.
+
+Choose a format — email, voicemail, social caption, cold DM. Then choose the voice: professional, casual, high-energy, persuasive.
+Add your product or service, and hit Generate.
+
+It builds you custom, high-converting content in seconds — all ready to deploy.
+
+Now — let’s go deeper.
+Click Run Lead Scrape.
+Choose your tool — let’s say Apollo.
+From here, apply filters: industry, job title, location, phone and email required, company size, tech stack, and more. Once set, YoBot® scrapes the data, deduplicates it, scores each lead based on your preferences, and sends it into your system.
+
+You don’t touch a CSV file. You don’t hire a VA. You just have leads — ready to go.
+
+You want reports? Click PDF Report. It compiles all selected fields, creates a branded document in Google Docs, and exports it as a client-ready PDF.
+
+Export Data syncs everything to Google Sheets, Airtable, or your connected database.
+
+Mailchimp Sync pushes fresh leads into the right campaign segment. No extra steps.
+
+---
+
+\[CAMERA BREAK — CEO PITCH]
+
+Let’s pause. Imagine this replacing your sales assistant, your tech VA, your cold caller, your analytics guy, and your scheduling coordinator. That’s what YoBot® does.
+
+Our clients save 360+ hours in their first 60 days — and they’re not slowing down. If you’re trying to scale without more staff, this isn’t software — this is your growth engine.
+
+Let’s keep going.
+
+---
+
+Back on the dashboard — let’s talk **Live Support**.
+
+At the bottom corner, we’ve got 24/7 live chat powered by a combination of AI triage and human escalation. Customers get immediate answers, and when something needs a person, the handoff is smooth.
+
+No form fills. No waiting hours. Just answers.
+
+Let’s get into **Botalytics™ and SmartSpend™**.
+
+Here’s what you’ll see:
+
+* **ROI %** — based on revenue tracked vs YoBot® package cost
+* **Cost per Lead** — actual cost per usable, verified lead
+* **Lead Quality Score** — based on your selected criteria: email/phone availability, industry fit, engagement
+* **Close Rate** — synced from deal stages or invoice tracking
+* **Budget Efficiency** — how well your spend is converting to closed business
+* **Payback Period** — number of days YoBot® paid for itself
+
+These are not vanity stats — they’re actionable. They tell you what’s working, what needs to be optimized, and how fast you’re moving.
+
+Now — let’s wrap with the bottom control bar.
+
+The Live Activity Feed shows everything in motion: lead scrapes completed, calls triggered, SMS sent, PDF generated, support escalated.
+
+Voice Assistant lets you trigger functions hands-free. Say, “Create PDF for John Doe,” or “Send quote to new lead.”
+
+Memory Text Insertion allows you to save standard answers, disclaimers, or onboarding lines and instantly inject them into emails, SMS, or calls.
+
+Smart Calendar shows all tasks, follow-ups, and bookings auto-created by the system — with manual overrides if needed.
+
+And finally, the RAG module. Ask it anything about your customer’s documents, your SOPs, or knowledge base, and it pulls accurate, grounded responses. It doesn’t hallucinate — it only references what you gave it.
+
+---
+
+So what do you have here?
+
+A control tower.
+A lead engine.
+A voice agent.
+A full-service CRM, communicator, and performance dashboard — that works even when you don’t.
+
+This is YoBot®.
+If you’re ready to scale, let’s launch your bot now."
+
+---
+
+✅ Use the above as your **full ElevenLabs script**. Includes flow, voice, sales tone, and real examples.
+Once you’ve got it loaded, I’ll generate visual timing, button highlights, and sync steps to match.
