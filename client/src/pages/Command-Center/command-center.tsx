@@ -593,19 +593,23 @@ export default function CommandCenter() {
 
   const handleViewKnowledge = async () => {
     try {
+      console.log('View Sources button clicked - starting knowledge load...');
       setVoiceStatus('Loading knowledge base contents...');
       const response = await fetch('/api/knowledge/list');
       
       if (response.ok) {
         const data = await response.json();
+        console.log('Knowledge API response:', data);
         setKnowledgeItems(data.items || []);
         setShowKnowledgeViewer(true);
+        console.log('Modal state set to true, items:', data.items?.length || 0);
         setVoiceStatus(`Loaded ${data.total || 0} knowledge items: ${data.documents || 0} documents, ${data.memories || 0} memories`);
         setToast({
           title: "Knowledge Loaded",
           description: `Found ${data.total || 0} items in knowledge base`,
         });
       } else {
+        console.error('Knowledge API failed:', response.status);
         setVoiceStatus('Failed to load knowledge contents');
         setToast({
           title: "Load Failed",
@@ -614,6 +618,7 @@ export default function CommandCenter() {
         });
       }
     } catch (error) {
+      console.error('Knowledge load error:', error);
       setVoiceStatus('Error loading knowledge base');
       setToast({
         title: "Error",
