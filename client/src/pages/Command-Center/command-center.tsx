@@ -102,6 +102,7 @@ export default function CommandCenter() {
   const [selectedTier, setSelectedTier] = React.useState('All');
   const [voiceCommand, setVoiceCommand] = React.useState('');
   const [automationMode, setAutomationMode] = React.useState(true);
+  const [currentRecognition, setCurrentRecognition] = React.useState<any>(null);
   
   // Voice recognition states for RAG programming
   const [queryText, setQueryText] = useState('');
@@ -1256,18 +1257,8 @@ export default function CommandCenter() {
         recognition.lang = 'en-US';
         recognition.maxAlternatives = 1;
         
-        // Prevent automatic timeout
-        const keepAlive = setInterval(() => {
-          if (isListening) {
-            try {
-              recognition.start();
-            } catch (e) {
-              // Already started, ignore
-            }
-          } else {
-            clearInterval(keepAlive);
-          }
-        }, 4000);
+        // Store recognition instance for cleanup
+        setCurrentRecognition(recognition);
         
         recognition.onstart = () => {
           setIsListening(true);
@@ -1300,18 +1291,17 @@ export default function CommandCenter() {
         
         recognition.onend = () => {
           console.log('Voice recognition ended');
-          // Auto-restart if still supposed to be listening
-          if (isListening) {
+          // Continuously restart if still listening
+          if (currentRecognition && isListening) {
             setTimeout(() => {
               try {
-                recognition.start();
+                currentRecognition.start();
+                console.log('Voice recognition restarted');
               } catch (error) {
                 console.error('Failed to restart recognition:', error);
                 setIsListening(false);
               }
-            }, 100);
-          } else {
-            setIsListening(false);
+            }, 500);
           }
         };
         
@@ -1334,7 +1324,18 @@ export default function CommandCenter() {
         });
       }
     } else {
+      // Stop voice recording
       setIsListening(false);
+      if (currentRecognition) {
+        try {
+          currentRecognition.stop();
+          currentRecognition.abort();
+          setCurrentRecognition(null);
+        } catch (error) {
+          console.error('Error stopping recognition:', error);
+        }
+      }
+      setVoiceCommand('');
     }
   };
 

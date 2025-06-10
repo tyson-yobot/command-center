@@ -154,7 +154,8 @@ export default function EnterpriseLeadScraper() {
     ratingThreshold: "4",
     excludeKeywords: "",
     requestDelay: "2000",
-    zipCodes: ""
+    zipCodes: "",
+    seniorityLevel: ""
   });
 
   const [phantombusterFilters, setPhantombusterFilters] = useState({
@@ -1265,6 +1266,90 @@ export default function EnterpriseLeadScraper() {
                           );
                         })}
                       </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Executive Seniority Level (Click to Select Multiple)</Label>
+                      <div className="w-full max-h-[200px] overflow-y-auto px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl">
+                        {[
+                          { value: "owner", label: "Business Owner" },
+                          { value: "founder", label: "Founder/Co-Founder" },
+                          { value: "cxo", label: "C-Level Executive" },
+                          { value: "partner", label: "Partner/Principal" },
+                          { value: "vp", label: "Vice President" },
+                          { value: "svp", label: "Senior Vice President" },
+                          { value: "evp", label: "Executive Vice President" },
+                          { value: "director", label: "Director" },
+                          { value: "senior_director", label: "Senior Director" },
+                          { value: "senior_manager", label: "Senior Manager" },
+                          { value: "manager", label: "Manager" }
+                        ].map((level) => {
+                          const selectedLevels = apifyFilters.seniorityLevel ? apifyFilters.seniorityLevel.split(',') : [];
+                          const isSelected = selectedLevels.includes(level.value);
+                          
+                          return (
+                            <div
+                              key={level.value}
+                              className={`flex items-center p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-700/50 ${
+                                isSelected ? 'bg-emerald-600/30 border border-emerald-400/50' : ''
+                              }`}
+                              onClick={() => {
+                                const currentLevels = apifyFilters.seniorityLevel ? apifyFilters.seniorityLevel.split(',').filter(l => l) : [];
+                                let newLevels;
+                                
+                                if (isSelected) {
+                                  newLevels = currentLevels.filter(l => l !== level.value);
+                                } else {
+                                  newLevels = [...currentLevels, level.value];
+                                }
+                                
+                                setApifyFilters(prev => ({ ...prev, seniorityLevel: newLevels.join(',') }));
+                              }}
+                            >
+                              <div className={`w-4 h-4 rounded border-2 mr-3 flex items-center justify-center ${
+                                isSelected ? 'bg-emerald-500 border-emerald-500' : 'border-slate-500'
+                              }`}>
+                                {isSelected && (
+                                  <CheckCircle className="w-3 h-3 text-white" />
+                                )}
+                              </div>
+                              <span className="text-white text-sm">{level.label}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {apifyFilters.seniorityLevel && apifyFilters.seniorityLevel.split(',').filter(l => l).map((levelValue) => {
+                          const levelLabel = [
+                            { value: "owner", label: "Business Owner" },
+                            { value: "founder", label: "Founder/Co-Founder" },
+                            { value: "cxo", label: "C-Level Executive" },
+                            { value: "partner", label: "Partner/Principal" },
+                            { value: "vp", label: "Vice President" },
+                            { value: "svp", label: "Senior Vice President" },
+                            { value: "evp", label: "Executive Vice President" },
+                            { value: "director", label: "Director" },
+                            { value: "senior_director", label: "Senior Director" },
+                            { value: "senior_manager", label: "Senior Manager" },
+                            { value: "manager", label: "Manager" }
+                          ].find(l => l.value === levelValue)?.label || levelValue;
+                          
+                          return (
+                            <Badge
+                              key={levelValue}
+                              className="bg-emerald-600/20 text-emerald-200 border border-emerald-400/30 px-2 py-1 text-xs cursor-pointer hover:bg-red-600/20 hover:text-red-200 hover:border-red-400/30"
+                              onClick={() => {
+                                const currentLevels = apifyFilters.seniorityLevel.split(',').filter(l => l);
+                                const newLevels = currentLevels.filter(l => l !== levelValue);
+                                setApifyFilters(prev => ({ ...prev, seniorityLevel: newLevels.join(',') }));
+                              }}
+                            >
+                              {levelLabel} ×
+                            </Badge>
+                          );
+                        })}
+                      </div>
+                      <p className="text-sm text-slate-400">Click levels to select, click badges to remove</p>
                     </div>
 
                     <div className="space-y-3">
