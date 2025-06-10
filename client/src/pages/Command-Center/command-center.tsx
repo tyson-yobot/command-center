@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import yobotRobotHead from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749548179437.png';
+import yobotRobotHead from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749548966185.png';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -2051,7 +2051,7 @@ export default function CommandCenter() {
               <img 
                 src={yobotRobotHead} 
                 alt="YoBot" 
-                className="w-16 h-16 mr-3 inline-block"
+                className="w-12 h-12 mr-3 inline-block"
                 style={{ marginTop: '-4px' }}
               />
               YoBot® Command Center
