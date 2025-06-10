@@ -2445,7 +2445,7 @@ export default function CommandCenter() {
                 </span>
                 <div className="flex items-center space-x-4">
                   <span className="text-sm text-green-400">
-                    {automationPerformance?.activeFunctions || 1040} Functions Active
+                    {automationPerformance?.activeFunctions || 0} Functions Active
                   </span>
                   <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
                 </div>
@@ -2462,10 +2462,10 @@ export default function CommandCenter() {
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Success Rate</div>
-                  <div className="text-2xl font-bold text-green-400">
-                    {automationPerformance?.successRate || '100%'}
+                  <div className="text-2xl font-bold text-slate-400">
+                    {automationPerformance?.successRate || '--'}
                   </div>
-                  <div className="text-xs text-green-400">High reliability</div>
+                  <div className="text-xs text-slate-400">No data</div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Recent Executions</div>
@@ -2476,10 +2476,10 @@ export default function CommandCenter() {
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">System Load</div>
-                  <div className="text-2xl font-bold text-yellow-400">
-                    {Math.round((automationPerformance?.activeFunctions || 1040) / 1040 * 100)}%
+                  <div className="text-2xl font-bold text-slate-400">
+                    --
                   </div>
-                  <div className="text-xs text-yellow-400">Optimal range</div>
+                  <div className="text-xs text-slate-400">No data</div>
                 </div>
               </div>
               
@@ -2550,7 +2550,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Uptime Status:</span>
-                  <span className="text-green-400 font-bold">{metrics?.systemHealth || 97}%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
               </div>
             </CardContent>
@@ -2636,11 +2636,11 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Avg Bot Response:</span>
-                  <span className="text-green-400 font-bold">1.2s</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-green-400 font-bold">97.8%</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Error Trend (7d):</span>
