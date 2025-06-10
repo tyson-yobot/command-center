@@ -2051,7 +2051,7 @@ export default function CommandCenter() {
               <img 
                 src={yobotRobotHead} 
                 alt="YoBot" 
-                className="w-24 h-24 mr-3 inline-block"
+                className="w-24 h-24 mr-2 inline-block"
                 style={{ marginTop: '-4px' }}
               />
               YoBot® Command Center
