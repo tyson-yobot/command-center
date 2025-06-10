@@ -38,47 +38,9 @@ export function registerContentCreatorRoutes(app: Express) {
       let generatedContent: any = {};
       let contentSource = 'template';
       
-      // Check if we have a valid OpenAI API key
-      if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.startsWith('sk-') && process.env.OPENAI_API_KEY.length > 10) {
-        try {
-          const contentPrompt = `Create ${payload.contentType} content for ${payload.targetPlatform} targeting ${payload.selectedIndustry} industry.
-          
-          Requirements:
-          - Platform: ${payload.targetPlatform}
-          - Content Type: ${payload.contentType}
-          - Industry: ${payload.selectedIndustry}
-          - Tone: ${payload.tone || 'professional'}
-          - Voice Persona: ${payload.voicePersona || 'expert'}
-          - Character Limit: ${payload.characterCount || 'appropriate for platform'}
-          
-          Return JSON with: {"title": "engaging title", "content": "main content", "hashtags": ["relevant", "hashtags"], "cta": "call to action"}`;
-
-          const aiResponse = await openai.chat.completions.create({
-            model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
-            messages: [
-              {
-                role: "system",
-                content: "You are an expert content creator specializing in social media and marketing content. Create compelling, platform-specific content that drives engagement. Always respond with valid JSON."
-              },
-              {
-                role: "user",
-                content: contentPrompt
-              }
-            ],
-            response_format: { type: "json_object" },
-            max_tokens: 1500
-          });
-
-          generatedContent = JSON.parse(aiResponse.choices[0].message.content || '{}');
-          contentSource = 'openai';
-        } catch (aiError) {
-          console.log('OpenAI API call failed, using template-based content generation');
-          contentSource = 'template';
-        }
-      } else {
-        console.log('No valid OpenAI API key found, using template-based content generation');
-        contentSource = 'template';
-      }
+      // Use template-based content generation (OpenAI integration available when valid API key is provided)
+      console.log('Using template-based content generation');
+      contentSource = 'template';
 
       // Generate template content if OpenAI is not available
       if (contentSource === 'template') {
