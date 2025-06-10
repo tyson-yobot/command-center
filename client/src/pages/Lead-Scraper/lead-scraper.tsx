@@ -184,10 +184,14 @@ export default function EnterpriseLeadScraper() {
                    : selectedTool === 'apify' ? apifyFilters 
                    : phantombusterFilters;
       
-      const response = await fetch(`/api/scraping/${selectedTool}`, {
+      const response = await fetch('/api/lead-scraper/run', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filters })
+        body: JSON.stringify({ 
+          platform: selectedTool,
+          filters,
+          maxResults: 100
+        })
       });
       
       const data = await response.json();
