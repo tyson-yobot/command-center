@@ -880,27 +880,38 @@ export default function CommandCenter() {
 
   const handleContentCreator = async () => {
     try {
-      setVoiceStatus('Generating AI-powered social media content...');
+      setVoiceStatus('Creating and posting AI-powered social media content...');
       
-      const response = await fetch('/api/content/create', {
+      const response = await fetch('/api/content/create-and-post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          contentType: 'social_post',
-          topic: 'business automation and AI solutions',
-          platform: 'LinkedIn',
-          tone: 'professional',
-          autoPost: true
+          type: 'social',
+          platform: 'linkedin',
+          industry: 'Business Automation',
+          topic: 'AI-powered automation and workflow optimization'
         })
       });
       
       if (response.ok) {
         const result = await response.json();
-        setVoiceStatus(`AI content created and posted: ${result.wordCount} words`);
-        setToast({ 
-          title: "Content Created & Posted", 
-          description: `AI-generated LinkedIn post published with ${result.hashtags?.length || 0} hashtags` 
-        });
+        const content = result.content;
+        const postResult = result.postResult;
+        
+        if (postResult?.success) {
+          setVoiceStatus(`✅ AI content posted to LinkedIn: ${content?.metadata?.wordCount || 0} words`);
+          setToast({ 
+            title: "Content Created & Posted", 
+            description: `AI-generated LinkedIn post published with ${content?.hashtags?.length || 0} hashtags` 
+          });
+        } else {
+          setVoiceStatus(`❌ Content generated but posting failed: ${postResult?.error || 'Unknown error'}`);
+          setToast({ 
+            title: "Posting Failed", 
+            description: content?.content ? `Content created but couldn't post to LinkedIn` : 'Content generation failed',
+            variant: "destructive"
+          });
+        }
         
         // Log the generated content for review
         console.log('Generated content:', result.content);
@@ -925,35 +936,47 @@ export default function CommandCenter() {
 
   const handleMailChimpCampaign = async () => {
     try {
-      setVoiceStatus('Creating AI-powered MailChimp email campaign...');
+      setVoiceStatus('Generating AI-powered email campaign content...');
       
-      const response = await fetch('/api/mailchimp/create-campaign', {
+      const response = await fetch('/api/content/create-and-send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          campaignType: 'newsletter',
-          audienceSegment: 'business_owners',
-          subject: 'Boost Your Business with AI Automation',
-          content: 'Latest automation trends and ROI insights',
-          autoSend: true
+          type: 'email',
+          industry: 'Business Automation',
+          audience: 'business_owners',
+          topic: 'AI automation ROI and productivity insights',
+          tone: 'professional'
         })
       });
       
       if (response.ok) {
         const result = await response.json();
-        setVoiceStatus(`MailChimp campaign ${result.status}: ${result.estimatedReach} recipients`);
-        setToast({ 
-          title: "MailChimp Campaign Created", 
-          description: `Campaign ID: ${result.campaignId} - Status: ${result.status}` 
-        });
+        const content = result.content;
+        const sendResult = result.sendResult;
         
-        console.log('Email campaign created:', result);
+        if (sendResult?.success) {
+          setVoiceStatus(`✅ AI email campaign sent: ${sendResult.recipients || 0} recipients`);
+          setToast({ 
+            title: "Email Campaign Sent", 
+            description: `Subject: "${content?.subject}" sent to ${sendResult.recipients || 0} contacts` 
+          });
+        } else {
+          setVoiceStatus(`❌ Email content generated but sending failed: ${sendResult?.error || 'Unknown error'}`);
+          setToast({ 
+            title: "Email Sending Failed", 
+            description: content?.subject ? `Content created but couldn't send email campaign` : 'Email generation failed',
+            variant: "destructive"
+          });
+        }
+        
+        console.log('Generated email campaign:', result.content);
       } else {
         const error = await response.json();
-        setVoiceStatus('MailChimp campaign failed');
+        setVoiceStatus('Email campaign creation failed - check API configuration');
         setToast({ 
           title: "Campaign Creation Failed", 
-          description: error.error || "Unable to create email campaign",
+          description: error.error || "Unable to generate email campaign",
           variant: "destructive" 
         });
       }

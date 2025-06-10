@@ -1,5 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
-import { registerRoutes } from "./routes";
+import { registerRoutes, registerContentCreationEndpoints } from "./routes";
 import orchestrator from "./systemAutomationOrchestrator";
 import completeAutomation from "./completeSystemAutomation";
 import documentRoutes from "./documentManager";
@@ -238,6 +238,9 @@ print(json.dumps(result))
 
 (async () => {
   const server = await registerRoutes(app);
+  
+  // Register AI-powered content creation endpoints
+  registerContentCreationEndpoints(app);
 
   // Register document management routes
   app.use('/api/documents', documentRoutes);
