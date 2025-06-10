@@ -2124,12 +2124,12 @@ export default function CommandCenter() {
                 <p className="text-red-700 text-sm">Automation requires attention</p>
               </div>
               <div className="flex space-x-3">
-                <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white">
+                <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white border border-red-500">
                   Fix Now
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="flex-1"
+                  className="flex-1 border border-red-400 text-red-400 hover:bg-red-600/20"
                   onClick={() => setShowEscalation(false)}
                 >
                   Dismiss
@@ -2784,7 +2784,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300">Avg Completion Time</span>
                   <span className="text-slate-400 font-bold">N/A</span>
                 </div>
-                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="text-slate-300 text-sm mb-1">Next Automation</div>
                   <div className="text-slate-400 font-medium">No Scheduled Automations</div>
                 </div>
@@ -2944,7 +2944,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300">Response Accuracy</span>
                   <span className="text-slate-400 font-bold">--</span>
                 </div>
-                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-purple-900/60 rounded-lg p-3 border border-purple-400 shadow-lg shadow-purple-400/20">
                   <div className="text-slate-300 text-sm mb-1">Latest Learning</div>
                   <div className="text-slate-400 font-medium">--</div>
                 </div>
@@ -2992,7 +2992,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300">Active Connections</span>
                   <span className="text-green-400 font-bold">{knowledgeStats?.totalDocuments || 0}</span>
                 </div>
-                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="text-slate-300 text-sm mb-1">System Status</div>
                   <div className="text-green-400 font-medium">All Systems Operational</div>
                 </div>
@@ -3003,7 +3003,7 @@ export default function CommandCenter() {
 
         {/* Customer Success Milestones */}
         <div className="mb-8">
-          <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 backdrop-blur-sm border border-blue-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 backdrop-blur-sm border border-blue-400 shadow-lg shadow-blue-400/20">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-2">
@@ -3087,7 +3087,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300">Resolution Rate</span>
                   <span className="text-slate-400 font-bold">--</span>
                 </div>
-                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="text-slate-300 text-sm mb-1">Top Intent</div>
                   <div className="text-slate-400 font-medium">No data available</div>
                 </div>
@@ -3108,7 +3108,7 @@ export default function CommandCenter() {
             <CardContent>
               <div className="space-y-3">
                 {/* Calendar events populated by live webhook data only */}
-                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-cyan-400/20">
+                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="text-slate-300 text-sm mb-1">Today's Schedule</div>
                   <div className="text-white font-bold">{metrics?.activeCampaigns || 0} total meetings</div>
                   <div className="text-cyan-400 text-xs">{metrics?.remainingTasks || 0} remaining today</div>
@@ -3354,7 +3354,7 @@ export default function CommandCenter() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              <div className="bg-gradient-to-br from-green-600/20 to-green-800/20 border border-blue-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
+              <div className="bg-gradient-to-br from-green-600/20 to-green-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
                 <div className="text-center">
                   <div className="text-3xl font-black text-slate-400 mb-2">--</div>
                   <div className="text-slate-300 text-sm">Monthly Savings</div>
@@ -3362,7 +3362,7 @@ export default function CommandCenter() {
                 </div>
               </div>
               
-              <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
+              <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
                 <div className="text-center">
                   <div className="text-3xl font-black text-slate-400 mb-2">--</div>
                   <div className="text-blue-300 text-sm">Cost Reduction</div>
@@ -3370,7 +3370,7 @@ export default function CommandCenter() {
                 </div>
               </div>
               
-              <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-blue-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
+              <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
                 <div className="text-center">
                   <div className="text-3xl font-black text-slate-400 mb-2">--</div>
                   <div className="text-slate-300 text-sm">ROI</div>
@@ -3378,7 +3378,7 @@ export default function CommandCenter() {
                 </div>
               </div>
               
-              <div className="bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 border border-blue-400 shadow-lg shadow-cyan-400/20 rounded-lg p-4">
+              <div className="bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
                 <div className="text-center">
                   <div className="text-3xl font-black text-slate-400 mb-2">--</div>
                   <div className="text-slate-300 text-sm">Payback Days</div>
@@ -3739,7 +3739,7 @@ export default function CommandCenter() {
                       </Button>
                     </div>
 
-                    <div className="bg-blue-900/40 rounded p-3 border border-blue-400 shadow-lg shadow-cyan-400/20">
+                    <div className="bg-blue-900/40 rounded p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
                       <div className="flex items-center justify-between">
                         <h4 className="text-white font-medium">Voice Status:</h4>
                         <span className={`px-2 py-1 rounded text-xs font-medium ${
