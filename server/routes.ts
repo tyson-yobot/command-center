@@ -10222,8 +10222,6 @@ function registerAutomationEndpoints(app: Express) {
   });
 
   console.log(`🚀 Registered ${allFinalFunctions.length} final automation functions (601-1040)`);
-
-  return httpServer;
 }
 
 // Export for other modules to update metrics
