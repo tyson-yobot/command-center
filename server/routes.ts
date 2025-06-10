@@ -36,6 +36,11 @@ const openai = new OpenAI({
 // System mode state - toggleable between test and live
 let systemMode: 'test' | 'live' = 'live';
 
+// Export getter function for system mode
+export function getSystemMode(): 'test' | 'live' {
+  return systemMode;
+}
+
 // Data store interfaces
 interface ContactData {
   fullName: string;
@@ -2405,15 +2410,20 @@ Report generated in Live Mode
   // System mode toggle endpoint with audit logging
   app.post('/api/system-mode-toggle', async (req, res) => {
     try {
-      const previousMode = systemMode;
-      systemMode = systemMode === 'live' ? 'test' : 'live';
+      const { setSystemMode, getSystemMode } = await import('./systemMode');
+      const previousMode = getSystemMode();
+      const newMode = previousMode === 'live' ? 'test' : 'live';
+      
+      // Update system mode using shared module
+      setSystemMode(newMode);
+      systemMode = newMode; // Keep local variable in sync
       
       // Store system mode in Express app for global access
-      app.set('systemMode', systemMode);
+      app.set('systemMode', newMode);
       
       // Synchronize mode with all modules
       const { updateSystemMode } = await import('./commandCenterRoutes');
-      updateSystemMode(systemMode);
+      updateSystemMode(newMode);
       
       const modeChange = {
         id: `mode_${Date.now()}`,

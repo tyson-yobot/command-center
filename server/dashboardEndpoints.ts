@@ -16,8 +16,9 @@ export function registerDashboardEndpoints(app: Express) {
     try {
       const timestamp = new Date().toISOString();
       
-      // Get system mode from global state
-      const currentSystemMode = req.app.get('systemMode') || 'live';
+      // Get system mode from shared module
+      const { getSystemMode } = await import('./systemMode');
+      const currentSystemMode = getSystemMode();
       
       let metrics;
       
