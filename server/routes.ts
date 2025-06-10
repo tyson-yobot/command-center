@@ -30,6 +30,7 @@ import { registerLocalTestLoggerRoutes, localTestLogger } from "./localTestLogge
 import { configManager } from "./controlCenterConfig";
 import { airtableLogger } from "./airtableLogger";
 import { automationTester } from "./automationTester";
+import { registerZendeskRoutes } from "./zendeskIntegration";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
 import { generateSocialMediaPost, generateEmailCampaign, postToSocialMedia, sendEmailCampaign } from './contentCreator';
@@ -13269,6 +13270,9 @@ export function registerContentCreationEndpoints(app: Express) {
       });
     }
   });
+
+  // Register Zendesk integration routes
+  registerZendeskRoutes(app);
 
 }
 
