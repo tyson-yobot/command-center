@@ -32,6 +32,7 @@ import { airtableLogger } from "./airtableLogger";
 import { automationTester } from "./automationTester";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
+import { generateSocialMediaPost, generateEmailCampaign, postToSocialMedia, sendEmailCampaign } from './contentCreator';
 
 // Initialize OpenAI
 const openai = new OpenAI({
@@ -12233,6 +12234,133 @@ function registerAutomationEndpoints(app: Express) {
   });
 
   console.log(`🚀 Registered ${allFinalFunctions.length} final automation functions (601-1040)`);
+}
+
+// AI-Powered Content Creator API Endpoints
+export function registerContentCreationEndpoints(app: Express) {
+  app.post('/api/content/create-social', async (req, res) => {
+    try {
+      const { platform, industry, topic } = req.body;
+      
+      if (!platform || !industry) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Platform and industry are required' 
+        });
+      }
+
+      logOperation('content-creation', { platform, industry, topic }, 'success', 'Social content generation started');
+
+      const content = await generateSocialMediaPost(platform, industry, topic);
+      
+      res.json({
+        success: true,
+        content,
+        platform,
+        industry,
+        generatedAt: new Date().toISOString()
+      });
+    } catch (error) {
+      logOperation('content-creation', req.body, 'error', `Social content generation failed: ${error.message}`);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Content generation failed',
+        details: error.message 
+      });
+    }
+  });
+
+  app.post('/api/content/create-and-post', async (req, res) => {
+    try {
+      const { type, platform, industry, audience, topic } = req.body;
+      
+      if (!type || (!platform && !audience) || !industry) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Type, platform/audience, and industry are required' 
+        });
+      }
+
+      let content, postResult;
+      
+      if (type === 'social') {
+        content = await generateSocialMediaPost(platform, industry, topic);
+        postResult = await postToSocialMedia(platform, content.content, content.hashtags);
+        
+        try {
+          await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📱%20Social%20Media%20Posts", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              fields: {
+                "Platform": platform,
+                "Content": content.content.substring(0, 500),
+                "Status": postResult.success ? "Posted" : "Failed",
+                "Post ID": postResult.postId || "N/A",
+                "Error": postResult.error || "",
+                "Posted At": new Date().toISOString(),
+                "Character Count": content.content.length,
+                "Hashtags": content.hashtags ? content.hashtags.join(", ") : "",
+                "Auto Generated": true
+              }
+            })
+          });
+        } catch (airtableError) {
+          console.error('Airtable logging failed:', airtableError);
+        }
+        
+      } else if (type === 'email') {
+        content = await generateEmailCampaign(audience, industry, topic);
+        postResult = await sendEmailCampaign(content.subject, content.content, audience);
+        
+        try {
+          await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📧%20Email%20Campaigns", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              fields: {
+                "Subject": content.subject,
+                "Content Preview": content.content.substring(0, 300),
+                "Audience": audience,
+                "Status": postResult.success ? "Sent" : "Failed",
+                "Campaign ID": postResult.campaignId || "N/A",
+                "Recipient Count": postResult.recipientCount || 0,
+                "Error": postResult.error || "",
+                "Sent At": new Date().toISOString(),
+                "Content Length": content.content.length,
+                "Auto Generated": true
+              }
+            })
+          });
+        } catch (airtableError) {
+          console.error('Airtable logging failed:', airtableError);
+        }
+      }
+
+      logOperation('content-create-post', { type, platform, audience, industry }, 'success', `${type} content created and posted successfully`);
+      
+      res.json({
+        success: true,
+        type,
+        content,
+        postResult,
+        completedAt: new Date().toISOString()
+      });
+    } catch (error) {
+      logOperation('content-create-post', req.body, 'error', `Content creation and posting failed: ${error.message}`);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Content creation and posting failed',
+        details: error.message 
+      });
+    }
+  });
 }
 
 // Export for other modules to update metrics
