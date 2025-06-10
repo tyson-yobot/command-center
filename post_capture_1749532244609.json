@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-06-10T05:10:44.609Z",
+  "url": "/api/voice-command",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "63"
+  },
+  "body": {
+    "command": "Start pipeline automation",
+    "userId": "admin_001"
+  },
+  "query": {}
+}

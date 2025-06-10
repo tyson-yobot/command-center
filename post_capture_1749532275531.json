@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-06-10T05:11:15.531Z",
+  "url": "/api/critical-escalation",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "135"
+  },
+  "body": {
+    "type": "system_performance",
+    "message": "All 1040+ automation functions operational",
+    "severity": "info",
+    "source": "command_center"
+  },
+  "query": {}
+}
