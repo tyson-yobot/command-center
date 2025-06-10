@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:00:00.645Z",
-    "functionId": 133,
-    "functionName": "Silent Call Detector",
-    "batch": 14,
-    "category": "Voice",
-    "status": "success",
-    "duration": 415,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:00:00.648Z",
     "functionId": 137,
     "functionName": "SmartSpend Entry Creator",
@@ -11368,6 +11357,21 @@
       "failedExecutions": 0,
       "systemUptime": 108.116713845,
       "lastHealthCheck": "2025-06-10T20:02:00.015Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-10T20:10:00.013Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 20.753863956,
+      "lastHealthCheck": "2025-06-10T20:09:00.009Z",
       "automationStatus": "paused"
     }
   }
