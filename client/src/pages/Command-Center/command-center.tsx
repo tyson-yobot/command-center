@@ -2167,7 +2167,7 @@ export default function CommandCenter() {
                 {metrics?.activeCalls || 0}
               </div>
               <p className="text-xs text-green-400">
-                {systemMode === 'live' ? 'Live voice sessions' : 'Test voice sessions'}
+                Live voice sessions
               </p>
             </CardContent>
           </Card>
@@ -2182,7 +2182,7 @@ export default function CommandCenter() {
                 {automationPerformance?.executionsToday || 0}
               </div>
               <p className="text-xs text-blue-400">
-                {systemMode === 'live' ? 'Tasks completed today' : 'Test tasks completed'}
+                Tasks completed today
               </p>
             </CardContent>
           </Card>
@@ -2197,7 +2197,7 @@ export default function CommandCenter() {
                 {automationPerformance?.successRate || '0%'}
               </div>
               <p className="text-xs text-emerald-400">
-                {systemMode === 'live' ? 'Live automation rate' : 'Test automation rate'}
+                {currentSystemMode === 'live' ? 'Live automation rate' : 'Test automation rate'}
               </p>
             </CardContent>
           </Card>
@@ -2212,7 +2212,7 @@ export default function CommandCenter() {
                 {metrics?.systemHealth || 100}%
               </div>
               <p className="text-xs text-amber-400">
-                {systemMode === 'live' ? 'Production systems' : 'Test environment'}
+                {currentSystemMode === 'live' ? 'Production systems' : 'Test environment'}
               </p>
             </CardContent>
           </Card>
