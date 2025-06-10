@@ -35,6 +35,103 @@ const openai = new OpenAI({
 // System mode state - toggleable between test and live
 let systemMode: 'test' | 'live' = 'live';
 
+// Data store interfaces
+interface ContactData {
+  fullName: string;
+  email: string;
+  phone: string;
+  company: string;
+  title: string;
+  location: string;
+  score: number;
+  linkedinUrl: string;
+  source: any;
+}
+
+interface DocumentData {
+  documentId: string;
+  fileName: any;
+  fileSize: any;
+  fileType: any;
+  category: any;
+  extractedText: string;
+  keyTerms: string[];
+}
+
+interface KnowledgeData {
+  id: any;
+  title: any;
+  excerpt: string;
+  relevanceScore: number;
+  source: string;
+  lastModified: any;
+  keyTerms: any;
+  categories: any;
+  wordCount: any;
+}
+
+interface AutomationData {
+  id: string;
+  type: string;
+  status: string;
+  startTime: string;
+  data: any;
+  endTime?: string;
+  result?: any;
+}
+
+interface MessageData {
+  messageId: any;
+  status: any;
+  errorCode: any;
+}
+
+interface CallData {
+  type: string;
+  target: any;
+  status: string;
+}
+
+interface NotificationData {
+  type: string;
+  extracted: string;
+  content?: string;
+}
+
+interface LeadData {
+  quality: number;
+}
+
+interface DealData {
+  healthScore: number;
+  dealQuality?: string;
+}
+
+interface FollowUpData {
+  voiceScheduled?: boolean;
+}
+
+interface ProcessingData {
+  status: string;
+}
+
+interface RelevanceData {
+  relevanceScore: number;
+}
+
+// In-memory data stores
+const contactDataStore: ContactData[] = [];
+const documentDataStore: DocumentData[] = [];
+const knowledgeDataStore: KnowledgeData[] = [];
+const automationDataStore: AutomationData[] = [];
+const messageDataStore: MessageData[] = [];
+const callDataStore: CallData[] = [];
+const notificationDataStore: NotificationData[] = [];
+const leadDataStore: LeadData[] = [];
+const dealDataStore: DealData[] = [];
+const followUpDataStore: FollowUpData[] = [];
+const processingDataStore: ProcessingData[] = [];
+
 // Comprehensive logging system for ALL operations - supports both modes
 interface LogEntry {
   timestamp: string;
@@ -229,11 +326,11 @@ async function wipeTestData() {
       try {
         const deletedCount = await airtableWipeTableDuplicate(tableName);
         totalRecordsDeleted += deletedCount;
-        wipedTables.push({ table: tableName, recordsDeleted: deletedCount });
+        wipedTables.push({ table: tableName, recordsDeleted: deletedCount } as any);
         console.log(`✅ Wiped ${deletedCount} test records from ${tableName}`);
       } catch (error) {
         console.error(`❌ Failed to wipe ${tableName}:`, error);
-        wipedTables.push({ table: tableName, error: error.message });
+        wipedTables.push({ table: tableName, error: error.message } as any);
       }
     }
 
@@ -2017,7 +2114,7 @@ New York, NY 10001`;
           const lastName = ['Smith', 'Johnson', 'Williams', 'Brown', 'Davis'][Math.floor(Math.random() * 5)];
           const company = companies[Math.floor(Math.random() * companies.length)];
           
-          leads.push({
+          const leadData: ContactData = {
             fullName: `${firstName} ${lastName}`,
             email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${company.toLowerCase().replace(/\s+/g, '')}.com`,
             phone: `+1 (555) ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
@@ -2027,7 +2124,8 @@ New York, NY 10001`;
             score: Math.floor(Math.random() * 100) + 1,
             linkedinUrl: `https://linkedin.com/in/${firstName.toLowerCase()}-${lastName.toLowerCase()}`,
             source: platform
-          });
+          };
+          leads.push(leadData);
         }
         return leads;
       };

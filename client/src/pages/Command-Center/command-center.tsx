@@ -660,6 +660,342 @@ export default function CommandCenter() {
     setVoiceStatus(`Automation ${!automationMode ? 'enabled' : 'disabled'}`);
   };
 
+  // Core Automation Button Handlers - Wiring Guide Implementation
+  const handleNewBookingSync = async () => {
+    try {
+      setVoiceStatus('Syncing new booking to calendar and database...');
+      const response = await fetch('/api/calendar-sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'calendar-sync' })
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        setVoiceStatus('Booking synced to Airtable & Google Calendar');
+        setToast({ title: "Booking Synced", description: "New booking added to calendar and database" });
+      } else {
+        setVoiceStatus('Booking sync failed');
+        setToast({ title: "Sync Failed", description: "Unable to sync booking", variant: "destructive" });
+      }
+    } catch (error) {
+      setVoiceStatus('Booking sync error');
+    }
+  };
+
+  const handleNewSupportTicket = async () => {
+    try {
+      setVoiceStatus('Creating support ticket in Zendesk...');
+      const response = await fetch('/api/zendesk-log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'zendesk-log' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Support ticket created successfully');
+        setToast({ title: "Ticket Created", description: "Support ticket submitted to Zendesk" });
+      } else {
+        setVoiceStatus('Ticket creation failed - fallback triggered');
+        setToast({ title: "Ticket Failed", description: "Zendesk unavailable, using fallback", variant: "destructive" });
+      }
+    } catch (error) {
+      setVoiceStatus('Support ticket error');
+    }
+  };
+
+  const handleManualFollowUp = async () => {
+    try {
+      setVoiceStatus('Triggering voice reminder for follow-up...');
+      const response = await fetch('/api/follow-up-caller', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'follow-up-caller' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Follow-up reminder scheduled and logged');
+        setToast({ title: "Follow-up Scheduled", description: "Voice reminder created and logged to tracker" });
+      } else {
+        setVoiceStatus('Follow-up scheduling failed');
+      }
+    } catch (error) {
+      setVoiceStatus('Follow-up error');
+    }
+  };
+
+  const handleSalesOrder = async () => {
+    try {
+      setVoiceStatus('Launching sales order form...');
+      const response = await fetch('/api/command-sales-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'command-sales-order' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Sales order form launched (Tally integration)');
+        setToast({ title: "Sales Order", description: "Order form opened - not processing yet" });
+      } else {
+        setVoiceStatus('Sales order launch failed');
+      }
+    } catch (error) {
+      setVoiceStatus('Sales order error');
+    }
+  };
+
+  const handleSendSMS = async () => {
+    try {
+      setVoiceStatus('Opening SMS interface...');
+      const response = await fetch('/api/sms-send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'sms-send' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('SMS interface ready - Twilio integration active');
+        setToast({ title: "SMS Ready", description: "Text input opened, ready to send via Twilio" });
+      } else {
+        setVoiceStatus('SMS interface failed - not wired yet');
+        setToast({ title: "SMS Not Ready", description: "SMS system not fully wired", variant: "destructive" });
+      }
+    } catch (error) {
+      setVoiceStatus('SMS error');
+    }
+  };
+
+  const handleStartPipelineCalls = async () => {
+    try {
+      setVoiceStatus('Starting outbound call pipeline...');
+      const response = await fetch('/api/voicebot-call', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'voicebot-call' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Call pipeline started successfully');
+        setToast({ title: "Pipeline Started", description: "Outbound call workflow initiated" });
+      } else {
+        setVoiceStatus('Pipeline start failed');
+      }
+    } catch (error) {
+      setVoiceStatus('Pipeline error');
+    }
+  };
+
+  const handleStopPipelineCalls = async () => {
+    try {
+      setVoiceStatus('Stopping voice calling pipeline...');
+      const response = await fetch('/api/voicebot-halt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'voicebot-halt' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Pipeline stopped - queued calls cancelled');
+        setToast({ title: "Pipeline Stopped", description: "All queued calls have been cancelled" });
+      } else {
+        setVoiceStatus('Pipeline stop failed');
+      }
+    } catch (error) {
+      setVoiceStatus('Pipeline stop error');
+    }
+  };
+
+  const handleInitiateVoiceCall = async () => {
+    try {
+      setVoiceStatus('Initiating manual voice call...');
+      const response = await fetch('/api/voicebot-directcall', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'voicebot-directcall' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Voice call initiated with logging & sentiment capture');
+        setToast({ title: "Call Initiated", description: "1:1 voicebot call started with full logging" });
+      } else {
+        setVoiceStatus('Voice call failed');
+      }
+    } catch (error) {
+      setVoiceStatus('Voice call error');
+    }
+  };
+
+  const handleVoiceInput = async () => {
+    try {
+      setVoiceStatus('Launching voice input with ElevenLabs...');
+      const response = await fetch('/api/command-voice-input', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'command-voice-input' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Voice input active - speech-to-text ready for RAG');
+        setToast({ title: "Voice Input Active", description: "Microphone ready with ElevenLabs support" });
+      } else {
+        setVoiceStatus('Voice input failed');
+      }
+    } catch (error) {
+      setVoiceStatus('Voice input error');
+    }
+  };
+
+  const handleContentCreator = async () => {
+    try {
+      setVoiceStatus('Opening content creation system...');
+      const response = await fetch('/api/content-gen', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'content-gen' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Content creator ready - script builder active');
+        setToast({ title: "Content Creator", description: "Script builder opened for social content generation" });
+      } else {
+        setVoiceStatus('Content creator failed');
+      }
+    } catch (error) {
+      setVoiceStatus('Content creator error');
+    }
+  };
+
+  const handleRunLeadScrape = async () => {
+    try {
+      setVoiceStatus('Launching lead scraper module...');
+      const response = await fetch('/api/lead-scraper', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'lead-scraper' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Lead scraper active - Apollo/Apify/Phantom routing ready');
+        setToast({ title: "Lead Scraper", description: "Module launched with proper tool routing" });
+      } else {
+        setVoiceStatus('Lead scraper failed');
+      }
+    } catch (error) {
+      setVoiceStatus('Lead scraper error');
+    }
+  };
+
+  const handlePDFReport = async () => {
+    try {
+      setVoiceStatus('Generating PDF report of current stats...');
+      const response = await fetch('/api/pdf-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'pdf-report' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('PDF report generated - auto-download started');
+        setToast({ title: "PDF Generated", description: "Report ready for download" });
+      } else {
+        setVoiceStatus('PDF generation failed');
+      }
+    } catch (error) {
+      setVoiceStatus('PDF report error');
+    }
+  };
+
+  const handleExportData = async () => {
+    try {
+      setVoiceStatus('Exporting Airtable data...');
+      const response = await fetch('/api/airtable-export', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'airtable-export' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Data exported - file linked in dashboard');
+        setToast({ title: "Data Exported", description: "Airtable rows exported to CSV/XLSX format" });
+      } else {
+        setVoiceStatus('Data export failed');
+      }
+    } catch (error) {
+      setVoiceStatus('Export error');
+    }
+  };
+
+  const handleMailchimpSync = async () => {
+    try {
+      setVoiceStatus('Syncing contacts to Mailchimp...');
+      const response = await fetch('/api/mailchimp-sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'mailchimp-sync' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Mailchimp sync completed successfully');
+        setToast({ title: "Mailchimp Synced", description: "Latest contacts pushed to Mailchimp" });
+      } else {
+        setVoiceStatus('Mailchimp sync failed');
+      }
+    } catch (error) {
+      setVoiceStatus('Mailchimp sync error');
+    }
+  };
+
+  const handleUploadDocuments = async () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.multiple = true;
+    fileInput.accept = '.pdf,.doc,.docx,.txt,.csv';
+    fileInput.onchange = handleFileUpload;
+    fileInput.click();
+  };
+
+  const handleClearTestData = async () => {
+    if (confirm('This will permanently delete ALL test data, QA rows, and sample client data. Continue?')) {
+      try {
+        setVoiceStatus('Purging all test data...');
+        const response = await fetch('/api/testmode-clear', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ scenario: 'testmode-clear' })
+        });
+        
+        if (response.ok) {
+          setVoiceStatus('Test data cleared - full purge completed');
+          setToast({ title: "Test Data Cleared", description: "All test logs, QA rows, and sample data removed" });
+        } else {
+          setVoiceStatus('Test data clear failed');
+        }
+      } catch (error) {
+        setVoiceStatus('Clear test data error');
+      }
+    }
+  };
+
+  const handleCriticalEscalation = async () => {
+    try {
+      setVoiceStatus('Triggering critical system alert...');
+      const response = await fetch('/api/system-alert', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenario: 'system-alert' })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Critical alert sent - Slack notification + visual banner');
+        setToast({ title: "Critical Alert", description: "System alert triggered for failures or hot leads", variant: "destructive" });
+      } else {
+        setVoiceStatus('Critical alert failed');
+      }
+    } catch (error) {
+      setVoiceStatus('Critical alert error');
+    }
+  };
+
 
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
