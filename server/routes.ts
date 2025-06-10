@@ -24,6 +24,8 @@ import { registerCommandCenterRoutes } from "./commandCenterRoutes";
 import { registerQAValidationRoutes } from "./qaValidationSystem";
 import { registerContentCreatorRoutes } from "./contentCreatorRoutes";
 import { registerMailchimpRoutes } from "./mailchimpRoutes";
+import { registerIntegrationTestRoutes } from "./integrationTestLogger";
+import { registerPublerRoutes } from "./publerIntegration";
 import { configManager } from "./controlCenterConfig";
 import { airtableLogger } from "./airtableLogger";
 import { automationTester } from "./automationTester";
@@ -415,6 +417,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register Command Center routes FIRST to bypass webhook middleware
   registerCommandCenterRoutes(app);
   registerQAValidationRoutes(app);
+  
+  // Register integration test logging system - CRITICAL: Must be active before any testing
+  registerIntegrationTestRoutes(app);
+  
+  // Register Publer social media integration - Required for automated posting
+  registerPublerRoutes(app);
   
   // Register Content Creator and Mailchimp webhook routes
   registerContentCreatorRoutes(app);
