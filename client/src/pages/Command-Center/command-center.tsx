@@ -3790,133 +3790,162 @@ export default function CommandCenter() {
                 </div>
               </div>
 
-              {/* Voice Generation & Phone Calling */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                {/* Voice Generation */}
-                <div className="bg-blue-900/60 rounded-lg p-6 border border-blue-400/50">
-                  <h3 className="text-white text-lg font-semibold mb-4 flex items-center">
-                    <Mic className="w-5 h-5 mr-2 text-cyan-400" />
-                    Voice Generation
+              {/* Voice Synthesis Studio - Unified Module */}
+              <div className="mb-8">
+                <div className="bg-gradient-to-br from-purple-900/60 to-blue-900/60 rounded-lg p-6 border border-purple-400/50 shadow-lg shadow-purple-400/20">
+                  <h3 className="text-white text-xl font-semibold mb-6 flex items-center">
+                    <Mic className="w-6 h-6 mr-3 text-purple-400" />
+                    Voice Synthesis Studio
+                    <span className="ml-3 text-sm text-purple-300 font-normal">
+                      Complete voice generation and persona management
+                    </span>
                   </h3>
-                  <div className="space-y-4">
-                    <textarea
-                      value={voiceGenerationText}
-                      onChange={(e) => setVoiceGenerationText(e.target.value)}
-                      placeholder="Enter text to convert to speech..."
-                      className="w-full p-3 bg-blue-800/60 border border-blue-400/50 rounded text-white placeholder-cyan-300"
-                      rows={3}
-                    />
-                    <div className="grid grid-cols-2 gap-3">
-                      <Button 
-                        onClick={generateVoice}
-                        className="bg-cyan-600 hover:bg-cyan-700 text-white"
-                      >
-                        <Headphones className="w-4 h-4 mr-2" />
-                        Generate Voice
-                      </Button>
-                      <Button 
-                        onClick={downloadAudio}
-                        className="bg-teal-600 hover:bg-teal-700 text-white"
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        Download Audio
-                      </Button>
+                  
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Text-to-Speech Generation */}
+                    <div className="bg-blue-800/40 rounded-lg p-4 border border-blue-400/30">
+                      <h4 className="text-white text-lg font-medium mb-4 flex items-center">
+                        <Headphones className="w-5 h-5 mr-2 text-cyan-400" />
+                        Text-to-Speech Generation
+                      </h4>
+                      <div className="space-y-3">
+                        <textarea
+                          value={voiceGenerationText}
+                          onChange={(e) => setVoiceGenerationText(e.target.value)}
+                          placeholder="Enter text to convert to natural speech using ElevenLabs AI..."
+                          className="w-full p-3 bg-blue-900/60 border border-blue-400/50 rounded text-white placeholder-blue-300 resize-none"
+                          rows={4}
+                        />
+                        <div className="text-xs text-blue-300 mb-2">
+                          Uses selected voice persona below. Premium quality synthesis with natural intonation.
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <Button 
+                            onClick={generateVoice}
+                            className="bg-cyan-600 hover:bg-cyan-700 text-white border border-cyan-500"
+                            disabled={!voiceGenerationText.trim()}
+                          >
+                            <Headphones className="w-4 h-4 mr-2" />
+                            Generate Voice
+                          </Button>
+                          <Button 
+                            onClick={downloadAudio}
+                            className="bg-teal-600 hover:bg-teal-700 text-white border border-teal-500"
+                          >
+                            <Download className="w-4 h-4 mr-2" />
+                            Download Audio
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Voice Persona Selection */}
+                    <div className="bg-purple-800/40 rounded-lg p-4 border border-purple-400/30">
+                      <h4 className="text-white text-lg font-medium mb-4 flex items-center">
+                        <Settings className="w-5 h-5 mr-2 text-purple-400" />
+                        Voice Persona & Settings
+                      </h4>
+                      <div className="space-y-3">
+                        <div className="relative">
+                          <label className="block text-sm text-purple-300 mb-1">Select Voice Persona</label>
+                          <select 
+                            value={selectedPersona}
+                            onChange={(e) => setSelectedPersona(e.target.value)}
+                            className="w-full p-3 bg-purple-900/60 border border-purple-400/50 rounded text-white text-sm"
+                            disabled={voicesLoading}
+                          >
+                            {voicesLoading ? (
+                              <option>Loading voices...</option>
+                            ) : availableVoices.length > 0 ? (
+                              <>
+                                {/* Custom Voices First */}
+                                {availableVoices.filter(voice => voice.category !== 'premade').length > 0 && (
+                                  <>
+                                    <option disabled style={{fontWeight: 'bold', color: '#10B981'}}>Your Custom Voices</option>
+                                    {availableVoices
+                                      .filter(voice => voice.category !== 'premade')
+                                      .map((voice) => (
+                                        <option key={voice.voice_id} value={voice.voice_id}>
+                                          ✨ {voice.name}
+                                          {voice.labels?.gender && ` (${voice.labels.gender})`}
+                                          {voice.labels?.age && ` - ${voice.labels.age}`}
+                                        </option>
+                                      ))}
+                                  </>
+                                )}
+                                
+                                {/* Premade Voices */}
+                                {availableVoices.filter(voice => voice.category === 'premade').length > 0 && (
+                                  <>
+                                    <option disabled style={{fontWeight: 'bold', color: '#6366F1'}}>ElevenLabs Premade</option>
+                                    {availableVoices
+                                      .filter(voice => voice.category === 'premade')
+                                      .map((voice) => (
+                                        <option key={voice.voice_id} value={voice.voice_id}>
+                                          {voice.name}
+                                          {voice.labels?.gender && ` (${voice.labels.gender})`}
+                                          {voice.labels?.age && ` - ${voice.labels.age}`}
+                                        </option>
+                                      ))}
+                                  </>
+                                )}
+                              </>
+                            ) : (
+                              <option disabled>Configure ElevenLabs API key to load voices</option>
+                            )}
+                          </select>
+                          {voicesLoading && (
+                            <div className="absolute right-3 top-8 transform -translate-y-1/2">
+                              <div className="animate-spin w-4 h-4 border-2 border-purple-300 border-t-transparent rounded-full"></div>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="bg-purple-900/40 rounded p-2 border border-purple-400/30 text-xs">
+                          <div className="flex items-center justify-between">
+                            <span className="text-purple-200">
+                              {availableVoices.length > 0 
+                                ? `${availableVoices.length} voices loaded`
+                                : 'API key required'
+                              }
+                            </span>
+                            <Button 
+                              size="sm" 
+                              onClick={fetchAvailableVoices}
+                              className="bg-purple-600 hover:bg-purple-700 text-xs px-2 py-1 h-6"
+                              disabled={voicesLoading}
+                            >
+                              {voicesLoading ? 'Loading...' : 'Refresh'}
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-2">
+                          <Button 
+                            onClick={testVoicePersona}
+                            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 text-sm"
+                          >
+                            <Headphones className="w-3 h-3 mr-1" />
+                            Test Voice
+                          </Button>
+                          <Button 
+                            onClick={handleApplyPersona}
+                            className="bg-green-600 hover:bg-green-700 text-white border border-green-500 text-sm"
+                          >
+                            <Settings className="w-3 h-3 mr-1" />
+                            Apply Persona
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                {/* ElevenLabs Persona Selector */}
-                <div className="bg-purple-900/60 rounded-lg p-6 border border-purple-400/50">
-                  <h3 className="text-white text-lg font-semibold mb-4 flex items-center">
-                    <Settings className="w-5 h-5 mr-2 text-purple-400" />
-                    Voice Persona Selection
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="relative">
-                      <select 
-                        value={selectedPersona}
-                        onChange={(e) => setSelectedPersona(e.target.value)}
-                        className="w-full p-3 bg-purple-800/60 border border-purple-400/50 rounded text-white"
-                        disabled={voicesLoading}
-                      >
-                        {voicesLoading ? (
-                          <option>Loading voices...</option>
-                        ) : availableVoices.length > 0 ? (
-                          <>
-                            {/* Custom Voices First */}
-                            {availableVoices.filter(voice => voice.category !== 'premade').length > 0 && (
-                              <>
-                                <option disabled style={{fontWeight: 'bold', color: '#10B981'}}>🎯 Your Custom Voices</option>
-                                {availableVoices
-                                  .filter(voice => voice.category !== 'premade')
-                                  .map((voice) => (
-                                    <option key={voice.voice_id} value={voice.voice_id}>
-                                      ✨ {voice.name}
-                                      {voice.labels?.gender && ` (${voice.labels.gender})`}
-                                      {voice.labels?.age && ` - ${voice.labels.age}`}
-                                    </option>
-                                  ))}
-                              </>
-                            )}
-                            
-                            {/* Premade Voices */}
-                            {availableVoices.filter(voice => voice.category === 'premade').length > 0 && (
-                              <>
-                                <option disabled style={{fontWeight: 'bold', color: '#6366F1'}}>🏪 ElevenLabs Premade</option>
-                                {availableVoices
-                                  .filter(voice => voice.category === 'premade')
-                                  .map((voice) => (
-                                    <option key={voice.voice_id} value={voice.voice_id}>
-                                      {voice.name}
-                                      {voice.labels?.gender && ` (${voice.labels.gender})`}
-                                      {voice.labels?.age && ` - ${voice.labels.age}`}
-                                    </option>
-                                  ))}
-                              </>
-                            )}
-                          </>
-                        ) : (
-                          <option disabled>Configure ElevenLabs API key to load voices</option>
-                        )}
-                      </select>
-                      {voicesLoading && (
-                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                          <div className="animate-spin w-4 h-4 border-2 border-purple-300 border-t-transparent rounded-full"></div>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="flex items-center justify-between p-2 bg-blue-900/40 rounded text-sm border border-purple-400 shadow-lg shadow-purple-400/20">
-                      <span className="text-white">
-                        {availableVoices.length > 0 
-                          ? `${availableVoices.length} ElevenLabs voices loaded`
-                          : 'ElevenLabs API key required'
-                        }
-                      </span>
-                      <Button 
-                        size="sm" 
-                        onClick={fetchAvailableVoices}
-                        className="bg-blue-700 hover:bg-blue-600 text-xs px-2 py-1"
-                        disabled={voicesLoading}
-                      >
-                        {voicesLoading ? 'Loading...' : 'Refresh'}
-                      </Button>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <Button 
-                        onClick={testVoicePersona}
-                        className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
-                      >
-                        <Headphones className="w-4 h-4 mr-2" />
-                        Test Voice
-                      </Button>
-                      <Button 
-                        onClick={handleApplyPersona}
-                        className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
-                      >
-                        <Settings className="w-4 h-4 mr-2" />
-                        Apply Persona
-                      </Button>
+                  
+                  {/* Studio Helper Text */}
+                  <div className="mt-4 bg-slate-800/40 rounded-lg p-3 border border-slate-600/50">
+                    <div className="text-xs text-slate-300">
+                      <span className="font-medium text-purple-300">Voice Synthesis Studio:</span> 
+                      Select a voice persona, enter your text, and generate high-quality speech. 
+                      Custom voices provide unique brand personality while premade voices offer professional consistency.
                     </div>
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { X, Trash2 } from 'lucide-react';
+import { X, Trash2, CheckCircle, XCircle, AlertTriangle, Eye, RefreshCw } from 'lucide-react';
 
 // Helper function to explain tags
 const getTagExplanation = (tag: string): string => {
@@ -30,6 +30,19 @@ const getMemorySummary = (content: string, category: string): string => {
     return content.substring(0, 80) + '...';
   }
   return content;
+};
+
+// Helper function to get document status
+const getDocumentStatus = (item: any) => {
+  if (item.status === 'processed' && item.keyTerms && item.keyTerms.length > 0) {
+    return { status: 'indexed', label: 'Indexed', icon: CheckCircle, color: 'text-green-400' };
+  } else if (item.status === 'failed' || item.error) {
+    return { status: 'failed', label: 'Failed - Re-upload', icon: XCircle, color: 'text-red-400' };
+  } else if (item.status === 'processing') {
+    return { status: 'processing', label: 'Processing...', icon: RefreshCw, color: 'text-yellow-400' };
+  } else {
+    return { status: 'not-indexed', label: 'Not Indexed', icon: AlertTriangle, color: 'text-orange-400' };
+  }
 };
 
 interface KnowledgeViewerModalProps {
@@ -84,23 +97,47 @@ export function KnowledgeViewerModal({
               No knowledge items found in the database
             </div>
           ) : (
-            knowledgeItems.map((item, index) => (
+            knowledgeItems.map((item, index) => {
+              const docStatus = getDocumentStatus(item);
+              const StatusIcon = docStatus.icon;
+              
+              return (
               <div key={item.id || index} className="bg-slate-800 border border-slate-600 rounded-lg p-4">
                 <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h4 className="text-white font-medium">
-                      {item.filename || item.name || item.title || 
-                       (item.type === 'memory' ? 
-                         (item.category === 'voice' ? 'Voice Entry' : 'Text Entry') : 
-                         'Untitled')}
-                    </h4>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="text-white font-medium">
+                        {item.filename || item.name || item.title || 
+                         (item.type === 'memory' ? 
+                           (item.category === 'voice' ? 'Voice Entry' : 'Text Entry') : 
+                           'Untitled')}
+                      </h4>
+                      <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${docStatus.color} bg-slate-700`}>
+                        <StatusIcon className="w-3 h-3" />
+                        {docStatus.label}
+                      </div>
+                    </div>
                     <div className="text-sm text-slate-400">
                       Type: {item.type || 'document'} • 
                       Category: {item.category || 'general'} • 
-                      Size: {item.size || item.wordCount || 0} {item.type === 'document' ? 'bytes' : 'words'}
+                      Size: {item.fileSize || item.size || item.wordCount || 0} {item.type === 'document' ? 'bytes' : 'words'}
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 ml-4">
+                    <Button
+                      onClick={() => handlePreviewDocument(item)}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 text-xs"
+                      title="Preview indexed content"
+                    >
+                      <Eye className="w-3 h-3" />
+                    </Button>
+                    <Button
+                      onClick={() => handleReindexDocument(item)}
+                      className="bg-orange-600 hover:bg-orange-700 text-white px-2 py-1 text-xs"
+                      title="Reindex document"
+                    >
+                      <RefreshCw className="w-3 h-3" />
+                    </Button>
                     <input
                       type="checkbox"
                       checked={selectedItems.includes(item.id)}
@@ -135,7 +172,7 @@ export function KnowledgeViewerModal({
                   </div>
                 )}
               </div>
-            ))
+            )})
           )}
         </div>
         
