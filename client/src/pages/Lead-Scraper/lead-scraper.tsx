@@ -1063,107 +1063,144 @@ export default function EnterpriseLeadScraper() {
                     </div>
 
                     <div className="space-y-3">
-                      <Label>Industry Categories (Select Multiple)</Label>
-                      <select
-                        multiple
-                        value={apifyFilters.industry ? apifyFilters.industry.split(',') : []}
-                        onChange={(e) => {
-                          const selected = Array.from(e.target.selectedOptions, option => option.value).join(',');
-                          setApifyFilters(prev => ({ ...prev, industry: selected }));
-                        }}
-                        className="w-full min-h-[280px] px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                      >
-                        <optgroup label="🧰 Trades & Services">
-                          <option value="hvac">HVAC</option>
-                          <option value="plumbing">Plumbing</option>
-                          <option value="electrical">Electrical</option>
-                          <option value="roofing">Roofing</option>
-                          <option value="landscaping">Landscaping</option>
-                          <option value="general_contracting">General Contracting</option>
-                          <option value="pest_control">Pest Control</option>
-                          <option value="pool_services">Pool Services</option>
-                          <option value="cleaning_services">Cleaning Services</option>
-                          <option value="appliance_repair">Appliance Repair</option>
-                        </optgroup>
-                        <optgroup label="🏥 Medical & Wellness">
-                          <option value="chiropractors">Chiropractors</option>
-                          <option value="dentists">Dentists</option>
-                          <option value="physical_therapists">Physical Therapists</option>
-                          <option value="mental_health_clinics">Mental Health Clinics</option>
-                          <option value="medspas">MedSpas</option>
-                          <option value="primary_care">Primary Care</option>
-                          <option value="dermatologists">Dermatologists</option>
-                          <option value="holistic_health">Holistic Health</option>
-                          <option value="weight_loss_clinics">Weight Loss Clinics</option>
-                        </optgroup>
-                        <optgroup label="💼 Professional Services">
-                          <option value="law_firms">Law Firms</option>
-                          <option value="accountants_cpas">Accountants / CPAs</option>
-                          <option value="insurance_agencies">Insurance Agencies</option>
-                          <option value="real_estate_brokers">Real Estate Brokers</option>
-                          <option value="mortgage_lenders">Mortgage Lenders</option>
-                          <option value="financial_advisors">Financial Advisors</option>
-                          <option value="business_consultants">Business Consultants</option>
-                        </optgroup>
-                        <optgroup label="🛍️ Local Retail & Consumer">
-                          <option value="auto_dealerships">Auto Dealerships</option>
-                          <option value="furniture_stores">Furniture Stores</option>
-                          <option value="jewelry_stores">Jewelry Stores</option>
-                          <option value="boutiques">Boutiques</option>
-                          <option value="vape_shops">Vape Shops</option>
-                          <option value="gun_shops">Gun Shops</option>
-                          <option value="nutrition_supplement_stores">Nutrition & Supplement Stores</option>
-                        </optgroup>
-                        <optgroup label="🧑‍🎓 Education & Training">
-                          <option value="tutoring_centers">Tutoring Centers</option>
-                          <option value="test_prep">Test Prep</option>
-                          <option value="trade_schools">Trade Schools</option>
-                          <option value="driving_schools">Driving Schools</option>
-                          <option value="online_course_creators">Online Course Creators</option>
-                          <option value="coaching_businesses">Coaching Businesses</option>
-                        </optgroup>
-                        <optgroup label="🖥️ Tech, SaaS & Digital">
-                          <option value="saas_startups">SaaS Startups</option>
-                          <option value="marketing_agencies">Marketing Agencies</option>
-                          <option value="web_design_firms">Web Design Firms</option>
-                          <option value="it_support_msps">IT Support & MSPs</option>
-                          <option value="ecommerce_brands">eCommerce Brands</option>
-                          <option value="cybersecurity_consultants">Cybersecurity Consultants</option>
-                          <option value="data_analytics_firms">Data & Analytics Firms</option>
-                        </optgroup>
-                        <optgroup label="🧰 Home & Commercial Services">
-                          <option value="garage_door_companies">Garage Door Companies</option>
-                          <option value="flooring_installers">Flooring Installers</option>
-                          <option value="window_tinting">Window Tinting</option>
-                          <option value="solar_installers">Solar Installers</option>
-                          <option value="security_system_installers">Security System Installers</option>
-                          <option value="commercial_janitorial">Commercial Janitorial</option>
-                          <option value="pressure_washing">Pressure Washing</option>
-                        </optgroup>
-                        <optgroup label="🏗️ Construction & Manufacturing">
-                          <option value="construction_firms">Construction Firms</option>
-                          <option value="fabricators">Fabricators</option>
-                          <option value="welders">Welders</option>
-                          <option value="machining_cnc">Machining & CNC</option>
-                          <option value="custom_metalworks">Custom Metalworks</option>
-                          <option value="modular_building">Modular Building</option>
-                        </optgroup>
-                        <optgroup label="🚚 Transportation & Logistics">
-                          <option value="trucking_companies">Trucking Companies</option>
-                          <option value="freight_brokers">Freight Brokers</option>
-                          <option value="3pl_providers">3PL Providers</option>
-                          <option value="moving_companies">Moving Companies</option>
-                          <option value="auto_transporters">Auto Transporters</option>
-                        </optgroup>
-                        <optgroup label="🏦 Financial Services & Lending">
-                          <option value="merchant_services">Merchant Services</option>
-                          <option value="business_loan_brokers">Business Loan Brokers</option>
-                          <option value="credit_repair_firms">Credit Repair Firms</option>
-                          <option value="funding_specialists">Funding Specialists</option>
-                          <option value="tax_resolution_firms">Tax Resolution Firms</option>
-                        </optgroup>
-                      </select>
-                      <p className="text-sm text-slate-400">Hold Ctrl/Cmd to select multiple categories</p>
+                      <Label>Industry Categories (Click to Select)</Label>
+                      <div className="w-full max-h-[280px] overflow-y-auto px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl">
+                        {[
+                          {
+                            category: "🧰 Trades & Services",
+                            options: [
+                              { value: "hvac", label: "HVAC" },
+                              { value: "plumbing", label: "Plumbing" },
+                              { value: "electrical", label: "Electrical" },
+                              { value: "roofing", label: "Roofing" },
+                              { value: "landscaping", label: "Landscaping" },
+                              { value: "general_contracting", label: "General Contracting" },
+                              { value: "pest_control", label: "Pest Control" },
+                              { value: "pool_services", label: "Pool Services" },
+                              { value: "cleaning_services", label: "Cleaning Services" },
+                              { value: "appliance_repair", label: "Appliance Repair" }
+                            ]
+                          },
+                          {
+                            category: "🏥 Healthcare & Wellness",
+                            options: [
+                              { value: "chiropractors", label: "Chiropractors" },
+                              { value: "dentists", label: "Dentists" },
+                              { value: "physical_therapists", label: "Physical Therapists" },
+                              { value: "mental_health_clinics", label: "Mental Health" },
+                              { value: "medspas", label: "MedSpas" },
+                              { value: "primary_care", label: "Primary Care" },
+                              { value: "dermatologists", label: "Dermatologists" },
+                              { value: "holistic_health", label: "Holistic Health" },
+                              { value: "weight_loss_clinics", label: "Weight Loss" }
+                            ]
+                          },
+                          {
+                            category: "💼 Professional Services",
+                            options: [
+                              { value: "law_firms", label: "Law Firms" },
+                              { value: "accountants_cpas", label: "CPAs" },
+                              { value: "insurance_agencies", label: "Insurance" },
+                              { value: "real_estate_brokers", label: "Real Estate" },
+                              { value: "mortgage_lenders", label: "Mortgage" },
+                              { value: "financial_advisors", label: "Financial" },
+                              { value: "business_consultants", label: "Consulting" },
+                              { value: "marketing_agencies", label: "Marketing" },
+                              { value: "it_services", label: "IT Services" },
+                              { value: "web_developers", label: "Web Dev" }
+                            ]
+                          }
+                        ].map((categoryGroup) => (
+                          <div key={categoryGroup.category} className="mb-4">
+                            <div className="text-xs font-semibold text-slate-400 mb-2 px-2">{categoryGroup.category}</div>
+                            {categoryGroup.options.map((industry) => {
+                              const selectedIndustries = apifyFilters.industry ? apifyFilters.industry.split(',') : [];
+                              const isSelected = selectedIndustries.includes(industry.value);
+                              
+                              return (
+                                <div
+                                  key={industry.value}
+                                  className={`flex items-center p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-700/50 ${
+                                    isSelected ? 'bg-emerald-600/30 border border-emerald-400/50' : ''
+                                  }`}
+                                  onClick={() => {
+                                    const currentIndustries = apifyFilters.industry ? apifyFilters.industry.split(',').filter(i => i) : [];
+                                    let newIndustries;
+                                    
+                                    if (isSelected) {
+                                      newIndustries = currentIndustries.filter(i => i !== industry.value);
+                                    } else {
+                                      newIndustries = [...currentIndustries, industry.value];
+                                    }
+                                    
+                                    setApifyFilters(prev => ({ ...prev, industry: newIndustries.join(',') }));
+                                  }}
+                                >
+                                  <div className={`w-4 h-4 rounded border-2 mr-3 flex items-center justify-center ${
+                                    isSelected ? 'bg-emerald-500 border-emerald-500' : 'border-slate-500'
+                                  }`}>
+                                    {isSelected && (
+                                      <CheckCircle className="w-3 h-3 text-white" />
+                                    )}
+                                  </div>
+                                  <span className="text-white text-sm">{industry.label}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {apifyFilters.industry && apifyFilters.industry.split(',').filter(i => i).map((industryValue) => {
+                          const allIndustries = [
+                            { value: "hvac", label: "HVAC" },
+                            { value: "plumbing", label: "Plumbing" },
+                            { value: "electrical", label: "Electrical" },
+                            { value: "roofing", label: "Roofing" },
+                            { value: "landscaping", label: "Landscaping" },
+                            { value: "general_contracting", label: "General Contracting" },
+                            { value: "pest_control", label: "Pest Control" },
+                            { value: "pool_services", label: "Pool Services" },
+                            { value: "cleaning_services", label: "Cleaning Services" },
+                            { value: "appliance_repair", label: "Appliance Repair" },
+                            { value: "chiropractors", label: "Chiropractors" },
+                            { value: "dentists", label: "Dentists" },
+                            { value: "physical_therapists", label: "Physical Therapists" },
+                            { value: "mental_health_clinics", label: "Mental Health" },
+                            { value: "medspas", label: "MedSpas" },
+                            { value: "primary_care", label: "Primary Care" },
+                            { value: "dermatologists", label: "Dermatologists" },
+                            { value: "holistic_health", label: "Holistic Health" },
+                            { value: "weight_loss_clinics", label: "Weight Loss" },
+                            { value: "law_firms", label: "Law Firms" },
+                            { value: "accountants_cpas", label: "CPAs" },
+                            { value: "insurance_agencies", label: "Insurance" },
+                            { value: "real_estate_brokers", label: "Real Estate" },
+                            { value: "mortgage_lenders", label: "Mortgage" },
+                            { value: "financial_advisors", label: "Financial" },
+                            { value: "business_consultants", label: "Consulting" },
+                            { value: "marketing_agencies", label: "Marketing" },
+                            { value: "it_services", label: "IT Services" },
+                            { value: "web_developers", label: "Web Dev" }
+                          ];
+                          
+                          const industryLabel = allIndustries.find(ind => ind.value === industryValue)?.label || industryValue;
+                          
+                          return (
+                            <div key={industryValue} className="bg-emerald-600/20 text-emerald-200 px-3 py-1 rounded-full text-xs flex items-center">
+                              {industryLabel}
+                              <X
+                                className="w-3 h-3 ml-2 cursor-pointer hover:text-emerald-100"
+                                onClick={() => {
+                                  const currentIndustries = apifyFilters.industry.split(',').filter(i => i);
+                                  const newIndustries = currentIndustries.filter(i => i !== industryValue);
+                                  setApifyFilters(prev => ({ ...prev, industry: newIndustries.join(',') }));
+                                }}
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
 
                     <div className="space-y-3">
