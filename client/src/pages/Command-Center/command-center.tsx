@@ -59,6 +59,7 @@ import { ContentCreatorDashboard } from '@/components/content-creator-dashboard'
 import { MailchimpSyncDashboard } from '@/components/mailchimp-sync-dashboard';
 import { SocialContentCreator } from '@/components/social-content-creator';
 import { useToast } from '@/hooks/use-toast';
+import { Toast, ToastTitle, ToastDescription } from '@/components/ui/toast';
 
 
 export default function CommandCenter() {
