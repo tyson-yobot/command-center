@@ -4075,6 +4075,13 @@ export default function CommandCenter() {
                     {documentsLoading ? 'Loading...' : 'Load Documents'}
                   </Button>
                   <Button 
+                    onClick={() => document.getElementById('file-upload')?.click()}
+                    className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
+                  >
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload Documents
+                  </Button>
+                  <Button 
                     onClick={deleteSelectedDocuments}
                     disabled={selectedDocuments.length === 0}
                     className="bg-red-600 hover:bg-red-700 text-white"
