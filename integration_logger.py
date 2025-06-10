@@ -62,12 +62,15 @@ def log_integration_test_to_airtable(
         "Content-Type": "application/json"
     }
 
+    # Format as concatenated string to match existing table structure
+    status_emoji = "✅" if passed else "❌"
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    combined_value = f"{integration_name} - {status_emoji} - {notes} - {timestamp} - QA: {qa_owner} - Module: {module_type}"
+    
     payload = {
         "fields": {
-            "🧠 Integration Name": integration_name,
-            "✅ Passed?": "✅" if passed else "❌",
-            "📅 Test Date": datetime.now().strftime("%Y-%m-%d"),
-            "📝 Notes / Debug": notes
+            "🔧 Integration Name": combined_value
         }
     }
 
