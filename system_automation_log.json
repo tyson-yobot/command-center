@@ -1,27 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:05:00.336Z",
-    "functionId": 146,
-    "functionName": "Customer Reconciliation",
-    "batch": 15,
-    "category": "Data",
-    "status": "success",
-    "duration": 241,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-10T16:05:00.358Z",
-    "functionId": 156,
-    "functionName": "Google Drive Backup",
-    "batch": 16,
-    "category": "Backup",
-    "status": "success",
-    "duration": 262,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:07:51.892Z",
     "type": "system_event",
     "level": "info",
@@ -11472,6 +11450,36 @@
       "failedExecutions": 0,
       "systemUptime": 267.411619503,
       "lastHealthCheck": "2025-06-11T01:09:00.006Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T01:20:00.013Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 215.462838571,
+      "lastHealthCheck": "2025-06-11T01:19:00.010Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T01:30:00.012Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 815.463136469,
+      "lastHealthCheck": "2025-06-11T01:29:00.010Z",
       "automationStatus": "paused"
     }
   }
