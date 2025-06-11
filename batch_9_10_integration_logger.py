@@ -51,10 +51,18 @@ def log_integration_test_to_airtable(
     module_type: str = "Automation Test",
     related_scenario_link: str = ""
 ):
+    # LOCKED AIRTABLE CONFIGURATION - ADMIN AUTHORIZED ONLY
+    from logger_config import AIRTABLE_API_KEY, AIRTABLE_BASE_ID, AIRTABLE_TABLE_ID
+    
+    # Safety check to prevent base mismatches
+    if AIRTABLE_BASE_ID != "appbFDTqB2WtRNV1H":
+        raise Exception("❌ Invalid Airtable Base ID in use – logger misconfigured.")
+    
+
     # Using our current Airtable configuration
-    airtable_api_key = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
-    base_id = "appbFDTqB2WtRNV1H"
-    table_id = "tbl7K5RthCtD69BE1"
+    airtable_api_key = AIRTABLE_API_KEY
+    base_id = AIRTABLE_BASE_ID
+    table_id = AIRTABLE_TABLE_ID
     url = f"https://api.airtable.com/v0/{base_id}/{table_id}"
 
     headers = {

@@ -88,7 +88,7 @@ def test_all_22_functions_new_table():
         print(f"\n[{i}/22] Testing: {function_name}")
         
         # Simulate function test
-        test_passed = True  # All functions working in production
+        test_passed=test_result  # All functions working in production
         notes = f"Production test {i}/22 - Full automation suite validation - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
         
         # Log to new table
