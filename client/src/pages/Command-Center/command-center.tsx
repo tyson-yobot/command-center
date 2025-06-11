@@ -2584,10 +2584,10 @@ export default function CommandCenter() {
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">System Load</div>
-                  <div className="text-2xl font-bold text-slate-400">
-                    --
+                  <div className="text-2xl font-bold text-green-400">
+                    {automationPerformance?.activeFunctions || 0}
                   </div>
-                  <div className="text-xs text-slate-400">No data</div>
+                  <div className="text-xs text-green-400">Active functions</div>
                 </div>
               </div>
               
