@@ -72,6 +72,76 @@ elif '${functionName}' == 'upload_to_drive':
     function_upload_to_drive()
 elif '${functionName}' == 'generate_compliance_pdf':
     function_generate_compliance_pdf()
+# Batch 9: Lead Engine Functions (32-36)
+elif '${functionName}' == 'lead_scraper_apollo':
+    function_lead_scraper_apollo()
+elif '${functionName}' == 'lead_scraper_phantombuster':
+    function_lead_scraper_phantombuster()
+elif '${functionName}' == 'lead_scraper_apify':
+    function_lead_scraper_apify()
+elif '${functionName}' == 'export_leads':
+    function_export_leads()
+elif '${functionName}' == 'scraped_leads_airtable':
+    function_scraped_leads_airtable()
+# Batch 10: Voice/Communication + Support Functions (37-54)
+elif '${functionName}' == 'start_pipeline_calls':
+    function_start_pipeline_calls()
+elif '${functionName}' == 'stop_pipeline_calls':
+    function_stop_pipeline_calls()
+elif '${functionName}' == 'initiate_voice_call_manual':
+    function_initiate_voice_call_manual()
+elif '${functionName}' == 'voice_input_elevenlabs':
+    function_voice_input_elevenlabs()
+elif '${functionName}' == 'send_sms_twilio':
+    function_send_sms_twilio()
+elif '${functionName}' == 'elevenlabs_voice_persona':
+    function_elevenlabs_voice_persona()
+elif '${functionName}' == 'submit_ticket_zendesk':
+    function_submit_ticket_zendesk()
+elif '${functionName}' == 'chatbot_voice_text_hybrid':
+    function_chatbot_voice_text_hybrid()
+elif '${functionName}' == 'download_logs':
+    function_download_logs()
+elif '${functionName}' == 'run_diagnostics':
+    function_run_diagnostics()
+elif '${functionName}' == 'emergency_data_wipe':
+    function_emergency_data_wipe()
+elif '${functionName}' == 'critical_escalation_alert':
+    function_critical_escalation_alert()
+elif '${functionName}' == 'sales_order_processor':
+    function_sales_order_processor()
+elif '${functionName}' == 'rag_knowledge_engine':
+    function_rag_knowledge_engine()
+elif '${functionName}' == 'botalytics_metrics_dashboard':
+    function_botalytics_metrics_dashboard()
+elif '${functionName}' == 'mailchimp_sync':
+    function_mailchimp_sync()
+elif '${functionName}' == 'system_mode_toggle':
+    function_system_mode_toggle()
+elif '${functionName}' == 'file_uploads_rag':
+    function_file_uploads_rag()
+elif '${functionName}' == 'webhook_automation':
+    function_webhook_automation()
+elif '${functionName}' == 'api_integration':
+    function_api_integration()
+elif '${functionName}' == 'data_sync':
+    function_data_sync()
+elif '${functionName}' == 'notification_system':
+    function_notification_system()
+elif '${functionName}' == 'backup_system':
+    function_backup_system()
+elif '${functionName}' == 'security_check':
+    function_security_check()
+elif '${functionName}' == 'performance_monitor':
+    function_performance_monitor()
+elif '${functionName}' == 'error_handler':
+    function_error_handler()
+elif '${functionName}' == 'log_aggregator':
+    function_log_aggregator()
+elif '${functionName}' == 'health_check':
+    function_health_check()
+elif '${functionName}' == 'system_cleanup':
+    function_system_cleanup()
 else:
     print('❌ Unknown function:', '${functionName}')
 `;
@@ -144,5 +214,41 @@ export const AUTOMATION_FUNCTIONS = [
   'gpt_summary',
   'calendar_booking',
   'upload_to_drive',
-  'generate_compliance_pdf'
+  'generate_compliance_pdf',
+  // Batch 9: Lead Engine Functions (32-36)
+  'lead_scraper_apollo',
+  'lead_scraper_phantombuster',
+  'lead_scraper_apify',
+  'export_leads',
+  'scraped_leads_airtable',
+  // Batch 10: Voice/Communication + Support Functions (37-54)
+  'start_pipeline_calls',
+  'stop_pipeline_calls',
+  'initiate_voice_call_manual',
+  'voice_input_elevenlabs',
+  'send_sms_twilio',
+  'elevenlabs_voice_persona',
+  'submit_ticket_zendesk',
+  'chatbot_voice_text_hybrid',
+  'download_logs',
+  'run_diagnostics',
+  'emergency_data_wipe',
+  'critical_escalation_alert',
+  'sales_order_processor',
+  'rag_knowledge_engine',
+  'botalytics_metrics_dashboard',
+  'mailchimp_sync',
+  'system_mode_toggle',
+  'file_uploads_rag',
+  'webhook_automation',
+  'api_integration',
+  'data_sync',
+  'notification_system',
+  'backup_system',
+  'security_check',
+  'performance_monitor',
+  'error_handler',
+  'log_aggregator',
+  'health_check',
+  'system_cleanup'
 ];
