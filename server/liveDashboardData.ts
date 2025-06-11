@@ -1,5 +1,11 @@
+import { TestModeData } from './testModeData';
+
 export class LiveDashboardData {
-  static async getAutomationMetrics() {
+  static async getAutomationMetrics(systemMode: 'test' | 'live' = 'live') {
+    // Complete isolation: serve test data when in test mode
+    if (systemMode === 'test') {
+      return TestModeData.getRealisticAutomationMetrics();
+    }
     try {
       const AUTHORIZED_BASE_ID = "appbFDTqB2WtRNV1H";
       const AUTHORIZED_TABLE_ID = "tbl7K5RthCtD69BE1";
@@ -134,7 +140,11 @@ export class LiveDashboardData {
     };
   }
 
-  static async getLeadMetrics() {
+  static async getLeadMetrics(systemMode: 'test' | 'live' = 'live') {
+    // Complete isolation: serve test data when in test mode
+    if (systemMode === 'test') {
+      return TestModeData.getRealisticLeadMetrics();
+    }
     try {
       return {
         totalLeads: null,
@@ -165,9 +175,14 @@ export class LiveDashboardData {
     }
   }
 
-  static async getDashboardOverview() {
-    const automationMetrics = await this.getAutomationMetrics();
-    const leadMetrics = await this.getLeadMetrics();
+  static async getDashboardOverview(systemMode: 'test' | 'live' = 'live') {
+    // Complete isolation: serve test data when in test mode
+    if (systemMode === 'test') {
+      return TestModeData.getRealisticDashboardOverview();
+    }
+    
+    const automationMetrics = await this.getAutomationMetrics(systemMode);
+    const leadMetrics = await this.getLeadMetrics(systemMode);
     
     return {
       automation: automationMetrics,
