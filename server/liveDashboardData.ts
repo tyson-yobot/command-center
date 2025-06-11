@@ -25,23 +25,9 @@ export class LiveDashboardData {
         const records = airtableData.records || [];
         
         // Parse integration test records to get real automation function status
-        const today = new Date().toISOString().split('T')[0];
-        const todaysRecords = records.filter(record => {
-          const createdTime = record.createdTime || '';
-          return createdTime.startsWith(today);
-        });
+        // Count ALL records, not just today's
 
-        // Define the actual 22 automation functions you have
-        const actualFunctions = [
-          'Log To CRM', 'Create Invoice', 'Send Slack Notification', 'Send Email Receipt',
-          'Record Call Log', 'Score Call', 'Run Voicebot Script', 'Sync To Smartspend',
-          'Generate ROI Snapshot', 'Trigger Quote PDF', 'Sync To Hubspot', 'Sync To Quickbooks',
-          'Log Voice Sentiment', 'Store Transcription', 'Send SMS Alert', 'Candidate Screening',
-          'Background Checks', 'Reference Verification', 'Onboarding Automation', 'Document Management',
-          'Policy Distribution', 'Compliance Training'
-        ];
-
-        // Extract function names and statuses from the new table structure
+        // Extract function names and statuses from ALL records (no hardcoded filtering)
         const functionTests = records.map(record => {
           const integrationName = record.fields['🔧 Integration Name'] || '';
           const passFailStatus = record.fields['✅ Pass/Fail'] || '';
