@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:10:00.247Z",
-    "functionId": 149,
-    "functionName": "Manual Override Logger",
-    "batch": 15,
-    "category": "Audit",
-    "status": "success",
-    "duration": 165,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:10:00.272Z",
     "functionId": 146,
     "functionName": "Customer Reconciliation",
@@ -11500,6 +11489,21 @@
       "failedExecutions": 0,
       "systemUptime": 232.622157995,
       "lastHealthCheck": "2025-06-11T02:49:00.007Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T03:00:00.013Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 42.472695168,
+      "lastHealthCheck": "2025-06-11T03:00:00.012Z",
       "automationStatus": "paused"
     }
   }

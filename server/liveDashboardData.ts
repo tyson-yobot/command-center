@@ -35,13 +35,21 @@ export class LiveDashboardData {
           // Use Pass/Fail field if populated, otherwise parse from integration name
           let success = false;
           if (passFailField) {
-            success = passFailField === '✅';
+            success = passFailField.includes('✅') || passFailField.toLowerCase().includes('pass');
           } else {
             // Fallback: parse from integrated format in integration name
-            success = integrationName.includes(' - ✅ - ');
+            success = integrationName.includes(' - ✅ - ') || integrationName.includes('✅');
           }
           
-          const functionName = integrationName.split(' - ')[0] || integrationName;
+          // Extract function name properly handling different formats
+          let functionName = integrationName;
+          if (integrationName.includes(' - ')) {
+            functionName = integrationName.split(' - ')[0];
+          }
+          // Clean up function names that start with "Function X:"
+          if (functionName.includes(': ')) {
+            functionName = functionName.split(': ')[1] || functionName;
+          }
           return { functionName: functionName.trim(), success, record };
         });
 
@@ -56,12 +64,19 @@ export class LiveDashboardData {
         
         // Get unique functions for top performers
         const uniqueFunctions: any = {};
+        const functionNames: string[] = [];
         functionTests.forEach(test => {
           const cleanFunctionName = test.functionName.trim();
+          functionNames.push(cleanFunctionName);
           if (!uniqueFunctions[cleanFunctionName] || test.record.fields['📅 Test Date'] > uniqueFunctions[cleanFunctionName].record.fields['📅 Test Date']) {
             uniqueFunctions[cleanFunctionName] = test;
           }
         });
+        
+        // Debug logging
+        console.log(`DEBUG: Found ${functionNames.length} total function names`);
+        console.log(`DEBUG: Unique function count: ${Object.keys(uniqueFunctions).length}`);
+        console.log(`DEBUG: First 5 unique functions: ${Object.keys(uniqueFunctions).slice(0, 5)}`);
 
         // Use actual record count from Airtable - no artificial calculation
         const uniqueFunctionCount = Object.keys(uniqueFunctions).length;
