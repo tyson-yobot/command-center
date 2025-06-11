@@ -29,7 +29,7 @@ import {
   type InsertKnowledgeBase,
   type InsertClientCompany,
   type InsertPhantombusterLead
-} from "@shared/schema";
+} from "../shared/schema.js";
 import { db } from "./db";
 import { eq, like, and, or } from "drizzle-orm";
 

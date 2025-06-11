@@ -12269,6 +12269,48 @@ CRM Data:
     }
   });
 
+  // Automation Performance Endpoint with Test/Live Mode Isolation
+  app.get('/api/automation-performance', async (req, res) => {
+    try {
+      const requestedMode = req.headers['x-system-mode'] as 'test' | 'live' || systemMode;
+      
+      const { LiveDashboardData } = await import('./liveDashboardData');
+      const automationMetrics = await LiveDashboardData.getAutomationMetrics(requestedMode);
+      
+      logOperation('automation-performance', { mode: requestedMode }, 'success', `Automation performance metrics retrieved in ${requestedMode} mode`);
+      
+      res.json(automationMetrics);
+    } catch (error: any) {
+      logOperation('automation-performance', {}, 'error', `Failed to get automation performance: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to get automation performance',
+        details: error.message
+      });
+    }
+  });
+
+  // Dashboard Metrics Endpoint with Test/Live Mode Isolation
+  app.get('/api/dashboard-metrics', async (req, res) => {
+    try {
+      const requestedMode = req.headers['x-system-mode'] as 'test' | 'live' || systemMode;
+      
+      const { LiveDashboardData } = await import('./liveDashboardData');
+      const dashboardData = await LiveDashboardData.getDashboardOverview(requestedMode);
+      
+      logOperation('dashboard-metrics', { mode: requestedMode }, 'success', `Dashboard metrics retrieved in ${requestedMode} mode`);
+      
+      res.json(dashboardData);
+    } catch (error: any) {
+      logOperation('dashboard-metrics', {}, 'error', `Failed to get dashboard metrics: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to get dashboard metrics',
+        details: error.message
+      });
+    }
+  });
+
   // Set System Mode - Toggle between test and live
   app.post('/api/system-mode', async (req, res) => {
     try {
