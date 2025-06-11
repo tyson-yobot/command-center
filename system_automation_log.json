@@ -1,27 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:10:00.272Z",
-    "functionId": 146,
-    "functionName": "Customer Reconciliation",
-    "batch": 15,
-    "category": "Data",
-    "status": "success",
-    "duration": 180,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-10T16:10:00.288Z",
-    "functionId": 151,
-    "functionName": "VoiceBot Escalation Detection",
-    "batch": 16,
-    "category": "Voice",
-    "status": "success",
-    "duration": 195,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:10:00.296Z",
     "functionId": 204,
     "functionName": "Duplicate Record Detection",
@@ -11504,6 +11482,36 @@
       "failedExecutions": 0,
       "systemUptime": 42.472695168,
       "lastHealthCheck": "2025-06-11T03:00:00.012Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T03:10:00.013Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 251.670099514,
+      "lastHealthCheck": "2025-06-11T03:09:00.006Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T03:20:00.010Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 851.671085207,
+      "lastHealthCheck": "2025-06-11T03:19:00.007Z",
       "automationStatus": "paused"
     }
   }
