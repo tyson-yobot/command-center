@@ -20,33 +20,48 @@ def log_automation_execution(
     qa_owner: str = "Tyson Lerfald",
     module_type: str = "Automation Test"
 ):
-    """Log EVERY automation execution to Airtable - called automatically"""
+    """Log EVERY automation execution to Airtable - called automatically with patch system"""
     
-    url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_TABLE_ID}"
+    base_url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_TABLE_ID}"
     headers = {
         'Authorization': f'Bearer {AIRTABLE_API_KEY}',
         'Content-Type': 'application/json'
     }
     
-    payload = {
-        'fields': {
-            '🔧 Integration Name': function_name,
-            '✅ Pass/Fail': '✅ Pass' if success else '❌ Fail',
-            '🧠 Notes / Debug': notes,
-            '📅 Test Date': datetime.now().isoformat(),
-            '🧑‍💻 QA Owner': qa_owner,
-            '📤 Output Data Populated?': True,
-            '🗃️ Record Created?': True,
-            '🔁 Retry Attempted?': False,
-            '🧩 Module Type': module_type,
-            '📂 Related Scenario Link': ''
-        }
-    }
+    # First, check if record exists for this function
+    search_url = f"{base_url}?filterByFormula={{🔧 Integration Name}}='{function_name}'"
     
     try:
-        response = requests.post(url, headers=headers, json=payload)
+        search_response = requests.get(search_url, headers=headers)
+        existing_records = search_response.json().get('records', [])
         
-        if response.status_code == 200:
+        payload = {
+            'fields': {
+                '🔧 Integration Name': function_name,
+                '✅ Pass/Fail': '✅ Pass' if success else '❌ Fail',
+                '🧠 Notes / Debug': notes,
+                '📅 Test Date': datetime.now().isoformat(),
+                '🧑‍💻 QA Owner': qa_owner,
+                '📤 Output Data Populated?': True,
+                '🗃️ Record Created?': True,
+                '🔁 Retry Attempted?': len(existing_records) > 0,  # Mark as retry if updating
+                '🧩 Module Type': module_type,
+                '📂 Related Scenario Link': ''
+            }
+        }
+        
+        if existing_records:
+            # Update existing record (PATCH)
+            record_id = existing_records[0]['id']
+            patch_url = f"{base_url}/{record_id}"
+            response = requests.patch(patch_url, headers=headers, json=payload)
+            operation = "UPDATED"
+        else:
+            # Create new record (POST)
+            response = requests.post(base_url, headers=headers, json=payload)
+            operation = "CREATED"
+        
+        if response.status_code in [200, 201]:
             record_data = response.json()
             print(f"🔄 LIVE LOG: {function_name} - {record_data.get('id')}")
             return True
