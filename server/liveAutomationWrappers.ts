@@ -142,6 +142,57 @@ elif '${functionName}' == 'health_check':
     function_health_check()
 elif '${functionName}' == 'system_cleanup':
     function_system_cleanup()
+# NEW FUNCTIONS - Batch 20-55 (Functions 67-91)
+elif '${functionName}' == 'generate_summary_email':
+    function_generate_summary_email()
+elif '${functionName}' == 'push_ticket_to_zendesk':
+    function_push_ticket_to_zendesk()
+elif '${functionName}' == 'log_inbound_call':
+    function_log_inbound_call()
+elif '${functionName}' == 'follow_up_responder':
+    function_follow_up_responder()
+elif '${functionName}' == 'log_debug_output':
+    function_log_debug_output()
+elif '${functionName}' == 'update_project_tracker':
+    function_update_project_tracker()
+elif '${functionName}' == 'update_mainframe_dashboard':
+    function_update_mainframe_dashboard()
+elif '${functionName}' == 'generate_contract_pdf':
+    function_generate_contract_pdf()
+elif '${functionName}' == 'send_contract_to_client':
+    function_send_contract_to_client()
+elif '${functionName}' == 'push_to_sandbox':
+    function_push_to_sandbox()
+elif '${functionName}' == 'update_voice_settings':
+    function_update_voice_settings()
+elif '${functionName}' == 'restart_bot_instance':
+    function_restart_bot_instance()
+elif '${functionName}' == 'store_call_summary':
+    function_store_call_summary()
+elif '${functionName}' == 'refresh_auth_tokens':
+    function_refresh_auth_tokens()
+elif '${functionName}' == 'deploy_quick_reply':
+    function_deploy_quick_reply()
+elif '${functionName}' == 'rebuild_sync_index':
+    function_rebuild_sync_index()
+elif '${functionName}' == 'check_data_integrity':
+    function_check_data_integrity()
+elif '${functionName}' == 'create_rag_snapshot':
+    function_create_rag_snapshot()
+elif '${functionName}' == 'log_disconnected_event':
+    function_log_disconnected_event()
+elif '${functionName}' == 'push_kpi_to_dashboard':
+    function_push_kpi_to_dashboard()
+elif '${functionName}' == 'log_failed_webhook':
+    function_log_failed_webhook()
+elif '${functionName}' == 'sync_client_permissions':
+    function_sync_client_permissions()
+elif '${functionName}' == 'trigger_workflow_backup':
+    function_trigger_workflow_backup()
+elif '${functionName}' == 'cache_analytics_snapshot':
+    function_cache_analytics_snapshot()
+elif '${functionName}' == 'clear_error_flags':
+    function_clear_error_flags()
 else:
     print('❌ Unknown function:', '${functionName}')
 `;
@@ -250,5 +301,31 @@ export const AUTOMATION_FUNCTIONS = [
   'error_handler',
   'log_aggregator',
   'health_check',
-  'system_cleanup'
+  'system_cleanup',
+  // NEW FUNCTIONS - Batch 20-55 (Functions 67-91)
+  'generate_summary_email',
+  'push_ticket_to_zendesk',
+  'log_inbound_call',
+  'follow_up_responder',
+  'log_debug_output',
+  'update_project_tracker',
+  'update_mainframe_dashboard',
+  'generate_contract_pdf',
+  'send_contract_to_client',
+  'push_to_sandbox',
+  'update_voice_settings',
+  'restart_bot_instance',
+  'store_call_summary',
+  'refresh_auth_tokens',
+  'deploy_quick_reply',
+  'rebuild_sync_index',
+  'check_data_integrity',
+  'create_rag_snapshot',
+  'log_disconnected_event',
+  'push_kpi_to_dashboard',
+  'log_failed_webhook',
+  'sync_client_permissions',
+  'trigger_workflow_backup',
+  'cache_analytics_snapshot',
+  'clear_error_flags'
 ];

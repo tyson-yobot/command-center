@@ -35,7 +35,7 @@ def log_automation_execution(
         search_response = requests.get(search_url, headers=headers)
         existing_records = search_response.json().get('records', [])
         
-        # Complete function mapping - ALL 65 functions mapped correctly
+        # Complete function mapping - ALL 90 functions mapped correctly
         function_map = {
             'Log to CRM': 1, 'Create Invoice': 2, 'Send Slack Notification': 3, 'Send Email Receipt': 4,
             'Record Call Log': 5, 'Score Call': 6, 'Run Voicebot Script': 7, 'Sync to SmartSpend': 8,
@@ -52,7 +52,14 @@ def log_automation_execution(
             'Sales Order Processor': 49, 'RAG Knowledge Engine': 50, 'Botalytics Metrics Dashboard': 51, 'Mailchimp Sync': 52,
             'System Mode Toggle': 53, 'File Uploads RAG': 54, 'Webhook Automation': 55, 'API Integration': 56,
             'Data Sync': 57, 'Notification System': 58, 'Backup System': 59, 'Security Check': 60,
-            'Performance Monitor': 61, 'Error Handler': 62, 'Log Aggregator': 63, 'Health Check': 64, 'System Cleanup': 65
+            'Performance Monitor': 61, 'Error Handler': 62, 'Log Aggregator': 63, 'Health Check': 64, 'System Cleanup': 65,
+            'Test Function - Standardized Logger Field Fix': 66, 'Generate Summary Email': 67, 'Push Ticket To Zendesk': 68,
+            'Log Inbound Call': 69, 'Follow-Up Responder': 70, 'Log Debug Output': 71, 'Update Project Tracker': 72,
+            'Update Mainframe Dashboard': 73, 'Generate Contract PDF': 74, 'Send Contract To Client': 75, 'Push To Sandbox': 76,
+            'Update Voice Settings': 77, 'Restart Bot Instance': 78, 'Store Call Summary': 79, 'Refresh Auth Tokens': 80,
+            'Deploy Quick Reply': 81, 'Rebuild Sync Index': 82, 'Check Data Integrity': 83, 'Create RAG Snapshot': 84,
+            'Log Disconnected Event': 85, 'Push KPI To Dashboard': 86, 'Log Failed Webhook': 87, 'Sync Client Permissions': 88,
+            'Trigger Workflow Backup': 89, 'Cache Analytics Snapshot': 90, 'Clear Error Flags': 91
         }
         
         test_number = function_map.get(function_name)
