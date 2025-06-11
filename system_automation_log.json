@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:05:00.253Z",
-    "functionId": 157,
-    "functionName": "New Lead Notification",
-    "batch": 16,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 171,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:05:00.298Z",
     "functionId": 134,
     "functionName": "QA Failure Alert",
@@ -11456,6 +11445,21 @@
       "failedExecutions": 0,
       "systemUptime": 300.152460472,
       "lastHealthCheck": "2025-06-11T00:29:00.008Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T00:40:00.018Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 452.799515199,
+      "lastHealthCheck": "2025-06-11T00:39:00.008Z",
       "automationStatus": "paused"
     }
   }
