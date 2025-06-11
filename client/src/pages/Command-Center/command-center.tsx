@@ -83,7 +83,9 @@ export default function CommandCenter() {
     queryKey: ['/api/automation-performance', currentSystemMode],
     queryFn: () => fetch('/api/automation-performance', {
       headers: { 'x-system-mode': currentSystemMode }
-    }).then(res => res.json())
+    }).then(res => res.json()),
+    refetchInterval: 3000,
+    refetchOnWindowFocus: true
   });
 
   const { data: liveActivityData } = useQuery({ 
