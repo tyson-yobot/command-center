@@ -67,8 +67,8 @@ export class LiveDashboardData {
         const uniqueFunctionCount = Object.keys(uniqueFunctions).length;
         
         return {
-          totalFunctions: records.length, // Use actual Airtable record count
-          activeFunctions: records.length, // Same as total - all records are functions
+          totalFunctions: Object.keys(uniqueFunctions).length, // Count unique functions only
+          activeFunctions: Object.keys(uniqueFunctions).length, // Same as total - all unique functions
           executionsToday: totalExecutions,
           successRate: `${successRate}%`,
           averageExecutionTime: null,
