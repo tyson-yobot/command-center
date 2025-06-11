@@ -163,17 +163,19 @@ export default function CommandCenter() {
   // System mode toggle function
   const toggleSystemMode = async () => {
     try {
-      const response = await apiRequest('POST', '/api/system-mode-toggle', {
-        userId: 'command-center-user'
+      const newMode = currentSystemMode === 'live' ? 'test' : 'live';
+      const response = await apiRequest('POST', '/api/system-mode', {
+        mode: newMode
       });
       
-      if (response.success && response.modeChange) {
-        setCurrentSystemMode(response.modeChange.newMode);
+      if (response.success) {
+        setCurrentSystemMode(newMode);
+        localStorage.setItem('systemMode', newMode);
         toast({
           title: "System Mode Changed",
-          description: `Switched to ${response.modeChange.newMode} mode. ${response.modeChange.newMode === 'live' ? 'Production data active.' : 'Test mode - safe operations only.'}`,
+          description: `Switched to ${newMode} mode. ${newMode === 'live' ? 'Production data active.' : 'Test mode - safe operations only.'}`,
         });
-        console.log(`Mode changed: ${response.modeChange.previousMode} → ${response.modeChange.newMode}`);
+        console.log(`Mode changed: ${response.previousMode} → ${response.newMode}`);
       }
     } catch (error) {
       console.error('Toggle failed:', error);
