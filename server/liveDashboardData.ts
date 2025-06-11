@@ -27,12 +27,12 @@ export class LiveDashboardData {
         // Parse integration test records to get real automation function status
         // Count ALL records, not just today's
 
-        // Extract function names and statuses from ALL records (no hardcoded filtering)
+        // Extract function names and statuses from ALL records - FIXED TO PARSE ACTUAL FORMAT
         const functionTests = records.map(record => {
           const integrationName = record.fields['🔧 Integration Name'] || '';
-          const passFailStatus = record.fields['✅ Pass/Fail'] || '';
-          const success = passFailStatus === '✅ Pass';
-          const functionName = integrationName;
+          // Parse success from the integrated format: "Function Name - ✅ - Notes - Timestamp..."
+          const success = integrationName.includes(' - ✅ - ');
+          const functionName = integrationName.split(' - ')[0] || integrationName;
           return { functionName, success, record };
         });
 
