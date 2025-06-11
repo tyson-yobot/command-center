@@ -12272,7 +12272,8 @@ CRM Data:
   // Automation Performance Endpoint with Test/Live Mode Isolation
   app.get('/api/automation-performance', async (req, res) => {
     try {
-      const requestedMode = req.headers['x-system-mode'] as 'test' | 'live' || systemMode;
+      const requestedMode = (req.headers['x-system-mode'] as 'test' | 'live') || systemMode;
+      console.log(`[DEBUG] Automation Performance - Header: ${req.headers['x-system-mode']}, System Mode: ${systemMode}, Requested Mode: ${requestedMode}`);
       
       const { LiveDashboardData } = await import('./liveDashboardData');
       const automationMetrics = await LiveDashboardData.getAutomationMetrics(requestedMode);
@@ -12293,7 +12294,8 @@ CRM Data:
   // Dashboard Metrics Endpoint with Test/Live Mode Isolation
   app.get('/api/dashboard-metrics', async (req, res) => {
     try {
-      const requestedMode = req.headers['x-system-mode'] as 'test' | 'live' || systemMode;
+      const requestedMode = (req.headers['x-system-mode'] as 'test' | 'live') || systemMode;
+      console.log(`[DEBUG] Dashboard Metrics - Header: ${req.headers['x-system-mode']}, System Mode: ${systemMode}, Requested Mode: ${requestedMode}`);
       
       const { LiveDashboardData } = await import('./liveDashboardData');
       const dashboardData = await LiveDashboardData.getDashboardOverview(requestedMode);

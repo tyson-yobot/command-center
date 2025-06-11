@@ -2,10 +2,15 @@ import { TestModeData } from './testModeData';
 
 export class LiveDashboardData {
   static async getAutomationMetrics(systemMode: 'test' | 'live' = 'live') {
+    console.log(`[DEBUG] getAutomationMetrics called with mode: ${systemMode}`);
+    
     // Complete isolation: serve test data when in test mode
     if (systemMode === 'test') {
+      console.log('[DEBUG] Serving realistic test data');
       return TestModeData.getRealisticAutomationMetrics();
     }
+    
+    console.log('[DEBUG] Serving live production data');
     try {
       const AUTHORIZED_BASE_ID = "appbFDTqB2WtRNV1H";
       const AUTHORIZED_TABLE_ID = "tbl7K5RthCtD69BE1";
