@@ -2796,12 +2796,12 @@ export default function CommandCenter() {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Active Workflows</span>
-                  <Badge className="bg-slate-600 text-slate-400">{automationPerformance?.activeFunctions || 0}</Badge>
+                  <span className="text-slate-300">Total Executions</span>
+                  <Badge className="bg-blue-600 text-white">{automationPerformance?.totalFunctions || 0}</Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Tasks Completed</span>
-                  <span className="text-slate-400 font-bold">{automationPerformance?.completedTasks || 0}</span>
+                  <span className="text-slate-300">Active Functions</span>
+                  <span className="text-slate-400 font-bold">{automationPerformance?.activeFunctions || 0}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Success Rate</span>

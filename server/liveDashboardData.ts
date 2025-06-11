@@ -48,7 +48,7 @@ export class LiveDashboardData {
           const success = passFailStatus === '✅ Pass';
           const functionName = integrationName;
           return { functionName, success, record };
-        }).filter(test => actualFunctions.some(af => test.functionName.toLowerCase().includes(af.toLowerCase())));
+        });
 
         // Count ALL executions, not just unique functions
         const totalExecutions = functionTests.length;
