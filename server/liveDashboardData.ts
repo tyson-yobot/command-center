@@ -60,7 +60,7 @@ export class LiveDashboardData {
         });
 
         return {
-          totalFunctions: totalExecutions,
+          totalFunctions: Object.keys(uniqueFunctions).length,
           activeFunctions: Object.keys(uniqueFunctions).length,
           executionsToday: totalExecutions,
           successRate: `${successRate}%`,
