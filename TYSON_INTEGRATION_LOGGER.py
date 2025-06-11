@@ -75,15 +75,24 @@ def log_integration_test_to_airtable(
         "Content-Type": "application/json"
     }
 
-    # Format exactly as dashboard expects
+    # Format with ALL required fields for dashboard
     status_emoji = "✅" if passed else "❌"
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.now().strftime("%Y-%m-%d")
     
-    combined_value = f"{integration_name} - {status_emoji} - {notes} - {timestamp} - QA: {qa_owner} - Module: {module_type}"
+    combined_value = f"{integration_name} - {status_emoji} - {notes} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - QA: {qa_owner} - Module: {module_type}"
     
     payload = {
         "fields": {
-            "🔧 Integration Name": combined_value
+            "🔧 Integration Name": combined_value,
+            "✅ Pass/Fail": status_emoji,
+            "📅 Test Date": timestamp,
+            "🧑‍💻 QA Owner": qa_owner,
+            "🧠 Notes / Debug": notes,
+            "🧩 Module Type": module_type,
+            "📤 Output Data Populated": "✅" if output_data_populated else "❌",
+            "🗃️ Record Created?": "✅" if record_created else "❌",
+            "🔁 Retry Attempted?": "✅" if retry_attempted else "❌",
+            "📂 Related Scenario Link": related_scenario_link
         }
     }
 
