@@ -74,10 +74,10 @@ export class LiveDashboardData {
             .slice(0, 3)
             .map((f: any) => ({ name: f.functionName, errorCount: 1, category: 'Automation' })),
           healthChecks: {
-            airtable: "healthy",
-            slack: "healthy", 
-            apis: "healthy",
-            database: "healthy"
+            airtable: records.length > 0 ? "healthy" : "error",
+            slack: "unknown", 
+            apis: "unknown",
+            database: "unknown"
           }
         };
       }

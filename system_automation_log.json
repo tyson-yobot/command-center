@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:10:00.170Z",
-    "functionId": 134,
-    "functionName": "QA Failure Alert",
-    "batch": 14,
-    "category": "QA",
-    "status": "success",
-    "duration": 93,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:10:00.199Z",
     "functionId": 140,
     "functionName": "Live Error Push",
@@ -11488,6 +11477,21 @@
       "failedExecutions": 0,
       "systemUptime": 290.432025036,
       "lastHealthCheck": "2025-06-11T02:19:00.006Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T02:30:00.014Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 0,
+      "lastHealthCheck": "2025-06-11T02:29:11.861Z",
       "automationStatus": "paused"
     }
   }
