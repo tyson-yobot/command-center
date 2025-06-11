@@ -2203,23 +2203,30 @@ export default function CommandCenter() {
             
             {/* System Mode Toggle - Controls Test/Live Data Isolation */}
             <div className="flex justify-center mt-6">
-              <div className="flex items-center space-x-4 bg-slate-800/50 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
-                <label className="text-white font-medium">System Mode:</label>
-                <div className="flex items-center space-x-3">
-                  <span className={`text-sm ${currentSystemMode === 'test' ? 'text-yellow-400' : 'text-gray-400'}`}>
-                    Test
+              <div className="flex items-center space-x-4 bg-gradient-to-r from-slate-800/80 to-slate-700/80 backdrop-blur-sm rounded-xl p-6 border-2 border-slate-600/70 shadow-xl">
+                <label className="text-white font-bold text-lg">System Mode:</label>
+                <div className="flex items-center space-x-4">
+                  <span className={`text-lg font-semibold ${currentSystemMode === 'test' ? 'text-yellow-400' : 'text-gray-500'}`}>
+                    Test Mode
                   </span>
                   <Switch
                     checked={currentSystemMode === 'live'}
                     onCheckedChange={toggleSystemMode}
-                    className="data-[state=checked]:bg-green-500"
+                    className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-yellow-500 scale-125"
                   />
-                  <span className={`text-sm ${currentSystemMode === 'live' ? 'text-green-400' : 'text-gray-400'}`}>
-                    Live
+                  <span className={`text-lg font-semibold ${currentSystemMode === 'live' ? 'text-green-400' : 'text-gray-500'}`}>
+                    Live Mode
                   </span>
                 </div>
-                <Badge variant={currentSystemMode === 'test' ? "secondary" : "default"} className="px-3 py-1">
-                  {currentSystemMode === 'test' ? "Test Mode - Safe Operations" : "Live Mode - Production Data"}
+                <Badge 
+                  variant={currentSystemMode === 'test' ? "secondary" : "default"} 
+                  className={`px-4 py-2 text-sm font-bold ${
+                    currentSystemMode === 'test' 
+                      ? 'bg-yellow-600 text-yellow-100' 
+                      : 'bg-green-600 text-green-100'
+                  }`}
+                >
+                  {currentSystemMode === 'test' ? "TEST MODE - 81% Success Rate" : "LIVE MODE - Production Data"}
                 </Badge>
               </div>
             </div>
