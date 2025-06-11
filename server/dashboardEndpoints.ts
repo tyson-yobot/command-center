@@ -2,9 +2,25 @@ import { Express } from 'express';
 
 export function registerDashboardEndpoints(app: Express) {
   
-  // Get overall dashboard metrics - LIVE DATA ONLY
+  // Get overall dashboard metrics - WITH TEST/LIVE MODE ISOLATION
   app.get("/api/dashboard-metrics", async (req, res) => {
     try {
+      const headerMode = req.headers['x-system-mode'] as 'test' | 'live';
+      const { getSystemMode } = await import('./systemMode');
+      const systemMode = getSystemMode();
+      const requestedMode = headerMode || systemMode;
+      console.log(`[DEBUG] Dashboard Metrics - Header: ${headerMode}, System Mode: ${systemMode}, Final Mode: ${requestedMode}`);
+      
+      // Complete isolation: serve test data when test mode is requested
+      if (requestedMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        const testOverview = TestModeData.getRealisticDashboardOverview();
+        console.log(`[DEBUG] Serving realistic test dashboard data`);
+        res.json(testOverview);
+        return;
+      }
+      
+      // Serve live data for live mode
       const { LiveDashboardData } = await import('./liveDashboardData');
       const metrics = await LiveDashboardData.getDashboardOverview();
       res.json(metrics);

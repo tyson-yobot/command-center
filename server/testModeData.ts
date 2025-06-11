@@ -112,22 +112,64 @@ export class TestModeData {
     const leadMetrics = this.getRealisticLeadMetrics();
 
     return {
-      systemHealth: 84, // Good but not perfect
-      activeIntegrations: automationMetrics.activeFunctions,
-      totalRevenue: 284750,
-      monthlyGrowth: 12.3,
-      customerSatisfaction: 4.2,
-      supportTickets: {
-        open: 17,
-        resolved: 142,
-        avgResolutionTime: "4.2 hours"
+      automation: {
+        totalFunctions: automationMetrics.totalFunctions,
+        activeFunctions: automationMetrics.activeFunctions,
+        failedFunctions: automationMetrics.failedFunctions,
+        successRate: automationMetrics.successRate,
+        executionsToday: 247,
+        avgResponseTime: automationMetrics.avgResponseTime,
+        lastExecution: "2025-06-11T05:15:23.000Z"
+      },
+      sales: {
+        totalLeads: leadMetrics.totalLeads,
+        qualifiedLeads: leadMetrics.qualifiedLeads,
+        convertedLeads: leadMetrics.convertedLeads,
+        conversionRate: leadMetrics.conversionRate,
+        totalRevenue: 284750,
+        monthlyRevenue: 23890,
+        avgDealSize: 1825,
+        salesTarget: 350000,
+        targetProgress: 81.4
+      },
+      support: {
+        totalTickets: 159,
+        openTickets: 17,
+        resolvedTickets: 142,
+        avgResolutionTime: "4.2 hours",
+        satisfaction: 4.2,
+        escalatedTickets: 3,
+        firstResponseTime: "1.8 hours"
+      },
+      operations: {
+        systemHealth: 84,
+        uptime: "99.2%",
+        activeUsers: 156,
+        totalUsers: 189,
+        dataProcessed: "2.3TB",
+        apiCalls: 45670,
+        errorRate: 2.1,
+        avgLoadTime: "1.2s"
+      },
+      finance: {
+        mrr: 23890,
+        arr: 286680,
+        churnRate: 3.2,
+        ltv: 4250,
+        cac: 185,
+        grossMargin: 78.5,
+        burnRate: 12400,
+        runway: "18 months"
       },
       recentActivity: [
-        { type: "automation", message: "Lead Capture Integration completed successfully", time: "2 minutes ago" },
-        { type: "alert", message: "Quote Generation system requires attention", time: "15 minutes ago" },
-        { type: "success", message: "Revenue Analytics updated", time: "23 minutes ago" },
-        { type: "automation", message: "Email Campaign Automation executed", time: "31 minutes ago" },
-        { type: "alert", message: "Compliance Monitoring needs update", time: "1 hour ago" }
+        { type: "automation", message: "Lead Capture Integration completed successfully", time: "2 minutes ago", status: "success" },
+        { type: "alert", message: "Quote Generation system requires attention", time: "15 minutes ago", status: "warning" },
+        { type: "success", message: "Revenue Analytics updated", time: "23 minutes ago", status: "success" },
+        { type: "automation", message: "Email Campaign Automation executed", time: "31 minutes ago", status: "success" },
+        { type: "alert", message: "Compliance Monitoring needs update", time: "1 hour ago", status: "warning" },
+        { type: "error", message: "Newsletter Distribution failed - SMTP timeout", time: "1.2 hours ago", status: "error" },
+        { type: "success", message: "Database backup completed", time: "2 hours ago", status: "success" },
+        { type: "automation", message: "Inventory sync processed 450 items", time: "2.5 hours ago", status: "success" }
       ]
     };
   }
