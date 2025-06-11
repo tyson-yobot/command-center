@@ -1,27 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:15:00.722Z",
-    "functionId": 146,
-    "functionName": "Customer Reconciliation",
-    "batch": 15,
-    "category": "Data",
-    "status": "success",
-    "duration": 117,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
-    "timestamp": "2025-06-10T16:15:00.725Z",
-    "functionId": 206,
-    "functionName": "Lead Score Calculator",
-    "batch": 21,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 113,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:15:00.752Z",
     "functionId": 147,
     "functionName": "Full API Health Check",
@@ -11536,6 +11514,36 @@
       "failedExecutions": 0,
       "systemUptime": 3.266312607,
       "lastHealthCheck": "2025-06-11T04:30:00.015Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T04:40:00.011Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 184.867931108,
+      "lastHealthCheck": "2025-06-11T04:39:00.006Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T04:50:00.014Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 784.867511547,
+      "lastHealthCheck": "2025-06-11T04:49:00.006Z",
       "automationStatus": "paused"
     }
   }
