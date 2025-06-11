@@ -64,10 +64,16 @@ def log_integration_test_to_airtable(
         bool: True if logged successfully, False if failed
     """
     
-    # WORKING AIRTABLE CONFIGURATION - SYNCHRONIZED WITH DASHBOARD
-    airtable_api_key = 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa'
-    base_id = "appRt8V3tH4g5Z5if"  # Matches dashboard table
-    table_id = "tbly0fjE2M5uHET9X"   # Matches dashboard table
+    # LOCKED AIRTABLE CONFIGURATION - ADMIN AUTHORIZED ONLY
+    from logger_config import AIRTABLE_API_KEY, AIRTABLE_BASE_ID, AIRTABLE_TABLE_ID
+    
+    # Safety check to prevent base mismatches
+    if AIRTABLE_BASE_ID != "appbFDTqB2WtRNV1H":
+        raise Exception("❌ Invalid Airtable Base ID in use – logger misconfigured.")
+    
+    airtable_api_key = AIRTABLE_API_KEY
+    base_id = AIRTABLE_BASE_ID
+    table_id = AIRTABLE_TABLE_ID
     url = f"https://api.airtable.com/v0/{base_id}/{table_id}"
 
     headers = {
