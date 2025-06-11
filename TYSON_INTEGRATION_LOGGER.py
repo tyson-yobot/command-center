@@ -87,13 +87,18 @@ def log_integration_test_to_airtable(
     
     combined_value = f"{integration_name} - {status_emoji} - {notes} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - QA: {qa_owner} - Module: {module_type}"
     
-    # Match current table structure with billing fields
+    # Match authorized production table structure
     payload = {
         "fields": {
-            "📧 Email": f"automation.{integration_name.lower().replace(' ', '.')}@yobot.bot",
-            "🏢 Company Name": f"{integration_name} - {status_emoji} - Automation Function",
-            "💵 One-Time Fee": "0",
-            "🧾 Invoice ID": f"AUTO-{datetime.now().strftime('%Y%m%d%H%M%S')}"
+            "🔧 Integration Name": integration_name,
+            "✅ Pass/Fail": f"✅ Pass" if passed else "❌ Fail",
+            "🧠 Notes / Debug": f"{notes} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            "📅 Test Date": datetime.now().isoformat(),
+            "🧑‍💻 QA Owner": qa_owner,
+            "📤 Output Data Populated?": output_data_populated,
+            "🗃️ Record Created?": record_created,
+            "🔁 Retry Attempted?": retry_attempted,
+            "🧩 Module Type": module_type
         }
     }
     
