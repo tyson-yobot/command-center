@@ -2550,7 +2550,7 @@ export default function CommandCenter() {
                 </span>
                 <div className="flex items-center space-x-4">
                   <span className="text-sm text-green-400">
-                    {automationPerformance?.activeFunctions || 0} Functions Active
+                    {automationPerformance?.totalFunctions || 0} Total Executions
                   </span>
                   <span className="text-xs text-slate-400">
                     Last Updated: {new Date().toLocaleTimeString()}
