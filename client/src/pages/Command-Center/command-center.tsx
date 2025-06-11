@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
+import { queryClient } from '@/lib/queryClient';
 // Live mode only - no test mode context needed
 import { 
   TrendingUp, 
@@ -164,23 +165,39 @@ export default function CommandCenter() {
   const toggleSystemMode = async () => {
     try {
       const newMode = currentSystemMode === 'live' ? 'test' : 'live';
-      const response = await apiRequest('POST', '/api/system-mode', {
-        mode: newMode
+      
+      console.log(`Toggling from ${currentSystemMode} to ${newMode}`);
+      
+      const response = await fetch('/api/system-mode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ mode: newMode })
       });
       
-      if (response.success) {
+      const data = await response.json();
+      console.log('Toggle response:', data);
+      
+      if (data.success) {
         setCurrentSystemMode(newMode);
         localStorage.setItem('systemMode', newMode);
+        
+        // Force refresh the queries with new mode
+        window.location.reload();
+        
         toast({
           title: "System Mode Changed",
           description: `Switched to ${newMode} mode. ${newMode === 'live' ? 'Production data active.' : 'Test mode - safe operations only.'}`,
         });
-        console.log(`Mode changed: ${response.previousMode} → ${response.newMode}`);
+        console.log(`Mode changed: ${data.previousMode} → ${data.newMode}`);
+      } else {
+        throw new Error(data.error || 'Unknown error');
       }
     } catch (error) {
       console.error('Toggle failed:', error);
       toast({
-        title: "Error",
+        title: "Error", 
         description: "Failed to toggle system mode",
         variant: "destructive"
       });
