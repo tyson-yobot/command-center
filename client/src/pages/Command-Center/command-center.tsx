@@ -2499,11 +2499,11 @@ export default function CommandCenter() {
               <Brain className="h-4 w-4 text-blue-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-slate-400">
-                --
+              <div className="text-2xl font-bold text-blue-400">
+                {automationPerformance?.totalFunctions || 0}
               </div>
-              <p className="text-xs text-slate-400">
-                No data
+              <p className="text-xs text-blue-400">
+                Live automation rate
               </p>
             </CardContent>
           </Card>
@@ -2529,11 +2529,11 @@ export default function CommandCenter() {
               <Gauge className="h-4 w-4 text-amber-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-slate-400">
-                --
+              <div className="text-2xl font-bold text-green-400">
+                {automationPerformance?.successRate || '0%'}
               </div>
-              <p className="text-xs text-slate-400">
-                No data
+              <p className="text-xs text-green-400">
+                Health status
               </p>
             </CardContent>
           </Card>
