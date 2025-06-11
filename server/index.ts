@@ -1,4 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
+import * as dotenv from "dotenv";
 import { registerRoutes, registerContentCreationEndpoints } from "./routes";
 import orchestrator from "./systemAutomationOrchestrator";
 import completeAutomation from "./completeSystemAutomation";
@@ -12,6 +13,9 @@ import { registerQATestEndpoints } from "./qaTestEndpoints";
 import { registerPublerRoutes } from "./publerIntegrationNew";
 import { registerAirtableTestLogger } from "./airtableTestLogger";
 import { testRoutes } from "./testRoutes";
+
+// Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 app.use(express.json());
