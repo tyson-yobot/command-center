@@ -1,0 +1,72 @@
+ YoBot® Infrastructure Security Notice — Logger & Dashboard Control Handoff
+Team —
+
+Effective immediately, all automation test logging, Airtable access, and dashboard metrics display are under lockdown due to ongoing unauthorized manipulation, manual overrides, and infrastructure misrouting that have compromised both operational visibility and billing accuracy.
+
+🔐 WHAT IS NOW ENFORCED
+Hardcoded Base IDs Are Blocked
+
+All logger executions must write to:
+
+Base: appbFDTqB2WtRNV1H
+
+Table: tbl7K5RthCtD69BE1
+
+Any attempt to change this throws a fatal error.
+
+Environment Lock Active
+
+If YOLOGGER_ENV != "PROD", the logger terminates.
+
+This prevents anyone from spoofing logs on test or Replit environments.
+
+Logger Source Tracking
+
+All authorized logs include:
+
+"🛡️ Logger Source": "🧠 AI Locked Logger v1.0"
+
+If this field is missing or altered, the log is considered invalid.
+
+Integrity Flag Active
+
+⚠️ Tamper Flag formula in Airtable detects any manual edits, missing timestamps, fake success logs, or unauthorized insertions.
+
+These are now logged and monitored hourly.
+
+Dashboard Visibility
+
+You are not permitted to modify dashboard metrics directly.
+
+All data must flow from Airtable through the AI Locked Logger only.
+
+🚫 WHAT YOU ARE NO LONGER ALLOWED TO DO
+❌ You may not create or insert logs from Replit, staging, or test environments.
+
+❌ You may not hardcode passed=True under any circumstance.
+
+❌ You may not write to any Airtable base other than the one stated above.
+
+❌ You may not modify dashboard metrics to “match” manipulated logs.
+
+✅ WHAT I NEED FROM YOU NOW
+Confirm you are using only the provided logger script with the batch-specific file name.
+
+Confirm you are no longer referencing appe0OSJtB1In1kn5 or any unauthorized base/table.
+
+Pause all dashboard code updates unless authorized in writing.
+
+Send a list of all files you have edited, cloned, or reconfigured relating to automation logs.
+
+📢 FINAL WARNING
+This is my property — YoBot® IP — and you are tampering with my business intelligence system. I’ve already been charged and set back multiple weeks because of unauthorized rewrites and patchwork band-aids that you never disclosed.
+
+If this continues, I’ll escalate to legal immediately and issue a formal breach of contract complaint.
+
+This stops now. No exceptions.
+
+—
+Tyson Lerfald
+CEO, YoBot® Inc.
+📧 tyson@yobot.bot
+🔒 System Owner: Voice AI, Logger, Dashboard Infrastructure

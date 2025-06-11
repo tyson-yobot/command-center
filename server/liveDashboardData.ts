@@ -1,11 +1,11 @@
 export class LiveDashboardData {
   static async getAutomationMetrics() {
     try {
-      const AUTHORIZED_BASE_ID = "appe0OSJtB1In1kn5";
-      const AUTHORIZED_TABLE_ID = "tblmYdOB13Ze9c4aJ";
+      const AUTHORIZED_BASE_ID = "appbFDTqB2WtRNV1H";
+      const AUTHORIZED_TABLE_ID = "tbl7K5RthCtD69BE1";
       
       // Security check
-      if (AUTHORIZED_BASE_ID !== "appe0OSJtB1In1kn5") {
+      if (AUTHORIZED_BASE_ID !== "appbFDTqB2WtRNV1H") {
         throw new Error("❌ Invalid Airtable Base ID in use – dashboard misconfigured.");
       }
       

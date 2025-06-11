@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:15:00.752Z",
-    "functionId": 147,
-    "functionName": "Full API Health Check",
-    "batch": 15,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 146,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:15:00.767Z",
     "functionId": 151,
     "functionName": "VoiceBot Escalation Detection",
@@ -11544,6 +11533,21 @@
       "failedExecutions": 0,
       "systemUptime": 784.867511547,
       "lastHealthCheck": "2025-06-11T04:49:00.006Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T05:00:00.020Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 131.213374785,
+      "lastHealthCheck": "2025-06-11T04:59:00.007Z",
       "automationStatus": "paused"
     }
   }
