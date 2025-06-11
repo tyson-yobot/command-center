@@ -80,7 +80,8 @@ def log_integration_test_to_airtable(
             "🧩 Module Type": module_type,
             "📤 Output Data Populated": output_data_populated,
             "🗃️ Record Created?": record_created,
-            "🔁 Retry Attempted?": retry_attempted
+            "🔁 Retry Attempted?": retry_attempted,
+            "🛡️ Logger Source": "🧠 AI Locked Logger v1.0"
         }
     }
     
