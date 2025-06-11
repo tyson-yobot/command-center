@@ -2563,17 +2563,17 @@ export default function CommandCenter() {
               <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Executions Today</div>
-                  <div className="text-2xl font-bold text-slate-400">
-                    --
+                  <div className="text-2xl font-bold text-cyan-400">
+                    {automationPerformance?.executionsToday || 0}
                   </div>
-                  <div className="text-xs text-slate-400">No data</div>
+                  <div className="text-xs text-cyan-400">Total runs</div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Success Rate</div>
-                  <div className="text-2xl font-bold text-slate-400">
-                    {automationPerformance?.successRate || '--'}
+                  <div className="text-2xl font-bold text-green-400">
+                    {automationPerformance?.successRate || '0%'}
                   </div>
-                  <div className="text-xs text-slate-400">No data</div>
+                  <div className="text-xs text-green-400">Pass rate</div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Recent Executions</div>
