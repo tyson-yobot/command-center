@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:05:00.326Z",
-    "functionId": 140,
-    "functionName": "Live Error Push",
-    "batch": 14,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 237,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:05:00.336Z",
     "functionId": 146,
     "functionName": "Customer Reconciliation",
@@ -11468,6 +11457,21 @@
       "failedExecutions": 0,
       "systemUptime": 27.534203072,
       "lastHealthCheck": "2025-06-11T01:00:00.014Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T01:10:00.012Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 267.411619503,
+      "lastHealthCheck": "2025-06-11T01:09:00.006Z",
       "automationStatus": "paused"
     }
   }
