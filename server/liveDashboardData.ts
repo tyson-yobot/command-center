@@ -8,10 +8,10 @@ export class LiveDashboardData {
   static async getAutomationMetrics() {
     try {
       // Safety check to prevent base mismatches
-      const AUTHORIZED_BASE_ID = "appbFDTqB2WtRNV1H";
+      const AUTHORIZED_BASE_ID = "appe0OSJtB1In1kn5";
       const AUTHORIZED_TABLE_ID = "tbl7K5RthCtD69BE1";
       
-      if (AUTHORIZED_BASE_ID !== "appbFDTqB2WtRNV1H") {
+      if (AUTHORIZED_BASE_ID !== "appe0OSJtB1In1kn5") {
         throw new Error("❌ Invalid Airtable Base ID in use – dashboard misconfigured.");
       }
       
@@ -63,6 +63,14 @@ export class LiveDashboardData {
 
         console.log(`Processing ${records.length} Airtable records`);
         console.log(`RECORD COUNT DEBUG: ${records.length} records from Airtable`);
+        
+        // Debug success rate calculation
+        const debugStats = {
+          totalRecords: records.length,
+          passedTests: functionTests.filter((test: any) => test.success).length,
+          failedTests: functionTests.filter((test: any) => !test.success).length
+        };
+        console.log(`SUCCESS RATE DEBUG: ${debugStats.passedTests} passed, ${debugStats.failedTests} failed of ${debugStats.totalRecords} total`);
 
         // Count ALL executions, not just unique functions
         const totalExecutions = functionTests.length;
