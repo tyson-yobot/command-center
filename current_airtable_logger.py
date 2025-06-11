@@ -84,7 +84,7 @@ def log_integration_test_to_airtable(
             "🧠 Notes / Debug": notes,
             "📅 Test Date": datetime.now().isoformat(),
             "🧑‍💻 QA Owner": qa_owner,
-            "📤 Output Data Populated?": output_data_populated,
+            "📤 Output Data Populated": output_data_populated,
             "🗃️ Record Created?": record_created,
             "🔁 Retry Attempted?": retry_attempted,
             "🧩 Module Type": module_type,

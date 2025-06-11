@@ -70,7 +70,15 @@ def log_integration_test_to_airtable(
     
     payload = {
         "fields": {
-            "🔧 Integration Name": combined_value
+            "🔧 Integration Name": combined_value,
+            "✅ Pass/Fail": status_emoji,
+            "📅 Test Date": datetime.now().isoformat(),
+            "🧑‍💻 QA Owner": qa_owner,
+            "🧠 Notes / Debug": notes,
+            "🧩 Module Type": module_type,
+            "📤 Output Data Populated": output_data_populated,
+            "🗃️ Record Created?": record_created,
+            "🔁 Retry Attempted?": retry_attempted
         }
     }
 
