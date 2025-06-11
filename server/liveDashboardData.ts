@@ -42,8 +42,10 @@ export class LiveDashboardData {
           }
           
           const functionName = integrationName.split(' - ')[0] || integrationName;
-          return { functionName, success, record };
+          return { functionName: functionName.trim(), success, record };
         });
+
+        console.log(`Processing ${records.length} Airtable records`);
 
         // Count ALL executions, not just unique functions
         const totalExecutions = functionTests.length;
@@ -60,9 +62,12 @@ export class LiveDashboardData {
           }
         });
 
+        // Use actual record count from Airtable - no artificial calculation
+        const uniqueFunctionCount = Object.keys(uniqueFunctions).length;
+        
         return {
-          totalFunctions: Object.keys(uniqueFunctions).length,
-          activeFunctions: Object.keys(uniqueFunctions).length,
+          totalFunctions: records.length, // Use actual Airtable record count
+          activeFunctions: records.length, // Same as total - all records are functions
           executionsToday: totalExecutions,
           successRate: `${successRate}%`,
           averageExecutionTime: null,
