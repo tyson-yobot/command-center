@@ -46,10 +46,10 @@ def log_integration_test_to_airtable(
         str: Record ID if successful, None if failed
     """
     
-    # Use environment variables for API configuration
-    airtable_api_key = os.environ.get('AIRTABLE_VALID_TOKEN', 'patVStYrAlD1NDvCj.2b44981669b29d0e591ec83bce2febebd5eb22d11ee4a2c8f349426c2892ba3d')
-    base_id = os.environ.get('AIRTABLE_BASE_ID', 'appbFDTqB2WtRNV1H')
-    table_id = os.environ.get('AIRTABLE_TABLE_ID', 'tbl7K5RthCtD69BE1')
+    # Use same configuration as working live_automation_logger.py
+    airtable_api_key = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
+    base_id = "appbFDTqB2WtRNV1H"
+    table_id = "tbl7K5RthCtD69BE1"
     
     headers = {
         "Authorization": f"Bearer {airtable_api_key}",
@@ -80,15 +80,15 @@ def log_integration_test_to_airtable(
         
         update_fields = {
             "🔧 Integration Name": integration_name,
-            "📝 Notes": notes,
-            "👤 QA Owner": qa_owner,
-            "📊 Output Data Populated": output_data_populated,
-            "📋 Record Created": record_created,
-            "🔄 Retry Attempted": retry_attempted,
-            "🏷️ Module Type": module_type,
-            "🔗 Related Scenario Link": related_scenario_link,
-            "⏰ Last Updated": timestamp,
-            "✅ Status": status_emoji
+            "✅ Pass/Fail": "✅ Pass" if passed else "❌ Fail",
+            "🧠 Notes / Debug": notes,
+            "📅 Test Date": datetime.now().isoformat(),
+            "🧑‍💻 QA Owner": qa_owner,
+            "📤 Output Data Populated?": output_data_populated,
+            "🗃️ Record Created?": record_created,
+            "🔁 Retry Attempted?": retry_attempted,
+            "🧩 Module Type": module_type,
+            "📂 Related Scenario Link": related_scenario_link
         }
         
         if existing_records:
