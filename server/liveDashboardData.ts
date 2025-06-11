@@ -54,8 +54,9 @@ export class LiveDashboardData {
         // Get unique functions for top performers
         const uniqueFunctions: any = {};
         functionTests.forEach(test => {
-          if (!uniqueFunctions[test.functionName] || test.record.createdTime > uniqueFunctions[test.functionName].createdTime) {
-            uniqueFunctions[test.functionName] = test;
+          const cleanFunctionName = test.functionName.trim();
+          if (!uniqueFunctions[cleanFunctionName] || test.record.fields['📅 Test Date'] > uniqueFunctions[cleanFunctionName].record.fields['📅 Test Date']) {
+            uniqueFunctions[cleanFunctionName] = test;
           }
         });
 
