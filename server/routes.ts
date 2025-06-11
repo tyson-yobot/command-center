@@ -12272,11 +12272,22 @@ CRM Data:
   // Automation Performance Endpoint with Test/Live Mode Isolation
   app.get('/api/automation-performance', async (req, res) => {
     try {
-      const requestedMode = (req.headers['x-system-mode'] as 'test' | 'live') || systemMode;
-      console.log(`[DEBUG] Automation Performance - Header: ${req.headers['x-system-mode']}, System Mode: ${systemMode}, Requested Mode: ${requestedMode}`);
+      const headerMode = req.headers['x-system-mode'] as 'test' | 'live';
+      const requestedMode = headerMode || systemMode;
+      console.log(`[DEBUG] Automation Performance - Header: ${headerMode}, System Mode: ${systemMode}, Final Mode: ${requestedMode}`);
       
+      // Complete isolation: serve test data when test mode is requested
+      if (requestedMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        const testMetrics = await TestModeData.getRealisticAutomationMetrics();
+        console.log(`[DEBUG] Serving test data with ${testMetrics.successRate} success rate`);
+        res.json(testMetrics);
+        return;
+      }
+      
+      // Serve live data for live mode
       const { LiveDashboardData } = await import('./liveDashboardData');
-      const automationMetrics = await LiveDashboardData.getAutomationMetrics(requestedMode);
+      const automationMetrics = await LiveDashboardData.getAutomationMetrics('live');
       
       logOperation('automation-performance', { mode: requestedMode }, 'success', `Automation performance metrics retrieved in ${requestedMode} mode`);
       

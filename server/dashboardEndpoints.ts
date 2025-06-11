@@ -17,11 +17,26 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get automation performance - LIVE DATA ONLY
+  // Get automation performance - WITH TEST/LIVE MODE ISOLATION
   app.get("/api/automation-performance", async (req, res) => {
     try {
+      const headerMode = req.headers['x-system-mode'] as 'test' | 'live';
+      const systemMode = global.systemMode || 'live';
+      const requestedMode = headerMode || systemMode;
+      console.log(`[DEBUG] Dashboard Automation Performance - Header: ${headerMode}, System Mode: ${systemMode}, Final Mode: ${requestedMode}`);
+      
+      // Complete isolation: serve test data when test mode is requested
+      if (requestedMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        const testMetrics = await TestModeData.getRealisticAutomationMetrics();
+        console.log(`[DEBUG] Serving realistic test data with ${testMetrics.successRate} success rate`);
+        res.json(testMetrics);
+        return;
+      }
+      
+      // Serve live data for live mode
       const { LiveDashboardData } = await import('./liveDashboardData');
-      const liveMetrics = await LiveDashboardData.getAutomationMetrics();
+      const liveMetrics = await LiveDashboardData.getAutomationMetrics('live');
       res.json(liveMetrics);
     } catch (error) {
       console.error("Automation performance error:", error);
