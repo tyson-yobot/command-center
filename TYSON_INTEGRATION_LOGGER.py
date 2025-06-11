@@ -85,16 +85,19 @@ def log_integration_test_to_airtable(
         "fields": {
             "🔧 Integration Name": combined_value,
             "✅ Pass/Fail": status_emoji,
-            "📅 Test Date": timestamp,
+            "📅 Test Date": datetime.now().isoformat(),
             "🧑‍💻 QA Owner": qa_owner,
             "🧠 Notes / Debug": notes,
             "🧩 Module Type": module_type,
-            "📤 Output Data Populated": "✅" if output_data_populated else "❌",
-            "🗃️ Record Created?": "✅" if record_created else "❌",
-            "🔁 Retry Attempted?": "✅" if retry_attempted else "❌",
-            "📂 Related Scenario Link": related_scenario_link
+            "📤 Output Data Populated": output_data_populated,
+            "🗃️ Record Created?": record_created,
+            "🔁 Retry Attempted?": retry_attempted
         }
     }
+    
+    # Only add related scenario link if provided
+    if related_scenario_link:
+        payload["fields"]["📂 Related Scenario Link"] = related_scenario_link
 
     try:
         response = requests.post(url, headers=headers, json=payload)
