@@ -81,11 +81,20 @@ export default function CommandCenter() {
   
   const { data: automationPerformance } = useQuery({ 
     queryKey: ['/api/automation-performance', currentSystemMode],
-    queryFn: () => fetch('/api/automation-performance', {
-      headers: { 'x-system-mode': currentSystemMode }
+    queryFn: () => fetch('/api/automation-performance?' + new URLSearchParams({
+      mode: currentSystemMode,
+      t: Date.now().toString()
+    }), {
+      headers: { 
+        'x-system-mode': currentSystemMode,
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }
     }).then(res => res.json()),
-    refetchInterval: 3000,
-    refetchOnWindowFocus: true
+    refetchInterval: 2000,
+    refetchOnWindowFocus: true,
+    staleTime: 0,
+    gcTime: 0
   });
 
   const { data: liveActivityData } = useQuery({ 
