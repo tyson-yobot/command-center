@@ -1306,11 +1306,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/zendesk/tickets', async (req, res) => {
     try {
-      // Only return authentic tickets from actual Zendesk integration
-      // No test data in live mode
-      const tickets = [];
+      const systemModeHeader = req.headers['x-system-mode'] as string;
+      const { systemMode } = await import('./systemMode');
+      const finalMode = systemModeHeader || systemMode;
 
       logOperation('zendesk-tickets', {}, 'success', 'Zendesk tickets retrieved');
+
+      // Return test data in test mode
+      if (finalMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        return res.json(TestModeData.getRealisticZendeskTickets());
+      }
+
+      // Only return authentic tickets from actual Zendesk integration
+      const tickets = [];
 
       res.json({
         success: true,
@@ -10271,10 +10280,20 @@ Always provide helpful, actionable guidance.`
     }
   });
 
-  // Knowledge Stats - Live Data Only
+  // Knowledge Stats - Supports both live and test modes
   app.get('/api/knowledge/stats', async (req, res) => {
     try {
+      const systemModeHeader = req.headers['x-system-mode'] as string;
+      const { systemMode } = await import('./systemMode');
+      const finalMode = systemModeHeader || systemMode;
+
       logOperation('knowledge-stats', {}, 'success', 'Knowledge stats requested');
+      
+      // Return test data in test mode
+      if (finalMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        return res.json(TestModeData.getRealisticKnowledgeStats());
+      }
       
       // Calculate stats from actual uploaded documents in both stores
       const totalDocuments = Math.max(documentDataStore.length, knowledgeDataStore.length);

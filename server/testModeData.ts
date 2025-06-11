@@ -173,4 +173,138 @@ export class TestModeData {
       ]
     };
   }
+
+  static getRealisticKnowledgeStats() {
+    return {
+      success: true,
+      totalDocuments: 342,
+      recentlyAdded: 23,
+      categories: [
+        { name: "Product Documentation", count: 89 },
+        { name: "API Reference", count: 67 },
+        { name: "Training Materials", count: 54 },
+        { name: "SOPs", count: 43 },
+        { name: "Troubleshooting", count: 89 }
+      ],
+      searchQueries: 1567,
+      popularDocuments: [
+        { title: "API Integration Guide", views: 234 },
+        { title: "Customer Onboarding Process", views: 189 },
+        { title: "Billing FAQ", views: 156 }
+      ],
+      lastUpdated: "2025-06-11T05:14:32.000Z"
+    };
+  }
+
+  static getRealisticZendeskTickets() {
+    return {
+      success: true,
+      tickets: [
+        {
+          id: "ZD-2401",
+          subject: "Integration timeout issues",
+          status: "open",
+          priority: "high",
+          created: "2025-06-11T09:15:00Z",
+          assignee: "Sarah Chen"
+        },
+        {
+          id: "ZD-2402", 
+          subject: "Dashboard loading slowly",
+          status: "pending",
+          priority: "medium",
+          created: "2025-06-11T08:30:00Z",
+          assignee: "Mike Rodriguez"
+        },
+        {
+          id: "ZD-2403",
+          subject: "API rate limit exceeded",
+          status: "resolved",
+          priority: "low",
+          created: "2025-06-11T07:45:00Z",
+          assignee: "Lisa Park"
+        }
+      ],
+      total: 17,
+      open: 8,
+      pending: 4,
+      resolved: 142,
+      avgResolutionTime: "4.2 hours",
+      satisfaction: 4.3,
+      slaBreaches: 2
+    };
+  }
+
+  static getRealisticLiveActivity() {
+    return {
+      success: true,
+      message: "Live activity monitoring active",
+      activities: [
+        {
+          timestamp: "2025-06-11T21:55:23.000Z",
+          type: "api_call",
+          description: "Stripe payment processed",
+          status: "success",
+          user: "system"
+        },
+        {
+          timestamp: "2025-06-11T21:54:45.000Z", 
+          type: "automation",
+          description: "Lead scoring automation completed",
+          status: "success",
+          user: "automation"
+        },
+        {
+          timestamp: "2025-06-11T21:53:12.000Z",
+          type: "user_action",
+          description: "Dashboard accessed by user",
+          status: "info",
+          user: "john.doe@company.com"
+        },
+        {
+          timestamp: "2025-06-11T21:52:33.000Z",
+          type: "system",
+          description: "Database backup initiated",
+          status: "info",
+          user: "system"
+        }
+      ],
+      activeUsers: 23,
+      systemLoad: 67,
+      memoryUsage: 78
+    };
+  }
+
+  static getRealisticCallMonitoring() {
+    return {
+      success: true,
+      data: {
+        activeCalls: 3,
+        totalCallsToday: 47,
+        avgCallDuration: "8m 34s",
+        callQuality: 4.1,
+        recordings: [
+          {
+            id: "REC-001",
+            duration: "12:45",
+            quality: 4.5,
+            sentiment: "positive",
+            timestamp: "2025-06-11T14:30:00Z"
+          },
+          {
+            id: "REC-002", 
+            duration: "6:12",
+            quality: 3.8,
+            sentiment: "neutral",
+            timestamp: "2025-06-11T13:15:00Z"
+          }
+        ],
+        agents: [
+          { name: "Agent A", status: "available", calls: 12 },
+          { name: "Agent B", status: "busy", calls: 8 },
+          { name: "Agent C", status: "available", calls: 15 }
+        ]
+      }
+    };
+  }
 }
