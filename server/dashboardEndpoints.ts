@@ -63,9 +63,21 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get lead generation analytics - LIVE DATA ONLY
+  // Get lead generation analytics - WITH TEST/LIVE MODE SUPPORT
   app.get("/api/lead-analytics", async (req, res) => {
     try {
+      const headerMode = req.headers['x-system-mode'] as 'test' | 'live';
+      const { getSystemMode } = await import('./systemMode');
+      const systemMode = getSystemMode();
+      const requestedMode = headerMode || systemMode;
+      
+      if (requestedMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        const testLeadMetrics = TestModeData.getRealisticLeadMetrics();
+        res.json(testLeadMetrics);
+        return;
+      }
+      
       const { LiveDashboardData } = await import('./liveDashboardData');
       const analytics = await LiveDashboardData.getLeadMetrics();
       res.json(analytics);
@@ -78,9 +90,21 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get scraper status and history - LIVE DATA ONLY
+  // Get scraper status and history - WITH TEST/LIVE MODE SUPPORT
   app.get("/api/scraper-status", async (req, res) => {
     try {
+      const headerMode = req.headers['x-system-mode'] as 'test' | 'live';
+      const { getSystemMode } = await import('./systemMode');
+      const systemMode = getSystemMode();
+      const requestedMode = headerMode || systemMode;
+      
+      if (requestedMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        const testScraperData = TestModeData.getRealisticScraperStatus();
+        res.json(testScraperData);
+        return;
+      }
+      
       // Let the actual scraper system populate data
       res.json({
         success: true,
@@ -95,9 +119,21 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get system health status - LIVE DATA ONLY
+  // Get system health status - WITH TEST/LIVE MODE SUPPORT
   app.get("/api/system-health", async (req, res) => {
     try {
+      const headerMode = req.headers['x-system-mode'] as 'test' | 'live';
+      const { getSystemMode } = await import('./systemMode');
+      const systemMode = getSystemMode();
+      const requestedMode = headerMode || systemMode;
+      
+      if (requestedMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        const testSystemHealth = TestModeData.getRealisticSystemHealth();
+        res.json(testSystemHealth);
+        return;
+      }
+      
       // Let the actual health monitoring system populate data
       res.json({
         success: true,

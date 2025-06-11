@@ -307,4 +307,118 @@ export class TestModeData {
       }
     };
   }
+
+  static getRealisticLeadMetrics() {
+    return {
+      success: true,
+      totalLeads: 2847,
+      qualifiedLeads: 1923,
+      conversionRate: "67.5%",
+      averageLeadScore: 8.3,
+      leadSources: {
+        organic: { count: 1254, quality: 8.7 },
+        paidAds: { count: 892, quality: 7.9 },
+        referrals: { count: 456, quality: 9.2 },
+        directTraffic: { count: 245, quality: 6.8 }
+      },
+      monthlyGrowth: "+23.4%",
+      recentActivity: [
+        {
+          timestamp: "2025-06-11T21:45:00Z",
+          type: "lead_capture",
+          description: "New lead from contact form",
+          quality: "high"
+        },
+        {
+          timestamp: "2025-06-11T21:38:00Z", 
+          type: "qualification",
+          description: "Lead qualified by sales team",
+          quality: "medium"
+        }
+      ]
+    };
+  }
+
+  static getRealisticScraperStatus() {
+    return {
+      success: true,
+      scrapers: [
+        {
+          id: "apollo-scraper",
+          name: "Apollo Lead Scraper",
+          status: "active",
+          lastRun: "2025-06-11T21:45:00Z",
+          recordsCollected: 342,
+          successRate: "94.2%"
+        },
+        {
+          id: "linkedin-scraper", 
+          name: "LinkedIn Contact Scraper",
+          status: "active",
+          lastRun: "2025-06-11T21:40:00Z", 
+          recordsCollected: 156,
+          successRate: "87.8%"
+        },
+        {
+          id: "company-data-scraper",
+          name: "Company Data Enrichment",
+          status: "paused",
+          lastRun: "2025-06-11T20:15:00Z",
+          recordsCollected: 89,
+          successRate: "76.3%"
+        }
+      ],
+      totalRecords: 12847,
+      averageQuality: 8.4,
+      dailyQuota: 15000,
+      quotaUsed: 587
+    };
+  }
+
+  static getRealisticSystemHealth() {
+    return {
+      success: true,
+      overallHealth: "Excellent",
+      healthScore: 94,
+      services: [
+        {
+          name: "Database",
+          status: "healthy",
+          responseTime: "12ms",
+          uptime: "99.97%"
+        },
+        {
+          name: "API Gateway",
+          status: "healthy", 
+          responseTime: "34ms",
+          uptime: "99.94%"
+        },
+        {
+          name: "Cache Layer",
+          status: "warning",
+          responseTime: "67ms", 
+          uptime: "98.85%"
+        },
+        {
+          name: "Background Jobs",
+          status: "healthy",
+          responseTime: "156ms",
+          uptime: "99.89%"
+        }
+      ],
+      metrics: {
+        cpuUsage: 34,
+        memoryUsage: 67,
+        diskUsage: 23,
+        networkLatency: "18ms"
+      },
+      alerts: [
+        {
+          level: "warning",
+          message: "Cache hit ratio below optimal threshold",
+          timestamp: "2025-06-11T20:45:00Z"
+        }
+      ]
+    };
+  }
 }
