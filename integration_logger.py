@@ -55,7 +55,7 @@ def log_integration_test_to_airtable(
     from logger_config import AIRTABLE_API_KEY, AIRTABLE_BASE_ID, AIRTABLE_TABLE_ID
     
     # Safety check to prevent base mismatches
-    if AIRTABLE_BASE_ID != "appbFDTqB2WtRNV1H":
+    if AIRTABLE_BASE_ID != "appe0OSJtB1In1kn5":
         raise Exception("❌ Invalid Airtable Base ID in use – logger misconfigured.")
     
     airtable_api_key = AIRTABLE_API_KEY
