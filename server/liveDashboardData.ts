@@ -16,9 +16,10 @@ export class LiveDashboardData {
       }
       
       // Get metrics from authorized Airtable Integration Test Log Table
+      const apiKey = process.env.AIRTABLE_API_KEY || "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa";
       const airtableResponse = await fetch(`https://api.airtable.com/v0/${AUTHORIZED_BASE_ID}/${AUTHORIZED_TABLE_ID}`, {
         headers: {
-          "Authorization": `Bearer ${process.env.AIRTABLE_TOKEN}`,
+          "Authorization": `Bearer ${apiKey}`,
           "Content-Type": "application/json"
         }
       });
@@ -26,10 +27,7 @@ export class LiveDashboardData {
       if (airtableResponse.ok) {
         const airtableData = await airtableResponse.json();
         console.log('Airtable response status:', airtableResponse.status);
-        if (!airtableResponse.ok) {
-          console.log('Airtable error:', airtableData);
-          throw new Error(`Airtable API error: ${airtableData.error?.message || 'Unknown error'}`);
-        }
+        console.log('Records found:', airtableData.records?.length || 0);
         const records = airtableData.records || [];
         
         // Parse integration test records to get real automation function status
