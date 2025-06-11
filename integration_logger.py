@@ -51,10 +51,10 @@ def log_integration_test_to_airtable(
 ):
     import os
     
-    # Use the working hardcoded API key - FIXED TO MATCH DASHBOARD TABLE
+    # Use the working hardcoded API key - CORRECTED TO ORIGINAL WORKING TABLE
     airtable_api_key = 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa'
-    base_id = "appbFDTqB2WtRNV1H"
-    table_id = "tbl7K5RthCtD69BE1"
+    base_id = "appRt8V3tH4g5Z5if"
+    table_id = "tbly0fjE2M5uHET9X"
     url = f"https://api.airtable.com/v0/{base_id}/{table_id}"
 
     headers = {

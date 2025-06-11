@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:10:00.155Z",
-    "functionId": 206,
-    "functionName": "Lead Score Calculator",
-    "batch": 21,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 72,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:10:00.167Z",
     "functionId": 132,
     "functionName": "Intake Form Validator",
@@ -11480,6 +11469,21 @@
       "failedExecutions": 0,
       "systemUptime": 526.316779569,
       "lastHealthCheck": "2025-06-11T01:59:00.006Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T02:10:00.013Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 69.002274164,
+      "lastHealthCheck": "2025-06-11T02:09:00.009Z",
       "automationStatus": "paused"
     }
   }
