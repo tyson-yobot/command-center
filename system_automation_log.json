@@ -1,20 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:10:00.088Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "Health check: 100.0% healthy",
-    "metrics": {
-      "totalFunctions": 40,
-      "activeFunctions": 40,
-      "successfulExecutions": 0,
-      "failedExecutions": 0,
-      "systemUptime": 94.336042841,
-      "lastHealthCheck": "2025-06-10T16:10:00.084Z",
-      "automationStatus": "running"
-    }
-  },
-  {
     "timestamp": "2025-06-10T16:10:00.155Z",
     "functionId": 206,
     "functionName": "Lead Score Calculator",
@@ -11480,6 +11465,21 @@
       "failedExecutions": 0,
       "systemUptime": 783.318068423,
       "lastHealthCheck": "2025-06-11T01:49:00.007Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T02:00:00.010Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 526.316779569,
+      "lastHealthCheck": "2025-06-11T01:59:00.006Z",
       "automationStatus": "paused"
     }
   }
