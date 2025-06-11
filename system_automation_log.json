@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:05:00.225Z",
-    "functionId": 153,
-    "functionName": "System Health Metric Update",
-    "batch": 16,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 144,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:05:00.253Z",
     "functionId": 157,
     "functionName": "New Lead Notification",
@@ -11452,6 +11441,21 @@
       "failedExecutions": 0,
       "systemUptime": 138.012121291,
       "lastHealthCheck": "2025-06-11T00:19:00.007Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T00:30:00.018Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 300.152460472,
+      "lastHealthCheck": "2025-06-11T00:29:00.008Z",
       "automationStatus": "paused"
     }
   }
