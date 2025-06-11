@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:05:00.199Z",
-    "functionId": 149,
-    "functionName": "Manual Override Logger",
-    "batch": 15,
-    "category": "Audit",
-    "status": "success",
-    "duration": 122,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:05:00.225Z",
     "functionId": 153,
     "functionName": "System Health Metric Update",
@@ -11448,6 +11437,21 @@
       "failedExecutions": 0,
       "systemUptime": 628.238373677,
       "lastHealthCheck": "2025-06-11T00:09:00.017Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T00:20:00.014Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 138.012121291,
+      "lastHealthCheck": "2025-06-11T00:19:00.007Z",
       "automationStatus": "paused"
     }
   }

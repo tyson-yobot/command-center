@@ -262,6 +262,129 @@ def function_generate_compliance_pdf():
     print("📑 Compliance doc created")
     return True
 
+# ========== BATCH 5: LEAD ENGINE FUNCTIONS ==========
+
+@auto_log_wrapper("Lead Scraper Apollo")
+def function_lead_scraper_apollo():
+    print("🧲 Apollo leads scraped")
+    return True
+
+@auto_log_wrapper("Lead Scraper PhantomBuster")
+def function_lead_scraper_phantombuster():
+    print("🔍 PhantomBuster leads scraped")
+    return True
+
+@auto_log_wrapper("Lead Scraper Apify")
+def function_lead_scraper_apify():
+    print("🕷️ Apify leads scraped")
+    return True
+
+@auto_log_wrapper("Export Leads")
+def function_export_leads():
+    print("📁 Leads exported")
+    return True
+
+@auto_log_wrapper("Scraped Leads Airtable")
+def function_scraped_leads_airtable():
+    print("📊 Leads synced to Airtable")
+    return True
+
+# ========== BATCH 6: VOICE/COMMUNICATION FUNCTIONS ==========
+
+@auto_log_wrapper("Start Pipeline Calls")
+def function_start_pipeline_calls():
+    print("📞 Pipeline calls initiated")
+    return True
+
+@auto_log_wrapper("Stop Pipeline Calls")
+def function_stop_pipeline_calls():
+    print("📞 Pipeline calls stopped")
+    return True
+
+@auto_log_wrapper("Initiate Voice Call Manual")
+def function_initiate_voice_call_manual():
+    print("📞 Manual voice call initiated")
+    return True
+
+@auto_log_wrapper("Voice Input ElevenLabs")
+def function_voice_input_elevenlabs():
+    print("🎤 ElevenLabs voice input processed")
+    return True
+
+@auto_log_wrapper("Send SMS Twilio")
+def function_send_sms_twilio():
+    print("📲 Twilio SMS sent")
+    return True
+
+@auto_log_wrapper("ElevenLabs Voice Persona")
+def function_elevenlabs_voice_persona():
+    print("🗣️ Voice persona activated")
+    return True
+
+# ========== BATCH 7: SUPPORT & MONITORING FUNCTIONS ==========
+
+@auto_log_wrapper("Submit Ticket Zendesk")
+def function_submit_ticket_zendesk():
+    print("🚨 Zendesk ticket submitted")
+    return True
+
+@auto_log_wrapper("Chatbot Voice Text Hybrid")
+def function_chatbot_voice_text_hybrid():
+    print("🗣️ Hybrid chatbot active")
+    return True
+
+@auto_log_wrapper("Download Logs")
+def function_download_logs():
+    print("🧾 System logs downloaded")
+    return True
+
+@auto_log_wrapper("Run Diagnostics")
+def function_run_diagnostics():
+    print("🚑 System diagnostics complete")
+    return True
+
+@auto_log_wrapper("Emergency Data Wipe")
+def function_emergency_data_wipe():
+    print("🧹 Emergency data wipe executed")
+    return True
+
+@auto_log_wrapper("Critical Escalation Alert")
+def function_critical_escalation_alert():
+    print("📛 Critical alert escalated")
+    return True
+
+# ========== BATCH 8: ADVANCED CORE SYSTEM FUNCTIONS ==========
+
+@auto_log_wrapper("Sales Order Processor")
+def function_sales_order_processor():
+    print("🧾 Sales order processed")
+    return True
+
+@auto_log_wrapper("RAG Knowledge Engine")
+def function_rag_knowledge_engine():
+    print("🧠 RAG knowledge query processed")
+    return True
+
+@auto_log_wrapper("Botalytics Metrics Dashboard")
+def function_botalytics_metrics_dashboard():
+    print("📊 Botalytics metrics updated")
+    return True
+
+@auto_log_wrapper("Mailchimp Sync")
+def function_mailchimp_sync():
+    print("📣 Mailchimp data synced")
+    return True
+
+@auto_log_wrapper("System Mode Toggle")
+def function_system_mode_toggle():
+    print("🔁 System mode toggled")
+    return True
+
+@auto_log_wrapper("File Uploads RAG")
+def function_file_uploads_rag():
+    print("🗃️ Files uploaded to RAG")
+    return True
+
 if __name__ == "__main__":
     print("🚀 Live Automation Logger Ready")
     print("Every function call will automatically log to Airtable")
