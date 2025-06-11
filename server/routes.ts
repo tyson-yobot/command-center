@@ -1231,9 +1231,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Call Monitoring API endpoints
+  // Call Monitoring API endpoints - Supports both live and test modes
   app.get('/api/call-monitoring/details', async (req, res) => {
     try {
+      const systemModeHeader = req.headers['x-system-mode'] as string;
+      const { systemMode } = await import('./systemMode');
+      const finalMode = systemModeHeader || systemMode;
+
+      logOperation('call-monitoring-details', {}, 'success', 'Call monitoring details requested');
+
+      // Return test data in test mode
+      if (finalMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        return res.json(TestModeData.getRealisticCallMonitoring());
+      }
+
       const callDetails = {
         activeCalls: [],
         todayStats: {
@@ -1244,8 +1256,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         },
         recentCalls: []
       };
-
-      logOperation('call-monitoring-details', {}, 'success', 'Call monitoring details requested');
 
       res.json({
         success: true,

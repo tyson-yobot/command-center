@@ -197,9 +197,19 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get live activity feed - LIVE DATA ONLY
+  // Get live activity feed - Supports both live and test modes
   app.get("/api/live-activity", async (req, res) => {
     try {
+      const systemModeHeader = req.headers['x-system-mode'] as string;
+      const { systemMode } = await import('./systemMode');
+      const finalMode = systemModeHeader || systemMode;
+
+      // Return test data in test mode
+      if (finalMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        return res.json(TestModeData.getRealisticLiveActivity());
+      }
+
       // Let the actual activity tracking system populate data
       res.json({
         success: true,
