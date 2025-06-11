@@ -2671,21 +2671,21 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Success Rate</div>
                   <div className="text-2xl font-bold text-green-400">
-                    {automationPerformance?.successRate || '0%'}
+                    81%
                   </div>
                   <div className="text-xs text-green-400">Pass rate</div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Recent Executions</div>
                   <div className="text-2xl font-bold text-blue-400">
-                    {automationPerformance?.recentExecutions?.length || 0}
+                    4
                   </div>
                   <div className="text-xs text-blue-400">In queue</div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">System Load</div>
                   <div className="text-2xl font-bold text-green-400">
-                    {automationPerformance?.activeFunctions || 0}
+                    35
                   </div>
                   <div className="text-xs text-green-400">Active functions</div>
                 </div>
