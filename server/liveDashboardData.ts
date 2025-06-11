@@ -95,6 +95,7 @@ export class LiveDashboardData {
         executionsToday: totalExecutions,
         successRate: `${successRate}%`,
         averageExecutionTime: null,
+        lastUpdated: new Date().toISOString(),
         topPerformers: functionTests
           .filter((f: any) => f.success)
           .slice(0, 5)

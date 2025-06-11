@@ -2553,7 +2553,7 @@ export default function CommandCenter() {
                     {automationPerformance?.totalFunctions || 0} Total Executions
                   </span>
                   <span className="text-xs text-slate-400">
-                    Last Updated: {new Date().toLocaleTimeString()}
+                    Last Updated: {automationPerformance?.lastUpdated ? new Date(automationPerformance.lastUpdated).toLocaleTimeString() : 'Loading...'}
                   </span>
                   <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
                 </div>
