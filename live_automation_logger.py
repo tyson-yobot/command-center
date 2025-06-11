@@ -35,16 +35,44 @@ def log_automation_execution(
         search_response = requests.get(search_url, headers=headers)
         existing_records = search_response.json().get('records', [])
         
+        # Generate QA test number based on function position
+        function_map = {
+            'log_to_crm': 1, 'create_invoice': 2, 'send_slack_notification': 3, 'send_email_receipt': 4,
+            'record_call_log': 5, 'score_call': 6, 'run_voicebot_script': 7, 'sync_to_smartspend': 8,
+            'generate_roi_snapshot': 9, 'trigger_quote_pdf': 10, 'sync_to_hubspot': 11, 'sync_to_quickbooks': 12,
+            'log_voice_sentiment': 13, 'store_transcription': 14, 'send_sms_alert': 15, 'candidate_screening': 16,
+            'background_checks': 17, 'reference_verification': 18, 'onboarding_automation': 19, 'document_management': 20,
+            'policy_distribution': 21, 'compliance_training': 22, 'safety_monitoring': 23, 'incident_reporting': 24,
+            'emergency_response': 25, 'inventory_sync': 26, 'stripe_payment': 27, 'gpt_summary': 28,
+            'calendar_booking': 29, 'upload_to_drive': 30, 'generate_compliance_pdf': 31, 'lead_scraper_apollo': 32,
+            'lead_scraper_phantombuster': 33, 'lead_scraper_apify': 34, 'export_leads': 35, 'scraped_leads_airtable': 36,
+            'start_pipeline_calls': 37, 'stop_pipeline_calls': 38, 'initiate_voice_call_manual': 39, 'voice_input_elevenlabs': 40,
+            'send_sms_twilio': 41, 'elevenlabs_voice_persona': 42, 'submit_ticket_zendesk': 43, 'chatbot_voice_text_hybrid': 44,
+            'download_logs': 45, 'run_diagnostics': 46, 'emergency_data_wipe': 47, 'critical_escalation_alert': 48,
+            'sales_order_processor': 49, 'rag_knowledge_engine': 50, 'botalytics_metrics_dashboard': 51, 'mailchimp_sync': 52,
+            'system_mode_toggle': 53, 'file_uploads_rag': 54, 'webhook_automation': 55, 'api_integration': 56,
+            'data_sync': 57, 'notification_system': 58, 'backup_system': 59, 'security_check': 60,
+            'performance_monitor': 61, 'error_handler': 62, 'log_aggregator': 63, 'health_check': 64, 'system_cleanup': 65
+        }
+        
+        test_number = function_map.get(function_name, 999)
+        
+        # Create proper QA Test # format in notes
+        if success:
+            test_notes = f"QA Test #{test_number} - {function_name} execution successful - Live automation test passed"
+        else:
+            test_notes = f"QA Test #{test_number} - {function_name} execution failed - {notes}"
+        
         payload = {
             'fields': {
                 '🔧 Integration Name': function_name,
                 '✅ Pass/Fail': '✅ Pass' if success else '❌ Fail',
-                '🧠 Notes / Debug': notes,
+                '🧠 Notes / Debug': test_notes,
                 '📅 Test Date': datetime.now().isoformat(),
                 '🧑‍💻 QA Owner': qa_owner,
                 '📤 Output Data Populated?': True,
                 '🗃️ Record Created?': True,
-                '🔁 Retry Attempted?': len(existing_records) > 0,  # Mark as retry if updating
+                '🔁 Retry Attempted?': len(existing_records) > 0,
                 '🧩 Module Type': module_type,
                 '📂 Related Scenario Link': ''
             }
