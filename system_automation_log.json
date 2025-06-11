@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:10:00.219Z",
-    "functionId": 147,
-    "functionName": "Full API Health Check",
-    "batch": 15,
-    "category": "Monitoring",
-    "status": "success",
-    "duration": 139,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:10:00.247Z",
     "functionId": 149,
     "functionName": "Manual Override Logger",
@@ -11496,6 +11485,21 @@
       "failedExecutions": 0,
       "systemUptime": 337.610988486,
       "lastHealthCheck": "2025-06-11T02:39:00.007Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-11T02:50:00.011Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 232.622157995,
+      "lastHealthCheck": "2025-06-11T02:49:00.007Z",
       "automationStatus": "paused"
     }
   }

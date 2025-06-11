@@ -46,10 +46,11 @@ export class LiveDashboardData {
         });
 
         console.log(`Processing ${records.length} Airtable records`);
+        console.log(`RECORD COUNT DEBUG: ${records.length} records from Airtable`);
 
         // Count ALL executions, not just unique functions
         const totalExecutions = functionTests.length;
-        const passedExecutions = functionTests.filter(test => test.success).length;
+        const passedExecutions = functionTests.filter((test: any) => test.success).length;
         const failedExecutions = totalExecutions - passedExecutions;
         const successRate = totalExecutions > 0 ? ((passedExecutions / totalExecutions) * 100).toFixed(1) : '0';
         
@@ -92,7 +93,7 @@ export class LiveDashboardData {
       console.error('Stack trace:', error.stack);
     }
     
-    // Fallback to default values if Airtable unavailable
+    // NO FALLBACK VALUES - only return if Airtable fails completely
     return {
       totalFunctions: 0,
       activeFunctions: 0,
@@ -102,8 +103,8 @@ export class LiveDashboardData {
       topPerformers: [],
       recentErrors: [],
       healthChecks: {
-        airtable: "unavailable",
-        slack: "healthy", 
+        airtable: "error",
+        slack: "unknown", 
         apis: "healthy",
         database: "healthy"
       }
