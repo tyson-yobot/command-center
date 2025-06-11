@@ -62,12 +62,16 @@ export class LiveDashboardData {
         const failedExecutions = totalExecutions - passedExecutions;
         const successRate = totalExecutions > 0 ? ((passedExecutions / totalExecutions) * 100).toFixed(1) : '0';
         
-        // Get unique functions using verified correct logic
+        // Get unique functions using verified correct logic - exclude invalid entries
         const uniqueFunctions: any = {};
         functionTests.forEach(test => {
           const cleanFunctionName = test.functionName.trim();
-          // Only include non-empty function names
-          if (cleanFunctionName) {
+          // Only include valid function names (not empty, not just emojis, not single characters)
+          if (cleanFunctionName && 
+              cleanFunctionName !== '✅' && 
+              cleanFunctionName !== '❌' && 
+              cleanFunctionName.length > 1 &&
+              !cleanFunctionName.match(/^[✅❌\s]+$/)) {
             uniqueFunctions[cleanFunctionName] = test;
           }
         });
