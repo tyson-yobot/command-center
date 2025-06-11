@@ -9,7 +9,7 @@ export class LiveDashboardData {
     try {
       // Safety check to prevent base mismatches
       const AUTHORIZED_BASE_ID = "appe0OSJtB1In1kn5";
-      const AUTHORIZED_TABLE_ID = "tbl7K5RthCtD69BE1";
+      const AUTHORIZED_TABLE_ID = "tblmYdOB13Ze9c4aJ";
       
       if (AUTHORIZED_BASE_ID !== "appe0OSJtB1In1kn5") {
         throw new Error("❌ Invalid Airtable Base ID in use – dashboard misconfigured.");
@@ -18,7 +18,7 @@ export class LiveDashboardData {
       // Get metrics from authorized Airtable Integration Test Log Table
       const airtableResponse = await fetch(`https://api.airtable.com/v0/${AUTHORIZED_BASE_ID}/${AUTHORIZED_TABLE_ID}`, {
         headers: {
-          "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`,
+          "Authorization": `Bearer ${process.env.AIRTABLE_TOKEN}`,
           "Content-Type": "application/json"
         }
       });

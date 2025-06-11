@@ -3,4 +3,4 @@ import os
 
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY", "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa")
 AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID", "appe0OSJtB1In1kn5")
-AIRTABLE_TABLE_ID = os.getenv("AIRTABLE_TABLE_ID", "tbl7K5RthCtD69BE1")
+AIRTABLE_TABLE_ID = os.getenv("AIRTABLE_TABLE_ID", "tblmYdOB13Ze9c4aJ")
