@@ -75,23 +75,66 @@ export default function CommandCenter() {
   // Dashboard metrics queries
   const { data: metrics } = useQuery({ 
     queryKey: ['/api/dashboard-metrics', currentSystemMode],
-    queryFn: () => fetch('/api/dashboard-metrics', {
-      headers: { 'x-system-mode': currentSystemMode }
-    }).then(res => res.json())
+    queryFn: () => {
+      if (currentSystemMode === 'test') {
+        return Promise.resolve({
+          automation: {
+            totalFunctions: 43,
+            activeFunctions: 35,
+            successRate: 81,
+            failedFunctions: 8,
+            averageResponseTime: "1.2s"
+          },
+          leads: {
+            totalLeads: 2847,
+            qualifiedLeads: 1923,
+            conversionRate: "67.5%",
+            averageLeadScore: 8.3
+          },
+          revenue: {
+            monthlyRevenue: 245000,
+            activeDeals: 23,
+            closeRate: 34,
+            pipelineValue: 890000
+          },
+          systemHealth: 94
+        });
+      }
+      return fetch('/api/dashboard-metrics', {
+        headers: { 'x-system-mode': currentSystemMode }
+      }).then(res => res.json());
+    }
   });
   
   const { data: automationPerformance } = useQuery({ 
     queryKey: ['/api/automation-performance', currentSystemMode],
-    queryFn: () => fetch('/api/automation-performance?' + new URLSearchParams({
-      mode: currentSystemMode,
-      t: Date.now().toString()
-    }), {
-      headers: { 
-        'x-system-mode': currentSystemMode,
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
+    queryFn: () => {
+      if (currentSystemMode === 'test') {
+        return Promise.resolve({
+          totalFunctions: 43,
+          activeFunctions: 35,
+          successRate: 81,
+          failedFunctions: 8,
+          averageResponseTime: "1.2s",
+          recentExecutions: [
+            { name: "Lead Capture Integration", success: true, timestamp: "2025-06-11T05:15:23.000Z" },
+            { name: "CRM Data Sync", success: true, timestamp: "2025-06-11T05:12:15.000Z" },
+            { name: "Quote Generation", success: false, timestamp: "2025-06-11T04:58:32.000Z" },
+            { name: "Invoice Processing", success: true, timestamp: "2025-06-11T05:14:01.000Z" }
+          ]
+        });
       }
-    }).then(res => res.json()),
+      return fetch('/api/automation-performance?' + new URLSearchParams({
+        mode: currentSystemMode,
+        t: Date.now().toString()
+      }), {
+        headers: { 
+          'x-system-mode': currentSystemMode,
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      }).then(res => res.json());
+    },
     refetchInterval: 2000,
     refetchOnWindowFocus: true,
     staleTime: 0,
@@ -100,16 +143,67 @@ export default function CommandCenter() {
 
   const { data: liveActivityData } = useQuery({ 
     queryKey: ['/api/live-activity', currentSystemMode],
-    queryFn: () => fetch('/api/live-activity', {
-      headers: { 'x-system-mode': currentSystemMode }
-    }).then(res => res.json())
+    queryFn: () => {
+      if (currentSystemMode === 'test') {
+        return Promise.resolve({
+          success: true,
+          activities: [
+            {
+              timestamp: "2025-06-11T21:55:23.000Z",
+              type: "api_call",
+              description: "Stripe payment processed",
+              status: "success",
+              user: "system"
+            },
+            {
+              timestamp: "2025-06-11T21:54:45.000Z",
+              type: "automation",
+              description: "Lead scoring automation completed",
+              status: "success",
+              user: "automation"
+            },
+            {
+              timestamp: "2025-06-11T21:53:12.000Z",
+              type: "user_action",
+              description: "Dashboard accessed by user",
+              status: "info",
+              user: "john.doe@company.com"
+            }
+          ],
+          activeUsers: 23,
+          systemLoad: 67,
+          memoryUsage: 78
+        });
+      }
+      return fetch('/api/live-activity', {
+        headers: { 'x-system-mode': currentSystemMode }
+      }).then(res => res.json());
+    }
   });
   
   const { data: knowledgeStats, refetch: refetchKnowledge } = useQuery({ 
     queryKey: ['/api/knowledge/stats', currentSystemMode],
-    queryFn: () => fetch('/api/knowledge/stats', {
-      headers: { 'x-system-mode': currentSystemMode }
-    }).then(res => res.json())
+    queryFn: () => {
+      if (currentSystemMode === 'test') {
+        return Promise.resolve({
+          success: true,
+          totalDocuments: 342,
+          recentlyAdded: 8,
+          totalSizeBytes: 15728640,
+          avgProcessingTime: "2.3s",
+          knowledgeCategories: {
+            "Product Documentation": 127,
+            "Process Guides": 89,
+            "Training Materials": 63,
+            "Technical Specs": 45,
+            "Customer FAQs": 18
+          }
+        });
+      }
+      return fetch('/api/knowledge/stats', {
+        headers: { 'x-system-mode': currentSystemMode }
+      }).then(res => res.json());
+    }
   });
   
   const [isListening, setIsListening] = React.useState(false);
