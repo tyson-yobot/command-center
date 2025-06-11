@@ -57,8 +57,11 @@ def log_integration_test_to_airtable(
     table_id = AIRTABLE_TABLE_ID
     url = f"https://api.airtable.com/v0/{base_id}/{table_id}"
 
+    # Use AIRTABLE_TOKEN if available, fallback to API key
+    import os
+    token = os.getenv('AIRTABLE_TOKEN') or airtable_api_key
     headers = {
-        "Authorization": f"Bearer {airtable_api_key}",
+        "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
     }
 
