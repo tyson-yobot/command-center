@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import yobotRobotHead from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749548966185.png';
+// Robot head image - will be handled with fallback
+const yobotRobotHead = '/api/placeholder-image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -48,6 +49,8 @@ import {
   Share2,
   Camera,
   Building,
+  Bot,
+  User,
   MapPin,
   Globe
 } from 'lucide-react';
@@ -131,6 +134,10 @@ export default function CommandCenter() {
   const [showPublyDashboard, setShowPublyDashboard] = useState(false);
   const [showMailchimpDashboard, setShowMailchimpDashboard] = useState(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [showLiveChat, setShowLiveChat] = useState(false);
+  const [showTicketsList, setShowTicketsList] = useState(false);
+  const [showCreateTicket, setShowCreateTicket] = useState(false);
+  const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
   const { toast } = useToast();
 
   // Fetch current system mode on load and set up periodic sync
@@ -741,15 +748,18 @@ export default function CommandCenter() {
 
   const handleOpenLiveChat = () => {
     setShowLiveChat(true);
-    // Initialize chat with welcome message if empty
-    if (chatMessages.length === 0) {
-      setChatMessages([{
-        id: '1',
-        sender: 'agent',
-        message: 'Hello! I\'m your YoBot support assistant. How can I help you today?',
-        timestamp: new Date().toLocaleTimeString()
-      }]);
-    }
+  };
+
+  const handleViewAllTickets = (event: React.MouseEvent) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setButtonPosition({ x: rect.right, y: rect.top });
+    setShowTicketsList(true);
+  };
+
+  const handleCreateNewTicket = (event: React.MouseEvent) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setButtonPosition({ x: rect.right, y: rect.top });
+    setShowCreateTicket(true);
   };
 
   const handleSendMessage = async () => {
