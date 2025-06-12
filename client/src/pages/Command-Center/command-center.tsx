@@ -152,35 +152,25 @@ export default function CommandCenter() {
   // System mode toggle function
   const toggleSystemMode = async () => {
     try {
-      const response = await fetch('/api/system-mode-toggle', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: 'command-center-user'
-        })
+      const response = await apiRequest('POST', '/api/system-mode-toggle', {
+        userId: 'command-center-user'
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
       
-      if (data.success && data.modeChange) {
-        setCurrentSystemMode(data.modeChange.newMode);
-        localStorage.setItem('systemMode', data.modeChange.newMode);
-        
-        console.log(`Mode changed: ${data.modeChange.previousMode} → ${data.modeChange.newMode}`);
-        
-        // Refresh the page data after mode change
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+      if (response.success && response.modeChange) {
+        setCurrentSystemMode(response.modeChange.newMode);
+        toast({
+          title: "System Mode Changed",
+          description: `Switched to ${response.modeChange.newMode} mode. ${response.modeChange.newMode === 'live' ? 'Production data active.' : 'Test mode - safe operations only.'}`,
+        });
+        console.log(`Mode changed: ${response.modeChange.previousMode} → ${response.modeChange.newMode}`);
       }
     } catch (error) {
       console.error('Toggle failed:', error);
+      toast({
+        title: "Error",
+        description: "Failed to toggle system mode",
+        variant: "destructive"
+      });
     }
   };
   const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
@@ -2138,6 +2128,12 @@ export default function CommandCenter() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-8 p-8">
+      {/* Test Mode Banner */}
+      {currentSystemMode === 'test' && (
+        <div className="bg-yellow-500 text-black py-3 px-4 text-center font-bold text-lg border-b-2 border-yellow-600 fixed top-0 left-0 right-0 z-50">
+          🧪 TEST MODE ACTIVE - No production data or API calls will be executed
+        </div>
+      )}
       
       <div className="w-full">
 

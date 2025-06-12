@@ -7,10 +7,10 @@ export class LiveDashboardData {
   // Get real automation metrics from Airtable Integration Test Log
   static async getAutomationMetrics() {
     try {
-      // Get metrics from production Airtable Integration Test Log Table
-      const airtableResponse = await fetch("https://api.airtable.com/v0/appbFDTqB2WtRNV1H/tbl7K5RthCtD69BE1", {
+      // Get metrics from Airtable Integration Test Log Table
+      const airtableResponse = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbly0fjE2M5uHET9X", {
         headers: {
-          "Authorization": `Bearer ${process.env.AIRTABLE_PRODUCTION_API_KEY}`,
+          "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`,
           "Content-Type": "application/json"
         }
       });
@@ -41,13 +41,13 @@ export class LiveDashboardData {
           'Policy Distribution', 'Compliance Training'
         ];
 
-        // Extract function names and statuses from the proper fields
+        // Extract function names and statuses from the integration name field - only count actual functions
         const functionTests = records.map(record => {
-          const functionName = record.fields['🔧 Integration Name'] || '';
-          const passFailField = record.fields['✅ Pass/Fail'] || '';
-          const success = passFailField === '✅ Pass';
+          const integrationName = record.fields['🔧 Integration Name'] || '';
+          const success = integrationName.includes('✅');
+          const functionName = integrationName.split(' - ')[0];
           return { functionName, success, record };
-        }).filter(test => test.functionName && actualFunctions.includes(test.functionName));
+        }).filter(test => actualFunctions.includes(test.functionName));
 
         // Get unique functions and their latest status
         const uniqueFunctions: any = {};
