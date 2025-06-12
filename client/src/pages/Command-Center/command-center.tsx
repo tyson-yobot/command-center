@@ -3770,7 +3770,7 @@ export default function CommandCenter() {
         {/* Live Activity & System Monitoring */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Live Activity Feed */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 h-64">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-green-400" />
@@ -3812,7 +3812,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Master Data Sync Monitor */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 h-64">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Monitor className="w-5 h-5 mr-2 text-blue-400" />
