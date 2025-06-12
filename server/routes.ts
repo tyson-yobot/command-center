@@ -14576,6 +14576,102 @@ export function registerContentCreationEndpoints(app: Express) {
     }
   });
 
+  // ElevenLabs Text-to-Speech
+  app.post('/api/elevenlabs/text-to-speech', async (req, res) => {
+    try {
+      const { text, voiceId, model } = req.body;
+      
+      if (!text || text.trim().length === 0) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Text content is required for voice generation' 
+        });
+      }
+
+      const apiKey = process.env.ELEVENLABS_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ 
+          success: false, 
+          message: 'ElevenLabs API key not configured' 
+        });
+      }
+
+      const selectedVoiceId = voiceId || '21m00Tcm4TlvDq8ikWAM'; // Default to Rachel
+      const selectedModel = model || 'eleven_multilingual_v2';
+
+      console.log(`Generating voice for text: "${text.substring(0, 50)}..." using voice ${selectedVoiceId}`);
+
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${selectedVoiceId}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'audio/mpeg',
+          'Content-Type': 'application/json',
+          'xi-api-key': apiKey
+        },
+        body: JSON.stringify({
+          text: text.trim(),
+          model_id: selectedModel,
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.75,
+            style: 0.0,
+            use_speaker_boost: true
+          }
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('ElevenLabs API error:', response.status, errorText);
+        return res.status(response.status).json({ 
+          success: false, 
+          message: `ElevenLabs API error: ${response.status}`,
+          error: errorText 
+        });
+      }
+
+      const audioBuffer = await response.arrayBuffer();
+      
+      console.log(`Voice generation successful. Audio size: ${audioBuffer.byteLength} bytes`);
+      
+      res.set({
+        'Content-Type': 'audio/mpeg',
+        'Content-Disposition': 'attachment; filename="generated_voice.mp3"',
+        'Content-Length': audioBuffer.byteLength.toString(),
+        'Access-Control-Allow-Origin': '*'
+      });
+      
+      res.send(Buffer.from(audioBuffer));
+    } catch (error: any) {
+      console.error('Text-to-speech generation error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Server error during voice generation',
+        error: error.message 
+      });
+    }
+  });
+
+  // ElevenLabs Default Voices Endpoint
+  app.get('/api/elevenlabs/voices', async (req, res) => {
+    try {
+      const { DEFAULT_VOICES } = await import('./elevenlabs');
+      
+      res.json({
+        success: true,
+        voices: DEFAULT_VOICES,
+        total: DEFAULT_VOICES.length
+      });
+    } catch (error: any) {
+      console.error('Error loading default voices:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to load voice library',
+        error: error.message
+      });
+    }
+  });
+
   // Register Zendesk integration routes
   registerZendeskRoutes(app);
 

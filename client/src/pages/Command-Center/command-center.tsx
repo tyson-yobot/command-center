@@ -391,7 +391,7 @@ export default function CommandCenter() {
         if (data.voices && data.voices.length > 0) {
           setAvailableVoices(data.voices);
           setVoiceStatus(`${data.voices.length} voices loaded successfully`);
-          console.log('Loaded voices:', data.voices.map(v => v.name));
+          console.log('Loaded voices:', data.voices.map((v: any) => v.name));
         } else {
           setAvailableVoices([]);
           setVoiceStatus(data.message || 'No voices available');
@@ -401,7 +401,7 @@ export default function CommandCenter() {
         setAvailableVoices([]);
         setVoiceStatus(`Failed to load voices: ${response.status}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to fetch voices:', error);
       setAvailableVoices([]);
       setVoiceStatus('Network error loading voices');
@@ -1616,6 +1616,8 @@ export default function CommandCenter() {
     }
   };
 
+
+
   const testEscalation = () => {
     setShowEscalation(true);
     setTimeout(() => setShowEscalation(false), 5000);
@@ -1703,6 +1705,7 @@ export default function CommandCenter() {
   const contextSearch = async () => {
     if (!queryText.trim()) {
       setToast({
+        id: Date.now().toString(),
         title: "Context Required",
         description: "Please enter text for context search",
         variant: "destructive"
