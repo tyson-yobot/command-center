@@ -151,9 +151,9 @@ export default function CommandCenter() {
 
   // Test statistics for Live Integration Test Results
   const testStats = {
-    totalTests: automationPerformanceData?.data?.totalTests || 74,
-    passedTests: automationPerformanceData?.data?.passedTests || 71,
-    successRate: automationPerformanceData?.data?.successRate || 95.9
+    totalTests: automationPerformance?.data?.totalTests || 74,
+    passedTests: automationPerformance?.data?.passedTests || 71,
+    successRate: automationPerformance?.data?.successRate || 95.9
   };
 
   // Fetch current system mode on load and set up periodic sync
