@@ -139,18 +139,8 @@ export function registerRealScrapingRoutes(app: Express) {
 
       console.log('Apollo Scraping Log:', logEntry);
 
-      // Log to Airtable Integration Test Log per specification
-      await // DISABLED - logIntegrationTest({
-        integrationName: "Apollo Lead Scraper",
-        passOrFail: logEntry.status === 'SUCCESS',
-        notes: `Validated Airtable + Slack delivery. Mode: ${mode}, Leads: ${leads.length}, Live Data: ${isLiveData}`,
-        qaOwner: "YoBot System",
-        outputDataPopulated: leads.length > 0,
-        recordCreated: true,
-        retryAttempted: false,
-        moduleType: "Scraper",
-        relatedScenarioLink: "https://replit.com/@YoBot/lead-scraper"
-      });
+      // DISABLED: Legacy logger removed - use PRODUCTION_HARDENED_LOGGER only
+      console.log(`[DISABLED] Legacy logger call blocked: Apollo Lead Scraper`);
 
       res.json({ 
         success: true, 
@@ -296,17 +286,9 @@ export function registerRealScrapingRoutes(app: Express) {
       console.log('Apify Scraping Log:', logEntry);
 
       // Log to Airtable Integration Test Log per specification
-      await // DISABLED - logIntegrationTest({
-        integrationName: "Apify Business Scraper",
-        passOrFail: logEntry.status === 'SUCCESS',
-        notes: `Google Maps business scraping completed. Mode: ${mode}, Leads: ${leads.length}, Live Data: ${isLiveData}`,
-        qaOwner: "YoBot System",
-        outputDataPopulated: leads.length > 0,
-        recordCreated: true,
-        retryAttempted: false,
-        moduleType: "Scraper",
-        relatedScenarioLink: "https://replit.com/@YoBot/lead-scraper"
-      });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
 
       res.json({ 
         success: true, 
@@ -455,17 +437,9 @@ export function registerRealScrapingRoutes(app: Express) {
       console.log('PhantomBuster Scraping Log:', logEntry);
 
       // Log to Airtable Integration Test Log per specification
-      await // DISABLED - logIntegrationTest({
-        integrationName: "PhantomBuster LinkedIn Scraper",
-        passOrFail: logEntry.status === 'SUCCESS',
-        notes: `LinkedIn professional network scraping completed. Mode: ${mode}, Leads: ${leads.length}, Live Data: ${isLiveData}`,
-        qaOwner: "YoBot System",
-        outputDataPopulated: leads.length > 0,
-        recordCreated: true,
-        retryAttempted: false,
-        moduleType: "Scraper",
-        relatedScenarioLink: "https://replit.com/@YoBot/lead-scraper"
-      });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
 
       res.json({ 
         success: true, 

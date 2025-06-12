@@ -88,12 +88,9 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const needsEscalation = detectEscalationIntent("I need to speak to a human about this issue");
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 151: VoiceBot Escalation Detection",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully detects escalation intent in voice transcripts"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, needsEscalation, message: "Escalation intent detected" });
       }
       
@@ -111,12 +108,9 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const category = categorizeFailure("stripe-payment-processor");
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 152: Failure Categorization",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully categorizes integration failures by module type"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, category, message: "Failure categorized" });
       }
       
@@ -134,12 +128,9 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const metric = await updateSystemHealthMetric("cpu_usage", "optimal");
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 153: System Health Metric Update",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully updates live system health metrics"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, metric, message: "Health metric updated" });
       }
       
@@ -157,12 +148,9 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const hasBrokenLinks = findBrokenLinks({ contacts: [] }, "contacts");
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 154: Broken Link Detection",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully detects broken linked records in Airtable"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, hasBrokenLinks, message: "Broken links detected" });
       }
       
@@ -180,12 +168,9 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const script = await expandToScript("Schedule a follow-up meeting");
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 155: AI Script Expansion",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully expands short prompts into full call scripts"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, script, message: "Script expanded" });
       }
       
@@ -203,12 +188,9 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const backup = await triggerDriveBackup({ test: "data" }, "test_backup.json");
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 156: Google Drive Backup",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully triggers backup exports to Google Drive"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, backup, message: "Backup triggered" });
       }
       
@@ -226,12 +208,9 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         await notifyNewLead({ name: "John Doe", email: "john@example.com" });
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 157: New Lead Notification",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully sends Slack notifications for new leads"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, message: "New lead notification sent" });
       }
       
@@ -249,12 +228,9 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const domain = getDomainFromUrl("https://www.example.com/page");
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 158: Domain Extraction",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully extracts domains from URLs"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, domain, message: "Domain extracted" });
       }
       
@@ -272,12 +248,9 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         await autoCompleteTask({ id: "task_123", label: "autofinish" });
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 159: Auto-Complete Task",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully auto-marks internal tasks as complete by label"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, message: "Task auto-completed" });
       }
       
@@ -298,12 +271,9 @@ export function registerBatch16Routes(app: Express): void {
           notes: "Test snapshot creation",
           status: "PASS",
         });
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 160: Test Snapshot Creation",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully creates test snapshot records in Integration Test Log 2"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, snapshot, message: "Test snapshot created" });
       }
       

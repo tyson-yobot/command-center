@@ -75,12 +75,9 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         const script = generateScriptFromNotes("Sample CRM notes for client meeting");
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 131: CRM to Call Script",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully converts CRM notes to call script format"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, script, message: "CRM notes converted to call script" });
       }
       
@@ -98,12 +95,9 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         const isValid = validateIntake({ name: "Test User", email: "test@example.com", phone: "555-0123" });
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 132: Validate Intake Fields",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully validates required intake fields"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, isValid, message: "Intake validation completed" });
       }
       
@@ -121,12 +115,9 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         const isSilent = isSilentCall({ duration: 3, transcript: null });
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 133: Silent Call Detection",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully detects silent calls by duration and transcript"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, isSilent, message: "Silent call detection completed" });
       }
       
@@ -144,12 +135,9 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         await alertOnQAFail("Sample QA Test");
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 134: QA Failure Alert",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully triggers Slack alerts for QA failures"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, message: "QA failure alert sent" });
       }
       
@@ -167,12 +155,9 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         const formatted = formatDateISO(new Date());
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 135: Date Format ISO",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully converts dates to YYYY-MM-DD format"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, formatted, message: "Date formatted to ISO" });
       }
       
@@ -190,12 +175,9 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         const personality = assignPersonality("Legal");
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 136: Bot Personality Assignment",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully assigns bot personality based on industry"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, personality, message: "Bot personality assigned" });
       }
       
@@ -217,12 +199,9 @@ export function registerBatch14Routes(app: Express): void {
           amount: 1000,
           source: "API Test"
         });
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 137: SmartSpend Sync",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully creates SmartSpend sync records"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, entry, message: "SmartSpend entry created" });
       }
       
@@ -240,12 +219,9 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         const sessionId = generateVoiceSessionId("test_user_123");
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 138: VoiceBot Session ID",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully generates unique VoiceBot session IDs"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, sessionId, message: "VoiceBot session ID generated" });
       }
       
@@ -266,12 +242,9 @@ export function registerBatch14Routes(app: Express): void {
           { client: "ABC Corp", result: "Meeting scheduled" },
           { client: "XYZ Inc", result: "Proposal sent" }
         ]);
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 139: Call Digest",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully posts Slack digest of call summaries"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, message: "Call digest posted to Slack" });
       }
       
@@ -289,12 +262,9 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         await pushLiveError({ message: "Test error for command center" });
-        await // DISABLED - logIntegrationTest({
-          testName: "Function 140: Live Error Push",
-          status: "PASS",
-          timestamp: new Date().toISOString(),
-          details: "Successfully pushes real-time errors to Command Center"
-        });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
         return res.json({ success: true, message: "Error pushed to Command Center" });
       }
       

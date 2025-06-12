@@ -33,11 +33,7 @@ export async function // DISABLED - logIntegrationTest(data: IntegrationTestData
 }
 
 export async function logFunctionExecution(functionName: string, result: any) {
-  return await // DISABLED - logIntegrationTest({
-    integrationName: functionName,
-    status: result.success ? 'PASS' : 'FAIL',
-    notes: JSON.stringify(result),
-    timestamp: new Date().toISOString(),
-    qaOwner: 'YoBot Automation'
-  });
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked`);
+  return true;
 }

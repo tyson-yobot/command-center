@@ -26,7 +26,7 @@ import { registerQAValidationRoutes } from "./qaValidationSystem";
 import { registerContentCreatorRoutes } from "./contentCreatorRoutes";
 import { registerMailchimpRoutes } from "./mailchimpRoutes";
 
-import { registerPublerRoutes } from "./publerIntegration";
+// Publer integration removed - hardcoded data eliminated
 import { isLiveMode } from "./systemMode";
 import { configManager } from "./controlCenterConfig";
 
