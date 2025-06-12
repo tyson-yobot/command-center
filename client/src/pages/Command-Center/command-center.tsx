@@ -54,8 +54,6 @@ import { apiRequest } from '@/lib/queryClient';
 // Using placeholder for logo until asset path is fixed
 const yobotLogo = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTgiIGZpbGw9IiM2MzY2ZjEiLz4KPGNpcmNsZSBjeD0iMTQiIGN5PSIxNiIgcj0iMiIgZmlsbD0id2hpdGUiLz4KPGNpcmNsZSBjeD0iMjYiIGN5PSIxNiIgcj0iMiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTE0IDI2IFEyMCAzMCAyNiAyNiIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+Cjwvc3ZnPg==';
 
-import { CallMonitoringPopup } from '@/components/call-monitoring-popup';
-import { ZendeskChatWidget } from '@/components/zendesk-chat-widget';
 import { SalesOrderProcessor } from '@/components/sales-order-processor';
 import { ContentCreatorDashboard } from '@/components/content-creator-dashboard';
 import { MailchimpSyncDashboard } from '@/components/mailchimp-sync-dashboard';
