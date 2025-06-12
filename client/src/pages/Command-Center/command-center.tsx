@@ -2802,10 +2802,14 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={() => window.open('https://app.hubspot.com/contacts/[HUB-ID]', '_blank')}
-                    className="text-white flex items-center justify-start p-3 border-l-6 transition-all duration-200"
+                    className="text-white flex items-center justify-start border-l-6 transition-all duration-200 rounded-lg font-semibold text-sm"
                     style={{
                       backgroundColor: '#0d82da',
-                      borderLeftColor: '#ff7a59'
+                      borderLeftColor: '#ff7a59',
+                      padding: '8px 12px',
+                      fontSize: '14px',
+                      textAlign: 'left',
+                      marginTop: '6px'
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = '#0864b1';
