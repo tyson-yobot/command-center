@@ -381,6 +381,58 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
+  // Get integration test results - Shows realistic failure patterns in demo mode
+  app.get("/api/integration-test-results", async (req, res) => {
+    try {
+      const { getSystemMode } = await import('./systemMode');
+      const systemMode = getSystemMode();
+      
+      if (systemMode === 'test') {
+        const { demoIntegrationResults } = await import('./demoTestResults');
+        
+        // Combine both batches and add realistic timestamps
+        const allResults = [
+          ...demoIntegrationResults.batch1,
+          ...demoIntegrationResults.batch2
+        ].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+        res.json({
+          success: true,
+          results: allResults,
+          summary: demoIntegrationResults.summary,
+          totalTests: allResults.length,
+          systemMode: 'test',
+          lastUpdated: new Date().toISOString(),
+          criticalIssues: [
+            "QuickBooks authentication timeout - requires manual re-auth",
+            "PDF generation service unavailable - 504 gateway timeout", 
+            "Twilio webhook delivery failed - carrier blocking",
+            "Document generation service timeout - manual intervention required"
+          ],
+          improvementAreas: [
+            "Email service response time elevated (3.2s average)",
+            "Voice sentiment analysis API rate limiting",
+            "SmartSpend sync validation failures (3 records)",
+            "Policy email delivery failures (12 recipients)"
+          ]
+        });
+      } else {
+        // Live mode - only real test data from actual logger
+        res.json({
+          success: true,
+          message: "Integration test results will populate from live AI Logger system",
+          systemMode: 'live'
+        });
+      }
+    } catch (error) {
+      console.error("Integration test results error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to fetch integration test results"
+      });
+    }
+  });
+
   // Get voice analytics - LIVE DATA ONLY
   app.get("/api/voice-analytics", async (req, res) => {
     try {
