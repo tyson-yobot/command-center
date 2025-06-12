@@ -2406,7 +2406,7 @@ export default function CommandCenter() {
               <img 
                 src={yobotLogo} 
                 alt="YoBot Logo" 
-                className="logo-icon h-[60px] mr-3 relative top-[-2px]"
+                className="logo-icon"
               />
               <h1 className="header-title text-6xl font-bold text-white leading-[60px]">
                 YoBot® Command Center
