@@ -1,208 +1,35 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { MessageCircle, Send, User, Bot, Phone, Mail, Clock } from 'lucide-react';
+import { ArrowLeft, MessageCircle } from 'lucide-react';
 
 interface LiveChatInterfaceProps {
-  isOpen: boolean;
-  onClose: () => void;
+  onBack: () => void;
 }
 
-interface ChatMessage {
-  id: number;
-  sender: 'user' | 'support' | 'system';
-  message: string;
-  timestamp: string;
-  avatar?: string;
-}
-
-export function LiveChatInterface({ isOpen, onClose }: LiveChatInterfaceProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: 1,
-      sender: 'system',
-      message: 'Welcome to YoBot Support! How can we help you today?',
-      timestamp: '2:30 PM'
-    },
-    {
-      id: 2,
-      sender: 'support',
-      message: 'Hi there! I\'m Sarah from the YoBot support team. I see you\'re exploring our Command Center. What questions do you have?',
-      timestamp: '2:31 PM'
-    }
-  ]);
-  
-  const [newMessage, setNewMessage] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      const userMessage: ChatMessage = {
-        id: messages.length + 1,
-        sender: 'user',
-        message: newMessage,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      
-      setMessages(prev => [...prev, userMessage]);
-      setNewMessage('');
-      setIsTyping(true);
-
-      // Simulate support response
-      setTimeout(() => {
-        const supportMessage: ChatMessage = {
-          id: messages.length + 2,
-          sender: 'support',
-          message: 'Thanks for your question! Let me help you with that. Our team is here to ensure you get the most out of YoBot\'s automation features.',
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-        setMessages(prev => [...prev, supportMessage]);
-        setIsTyping(false);
-      }, 2000);
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
+const LiveChatInterface: React.FC<LiveChatInterfaceProps> = ({ onBack }) => {
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] bg-slate-900 border border-blue-400 p-0">
-        {/* Chat Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-cyan-600 p-4 text-white">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                <MessageCircle className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-semibold">YoBot Support</h3>
-                <div className="flex items-center space-x-2 text-sm">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <span>Online • Avg response: 2 min</span>
-                </div>
-              </div>
-            </div>
-            <Badge className="bg-green-600 text-white">Live Support</Badge>
-          </div>
-        </div>
+    <div className="p-6">
+      <div className="flex items-center gap-3 mb-6">
+        <Button variant="ghost" size="sm" onClick={onBack}>
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
+        <MessageCircle className="h-5 w-5" />
+        <h2 className="text-xl font-bold">Live Chat Interface</h2>
+      </div>
 
-        {/* Support Agent Info */}
-        <div className="bg-slate-800 p-3 border-b border-slate-700">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-              <User className="w-4 h-4 text-white" />
-            </div>
-            <div>
-              <div className="text-white text-sm font-medium">Sarah Johnson</div>
-              <div className="text-slate-400 text-xs">Senior Support Specialist</div>
-            </div>
-            <div className="ml-auto flex space-x-2">
-              <Button size="sm" variant="outline" className="text-blue-400 border-blue-400">
-                <Phone className="w-3 h-3 mr-1" />
-                Call
-              </Button>
-              <Button size="sm" variant="outline" className="text-green-400 border-green-400">
-                <Mail className="w-3 h-3 mr-1" />
-                Email
-              </Button>
-            </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Chat Management</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-8 text-gray-500">
+            No active chat sessions
           </div>
-        </div>
-
-        {/* Chat Messages */}
-        <div className="flex-1 max-h-96 overflow-y-auto p-4 space-y-4">
-          {messages.map((message) => (
-            <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-xs lg:max-w-md ${
-                message.sender === 'user' 
-                  ? 'bg-blue-600 text-white' 
-                  : message.sender === 'support'
-                  ? 'bg-slate-700 text-white'
-                  : 'bg-green-600 text-white'
-              } rounded-lg p-3`}>
-                <div className="flex items-center space-x-2 mb-1">
-                  {message.sender === 'support' && (
-                    <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                      <User className="w-3 h-3 text-white" />
-                    </div>
-                  )}
-                  {message.sender === 'system' && (
-                    <div className="w-5 h-5 bg-green-600 rounded-full flex items-center justify-center">
-                      <Bot className="w-3 h-3 text-white" />
-                    </div>
-                  )}
-                  <span className="text-xs opacity-75">
-                    {message.sender === 'user' ? 'You' : message.sender === 'support' ? 'Sarah' : 'System'}
-                  </span>
-                  <span className="text-xs opacity-50 flex items-center">
-                    <Clock className="w-3 h-3 mr-1" />
-                    {message.timestamp}
-                  </span>
-                </div>
-                <p className="text-sm">{message.message}</p>
-              </div>
-            </div>
-          ))}
-          
-          {isTyping && (
-            <div className="flex justify-start">
-              <div className="bg-slate-700 text-white rounded-lg p-3">
-                <div className="flex items-center space-x-2">
-                  <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                    <User className="w-3 h-3 text-white" />
-                  </div>
-                  <span className="text-xs opacity-75">Sarah is typing...</span>
-                </div>
-                <div className="flex space-x-1 mt-2">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                </div>
-              </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Chat Input */}
-        <div className="p-4 border-t border-slate-700">
-          <div className="flex space-x-2">
-            <Input
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Type your message..."
-              className="flex-1 bg-slate-800 border-slate-600 text-white placeholder-slate-400"
-            />
-            <Button 
-              onClick={handleSendMessage}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-              disabled={!newMessage.trim()}
-            >
-              <Send className="w-4 h-4" />
-            </Button>
-          </div>
-          <div className="mt-2 text-xs text-slate-400 text-center">
-            Powered by YoBot Live Support • End-to-end encrypted
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+        </CardContent>
+      </Card>
+    </div>
   );
-}
+};
+
+export { LiveChatInterface };
