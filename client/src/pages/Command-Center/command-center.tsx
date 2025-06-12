@@ -2978,7 +2978,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-400">
-                {currentSystemMode === 'test' ? '99.8%' : (metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '0%')}
+                {metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '--'}
               </div>
               <p className="text-xs text-green-400">
                 {currentSystemMode === 'test' ? 'All systems operational' : 'System uptime'}
@@ -3037,7 +3037,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">System Load</div>
                   <div className="text-2xl font-bold text-green-400">
-                    {currentSystemMode === 'test' ? '99.8%' : (metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '0%')}
+                    {metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '--'}
                   </div>
                   <div className="text-xs text-green-400">Uptime</div>
                 </div>
@@ -3309,7 +3309,7 @@ export default function CommandCenter() {
                     <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '8.7/10' : '--'}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: currentSystemMode === 'test' ? '87%' : '0%' }}></div>
+                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: `${metrics?.data?.automationEfficiency || 0}%` }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
@@ -3422,7 +3422,7 @@ export default function CommandCenter() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Confidence Score</span>
-                  <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '94.2%' : '--'}</span>
+                  <span className="text-purple-400 font-bold">--</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Learning Status</span>
@@ -3796,7 +3796,7 @@ export default function CommandCenter() {
               {/* Interaction Quality */}
               <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-blue-400 mb-1">{currentSystemMode === 'test' ? '94.2%' : '--'}</div>
+                  <div className="text-2xl font-black text-blue-400 mb-1">--</div>
                   <div className="text-slate-300 text-sm">Accuracy Rate</div>
                 </div>
                 <div className="space-y-2">
