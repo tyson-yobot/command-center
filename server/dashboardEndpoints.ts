@@ -312,14 +312,75 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get live activity feed - LIVE DATA ONLY
+  // Get live activity feed
   app.get("/api/live-activity", async (req, res) => {
     try {
-      // Let the actual activity tracking system populate data
-      res.json({
-        success: true,
-        message: "Live activity will populate from actual system events"
-      });
+      const { getSystemMode } = await import('./systemMode');
+      const systemMode = getSystemMode();
+      
+      if (systemMode === 'test') {
+        // Demo data for presentations - recent activity with mixed results
+        res.json({
+          success: true,
+          activities: [
+            {
+              type: "automation_execution",
+              title: "CRM Sync Completed",
+              description: "Successfully synced 47 leads to HubSpot",
+              status: "success",
+              timestamp: new Date(Date.now() - 300000).toISOString(),
+              metric: "47 records"
+            },
+            {
+              type: "system_alert",
+              title: "QuickBooks Connection Failed",
+              description: "Authentication timeout - needs attention",
+              status: "error",
+              timestamp: new Date(Date.now() - 600000).toISOString(),
+              metric: "3 retries"
+            },
+            {
+              type: "lead_capture",
+              title: "New Apollo.io Leads",
+              description: "23 qualified leads from technology sector",
+              status: "success",
+              timestamp: new Date(Date.now() - 900000).toISOString(),
+              metric: "23 leads"
+            },
+            {
+              type: "voice_call",
+              title: "Customer Support Call",
+              description: "Issue resolved - satisfaction score 8.5/10",
+              status: "success",
+              timestamp: new Date(Date.now() - 1200000).toISOString(),
+              metric: "8.5/10"
+            },
+            {
+              type: "workflow_failure",
+              title: "Email Campaign Delivery Issue",
+              description: "SMTP timeout affecting 12 subscribers",
+              status: "warning",
+              timestamp: new Date(Date.now() - 1500000).toISOString(),
+              metric: "12 affected"
+            },
+            {
+              type: "sales_order",
+              title: "Enterprise Package Sale",
+              description: "New client signed - $12,500 annual contract",
+              status: "success",
+              timestamp: new Date(Date.now() - 1800000).toISOString(),
+              metric: "$12,500"
+            }
+          ],
+          totalCount: 6,
+          lastUpdated: new Date().toISOString()
+        });
+      } else {
+        res.json({
+          success: true,
+          message: "Live activity will populate from actual system events"
+        });
+      }
     } catch (error) {
       console.error("Live activity error:", error);
       res.status(500).json({
