@@ -72,6 +72,7 @@ import { CallMonitoringPopup } from '@/components/call-monitoring-popup';
 import { CallMonitoringDetails } from '@/components/call-monitoring-details';
 import { LiveChatInterface } from '@/components/live-chat-interface';
 import { KnowledgeBaseManager } from '@/components/knowledge-base-manager';
+import { TabContentRenderer } from '@/components/TabContentRenderer';
 
 
 export default function CommandCenter() {
@@ -84,6 +85,18 @@ export default function CommandCenter() {
   const [currentSystemMode, setCurrentSystemMode] = useState(() => {
     return localStorage.getItem('systemMode') || 'live';
   });
+
+  // Tab navigation state
+  const [activeTab, setActiveTab] = useState('automation-ops');
+  
+  // Tab definitions
+  const tabs = [
+    { id: 'automation-ops', label: 'Automation Ops', icon: Zap },
+    { id: 'voiceops', label: 'VoiceOps™', icon: Mic },
+    { id: 'ai-intelligence', label: 'AI Intelligence', icon: Brain },
+    { id: 'smartspend', label: 'SmartSpend™', icon: DollarSign },
+    { id: 'system-tools', label: 'System Tools', icon: Settings }
+  ];
   
   // Dashboard metrics queries
   const { data: metrics } = useQuery({ 
