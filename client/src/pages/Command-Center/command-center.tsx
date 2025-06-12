@@ -2419,6 +2419,7 @@ export default function CommandCenter() {
   };
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-8 p-8">
 
       
@@ -3842,9 +3843,11 @@ export default function CommandCenter() {
         </div>
 
         {/* Analytics Dashboard - 2x3 Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* Top Row - First 3 Panels */}
+          
           {/* Voice Analytics */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 h-64">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Mic className="w-5 h-5 mr-2 text-red-400" />
@@ -3870,7 +3873,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* System Audit Log */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 h-64">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <FileText className="w-5 h-5 mr-2 text-orange-400" />
@@ -3894,7 +3897,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Quick Stats Dashboard */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 h-64">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Gauge className="w-5 h-5 mr-2 text-cyan-400" />
@@ -3920,10 +3923,11 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Second Row - Bottom 3 panels */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        {/* Bottom Row - Second 3 Panels */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          
           {/* AI Automation Engine */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 h-64">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Zap className="w-5 h-5 mr-2 text-yellow-400" />
@@ -3949,7 +3953,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Escalation Alerts */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 h-64">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Bell className="w-5 h-5 mr-2" />
@@ -3983,7 +3987,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Live Integration Test Results */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 h-64">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <FileText className="w-5 h-5 mr-2" />
@@ -5787,5 +5791,6 @@ export default function CommandCenter() {
         </div>
       </div>
     </div>
+    </>
   );
 }
