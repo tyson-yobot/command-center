@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { getSystemMode } from "./systemMode";
+import { isLiveMode, safeLiveData, blockTestData } from './liveMode';
 
 // Realistic test data for demo - believable business metrics
 const testModeMetrics = {
