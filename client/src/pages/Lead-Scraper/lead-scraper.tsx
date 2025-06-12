@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749714890077.png';
 import { 
   Target,
   Globe,
@@ -224,13 +225,36 @@ export default function EnterpriseLeadScraper() {
   // Tool Selection Step - Enterprise Design
   if (currentStep === 'tool-selection') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-8 relative">
+        {/* Back to Command Center Button */}
+        <a 
+          href="/command-center" 
+          className="absolute top-8 left-8 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-[0_0_8px_rgba(13,130,218,0.5)]"
+          style={{ 
+            backgroundColor: '#0d82da',
+            textDecoration: 'none'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#0864b1';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#0d82da';
+          }}
+        >
+          <ArrowLeft className="w-4 h-4 inline mr-2" />
+          Back to Command Center
+        </a>
+
         <div className="max-w-7xl mx-auto">
           {/* Header Section */}
           <div className="text-center mb-16">
             <div className="flex justify-center mb-8">
-              <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 p-6 rounded-full shadow-2xl animate-pulse">
-                <Target className="w-12 h-12 text-white" />
+              <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 p-6 rounded-full shadow-2xl">
+                <img 
+                  src={yobotLogo} 
+                  alt="YoBot Logo" 
+                  className="w-12 h-12 rounded-full bg-blue-600/20 p-1"
+                />
               </div>
             </div>
             <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent mb-6">
