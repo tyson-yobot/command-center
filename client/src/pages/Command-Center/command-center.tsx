@@ -249,7 +249,10 @@ export default function CommandCenter() {
   const [showScheduleViewer, setShowScheduleViewer] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0); // 0 = today, 1 = tomorrow, etc.
   const [showTicketModal, setShowTicketModal] = useState(false);
+  const [showTicketHistory, setShowTicketHistory] = useState(false);
   const [newTicketSubject, setNewTicketSubject] = useState('');
+  const [newTicketDescription, setNewTicketDescription] = useState('');
+  const [newTicketPriority, setNewTicketPriority] = useState('medium');
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [currentMessage, setCurrentMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -4746,6 +4749,7 @@ export default function CommandCenter() {
                     Create New Ticket
                   </Button>
                   <Button 
+                    onClick={() => setShowTicketHistory(true)}
                     className="w-full bg-slate-600 hover:bg-slate-700 text-white border border-slate-400"
                   >
                     <FileText className="w-4 h-4 mr-2" />
@@ -4886,6 +4890,159 @@ export default function CommandCenter() {
       {/* Social Content Creator Modal */}
       {showSocialContentCreator && (
         <SocialContentCreator onBack={() => setShowSocialContentCreator(false)} />
+      )}
+
+      {/* Create New Ticket Modal */}
+      {showTicketModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl bg-slate-900 rounded-lg border border-purple-500">
+            <div className="bg-slate-900 border-b border-purple-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white flex items-center">
+                <Plus className="w-5 h-5 mr-2 text-purple-400" />
+                Create New Support Ticket
+              </h2>
+              <Button
+                onClick={() => setShowTicketModal(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="text-white text-sm font-medium mb-2 block">Subject</label>
+                <input
+                  type="text"
+                  value={newTicketSubject}
+                  onChange={(e) => setNewTicketSubject(e.target.value)}
+                  placeholder="Brief description of the issue..."
+                  className="w-full p-3 bg-slate-700/60 border border-purple-400 rounded-lg text-white placeholder-slate-400 focus:border-purple-400 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-white text-sm font-medium mb-2 block">Priority</label>
+                <select
+                  value={newTicketPriority}
+                  onChange={(e) => setNewTicketPriority(e.target.value)}
+                  className="w-full p-3 bg-slate-700/60 border border-purple-400 rounded-lg text-white focus:border-purple-400 focus:outline-none"
+                >
+                  <option value="low">Low - General inquiry</option>
+                  <option value="medium">Medium - Standard issue</option>
+                  <option value="high">High - Urgent problem</option>
+                  <option value="critical">Critical - System down</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-white text-sm font-medium mb-2 block">Description</label>
+                <textarea
+                  value={newTicketDescription}
+                  onChange={(e) => setNewTicketDescription(e.target.value)}
+                  placeholder="Detailed description of the issue, steps to reproduce, and any error messages..."
+                  rows={6}
+                  className="w-full p-3 bg-slate-700/60 border border-purple-400 rounded-lg text-white placeholder-slate-400 focus:border-purple-400 focus:outline-none resize-none"
+                />
+              </div>
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={() => {
+                    // Handle ticket creation
+                    console.log('Creating ticket:', { subject: newTicketSubject, priority: newTicketPriority, description: newTicketDescription });
+                    setShowTicketModal(false);
+                    setNewTicketSubject('');
+                    setNewTicketDescription('');
+                    setNewTicketPriority('medium');
+                  }}
+                  disabled={!newTicketSubject.trim() || !newTicketDescription.trim()}
+                  className="bg-purple-600 hover:bg-purple-700 text-white border border-purple-400"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Ticket
+                </Button>
+                <Button
+                  onClick={() => setShowTicketModal(false)}
+                  variant="outline"
+                  className="border-slate-400 text-slate-400 hover:bg-slate-700"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Ticket History Modal */}
+      {showTicketHistory && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-purple-500">
+            <div className="sticky top-0 bg-slate-900 border-b border-purple-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white flex items-center">
+                <FileText className="w-5 h-5 mr-2 text-purple-400" />
+                Support Ticket History
+              </h2>
+              <Button
+                onClick={() => setShowTicketHistory(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6">
+              <div className="space-y-4">
+                {currentSystemMode === 'test' ? (
+                  <>
+                    <div className="bg-slate-800/60 rounded-lg p-4 border border-purple-400">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-white font-medium">#T001 - API Integration Issues</span>
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-red-600/20 text-red-400">High Priority</span>
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-green-600/20 text-green-400">Resolved</span>
+                        </div>
+                        <span className="text-slate-400 text-sm">Dec 10, 2024</span>
+                      </div>
+                      <p className="text-slate-300 text-sm mb-2">YoBot API returning 500 errors on webhook calls</p>
+                      <p className="text-slate-400 text-xs">Resolved by: Engineering Team</p>
+                    </div>
+                    
+                    <div className="bg-slate-800/60 rounded-lg p-4 border border-purple-400">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-white font-medium">#T002 - Dashboard Loading Slow</span>
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-yellow-600/20 text-yellow-400">Medium Priority</span>
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-blue-600/20 text-blue-400">In Progress</span>
+                        </div>
+                        <span className="text-slate-400 text-sm">Dec 11, 2024</span>
+                      </div>
+                      <p className="text-slate-300 text-sm mb-2">Command Center dashboard takes 15+ seconds to load</p>
+                      <p className="text-slate-400 text-xs">Assigned to: Performance Team</p>
+                    </div>
+                    
+                    <div className="bg-slate-800/60 rounded-lg p-4 border border-purple-400">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-white font-medium">#T003 - Feature Request: Dark Mode</span>
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-green-600/20 text-green-400">Low Priority</span>
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-slate-600/20 text-slate-400">Open</span>
+                        </div>
+                        <span className="text-slate-400 text-sm">Dec 12, 2024</span>
+                      </div>
+                      <p className="text-slate-300 text-sm mb-2">Add dark mode option to user preferences</p>
+                      <p className="text-slate-400 text-xs">Status: Under Review</p>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center text-slate-400 py-8">
+                    <FileText className="w-16 h-16 mx-auto mb-4 text-slate-600" />
+                    <p className="text-lg mb-2">No Support Tickets Found</p>
+                    <p className="text-sm">You haven't created any support tickets yet.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Hidden File Input for Document Upload */}
