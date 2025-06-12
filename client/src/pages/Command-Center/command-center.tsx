@@ -66,6 +66,7 @@ import { SocialContentCreator } from '@/components/social-content-creator';
 import { useToast } from '@/hooks/use-toast';
 import { Toast, ToastTitle, ToastDescription } from '@/components/ui/toast';
 import { KnowledgeViewerModal } from '@/components/knowledge-viewer-modal';
+import { KnowledgeLibraryModal } from '@/components/knowledge-library-modal';
 import { ZendeskChatWidget } from '@/components/zendesk-chat-widget';
 import CallMonitoringPopup from '@/components/call-monitoring-popup';
 import { CallMonitoringDetails } from '@/components/call-monitoring-details';
@@ -136,6 +137,7 @@ export default function CommandCenter() {
 
   const [showTicketsList, setShowTicketsList] = useState(false);
   const [showCreateTicket, setShowCreateTicket] = useState(false);
+  const [showKnowledgeLibrary, setShowKnowledgeLibrary] = useState(false);
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
   const { toast } = useToast();
 
@@ -4366,6 +4368,13 @@ export default function CommandCenter() {
                     <Eye className="w-4 h-4 mr-2" />
                     View Sources
                   </Button>
+                  <Button 
+                    onClick={() => setShowKnowledgeLibrary(true)}
+                    className="bg-cyan-600 hover:bg-cyan-700 text-white"
+                  >
+                    <Database className="w-4 h-4 mr-2" />
+                    View Knowledge Library
+                  </Button>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
@@ -5061,6 +5070,13 @@ export default function CommandCenter() {
 
       {/* Zendesk Chat Widget */}
       <ZendeskChatWidget />
+
+      {/* Knowledge Library Modal */}
+      <KnowledgeLibraryModal
+        isOpen={showKnowledgeLibrary}
+        onClose={() => setShowKnowledgeLibrary(false)}
+        currentSystemMode={currentSystemMode}
+      />
     </div>
   );
 }

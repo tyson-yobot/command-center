@@ -119,6 +119,7 @@ export function KnowledgeLibraryModal({ isOpen, onClose, currentSystemMode }: Kn
       setShowPreview(false);
       setSelectedItem(null);
       toast({
+        id: Date.now().toString(),
         description: "Knowledge item deleted successfully",
       });
     }
