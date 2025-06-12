@@ -3300,7 +3300,7 @@ export default function CommandCenter() {
                     <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '$24.50' : '--'}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-green-400 h-1 rounded-full" style={{ width: currentSystemMode === 'test' ? '82%' : '0%' }}></div>
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
@@ -3318,7 +3318,7 @@ export default function CommandCenter() {
                     <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '12.3%' : '--'}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: currentSystemMode === 'test' ? '62%' : '0%' }}></div>
+                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-orange-400 shadow-lg shadow-orange-400/20">
@@ -3327,7 +3327,7 @@ export default function CommandCenter() {
                     <span className="text-orange-400 font-bold">{currentSystemMode === 'test' ? '285%' : '--'}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-orange-400 h-1 rounded-full" style={{ width: currentSystemMode === 'test' ? '95%' : '0%' }}></div>
+                    <div className="bg-orange-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-cyan-400 shadow-lg shadow-cyan-400/20">
@@ -3337,7 +3337,7 @@ export default function CommandCenter() {
                     <Badge className="bg-cyan-600 text-white">{currentSystemMode === 'test' ? '+15%' : '--'}</Badge>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-cyan-400 h-1 rounded-full" style={{ width: currentSystemMode === 'test' ? '74%' : '0%' }}></div>
+                    <div className="bg-cyan-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
               </div>
@@ -3368,11 +3368,11 @@ export default function CommandCenter() {
                     <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
                     <div className="flex items-center space-x-2">
                       <span className="text-yellow-400 font-bold">${metrics?.data?.avgResponseTime ? (metrics.data.avgResponseTime * 0.5).toFixed(0) : '--'}</span>
-                      <Badge className="bg-yellow-600 text-white text-xs">-12%</Badge>
+                      <Badge className="bg-slate-600 text-white text-xs">--</Badge>
                     </div>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-yellow-400 h-1 rounded-full" style={{ width: '78%' }}></div>
+                    <div className="bg-yellow-400 h-1 rounded-full" style={{ width: `${metrics?.data?.avgResponseTime || 0}%` }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
@@ -3381,7 +3381,7 @@ export default function CommandCenter() {
                     <span className="text-blue-400 font-bold">{metrics?.data?.conversionRate ? (metrics.data.conversionRate / 4).toFixed(1) : '--'} months</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: '65%' }}></div>
+                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
@@ -3458,7 +3458,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300">Bot Utilization Rate</span>
                   <div className="flex items-center space-x-2">
                     <div className="w-16 bg-slate-700 rounded-full h-2">
-                      <div className="bg-green-400 h-2 rounded-full" style={{ width: currentSystemMode === 'test' ? '84%' : '0%' }}></div>
+                      <div className="bg-green-400 h-2 rounded-full" style={{ width: '0%' }}></div>
                     </div>
                     <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '84%' : '--'}</span>
                   </div>
