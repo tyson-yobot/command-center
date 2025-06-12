@@ -43,6 +43,24 @@
   --radius: 0.75rem;
 }
 
+/* YoBot Logo Header Alignment Styles */
+.header-logo-wrapper {
+  display: flex;
+  align-items: baseline;
+}
+
+.logo-icon {
+  height: 60px;
+  margin-right: 12px;
+  position: relative;
+  top: -2px; /* Fine-tune until baseline aligns with 'Y' */
+}
+
+.header-title {
+  font-size: 3.75rem; /* text-6xl equivalent */
+  line-height: 60px;
+}
+
 /* Enhanced card system with uniform styling */
 .card {
   background: hsl(var(--card-background));
