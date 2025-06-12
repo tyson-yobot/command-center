@@ -75,6 +75,35 @@ export const crmData = pgTable("crm_data", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Knowledge Base Storage
+export const knowledgeItems = pgTable("knowledge_items", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  category: text("category").notNull().default("general"),
+  type: text("type").notNull().default("document"), // document, memory, note
+  tags: text("tags").array(),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Call Logs for persistent monitoring
+export const callLogs = pgTable("call_logs", {
+  id: serial("id").primaryKey(),
+  callId: text("call_id").notNull().unique(),
+  timestamp: timestamp("timestamp").defaultNow(),
+  botName: text("bot_name").notNull(),
+  clientName: text("client_name"),
+  phoneNumber: text("phone_number"),
+  intent: text("intent"),
+  sentiment: integer("sentiment"), // 1-10 scale
+  duration: text("duration"),
+  status: text("status").notNull(), // active, completed, missed, failed
+  transcript: text("transcript"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const clientCompanies = pgTable("client_companies", {
   id: text("id").primaryKey(), // UUID for client identification
   companyName: text("company_name").notNull(),
@@ -167,6 +196,18 @@ export const insertUserSchema = createInsertSchema(users).pick({
   lastName: true,
 });
 
+// Knowledge Items Schema
+export const insertKnowledgeItemSchema = createInsertSchema(knowledgeItems).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertCallLogSchema = createInsertSchema(callLogs).omit({
+  id: true,
+  createdAt: true,
+});
+
 export const insertClientCompanySchema = createInsertSchema(clientCompanies).omit({
   createdAt: true,
 });
@@ -234,3 +275,11 @@ export type InsertClientCompany = z.infer<typeof insertClientCompanySchema>;
 export type InsertScannedContact = z.infer<typeof insertScannedContactSchema>;
 export type InsertKnowledgeBase = z.infer<typeof insertKnowledgeBaseSchema>;
 export type InsertPhantombusterLead = z.infer<typeof insertPhantombusterLeadSchema>;
+
+// Knowledge Items Types
+export type KnowledgeItem = typeof knowledgeItems.$inferSelect;
+export type InsertKnowledgeItem = z.infer<typeof insertKnowledgeItemSchema>;
+
+// Call Logs Types
+export type CallLog = typeof callLogs.$inferSelect;
+export type InsertCallLog = z.infer<typeof insertCallLogSchema>;

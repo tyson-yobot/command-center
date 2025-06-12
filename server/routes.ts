@@ -38,7 +38,7 @@ import { registerTestDataRoutes } from "./testDataPopulator";
 import { registerProductionLoggerRoutes } from "./productionLogger";
 import { getSystemMode, setSystemMode } from "./systemMode";
 import { isLiveMode, safeLiveData, blockTestData, validateLiveData } from "./liveMode";
-import { storage } from "./storage";
+import { knowledgeStorage, callLogStorage } from "./storage";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
 import { generateSocialMediaPost, generateEmailCampaign, postToSocialMedia, sendEmailCampaign } from './contentCreator';
@@ -1985,68 +1985,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Knowledge list/view endpoint
+  // Knowledge list/view endpoint - PERSISTENT STORAGE WITH TEST/LIVE MODE
   app.get('/api/knowledge/list', async (req, res) => {
     try {
       const { category, limit = 50 } = req.query;
+      const systemMode = getSystemMode();
 
-      let documents = [...documentStore];
-      let memories = [...memoryStore];
-
+      // Get knowledge items from persistent storage
+      const knowledgeItems = await knowledgeStorage.getKnowledgeItems();
+      
       // Filter by category if specified
+      let filteredItems = knowledgeItems;
       if (category && category !== 'all') {
-        documents = documents.filter(doc => doc.category === category);
-        memories = memories.filter(mem => mem.category === category);
+        filteredItems = knowledgeItems.filter(item => item.category === category);
       }
 
       // Limit results
       const limitNum = parseInt(limit as string);
-      documents = documents.slice(0, limitNum);
-      memories = memories.slice(0, limitNum);
+      filteredItems = filteredItems.slice(0, limitNum);
 
-      // Format documents for display
-      const formattedDocuments = documents.map(doc => ({
-        id: doc.documentId || doc.id,
-        type: 'document',
-        title: doc.filename || doc.originalname || 'Untitled',
-        content: (doc.extractedText || '').substring(0, 200) + '...',
-        category: doc.category || 'general',
-        uploadTime: doc.uploadTime || doc.uploadedAt,
-        fileSize: doc.size || doc.fileSize,
-        fileType: doc.mimetype || doc.fileType,
-        keyTerms: doc.keyTerms || [],
-        wordCount: doc.wordCount || 0,
-        status: doc.status || 'processed'
-      }));
-
-      // Format memories for display
-      const formattedMemories = memories.map(mem => ({
-        id: mem.id,
-        type: 'memory',
-        title: `Memory Entry - ${mem.category}`,
-        content: mem.content.substring(0, 200) + (mem.content.length > 200 ? '...' : ''),
-        category: mem.category,
-        uploadTime: mem.timestamp,
-        fileSize: mem.content.length,
+      // Format items for display
+      const formattedItems = filteredItems.map(item => ({
+        id: item.id,
+        type: item.type,
+        title: item.title,
+        content: item.content.substring(0, 200) + (item.content.length > 200 ? '...' : ''),
+        category: item.category,
+        uploadTime: item.createdAt,
+        fileSize: item.content.length,
         fileType: 'text/plain',
-        keyTerms: [],
-        wordCount: mem.wordCount || 0,
+        keyTerms: item.tags || [],
+        wordCount: item.content.split(' ').length,
         status: 'processed'
       }));
 
-      // Combine and sort by upload time
-      const allItems = [...formattedDocuments, ...formattedMemories]
-        .sort((a, b) => new Date(b.uploadTime || 0).getTime() - new Date(a.uploadTime || 0).getTime());
-
-      logOperation('knowledge-list', { count: allItems.length, category }, 'success', 'Knowledge items listed');
+      logOperation('knowledge-list', { count: formattedItems.length, category, systemMode }, 'success', 'Knowledge items listed');
 
       res.json({
         success: true,
-        items: allItems,
-        total: allItems.length,
-        documents: formattedDocuments.length,
-        memories: formattedMemories.length,
-        categories: [...new Set([...documents.map(d => d.category), ...memories.map(m => m.category)].filter(Boolean))]
+        items: formattedItems,
+        total: formattedItems.length,
+        documents: formattedItems.filter(item => item.type === 'document').length,
+        memories: formattedItems.filter(item => item.type === 'memory').length,
+        categories: [...new Set(filteredItems.map(item => item.category))]
       });
     } catch (error) {
       console.error('Knowledge list error:', error);
