@@ -9,24 +9,24 @@ export function registerDashboardEndpoints(app: Express) {
       const systemMode = getSystemMode();
       
       if (systemMode === 'test') {
-        // Comprehensive demo data for dashboard presentation
+        // DEMO DATA ONLY - Realistic numbers showing actual business challenges
         res.json({
-          // Top metrics cards
+          // Top metrics cards - showing areas needing improvement
           totalLeads: 2847,
           totalCampaigns: 12,
           activeAutomations: 18,
-          successRate: 74.5, // Lower - shows improvement opportunity
-          monthlyGrowth: 12.7,
+          successRate: 67.3, // Intentionally lower - client needs improvement
+          monthlyGrowth: 8.4, // Slower growth - improvement opportunity
           
-          // Live Automation Engine metrics
+          // Live Automation Engine metrics - showing clear problems
           automationEngine: {
-            status: "Active",
+            status: "Degraded", // Shows issues need attention
             executionsToday: 1829,
-            successRate: 74.5,
-            avgResponseTime: 1.4,
+            successRate: 63.2, // Lower - clear improvement needed
+            avgResponseTime: 2.8, // Higher latency - performance issue
             activeConnections: 23,
-            queuedTasks: 7,
-            failedTasks: 3
+            queuedTasks: 14, // Backlog building up
+            failedTasks: 23 // Significant failures
           },
           
           // Bot Health Monitor
