@@ -2402,15 +2402,15 @@ export default function CommandCenter() {
         {/* Header */}
         <div className="mb-8">
           <div className="text-center mb-6">
-            <h1 className="text-6xl font-bold text-white mb-3 flex items-end justify-center">
+            <h1 className="text-6xl font-bold text-white mb-3 flex items-baseline justify-center leading-tight">
               <img 
                 src={robotHeadImage} 
                 alt="Robot Head" 
                 className="mr-3"
                 style={{ 
-                  height: '1.1em',
+                  height: '0.9em',
                   width: 'auto',
-                  marginBottom: '0em'
+                  transform: 'translateY(-0.05em)'
                 }}
               />
               YoBot® Command Center
