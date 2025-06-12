@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749714890077.png';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -80,8 +81,12 @@ const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({ isOpen, onClose }) => {
         <CardHeader className="pb-3 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                <Bot className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center p-1">
+                <img 
+                  src={yobotLogo} 
+                  alt="YoBot Logo" 
+                  className="w-6 h-6"
+                />
               </div>
               <div>
                 <CardTitle className="text-lg">YoBot Support</CardTitle>

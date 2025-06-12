@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import yobotLogo from '@assets/yobot-logo.png';
+import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749714890077.png';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

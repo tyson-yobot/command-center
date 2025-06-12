@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749714890077.png';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -254,7 +255,11 @@ export default function YoBotMasterDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2 text-blue-300">
-            <Bot className="w-8 h-8" />
+            <img 
+              src={yobotLogo} 
+              alt="YoBot Logo" 
+              className="w-8 h-8"
+            />
             YoBot Master Dashboard
           </h1>
           <p className="text-slate-400">Complete enterprise automation and analytics platform</p>
