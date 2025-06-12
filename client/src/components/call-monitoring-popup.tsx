@@ -263,7 +263,7 @@ export function CallMonitoringPopup() {
 
   return (
     <TooltipProvider>
-      <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30 w-full max-w-4xl">
+      <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 w-full max-w-4xl">
         <CardHeader>
           <CardTitle className="text-white flex items-center justify-between">
             <div className="flex items-center">
