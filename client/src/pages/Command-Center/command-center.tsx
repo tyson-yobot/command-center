@@ -4421,7 +4421,7 @@ export default function CommandCenter() {
         {/* Document Management & Memory Insertion */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Document Manager */}
-          <Card className="bg-slate-800/80 backdrop-blur-sm border border-blue-500">
+          <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Database className="w-5 h-5 mr-2 text-blue-400" />
@@ -4593,7 +4593,7 @@ export default function CommandCenter() {
         {/* Call Monitoring & YoBot Support - Positioned Under Document Manager */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Call Monitoring Panel - Under Document Manager */}
-          <Card className="bg-slate-800/80 backdrop-blur-sm border border-blue-500">
+          <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Phone className="w-5 h-5 mr-2 text-blue-400" />
@@ -4608,41 +4608,52 @@ export default function CommandCenter() {
                     <Settings className="w-4 h-4 mr-2 text-blue-400" />
                     System Services
                   </h4>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Activity className="w-4 h-4 text-yellow-400" />
-                        <span className="text-white text-sm">Monitoring Service</span>
-                        <span className="text-yellow-400 text-xs">IDLE</span>
-                      </div>
-                      <div className="flex space-x-1">
-                        <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400">Start</Button>
-                        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400">Restart</Button>
-                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400">Ping</Button>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Headphones className="w-4 h-4 text-yellow-400" />
-                        <span className="text-white text-sm">Recording Service</span>
-                        <span className="text-yellow-400 text-xs">IDLE</span>
-                      </div>
-                      <div className="flex space-x-1">
-                        <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400">Start</Button>
-                        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400">Restart</Button>
-                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400">Ping</Button>
+                  <div className="space-y-2">
+                    {/* Monitoring Service */}
+                    <div className="bg-slate-800/60 rounded-lg p-3 border border-blue-400">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <Activity className="w-4 h-4 text-yellow-400" />
+                          <span className="text-white text-sm">Monitoring Service</span>
+                          <span className="text-yellow-400 text-xs">IDLE</span>
+                        </div>
+                        <div className="flex space-x-1">
+                          <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400">Start</Button>
+                          <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400">Restart</Button>
+                          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400">Ping</Button>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Zap className="w-4 h-4 text-yellow-400" />
-                        <span className="text-white text-sm">Analytics Service</span>
-                        <span className="text-yellow-400 text-xs">IDLE</span>
+                    
+                    {/* Recording Service */}
+                    <div className="bg-slate-800/60 rounded-lg p-3 border border-blue-400">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <Headphones className="w-4 h-4 text-yellow-400" />
+                          <span className="text-white text-sm">Recording Service</span>
+                          <span className="text-yellow-400 text-xs">IDLE</span>
+                        </div>
+                        <div className="flex space-x-1">
+                          <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400">Start</Button>
+                          <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400">Restart</Button>
+                          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400">Ping</Button>
+                        </div>
                       </div>
-                      <div className="flex space-x-1">
-                        <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400">Start</Button>
-                        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400">Restart</Button>
-                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400">Ping</Button>
+                    </div>
+                    
+                    {/* Analytics Service */}
+                    <div className="bg-slate-800/60 rounded-lg p-3 border border-blue-400">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <Zap className="w-4 h-4 text-yellow-400" />
+                          <span className="text-white text-sm">Analytics Service</span>
+                          <span className="text-yellow-400 text-xs">IDLE</span>
+                        </div>
+                        <div className="flex space-x-1">
+                          <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400">Start</Button>
+                          <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400">Restart</Button>
+                          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400">Ping</Button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -4860,14 +4871,7 @@ export default function CommandCenter() {
         </div>
       )}
 
-      {/* Call Monitoring Popup */}
-      <CallMonitoringPopup
-        isOpen={showCallMonitoring}
-        onClose={() => setShowCallMonitoring(false)}
-        activeCalls={activeCalls}
-        totalRecords={totalRecords}
-        completedCalls={completedCalls}
-      />
+
 
       {/* Content Creator Dashboard Modal */}
       {showContentCreator && (
