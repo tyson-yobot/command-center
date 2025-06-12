@@ -4963,7 +4963,17 @@ export default function CommandCenter() {
                       setShowLiveChat(true);
                       addRecentActivity('Live chat session opened', 'chat');
                     }}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-400"
+                    className="w-full text-white border transition-all duration-200 hover:shadow-[0_0_8px_rgba(13,130,218,0.5)]"
+                    style={{ 
+                      backgroundColor: '#0d82da',
+                      borderColor: '#0d82da'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#0864b1';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#0d82da';
+                    }}
                     title="Opens built-in live chat window for real-time support"
                   >
                     <MessageCircle className="w-4 h-4 mr-2" />

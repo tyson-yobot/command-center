@@ -145,7 +145,7 @@ export function LiveChatInterface({ isOpen, onClose }: LiveChatInterfaceProps) {
                     ? '#1a1a1a'
                     : message.sender === 'support'
                     ? '#0d82da'
-                    : '#22c55e',
+                    : '#16a34a',
                   color: message.sender === 'user' ? '#c3c3c3' : '#ffffff'
                 }}
               >
