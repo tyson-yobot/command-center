@@ -2746,7 +2746,7 @@ export default function CommandCenter() {
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
                   >
                     <span className="text-xl mr-3">💰</span>
-                    <span>Create Sales Order</span>
+                    <span>Automate Sales Order Flow</span>
                   </Button>
                   
                   <Button
