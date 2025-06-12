@@ -12180,50 +12180,156 @@ CRM Data:
   // Command Center Dashboard Data Endpoint
   app.get('/api/dashboard-data', async (req, res) => {
     try {
-      const testSummary = automationTester.getTestSummary();
-      
-      // Log this API call to Airtable QA
-      await logToAirtableQA({
-        integrationName: "Command Center Dashboard Data API",
-        passFail: "✅ Pass",
-        notes: "Dashboard data endpoint responding with live automation metrics",
-        qaOwner: "Replit System",
-        outputDataPopulated: true,
-        recordCreated: true,
-        retryAttempted: false,
-        moduleType: "Dashboard API",
-        scenarioLink: "https://replit.dev/command-center"
-      });
-      
-      // Return live automation metrics data
-      const realMetrics = await automationTester.getLiveMetrics();
-      
-      res.json({
-        success: true,
-        systemMode: systemMode,
-        activeCalls: realMetrics.activeCalls || 0,
-        aiResponsesToday: realMetrics.aiResponsesToday || 0,
-        pipelineValue: realMetrics.pipelineValue || 0,
-        systemHealth: realMetrics.systemHealth || 100,
-        metrics: {
-          totalTests: 1040,
-          passRate: realMetrics.passRate || 100,
-          uniqueTesters: realMetrics.uniqueTesters || 0,
-          executions: realMetrics.executions || 0
-        },
-        recentActivity: realMetrics.recentActivity || [],
-        totalBots: realMetrics.totalBots || 0,
-        avgResponseTime: realMetrics.avgResponseTime || "0.0s",
-        errorCount: realMetrics.errorCount || 0,
-        activeSessions: realMetrics.activeSessions || 0,
-        monthlyRevenue: realMetrics.monthlyRevenue || 0,
-        activeDeals: realMetrics.activeDeals || 0,
-        closeRate: realMetrics.closeRate || 0,
-        salesVelocity: realMetrics.salesVelocity || 0,
-        documents: realMetrics.documents || [],
-        memory: realMetrics.memory || [],
-        isAuthenticated: true
-      });
+      if (systemMode === 'test') {
+        // Demo data for presentations - comprehensive metrics with some lower values
+        res.json({
+          success: true,
+          systemMode: systemMode,
+          activeCalls: 23,
+          aiResponsesToday: 1847,
+          pipelineValue: 284750, // $284,750
+          systemHealth: 87.3, // Intentionally lower - improvement area
+          metrics: {
+            totalTests: 1040,
+            passRate: 74.2, // Lower than ideal - shows improvement opportunity
+            uniqueTesters: 18,
+            executions: 12847
+          },
+          recentActivity: [
+            { action: "Lead Qualified", details: "Apollo.io sync completed", timestamp: new Date(Date.now() - 300000).toISOString() },
+            { action: "Automation Failed", details: "QuickBooks sync timeout", timestamp: new Date(Date.now() - 600000).toISOString() },
+            { action: "Voice Call", details: "Customer support resolved", timestamp: new Date(Date.now() - 900000).toISOString() },
+            { action: "Sales Order", details: "Enterprise package $12,500", timestamp: new Date(Date.now() - 1200000).toISOString() }
+          ],
+          totalBots: 47,
+          avgResponseTime: "2.4s", // Slightly high - improvement area
+          errorCount: 12, // Shows issues to address
+          activeSessions: 156,
+          monthlyRevenue: 89750,
+          activeDeals: 34,
+          closeRate: 67.8, // Room for improvement
+          salesVelocity: 14.2,
+          documents: [
+            { name: "Sales Playbook", type: "PDF", size: "2.4MB", lastModified: new Date(Date.now() - 86400000).toISOString() },
+            { name: "Product Specifications", type: "DOCX", size: "890KB", lastModified: new Date(Date.now() - 172800000).toISOString() }
+          ],
+          memory: [
+            { category: "Customer Preferences", count: 234, lastUpdated: new Date(Date.now() - 3600000).toISOString() },
+            { category: "Lead Scoring Rules", count: 67, lastUpdated: new Date(Date.now() - 7200000).toISOString() }
+          ],
+          isAuthenticated: true,
+          // Additional comprehensive metrics for all dashboard sections
+          botHealthMonitor: {
+            totalBots: 47,
+            activeBots: 39,
+            botResponseTime: 1.8,
+            systemUptime: 94.2, // Lower - improvement area
+            activeConnections: 156,
+            systemLoad: 68.4
+          },
+          revenueMetrics: {
+            monthlyRevenue: 89750,
+            projectedRevenue: 107200,
+            dealsPipeline: 284750,
+            closeRate: 67.8,
+            avgDealSize: 8375,
+            dealsThisMonth: 23
+          },
+          clientPulse: {
+            activeClients: 234,
+            satisfaction: 78.6, // Lower - improvement opportunity
+            escalations: 8,
+            responseTime: 4.2, // Hours - needs improvement
+            resolvedToday: 12,
+            pendingTickets: 23
+          },
+          opsMetrics: {
+            automationsActive: 35,
+            successRate: 74.2,
+            avgExecutionTime: 2.4,
+            failuresLast24h: 8,
+            queueDepth: 45,
+            processingRate: 89.3
+          },
+          workflowPerformance: {
+            totalWorkflows: 28,
+            activeWorkflows: 23,
+            completionRate: 82.1,
+            avgProcessingTime: 3.7,
+            bottlenecks: 3,
+            optimizationOpportunities: 7
+          },
+          socialMetrics: {
+            linkedinConnections: 2847,
+            engagementRate: 12.4,
+            leadQualityScore: 76.8,
+            conversionRate: 13.2,
+            outreachSent: 1234,
+            responseRate: 18.7
+          },
+          smartSpend: {
+            budgetUtilization: 73.8,
+            costPerLead: 47.50,
+            roi: 340,
+            campaignPerformance: 81.2,
+            spendEfficiency: 76.4,
+            forecastAccuracy: 89.1
+          },
+          aiInsights: {
+            confidenceScore: 84.7,
+            learningStatus: "Active",
+            dataPoints: 15678,
+            predictions: 234,
+            accuracy: 87.3,
+            recommendations: 12
+          }
+        });
+      } else {
+        const testSummary = automationTester.getTestSummary();
+        
+        // Log this API call to Airtable QA
+        await logToAirtableQA({
+          integrationName: "Command Center Dashboard Data API",
+          passFail: "✅ Pass",
+          notes: "Dashboard data endpoint responding with live automation metrics",
+          qaOwner: "Replit System",
+          outputDataPopulated: true,
+          recordCreated: true,
+          retryAttempted: false,
+          moduleType: "Dashboard API",
+          scenarioLink: "https://replit.dev/command-center"
+        });
+        
+        // Return live automation metrics data
+        const realMetrics = await automationTester.getLiveMetrics();
+        
+        res.json({
+          success: true,
+          systemMode: systemMode,
+          activeCalls: realMetrics.activeCalls || 0,
+          aiResponsesToday: realMetrics.aiResponsesToday || 0,
+          pipelineValue: realMetrics.pipelineValue || 0,
+          systemHealth: realMetrics.systemHealth || 100,
+          metrics: {
+            totalTests: 1040,
+            passRate: realMetrics.passRate || 100,
+            uniqueTesters: realMetrics.uniqueTesters || 0,
+            executions: realMetrics.executions || 0
+          },
+          recentActivity: realMetrics.recentActivity || [],
+          totalBots: realMetrics.totalBots || 0,
+          avgResponseTime: realMetrics.avgResponseTime || "0.0s",
+          errorCount: realMetrics.errorCount || 0,
+          activeSessions: realMetrics.activeSessions || 0,
+          monthlyRevenue: realMetrics.monthlyRevenue || 0,
+          activeDeals: realMetrics.activeDeals || 0,
+          closeRate: realMetrics.closeRate || 0,
+          salesVelocity: realMetrics.salesVelocity || 0,
+          documents: realMetrics.documents || [],
+          memory: realMetrics.memory || [],
+          isAuthenticated: true
+        });
+      }
     } catch (error: any) {
       // Log failure to Airtable QA
       await logToAirtableQA({
