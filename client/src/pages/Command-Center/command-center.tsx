@@ -1363,6 +1363,19 @@ export default function CommandCenter() {
     if (!files || files.length === 0) return;
 
     setVoiceStatus('Uploading documents to RAG system...');
+    setDocumentsLoading(true);
+    
+    // Add files to uploaded documents with "processing" status
+    const newFiles = Array.from(files).map(file => ({
+      id: 'temp_' + Date.now() + '_' + Math.random(),
+      originalname: file.name,
+      filename: file.name,
+      size: file.size,
+      status: 'processing',
+      uploadTime: new Date().toISOString(),
+      category: 'general'
+    }));
+    setUploadedDocuments(prev => [...prev, ...newFiles]);
     
     const formData = new FormData();
     Array.from(files).forEach(file => {
@@ -1382,13 +1395,26 @@ export default function CommandCenter() {
         const fileNames = result.files?.map(f => f.filename).join(', ') || '';
         
         setVoiceStatus(`Documents Processed: ${fileNames}`);
-        setToast({
-          title: "Documents Uploaded",
-          description: `${successCount} files processed: ${fileNames}`,
-        });
         
-        // Store uploaded files for display
-        setUploadedFiles(prev => [...prev, ...result.files]);
+        // Add to memory activity log instead of toast
+        const logEntry = {
+          timestamp: new Date().toLocaleTimeString(),
+          type: 'File',
+          category: 'document',
+          result: successCount > 0 ? 'Success' : 'Error'
+        };
+        setMemoryActivityLog(prev => [...prev, logEntry]);
+        
+        // Update uploaded documents with processed status
+        setUploadedDocuments(prev => 
+          prev.map(doc => {
+            if (doc.id.startsWith('temp_')) {
+              const matchingFile = result.files?.find(f => f.filename === doc.filename);
+              return matchingFile ? { ...matchingFile, status: 'indexed' } : { ...doc, status: 'indexed' };
+            }
+            return doc;
+          })
+        );
         
         // Refresh knowledge stats
         refetchKnowledge();
@@ -1396,21 +1422,44 @@ export default function CommandCenter() {
       } else {
         const errorData = await response.json().catch(() => ({}));
         setVoiceStatus('RAG upload failed');
-        setToast({
-          title: "RAG Upload Failed",
-          description: errorData.error || "Please try again or check file format",
-          variant: "destructive"
-        });
+        
+        // Add error to memory activity log
+        const errorEntry = {
+          timestamp: new Date().toLocaleTimeString(),
+          type: 'File',
+          category: 'document',
+          result: 'Error'
+        };
+        setMemoryActivityLog(prev => [...prev, errorEntry]);
+        
+        // Update documents to show error status
+        setUploadedDocuments(prev => 
+          prev.map(doc => 
+            doc.id.startsWith('temp_') ? { ...doc, status: 'failed' } : doc
+          )
+        );
       }
     } catch (error) {
       setVoiceStatus('Upload error');
-      setToast({
-        title: "Upload Error",
-        description: "Network error occurred during upload",
-        variant: "destructive"
-      });
+      
+      // Add error to memory activity log
+      const errorEntry = {
+        timestamp: new Date().toLocaleTimeString(),
+        type: 'File',
+        category: 'document',
+        result: 'Error'
+      };
+      setMemoryActivityLog(prev => [...prev, errorEntry]);
+      
+      // Update documents to show error status
+      setUploadedDocuments(prev => 
+        prev.map(doc => 
+          doc.id.startsWith('temp_') ? { ...doc, status: 'failed' } : doc
+        )
+      );
     }
 
+    setDocumentsLoading(false);
     // Reset input
     event.target.value = '';
   };
