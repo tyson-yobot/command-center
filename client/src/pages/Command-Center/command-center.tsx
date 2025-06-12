@@ -2799,6 +2799,27 @@ export default function CommandCenter() {
                     <span className="text-xl mr-3">🎤</span>
                     <span>Voice Input</span>
                   </Button>
+                  
+                  <a
+                    href="https://app.hubspot.com/contacts/[HUB-ID]"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block text-white font-semibold text-left p-3 rounded-lg transition-all duration-200 border-l-8"
+                    style={{
+                      backgroundColor: '#0d82da',
+                      borderLeftColor: '#ff7a59',
+                      textDecoration: 'none'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#0864b1';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#0d82da';
+                    }}
+                  >
+                    <span className="text-xl mr-3">🟠</span>
+                    <span>HubSpot Contacts</span>
+                  </a>
                 </div>
               </CardContent>
             </Card>
