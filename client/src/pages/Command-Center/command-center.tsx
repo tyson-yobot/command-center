@@ -74,8 +74,8 @@ import { KnowledgeBaseManager } from '@/components/knowledge-base-manager';
 export default function CommandCenter() {
   const queryClient = useQueryClient();
   
-  // Robot head image - will be handled with fallback
-  const yobotRobotHead = '/api/placeholder-image';
+  // Robot head image - using attached asset
+  const robotHeadImage = '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749713043354.png';
   
   // System mode state
   const [currentSystemMode, setCurrentSystemMode] = useState(() => {
@@ -1870,10 +1870,16 @@ export default function CommandCenter() {
       if (response.ok) {
         const result = await response.json();
         setVoiceStatus('Memory text inserted successfully');
-        setToast({
-          title: "Memory Updated",
-          description: `Text inserted into ${memoryCategory} memory category`,
-        });
+        
+        // Add to memory activity log instead of toast
+        const logEntry = {
+          timestamp: new Date().toLocaleTimeString(),
+          type: 'Manual',
+          category: memoryCategory,
+          result: 'Success'
+        };
+        setMemoryActivityLog(prev => [...prev, logEntry]);
+        
         setMemoryText('');
         
         // Refresh knowledge stats and documents list
@@ -1881,19 +1887,27 @@ export default function CommandCenter() {
         loadDocuments();
       } else {
         setVoiceStatus('Memory insertion failed');
-        setToast({
-          title: "Insertion Failed",
-          description: "Unable to insert text into memory system",
-          variant: "destructive"
-        });
+        
+        // Add error to memory activity log
+        const errorEntry = {
+          timestamp: new Date().toLocaleTimeString(),
+          type: 'Manual',
+          category: memoryCategory,
+          result: 'Error'
+        };
+        setMemoryActivityLog(prev => [...prev, errorEntry]);
       }
     } catch (error) {
       setVoiceStatus('Error during memory insertion');
-      setToast({
-        title: "Memory Error",
-        description: "Network error during memory insertion",
-        variant: "destructive"
-      });
+      
+      // Add error to memory activity log
+      const errorEntry = {
+        timestamp: new Date().toLocaleTimeString(),
+        type: 'Manual',
+        category: memoryCategory,
+        result: 'Error'
+      };
+      setMemoryActivityLog(prev => [...prev, errorEntry]);
     }
   };
 
@@ -2341,7 +2355,7 @@ export default function CommandCenter() {
           <div className="text-center mb-6">
             <h1 className="text-6xl font-bold text-white mb-3 flex items-center justify-center">
               <img 
-                src="/assets/A_flat_vector_illustration_features_a_robot_face_i_1749713043354.png" 
+                src={robotHeadImage} 
                 alt="Robot Head" 
                 className="w-20 h-20 mr-2 inline-block"
                 style={{ marginTop: '-8px' }}
@@ -2810,7 +2824,7 @@ export default function CommandCenter() {
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-green-400" />
-                <img src="/assets/A_flat_vector_illustration_features_a_robot_face_i_1749713043354.png" alt="Robot Head" className="w-6 h-6 mr-2" />
+                <img src={robotHeadImage} alt="Robot Head" className="w-6 h-6 mr-2" />
                 Bot Health Monitor
               </CardTitle>
             </CardHeader>
@@ -4504,6 +4518,41 @@ export default function CommandCenter() {
                   <Brain className="w-4 h-4 mr-2" />
                   Insert into Memory
                 </Button>
+
+                {/* View Knowledge Library Button */}
+                <Button 
+                  onClick={handleViewKnowledge}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  🗂 View Knowledge Library
+                </Button>
+                
+                {/* Latest Memory Activity Log */}
+                <div className="bg-slate-700/40 rounded-lg p-4 border border-purple-400/30">
+                  <h4 className="text-white font-medium mb-3 flex items-center">
+                    <Brain className="w-4 h-4 mr-2 text-purple-400" />
+                    🧠 Latest Memory Activity Log
+                  </h4>
+                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                    {memoryActivityLog.length > 0 ? memoryActivityLog.slice(-5).reverse().map((entry, index) => (
+                      <div key={index} className="flex items-center justify-between p-2 bg-slate-800/60 rounded border border-purple-400/20">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-xs text-slate-400">{entry.timestamp}</span>
+                          <span className="text-sm text-white">{entry.type}</span>
+                          <span className="text-xs text-purple-400">{entry.category}</span>
+                        </div>
+                        <span className={`text-xs font-medium ${entry.result === 'Success' ? 'text-green-400' : 'text-red-400'}`}>
+                          {entry.result === 'Success' ? '✅ Success' : '❌ Error'}
+                        </span>
+                      </div>
+                    )) : (
+                      <div className="text-slate-400 text-sm text-center py-4">
+                        No recent memory activity
+                      </div>
+                    )}
+                  </div>
+                </div>
                 
                 <div className="text-slate-400 text-xs">
                   Memory entries are stored with high priority and can be retrieved during conversations.
