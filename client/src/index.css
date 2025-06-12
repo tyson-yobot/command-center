@@ -50,10 +50,10 @@
 }
 
 .logo-icon {
-  height: 84px; /* Larger to match full Y height from top to bottom */
-  margin-right: 4px; /* Moved very close to Y */
+  height: 86px; /* Slightly taller to extend bottom baseline */
+  margin-right: 3px; /* Moved even closer to Y */
   position: relative;
-  top: 12px; /* Final adjustment for perfect Y baseline alignment */
+  top: 12px; /* Keep top alignment perfect */
 }
 
 .header-title {
