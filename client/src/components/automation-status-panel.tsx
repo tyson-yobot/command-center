@@ -20,7 +20,7 @@ export default function AutomationStatusPanel() {
       name: "QA Review System",
       status: "active",
       lastRun: "2 minutes ago",
-      successRate: 95,
+      successRate: 0,
       description: "GPT-powered call scoring with PDF generation",
       category: "Quality"
     },
@@ -28,7 +28,7 @@ export default function AutomationStatusPanel() {
       name: "Follow-up SMS Automation",
       status: "active", 
       lastRun: "5 minutes ago",
-      successRate: 88,
+      successRate: 0,
       description: "Automated SMS follow-ups for missed calls",
       category: "Communication"
     },
@@ -36,7 +36,7 @@ export default function AutomationStatusPanel() {
       name: "VoiceBot Call Logging",
       status: "pending",
       lastRun: "1 hour ago",
-      successRate: 78,
+      successRate: 0,
       description: "Comprehensive call transcription and logging",
       category: "Logging"
     },
@@ -44,7 +44,7 @@ export default function AutomationStatusPanel() {
       name: "Escalation Tracking",
       status: "active",
       lastRun: "10 minutes ago", 
-      successRate: 92,
+      successRate: 0,
       description: "Automatic escalation detection and routing",
       category: "Quality"
     },
@@ -52,7 +52,7 @@ export default function AutomationStatusPanel() {
       name: "Lead Scraping Pipeline",
       status: "error",
       lastRun: "3 hours ago",
-      successRate: 45,
+      successRate: 0,
       description: "Apollo.io and PhantomBuster integration",
       category: "Lead Generation"
     },
@@ -60,7 +60,7 @@ export default function AutomationStatusPanel() {
       name: "Google Drive PDF Storage",
       status: "active",
       lastRun: "8 minutes ago",
-      successRate: 89,
+      successRate: 0,
       description: "Automated PDF upload and sharing",
       category: "Storage"
     }
@@ -68,9 +68,9 @@ export default function AutomationStatusPanel() {
   
   const [systemHealth, setSystemHealth] = useState({
     overall: 87,
-    activeAutomations: 40,
-    totalExecutions: 1247,
-    errorRate: 8.3
+    activeAutomations: 0,
+    totalExecutions: 0,
+    errorRate: 0
   });
 
   const testAutomation = async (name: string) => {

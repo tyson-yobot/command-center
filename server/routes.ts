@@ -397,9 +397,9 @@ async function wipeTestData() {
 
 // Live automation tracking - initialized clean for production
 let liveAutomationMetrics = {
-  activeFunctions: 1040,
+  activeFunctions: 0,
   executionsToday: 0,
-  successRate: 100,
+  successRate: 0,
   lastExecution: null,
   recentExecutions: [],
   functionStats: {}
@@ -2071,7 +2071,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const result = {
         success: true,
         totalCalls: 0,
-        successRate: 100,
+        successRate: 0,
         avgDuration: '2.1s',
         timestamp: new Date().toISOString()
       };
@@ -2247,7 +2247,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         subject,
         content: emailContent,
         status: 'created',
-        estimatedReach: Math.floor(Math.random() * 5000) + 1000,
+        estimatedReach: 0,
         scheduledSend: new Date(Date.now() + 3600000).toISOString(), // 1 hour from now
         timestamp: new Date().toISOString()
       };
@@ -2441,18 +2441,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { filters } = req.body;
       
       // Generate realistic business leads based on filters
-      const mockLeads = Array.from({ length: Math.floor(Math.random() * 70) + 30 }, (_, i) => ({
+      const mockLeads = Array.from({ length: 0 }, (_, i) => ({
         fullName: `${['Michael', 'Lisa', 'Robert', 'Amanda', 'Christopher', 'Patricia', 'William', 'Linda'][i % 8]} ${['Davis', 'Miller', 'Wilson', 'Moore', 'Taylor', 'Anderson', 'Thomas', 'Jackson'][i % 8]}`,
         email: `owner${i + 1}@${filters.category?.toLowerCase().replace(/\s+/g, '') || 'business'}${i + 1}.com`,
         company: `${filters.category || 'Local Business'} ${i + 1}`,
         title: "Business Owner",
         location: filters.location || "Local Area",
-        phone: `+1-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+        phone: `+1-${0}-${0}-${0}`,
         industry: filters.category || "Local Business",
         sourceTag: `Apify - ${new Date().toLocaleDateString()}`,
         scrapeSessionId: `apify-${Date.now()}`,
-        rating: (Math.random() * 2 + 3).toFixed(1),
-        reviewCount: Math.floor(Math.random() * 200) + filters.reviewCountMin || 10,
+        rating: (0).toFixed(1),
+        reviewCount: Math.floor(0) + filters.reviewCountMin || 10,
         source: "apify"
       }));
 
@@ -2479,13 +2479,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { filters } = req.body;
       
       // Generate realistic LinkedIn leads based on filters
-      const mockLeads = Array.from({ length: Math.floor(Math.random() * 80) + 40 }, (_, i) => ({
+      const mockLeads = Array.from({ length: 0 }, (_, i) => ({
         fullName: `${['Alex', 'Jessica', 'Daniel', 'Michelle', 'Ryan', 'Emma', 'James', 'Sophia'][i % 8]} ${['Anderson', 'Jackson', 'White', 'Harris', 'Martin', 'Taylor', 'Thomas', 'Moore'][i % 8]}`,
         email: `${['alex', 'jessica', 'daniel', 'michelle', 'ryan', 'emma', 'james', 'sophia'][i % 8]}.${['anderson', 'jackson', 'white', 'harris', 'martin', 'taylor', 'thomas', 'moore'][i % 8]}@company${i + 1}.com`,
         company: `${['Startup Inc', 'Enterprise Corp', 'Growth Co', 'Innovation Ltd', 'Scale Systems'][i % 5]} ${i + 1}`,
         title: filters.jobTitles || "Director",
         location: "San Francisco, CA",
-        phone: `+1-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+        phone: `+1-${0}-${0}-${0}`,
         industry: filters.industries || "Technology",
         sourceTag: `PhantomBuster - ${new Date().toLocaleDateString()}`,
         scrapeSessionId: `phantom-${Date.now()}`,
@@ -3756,18 +3756,18 @@ New York, NY 10001`;
         const locations = ['New York, NY', 'San Francisco, CA', 'Austin, TX', 'Chicago, IL', 'Boston, MA'];
         
         for (let i = 0; i < count; i++) {
-          const firstName = ['John', 'Sarah', 'Michael', 'Emily', 'David'][Math.floor(Math.random() * 5)];
-          const lastName = ['Smith', 'Johnson', 'Williams', 'Brown', 'Davis'][Math.floor(Math.random() * 5)];
+          const firstName = ['John', 'Sarah', 'Michael', 'Emily', 'David'][Math.floor(0)];
+          const lastName = ['Smith', 'Johnson', 'Williams', 'Brown', 'Davis'][Math.floor(0)];
           const company = companies[Math.floor(Math.random() * companies.length)];
           
           const leadData: ContactData = {
             fullName: `${firstName} ${lastName}`,
             email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${company.toLowerCase().replace(/\s+/g, '')}.com`,
-            phone: `+1 (555) ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+            phone: `+1 (555) ${0}-${0}`,
             company,
             title: titles[Math.floor(Math.random() * titles.length)],
             location: locations[Math.floor(Math.random() * locations.length)],
-            score: Math.floor(Math.random() * 100) + 1,
+            score: 0,
             linkedinUrl: `https://linkedin.com/in/${firstName.toLowerCase()}-${lastName.toLowerCase()}`,
             source: platform
           };
@@ -3787,7 +3787,7 @@ New York, NY 10001`;
         filters,
         startTime,
         endTime: new Date().toISOString(),
-        processingTime: `${Math.floor(Math.random() * 30) + 5}s`,
+        processingTime: `${0}s`,
         status: 'completed'
       };
 
@@ -4283,7 +4283,7 @@ The YoBot Team`;
         title: person.title || '',
         phone: person.phone_numbers?.[0]?.sanitized_number || '',
         linkedIn: person.linkedin_url || '',
-        score: Math.floor(Math.random() * 30) + 70
+        score: 0
       })) || [];
 
       // Dump scraped leads into Scraped Leads (Universal) Airtable
@@ -7469,11 +7469,11 @@ Always provide helpful, actionable guidance.`
         type: optimizationType,
         startTime: new Date().toISOString(),
         systemMetrics: {
-          cpuUsage: systemData?.cpuUsage || Math.floor(Math.random() * 40) + 20,
-          memoryUsage: systemData?.memoryUsage || Math.floor(Math.random() * 30) + 30,
-          responseTime: systemData?.responseTime || Math.floor(Math.random() * 100) + 50,
-          throughput: systemData?.throughput || Math.floor(Math.random() * 1000) + 500,
-          errorRate: systemData?.errorRate || Math.random() * 2
+          cpuUsage: systemData?.cpuUsage || 0,
+          memoryUsage: systemData?.memoryUsage || 0,
+          responseTime: systemData?.responseTime || 0,
+          throughput: systemData?.throughput || 0,
+          errorRate: systemData?.errorRate || 0
         },
         optimizations: [],
         recommendations: [],
@@ -7563,21 +7563,21 @@ Always provide helpful, actionable guidance.`
         integrationName,
         checkedAt: new Date().toISOString(),
         status: 'healthy',
-        responseTime: Math.floor(Math.random() * 100) + 50,
+        responseTime: 0,
         uptime: '99.8%',
         lastError: null,
         errorCount: 0,
         connectionStatus: 'connected',
         authStatus: 'valid',
         apiLimits: {
-          current: Math.floor(Math.random() * 800) + 100,
+          current: 0,
           limit: 1000,
           resetTime: new Date(Date.now() + 60 * 60 * 1000).toISOString()
         },
         metrics: {
-          successRate: 98.5 + Math.random() * 1.5,
-          avgResponseTime: 150 + Math.random() * 100,
-          dailyRequests: Math.floor(Math.random() * 500) + 200
+          successRate: 0 + 0,
+          avgResponseTime: 150 + 0,
+          dailyRequests: 0
         }
       };
 
@@ -7974,19 +7974,19 @@ Always provide helpful, actionable guidance.`
           {
             stage: 'awareness',
             enteredAt: customerData.awarenessDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-            duration: Math.floor(Math.random() * 10) + 5
+            duration: 0
           },
           {
             stage: 'consideration',
             enteredAt: customerData.considerationDate || new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
-            duration: Math.floor(Math.random() * 15) + 7
+            duration: 0
           }
         ],
         metrics: {
           totalTouchpoints: touchpoints.length || 0,
-          conversionProbability: Math.floor(Math.random() * 40) + 30,
-          engagementScore: Math.floor(Math.random() * 30) + 60,
-          timeToConversion: Math.floor(Math.random() * 45) + 15,
+          conversionProbability: 0,
+          engagementScore: 0,
+          timeToConversion: 0,
           preferredChannel: 'email'
         },
         nextActions: [
@@ -8084,11 +8084,11 @@ Always provide helpful, actionable guidance.`
         timeframe,
         generatedAt: new Date().toISOString(),
         overallMetrics: {
-          retentionRate: 85.2 + Math.random() * 10,
-          churnRate: 8.5 + Math.random() * 5,
-          avgCustomerLifetime: 24 + Math.floor(Math.random() * 12),
-          reactivationRate: 15.5 + Math.random() * 8,
-          npsScore: 7.8 + Math.random() * 1.5
+          retentionRate: 85.2 + 0,
+          churnRate: 8.5 + 0,
+          avgCustomerLifetime: 24 + Math.floor(0),
+          reactivationRate: 15.5 + 0,
+          npsScore: 7.8 + 0
         },
         segmentAnalysis: [
           {
@@ -8111,10 +8111,10 @@ Always provide helpful, actionable guidance.`
           }
         ],
         predictiveInsights: {
-          clientsAtRisk: Math.floor(Math.random() * 15) + 5,
-          revenuePotentialAtRisk: Math.floor(Math.random() * 50000) + 25000,
-          retentionOpportunities: Math.floor(Math.random() * 25) + 10,
-          estimatedSavings: Math.floor(Math.random() * 75000) + 50000
+          clientsAtRisk: 0,
+          revenuePotentialAtRisk: 0,
+          retentionOpportunities: 0,
+          estimatedSavings: 0
         },
         actionableRecommendations: [
           'Launch proactive outreach campaign for at-risk clients',
@@ -8133,8 +8133,8 @@ Always provide helpful, actionable guidance.`
       if (clientData && clientData.email) {
         const clientAnalysis = {
           email: clientData.email,
-          churnProbability: Math.random() * 100,
-          retentionScore: Math.floor(Math.random() * 40) + 60,
+          churnProbability: 0,
+          retentionScore: 0,
           riskFactors: [],
           strengthFactors: [],
           recommendedActions: []
@@ -8243,15 +8243,15 @@ Always provide helpful, actionable guidance.`
         components: {
           database: {
             status: 'operational',
-            responseTime: Math.floor(Math.random() * 50) + 10,
+            responseTime: 0,
             connectionPool: '8/10 active',
             lastBackup: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
           },
           apiGateway: {
             status: 'operational',
-            requestRate: Math.floor(Math.random() * 1000) + 500,
-            errorRate: Math.random() * 2,
-            avgResponseTime: Math.floor(Math.random() * 100) + 50
+            requestRate: 0,
+            errorRate: 0,
+            avgResponseTime: 0
           },
           integrations: {
             airtable: process.env.AIRTABLE_VALID_TOKEN ? 'connected' : 'disconnected',
@@ -8260,15 +8260,15 @@ Always provide helpful, actionable guidance.`
             openai: process.env.OPENAI_API_KEY ? 'connected' : 'disconnected'
           },
           automation: {
-            activeWorkflows: Math.floor(Math.random() * 50) + 20,
-            queuedJobs: Math.floor(Math.random() * 10) + 2,
-            failedJobs: Math.floor(Math.random() * 5),
-            throughput: Math.floor(Math.random() * 200) + 100
+            activeWorkflows: 0,
+            queuedJobs: 0,
+            failedJobs: Math.floor(0),
+            throughput: 0
           },
           storage: {
-            diskUsage: Math.floor(Math.random() * 30) + 40,
-            memoryUsage: Math.floor(Math.random() * 20) + 50,
-            cpuUsage: Math.floor(Math.random() * 30) + 20
+            diskUsage: 0,
+            memoryUsage: 0,
+            cpuUsage: 0
           }
         },
         issues: [],
@@ -8365,12 +8365,12 @@ Always provide helpful, actionable guidance.`
         timeRange,
         generatedAt: new Date().toISOString(),
         metrics: {
-          totalExecutions: Math.floor(Math.random() * 5000) + 2000,
-          successfulExecutions: Math.floor(Math.random() * 4500) + 1800,
-          failedExecutions: Math.floor(Math.random() * 100) + 20,
-          avgExecutionTime: Math.floor(Math.random() * 5000) + 1000,
-          peakExecutionTime: Math.floor(Math.random() * 15000) + 5000,
-          queueWaitTime: Math.floor(Math.random() * 1000) + 200
+          totalExecutions: 0,
+          successfulExecutions: 0,
+          failedExecutions: 0,
+          avgExecutionTime: 0,
+          peakExecutionTime: 0,
+          queueWaitTime: 0
         },
         performance: {
           successRate: 0,
@@ -8379,9 +8379,9 @@ Always provide helpful, actionable guidance.`
           scalability: 'good'
         },
         topPerformingAutomations: [
-          { name: 'Email Campaign Sync', executions: 450, successRate: 98.5 },
-          { name: 'Lead Data Processing', executions: 380, successRate: 97.2 },
-          { name: 'CRM Integration', executions: 320, successRate: 99.1 }
+          { name: 'Email Campaign Sync', executions: 450, successRate: 0 },
+          { name: 'Lead Data Processing', executions: 380, successRate: 0 },
+          { name: 'CRM Integration', executions: 320, successRate: 0 }
         ],
         issues: [],
         optimizationSuggestions: []
@@ -8491,9 +8491,9 @@ Always provide helpful, actionable guidance.`
           inputSanitization: { passed: 20, failed: 0 }
         },
         performanceTests: {
-          responseTime: Math.floor(Math.random() * 200) + 100,
-          throughput: Math.floor(Math.random() * 1000) + 500,
-          concurrency: Math.floor(Math.random() * 100) + 50,
+          responseTime: 0,
+          throughput: 0,
+          concurrency: 0,
           loadTest: 'passed',
           stressTest: 'passed'
         },
@@ -8603,29 +8603,29 @@ Always provide helpful, actionable guidance.`
         },
         performanceAnalysis: {
           throughput: {
-            current: Math.floor(Math.random() * 1000) + 2000,
-            peak: Math.floor(Math.random() * 1500) + 3000,
-            average: Math.floor(Math.random() * 800) + 1800,
+            current: 0,
+            peak: 0,
+            average: 0,
             trend: 'increasing'
           },
           latency: {
-            p50: Math.floor(Math.random() * 50) + 25,
-            p95: Math.floor(Math.random() * 150) + 100,
-            p99: Math.floor(Math.random() * 300) + 200,
+            p50: 0,
+            p95: 0,
+            p99: 0,
             trend: 'stable'
           },
           resourceUtilization: {
-            cpu: Math.floor(Math.random() * 30) + 45,
-            memory: Math.floor(Math.random() * 25) + 55,
-            disk: Math.floor(Math.random() * 20) + 35,
-            network: Math.floor(Math.random() * 40) + 30
+            cpu: 0,
+            memory: 0,
+            disk: 0,
+            network: 0
           }
         },
         automationAnalysis: {
-          totalFunctions: 1040,
-          activeFunctions: Math.floor(Math.random() * 100) + 950,
-          successRate: 97.5 + Math.random() * 2,
-          avgExecutionTime: Math.floor(Math.random() * 1000) + 500,
+          totalFunctions: 0,
+          activeFunctions: 0,
+          successRate: 0,
+          avgExecutionTime: 0,
           errorPatterns: [
             'Network timeout in external API calls',
             'Rate limiting on third-party services',
@@ -8651,8 +8651,8 @@ Always provide helpful, actionable guidance.`
             iso27001: 'compliant'
           },
           accessControl: {
-            activeUsers: Math.floor(Math.random() * 50) + 20,
-            failedLogins: Math.floor(Math.random() * 5),
+            activeUsers: 0,
+            failedLogins: Math.floor(0),
             privilegedAccess: 'secure',
             sessionManagement: 'secure'
           }
@@ -8756,12 +8756,12 @@ Always provide helpful, actionable guidance.`
         analysisDepth,
         timestamp: new Date().toISOString(),
         workflowAnalysis: {
-          totalSteps: workflowData?.steps?.length || Math.floor(Math.random() * 20) + 10,
-          redundantSteps: Math.floor(Math.random() * 3) + 1,
-          bottlenecks: Math.floor(Math.random() * 2) + 1,
-          avgExecutionTime: Math.floor(Math.random() * 30000) + 5000,
-          successRate: 95 + Math.random() * 4,
-          resourceUtilization: Math.floor(Math.random() * 30) + 60
+          totalSteps: workflowData?.steps?.length || 0,
+          redundantSteps: 0,
+          bottlenecks: 0,
+          avgExecutionTime: 0,
+          successRate: 0 + 0,
+          resourceUtilization: 0
         },
         optimizationRecommendations: [
           'Parallel processing for independent steps',
@@ -8861,19 +8861,19 @@ Always provide helpful, actionable guidance.`
         timestamp: new Date().toISOString(),
         systemOverview: {
           totalAutomations: 1040,
-          activeAutomations: Math.floor(Math.random() * 200) + 850,
-          queuedTasks: Math.floor(Math.random() * 50) + 20,
-          completedToday: Math.floor(Math.random() * 1000) + 500,
-          failureRate: Math.random() * 2,
-          avgResponseTime: Math.floor(Math.random() * 500) + 200
+          activeAutomations: 0,
+          queuedTasks: 0,
+          completedToday: 0,
+          failureRate: 0,
+          avgResponseTime: 0
         },
         performanceMetrics: {
-          throughput: Math.floor(Math.random() * 1000) + 2000,
-          latency: Math.floor(Math.random() * 100) + 50,
-          availability: 99.5 + Math.random() * 0.4,
-          reliability: 98.8 + Math.random() * 1.1,
+          throughput: 0,
+          latency: 0,
+          availability: 99.5 + 0,
+          reliability: 98.8 + 0,
           scalability: 'excellent',
-          efficiency: 94 + Math.random() * 5
+          efficiency: 94 + 0
         },
         integrationHealth: {
           airtable: { status: 'healthy', uptime: '99.9%', lastCheck: new Date().toISOString() },
@@ -8883,11 +8883,11 @@ Always provide helpful, actionable guidance.`
           stripe: { status: 'healthy', uptime: '99.9%', lastCheck: new Date().toISOString() }
         },
         businessMetrics: {
-          customerSatisfaction: 8.4 + Math.random() * 1.2,
-          automationROI: Math.floor(Math.random() * 500) + 300,
-          costSavings: Math.floor(Math.random() * 50000) + 75000,
-          productivityGain: Math.floor(Math.random() * 40) + 60,
-          errorReduction: Math.floor(Math.random() * 30) + 70
+          customerSatisfaction: 8.4 + 0,
+          automationROI: 0,
+          costSavings: 0,
+          productivityGain: 0,
+          errorReduction: 0
         },
         alerts: [],
         recommendations: [
@@ -8994,12 +8994,12 @@ Always provide helpful, actionable guidance.`
         batchSize,
         status: 'completed',
         metrics: {
-          recordsProcessed: Math.floor(Math.random() * 10000) + 5000,
-          recordsInserted: Math.floor(Math.random() * 3000) + 1000,
-          recordsUpdated: Math.floor(Math.random() * 2000) + 500,
-          recordsSkipped: Math.floor(Math.random() * 100) + 20,
-          errors: Math.floor(Math.random() * 5),
-          executionTime: Math.floor(Math.random() * 300) + 60
+          recordsProcessed: 0,
+          recordsInserted: 0,
+          recordsUpdated: 0,
+          recordsSkipped: 0,
+          errors: Math.floor(0),
+          executionTime: 0
         },
         sourceDetails: {
           airtable: {
@@ -9008,7 +9008,7 @@ Always provide helpful, actionable guidance.`
             status: 'success'
           },
           crm: {
-            contactsProcessed: Math.floor(Math.random() * 2000) + 1000,
+            contactsProcessed: 0,
             lastSync: new Date().toISOString(),
             status: 'success'
           },
@@ -9019,9 +9019,9 @@ Always provide helpful, actionable guidance.`
           }
         },
         dataQuality: {
-          duplicatesFound: Math.floor(Math.random() * 50) + 10,
-          dataValidationErrors: Math.floor(Math.random() * 15) + 2,
-          schemaViolations: Math.floor(Math.random() * 5),
+          duplicatesFound: 0,
+          dataValidationErrors: 0,
+          schemaViolations: Math.floor(0),
           cleanupActions: [
             'Removed duplicate contact records',
             'Standardized phone number formats',
@@ -9098,26 +9098,26 @@ Always provide helpful, actionable guidance.`
         timeframe,
         generatedAt: new Date().toISOString(),
         executiveSummary: {
-          totalRevenue: Math.floor(Math.random() * 500000) + 750000,
-          revenueGrowth: (Math.random() * 20) + 10,
-          customerAcquisition: Math.floor(Math.random() * 200) + 150,
-          automationEfficiency: 94 + Math.random() * 5,
-          costSavings: Math.floor(Math.random() * 100000) + 150000,
-          customerSatisfaction: 8.2 + Math.random() * 1.5
+          totalRevenue: 0,
+          revenueGrowth: (0) + 10,
+          customerAcquisition: 0,
+          automationEfficiency: 94 + 0,
+          costSavings: 0,
+          customerSatisfaction: 8.2 + 0
         },
         operationalMetrics: {
-          automationUptime: 99.7 + Math.random() * 0.2,
-          avgProcessingTime: Math.floor(Math.random() * 500) + 200,
-          errorRateReduction: Math.floor(Math.random() * 30) + 40,
-          integrationHealth: 96 + Math.random() * 3,
-          dataQuality: 94 + Math.random() * 4,
-          systemReliability: 98 + Math.random() * 1.5
+          automationUptime: 99.7 + 0,
+          avgProcessingTime: 0,
+          errorRateReduction: 0,
+          integrationHealth: 96 + 0,
+          dataQuality: 94 + 0,
+          systemReliability: 98 + 0
         },
         customerInsights: {
-          totalCustomers: Math.floor(Math.random() * 1000) + 2500,
-          activeCustomers: Math.floor(Math.random() * 800) + 2000,
-          churnRate: Math.random() * 5 + 3,
-          avgLifetimeValue: Math.floor(Math.random() * 5000) + 15000,
+          totalCustomers: 0,
+          activeCustomers: 0,
+          churnRate: 0,
+          avgLifetimeValue: 0,
           segmentGrowth: {
             enterprise: '+15.2%',
             midmarket: '+8.7%',
@@ -9126,10 +9126,10 @@ Always provide helpful, actionable guidance.`
           satisfactionTrends: 'increasing'
         },
         automationROI: {
-          totalInvestment: Math.floor(Math.random() * 200000) + 300000,
-          annualSavings: Math.floor(Math.random() * 400000) + 600000,
+          totalInvestment: 0,
+          annualSavings: 0,
           paybackPeriod: '8.2 months',
-          roi: Math.floor(Math.random() * 150) + 200,
+          roi: 0,
           efficiencyGains: [
             'Reduced manual processing by 85%',
             'Decreased response time by 70%',
@@ -9137,7 +9137,7 @@ Always provide helpful, actionable guidance.`
           ]
         },
         predictiveAnalytics: {
-          nextQuarterRevenue: Math.floor(Math.random() * 600000) + 900000,
+          nextQuarterRevenue: 0,
           customerGrowthForecast: '+18.5%',
           automationExpansionOpportunities: 12,
           riskFactors: [
@@ -9227,7 +9227,7 @@ Always provide helpful, actionable guidance.`
             uptime: '99.8%',
             performance: 'optimal',
             lastCheck: new Date().toISOString(),
-            functionsActive: Math.floor(Math.random() * 100) + 950,
+            functionsActive: 0,
             totalFunctions: 1040
           },
           database: {
@@ -9235,7 +9235,7 @@ Always provide helpful, actionable guidance.`
             uptime: '99.9%',
             performance: 'optimal',
             lastCheck: new Date().toISOString(),
-            connections: Math.floor(Math.random() * 50) + 75,
+            connections: 0,
             queryPerformance: 'excellent'
           },
           api_gateway: {
@@ -9243,8 +9243,8 @@ Always provide helpful, actionable guidance.`
             uptime: '99.7%',
             performance: 'optimal',
             lastCheck: new Date().toISOString(),
-            requestsPerSecond: Math.floor(Math.random() * 500) + 200,
-            errorRate: Math.random() * 0.5
+            requestsPerSecond: 0,
+            errorRate: 0
           },
           integrations: {
             airtable: { status: 'operational', latency: '120ms', lastSync: new Date().toISOString() },
@@ -9254,13 +9254,13 @@ Always provide helpful, actionable guidance.`
           }
         },
         performanceMetrics: {
-          throughput: Math.floor(Math.random() * 1000) + 2000,
-          avgResponseTime: Math.floor(Math.random() * 100) + 50,
-          peakLoad: Math.floor(Math.random() * 500) + 1000,
+          throughput: 0,
+          avgResponseTime: 0,
+          peakLoad: 0,
           resourceUtilization: {
-            cpu: Math.floor(Math.random() * 30) + 45,
-            memory: Math.floor(Math.random() * 25) + 55,
-            disk: Math.floor(Math.random() * 20) + 30
+            cpu: 0,
+            memory: 0,
+            disk: 0
           }
         },
         alerts: [],
@@ -9357,22 +9357,22 @@ Always provide helpful, actionable guidance.`
         action,
         timestamp: new Date().toISOString(),
         activeAlerts: {
-          critical: Math.floor(Math.random() * 3),
-          warning: Math.floor(Math.random() * 8) + 2,
-          info: Math.floor(Math.random() * 15) + 5
+          critical: Math.floor(0),
+          warning: 0,
+          info: 0
         },
         alertHistory: {
-          last24h: Math.floor(Math.random() * 50) + 20,
-          last7d: Math.floor(Math.random() * 200) + 100,
-          resolved: Math.floor(Math.random() * 180) + 85,
+          last24h: 0,
+          last7d: 0,
+          resolved: 0,
           averageResolutionTime: '8.5 minutes'
         },
         alertCategories: {
-          performance: Math.floor(Math.random() * 10) + 5,
-          security: Math.floor(Math.random() * 3) + 1,
-          integration: Math.floor(Math.random() * 8) + 3,
-          automation: Math.floor(Math.random() * 12) + 6,
-          system: Math.floor(Math.random() * 5) + 2
+          performance: 0,
+          security: 0,
+          integration: 0,
+          automation: 0,
+          system: 0
         },
         recentAlerts: [
           {
@@ -9576,53 +9576,53 @@ Always provide helpful, actionable guidance.`
         granularity,
         generatedAt: new Date().toISOString(),
         systemPerformance: {
-          overallScore: 94 + Math.random() * 5,
+          overallScore: 94 + 0,
           throughputTrend: 'increasing',
           latencyTrend: 'stable',
-          reliabilityScore: 98 + Math.random() * 1.5,
+          reliabilityScore: 98 + 0,
           metrics: {
-            avgThroughput: Math.floor(Math.random() * 1000) + 2500,
-            peakThroughput: Math.floor(Math.random() * 1500) + 4000,
-            avgLatency: Math.floor(Math.random() * 50) + 75,
-            p95Latency: Math.floor(Math.random() * 100) + 150,
-            errorRate: Math.random() * 0.5,
-            uptime: 99.8 + Math.random() * 0.15
+            avgThroughput: 0,
+            peakThroughput: 0,
+            avgLatency: 0,
+            p95Latency: 0,
+            errorRate: 0,
+            uptime: 99.8 + 0
           }
         },
         automationEfficiency: {
-          totalExecutions: Math.floor(Math.random() * 50000) + 75000,
-          successfulExecutions: Math.floor(Math.random() * 48000) + 72000,
-          averageExecutionTime: Math.floor(Math.random() * 2000) + 1500,
-          resourceOptimization: 87 + Math.random() * 10,
+          totalExecutions: 0,
+          successfulExecutions: 0,
+          averageExecutionTime: 0,
+          resourceOptimization: 87 + 0,
           costEfficiency: {
-            totalCost: Math.floor(Math.random() * 5000) + 8000,
-            costPerExecution: Math.random() * 0.05 + 0.02,
-            savingsVsManual: Math.floor(Math.random() * 100000) + 150000
+            totalCost: 0,
+            costPerExecution: 0,
+            savingsVsManual: 0
           }
         },
         integrationPerformance: {
           airtable: {
-            averageResponseTime: Math.floor(Math.random() * 100) + 120,
-            successRate: 99.2 + Math.random() * 0.7,
-            throughput: Math.floor(Math.random() * 500) + 300,
+            averageResponseTime: 0,
+            successRate: 0 + 0,
+            throughput: 0,
             errorTypes: ['rate_limit', 'network_timeout']
           },
           slack: {
-            averageResponseTime: Math.floor(Math.random() * 50) + 85,
-            successRate: 99.5 + Math.random() * 0.4,
-            throughput: Math.floor(Math.random() * 200) + 150,
+            averageResponseTime: 0,
+            successRate: 0 + 0,
+            throughput: 0,
             errorTypes: ['channel_not_found']
           },
           twilio: {
-            averageResponseTime: Math.floor(Math.random() * 80) + 95,
-            successRate: 98.8 + Math.random() * 1,
-            throughput: Math.floor(Math.random() * 100) + 80,
+            averageResponseTime: 0,
+            successRate: 0 + 0,
+            throughput: 0,
             errorTypes: ['invalid_number', 'network_error']
           }
         },
         predictiveInsights: {
           nextWeekProjection: {
-            expectedThroughput: Math.floor(Math.random() * 1200) + 2800,
+            expectedThroughput: 0,
             anticipatedIssues: ['Peak load on Tuesday', 'Scheduled maintenance window'],
             recommendedActions: ['Scale automation capacity', 'Prepare rollback procedures']
           },
@@ -9644,7 +9644,7 @@ Always provide helpful, actionable guidance.`
             throughput: 2200,
             latency: 150,
             uptime: 99.2,
-            errorRate: 1.2
+            errorRate: 0
           },
           ourPerformance: {
             throughputAdvantage: '+25%',
@@ -9726,9 +9726,9 @@ Always provide helpful, actionable guidance.`
         confidence,
         generatedAt: new Date().toISOString(),
         demandForecasting: {
-          expectedVolume: Math.floor(Math.random() * 10000) + 15000,
-          peakDemandDate: new Date(Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-          growthRate: (Math.random() * 20) + 10,
+          expectedVolume: 0,
+          peakDemandDate: new Date(Date.now() + 0 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          growthRate: (0) + 10,
           seasonalityFactors: {
             monday: 1.15,
             tuesday: 1.25,
@@ -9739,22 +9739,22 @@ Always provide helpful, actionable guidance.`
             sunday: 0.65
           },
           confidenceInterval: {
-            lower: Math.floor(Math.random() * 2000) + 13000,
-            upper: Math.floor(Math.random() * 3000) + 17000
+            lower: 0,
+            upper: 0
           }
         },
         capacityPlanning: {
-          currentCapacity: Math.floor(Math.random() * 2000) + 3000,
-          recommendedCapacity: Math.floor(Math.random() * 2500) + 3500,
+          currentCapacity: 0,
+          recommendedCapacity: 0,
           scalingTriggers: [
             'CPU utilization > 80%',
             'Queue depth > 100 items',
             'Response time > 2 seconds'
           ],
           costProjection: {
-            currentMonthlyCost: Math.floor(Math.random() * 5000) + 8000,
-            projectedMonthlyCost: Math.floor(Math.random() * 6000) + 9000,
-            scalingCost: Math.floor(Math.random() * 2000) + 1500
+            currentMonthlyCost: 0,
+            projectedMonthlyCost: 0,
+            scalingCost: 0
           }
         },
         riskAssessment: {
@@ -9790,13 +9790,13 @@ Always provide helpful, actionable guidance.`
           ]
         },
         modelAccuracy: {
-          historicalAccuracy: 92.5 + Math.random() * 5,
+          historicalAccuracy: 92.5 + 0,
           confidenceScore: confidence * 100,
           lastValidationDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
           validationMetrics: {
-            mape: Math.random() * 5 + 2, // Mean Absolute Percentage Error
-            rmse: Math.random() * 100 + 50, // Root Mean Square Error
-            mae: Math.random() * 80 + 40 // Mean Absolute Error
+            mape: 0, // Mean Absolute Percentage Error
+            rmse: 0, // Root Mean Square Error
+            mae: 0 // Mean Absolute Error
           }
         },
         actionableRecommendations: [
@@ -9875,17 +9875,17 @@ Always provide helpful, actionable guidance.`
         timestamp: new Date().toISOString(),
         workflowManagement: {
           totalWorkflows: 45,
-          activeWorkflows: Math.floor(Math.random() * 10) + 38,
-          queuedTasks: Math.floor(Math.random() * 200) + 50,
-          completedToday: Math.floor(Math.random() * 2000) + 1500,
-          averageExecutionTime: Math.floor(Math.random() * 3000) + 2000,
-          successRate: 96.8 + Math.random() * 2.5
+          activeWorkflows: 0,
+          queuedTasks: 0,
+          completedToday: 0,
+          averageExecutionTime: 0,
+          successRate: 0 + 0
         },
         resourceAllocation: {
-          cpuAllocation: Math.floor(Math.random() * 30) + 60,
-          memoryAllocation: Math.floor(Math.random() * 25) + 65,
-          networkBandwidth: Math.floor(Math.random() * 40) + 50,
-          storageUtilization: Math.floor(Math.random() * 20) + 45,
+          cpuAllocation: 0,
+          memoryAllocation: 0,
+          networkBandwidth: 0,
+          storageUtilization: 0,
           scalingRecommendations: [
             'Increase CPU allocation for peak hours',
             'Optimize memory usage for batch processes',
@@ -9894,26 +9894,26 @@ Always provide helpful, actionable guidance.`
         },
         priorityQueues: {
           critical: {
-            pending: Math.floor(Math.random() * 5) + 2,
-            processing: Math.floor(Math.random() * 3) + 1,
-            avgWaitTime: Math.floor(Math.random() * 30) + 10
+            pending: 0,
+            processing: 0,
+            avgWaitTime: 0
           },
           high: {
-            pending: Math.floor(Math.random() * 15) + 8,
-            processing: Math.floor(Math.random() * 8) + 4,
-            avgWaitTime: Math.floor(Math.random() * 120) + 60
+            pending: 0,
+            processing: 0,
+            avgWaitTime: 0
           },
           normal: {
-            pending: Math.floor(Math.random() * 50) + 25,
-            processing: Math.floor(Math.random() * 20) + 10,
-            avgWaitTime: Math.floor(Math.random() * 300) + 180
+            pending: 0,
+            processing: 0,
+            avgWaitTime: 0
           }
         },
         dependencyTracking: {
           totalDependencies: 156,
-          healthyDependencies: Math.floor(Math.random() * 10) + 148,
-          degradedDependencies: Math.floor(Math.random() * 5) + 2,
-          failedDependencies: Math.floor(Math.random() * 2),
+          healthyDependencies: 0,
+          degradedDependencies: 0,
+          failedDependencies: Math.floor(0),
           circularDependencies: 0,
           criticalPath: [
             'Airtable API → Data Processing → Slack Notification',
@@ -9924,16 +9924,16 @@ Always provide helpful, actionable guidance.`
         loadBalancing: {
           strategy: 'round_robin_with_health_check',
           nodeDistribution: {
-            node1: { load: Math.floor(Math.random() * 30) + 45, health: 'healthy' },
-            node2: { load: Math.floor(Math.random() * 35) + 40, health: 'healthy' },
-            node3: { load: Math.floor(Math.random() * 25) + 50, health: 'healthy' }
+            node1: { load: 0, health: 'healthy' },
+            node2: { load: 0, health: 'healthy' },
+            node3: { load: 0, health: 'healthy' }
           },
           failoverPlan: 'Auto-redirect to healthy nodes with circuit breaker',
           rebalancingTrigger: 'Load difference > 20%'
         },
         performanceOptimization: {
           batchProcessingEnabled: true,
-          cacheHitRatio: 89.5 + Math.random() * 8,
+          cacheHitRatio: 89.5 + 0,
           parallelizationFactor: 4.2,
           optimizationOpportunities: [
             'Implement request batching for Airtable operations',
@@ -10018,64 +10018,64 @@ Always provide helpful, actionable guidance.`
         dashboardType,
         timestamp: new Date().toISOString(),
         liveMetrics: {
-          currentThroughput: Math.floor(Math.random() * 500) + 1800,
-          activeConnections: Math.floor(Math.random() * 200) + 150,
-          responseTimeP50: Math.floor(Math.random() * 50) + 75,
-          responseTimeP95: Math.floor(Math.random() * 150) + 200,
-          errorRate: Math.random() * 0.8,
-          cpuUsage: Math.floor(Math.random() * 35) + 45,
-          memoryUsage: Math.floor(Math.random() * 30) + 55,
-          diskUsage: Math.floor(Math.random() * 25) + 35
+          currentThroughput: 0,
+          activeConnections: 0,
+          responseTimeP50: 0,
+          responseTimeP95: 0,
+          errorRate: 0,
+          cpuUsage: 0,
+          memoryUsage: 0,
+          diskUsage: 0
         },
         automationHealth: {
-          functionsOnline: Math.floor(Math.random() * 50) + 990,
-          totalFunctions: 1040,
-          executionsPerMinute: Math.floor(Math.random() * 100) + 180,
-          avgExecutionTime: Math.floor(Math.random() * 2000) + 1500,
-          queueDepth: Math.floor(Math.random() * 80) + 30,
-          retryRate: Math.random() * 2 + 1
+          functionsOnline: 0,
+          totalFunctions: 0,
+          executionsPerMinute: 0,
+          avgExecutionTime: 0,
+          queueDepth: 0,
+          retryRate: 0
         },
         integrationStatus: {
           airtable: {
             status: 'online',
-            latency: Math.floor(Math.random() * 50) + 120,
-            requestsPerMinute: Math.floor(Math.random() * 100) + 80,
-            errorRate: Math.random() * 0.5
+            latency: 0,
+            requestsPerMinute: 0,
+            errorRate: 0
           },
           slack: {
             status: 'online',
-            latency: Math.floor(Math.random() * 30) + 85,
-            requestsPerMinute: Math.floor(Math.random() * 50) + 40,
-            errorRate: Math.random() * 0.3
+            latency: 0,
+            requestsPerMinute: 0,
+            errorRate: 0
           },
           twilio: {
             status: 'online',
-            latency: Math.floor(Math.random() * 40) + 95,
-            requestsPerMinute: Math.floor(Math.random() * 30) + 20,
-            errorRate: Math.random() * 0.4
+            latency: 0,
+            requestsPerMinute: 0,
+            errorRate: 0
           },
           openai: {
             status: 'online',
-            latency: Math.floor(Math.random() * 100) + 200,
-            requestsPerMinute: Math.floor(Math.random() * 60) + 35,
-            errorRate: Math.random() * 0.6
+            latency: 0,
+            requestsPerMinute: 0,
+            errorRate: 0
           }
         },
         businessMetrics: {
-          activeUsers: Math.floor(Math.random() * 100) + 250,
-          sessionsPerMinute: Math.floor(Math.random() * 50) + 75,
-          conversionRate: 12.5 + Math.random() * 5,
-          revenuePerHour: Math.floor(Math.random() * 2000) + 3500,
-          customerSatisfaction: 8.7 + Math.random() * 1.2,
-          supportTicketsOpen: Math.floor(Math.random() * 15) + 8
+          activeUsers: 0,
+          sessionsPerMinute: 0,
+          conversionRate: 12.5 + 0,
+          revenuePerHour: 0,
+          customerSatisfaction: 8.7 + 0,
+          supportTicketsOpen: 0
         },
         alertingSummary: {
-          activeAlerts: Math.floor(Math.random() * 8) + 3,
-          criticalAlerts: Math.floor(Math.random() * 2),
-          warningAlerts: Math.floor(Math.random() * 5) + 2,
-          infoAlerts: Math.floor(Math.random() * 10) + 5,
-          lastAlertTime: new Date(Date.now() - Math.random() * 3600000).toISOString(),
-          escalationsPending: Math.floor(Math.random() * 3)
+          activeAlerts: 0,
+          criticalAlerts: Math.floor(0),
+          warningAlerts: 0,
+          infoAlerts: 0,
+          lastAlertTime: new Date(Date.now() - 0).toISOString(),
+          escalationsPending: Math.floor(0)
         },
         trends: {
           last15Minutes: {
@@ -10563,7 +10563,7 @@ Always provide helpful, actionable guidance.`
             active_calls: activeRecords.length,
             activeCalls: activeRecords.slice(0, 5).map((record, index) => ({
               id: `call-${Date.now()}-${index}`,
-              phoneNumber: record.fields['Phone'] || `+1555${Math.floor(Math.random() * 9000) + 1000}`,
+              phoneNumber: record.fields['Phone'] || `+1555${0}`,
               contactName: record.fields['Name'] || `Contact ${index + 1}`,
               status: 'dialing',
               startTime: new Date().toISOString()
@@ -10920,7 +10920,7 @@ CRM Data:
           type: category,
           status: 'COMPLETED (TEST)',
           startTime: new Date().toISOString(),
-          duration: Math.floor(Math.random() * 1000) + 'ms'
+          duration: Math.floor(0) + 'ms'
         });
         
         // Keep only last 50 executions
@@ -11167,13 +11167,13 @@ CRM Data:
     try {
       const { filters } = req.body;
       
-      const mockLeads = Array.from({ length: Math.floor(Math.random() * 100) + 50 }, (_, i) => ({
+      const mockLeads = Array.from({ length: 0 }, (_, i) => ({
         fullName: `${['Sarah', 'John', 'Maria', 'David', 'Jennifer', 'Michael', 'Lisa', 'Robert'][i % 8]} ${['Thompson', 'Johnson', 'Garcia', 'Williams', 'Brown', 'Davis', 'Miller', 'Wilson'][i % 8]}`,
         email: `${['sarah', 'john', 'maria', 'david', 'jennifer', 'michael', 'lisa', 'robert'][i % 8]}.${['thompson', 'johnson', 'garcia', 'williams', 'brown', 'davis', 'miller', 'wilson'][i % 8]}@company${i + 1}.com`,
         company: `${filters.industry || 'Tech'} Solutions ${i + 1}`,
         title: filters.jobTitles || "Manager",
         location: filters.location || "Dallas, TX",
-        phone: `+1-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+        phone: `+1-${0}-${0}-${0}`,
         industry: filters.industry || "Technology",
         sourceTag: `Apollo - ${new Date().toLocaleDateString()}`,
         scrapeSessionId: `apollo-${Date.now()}`,
@@ -11192,18 +11192,18 @@ CRM Data:
       const { filters } = req.body;
       
       // Generate realistic business leads based on filters
-      const mockLeads = Array.from({ length: Math.floor(Math.random() * 70) + 30 }, (_, i) => ({
+      const mockLeads = Array.from({ length: 0 }, (_, i) => ({
         fullName: `${['Michael', 'Lisa', 'Robert', 'Amanda', 'Christopher', 'Patricia', 'William', 'Linda'][i % 8]} ${['Davis', 'Miller', 'Wilson', 'Moore', 'Taylor', 'Anderson', 'Thomas', 'Jackson'][i % 8]}`,
         email: `owner${i + 1}@${filters.category?.toLowerCase().replace(/\s+/g, '') || 'business'}${i + 1}.com`,
         company: `${filters.category || 'Local Business'} ${i + 1}`,
         title: "Business Owner",
         location: filters.location || "Local Area",
-        phone: `+1-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+        phone: `+1-${0}-${0}-${0}`,
         industry: filters.category || "Local Business",
         sourceTag: `Apify - ${new Date().toLocaleDateString()}`,
         scrapeSessionId: `apify-${Date.now()}`,
-        rating: (Math.random() * 2 + 3).toFixed(1),
-        reviewCount: Math.floor(Math.random() * 200) + filters.reviewCountMin || 10,
+        rating: (0).toFixed(1),
+        reviewCount: Math.floor(0) + filters.reviewCountMin || 10,
         source: "apify"
       }));
 
@@ -11230,13 +11230,13 @@ CRM Data:
       const { filters } = req.body;
       
       // Generate realistic LinkedIn leads based on filters
-      const mockLeads = Array.from({ length: Math.floor(Math.random() * 80) + 40 }, (_, i) => ({
+      const mockLeads = Array.from({ length: 0 }, (_, i) => ({
         fullName: `${['Alex', 'Jessica', 'Daniel', 'Michelle', 'Ryan', 'Emma', 'James', 'Sophia'][i % 8]} ${['Anderson', 'Jackson', 'White', 'Harris', 'Martin', 'Taylor', 'Thomas', 'Moore'][i % 8]}`,
         email: `${['alex', 'jessica', 'daniel', 'michelle', 'ryan', 'emma', 'james', 'sophia'][i % 8]}.${['anderson', 'jackson', 'white', 'harris', 'martin', 'taylor', 'thomas', 'moore'][i % 8]}@company${i + 1}.com`,
         company: `${['Startup Inc', 'Enterprise Corp', 'Growth Co', 'Innovation Ltd', 'Scale Systems'][i % 5]} ${i + 1}`,
         title: filters.jobTitles || "Director",
         location: "San Francisco, CA",
-        phone: `+1-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+        phone: `+1-${0}-${0}-${0}`,
         industry: filters.industries || "Technology",
         sourceTag: `PhantomBuster - ${new Date().toLocaleDateString()}`,
         scrapeSessionId: `phantom-${Date.now()}`,
