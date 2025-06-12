@@ -1,13 +1,36 @@
 import { Express } from 'express';
+import LiveDataCleaner from './liveDataCleaner';
+import { getSystemMode } from './systemMode';
 
 export function registerDashboardEndpoints(app: Express) {
   
-  // Get overall dashboard metrics - LIVE DATA ONLY
+  // Get overall dashboard metrics
   app.get("/api/dashboard-metrics", async (req, res) => {
     try {
-      const { LiveDashboardData } = await import('./liveDashboardData');
-      const metrics = await LiveDashboardData.getDashboardOverview();
-      res.json(metrics);
+      const systemMode = getSystemMode();
+      
+      if (systemMode === 'live') {
+        // LIVE MODE: Serve only empty states
+        const emptyMetrics = LiveDataCleaner.getEmptyDashboardMetrics();
+        LiveDataCleaner.logLiveModeAccess('dashboard-metrics', '/api/dashboard-metrics', systemMode);
+        
+        res.json({
+          success: true,
+          data: emptyMetrics,
+          mode: 'live',
+          message: 'Live mode - authentic dashboard metrics only'
+        });
+      } else {
+        // TEST MODE: Serve hardcoded test data
+        const { LiveDashboardData } = await import('./liveDashboardData');
+        const metrics = await LiveDashboardData.getDashboardOverview();
+        res.json({
+          success: true,
+          data: metrics,
+          mode: 'test',
+          message: 'Test mode - displaying sample data'
+        });
+      }
     } catch (error) {
       console.error("Dashboard metrics error:", error);
       res.status(500).json({
@@ -17,12 +40,33 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get automation performance - LIVE DATA ONLY
+  // Get automation performance
   app.get("/api/automation-performance", async (req, res) => {
     try {
-      const { LiveDashboardData } = await import('./liveDashboardData');
-      const liveMetrics = await LiveDashboardData.getAutomationMetrics();
-      res.json(liveMetrics);
+      const systemMode = getSystemMode();
+      
+      if (systemMode === 'live') {
+        // LIVE MODE: Serve only empty states
+        const emptyPerformance = LiveDataCleaner.getEmptyAutomationPerformance();
+        LiveDataCleaner.logLiveModeAccess('automation-performance', '/api/automation-performance', systemMode);
+        
+        res.json({
+          success: true,
+          data: emptyPerformance,
+          mode: 'live',
+          message: 'Live mode - authentic automation metrics only'
+        });
+      } else {
+        // TEST MODE: Serve hardcoded test data
+        const { LiveDashboardData } = await import('./liveDashboardData');
+        const liveMetrics = await LiveDashboardData.getAutomationMetrics();
+        res.json({
+          success: true,
+          data: liveMetrics,
+          mode: 'test',
+          message: 'Test mode - displaying sample data'
+        });
+      }
     } catch (error) {
       console.error("Automation performance error:", error);
       res.status(500).json({

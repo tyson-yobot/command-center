@@ -39,6 +39,7 @@ import { registerProductionLoggerRoutes } from "./productionLogger";
 import { getSystemMode, setSystemMode } from "./systemMode";
 import { isLiveMode, safeLiveData, blockTestData, validateLiveData } from "./liveMode";
 import { knowledgeStorage, callLogStorage } from "./storage";
+import LiveDataCleaner from "./liveDataCleaner";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
 import { generateSocialMediaPost, generateEmailCampaign, postToSocialMedia, sendEmailCampaign } from './contentCreator';
