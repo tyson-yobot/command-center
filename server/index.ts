@@ -1,3 +1,6 @@
+// Suppress browserslist warning
+process.env.BROWSERSLIST_IGNORE_OLD_DATA = 'true';
+
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes, registerContentCreationEndpoints } from "./routes";
 import orchestrator from "./systemAutomationOrchestrator";
