@@ -1,31 +1,31 @@
 import type { Express } from "express";
 import { getSystemMode } from "./systemMode";
 
-// Real test data for demo - comprehensive metrics across all dashboard sections
+// Realistic test data for demo - believable business metrics
 const testModeMetrics = {
   dashboardMetrics: {
-    totalRevenue: 847532.45,
-    monthlyRecurringRevenue: 156890.22,
-    activeClients: 143,
-    completedJobs: 2847,
-    pendingOrders: 23,
+    totalRevenue: 85420.75,
+    monthlyRecurringRevenue: 12490.50,
+    activeClients: 23,
+    completedJobs: 47,
+    pendingOrders: 8,
     automationEfficiency: 94.2,
     systemUptime: 99.8,
     avgResponseTime: 127,
-    dailyActiveUsers: 89,
-    conversionRate: 12.8,
+    dailyActiveUsers: 23,
+    conversionRate: 8.5,
     customerSatisfaction: 4.7,
-    revenueGrowth: 23.5
+    revenueGrowth: 18.0
   },
   
   automationPerformance: {
-    totalTests: 847,
-    passedTests: 793,
-    failedTests: 54,
+    totalTests: 47,
+    passedTests: 44,
+    failedTests: 3,
     passRate: 93.6,
     avgExecutionTime: 2.3,
     criticalErrors: 3,
-    warnings: 12,
+    warnings: 5,
     lastRunTime: new Date(Date.now() - 300000).toISOString(), // 5 min ago
     automationFunctions: [
       { name: "CRM Sync", status: "✅ PASS", lastRun: "2 min ago", execTime: "1.2s" },
@@ -40,12 +40,12 @@ const testModeMetrics = {
   },
   
   liveActivity: {
-    activeConnections: 47,
-    requestsPerMinute: 156,
+    activeConnections: 12,
+    requestsPerMinute: 38,
     errorRate: 0.8,
     avgLatency: 89,
-    queuedJobs: 12,
-    processingJobs: 5,
+    queuedJobs: 3,
+    processingJobs: 2,
     recentActivity: [
       { time: "2 min ago", action: "New booking sync", status: "success", user: "System" },
       { time: "3 min ago", action: "Invoice generated", status: "success", user: "Sales Team" },
