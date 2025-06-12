@@ -3096,15 +3096,15 @@ export default function CommandCenter() {
                 <h4 className="text-slate-200 font-medium text-sm">Suggested Prompts</h4>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-blue-400 shadow-lg shadow-blue-400/20">
                   <span className="text-slate-300">"Show me today's leads"</span>
                   <Badge variant="outline" className="text-green-400 border-green-400">Active</Badge>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-blue-400 shadow-lg shadow-blue-400/20">
                   <span className="text-slate-300">"Call my top prospect"</span>
                   <Badge variant="outline" className="text-green-400 border-green-400">Active</Badge>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-blue-400 shadow-lg shadow-blue-400/20">
                   <span className="text-slate-300">"Schedule follow-up"</span>
                   <Badge variant="outline" className="text-green-400 border-green-400">Active</Badge>
                 </div>
@@ -3542,15 +3542,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Calls Today:</span>
-                  <span className="text-white font-bold">{metrics?.activeCalls || 0}</span>
+                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '23' : (metrics?.activeCalls || 0)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Avg Duration:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '7:42' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Conversion Rate:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '15.2%' : '--'}</span>
                 </div>
               </div>
             </CardContent>
@@ -3566,10 +3566,16 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <div className="text-xs text-slate-400">14:32 - Admin login successful</div>
-                <div className="text-xs text-slate-400">14:28 - Automation rule updated</div>
-                <div className="text-xs text-slate-400">14:15 - Bot training completed</div>
-                <div className="text-xs text-slate-400">14:02 - CRM sync executed</div>
+                {currentSystemMode === 'test' ? (
+                  <>
+                    <div className="text-xs text-green-400">14:32 - Admin login successful</div>
+                    <div className="text-xs text-blue-400">14:28 - Automation rule updated</div>
+                    <div className="text-xs text-cyan-400">14:15 - Bot training completed</div>
+                    <div className="text-xs text-purple-400">14:02 - CRM sync executed</div>
+                  </>
+                ) : (
+                  <div className="text-xs text-slate-400">No audit events available</div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -3586,15 +3592,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">New Leads:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '17' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Conversions:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '4' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Escalations:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-yellow-400 font-bold">{currentSystemMode === 'test' ? '2' : '--'}</span>
                 </div>
               </div>
             </CardContent>
