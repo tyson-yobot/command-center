@@ -221,6 +221,7 @@ export default function CommandCenter() {
   const [showCallDetails, setShowCallDetails] = useState(false);
   const [showLiveChat, setShowLiveChat] = useState(false);
   const [showKnowledgeManager, setShowKnowledgeManager] = useState(false);
+  const [showScheduleViewer, setShowScheduleViewer] = useState(false);
   const [activeCalls, setActiveCalls] = useState<any[]>([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [completedCalls, setCompletedCalls] = useState(0);
@@ -3168,10 +3169,18 @@ export default function CommandCenter() {
             <CardContent>
               <div className="space-y-3">
                 {/* Calendar events populated by live webhook data only */}
-                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
+                <div 
+                  className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20 cursor-pointer hover:bg-blue-800/70 transition-colors"
+                  onClick={() => setShowScheduleViewer(!showScheduleViewer)}
+                >
                   <div className="text-slate-300 text-sm mb-1">Today's Schedule</div>
-                  <div className="text-white font-bold">{metrics?.activeCampaigns || 0} total meetings</div>
-                  <div className="text-cyan-400 text-xs">{metrics?.remainingTasks || 0} remaining today</div>
+                  <div className="text-white font-bold">
+                    {currentSystemMode === 'test' ? '6 total meetings' : (metrics?.activeCampaigns || 0) + ' total meetings'}
+                  </div>
+                  <div className="text-cyan-400 text-xs">
+                    {currentSystemMode === 'test' ? '2 remaining today' : (metrics?.remainingTasks || 0) + ' remaining today'}
+                  </div>
+                  <div className="text-blue-300 text-xs mt-1">Click to view details →</div>
                 </div>
               </div>
             </CardContent>
@@ -3186,21 +3195,61 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {/* Live activity feed - populated by webhook data only */}
-                {liveActivityData && Array.isArray(liveActivityData) && liveActivityData.length > 0 ? (
-                  liveActivityData.map((item: any, index: number) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                {/* Live activity feed - test mode has demo data, live mode only shows webhook data */}
+                {currentSystemMode === 'test' ? (
+                  <>
+                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-blue-400/30">
                       <div>
-                        <p className="text-white font-medium">{item.action}</p>
-                        <p className="text-slate-300 text-sm">{item.company} • {item.time}</p>
+                        <p className="text-white font-medium">New lead qualified</p>
+                        <p className="text-slate-300 text-sm">TechCorp Solutions • 2 min ago</p>
                       </div>
-                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                     </div>
-                  ))
+                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-green-400/30">
+                      <div>
+                        <p className="text-white font-medium">Quote generated</p>
+                        <p className="text-slate-300 text-sm">BuildRight Industries • 5 min ago</p>
+                      </div>
+                      <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-purple-400/30">
+                      <div>
+                        <p className="text-white font-medium">Follow-up scheduled</p>
+                        <p className="text-slate-300 text-sm">Apex Manufacturing • 8 min ago</p>
+                      </div>
+                      <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-orange-400/30">
+                      <div>
+                        <p className="text-white font-medium">Call completed</p>
+                        <p className="text-slate-300 text-sm">Summit Enterprises • 12 min ago</p>
+                      </div>
+                      <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-cyan-400/30">
+                      <div>
+                        <p className="text-white font-medium">Email automation sent</p>
+                        <p className="text-slate-300 text-sm">Premier Contractors • 15 min ago</p>
+                      </div>
+                      <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
+                    </div>
+                  </>
                 ) : (
-                  <div className="text-center py-8">
-                    <p className="text-slate-400 text-sm">--</p>
-                  </div>
+                  liveActivityData && Array.isArray(liveActivityData) && liveActivityData.length > 0 ? (
+                    liveActivityData.map((item: any, index: number) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                        <div>
+                          <p className="text-white font-medium">{item.action}</p>
+                          <p className="text-slate-300 text-sm">{item.company} • {item.time}</p>
+                        </div>
+                        <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-slate-400 text-sm">Monitoring live activity...</p>
+                    </div>
+                  )
                 )}
               </div>
             </CardContent>
@@ -3209,27 +3258,31 @@ export default function CommandCenter() {
 
         {/* Advanced Intelligence & Analytics Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
-          {/* Smart Calendar */}
+          {/* Sentiment Analysis */}
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <Calendar className="w-5 h-5 mr-2 text-blue-400" />
-                Smart Calendar
+                <Brain className="w-5 h-5 mr-2 text-green-400" />
+                Sentiment Analysis
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Today's Meetings:</span>
-                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '4' : '--'}</span>
+                  <span className="text-slate-300 text-sm">Positive:</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '68%' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Auto-Scheduled:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '2' : '--'}</span>
+                  <span className="text-slate-300 text-sm">Neutral:</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '24%' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Follow-ups Due:</span>
-                  <span className="text-yellow-400 font-bold">{currentSystemMode === 'test' ? '3' : '--'}</span>
+                  <span className="text-slate-300 text-sm">Negative:</span>
+                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '8%' : '--'}</span>
+                </div>
+                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
+                  <div className="text-slate-300 text-sm mb-1">Overall Score</div>
+                  <div className="text-green-400 font-bold">{currentSystemMode === 'test' ? '7.8/10' : '--'}</div>
                 </div>
               </div>
             </CardContent>
@@ -3287,31 +3340,7 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          {/* Sentiment Analysis */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Brain className="w-5 h-5 mr-2 text-green-400" />
-                Sentiment Analysis
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Positive:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '68%' : '--'}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Neutral:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '27%' : '--'}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Negative:</span>
-                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '5%' : '--'}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+
         </div>
 
         {/* Botalytics™ Performance Dashboard */}
