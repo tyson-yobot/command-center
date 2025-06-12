@@ -1314,18 +1314,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/zendesk/tickets', async (req, res) => {
     try {
-      // Only return authentic tickets from actual Zendesk integration
-      // No test data in live mode
-      const tickets = [];
+      const systemMode = req.headers['x-system-mode'] || 'live';
+      let tickets = [];
 
-      logOperation('zendesk-tickets', {}, 'success', 'Zendesk tickets retrieved');
+      if (systemMode === 'test') {
+        // Test mode: Return hardcoded tickets for presentation
+        tickets = [
+          {
+            id: 'TICK-001247',
+            subject: 'Integration Setup Assistance',
+            description: 'Need help configuring Slack webhook integration for automation alerts',
+            priority: 'high',
+            status: 'open',
+            created: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
+            requester: 'Sarah Johnson',
+            assignee: 'YoBot Support',
+            tags: ['integration', 'slack', 'webhook']
+          },
+          {
+            id: 'TICK-001248',
+            subject: 'Call Monitoring Dashboard Questions',
+            description: 'Questions about callback functionality and call analytics metrics',
+            priority: 'normal',
+            status: 'pending',
+            created: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(), // 4 hours ago
+            requester: 'Mike Chen',
+            assignee: 'YoBot Support',
+            tags: ['call-monitoring', 'analytics', 'dashboard']
+          },
+          {
+            id: 'TICK-001249',
+            subject: 'Lead Scraping API Rate Limits',
+            description: 'Experiencing rate limiting issues with Apollo.io integration during bulk lead export',
+            priority: 'urgent',
+            status: 'open',
+            created: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(), // 6 hours ago
+            requester: 'Emily Davis',
+            assignee: 'YoBot Support',
+            tags: ['lead-scraping', 'apollo', 'rate-limit']
+          }
+        ];
+      }
+      
+      // Live mode: Only return authentic tickets from actual Zendesk integration
+
+      logOperation('zendesk-tickets', { systemMode, ticketCount: tickets.length }, 'success', 'Zendesk tickets retrieved');
 
       res.json({
         success: true,
-        tickets: tickets,
-        total: tickets.length,
-        pending: tickets.filter(t => t.status === 'pending').length,
-        open: tickets.filter(t => t.status === 'open').length
+        data: {
+          tickets: tickets,
+          openTickets: tickets.filter(t => t.status === 'open').length,
+          pendingTickets: tickets.filter(t => t.status === 'pending').length,
+          totalTickets: tickets.length
+        }
       });
     } catch (error) {
       console.error('Zendesk tickets error:', error);
