@@ -152,8 +152,11 @@ export default function CommandCenter() {
   // System mode toggle function
   const toggleSystemMode = async () => {
     try {
-      const response = await apiRequest('POST', '/api/system-mode-toggle', {
-        userId: 'command-center-user'
+      const response = await apiRequest('/api/system-mode-toggle', {
+        method: 'POST',
+        body: JSON.stringify({
+          userId: 'command-center-user'
+        })
       });
       
       if (response.success && response.modeChange) {
