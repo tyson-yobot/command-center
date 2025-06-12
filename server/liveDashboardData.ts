@@ -13,7 +13,7 @@ export class LiveDashboardData {
     console.log('[DEBUG] Serving live production data');
     try {
       const AUTHORIZED_BASE_ID = "appbFDTqB2WtRNV1H";
-      const AUTHORIZED_TABLE_ID = "tbl7K5RthCtD69BE1";
+      const AUTHORIZED_TABLE_ID = "tblQAIntegrationTests";
       
       // Security check
       if (AUTHORIZED_BASE_ID !== "appbFDTqB2WtRNV1H") {
@@ -21,7 +21,11 @@ export class LiveDashboardData {
       }
       
       // Get metrics from authorized Airtable Integration Test Log Table
-      const apiKey = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa";
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        throw new Error("❌ AIRTABLE_API_KEY environment variable not set - cannot fetch live data");
+      }
+      
       const airtableResponse = await fetch(`https://api.airtable.com/v0/${AUTHORIZED_BASE_ID}/${AUTHORIZED_TABLE_ID}`, {
         headers: {
           "Authorization": `Bearer ${apiKey}`,
@@ -44,26 +48,28 @@ export class LiveDashboardData {
       console.log('Records found:', airtableData.records?.length || 0);
       const records = airtableData.records || [];
         
-      // Parse records - adapt to current table structure
+      // Parse records from QA Integration Test table structure
       const functionTests = records.map((record: any, index: number) => {
         const fields = record.fields;
         
-        // For current billing table, create function entries from available data
-        let functionName = '';
-        let success = true; // Default to success for billing records
+        // Extract data from QA Integration Test table fields
+        const functionName = fields['🔧 Integration Name'] || `Unknown Function ${index + 1}`;
+        const passFailField = fields['✅ Pass/Fail'] || '';
+        const success = passFailField.includes('✅') || passFailField.toLowerCase().includes('pass');
+        const notes = fields['🧠 Notes / Debug'] || '';
+        const testDate = fields['📅 Test Date'] || '';
+        const qaOwner = fields['🧑‍💻 QA Owner'] || '';
+        const moduleType = fields['🧩 Module Type'] || '';
         
-        // Try to extract meaningful function name from available fields
-        if (fields['🏢 Company Name']) {
-          functionName = `Invoice Processing - ${fields['🏢 Company Name']}`;
-        } else if (fields['🧾 Invoice ID']) {
-          functionName = `Invoice ${fields['🧾 Invoice ID']}`;
-        } else if (fields['📧 Email']) {
-          functionName = `Email Processing - ${fields['📧 Email']}`;
-        } else {
-          functionName = `Billing Function ${index + 1}`;
-        }
-        
-        return { functionName: functionName.trim(), success, record };
+        return { 
+          functionName: functionName.trim(), 
+          success, 
+          notes,
+          testDate,
+          qaOwner,
+          moduleType,
+          record 
+        };
       });
 
       console.log(`Processing ${records.length} Airtable records`);
@@ -83,16 +89,15 @@ export class LiveDashboardData {
       const failedExecutions = totalExecutions - passedExecutions;
       const successRate = totalExecutions > 0 ? ((passedExecutions / totalExecutions) * 100).toFixed(1) : '0';
       
-      // Get unique functions using verified correct logic - exclude invalid entries
+      // Get unique functions from QA Integration Test data
       const uniqueFunctions: any = {};
       functionTests.forEach((test: any) => {
         const cleanFunctionName = test.functionName.trim();
-        // Only include valid function names (not empty, not just emojis, not single characters)
+        // Only include valid integration names from authenticated QA tests
         if (cleanFunctionName && 
-            cleanFunctionName !== '✅' && 
-            cleanFunctionName !== '❌' && 
-            cleanFunctionName.length > 1 &&
-            !cleanFunctionName.match(/^[✅❌\s]+$/)) {
+            cleanFunctionName !== 'Unknown Function' &&
+            !cleanFunctionName.startsWith('Unknown Function') &&
+            cleanFunctionName.length > 3) {
           uniqueFunctions[cleanFunctionName] = test;
         }
       });
