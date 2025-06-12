@@ -46,6 +46,8 @@ export const DEFAULT_VOICES = [
   { id: 'Zlb1dXrM653N07WRdFW3', name: 'Emily', category: 'Characters', description: 'Young Adult Female, Excited', accent: 'American', use_case: 'Excited, Energetic' }
 ];
 
+
+
 // Get all available voices (default + custom if API available)
 export async function getAllVoices() {
   if (!process.env.ELEVENLABS_API_KEY) {
@@ -131,10 +133,13 @@ export async function getModels() {
   }
 }
 
-// Generate speech from text
+// Enhanced speech generation with full ElevenLabs features
 export async function generateSpeech(text: string, voiceId: string = '21m00Tcm4TlvDq8ikWAM', options: any = {}) {
-  if (!process.env.ELEVENLABS_API_KEY) {
-    throw new Error('ElevenLabs API key not configured');
+  const apiKey = process.env.ELEVENLABS_API_KEY;
+  
+  if (!apiKey) {
+    console.log('ElevenLabs API key not configured - please provide ELEVENLABS_API_KEY');
+    throw new Error('ElevenLabs API key required for voice generation');
   }
 
   try {
@@ -143,10 +148,17 @@ export async function generateSpeech(text: string, voiceId: string = '21m00Tcm4T
       headers: {
         'Accept': 'audio/mpeg',
         'Content-Type': 'application/json',
-        'xi-api-key': process.env.ELEVENLABS_API_KEY
+        'xi-api-key': apiKey
       },
       body: JSON.stringify({
         text: text,
+        model_id: options.model_id || 'eleven_monolingual_v1',
+        voice_settings: options.voice_settings || {
+          stability: 0.75,
+          similarity_boost: 0.75,
+          style: 0.0,
+          use_speaker_boost: true
+        }
         model_id: options.model_id || 'eleven_multilingual_v2',
         voice_settings: {
           stability: parseFloat(options.stability) || 0.5,
