@@ -1,5 +1,5 @@
 import type { Express } from "express";
-import { logIntegrationTest } from "./airtableIntegrationLogger";
+// Logger import removed - using PRODUCTION_HARDENED_LOGGER only
 
 // Real API integration for lead scraping with proper test/live mode separation
 export function registerRealScrapingRoutes(app: Express) {

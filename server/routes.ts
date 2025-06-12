@@ -29,8 +29,8 @@ import { registerMailchimpRoutes } from "./mailchimpRoutes";
 import { registerPublerRoutes } from "./publerIntegration";
 import { isLiveMode } from "./systemMode";
 import { configManager } from "./controlCenterConfig";
-import { logToAirtable } from "./airtableLogger";
-import { automationTester } from "./automationTester";
+
+
 import { registerZendeskRoutes } from "./zendeskIntegration";
 import { registerAutomationTestEndpoint } from "./automationTestEndpoint";
 import { registerAutomationLogsEndpoint } from "./automationLogsEndpoint";
@@ -453,7 +453,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   registerIntegrationTestRoutes(app);
   
   // Register local test logger - Primary test tracking system
-  registerLocalTestLoggerRoutes(app);
+  // Logger routes removed - using PRODUCTION_HARDENED_LOGGER only
   
   // Register real automation endpoints - Connect Python functions to web interface
   registerRealAutomationEndpoints(app);

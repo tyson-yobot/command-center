@@ -11,8 +11,7 @@ import { registerQATracker } from "./qaTracker";
 import { officialQATracker } from "./officialQATracker";
 import { registerQATestEndpoints } from "./qaTestEndpoints";
 import { registerPublerRoutes } from "./publerIntegrationNew";
-import { registerAirtableTestLogger } from "./airtableTestLogger";
-import { testRoutes } from "./testRoutes";
+// Removed deleted logger imports
 
 // Load environment variables from .env file
 dotenv.config();
@@ -21,8 +20,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Register test logging routes FIRST (before any other middleware)
-app.use('/api/test', testRoutes);
+// Test logging routes removed - using PRODUCTION_HARDENED_LOGGER only
 
 app.use((req, res, next) => {
   const start = Date.now();
