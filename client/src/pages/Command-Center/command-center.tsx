@@ -2804,7 +2804,7 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => window.open('https://app.hubspot.com/contacts/[HUB-ID]', '_blank')}
+                    onClick={() => window.open('https://app-na2.hubspot.com/contacts/242375511/objects/0-1/views/all/list', '_blank')}
                     className="text-white flex items-center justify-start p-3 transition-all duration-200"
                     style={{
                       backgroundColor: '#0d82da',
