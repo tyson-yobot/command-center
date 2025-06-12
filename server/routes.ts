@@ -34,6 +34,7 @@ import { automationTester } from "./automationTester";
 import { registerZendeskRoutes } from "./zendeskIntegration";
 import { registerAutomationTestEndpoint } from "./automationTestEndpoint";
 import { registerAutomationLogsEndpoint } from "./automationLogsEndpoint";
+import { registerTestDataRoutes } from "./testDataPopulator";
 import { storage } from "./storage";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
@@ -444,6 +445,9 @@ function clearTestData() {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Register test data population and live mode clearing - CRITICAL for demo data vs authentic data separation
+  registerTestDataRoutes(app);
+  
   // Register Command Center routes FIRST to bypass webhook middleware
   registerCommandCenterRoutes(app);
   registerQAValidationRoutes(app);
