@@ -6376,7 +6376,7 @@ export default function CommandCenter() {
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Internal Meetings:</span>
                     <span className="text-blue-400 font-medium">
-                      0
+                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '9' : selectedDay === 1 ? '8' : selectedDay === 2 ? '7' : selectedDay === 3 ? '7' : selectedDay === 4 ? '6' : selectedDay === 5 ? '5' : '3') : '0'}
                     </span>
                   </div>
                 </div>
