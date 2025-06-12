@@ -228,12 +228,10 @@ export default function CommandCenter() {
   // Call monitoring states
   const [showCallMonitoring, setShowCallMonitoring] = useState(false);
   const [showCallDetails, setShowCallDetails] = useState(false);
-  const [showLiveChat, setShowLiveChat] = useState(false);
   const [showKnowledgeManager, setShowKnowledgeManager] = useState(false);
   const [showScheduleViewer, setShowScheduleViewer] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0); // 0 = today, 1 = tomorrow, etc.
   const [showTicketModal, setShowTicketModal] = useState(false);
-  const [showCreateTicket, setShowCreateTicket] = useState(false);
   const [newTicketSubject, setNewTicketSubject] = useState('');
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [currentMessage, setCurrentMessage] = useState('');
