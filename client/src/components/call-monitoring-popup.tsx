@@ -26,14 +26,30 @@ interface CallDetails {
 }
 
 export function CallMonitoringPopup() {
-  const [isMonitoring, setIsMonitoring] = useState(true);
+  const [isMonitoring, setIsMonitoring] = useState(false);
   const [callDetails, setCallDetails] = useState<CallDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCallDetails, setShowCallDetails] = useState(false);
   
   useEffect(() => {
     fetchCallDetails();
+    // Check initial monitoring state
+    checkMonitoringStatus();
   }, []);
+
+  const checkMonitoringStatus = async () => {
+    try {
+      const response = await fetch('/api/call-monitoring/status');
+      if (response.ok) {
+        const data = await response.json();
+        setIsMonitoring(data.isMonitoring || false);
+      }
+    } catch (error) {
+      console.error('Failed to check monitoring status:', error);
+      // Default to false if we can't determine status
+      setIsMonitoring(false);
+    }
+  };
 
   const fetchCallDetails = async () => {
     try {

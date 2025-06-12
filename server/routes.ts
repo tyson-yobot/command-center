@@ -1266,14 +1266,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Store monitoring state in memory
+  let isCallMonitoringActive = false;
+
+  app.get('/api/call-monitoring/status', async (req, res) => {
+    try {
+      res.json({
+        success: true,
+        isMonitoring: isCallMonitoringActive,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Call monitoring status error:', error);
+      res.status(500).json({ success: false, error: 'Failed to get monitoring status' });
+    }
+  });
+
   app.post('/api/call-monitoring/toggle', async (req, res) => {
     try {
       const { action } = req.body; // 'start' or 'stop'
       
+      // Update the monitoring state
+      isCallMonitoringActive = action === 'start';
+      
       const result = {
         status: action === 'start' ? 'monitoring started' : 'monitoring stopped',
         timestamp: new Date().toISOString(),
-        activeMonitoring: action === 'start'
+        activeMonitoring: isCallMonitoringActive
       };
 
       logOperation('call-monitoring-toggle', { action }, 'success', `Call monitoring ${action}ed`);
@@ -1281,7 +1300,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         success: true,
         message: `Call monitoring ${action}ed successfully`,
-        data: result
+        data: result,
+        isMonitoring: isCallMonitoringActive
       });
     } catch (error) {
       console.error('Call monitoring toggle error:', error);
