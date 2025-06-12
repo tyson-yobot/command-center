@@ -3621,15 +3621,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Tasks Automated:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '127' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Hours Saved:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '34.2' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Efficiency:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '89.7%' : '--'}</span>
                 </div>
               </div>
             </CardContent>
@@ -3648,11 +3648,28 @@ export default function CommandCenter() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
+              {currentSystemMode === 'test' ? (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between bg-yellow-900/40 p-3 rounded-lg border border-yellow-400">
+                    <div className="flex items-center">
+                      <AlertTriangle className="w-4 h-4 text-yellow-400 mr-2" />
+                      <span className="text-slate-300 text-sm">High-value lead requires attention</span>
+                    </div>
+                    <span className="text-yellow-400 text-xs">3 min ago</span>
+                  </div>
+                  <div className="flex items-center justify-between bg-red-900/40 p-3 rounded-lg border border-red-400">
+                    <div className="flex items-center">
+                      <AlertTriangle className="w-4 h-4 text-red-400 mr-2" />
+                      <span className="text-slate-300 text-sm">Integration timeout detected</span>
+                    </div>
+                    <span className="text-red-400 text-xs">8 min ago</span>
+                  </div>
+                </div>
+              ) : (
                 <div className="text-center text-slate-400 py-8">
                   No escalation alerts at this time
                 </div>
-              </div>
+              )}
             </CardContent>
           </Card>
         </div>
