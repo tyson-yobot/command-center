@@ -2406,11 +2406,11 @@ export default function CommandCenter() {
               <img 
                 src={robotHeadImage} 
                 alt="Robot Head" 
-                className="mr-2"
+                className="mr-3"
                 style={{ 
-                  height: '1em',
+                  height: '1.1em',
                   width: 'auto',
-                  marginBottom: '0.2em'
+                  marginBottom: '0em'
                 }}
               />
               YoBot® Command Center
