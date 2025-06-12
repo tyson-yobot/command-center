@@ -82,16 +82,17 @@ export function LiveChatInterface({ isOpen, onClose }: LiveChatInterfaceProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] bg-slate-900 border border-blue-400 p-0">
+      <DialogContent className="max-w-2xl max-h-[80vh] bg-black border border-gray-600 p-0" style={{ backgroundColor: '#000000' }}>
+        <DialogTitle className="sr-only">YoBot Live Chat Support</DialogTitle>
         {/* Chat Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-cyan-600 p-4 text-white">
+        <div className="p-4 text-white rounded-t-lg" style={{ backgroundColor: '#0d82da' }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                 <MessageCircle className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-semibold">YoBot Support</h3>
+                <h3 className="font-semibold text-base">YoBot Support</h3>
                 <div className="flex items-center space-x-2 text-sm">
                   <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                   <span>Online • Avg response: 2 min</span>
