@@ -1242,18 +1242,140 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Call Monitoring API endpoints
   app.get('/api/call-monitoring/details', async (req, res) => {
     try {
-      const callDetails = {
-        activeCalls: [],
-        todayStats: {
-          totalCalls: 0,
-          averageDuration: '0m 0s',
-          successRate: '0%',
-          conversionRate: '0%'
-        },
-        recentCalls: []
-      };
+      let callDetails;
+      
+      if (systemMode === 'test') {
+        // Test mode - comprehensive demo data
+        callDetails = {
+          activeCalls: [
+            {
+              id: "CALL-2025-001",
+              client: "TechCorp Solutions",
+              duration: "12m 34s",
+              status: "In Progress",
+              agent: "Sarah Chen",
+              type: "Sales Follow-up",
+              priority: "High"
+            },
+            {
+              id: "CALL-2025-002", 
+              client: "Global Dynamics",
+              duration: "8m 15s",
+              status: "On Hold",
+              agent: "Marcus Rodriguez",
+              type: "Customer Support",
+              priority: "Medium"
+            },
+            {
+              id: "CALL-2025-003",
+              client: "Innovation Labs",
+              duration: "4m 22s", 
+              status: "In Progress",
+              agent: "Daniel Thompson",
+              type: "Product Demo",
+              priority: "High"
+            }
+          ],
+          todayStats: {
+            totalCalls: 47,
+            averageDuration: "11m 28s",
+            successRate: "96.2%",
+            conversionRate: "42.8%",
+            totalDuration: "8h 52m",
+            answeredCalls: 45,
+            missedCalls: 2
+          },
+          recentCalls: [
+            {
+              time: "2:14 PM",
+              client: "DataFlow Systems",
+              outcome: "Qualified Lead",
+              duration: "18m 45s",
+              agent: "Sarah Chen",
+              type: "Cold Outreach"
+            },
+            {
+              time: "1:45 PM", 
+              client: "CloudTech Inc",
+              outcome: "Meeting Scheduled",
+              duration: "9m 12s",
+              agent: "Marcus Rodriguez",
+              type: "Follow-up"
+            },
+            {
+              time: "1:22 PM",
+              client: "StartupX",
+              outcome: "Information Sent",
+              duration: "6m 33s",
+              agent: "Daniel Thompson", 
+              type: "Product Inquiry"
+            },
+            {
+              time: "12:58 PM",
+              client: "Enterprise Corp",
+              outcome: "Demo Booked",
+              duration: "15m 07s",
+              agent: "Sarah Chen",
+              type: "Sales Call"
+            },
+            {
+              time: "12:31 PM",
+              client: "Tech Innovations",
+              outcome: "No Answer",
+              duration: "0m 45s",
+              agent: "Marcus Rodriguez",
+              type: "Callback"
+            }
+          ],
+          weeklyStats: {
+            monday: { calls: 52, conversions: 18 },
+            tuesday: { calls: 48, conversions: 16 },
+            wednesday: { calls: 55, conversions: 21 },
+            thursday: { calls: 47, conversions: 16 },
+            friday: { calls: 44, conversions: 15 },
+            saturday: { calls: 12, conversions: 4 },
+            sunday: { calls: 8, conversions: 2 }
+          },
+          callQuality: {
+            avgRating: 4.7,
+            positiveOutcomes: 78,
+            followUpsScheduled: 23,
+            salesGenerated: "$142,350"
+          }
+        };
+      } else {
+        // Live mode - authentic data only (empty until real data exists)
+        callDetails = {
+          activeCalls: [],
+          todayStats: {
+            totalCalls: 0,
+            averageDuration: '0m 0s',
+            successRate: '0%',
+            conversionRate: '0%',
+            totalDuration: '0m',
+            answeredCalls: 0,
+            missedCalls: 0
+          },
+          recentCalls: [],
+          weeklyStats: {
+            monday: { calls: 0, conversions: 0 },
+            tuesday: { calls: 0, conversions: 0 },
+            wednesday: { calls: 0, conversions: 0 },
+            thursday: { calls: 0, conversions: 0 },
+            friday: { calls: 0, conversions: 0 },
+            saturday: { calls: 0, conversions: 0 },
+            sunday: { calls: 0, conversions: 0 }
+          },
+          callQuality: {
+            avgRating: 0,
+            positiveOutcomes: 0,
+            followUpsScheduled: 0,
+            salesGenerated: "$0"
+          }
+        };
+      }
 
-      logOperation('call-monitoring-details', {}, 'success', 'Call monitoring details requested');
+      logOperation('call-monitoring-details', { systemMode }, 'success', 'Call monitoring details requested');
 
       res.json({
         success: true,
