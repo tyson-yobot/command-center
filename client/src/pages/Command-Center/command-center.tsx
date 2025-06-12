@@ -3021,7 +3021,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Success Rate</div>
                   <div className="text-2xl font-bold text-green-400">
-                    {currentSystemMode === 'test' ? '94.2%' : (automationPerformance?.data?.passRate + '%' || '0%')}
+                    {automationPerformance?.data?.passRate ? automationPerformance.data.passRate + '%' : '--'}
                   </div>
                   <div className="text-xs text-green-400">
                     {currentSystemMode === 'test' ? 'Test mode performance' : 'Live performance'}
@@ -3237,11 +3237,11 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">API Usage:</span>
-                  <span className="text-green-400 font-bold">{metrics?.data?.dailyActiveUsers ? (metrics.data.dailyActiveUsers * 12).toFixed(0) : '1,068'}/day</span>
+                  <span className="text-green-400 font-bold">{metrics?.data?.dailyActiveUsers ? (metrics.data.dailyActiveUsers * 12).toFixed(0) : '--'}/day</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Bot Processing Load:</span>
-                  <span className="text-blue-400 font-bold">{metrics?.data?.automationEfficiency ? metrics.data.automationEfficiency.toFixed(1) : '94.2'}%</span>
+                  <span className="text-blue-400 font-bold">{metrics?.data?.automationEfficiency ? metrics.data.automationEfficiency.toFixed(1) : '--'}%</span>
                 </div>
               </div>
             </CardContent>
@@ -3357,17 +3357,17 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Budget Utilization</span>
-                    <span className="text-green-400 font-bold">{metrics?.data?.automationEfficiency ? metrics.data.automationEfficiency + '%' : '87%'}</span>
+                    <span className="text-green-400 font-bold">{metrics?.data?.automationEfficiency ? metrics.data.automationEfficiency + '%' : '--'}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-green-400 h-1 rounded-full" style={{ width: `${metrics?.data?.automationEfficiency || 87}%` }}></div>
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: `${metrics?.data?.automationEfficiency || 0}%` }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-yellow-400 shadow-lg shadow-yellow-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-yellow-400 font-bold">${metrics?.data?.avgResponseTime ? (metrics.data.avgResponseTime * 0.5).toFixed(0) : '64'}</span>
+                      <span className="text-yellow-400 font-bold">${metrics?.data?.avgResponseTime ? (metrics.data.avgResponseTime * 0.5).toFixed(0) : '--'}</span>
                       <Badge className="bg-yellow-600 text-white text-xs">-12%</Badge>
                     </div>
                   </div>
@@ -3378,7 +3378,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Time until positive return on investment">Payback Period</span>
-                    <span className="text-blue-400 font-bold">{metrics?.data?.conversionRate ? (metrics.data.conversionRate / 4).toFixed(1) : '3.2'} months</span>
+                    <span className="text-blue-400 font-bold">{metrics?.data?.conversionRate ? (metrics.data.conversionRate / 4).toFixed(1) : '--'} months</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
                     <div className="bg-blue-400 h-1 rounded-full" style={{ width: '65%' }}></div>
@@ -3387,10 +3387,10 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Automation Coverage</span>
-                    <span className="text-purple-400 font-bold">{automationPerformance?.data?.passRate ? automationPerformance.data.passRate + '%' : '93.6%'}</span>
+                    <span className="text-purple-400 font-bold">{automationPerformance?.data?.passRate ? automationPerformance.data.passRate + '%' : '--'}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: `${automationPerformance?.data?.passRate || 93.6}%` }}></div>
+                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: `${automationPerformance?.data?.passRate || 0}%` }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
