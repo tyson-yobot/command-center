@@ -3759,134 +3759,14 @@ export default function CommandCenter() {
           </CardContent>
         </Card>
 
-        {/* Call Monitoring Panel & YoBot Support */}
+        {/* Live Activity & System Monitoring */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          {/* Call Monitoring Panel */}
-          <Card className="bg-slate-800/80 backdrop-blur-sm border border-blue-500/50">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Phone className="w-5 h-5 mr-2 text-blue-400" />
-                Call Monitoring Panel
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex gap-3">
-                  <Button 
-                    onClick={() => setShowCallMonitoring(true)}
-                    className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
-                  >
-                    <Eye className="w-4 h-4 mr-2" />
-                    View Call Records
-                  </Button>
-                  <Button 
-                    onClick={() => setShowCallDetails(true)}
-                    className="bg-red-600 hover:bg-red-700 text-white"
-                  >
-                    Call Analytics
-                  </Button>
-                </div>
-                
-                {/* Active Calls List */}
-                <div className="bg-slate-700/40 rounded-lg p-4 border border-blue-400/30">
-                  <h4 className="text-white font-medium mb-3">📞 Active Call Sessions</h4>
-                  <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {activeCalls.length > 0 ? activeCalls.map((call, index) => (
-                      <div 
-                        key={index}
-                        className="flex items-center justify-between p-3 bg-slate-800/60 rounded border border-blue-400/30"
-                      >
-                        <div className="flex-1">
-                          <div className="text-white font-medium">{call.client || 'Unknown Caller'}</div>
-                          <div className="text-slate-400 text-sm flex items-center space-x-2">
-                            <span>{call.duration || '0:00'}</span>
-                            <span>•</span>
-                            <span>{call.status || 'Active'}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="px-2 py-1 rounded text-xs font-medium bg-green-600/30 text-green-400">
-                            ✅ Live
-                          </span>
-                          <Button
-                            onClick={() => setShowCallDetails(true)}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1"
-                          >
-                            🔍 Monitor
-                          </Button>
-                        </div>
-                      </div>
-                    )) : (
-                      <div className="text-slate-400 text-center py-4">
-                        No active calls in session
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* YoBot Support */}
-          <Card className="bg-slate-800/80 backdrop-blur-sm border border-purple-500/50">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <MessageCircle className="w-5 h-5 mr-2 text-purple-400" />
-                YoBot Support
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex gap-3">
-                  <Button 
-                    onClick={() => setShowLiveChat(true)}
-                    className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
-                  >
-                    <MessageCircle className="w-4 h-4 mr-2" />
-                    Start Live Chat
-                  </Button>
-                  <Button 
-                    onClick={() => setShowTicketModal(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    <Ticket className="w-4 h-4 mr-2" />
-                    Create Ticket
-                  </Button>
-                </div>
-                
-                {/* Support Status */}
-                <div className="bg-slate-700/40 rounded-lg p-4 border border-purple-400/30">
-                  <h4 className="text-white font-medium mb-3">🎧 Support Status</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between p-3 bg-slate-800/60 rounded border border-purple-400/30">
-                      <div className="flex-1">
-                        <div className="text-white font-medium">Team Availability</div>
-                        <div className="text-slate-400 text-sm flex items-center space-x-2">
-                          <span>Online</span>
-                          <span>•</span>
-                          <span>Avg response: 2 min</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="px-2 py-1 rounded text-xs font-medium bg-green-600/30 text-green-400">
-                          ✅ Available
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* System Monitoring */}
-        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8 mb-12">
+          {/* Live Activity Feed */}
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <Monitor className="w-5 h-5 mr-2 text-blue-400" />
-                System Monitoring
+                <Activity className="w-5 h-5 mr-2 text-green-400" />
+                Live Activity Feed
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -3954,182 +3834,208 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Voice & Conversation Analytics - 3x2 Grid Layout */}
+        {/* Voice & Conversation Analytics */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {/* Column 1: Voice Analytics */}
-          <div className="space-y-8">
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Mic className="w-5 h-5 mr-2 text-red-400" />
-                  Voice Analytics
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Calls Today:</span>
-                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '23' : (metrics?.activeCalls || 0)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Avg Duration:</span>
-                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '7:42' : '--'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Conversion Rate:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '15.2%' : '--'}</span>
-                  </div>
+          {/* Voice Analytics */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Mic className="w-5 h-5 mr-2 text-red-400" />
+                Voice Analytics
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Calls Today:</span>
+                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '23' : (metrics?.activeCalls || 0)}</span>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* AI Automation Engine - Under Voice Analytics */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Zap className="w-5 h-5 mr-2 text-yellow-400" />
-                  AI Automation Engine
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Tasks Automated:</span>
-                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '127' : '--'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Hours Saved:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '23.5' : '--'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Efficiency:</span>
-                    <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '94.2%' : '--'}</span>
-                  </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Avg Duration:</span>
+                  <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '7:42' : '--'}</span>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Column 2: System Audit Log */}
-          <div className="space-y-8">
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <FileText className="w-5 h-5 mr-2 text-orange-400" />
-                  System Audit Log
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {currentSystemMode === 'test' ? (
-                    <>
-                      <div className="text-xs text-green-400">14:32 - Admin login successful</div>
-                      <div className="text-xs text-blue-400">14:28 - Automation rule updated</div>
-                      <div className="text-xs text-cyan-400">14:15 - Bot training completed</div>
-                      <div className="text-xs text-purple-400">14:02 - CRM sync executed</div>
-                    </>
-                  ) : (
-                    <div className="text-xs text-slate-400">No audit events available</div>
-                  )}
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Conversion Rate:</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '15.2%' : '--'}</span>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Escalation Alerts - Under System Audit Log */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Bell className="w-5 h-5 mr-2" />
-                  Escalation Alerts
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+          {/* System Audit Log */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <FileText className="w-5 h-5 mr-2 text-orange-400" />
+                System Audit Log
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
                 {currentSystemMode === 'test' ? (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between bg-yellow-900/40 p-3 rounded-lg border border-yellow-400">
-                      <div className="flex items-center">
-                        <AlertTriangle className="w-4 h-4 text-yellow-400 mr-2" />
-                        <span className="text-slate-300 text-sm">High-value lead requires attention</span>
-                      </div>
-                      <Button size="sm" className="bg-yellow-600 hover:bg-yellow-700 text-white text-xs">
-                        Review
-                      </Button>
-                    </div>
-                    <div className="flex items-center justify-between bg-red-900/40 p-3 rounded-lg border border-red-400">
-                      <div className="flex items-center">
-                        <AlertCircle className="w-4 h-4 text-red-400 mr-2" />
-                        <span className="text-slate-300 text-sm">Call quality below threshold</span>
-                      </div>
-                      <Button size="sm" className="bg-red-600 hover:bg-red-700 text-white text-xs">
-                        Escalate
-                      </Button>
-                    </div>
-                  </div>
+                  <>
+                    <div className="text-xs text-green-400">14:32 - Admin login successful</div>
+                    <div className="text-xs text-blue-400">14:28 - Automation rule updated</div>
+                    <div className="text-xs text-cyan-400">14:15 - Bot training completed</div>
+                    <div className="text-xs text-purple-400">14:02 - CRM sync executed</div>
+                  </>
                 ) : (
-                  <div className="text-center py-6 text-slate-400">
-                    No escalations alerts at this time
-                  </div>
+                  <div className="text-xs text-slate-400">No audit events available</div>
                 )}
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
 
-          {/* Column 3: Quick Stats */}
-          <div className="space-y-8">
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Gauge className="w-5 h-5 mr-2 text-cyan-400" />
-                  Quick Stats
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">New Leads:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '17' : '--'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Conversions:</span>
-                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '4' : '--'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Escalations:</span>
-                    <span className="text-yellow-400 font-bold">{currentSystemMode === 'test' ? '2' : '--'}</span>
-                  </div>
+          {/* Quick Stats Dashboard */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Gauge className="w-5 h-5 mr-2 text-cyan-400" />
+                Quick Stats
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">New Leads:</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '17' : '--'}</span>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Live Integration Test Results - Under Quick Stats */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <FileText className="w-5 h-5 mr-2" />
-                  Live Integration Test Results
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Total Tests:</span>
-                    <span className="text-white font-mono">{currentSystemMode === 'test' ? testResults?.totalTests || 0 : '--'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Pass Rate:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? testResults?.passRate || '0%' : '--'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Failed Tests:</span>
-                    <span className="text-red-400 font-mono">{currentSystemMode === 'test' ? testResults?.failedTests || 0 : '--'}</span>
-                  </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Conversions:</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '4' : '--'}</span>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Escalations:</span>
+                  <span className="text-yellow-400 font-bold">{currentSystemMode === 'test' ? '2' : '--'}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
+        {/* AI & Automation Engine Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          {/* AI Automation Engine */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Zap className="w-5 h-5 mr-2 text-yellow-400" />
+                AI Automation Engine
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Tasks Automated:</span>
+                  <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '127' : '--'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Hours Saved:</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '34.2' : '--'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Efficiency:</span>
+                  <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '89.7%' : '--'}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
+
+        </div>
+
+        {/* Escalation Alerts */}
+        <div className="mb-12">
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Bell className="w-5 h-5 mr-2" />
+                Escalation Alerts
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {currentSystemMode === 'test' ? (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between bg-yellow-900/40 p-3 rounded-lg border border-yellow-400">
+                    <div className="flex items-center">
+                      <AlertTriangle className="w-4 h-4 text-yellow-400 mr-2" />
+                      <span className="text-slate-300 text-sm">High-value lead requires attention</span>
+                    </div>
+                    <span className="text-yellow-400 text-xs">3 min ago</span>
+                  </div>
+                  <div className="flex items-center justify-between bg-red-900/40 p-3 rounded-lg border border-red-400">
+                    <div className="flex items-center">
+                      <AlertTriangle className="w-4 h-4 text-red-400 mr-2" />
+                      <span className="text-slate-300 text-sm">Integration timeout detected</span>
+                    </div>
+                    <span className="text-red-400 text-xs">8 min ago</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center text-slate-400 py-8">
+                  No escalation alerts at this time
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Integration Test Log - Live Results */}
+        <div className="mb-8">
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <FileText className="w-5 h-5 mr-2" />
+                Live Integration Test Results
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="text-slate-300 font-medium mb-3">Test Summary</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Total Tests:</span>
+                      <span className="text-white font-mono">
+                        {metrics?.totalTests || 0}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Pass Rate:</span>
+                      <span className="text-green-400 font-mono">
+                        {metrics?.passRate || 0}%
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Unique Testers:</span>
+                      <span className="text-blue-400 font-mono">
+                        {metrics?.uniqueTesters || 0}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-slate-300 font-medium mb-3">Recent Activity</h4>
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
+                    {metrics?.recentActivity?.slice(0, 5).map((test: any, index: number) => (
+                      <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded">
+                        <span className="text-slate-300 text-sm truncate">{test.name}</span>
+                        <Badge 
+                          variant={test.status === "✅ Pass" ? "default" : "destructive"}
+                          className="text-xs"
+                        >
+                          {test.status === "✅ Pass" ? "PASS" : "FAIL"}
+                        </Badge>
+                      </div>
+                    )) || (
+                      <div className="text-slate-400 text-sm">No recent test data available</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* RAG Knowledge Base System - Positioned at bottom as requested */}
         <div className="mb-12">
