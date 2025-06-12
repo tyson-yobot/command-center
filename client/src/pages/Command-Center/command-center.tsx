@@ -2504,7 +2504,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {metrics?.activeCalls || 0}
+                {currentSystemMode === 'test' ? '8' : (metrics?.activeCalls || 0)}
               </div>
               <p className="text-xs text-green-400">
                 Live voice sessions
@@ -2665,11 +2665,11 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Total Bots:</span>
-                  <span className="text-white font-bold">{metrics?.totalBots || 0}</span>
+                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '12' : (metrics?.totalBots || 0)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Avg Response Time:</span>
-                  <span className="text-green-400 font-bold">{metrics?.avgResponseTime || '0s'}</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '127ms' : (metrics?.data?.avgResponseTime ? metrics.data.avgResponseTime + 'ms' : '0ms')}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Bot Errors:</span>
@@ -2705,26 +2705,41 @@ export default function CommandCenter() {
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">MRR:</span>
                   <div className="text-right">
-                    <span className="text-green-400 font-bold">${metrics?.data?.monthlyRecurringRevenue ? (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : '--'}</span>
+                    <span className="text-green-400 font-bold">
+                      {currentSystemMode === 'test' ? '$157K' : 
+                       (metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : '$0K')}
+                    </span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">ROI This Quarter:</span>
                   <div className="text-right">
-                    <span className="text-emerald-400 font-bold">{metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : '--'}</span>
+                    <span className="text-emerald-400 font-bold">
+                      {currentSystemMode === 'test' ? '23.5%' : 
+                       (metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : '0%')}
+                    </span>
                   </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Pipeline Value:</span>
-                  <span className="text-blue-400 font-bold">${metrics?.data?.totalRevenue ? (metrics.data.totalRevenue / 1000).toFixed(0) + 'K' : '--'}</span>
+                  <span className="text-blue-400 font-bold">
+                    {currentSystemMode === 'test' ? '$848K' : 
+                     (metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(0) + 'K' : '$0K')}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Close Rate:</span>
-                  <span className="text-cyan-400 font-bold">{metrics?.data?.conversionRate ? metrics.data.conversionRate + '%' : '--'}</span>
+                  <span className="text-cyan-400 font-bold">
+                    {currentSystemMode === 'test' ? '12.8%' : 
+                     (metrics?.data?.conversionRate ? metrics.data.conversionRate + '%' : '0%')}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Sales Velocity:</span>
-                  <span className="text-purple-400 font-bold">{metrics?.data?.customerSatisfaction ? metrics.data.customerSatisfaction + '/5' : '--'}</span>
+                  <span className="text-purple-400 font-bold">
+                    {currentSystemMode === 'test' ? '4.7/5' : 
+                     (metrics?.data?.customerSatisfaction ? metrics.data.customerSatisfaction + '/5' : '0/5')}
+                  </span>
                 </div>
               </div>
             </CardContent>
