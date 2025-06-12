@@ -1255,6 +1255,56 @@ export default function CommandCenter() {
     }
   };
 
+  const handlePurgeKnowledgeTestData = async () => {
+    if (currentSystemMode !== 'live') {
+      toast({
+        id: Date.now().toString(),
+        title: 'Live Mode Required',
+        description: 'Knowledge purge only available in live mode',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    if (confirm('This will permanently remove all test/sample content from the knowledge base. Continue?')) {
+      try {
+        setVoiceStatus('Purging test knowledge content...');
+        const response = await fetch('/api/knowledge/purge-test-data', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (response.ok) {
+          const result = await response.json();
+          setVoiceStatus(`Knowledge purge completed - removed ${result.removed} items`);
+          toast({
+            id: Date.now().toString(),
+            title: "Knowledge Purged",
+            description: `Removed ${result.removed} test items from knowledge base`
+          });
+          // Refresh knowledge stats
+          window.location.reload();
+        } else {
+          setVoiceStatus('Knowledge purge failed');
+          toast({
+            id: Date.now().toString(),
+            title: 'Purge Failed',
+            description: 'Unable to purge knowledge base',
+            variant: 'destructive'
+          });
+        }
+      } catch (error) {
+        setVoiceStatus('Knowledge purge error');
+        toast({
+          id: Date.now().toString(),
+          title: 'Error',
+          description: 'Network error during purge operation',
+          variant: 'destructive'
+        });
+      }
+    }
+  };
+
   const generateVoice = async () => {
     if (!voiceGenerationText.trim()) {
       toast({

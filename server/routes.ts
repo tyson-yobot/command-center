@@ -40,6 +40,7 @@ import { getSystemMode, setSystemMode } from "./systemMode";
 import { isLiveMode, safeLiveData, blockTestData, validateLiveData } from "./liveMode";
 import { knowledgeStorage, callLogStorage } from "./storage";
 import LiveDataCleaner from "./liveDataCleaner";
+import { liveKnowledgePurge } from "./liveKnowledgePurge";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
 import { generateSocialMediaPost, generateEmailCampaign, postToSocialMedia, sendEmailCampaign } from './contentCreator';
@@ -1657,6 +1658,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Zendesk create ticket error:', error);
       res.status(500).json({ success: false, error: 'Failed to create ticket' });
+    }
+  });
+
+  // Knowledge base purge endpoint - removes test data in live mode
+  app.post('/api/knowledge/purge-test-data', async (req, res) => {
+    try {
+      const systemMode = getSystemModeLocal();
+      
+      if (systemMode !== 'live') {
+        return res.json({
+          success: false,
+          message: 'Knowledge purge only available in live mode',
+          removed: 0
+        });
+      }
+      
+      const result = await liveKnowledgePurge.purgeTestContentInLiveMode();
+      
+      logOperation('knowledge-purge', { systemMode, removed: result.removed }, 'success', result.message);
+      
+      res.json({
+        success: true,
+        message: result.message,
+        removed: result.removed,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Knowledge purge error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to purge knowledge base',
+        message: 'Error during knowledge purge operation'
+      });
     }
   });
 
