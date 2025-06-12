@@ -104,21 +104,29 @@ export function LiveChatInterface({ isOpen, onClose }: LiveChatInterfaceProps) {
         </div>
 
         {/* Support Agent Info */}
-        <div className="bg-slate-800 p-3 border-b border-slate-700">
+        <div className="p-3 border-b" style={{ backgroundColor: '#1a1a1a', borderColor: '#333333' }}>
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#0d82da' }}>
               <User className="w-4 h-4 text-white" />
             </div>
             <div>
-              <div className="text-white text-sm font-medium">Sarah Johnson</div>
-              <div className="text-slate-400 text-xs">Senior Support Specialist</div>
+              <div className="text-white text-sm font-semibold">Sarah Johnson</div>
+              <div className="text-xs" style={{ color: '#c3c3c3' }}>Senior Support Specialist</div>
             </div>
             <div className="ml-auto flex space-x-2">
-              <Button size="sm" variant="outline" className="text-blue-400 border-blue-400">
+              <Button 
+                size="sm" 
+                className="text-white font-bold border-none rounded-md px-3 py-1 hover:opacity-90" 
+                style={{ backgroundColor: '#0d82da' }}
+              >
                 <Phone className="w-3 h-3 mr-1" />
                 Call
               </Button>
-              <Button size="sm" variant="outline" className="text-green-400 border-green-400">
+              <Button 
+                size="sm" 
+                className="text-white font-bold border-none rounded-md px-3 py-1 hover:opacity-90" 
+                style={{ backgroundColor: '#0d82da' }}
+              >
                 <Mail className="w-3 h-3 mr-1" />
                 Email
               </Button>
@@ -127,24 +135,28 @@ export function LiveChatInterface({ isOpen, onClose }: LiveChatInterfaceProps) {
         </div>
 
         {/* Chat Messages */}
-        <div className="flex-1 max-h-96 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 max-h-96 overflow-y-auto p-4 space-y-4" style={{ backgroundColor: '#000000' }}>
           {messages.map((message) => (
             <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-xs lg:max-w-md ${
-                message.sender === 'user' 
-                  ? 'bg-blue-600 text-white' 
-                  : message.sender === 'support'
-                  ? 'bg-slate-700 text-white'
-                  : 'bg-green-600 text-white'
-              } rounded-lg p-3`}>
+              <div 
+                className="max-w-xs lg:max-w-md rounded-lg p-3"
+                style={{
+                  backgroundColor: message.sender === 'user' 
+                    ? '#1a1a1a'
+                    : message.sender === 'support'
+                    ? '#0d82da'
+                    : '#22c55e',
+                  color: message.sender === 'user' ? '#c3c3c3' : '#ffffff'
+                }}
+              >
                 <div className="flex items-center space-x-2 mb-1">
                   {message.sender === 'support' && (
-                    <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
+                    <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center">
                       <User className="w-3 h-3 text-white" />
                     </div>
                   )}
                   {message.sender === 'system' && (
-                    <div className="w-5 h-5 bg-green-600 rounded-full flex items-center justify-center">
+                    <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center">
                       <Bot className="w-3 h-3 text-white" />
                     </div>
                   )}
@@ -156,24 +168,24 @@ export function LiveChatInterface({ isOpen, onClose }: LiveChatInterfaceProps) {
                     {message.timestamp}
                   </span>
                 </div>
-                <p className="text-sm">{message.message}</p>
+                <p className="text-sm leading-relaxed">{message.message}</p>
               </div>
             </div>
           ))}
           
           {isTyping && (
             <div className="flex justify-start">
-              <div className="bg-slate-700 text-white rounded-lg p-3">
+              <div className="text-white rounded-lg p-3" style={{ backgroundColor: '#0d82da' }}>
                 <div className="flex items-center space-x-2">
-                  <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
+                  <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center">
                     <User className="w-3 h-3 text-white" />
                   </div>
                   <span className="text-xs opacity-75">Sarah is typing...</span>
                 </div>
                 <div className="flex space-x-1 mt-2">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                 </div>
               </div>
             </div>
@@ -182,24 +194,30 @@ export function LiveChatInterface({ isOpen, onClose }: LiveChatInterfaceProps) {
         </div>
 
         {/* Chat Input */}
-        <div className="p-4 border-t border-slate-700">
+        <div className="p-4 border-t" style={{ backgroundColor: '#000000', borderColor: '#333333' }}>
           <div className="flex space-x-2">
             <Input
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your message..."
-              className="flex-1 bg-slate-800 border-slate-600 text-white placeholder-slate-400"
+              className="flex-1 border rounded-lg px-3 py-2 text-white text-sm"
+              style={{ 
+                backgroundColor: '#1a1a1a', 
+                borderColor: '#333333',
+                color: '#ffffff'
+              }}
             />
             <Button 
               onClick={handleSendMessage}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+              className="text-white border-none rounded-full px-3 py-2 hover:opacity-90"
+              style={{ backgroundColor: '#0d82da' }}
               disabled={!newMessage.trim()}
             >
               <Send className="w-4 h-4" />
             </Button>
           </div>
-          <div className="mt-2 text-xs text-slate-400 text-center">
+          <div className="mt-2 text-xs text-center" style={{ color: '#c3c3c3' }}>
             Powered by YoBot Live Support • End-to-end encrypted
           </div>
         </div>
