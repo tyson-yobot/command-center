@@ -2583,7 +2583,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Executions Today</div>
                   <div className="text-2xl font-bold text-blue-400">
-                    {currentSystemMode === 'test' ? '2,847' : (automationPerformance?.data?.totalTests || 0)}
+                    {currentSystemMode === 'test' ? '47' : (automationPerformance?.data?.totalTests || 0)}
                   </div>
                   <div className="text-xs text-blue-400">
                     {currentSystemMode === 'test' ? 'Test executions completed' : 'Live executions'}
@@ -2665,11 +2665,11 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Total Bots:</span>
-                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '12' : (metrics?.totalBots || 0)}</span>
+                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '5' : (metrics?.totalBots || 0)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Avg Response Time:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '127ms' : (metrics?.data?.avgResponseTime ? metrics.data.avgResponseTime + 'ms' : '0ms')}</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1.2s' : (metrics?.data?.avgResponseTime ? metrics.data.avgResponseTime + 'ms' : '0ms')}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Bot Errors:</span>
@@ -2682,7 +2682,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Active Sessions:</span>
-                  <span className="text-green-400 font-bold">{metrics?.data?.dailyActiveUsers || '89'}</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '23' : (metrics?.data?.dailyActiveUsers || 0)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">System Uptime:</span>
@@ -2706,7 +2706,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">MRR:</span>
                   <div className="text-right">
                     <span className="text-green-400 font-bold">
-                      {currentSystemMode === 'test' ? '$157K' : 
+                      {currentSystemMode === 'test' ? '$12.5K' : 
                        (metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : '$0K')}
                     </span>
                   </div>
@@ -2715,7 +2715,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">ROI This Quarter:</span>
                   <div className="text-right">
                     <span className="text-emerald-400 font-bold">
-                      {currentSystemMode === 'test' ? '23.5%' : 
+                      {currentSystemMode === 'test' ? '18%' : 
                        (metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : '0%')}
                     </span>
                   </div>
@@ -2723,14 +2723,14 @@ export default function CommandCenter() {
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Pipeline Value:</span>
                   <span className="text-blue-400 font-bold">
-                    {currentSystemMode === 'test' ? '$848K' : 
+                    {currentSystemMode === 'test' ? '$85K' : 
                      (metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(0) + 'K' : '$0K')}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Close Rate:</span>
                   <span className="text-cyan-400 font-bold">
-                    {currentSystemMode === 'test' ? '12.8%' : 
+                    {currentSystemMode === 'test' ? '8.5%' : 
                      (metrics?.data?.conversionRate ? metrics.data.conversionRate + '%' : '0%')}
                   </span>
                 </div>
