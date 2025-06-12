@@ -215,6 +215,8 @@ export default function CommandCenter() {
   
   // Call monitoring states
   const [showCallMonitoring, setShowCallMonitoring] = useState(false);
+  const [showCallDetails, setShowCallDetails] = useState(false);
+  const [showLiveChat, setShowLiveChat] = useState(false);
   const [activeCalls, setActiveCalls] = useState<any[]>([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [completedCalls, setCompletedCalls] = useState(0);
@@ -3475,17 +3477,25 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 {currentSystemMode === 'test' ? (
                   <div className="space-y-3">
+                    <div className="flex items-center justify-between bg-green-900/40 p-3 rounded-lg border border-green-400">
+                      <span className="text-slate-300 text-sm">📞 Incoming call from (555) 123-4567</span>
+                      <span className="text-green-400 text-xs">Live</span>
+                    </div>
                     <div className="flex items-center justify-between bg-slate-800/40 p-3 rounded-lg">
                       <span className="text-slate-300 text-sm">📧 Email automation triggered</span>
                       <span className="text-green-400 text-xs">2 min ago</span>
                     </div>
                     <div className="flex items-center justify-between bg-slate-800/40 p-3 rounded-lg">
-                      <span className="text-slate-300 text-sm">💼 CRM lead updated</span>
+                      <span className="text-slate-300 text-sm">💼 CRM lead updated - Sarah Johnson</span>
                       <span className="text-blue-400 text-xs">5 min ago</span>
                     </div>
                     <div className="flex items-center justify-between bg-slate-800/40 p-3 rounded-lg">
-                      <span className="text-slate-300 text-sm">📞 Call logged successfully</span>
+                      <span className="text-slate-300 text-sm">📞 Call completed - 8:42 duration</span>
                       <span className="text-cyan-400 text-xs">8 min ago</span>
+                    </div>
+                    <div className="flex items-center justify-between bg-slate-800/40 p-3 rounded-lg">
+                      <span className="text-slate-300 text-sm">💰 Quote generated - $12,500</span>
+                      <span className="text-purple-400 text-xs">12 min ago</span>
                     </div>
                   </div>
                 ) : (
@@ -3517,11 +3527,11 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Last Sync:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '2 min ago' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Records:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '1,847' : '--'}</span>
                 </div>
               </div>
             </CardContent>
