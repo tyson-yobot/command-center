@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-// Robot head image - will be handled with fallback
-const yobotRobotHead = '/api/placeholder-image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -76,6 +74,9 @@ import { KnowledgeBaseManager } from '@/components/knowledge-base-manager';
 export default function CommandCenter() {
   const queryClient = useQueryClient();
   
+  // Robot head image - will be handled with fallback
+  const yobotRobotHead = '/api/placeholder-image';
+  
   // System mode state
   const [currentSystemMode, setCurrentSystemMode] = useState(() => {
     return localStorage.getItem('systemMode') || 'live';
@@ -138,6 +139,9 @@ export default function CommandCenter() {
   const [showTicketsList, setShowTicketsList] = useState(false);
   const [showCreateTicket, setShowCreateTicket] = useState(false);
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
+  const [showKnowledgeViewer, setShowKnowledgeViewer] = useState(false);
+  const [knowledgeItems, setKnowledgeItems] = useState([]);
+  const [memoryActivityLog, setMemoryActivityLog] = useState([]);
   const { toast } = useToast();
 
   // Fetch current system mode on load and set up periodic sync
