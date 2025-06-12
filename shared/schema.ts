@@ -136,36 +136,6 @@ export const knowledgeUsageLog = pgTable("knowledge_usage_log", {
   usedAt: timestamp("used_at").defaultNow(),
 });
 
-export const memoryActivityLog = pgTable("memory_activity_log", {
-  id: serial("id").primaryKey(),
-  operation: text("operation").notNull(), // "insert", "delete", "edit", "upload"
-  itemType: text("item_type").notNull(), // "Manual", "Document" 
-  itemName: text("item_name").notNull(),
-  category: text("category").notNull().default("general"),
-  result: text("result").notNull(), // "Success", "Error"
-  errorMessage: text("error_message"),
-  itemId: text("item_id"),
-  fileSize: integer("file_size"),
-  timestamp: timestamp("timestamp").defaultNow(),
-});
-
-export const documentMetadata = pgTable("document_metadata", {
-  id: serial("id").primaryKey(),
-  filename: text("filename").notNull(),
-  originalName: text("original_name").notNull(),
-  fileSize: integer("file_size").notNull(),
-  mimeType: text("mime_type").notNull(),
-  status: text("status").notNull().default("processing"), // "processing", "indexed", "failed"
-  uploadTime: timestamp("upload_time").defaultNow(),
-  indexedTime: timestamp("indexed_time"),
-  extractedText: text("extracted_text"),
-  wordCount: integer("word_count").default(0),
-  keyTerms: text("key_terms").array(),
-  category: text("category").default("document"),
-  sourceType: text("source_type").default("file"), // "file", "text", "manual"
-  isActive: boolean("is_active").default(true),
-});
-
 export const phantombusterLeads = pgTable("phantombuster_leads", {
   id: serial("id").primaryKey(),
   leadOwner: text("lead_owner").notNull(),
