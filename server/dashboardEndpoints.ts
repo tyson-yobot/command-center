@@ -378,14 +378,40 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get data sync status - LIVE DATA ONLY
+  // Get data sync status
   app.get("/api/data-sync-status", async (req, res) => {
     try {
-      // Let the actual data sync system populate data
-      res.json({
-        success: true,
-        message: "Data sync status will populate from live system"
-      });
+      const { getSystemMode } = await import('./systemMode');
+      const systemMode = getSystemMode();
+      
+      if (systemMode === 'test') {
+        // Demo data for presentations - shows sync issues
+        res.json({
+          success: true,
+          overallStatus: "partial", // Shows room for improvement
+          syncConnections: [
+            { source: "HubSpot CRM", status: "connected", lastSync: new Date(Date.now() - 900000).toISOString(), recordCount: 15430, errorCount: 0 },
+            { source: "QuickBooks", status: "error", lastSync: new Date(Date.now() - 86400000).toISOString(), recordCount: 0, errorCount: 23 }, // Problem area
+            { source: "Slack Workspace", status: "connected", lastSync: new Date(Date.now() - 300000).toISOString(), recordCount: 892, errorCount: 2 },
+            { source: "Airtable Base", status: "warning", lastSync: new Date(Date.now() - 1800000).toISOString(), recordCount: 3421, errorCount: 7 } // Needs attention
+          ],
+          syncMetrics: {
+            totalRecords: 19743,
+            successfulSyncs: 87.2, // Room for improvement
+            failedSyncs: 12.8,
+            avgSyncTime: 4.7
+          },
+          recentErrors: [
+            { source: "QuickBooks", error: "Authentication expired", timestamp: new Date(Date.now() - 3600000).toISOString() },
+            { source: "Airtable", error: "Rate limit exceeded", timestamp: new Date(Date.now() - 7200000).toISOString() }
+          ]
+        });
+      } else {
+        res.json({
+          success: true,
+          message: "Data sync status will populate from live system"
+        });
+      }
     } catch (error) {
       console.error("Data sync status error:", error);
       res.status(500).json({
@@ -395,14 +421,43 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get zendesk support queue - LIVE DATA ONLY
+  // Get zendesk support queue
   app.get("/api/zendesk-queue", async (req, res) => {
     try {
-      // Let the actual Zendesk integration populate data
-      res.json({
-        success: true,
-        message: "Zendesk queue will populate from live system"
-      });
+      const { getSystemMode } = await import('./systemMode');
+      const systemMode = getSystemMode();
+      
+      if (systemMode === 'test') {
+        // Demo data for presentations - shows support queue with issues
+        res.json({
+          success: true,
+          totalTickets: 47,
+          urgentTickets: 8, // Higher than ideal
+          avgResponseTime: 4.7, // Hours - improvement opportunity
+          ticketsByStatus: {
+            new: 12,
+            open: 23,
+            pending: 8,
+            solved: 4
+          },
+          recentTickets: [
+            { id: "ZD-001", subject: "Integration failing", priority: "urgent", created: new Date(Date.now() - 3600000).toISOString(), assignee: "Sarah K." },
+            { id: "ZD-002", subject: "Voice bot not responding", priority: "high", created: new Date(Date.now() - 7200000).toISOString(), assignee: "Mike R." },
+            { id: "ZD-003", subject: "Lead sync issues", priority: "normal", created: new Date(Date.now() - 10800000).toISOString(), assignee: "Alex M." }
+          ],
+          agentMetrics: [
+            { agent: "Sarah K.", activeTickets: 8, avgResolution: 3.2 },
+            { agent: "Mike R.", activeTickets: 12, avgResolution: 5.8 }, // Slower resolution
+            { agent: "Alex M.", activeTickets: 6, avgResolution: 2.9 }
+          ],
+          satisfactionScore: 78.4 // Room for improvement
+        });
+      } else {
+        res.json({
+          success: true,
+          message: "Zendesk queue will populate from live system"
+        });
+      }
     } catch (error) {
       console.error("Zendesk queue error:", error);
       res.status(500).json({
