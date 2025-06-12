@@ -4925,6 +4925,145 @@ export default function CommandCenter() {
         }}
       />
 
+      {/* Schedule Viewer Modal */}
+      {showScheduleViewer && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-blue-400/50">
+            <div className="sticky top-0 bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white flex items-center">
+                <Calendar className="w-5 h-5 mr-2 text-blue-400" />
+                Schedule Overview
+              </h2>
+              <Button
+                onClick={() => setShowScheduleViewer(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6">
+              {/* Week Toggle */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-4">
+                  <Button variant="outline" className="border-blue-400 text-blue-400">
+                    ← Previous Week
+                  </Button>
+                  <span className="text-white font-medium">
+                    {new Date().toLocaleDateString('en-US', { 
+                      month: 'long', 
+                      day: 'numeric', 
+                      year: 'numeric' 
+                    })} - Week View
+                  </span>
+                  <Button variant="outline" className="border-blue-400 text-blue-400">
+                    Next Week →
+                  </Button>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-slate-300 text-sm">View:</span>
+                  <Button size="sm" className="bg-blue-600 text-white">Today</Button>
+                  <Button size="sm" variant="outline" className="border-slate-600 text-slate-400">Week</Button>
+                </div>
+              </div>
+
+              {/* Schedule Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Daniel's Schedule */}
+                <div className="bg-slate-800/60 border border-blue-400/50 rounded-lg p-4">
+                  <h3 className="text-white font-semibold mb-4 flex items-center">
+                    <div className="w-3 h-3 bg-blue-400 rounded-full mr-2"></div>
+                    Daniel's Schedule
+                  </h3>
+                  <div className="space-y-3">
+                    {currentSystemMode === 'test' ? [
+                      { time: "9:00 AM", event: "Team standup meeting", type: "meeting" },
+                      { time: "10:30 AM", event: "Client presentation - Acme Corp", type: "client" },
+                      { time: "12:00 PM", event: "Lunch break", type: "break" },
+                      { time: "2:00 PM", event: "YoBot system review", type: "internal" },
+                      { time: "3:30 PM", event: "Pipeline optimization call", type: "meeting" },
+                      { time: "5:00 PM", event: "Day wrap-up", type: "admin" }
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-slate-700/40 rounded border border-blue-400/30">
+                        <div>
+                          <div className="text-white font-medium">{item.event}</div>
+                          <div className="text-blue-400 text-sm">{item.time}</div>
+                        </div>
+                        <div className={`px-2 py-1 rounded text-xs font-medium ${
+                          item.type === 'client' ? 'bg-green-600/20 text-green-400' :
+                          item.type === 'meeting' ? 'bg-blue-600/20 text-blue-400' :
+                          item.type === 'break' ? 'bg-yellow-600/20 text-yellow-400' :
+                          'bg-purple-600/20 text-purple-400'
+                        }`}>
+                          {item.type}
+                        </div>
+                      </div>
+                    )) : (
+                      <div className="text-center py-8">
+                        <p className="text-slate-400 text-sm">No scheduled events</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* User's Schedule */}
+                <div className="bg-slate-800/60 border border-green-400/50 rounded-lg p-4">
+                  <h3 className="text-white font-semibold mb-4 flex items-center">
+                    <div className="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
+                    Your Schedule
+                  </h3>
+                  <div className="space-y-3">
+                    {currentSystemMode === 'test' ? [
+                      { time: "8:30 AM", event: "Morning automation review", type: "admin" },
+                      { time: "11:00 AM", event: "Sales pipeline call", type: "sales" },
+                      { time: "1:00 PM", event: "Strategy planning", type: "planning" },
+                      { time: "3:00 PM", event: "Client follow-up calls", type: "client" },
+                      { time: "4:30 PM", event: "Weekly metrics review", type: "review" }
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-slate-700/40 rounded border border-green-400/30">
+                        <div>
+                          <div className="text-white font-medium">{item.event}</div>
+                          <div className="text-green-400 text-sm">{item.time}</div>
+                        </div>
+                        <div className={`px-2 py-1 rounded text-xs font-medium ${
+                          item.type === 'sales' ? 'bg-emerald-600/20 text-emerald-400' :
+                          item.type === 'client' ? 'bg-green-600/20 text-green-400' :
+                          item.type === 'planning' ? 'bg-cyan-600/20 text-cyan-400' :
+                          item.type === 'review' ? 'bg-orange-600/20 text-orange-400' :
+                          'bg-purple-600/20 text-purple-400'
+                        }`}>
+                          {item.type}
+                        </div>
+                      </div>
+                    )) : (
+                      <div className="text-center py-8">
+                        <p className="text-slate-400 text-sm">No scheduled events</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="mt-6 flex items-center justify-center space-x-4">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Add Meeting
+                </Button>
+                <Button variant="outline" className="border-green-400 text-green-400">
+                  <Clock className="w-4 h-4 mr-2" />
+                  Schedule Follow-up
+                </Button>
+                <Button variant="outline" className="border-purple-400 text-purple-400">
+                  <Settings className="w-4 h-4 mr-2" />
+                  Calendar Settings
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Footer - Support Contact - Moved to Bottom */}
       <div className="text-center mt-8 mb-4">
         <div className="bg-white/10 backdrop-blur-sm border border-blue-400 rounded-lg p-6">
