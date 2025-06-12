@@ -41,7 +41,7 @@ def log_integration_test_to_airtable(
     }
     
     # Check for existing record
-    params = {'filterByFormula': f"{{Integration Name}} = '{integration_name}'"}
+    params = {'filterByFormula': f"{{🔧 Integration Name}} = '{integration_name}'"}
     
     try:
         response = requests.get(list_url, headers=headers, params=params)
@@ -49,17 +49,16 @@ def log_integration_test_to_airtable(
         existing_records = response.json().get('records', [])
         
         record_data = {
-            "Integration Name": integration_name,
-            "Status": "✅ Passed" if passed else "❌ Failed",
-            "Notes": notes,
-            "QA Owner": qa_owner,
-            "Output Data Populated": passed,  # Only true if actually passed
-            "Record Created": passed,         # Only true if actually passed
-            "Retry Attempted": not passed,    # True if failed (needs retry)
-            "Module Type": module_type,
-            "Logger Source": "🧠 AI Locked Logger v1.0",
-            "Last Tested": datetime.now().isoformat(),
-            "Related Scenario Link": related_scenario_link
+            "🔧 Integration Name": integration_name,
+            "✅ Pass/Fail": "✅ Pass" if passed else "❌ Fail",
+            "🧠 Notes / Debug": notes,
+            "🧑‍💻 QA Owner": qa_owner,
+            "📤 Output Data Populated?": passed,  # Only true if actually passed
+            "🗃️ Record Created?": passed,         # Only true if actually passed
+            "🔁 Retry Attempted?": not passed,    # True if failed (needs retry)
+            "🧩 Module Type": "Automation Test",
+            "📂 Related Scenario Link": related_scenario_link if related_scenario_link else "",
+            "📅 Test Date": datetime.now().isoformat()
         }
         
         if existing_records:
