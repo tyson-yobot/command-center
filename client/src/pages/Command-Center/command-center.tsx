@@ -4976,7 +4976,7 @@ export default function CommandCenter() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300 text-sm">Open Tickets</span>
-                    <span className="text-white font-bold">0</span>
+                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '4' : '0'}</span>
                   </div>
                 </div>
 

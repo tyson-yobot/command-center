@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MessageCircle, Users, Clock, CheckCircle, AlertCircle, Plus } from 'lucide-react';
+import { useLiveMode } from '@/hooks/useLiveMode';
 
 interface TicketData {
   tickets: Array<{
@@ -21,6 +22,7 @@ export function ZendeskChatWidget() {
   const [isConnected, setIsConnected] = useState(true);
   const [ticketData, setTicketData] = useState<TicketData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { currentSystemMode } = useLiveMode();
 
   useEffect(() => {
     fetchTickets();
@@ -131,7 +133,7 @@ export function ZendeskChatWidget() {
             </Badge>
             <div className="flex items-center text-white text-sm">
               <Users className="w-4 h-4 mr-1" />
-              <span>{loading ? "..." : ticketData?.total || 0} Total Tickets</span>
+              <span>{loading ? "..." : currentSystemMode === 'test' ? '7' : (ticketData?.total || 0)} Total Tickets</span>
             </div>
           </div>
           
@@ -142,7 +144,7 @@ export function ZendeskChatWidget() {
                 <span>Pending</span>
               </div>
               <div className="text-white font-semibold">
-                {loading ? "..." : ticketData?.pending || 0} tickets
+                {loading ? "..." : currentSystemMode === 'test' ? '3' : (ticketData?.pending || 0)} tickets
               </div>
             </div>
             <div className="bg-slate-800/50 rounded p-2">
