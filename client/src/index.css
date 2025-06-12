@@ -53,7 +53,7 @@
   height: 84px; /* Larger to match full Y height from top to bottom */
   margin-right: 8px; /* Moved closer to Y */
   position: relative;
-  top: -4px; /* Moved down to align top and bottom with Y edges */
+  top: 2px; /* Moved further down to align with Y edges */
 }
 
 .header-title {
