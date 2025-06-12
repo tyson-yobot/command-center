@@ -1604,6 +1604,113 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Knowledge Library - Get all items
+  app.get('/api/knowledge/library', async (req, res) => {
+    try {
+      const systemMode = req.headers['x-system-mode'] as string || 'live';
+      
+      if (systemMode === 'test') {
+        // Test mode - return demo library items
+        const demoItems = [
+          {
+            id: 1,
+            name: "YoBot Price List",
+            content: "YoBot Enterprise: $599/month\nYoBot Professional: $299/month\nYoBot Starter: $99/month\n\nAll plans include:\n- 24/7 support\n- API access\n- Custom integrations\n- Advanced analytics",
+            source: "document",
+            sourceType: "document",
+            createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+            size: "2.4 KB",
+            tags: ["pricing", "sales"]
+          },
+          {
+            id: 2,
+            name: "Support Escalation Process",
+            content: "Level 1: Basic support issues handled by tier 1 agents\nLevel 2: Technical issues requiring specialized knowledge\nLevel 3: Critical system issues requiring immediate attention\n\nEscalation timeline:\n- Level 1: 2 hours\n- Level 2: 4 hours\n- Level 3: Immediate",
+            source: "manual",
+            sourceType: "manual",
+            createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+            size: "1.8 KB",
+            tags: ["support", "process"]
+          },
+          {
+            id: 3,
+            name: "Product Feature Overview",
+            content: "Core Features:\n- AI-powered call monitoring\n- Real-time analytics\n- Integration with CRM systems\n- Voice synthesis capabilities\n- Automated reporting\n\nAdvanced Features:\n- Custom dashboards\n- API integrations\n- Workflow automation",
+            source: "manual",
+            sourceType: "manual",
+            createdAt: new Date(Date.now() - 86400000).toISOString(),
+            size: "3.2 KB",
+            tags: ["product", "features"]
+          },
+          {
+            id: 4,
+            name: "Sales Contract Template",
+            content: "Standard sales contract terms and conditions for YoBot services including payment terms, service level agreements, and cancellation policies.",
+            source: "document",
+            sourceType: "document",
+            createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+            size: "5.1 KB",
+            tags: ["sales", "legal"]
+          }
+        ];
+        
+        res.json(demoItems);
+      } else {
+        // Live mode - get actual items from database
+        const knowledgeItems = await storage.getKnowledgeBase(1);
+        
+        const formattedItems = knowledgeItems.map((item, index) => ({
+          id: item.id,
+          name: item.name || `Knowledge Entry ${index + 1}`,
+          content: item.content,
+          source: item.source || 'manual',
+          sourceType: item.source === 'document' ? 'document' : 'manual',
+          createdAt: item.createdAt?.toISOString() || new Date().toISOString(),
+          size: `${Math.round(item.content.length / 1024 * 10) / 10} KB`,
+          tags: item.tags || []
+        }));
+        
+        res.json(formattedItems);
+      }
+    } catch (error) {
+      console.error('Error fetching knowledge library:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to fetch knowledge library' 
+      });
+    }
+  });
+
+  // Delete knowledge item
+  app.delete('/api/knowledge/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const systemMode = req.headers['x-system-mode'] as string || 'live';
+      
+      if (systemMode === 'test') {
+        // Test mode - simulate deletion
+        res.json({
+          success: true,
+          message: 'Knowledge item deleted (test mode)'
+        });
+      } else {
+        // Live mode - actually delete from database
+        await storage.deleteKnowledgeItem(parseInt(id));
+        
+        res.json({
+          success: true,
+          message: 'Knowledge item deleted successfully'
+        });
+      }
+    } catch (error) {
+      console.error('Error deleting knowledge item:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to delete knowledge item' 
+      });
+    }
+  });
+
   // Document reindex endpoint
   app.post('/api/knowledge/reindex/:id', async (req, res) => {
     try {
