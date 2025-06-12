@@ -2830,7 +2830,7 @@ export default function CommandCenter() {
               <CardContent>
                 <div className="grid grid-cols-1 gap-3">
                   <Button
-                    onClick={handleNewBookingSync}
+                    onClick={handleCreateBooking}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
                   >
                     <span className="text-xl mr-3">📅</span>
@@ -2838,7 +2838,7 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={handleNewSupportTicket}
+                    onClick={handleCreateSupportTicket}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
                   >
                     <span className="text-xl mr-3">🎧</span>
@@ -5209,12 +5209,12 @@ export default function CommandCenter() {
         </div>
       )}
 
-      {/* Sales Order Processor Modal */}
+      {/* Sales Order Form Modal */}
       {showSalesOrderProcessor && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-green-400/50">
             <div className="sticky top-0 bg-slate-900 border-b border-green-400/30 p-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-white">Complete Sales Order Processing</h2>
+              <h2 className="text-xl font-bold text-white">Create Sales Order</h2>
               <Button
                 onClick={() => setShowSalesOrderProcessor(false)}
                 variant="ghost"
@@ -5224,14 +5224,60 @@ export default function CommandCenter() {
               </Button>
             </div>
             <div className="p-6">
-              <SalesOrderProcessor
-                onProcessComplete={(result) => {
-                  console.log('Sales order processed:', result);
-                  // Refresh metrics after successful processing
-                  if (result.success) {
-                    window.location.reload();
-                  }
-                }}
+              <iframe
+                src="https://tally.so/r/mDb87X"
+                className="w-full h-[600px] border border-green-400/30 rounded-lg"
+                title="Sales Order Form"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Booking Form Modal */}
+      {showBookingModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-blue-400/50">
+            <div className="sticky top-0 bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white">Create New Booking</h2>
+              <Button
+                onClick={() => setShowBookingModal(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6">
+              <iframe
+                src="https://tally.so/r/w7jep6"
+                className="w-full h-[600px] border border-blue-400/30 rounded-lg"
+                title="Booking Form"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Support Ticket Form Modal */}
+      {showSupportTicketModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-blue-400/50">
+            <div className="sticky top-0 bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white">Create Support Ticket</h2>
+              <Button
+                onClick={() => setShowSupportTicketModal(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6">
+              <iframe
+                src="https://tally.so/r/w7jep6"
+                className="w-full h-[600px] border border-blue-400/30 rounded-lg"
+                title="Support Ticket Form"
               />
             </div>
           </div>
