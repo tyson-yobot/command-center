@@ -1,0 +1,135 @@
+ Core Automation Button Activation Instructions for Replit
+1. 🗓️ Create Booking
+📌 Function:
+Open a popup modal for booking form
+
+Form should include fields like:
+
+Client name
+
+Booking type (dropdown: Demo, Onboarding, Follow-up, etc.)
+
+Date/time picker
+
+Assigned rep
+
+Notes (textarea)
+
+✅ Trigger:
+Submit button fires a webhook to Make.com to push data to Airtable or Google Calendar
+
+💡 UI Behavior:
+Modal should slide up center-screen, with dark overlay behind it
+
+Submit = green
+
+Cancel = gray or transparent
+
+2. 🎧 Create Support Ticket
+📌 Function:
+Open internal ticket modal with fields:
+
+Client name (dropdown if available)
+
+Priority (Low, Normal, High)
+
+Issue Type (dropdown: Tech, Billing, Onboarding, Custom)
+
+Description
+
+Attachments (optional)
+
+✅ Trigger:
+On submit, push to Airtable or your internal support tracker table
+
+💡 UI Behavior:
+Same modal layout as Booking
+
+Confirmation toast after submission:
+✅ Ticket logged successfully
+
+3. 📞 Create Follow-up
+📌 Function:
+Opens a lightweight task creation modal:
+
+Contact or Deal Name (autocomplete)
+
+Follow-up Type (Call, Email, SMS)
+
+Follow-up Date (picker)
+
+Notes
+
+✅ Trigger:
+Pushes to Airtable's Follow-Up Tracker or CRM deal timeline
+
+💡 UI Behavior:
+Optionally adds a toggle for Slack reminder or email alert
+
+Uses "Call" icon and red theme (since the button is red)
+
+4. 💰 Automate Sales Order Flow
+📌 Function:
+Opens external Tally form in new tab
+(DO NOT build a form here — this is client-facing only)
+
+✅ Trigger:
+onClick → window.open('[TALLY_FORM_URL]', '_blank')
+
+💡 UI Behavior:
+No modal, just an external launch
+
+Hover effect on button: subtle glow or light stripe animation
+
+5. 💬 Send SMS
+📌 Function:
+Open a modal:
+
+Recipient name/number
+
+Message (textarea, max 160 chars)
+
+Pre-built templates (dropdown)
+
+Send now / Schedule later toggle
+
+✅ Trigger:
+Submits to Twilio (via Make webhook or backend function)
+
+💡 UI Behavior:
+Green “Send SMS” button at bottom of modal
+
+Optional preview panel to show formatted text before send
+
+🧩 Common Modal UI Specs for All Popups
+css
+Copy
+Edit
+.modal {
+  width: 480px;
+  background: #1a1a1a;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 0 16px rgba(0,0,0,0.5);
+  animation: fadeIn 0.3s ease;
+}
+input, select, textarea {
+  width: 100%;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: none;
+  padding: 10px;
+  background-color: #2c2c2c;
+  color: #ffffff;
+}
+button.submit {
+  background-color: #0d82da;
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+🧠 Final Notes to Send Replit
+“Each Core Automation button should open a modern modal interface, except for the ‘Sales Order Flow’ which should launch a Tally link. Use consistent styling across all popups, and route the submissions to Make webhooks or our Airtable/CRM targets depending on the function. Forms should be clean, compact, and not require full-page refresh or redirection. Add toast confirmations where appropriate.”
+

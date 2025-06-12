@@ -263,11 +263,48 @@ export default function CommandCenter() {
   const [selectedDay, setSelectedDay] = useState(0); // 0 = today, 1 = tomorrow, etc.
   const [showTicketModal, setShowTicketModal] = useState(false);
   const [showCreateTicketModal, setShowCreateTicketModal] = useState(false);
+  
+  // Core Automation Modal States
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showSupportTicketModal, setShowSupportTicketModal] = useState(false);
+  const [showFollowUpModal, setShowFollowUpModal] = useState(false);
+  const [showSMSModal, setShowSMSModal] = useState(false);
   const [showTicketHistory, setShowTicketHistory] = useState(false);
   const [newTicketSubject, setNewTicketSubject] = useState('');
   const [newTicketDescription, setNewTicketDescription] = useState('');
   const [newTicketCategory, setNewTicketCategory] = useState('');
   const [newTicketPriority, setNewTicketPriority] = useState('medium');
+  
+  // Core Automation Form States
+  const [bookingForm, setBookingForm] = useState({
+    clientName: '',
+    bookingType: 'Demo',
+    dateTime: '',
+    assignedRep: '',
+    notes: ''
+  });
+  
+  const [supportForm, setSupportForm] = useState({
+    clientName: '',
+    priority: 'Normal',
+    issueType: 'Tech',
+    description: '',
+    attachments: ''
+  });
+  
+  const [followUpForm, setFollowUpForm] = useState({
+    contactName: '',
+    followUpType: 'Call',
+    followUpDate: '',
+    notes: ''
+  });
+  
+  const [smsForm, setSmsForm] = useState({
+    recipient: '',
+    message: '',
+    template: '',
+    sendNow: true
+  });
   const [newTicketName, setNewTicketName] = useState('');
   const [newTicketEmail, setNewTicketEmail] = useState('');
   const [chatMessages, setChatMessages] = useState<any[]>([]);
@@ -381,6 +418,100 @@ export default function CommandCenter() {
       type
     };
     setRecentActivity(prev => [newActivity, ...prev.slice(0, 4)]); // Keep last 5 items
+  };
+
+  // Core Automation Button Handlers
+  const handleCreateBooking = () => {
+    setShowBookingModal(true);
+  };
+
+  const handleCreateSupportTicket = () => {
+    setShowSupportTicketModal(true);
+  };
+
+  const handleCreateFollowUp = () => {
+    setShowFollowUpModal(true);
+  };
+
+  const handleAutomateSalesOrder = () => {
+    window.open('https://tally.so/r/mDb87X', '_blank');
+  };
+
+  const handleSendSMS = () => {
+    setShowSMSModal(true);
+  };
+
+  // Form submission handlers
+  const submitBookingForm = async () => {
+    try {
+      const response = await fetch('/api/webhooks/booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bookingForm)
+      });
+      
+      if (response.ok) {
+        showToastMessage('Booking created successfully!', 'success');
+        setShowBookingModal(false);
+        setBookingForm({ clientName: '', bookingType: 'Demo', dateTime: '', assignedRep: '', notes: '' });
+      }
+    } catch (error) {
+      showToastMessage('Failed to create booking', 'error');
+    }
+  };
+
+  const submitSupportTicket = async () => {
+    try {
+      const response = await fetch('/api/webhooks/support-ticket', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(supportForm)
+      });
+      
+      if (response.ok) {
+        showToastMessage('Support ticket created successfully!', 'success');
+        setShowSupportTicketModal(false);
+        setSupportForm({ clientName: '', priority: 'Normal', issueType: 'Tech', description: '', attachments: '' });
+      }
+    } catch (error) {
+      showToastMessage('Failed to create support ticket', 'error');
+    }
+  };
+
+  const submitFollowUp = async () => {
+    try {
+      const response = await fetch('/api/webhooks/follow-up', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(followUpForm)
+      });
+      
+      if (response.ok) {
+        showToastMessage('Follow-up scheduled successfully!', 'success');
+        setShowFollowUpModal(false);
+        setFollowUpForm({ contactName: '', followUpType: 'Call', followUpDate: '', notes: '' });
+      }
+    } catch (error) {
+      showToastMessage('Failed to schedule follow-up', 'error');
+    }
+  };
+
+  const submitSMS = async () => {
+    try {
+      const response = await fetch('/api/webhooks/sms', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(smsForm)
+      });
+      
+      if (response.ok) {
+        showToastMessage('SMS sent successfully!', 'success');
+        setShowSMSModal(false);
+        setSmsForm({ recipient: '', message: '', template: '', sendNow: true });
+      }
+    } catch (error) {
+      showToastMessage('Failed to send SMS', 'error');
+    }
   };
 
   // Voice recognition functions for RAG system
@@ -1063,26 +1194,7 @@ export default function CommandCenter() {
     }
   };
 
-  const handleSendSMS = async () => {
-    try {
-      setVoiceStatus('Opening SMS interface...');
-      const response = await fetch('/api/sms-send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scenario: 'sms-send' })
-      });
-      
-      if (response.ok) {
-        setVoiceStatus('SMS interface ready - Twilio integration active');
-        setToast({ title: "SMS Ready", description: "Text input opened, ready to send via Twilio" });
-      } else {
-        setVoiceStatus('SMS interface failed - not wired yet');
-        setToast({ title: "SMS Not Ready", description: "SMS system not fully wired", variant: "destructive" });
-      }
-    } catch (error) {
-      setVoiceStatus('SMS error');
-    }
-  };
+
 
   const handleStartPipelineCalls = async () => {
     try {
