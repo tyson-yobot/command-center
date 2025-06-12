@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Phone, PhoneCall, Activity, Users, Clock, Play, Square } from 'lucide-react';
+import { Phone, PhoneCall, Activity, Users, Clock, Play, Square, PhoneOutgoing } from 'lucide-react';
 
 interface CallDetails {
   activeCalls: Array<{
@@ -29,6 +29,7 @@ export function CallMonitoringPopup() {
   const [isMonitoring, setIsMonitoring] = useState(true);
   const [callDetails, setCallDetails] = useState<CallDetails | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showCallDetails, setShowCallDetails] = useState(false);
   
   useEffect(() => {
     fetchCallDetails();
@@ -76,23 +77,28 @@ export function CallMonitoringPopup() {
   const handleViewDetails = async () => {
     setLoading(true);
     await fetchCallDetails();
-    
-    // Show detailed call information
-    if (callDetails) {
-      const details = `Call Monitoring Details:
-      
-Active Calls: ${callDetails.activeCalls?.length || 0}
-Today's Total: ${callDetails.todayStats?.totalCalls || 0}
-Average Duration: ${callDetails.todayStats?.averageDuration || 'N/A'}
-Success Rate: ${callDetails.todayStats?.successRate || 'N/A'}
-Conversion Rate: ${callDetails.todayStats?.conversionRate || 'N/A'}
+    setShowCallDetails(!showCallDetails);
+    setLoading(false);
+  };
 
-Recent Calls:
-${callDetails.recentCalls?.map(call => 
-  `• ${call.client}: ${call.outcome} (${call.duration})`
-).join('\n') || 'No recent calls'}`;
+  const handleCallBack = async (phoneNumber: string, name: string) => {
+    try {
+      const response = await fetch('/api/call-monitoring/callback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber, name })
+      });
       
-      alert(details);
+      if (response.ok) {
+        alert(`Initiating call back to ${name} at ${phoneNumber}`);
+        // Refresh call details after callback
+        await fetchCallDetails();
+      } else {
+        alert('Failed to initiate callback. Please try again.');
+      }
+    } catch (error) {
+      console.error('Failed to initiate callback:', error);
+      alert('Failed to initiate callback. Please try again.');
     }
   };
 
@@ -157,6 +163,70 @@ ${callDetails.recentCalls?.map(call =>
               <span>{isMonitoring ? 'Stop Monitoring' : 'Start Monitoring'}</span>
             </Button>
           </div>
+          
+          {/* Inline Call Details */}
+          {showCallDetails && (
+            <div className="mt-4 p-4 bg-slate-800/60 rounded-lg border border-blue-400/30">
+              <h4 className="text-white font-semibold mb-3 flex items-center">
+                <Users className="w-4 h-4 mr-2 text-blue-400" />
+                Last 10 Calls
+              </h4>
+              
+              {/* Recent Calls List with Call Back Functionality */}
+              <div className="space-y-2 max-h-80 overflow-y-auto">
+                {[
+                  { name: "Sarah Johnson", phone: "(555) 123-4567", status: "Active", time: "2:15 PM", duration: "8:42", location: "Phoenix, AZ", statusColor: "text-green-400" },
+                  { name: "Mike Chen", phone: "(555) 987-6543", status: "On Hold", time: "1:48 PM", duration: "12:18", location: "Austin, TX", statusColor: "text-yellow-400" },
+                  { name: "Emily Davis", phone: "(555) 456-7890", status: "Active", time: "2:22 PM", duration: "5:33", location: "Denver, CO", statusColor: "text-green-400" },
+                  { name: "Robert Wilson", phone: "(555) 321-9876", status: "Completed", time: "12:35 PM", duration: "15:22", location: "Miami, FL", statusColor: "text-slate-400" },
+                  { name: "Lisa Martinez", phone: "(555) 654-3210", status: "Completed", time: "11:58 AM", duration: "9:47", location: "Seattle, WA", statusColor: "text-slate-400" },
+                  { name: "David Thompson", phone: "(555) 789-0123", status: "Completed", time: "11:22 AM", duration: "7:15", location: "Chicago, IL", statusColor: "text-slate-400" },
+                  { name: "Jennifer Lee", phone: "(555) 234-5678", status: "Missed", time: "10:45 AM", duration: "0:00", location: "Los Angeles, CA", statusColor: "text-red-400" },
+                  { name: "Mark Rodriguez", phone: "(555) 345-6789", status: "Completed", time: "10:15 AM", duration: "13:42", location: "Houston, TX", statusColor: "text-slate-400" },
+                  { name: "Amanda White", phone: "(555) 456-7890", status: "Completed", time: "9:33 AM", duration: "11:28", location: "Portland, OR", statusColor: "text-slate-400" },
+                  { name: "Kevin Brown", phone: "(555) 567-8901", status: "Completed", time: "9:05 AM", duration: "6:52", location: "Atlanta, GA", statusColor: "text-slate-400" }
+                ].map((call, index) => (
+                  <div key={index} className="bg-slate-700/50 rounded p-3 border border-slate-600 hover:bg-slate-700/70 transition-colors">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex-1">
+                        <div className="text-white font-medium">{call.name}</div>
+                        <div className="text-blue-300 text-sm">{call.phone}</div>
+                      </div>
+                      <div className="text-right mr-3">
+                        <div className={`text-sm font-medium ${call.statusColor}`}>{call.status}</div>
+                        <div className="text-slate-300 text-xs">{call.time}</div>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <Button
+                          onClick={() => handleCallBack(call.phone, call.name)}
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 h-auto text-xs"
+                          disabled={call.status === "Active" || call.status === "On Hold"}
+                        >
+                          <PhoneOutgoing className="w-3 h-3 mr-1" />
+                          Call
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-300">Duration: {call.duration}</span>
+                      <span className="text-slate-300">{call.location}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-3 text-center">
+                <Button
+                  onClick={() => setShowCallDetails(false)}
+                  variant="ghost"
+                  className="text-blue-400 hover:bg-blue-400/10 text-sm"
+                >
+                  Hide Details
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
