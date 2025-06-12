@@ -2705,7 +2705,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Recent Executions</div>
                   <div className="text-2xl font-bold text-blue-400">
-                    {automationPerformance?.recentExecutions?.length || 0}
+                    {currentSystemMode === 'test' ? '6' : (automationPerformance?.recentExecutions?.length || 0)}
                   </div>
                   <div className="text-xs text-blue-400">In queue</div>
                 </div>
