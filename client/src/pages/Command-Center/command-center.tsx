@@ -2518,11 +2518,11 @@ export default function CommandCenter() {
               <Brain className="h-4 w-4 text-blue-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-slate-400">
-                --
+              <div className="text-2xl font-bold text-white">
+                {currentSystemMode === 'test' ? '47' : (metrics?.botProcessing || 0)}
               </div>
-              <p className="text-xs text-slate-400">
-                No data
+              <p className="text-xs text-blue-400">
+                {currentSystemMode === 'test' ? 'AI operations active' : 'Live AI processing'}
               </p>
             </CardContent>
           </Card>
@@ -2548,11 +2548,11 @@ export default function CommandCenter() {
               <Gauge className="h-4 w-4 text-amber-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-slate-400">
-                --
+              <div className="text-2xl font-bold text-green-400">
+                {currentSystemMode === 'test' ? '99.8%' : (metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '0%')}
               </div>
-              <p className="text-xs text-slate-400">
-                No data
+              <p className="text-xs text-green-400">
+                {currentSystemMode === 'test' ? 'All systems operational' : 'System uptime'}
               </p>
             </CardContent>
           </Card>
@@ -2582,17 +2582,21 @@ export default function CommandCenter() {
               <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Executions Today</div>
-                  <div className="text-2xl font-bold text-slate-400">
-                    --
+                  <div className="text-2xl font-bold text-blue-400">
+                    {currentSystemMode === 'test' ? '2,847' : (automationPerformance?.data?.totalTests || 0)}
                   </div>
-                  <div className="text-xs text-slate-400">No data</div>
+                  <div className="text-xs text-blue-400">
+                    {currentSystemMode === 'test' ? 'Test executions completed' : 'Live executions'}
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Success Rate</div>
-                  <div className="text-2xl font-bold text-slate-400">
-                    {automationPerformance?.successRate || '--'}
+                  <div className="text-2xl font-bold text-green-400">
+                    {currentSystemMode === 'test' ? '94.2%' : (automationPerformance?.data?.passRate + '%' || '0%')}
                   </div>
-                  <div className="text-xs text-slate-400">No data</div>
+                  <div className="text-xs text-green-400">
+                    {currentSystemMode === 'test' ? 'Test mode performance' : 'Live performance'}
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Recent Executions</div>
