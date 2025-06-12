@@ -5430,7 +5430,7 @@ export default function CommandCenter() {
       {/* SMS Modal */}
       {showSMSModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-green-400/50 p-6 animate-in fade-in-0 duration-300">
+          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-blue-400/50 p-6 animate-in fade-in-0 duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Send SMS</h2>
               <Button
@@ -5447,14 +5447,14 @@ export default function CommandCenter() {
                 <label className="block text-white text-sm font-medium mb-2">Recipient Name/Number</label>
                 <input 
                   type="text"
-                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500"
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter phone number or contact name"
                 />
               </div>
               
               <div>
                 <label className="block text-white text-sm font-medium mb-2">Pre-built Templates</label>
-                <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500">
+                <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500">
                   <option value="">Select template...</option>
                   <option value="followup">Follow-up reminder</option>
                   <option value="appointment">Appointment confirmation</option>
@@ -5466,9 +5466,9 @@ export default function CommandCenter() {
               <div>
                 <label className="block text-white text-sm font-medium mb-2">Message (max 160 chars)</label>
                 <textarea 
-                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500 h-24 resize-none"
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500 h-24 resize-none"
                   placeholder="Type your message..."
-                  maxLength="160"
+                  maxLength={160}
                 />
                 <div className="text-right text-gray-400 text-xs mt-1">0/160 characters</div>
               </div>
@@ -5502,7 +5502,7 @@ export default function CommandCenter() {
                       setToast({ title: "Error", description: "Failed to send SMS", variant: "destructive" });
                     }
                   }}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg"
+                  className="flex-1 bg-[#0d82da] hover:bg-[#0b6bb8] text-white font-semibold py-3 px-6 rounded-lg"
                 >
                   Send SMS
                 </Button>
