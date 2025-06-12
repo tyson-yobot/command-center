@@ -4662,7 +4662,6 @@ export default function CommandCenter() {
         </div>
 
       </div>
-    </div>
 
     {showClearConfirm && (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
