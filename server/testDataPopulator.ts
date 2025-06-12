@@ -337,7 +337,16 @@ export function registerTestDataRoutes(app: Express) {
   app.get('/api/live-activity', (req, res) => {
     const systemMode = getSystemMode();
     
-    if (systemMode === 'test') {
+    // Global environment gate enforcement
+    if (isLiveMode()) {
+      blockTestData(testModeMetrics.liveActivity);
+      res.json({
+        success: true,
+        data: safeLiveData(null, liveModeMetrics.liveActivity),
+        mode: 'live',
+        message: 'LIVE mode - hardcoded data blocked, authentic data only'
+      });
+    } else if (systemMode === 'test') {
       res.json({
         success: true,
         data: testModeMetrics.liveActivity,
@@ -354,11 +363,20 @@ export function registerTestDataRoutes(app: Express) {
     }
   });
 
-  // Knowledge stats with mode-specific data
+  // Knowledge stats with global environment gate
   app.get('/api/knowledge/stats', (req, res) => {
-    const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'live';
+    const systemMode = getSystemMode();
     
-    if (systemMode === 'test') {
+    // Global environment gate enforcement
+    if (isLiveMode()) {
+      blockTestData(testModeMetrics.knowledgeStats);
+      res.json({
+        success: true,
+        data: safeLiveData(null, liveModeMetrics.knowledgeStats),
+        mode: 'live',
+        message: 'LIVE mode - hardcoded data blocked, authentic data only'
+      });
+    } else if (systemMode === 'test') {
       res.json({
         success: true,
         data: testModeMetrics.knowledgeStats,
@@ -375,11 +393,20 @@ export function registerTestDataRoutes(app: Express) {
     }
   });
 
-  // Call monitoring with mode-specific data
+  // Call monitoring with global environment gate
   app.get('/api/call-monitoring/details', (req, res) => {
-    const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'live';
+    const systemMode = getSystemMode();
     
-    if (systemMode === 'test') {
+    // Global environment gate enforcement
+    if (isLiveMode()) {
+      blockTestData(testModeMetrics.callMonitoring);
+      res.json({
+        success: true,
+        data: safeLiveData(null, liveModeMetrics.callMonitoring),
+        mode: 'live',
+        message: 'LIVE mode - hardcoded data blocked, authentic data only'
+      });
+    } else if (systemMode === 'test') {
       res.json({
         success: true,
         data: testModeMetrics.callMonitoring,
@@ -396,11 +423,22 @@ export function registerTestDataRoutes(app: Express) {
     }
   });
 
-  // Zendesk tickets with mode-specific data
+  // Zendesk tickets with global environment gate
   app.get('/api/zendesk/tickets', (req, res) => {
-    const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'live';
+    const systemMode = getSystemMode();
     
-    if (systemMode === 'test') {
+    // Global environment gate enforcement
+    if (isLiveMode()) {
+      blockTestData(testModeMetrics.zendeskTickets);
+      res.json({
+        success: true,
+        data: safeLiveData(null, liveModeMetrics.zendeskTickets),
+        tickets: [],
+        total: 0,
+        mode: 'live',
+        message: 'LIVE mode - hardcoded data blocked, authentic data only'
+      });
+    } else if (systemMode === 'test') {
       res.json({
         success: true,
         data: testModeMetrics.zendeskTickets,
