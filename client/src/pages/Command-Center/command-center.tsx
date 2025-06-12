@@ -2419,6 +2419,7 @@ export default function CommandCenter() {
   };
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-8 p-8">
 
       
@@ -4657,9 +4658,10 @@ export default function CommandCenter() {
         </div>
 
       </div>
+    </div>
 
-      {/* Clear Knowledge Confirmation Dialog */}
-      {showClearConfirm && (
+    {/* Clear Knowledge Confirmation Dialog */}
+    {showClearConfirm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-slate-800 border border-red-500/50 rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-xl font-semibold text-red-400 mb-4 flex items-center">
