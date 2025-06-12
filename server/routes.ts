@@ -2629,6 +2629,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // LIVE DATA PURGE: Remove all hardcoded data from LIVE environment
+  app.post('/api/live-data-purge', async (req, res) => {
+    try {
+      const { LivePurgeScript } = await import('./livePurgeScript');
+      
+      logOperation('live-data-purge', {}, 'success', 'Starting live data purge operation');
+      
+      const result = await LivePurgeScript.executePurge();
+      
+      if (result.success) {
+        logOperation('live-data-purge', result, 'success', 'Live data successfully purged');
+        res.json({ 
+          success: true, 
+          message: result.message,
+          itemsPurged: result.itemsPurged,
+          areas: result.areas,
+          timestamp: result.timestamp
+        });
+      } else {
+        logOperation('live-data-purge', result, 'error', 'Failed to purge live data');
+        res.status(500).json({ 
+          success: false, 
+          error: result.message,
+          message: 'Failed to purge live data' 
+        });
+      }
+    } catch (error) {
+      logOperation('live-data-purge', { error: error.message }, 'error', 'Critical error during live data purge');
+      res.status(500).json({ 
+        success: false, 
+        error: error.message,
+        message: 'Critical error during live data purge operation'
+      });
+    }
+  });
+
   // IMMEDIATE FIX: One-Click Test Data Wipe Function
   app.post('/api/wipe-test-data', async (req, res) => {
     try {
