@@ -5802,7 +5802,6 @@ export default function CommandCenter() {
         documentName={previewDocumentName}
       />
 
-
       {/* Footer - Support Contact - Moved to Bottom */}
       <div className="text-center mt-8 mb-4">
         <div className="bg-white/10 backdrop-blur-sm border border-blue-400 rounded-lg p-6">

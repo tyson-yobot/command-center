@@ -263,68 +263,309 @@ export function CallMonitoringPopup() {
 
   return (
     <TooltipProvider>
-      <Card className="bg-slate-800/80 backdrop-blur-sm border border-blue-500/50 w-full max-w-4xl">
+      <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 w-full max-w-4xl">
         <CardHeader>
-          <CardTitle className="text-white flex items-center">
-            <Phone className="w-5 h-5 mr-2 text-blue-400" />
-            Call Monitoring Panel
+          <CardTitle className="text-white flex items-center justify-between">
+            <div className="flex items-center">
+              <Phone className="w-5 h-5 mr-2" />
+              Call Monitoring Panel
+            </div>
+            <Button
+              onClick={handleRefreshStatus}
+              variant="outline"
+              size="sm"
+              className="text-white border-blue-400 hover:bg-blue-700"
+              disabled={loading}
+            >
+              <RefreshCw className={`w-4 h-4 mr-1 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="flex gap-3">
-              <Button 
-                onClick={handleRefreshStatus}
-                className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
-                disabled={loading}
-              >
-                <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-                View Call Records
-              </Button>
-              <Button 
-                onClick={() => {}}
-                className="bg-red-600 hover:bg-red-700 text-white"
-              >
-                Call Analytics
-              </Button>
-            </div>
+          <div className="space-y-6">
             
-            {/* Active Calls List */}
-            <div className="bg-slate-700/40 rounded-lg p-4 border border-blue-400/30">
-              <h4 className="text-white font-medium mb-3">📞 Active Call Sessions</h4>
-              <div className="space-y-2 max-h-64 overflow-y-auto">
-                {callDetails?.activeCalls?.length > 0 ? callDetails.activeCalls.map((call: any, index: number) => (
-                  <div 
-                    key={index}
-                    className="flex items-center justify-between p-3 bg-slate-800/60 rounded border border-blue-400/30"
-                  >
-                    <div className="flex-1">
-                      <div className="text-white font-medium">{call.client || 'Unknown Caller'}</div>
-                      <div className="text-slate-400 text-sm flex items-center space-x-2">
-                        <span>{call.duration || '0:00'}</span>
-                        <span>•</span>
-                        <span>{call.status || 'Active'}</span>
+            {/* System Services Control Panel */}
+            <div className="bg-slate-800/50 rounded-lg p-4 border border-blue-400/20">
+              <h3 className="text-white font-semibold mb-4 flex items-center">
+                <Settings className="w-4 h-4 mr-2 text-blue-400" />
+                System Services
+              </h3>
+              <div className="space-y-3">
+                {services.map((service) => {
+                  const StatusIcon = getStatusIcon(service.status);
+                  const IconComponent = service.icon;
+                  return (
+                    <div key={service.name} className="flex items-center justify-between bg-slate-700/50 rounded p-3">
+                      <div className="flex items-center space-x-3">
+                        <IconComponent className="w-5 h-5 text-blue-400" />
+                        <div>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-white font-medium">{service.name}</span>
+                            <StatusIcon className={`w-4 h-4 ${getStatusColor(service.status)}`} />
+                            <span className={`text-xs font-medium ${getStatusColor(service.status)}`}>
+                              {service.status.toUpperCase()}
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-400">
+                            Last ping: {service.lastPing}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Button
+                              onClick={() => handleServiceAction(service.name, 'start')}
+                              size="sm"
+                              className="bg-green-600 hover:bg-green-700 text-white h-8 px-2"
+                            >
+                              <Play className="w-3 h-3 mr-1" />
+                              Start
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{service.description}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                        
+                        <Button
+                          onClick={() => handleServiceAction(service.name, 'restart')}
+                          size="sm"
+                          className="bg-orange-600 hover:bg-orange-700 text-white h-8 px-2"
+                        >
+                          <RefreshCw className="w-3 h-3 mr-1" />
+                          Restart
+                        </Button>
+                        
+                        <Button
+                          onClick={() => handleServiceAction(service.name, 'ping')}
+                          size="sm"
+                          className="bg-blue-600 hover:bg-blue-700 text-white h-8 px-2"
+                        >
+                          <Activity className="w-3 h-3 mr-1" />
+                          Ping
+                        </Button>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="px-2 py-1 rounded text-xs font-medium bg-green-600/30 text-green-400">
-                        ✅ Live
-                      </span>
-                      <Button
-                        onClick={() => {}}
-                        className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1"
-                      >
-                        🔍 Monitor
-                      </Button>
-                    </div>
-                  </div>
-                )) : (
-                  <div className="text-slate-400 text-center py-4">
-                    No active calls in session
-                  </div>
-                )}
+                  );
+                })}
               </div>
             </div>
+
+            {/* Status Dashboard */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                <div className="flex items-center text-blue-300 mb-1">
+                  <PhoneCall className="w-4 h-4 mr-1" />
+                  <span className="text-sm">Active Calls</span>
+                </div>
+                <div className="text-white font-bold text-xl">
+                  {loading ? "..." : callDetails?.activeCalls?.length || 0}
+                </div>
+              </div>
+              
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                <div className="flex items-center text-green-300 mb-1">
+                  <Clock className="w-4 h-4 mr-1" />
+                  <span className="text-sm">Avg Duration</span>
+                </div>
+                <div className="text-white font-bold text-xl">
+                  {loading ? "..." : callDetails?.todayStats?.averageDuration || "0m"}
+                </div>
+              </div>
+              
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                <div className="flex items-center text-purple-300 mb-1">
+                  <Users className="w-4 h-4 mr-1" />
+                  <span className="text-sm">Success Rate</span>
+                </div>
+                <div className="text-white font-bold text-xl">
+                  {loading ? "..." : callDetails?.todayStats?.successRate || "0%"}
+                </div>
+              </div>
+              
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                <div className="flex items-center text-yellow-300 mb-1">
+                  <PhoneOutgoing className="w-4 h-4 mr-1" />
+                  <span className="text-sm">Total Today</span>
+                </div>
+                <div className="text-white font-bold text-xl">
+                  {loading ? "..." : callDetails?.todayStats?.totalCalls || 0}
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <Button
+                onClick={handleSimulateCall}
+                className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center p-3"
+              >
+                <TestTube className="w-4 h-4 mr-2" />
+                Simulate Test Call
+              </Button>
+              
+              <Button
+                onClick={() => setShowCallDetails(!showCallDetails)}
+                className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center p-3"
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                {showCallDetails ? 'Hide' : 'View'} Call Reports
+              </Button>
+              
+              <Button
+                onClick={() => setShowCallHistory(!showCallHistory)}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center p-3"
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Call Log History
+              </Button>
+            </div>
+          
+          {/* Inline Call Details */}
+          {showCallDetails && (
+            <div className="mt-4 p-4 bg-slate-800/60 rounded-lg border border-blue-400/30">
+              <h4 className="text-white font-semibold mb-3 flex items-center">
+                <Users className="w-4 h-4 mr-2 text-blue-400" />
+                Last 10 Calls
+              </h4>
+              
+              {/* Recent Calls List with Call Back Functionality */}
+              <div className="space-y-2 max-h-80 overflow-y-auto">
+                {[
+                  { name: "Sarah Johnson", phone: "(555) 123-4567", status: "Active", time: "2:15 PM", duration: "8:42", location: "Phoenix, AZ", statusColor: "text-green-400" },
+                  { name: "Mike Chen", phone: "(555) 987-6543", status: "On Hold", time: "1:48 PM", duration: "12:18", location: "Austin, TX", statusColor: "text-yellow-400" },
+                  { name: "Emily Davis", phone: "(555) 456-7890", status: "Active", time: "2:22 PM", duration: "5:33", location: "Denver, CO", statusColor: "text-green-400" },
+                  { name: "Robert Wilson", phone: "(555) 321-9876", status: "Completed", time: "12:35 PM", duration: "15:22", location: "Miami, FL", statusColor: "text-slate-400" },
+                  { name: "Lisa Martinez", phone: "(555) 654-3210", status: "Completed", time: "11:58 AM", duration: "9:47", location: "Seattle, WA", statusColor: "text-slate-400" },
+                  { name: "David Thompson", phone: "(555) 789-0123", status: "Completed", time: "11:22 AM", duration: "7:15", location: "Chicago, IL", statusColor: "text-slate-400" },
+                  { name: "Jennifer Lee", phone: "(555) 234-5678", status: "Missed", time: "10:45 AM", duration: "0:00", location: "Los Angeles, CA", statusColor: "text-red-400" },
+                  { name: "Mark Rodriguez", phone: "(555) 345-6789", status: "Completed", time: "10:15 AM", duration: "13:42", location: "Houston, TX", statusColor: "text-slate-400" },
+                  { name: "Amanda White", phone: "(555) 456-7890", status: "Completed", time: "9:33 AM", duration: "11:28", location: "Portland, OR", statusColor: "text-slate-400" },
+                  { name: "Kevin Brown", phone: "(555) 567-8901", status: "Completed", time: "9:05 AM", duration: "6:52", location: "Atlanta, GA", statusColor: "text-slate-400" }
+                ].map((call, index) => (
+                  <div key={index} className="bg-slate-700/50 rounded p-3 border border-slate-600 hover:bg-slate-700/70 transition-colors">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex-1">
+                        <div className="text-white font-medium">{call.name}</div>
+                        <div className="text-blue-300 text-sm">{call.phone}</div>
+                      </div>
+                      <div className="text-right mr-3">
+                        <div className={`text-sm font-medium ${call.statusColor}`}>{call.status}</div>
+                        <div className="text-slate-300 text-xs">{call.time}</div>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <Button
+                          onClick={() => handleCallBack(call.phone, call.name)}
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 h-auto text-xs"
+                          disabled={call.status === "Active" || call.status === "On Hold"}
+                        >
+                          <PhoneOutgoing className="w-3 h-3 mr-1" />
+                          Call
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-300">Duration: {call.duration}</span>
+                      <span className="text-slate-300">{call.location}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-3 text-center">
+                <Button
+                  onClick={() => setShowCallDetails(false)}
+                  variant="ghost"
+                  className="text-blue-400 hover:bg-blue-400/10 text-sm"
+                >
+                  Hide Details
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Call Log History Panel */}
+          {showCallHistory && (
+            <div className="bg-slate-800/50 rounded-lg p-4 border border-blue-400/20">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-white font-semibold flex items-center">
+                  <FileText className="w-4 h-4 mr-2 text-blue-400" />
+                  Call Log History
+                </h3>
+                <div className="flex space-x-2">
+                  <Button
+                    size="sm"
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    <Upload className="w-3 h-3 mr-1" />
+                    Upload Logs
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    <Download className="w-3 h-3 mr-1" />
+                    Export CSV
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-600">
+                      <th className="text-left text-gray-300 pb-2">Call ID</th>
+                      <th className="text-left text-gray-300 pb-2">Timestamp</th>
+                      <th className="text-left text-gray-300 pb-2">Bot Name</th>
+                      <th className="text-left text-gray-300 pb-2">Intent</th>
+                      <th className="text-left text-gray-300 pb-2">Sentiment</th>
+                      <th className="text-left text-gray-300 pb-2">Duration</th>
+                      <th className="text-left text-gray-300 pb-2">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { id: "CALL-001", timestamp: "2:15 PM", bot: "SalesBot", intent: "Product Inquiry", sentiment: 8.5, duration: "8:42" },
+                      { id: "CALL-002", timestamp: "1:48 PM", bot: "SupportBot", intent: "Technical Support", sentiment: 6.2, duration: "12:18" },
+                      { id: "CALL-003", timestamp: "1:22 PM", bot: "SalesBot", intent: "Price Quote", sentiment: 9.1, duration: "5:33" },
+                      { id: "CALL-004", timestamp: "12:35 PM", bot: "LeadBot", intent: "Lead Qualification", sentiment: 7.8, duration: "15:22" },
+                      { id: "CALL-005", timestamp: "11:58 AM", bot: "SupportBot", intent: "Billing Question", sentiment: 5.4, duration: "9:47" }
+                    ].map((log, index) => (
+                      <tr key={index} className="border-b border-slate-700/50 hover:bg-slate-700/30">
+                        <td className="py-2 text-blue-300 font-mono">{log.id}</td>
+                        <td className="py-2 text-white">{log.timestamp}</td>
+                        <td className="py-2 text-white">{log.bot}</td>
+                        <td className="py-2 text-purple-300">{log.intent}</td>
+                        <td className="py-2">
+                          <span className={`font-medium ${log.sentiment >= 7 ? 'text-green-400' : log.sentiment >= 5 ? 'text-yellow-400' : 'text-red-400'}`}>
+                            {log.sentiment}/10
+                          </span>
+                        </td>
+                        <td className="py-2 text-white">{log.duration}</td>
+                        <td className="py-2">
+                          <div className="flex space-x-1">
+                            <Button size="sm" variant="outline" className="h-6 px-2 text-xs">
+                              <Eye className="w-3 h-3" />
+                            </Button>
+                            <Button size="sm" variant="outline" className="h-6 px-2 text-xs">
+                              <Download className="w-3 h-3" />
+                            </Button>
+                            <Button size="sm" variant="outline" className="h-6 px-2 text-xs text-red-400">
+                              <Trash2 className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
           </div>
         </CardContent>
       </Card>
