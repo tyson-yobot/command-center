@@ -1136,6 +1136,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
             keyTerms,
             wordCount: extractedText.split(' ').length
           });
+
+          // Create memory entry for the knowledge library integration
+          const memoryEntry = {
+            id: `MEM_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            type: 'document',
+            title: `Document - ${file.originalname}`,
+            content: extractedText,
+            category: 'documents',
+            uploadTime: new Date().toISOString(),
+            fileSize: file.size,
+            fileType: file.mimetype,
+            keyTerms,
+            wordCount: extractedText.split(' ').length,
+            status: 'processed',
+            source: 'file_upload',
+            originalFilename: file.originalname
+          };
+          memoryStore.push(memoryEntry);
           
           // Store in database knowledge base
           try {
