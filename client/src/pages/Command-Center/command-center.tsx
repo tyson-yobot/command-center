@@ -5814,42 +5814,26 @@ export default function CommandCenter() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex gap-3">
-                <Button 
-                  onClick={() => setShowCallMonitoring(true)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
-                >
-                  <Eye className="w-4 h-4 mr-2" />
-                  View Call Records
-                </Button>
-                <Button 
-                  onClick={() => setShowCallDetails(true)}
-                  className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
-                >
-                  <BarChart3 className="w-4 h-4 mr-2" />
-                  Call Analytics
-                </Button>
-              </div>
+              <Button 
+                onClick={() => setShowCallMonitoring(true)}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                View Call Records & Analytics
+              </Button>
               
-              {/* System Services Status */}
-              <div className="bg-slate-800/50 rounded-lg p-4 border border-blue-400/20">
-                <h4 className="text-white font-semibold mb-3 flex items-center">
-                  <Settings className="w-4 h-4 mr-2 text-blue-400" />
-                  System Services
-                </h4>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300 text-sm">Monitoring Service</span>
-                    <span className="text-green-400 text-xs bg-green-400/20 px-2 py-1 rounded">ACTIVE</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300 text-sm">Recording Service</span>
-                    <span className="text-green-400 text-xs bg-green-400/20 px-2 py-1 rounded">ACTIVE</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300 text-sm">Analytics Service</span>
-                    <span className="text-green-400 text-xs bg-green-400/20 px-2 py-1 rounded">ACTIVE</span>
-                  </div>
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                  <div className="text-green-400 text-lg font-bold">97%</div>
+                  <div className="text-slate-300 text-xs">Uptime</div>
+                </div>
+                <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                  <div className="text-blue-400 text-lg font-bold">24</div>
+                  <div className="text-slate-300 text-xs">Active Calls</div>
+                </div>
+                <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                  <div className="text-purple-400 text-lg font-bold">142</div>
+                  <div className="text-slate-300 text-xs">Today</div>
                 </div>
               </div>
             </div>
@@ -5866,42 +5850,26 @@ export default function CommandCenter() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex gap-3">
-                <Button 
-                  onClick={() => setShowLiveChat(true)}
-                  className="bg-purple-600 hover:bg-purple-700 text-white border border-purple-500"
-                >
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Open Live Chat
-                </Button>
-                <Button 
-                  onClick={() => setShowTicketModal(true)}
-                  className="bg-orange-600 hover:bg-orange-700 text-white border border-orange-500"
-                >
-                  <Ticket className="w-4 h-4 mr-2" />
-                  View All Tickets
-                </Button>
-              </div>
+              <Button 
+                onClick={() => setShowLiveChat(true)}
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white border border-purple-500"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Open Live Chat & Support
+              </Button>
               
-              {/* Support Status */}
-              <div className="bg-slate-800/50 rounded-lg p-4 border border-blue-400/20">
-                <h4 className="text-white font-semibold mb-3 flex items-center">
-                  <Users className="w-4 h-4 mr-2 text-blue-400" />
-                  Support Status
-                </h4>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300 text-sm">Support Team</span>
-                    <span className="text-green-400 text-xs bg-green-400/20 px-2 py-1 rounded">ONLINE</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300 text-sm">Response Time</span>
-                    <span className="text-blue-400 text-xs">&lt; 5 minutes</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300 text-sm">Open Tickets</span>
-                    <span className="text-slate-400 text-xs">3 active</span>
-                  </div>
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                  <div className="text-green-400 text-lg font-bold">Online</div>
+                  <div className="text-slate-300 text-xs">Support Team</div>
+                </div>
+                <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                  <div className="text-blue-400 text-lg font-bold">2m</div>
+                  <div className="text-slate-300 text-xs">Response Time</div>
+                </div>
+                <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                  <div className="text-purple-400 text-lg font-bold">3</div>
+                  <div className="text-slate-300 text-xs">Open Tickets</div>
                 </div>
               </div>
             </div>
