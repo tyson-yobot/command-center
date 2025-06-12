@@ -224,11 +224,13 @@ export default function CommandCenter() {
   const [showCallMonitoring, setShowCallMonitoring] = useState(false);
   const [showCallDetails, setShowCallDetails] = useState(false);
   const [showLiveChat, setShowLiveChat] = useState(false);
+  const [showTicketsList, setShowTicketsList] = useState(false);
+  const [showCreateTicket, setShowCreateTicket] = useState(false);
+  const [ticketPopupPosition, setTicketPopupPosition] = useState<{x: number, y: number} | undefined>();
   const [showKnowledgeManager, setShowKnowledgeManager] = useState(false);
   const [showScheduleViewer, setShowScheduleViewer] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0); // 0 = today, 1 = tomorrow, etc.
   const [showTicketModal, setShowTicketModal] = useState(false);
-  const [showCreateTicket, setShowCreateTicket] = useState(false);
   const [newTicketSubject, setNewTicketSubject] = useState('');
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [currentMessage, setCurrentMessage] = useState('');
@@ -761,6 +763,64 @@ export default function CommandCenter() {
       y: rect.bottom + 10 
     });
     setShowCreateTicket(true);
+  };
+
+  // Generate Voice functionality
+  const handleGenerateVoice = async () => {
+    if (!voiceGenerationText.trim()) {
+      toast({
+        title: "Text Required",
+        description: "Please enter text to generate voice",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      setVoiceStatus('Generating voice...');
+      const response = await fetch('/api/elevenlabs/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: voiceGenerationText,
+          voiceId: selectedPersona,
+          options: {
+            stability: 0.5,
+            similarity_boost: 0.8,
+            style: 0.0,
+            use_speaker_boost: true
+          }
+        })
+      });
+
+      if (response.ok) {
+        // Since the endpoint returns the audio file for download
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `voice_generation_${Date.now()}.mp3`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        setVoiceStatus('Voice generated and downloaded!');
+        toast({
+          title: "Voice Generated",
+          description: "Audio file has been downloaded"
+        });
+      } else {
+        throw new Error('Voice generation failed');
+      }
+    } catch (error: any) {
+      setVoiceStatus('Voice generation failed');
+      toast({
+        title: "Generation Failed",
+        description: error.message || "Failed to generate voice",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleSendMessage = async () => {
@@ -2303,7 +2363,7 @@ export default function CommandCenter() {
           <div className="text-center mb-6">
             <h1 className="text-6xl font-bold text-white mb-3 flex items-center justify-center">
               <div className="w-20 h-20 mr-1 inline-block rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center" style={{ marginTop: '-8px' }}>
-                <Bot className="w-10 h-10 text-white" />
+                <Settings className="w-10 h-10 text-white" />
               </div>
               YoBot® Command Center
             </h1>
@@ -4054,7 +4114,7 @@ export default function CommandCenter() {
                         </div>
                         <div className="grid grid-cols-2 gap-2">
                           <Button 
-                            onClick={generateVoice}
+                            onClick={handleGenerateVoice}
                             className="bg-cyan-600 hover:bg-cyan-700 text-white border border-cyan-500"
                             disabled={!voiceGenerationText.trim()}
                           >
