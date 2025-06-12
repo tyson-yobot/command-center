@@ -10678,58 +10678,26 @@ Always provide helpful, actionable guidance.`
     }
   });
 
-  // Knowledge Stats - Live Data Only
+  // Knowledge Stats - PERSISTENT STORAGE WITH TEST/LIVE MODE
   app.get('/api/knowledge/stats', async (req, res) => {
     try {
-      logOperation('knowledge-stats', {}, 'success', 'Knowledge stats requested');
+      const systemMode = getSystemMode();
       
-      // Calculate stats from actual uploaded documents in both stores
-      const totalDocuments = Math.max(documentDataStore.length, knowledgeDataStore.length);
+      // Get stats from persistent storage
+      const stats = await knowledgeStorage.getKnowledgeStats();
       
-      // Count recent uploads (last 24 hours) from actual data stores
-      const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-      const recentUploads = documentDataStore.length; // All uploads are recent in memory
-      
-      // Calculate total size from document data store
-      const totalSize = documentDataStore.reduce((sum, doc) => {
-        return sum + (doc.fileSize || 0);
-      }, 0);
-      
-      // Calculate processed documents (all in documentDataStore are processed)
-      const processedDocuments = documentDataStore.length;
-      
-      // Get categories distribution from document data store
-      const categoriesCount = {};
-      documentDataStore.forEach(doc => {
-        const category = doc.category || 'uncategorized';
-        categoriesCount[category] = (categoriesCount[category] || 0) + 1;
-      });
-      
-      // Get recent documents for activity feed from document data store
-      const recentDocuments = documentDataStore
-        .slice(-5) // Get last 5 uploaded documents
-        .reverse() // Most recent first
-        .map(doc => ({
-          filename: doc.fileName,
-          uploadTime: new Date().toISOString(), // Recent upload
-          status: 'processed',
-          wordCount: doc.extractedText ? doc.extractedText.split(' ').length : 0
-        }));
+      logOperation('knowledge-stats', { systemMode }, 'success', 'Knowledge stats requested');
       
       res.json({
         success: true,
-        totalDocuments,
-        recentUploads,
-        totalSize,
-        processedDocuments,
-        categories: Object.keys(categoriesCount).length,
-        documentsWithAI: processedDocuments,
-        averageWordCount: totalDocuments > 0 ? 
-          Math.round(documentStore.reduce((sum, doc) => sum + (doc.wordCount || 0), 0) / totalDocuments) : 0,
-        recentDocuments,
-        categoriesBreakdown: categoriesCount,
-        systemHealth: 'operational',
-        lastUpdate: new Date().toISOString()
+        data: {
+          totalDocuments: stats.totalDocuments,
+          totalMemories: stats.totalMemories,
+          categories: stats.categories,
+          totalSize: 0, // Will be calculated from actual content
+          lastUpdated: new Date().toISOString(),
+          systemMode
+        }
       });
     } catch (error) {
       logOperation('knowledge-stats', {}, 'error', `Knowledge stats failed: ${error.message}`);
