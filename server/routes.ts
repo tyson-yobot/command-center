@@ -449,8 +449,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   registerCommandCenterRoutes(app);
   registerQAValidationRoutes(app);
   
-  // Register integration test logging system - CRITICAL: Must be active before any testing
-  registerIntegrationTestRoutes(app);
+  // Integration test routes removed - using PRODUCTION_HARDENED_LOGGER only
   
   // Register local test logger - Primary test tracking system
   // Logger routes removed - using PRODUCTION_HARDENED_LOGGER only
@@ -459,7 +458,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   registerRealAutomationEndpoints(app);
   
   // Register Publer social media integration - Required for automated posting
-  registerPublerRoutes(app);
+  // Publer routes removed - hardcoded data eliminated
   
   // Register Content Creator and Mailchimp webhook routes
   registerContentCreatorRoutes(app);
