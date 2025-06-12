@@ -4479,6 +4479,14 @@ export default function CommandCenter() {
                     Clear Knowledge
                   </Button>
                   <Button 
+                    onClick={handlePurgeKnowledgeTestData}
+                    className="bg-orange-600 hover:bg-orange-700 text-white"
+                    disabled={currentSystemMode !== 'live'}
+                  >
+                    <AlertTriangle className="w-4 h-4 mr-2" />
+                    Purge Test Data
+                  </Button>
+                  <Button 
                     onClick={handleViewKnowledge}
                     className="bg-amber-600 hover:bg-amber-700 text-white"
                   >
