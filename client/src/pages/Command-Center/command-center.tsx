@@ -2712,7 +2712,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">System Load</div>
                   <div className="text-2xl font-bold text-green-400">
-                    {metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '99.8%'}
+                    {currentSystemMode === 'test' ? '99.8%' : (metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '0%')}
                   </div>
                   <div className="text-xs text-green-400">Uptime</div>
                 </div>
@@ -2811,7 +2811,7 @@ export default function CommandCenter() {
                   <div className="text-right">
                     <span className="text-green-400 font-bold">
                       {currentSystemMode === 'test' ? '$12.5K' : 
-                       (metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : '$0K')}
+                       (metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : '--')}
                     </span>
                   </div>
                 </div>
@@ -2820,7 +2820,7 @@ export default function CommandCenter() {
                   <div className="text-right">
                     <span className="text-emerald-400 font-bold">
                       {currentSystemMode === 'test' ? '18%' : 
-                       (metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : '0%')}
+                       (metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : '--')}
                     </span>
                   </div>
                 </div>
@@ -2828,21 +2828,21 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">Pipeline Value:</span>
                   <span className="text-blue-400 font-bold">
                     {currentSystemMode === 'test' ? '$85K' : 
-                     (metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(0) + 'K' : '$0K')}
+                     (metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(0) + 'K' : '--')}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Close Rate:</span>
                   <span className="text-cyan-400 font-bold">
                     {currentSystemMode === 'test' ? '8.5%' : 
-                     (metrics?.data?.conversionRate ? metrics.data.conversionRate + '%' : '0%')}
+                     (metrics?.data?.conversionRate ? metrics.data.conversionRate + '%' : '--')}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Sales Velocity:</span>
                   <span className="text-purple-400 font-bold">
                     {currentSystemMode === 'test' ? '4.7/5' : 
-                     (metrics?.data?.customerSatisfaction ? metrics.data.customerSatisfaction + '/5' : '0/5')}
+                     (metrics?.data?.customerSatisfaction ? metrics.data.customerSatisfaction + '/5' : '--')}
                   </span>
                 </div>
               </div>
@@ -2949,11 +2949,11 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Avg Completion Time</span>
-                  <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '2.1s' : 'N/A'}</span>
+                  <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '2.1s' : '--'}</span>
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="text-slate-300 text-sm mb-1">Next Automation</div>
-                  <div className="text-blue-400 font-medium">{currentSystemMode === 'test' ? 'Lead follow-up in 15 min' : 'No Scheduled Automations'}</div>
+                  <div className="text-blue-400 font-medium">{currentSystemMode === 'test' ? 'Lead follow-up in 15 min' : '--'}</div>
                 </div>
               </div>
             </CardContent>
