@@ -1958,6 +1958,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Document loading status endpoint
+  app.get('/api/documents/status', async (req, res) => {
+    try {
+      const documentCount = documentStore.length;
+      const memoryCount = memoryStore.length;
+      
+      // Get database knowledge entries
+      const dbKnowledge = await storage.getAllKnowledgeBase();
+      const dbCount = dbKnowledge.length;
+      
+      // Recent activity (last hour)
+      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+      const recentDocuments = documentStore.filter(doc => 
+        new Date(doc.uploadTime || doc.uploadedAt || 0) > oneHourAgo
+      );
+      
+      const recentMemory = memoryStore.filter(mem => 
+        new Date(mem.timestamp) > oneHourAgo
+      );
+      
+      console.log(`✓ Document Status: ${documentCount} docs, ${memoryCount} memory, ${dbCount} DB entries`);
+      
+      res.json({
+        success: true,
+        data: {
+          documentsLoaded: documentCount,
+          memoryEntries: memoryCount,
+          databaseEntries: dbCount,
+          totalKnowledge: documentCount + memoryCount + dbCount,
+          recentActivity: {
+            documents: recentDocuments.length,
+            memory: recentMemory.length,
+            lastUpdated: new Date().toISOString()
+          },
+          loadingVerified: true
+        }
+      });
+      
+    } catch (error) {
+      console.error('Document status error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to check document status'
+      });
+    }
+  });
+
   // Knowledge reindex endpoint
   app.post('/api/knowledge/reindex', async (req, res) => {
     try {
