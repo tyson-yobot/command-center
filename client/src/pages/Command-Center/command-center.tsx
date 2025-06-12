@@ -2887,7 +2887,7 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => setShowContentCreator(!showContentCreator)}
+                    onClick={() => window.open('https://app.jasper.ai/', '_blank')}
                     className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
                     style={{ borderLeft: '8px solid #f59e0b' }}
                   >
@@ -2896,7 +2896,7 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => setShowMailchimpSync(!showMailchimpSync)}
+                    onClick={() => window.open('https://mailchimp.com/login/', '_blank')}
                     className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
                     style={{ borderLeft: '8px solid #fbbf24' }}
                   >
