@@ -3302,15 +3302,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Positive:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '68%' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Neutral:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '27%' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Negative:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '5%' : '--'}</span>
                 </div>
               </div>
             </CardContent>
@@ -3331,75 +3331,85 @@ export default function CommandCenter() {
               {/* Cost Per Lead */}
               <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-slate-400 mb-1">--</div>
+                  <div className="text-2xl font-black text-green-400 mb-1">{currentSystemMode === 'test' ? '$8.50' : '--'}</div>
                   <div className="text-slate-300 text-sm">Cost Per Lead</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Last Month</span>
-                    <span className="text-slate-400">--</span>
+                    <span className="text-cyan-400">{currentSystemMode === 'test' ? '$12.30' : '--'}</span>
                   </div>
-                  <div className="text-center text-xs text-slate-400">No data available</div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className={`bg-green-400 h-2 rounded-full ${currentSystemMode === 'test' ? 'w-3/4' : 'w-0'}`}></div>
+                  </div>
                 </div>
               </div>
 
               {/* Interaction Quality */}
               <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-slate-400 mb-1">--</div>
+                  <div className="text-2xl font-black text-blue-400 mb-1">{currentSystemMode === 'test' ? '94.2%' : '--'}</div>
                   <div className="text-slate-300 text-sm">Accuracy Rate</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Target</span>
-                    <span className="text-slate-400">--</span>
+                    <span className="text-green-400">{currentSystemMode === 'test' ? '90%' : '--'}</span>
                   </div>
-                  <div className="text-center text-xs text-slate-400">No data available</div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className={`bg-blue-400 h-2 rounded-full ${currentSystemMode === 'test' ? 'w-[94%]' : 'w-0'}`}></div>
+                  </div>
                 </div>
               </div>
 
               {/* Learning Rate */}
               <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-slate-400 mb-1">--</div>
+                  <div className="text-2xl font-black text-purple-400 mb-1">{currentSystemMode === 'test' ? '78%' : '--'}</div>
                   <div className="text-slate-300 text-sm">Learning Rate</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Weekly</span>
-                    <span className="text-slate-400">--</span>
+                    <span className="text-yellow-400">{currentSystemMode === 'test' ? '+12%' : '--'}</span>
                   </div>
-                  <div className="text-center text-xs text-slate-400">No data available</div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className={`bg-purple-400 h-2 rounded-full ${currentSystemMode === 'test' ? 'w-[78%]' : 'w-0'}`}></div>
+                  </div>
                 </div>
               </div>
 
               {/* Total Interactions */}
               <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-slate-400 mb-1">--</div>
+                  <div className="text-2xl font-black text-cyan-400 mb-1">{currentSystemMode === 'test' ? '142' : '--'}</div>
                   <div className="text-slate-300 text-sm">Interactions</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Today</span>
-                    <span className="text-slate-400">--</span>
+                    <span className="text-emerald-400">{currentSystemMode === 'test' ? '38' : '--'}</span>
                   </div>
-                  <div className="text-center text-xs text-slate-400">No data available</div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className={`bg-cyan-400 h-2 rounded-full ${currentSystemMode === 'test' ? 'w-[85%]' : 'w-0'}`}></div>
+                  </div>
                 </div>
               </div>
 
               {/* Conversion Rate */}
               <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-slate-400 mb-1">--</div>
+                  <div className="text-2xl font-black text-emerald-400 mb-1">{currentSystemMode === 'test' ? '8.5%' : '--'}</div>
                   <div className="text-slate-300 text-sm">Close Rate</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Industry Avg</span>
-                    <span className="text-slate-400">--</span>
+                    <span className="text-orange-400">{currentSystemMode === 'test' ? '3.2%' : '--'}</span>
                   </div>
-                  <div className="text-center text-xs text-slate-400">No data available</div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className={`bg-emerald-400 h-2 rounded-full ${currentSystemMode === 'test' ? 'w-[85%]' : 'w-0'}`}></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -3419,33 +3429,41 @@ export default function CommandCenter() {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
               <div className="bg-gradient-to-br from-green-600/20 to-green-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-slate-400 mb-2">--</div>
+                  <div className="text-3xl font-black text-green-400 mb-2">{currentSystemMode === 'test' ? '$3,240' : '--'}</div>
                   <div className="text-slate-300 text-sm">Monthly Savings</div>
-                  <div className="text-slate-400 text-xs mt-1">No data available</div>
+                  <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
+                    <div className={`bg-green-400 h-2 rounded-full ${currentSystemMode === 'test' ? 'w-4/5' : 'w-0'}`}></div>
+                  </div>
                 </div>
               </div>
               
               <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-slate-400 mb-2">--</div>
+                  <div className="text-3xl font-black text-blue-400 mb-2">{currentSystemMode === 'test' ? '67%' : '--'}</div>
                   <div className="text-blue-300 text-sm">Cost Reduction</div>
-                  <div className="text-blue-200 text-xs mt-1">vs Manual Process</div>
+                  <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
+                    <div className={`bg-blue-400 h-2 rounded-full ${currentSystemMode === 'test' ? 'w-2/3' : 'w-0'}`}></div>
+                  </div>
                 </div>
               </div>
               
               <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-slate-400 mb-2">--</div>
+                  <div className="text-3xl font-black text-purple-400 mb-2">{currentSystemMode === 'test' ? '340%' : '--'}</div>
                   <div className="text-slate-300 text-sm">ROI</div>
-                  <div className="text-slate-400 text-xs mt-1">No data available</div>
+                  <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
+                    <div className={`bg-purple-400 h-2 rounded-full ${currentSystemMode === 'test' ? 'w-full' : 'w-0'}`}></div>
+                  </div>
                 </div>
               </div>
               
               <div className="bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-slate-400 mb-2">--</div>
+                  <div className="text-3xl font-black text-yellow-400 mb-2">{currentSystemMode === 'test' ? '42' : '--'}</div>
                   <div className="text-slate-300 text-sm">Payback Days</div>
-                  <div className="text-slate-400 text-xs mt-1">No data available</div>
+                  <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
+                    <div className={`bg-yellow-400 h-2 rounded-full ${currentSystemMode === 'test' ? 'w-1/3' : 'w-0'}`}></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -3464,9 +3482,26 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="text-center text-slate-400 py-8">
-                  No live activity data available
-                </div>
+                {currentSystemMode === 'test' ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between bg-slate-800/40 p-3 rounded-lg">
+                      <span className="text-slate-300 text-sm">📧 Email automation triggered</span>
+                      <span className="text-green-400 text-xs">2 min ago</span>
+                    </div>
+                    <div className="flex items-center justify-between bg-slate-800/40 p-3 rounded-lg">
+                      <span className="text-slate-300 text-sm">💼 CRM lead updated</span>
+                      <span className="text-blue-400 text-xs">5 min ago</span>
+                    </div>
+                    <div className="flex items-center justify-between bg-slate-800/40 p-3 rounded-lg">
+                      <span className="text-slate-300 text-sm">📞 Call logged successfully</span>
+                      <span className="text-cyan-400 text-xs">8 min ago</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center text-slate-400 py-8">
+                    No live activity data available
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
