@@ -3021,7 +3021,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Success Rate</div>
                   <div className="text-2xl font-bold text-green-400">
-                    {automationPerformance?.data?.passRate ? automationPerformance.data.passRate + '%' : '--'}
+                    {currentSystemMode === 'test' ? '94.2%' : (automationPerformance?.data?.passRate + '%' || '--')}
                   </div>
                   <div className="text-xs text-green-400">
                     {currentSystemMode === 'test' ? 'Test mode performance' : 'Live performance'}
@@ -3103,7 +3103,7 @@ export default function CommandCenter() {
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Bot Errors:</span>
                   <div className="flex items-center space-x-2">
-                    <span className="text-red-400 font-bold">{automationPerformance?.data?.criticalErrors || '0'}</span>
+                    <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '3' : (automationPerformance?.data?.criticalErrors || '0')}</span>
                     <Button size="sm" variant="ghost" className="text-cyan-400 hover:text-cyan-300 text-xs p-1">
                       👁 View Details
                     </Button>
@@ -3115,7 +3115,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">System Uptime:</span>
-                  <span className="text-green-400 font-bold">{metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '--'}</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '99.8%' : (metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '--')}</span>
                 </div>
               </div>
             </CardContent>
@@ -3203,10 +3203,10 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Bot Utilization Rate:</span>
-                    <span className="text-cyan-400 font-bold">{automationPerformance?.data?.passRate || '--'}%</span>
+                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '93.6' : (automationPerformance?.data?.passRate || '--')}%</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300" style={{width: `${automationPerformance?.data?.passRate || 0}%`}}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300" style={{width: `${currentSystemMode === 'test' ? '93.6' : (automationPerformance?.data?.passRate || 0)}%`}}></div>
                   </div>
                 </div>
               </div>
@@ -3233,15 +3233,15 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Error Trend (7d):</span>
-                  <span className="text-red-400 font-bold">{automationPerformance?.data?.failedTests || 0} errors</span>
+                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '54' : (automationPerformance?.data?.failedTests || 0)} errors</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">API Usage:</span>
-                  <span className="text-green-400 font-bold">{metrics?.data?.dailyActiveUsers ? (metrics.data.dailyActiveUsers * 12).toFixed(0) : '--'}/day</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1,068' : (metrics?.data?.dailyActiveUsers ? (metrics.data.dailyActiveUsers * 12).toFixed(0) : '--')}/day</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Bot Processing Load:</span>
-                  <span className="text-blue-400 font-bold">{metrics?.data?.automationEfficiency ? metrics.data.automationEfficiency.toFixed(1) : '--'}%</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '94.2' : (metrics?.data?.automationEfficiency ? metrics.data.automationEfficiency.toFixed(1) : '--')}%</span>
                 </div>
               </div>
             </CardContent>
