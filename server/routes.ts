@@ -2173,6 +2173,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Individual knowledge item deletion endpoint
+  app.delete('/api/knowledge/delete/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      if (!id) {
+        return res.status(400).json({
+          success: false,
+          error: 'Item ID is required'
+        });
+      }
+
+      let deleted = false;
+      let itemType = '';
+
+      // Try to delete from documents
+      const docIndex = documentStore.findIndex(doc => (doc.documentId || doc.id) === id);
+      if (docIndex !== -1) {
+        documentStore.splice(docIndex, 1);
+        deleted = true;
+        itemType = 'document';
+      }
+
+      // Try to delete from memories if not found in documents
+      if (!deleted) {
+        const memIndex = memoryStore.findIndex(mem => mem.id === id);
+        if (memIndex !== -1) {
+          memoryStore.splice(memIndex, 1);
+          deleted = true;
+          itemType = 'memory';
+        }
+      }
+
+      if (deleted) {
+        res.json({
+          success: true,
+          message: `${itemType} deleted successfully`,
+          deletedId: id,
+          itemType: itemType
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          error: 'Item not found'
+        });
+      }
+    } catch (error) {
+      console.error('Individual knowledge deletion error:', error);
+      res.status(500).json({ success: false, error: 'Failed to delete knowledge item' });
+    }
+  });
+
   // Voice recordings list endpoint
   app.get('/api/voice/recordings', async (req, res) => {
     try {

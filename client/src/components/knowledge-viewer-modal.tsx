@@ -98,6 +98,33 @@ export function KnowledgeViewerModal({
     }
   };
 
+  const handleDeleteItem = async (itemId: string) => {
+    if (confirm('Are you sure you want to delete this item?')) {
+      try {
+        const response = await fetch(`/api/knowledge/delete/${itemId}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error('Failed to delete item:', error);
+      }
+    }
+  };
+
+  const handleEditTitle = (item: any) => {
+    const newTitle = prompt('Enter new title:', item.title || item.filename || item.name);
+    if (newTitle && newTitle.trim()) {
+      // Update title functionality would go here
+      console.log('Updating title to:', newTitle);
+    }
+  };
+
+  const handleViewSourceType = (item: any) => {
+    alert(`Source Type: ${item.type}\nFile Type: ${item.fileType || item.mimetype || 'text/plain'}\nCategory: ${item.category}`);
+  };
+
   const handleReindexDocument = async (document: any) => {
     if (isReindexing === document.id) return;
     
@@ -110,7 +137,6 @@ export function KnowledgeViewerModal({
       
       if (response.ok) {
         console.log('Document reindexed successfully');
-        // Refresh the knowledge items list
         window.location.reload();
       } else {
         console.error('Failed to reindex document');
@@ -186,16 +212,30 @@ export function KnowledgeViewerModal({
                     <Button
                       onClick={() => handlePreviewDocument(item)}
                       className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 text-xs"
-                      title="Preview indexed content"
+                      title="🔍 Preview"
                     >
-                      <Eye className="w-3 h-3" />
+                      🔍
                     </Button>
                     <Button
-                      onClick={() => handleReindexDocument(item)}
-                      className="bg-orange-600 hover:bg-orange-700 text-white px-2 py-1 text-xs"
-                      title="Reindex document"
+                      onClick={() => handleDeleteItem(item.id)}
+                      className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 text-xs"
+                      title="🗑 Delete"
                     >
-                      <RefreshCw className="w-3 h-3" />
+                      🗑
+                    </Button>
+                    <Button
+                      onClick={() => handleEditTitle(item)}
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 text-xs"
+                      title="✏️ Edit Title"
+                    >
+                      ✏️
+                    </Button>
+                    <Button
+                      onClick={() => handleViewSourceType(item)}
+                      className="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 text-xs"
+                      title="🪪 View Source Type"
+                    >
+                      🪪
                     </Button>
                     <input
                       type="checkbox"
@@ -286,7 +326,27 @@ export function KnowledgeViewerModal({
                 </pre>
               </div>
             </div>
-            <div className="sticky bottom-0 bg-slate-800 border-t border-blue-400/30 p-4 flex justify-end">
+            <div className="sticky bottom-0 bg-slate-800 border-t border-blue-400/30 p-4 flex justify-between">
+              <Button
+                onClick={async () => {
+                  if (confirm('Are you sure you want to remove this item from memory?')) {
+                    try {
+                      const response = await fetch(`/api/knowledge/delete/${documentPreview.document?.id}`, {
+                        method: 'DELETE'
+                      });
+                      if (response.ok) {
+                        setDocumentPreview(prev => ({ ...prev, isOpen: false }));
+                        window.location.reload();
+                      }
+                    } catch (error) {
+                      console.error('Failed to remove from memory:', error);
+                    }
+                  }
+                }}
+                className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                Remove from Memory
+              </Button>
               <Button
                 onClick={() => setDocumentPreview(prev => ({ ...prev, isOpen: false }))}
                 className="bg-blue-600 hover:bg-blue-700 text-white"
