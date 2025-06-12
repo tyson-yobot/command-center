@@ -5775,97 +5775,19 @@ export default function CommandCenter() {
         documentName={previewDocumentName}
       />
 
-      {/* Bottom Panels - Call Monitoring and Support Side by Side */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8 mb-4">
-        
-        {/* Call Monitoring Panel */}
-        <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 h-64">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center">
-              <Phone className="w-5 h-5 mr-2 text-green-400" />
-              Call Monitoring Panel
-              <Button
-                onClick={() => setShowCallMonitoring(true)}
-                variant="outline"
-                size="sm"
-                className="ml-auto text-white border-blue-400 hover:bg-blue-700"
-              >
-                <Monitor className="w-4 h-4 mr-1" />
-                Details
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-slate-300 text-sm">Active Calls:</span>
-                <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '3' : (metrics?.activeCalls || 0)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-300 text-sm">Total Today:</span>
-                <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '47' : '--'}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-300 text-sm">Success Rate:</span>
-                <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '96.2%' : '--'}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-300 text-sm">Avg Duration:</span>
-                <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '11m 28s' : '--'}</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* YoBot Support Panel */}
-        <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 h-64">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center">
-              <Headphones className="w-5 h-5 mr-2 text-blue-400" />
-              YoBot Support
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3 h-full flex flex-col justify-between">
-              <div className="space-y-3">
-                <p className="text-slate-300 text-sm">Our team is here to help optimize your automation</p>
-                
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Support Status:</span>
-                  <span className="text-green-400 font-bold">Online</span>
-                </div>
-                
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Response Time:</span>
-                  <span className="text-blue-400 font-bold">&lt; 2 min</span>
-                </div>
-                
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Open Tickets:</span>
-                  <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '2' : '0'}</span>
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <Button 
-                  onClick={handleContactSupport}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 text-sm"
-                >
-                  <Headphones className="w-4 h-4 mr-2" />
-                  Contact Support
-                </Button>
-                
-                <Button 
-                  onClick={() => setShowLiveChat(true)}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white border border-green-500 text-sm"
-                >
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Live Chat
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Footer - Support Contact - Moved to Bottom */}
+      <div className="text-center mt-8 mb-4">
+        <div className="bg-white/10 backdrop-blur-sm border border-blue-400 rounded-lg p-6">
+          <h3 className="text-xl font-semibold text-white mb-2">Need Support?</h3>
+          <p className="text-slate-300 mb-4">Our team is here to help optimize your automation</p>
+          <Button 
+            onClick={handleContactSupport}
+            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+          >
+            <Headphones className="w-4 h-4 mr-2" />
+            Contact Support
+          </Button>
+        </div>
       </div>
     </div>
     </>
