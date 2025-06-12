@@ -831,6 +831,7 @@ export default function CommandCenter() {
       }
     } catch (error) {
       toast({
+        id: Date.now().toString(),
         title: "Error",
         description: "Failed to create ticket",
         variant: "destructive"
