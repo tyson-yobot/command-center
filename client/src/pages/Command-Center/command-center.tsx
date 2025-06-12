@@ -3841,8 +3841,8 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Voice & Conversation Analytics */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        {/* Analytics Dashboard - 2x3 Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           {/* Voice Analytics */}
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
             <CardHeader>
