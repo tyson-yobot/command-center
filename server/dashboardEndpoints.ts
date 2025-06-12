@@ -9,22 +9,125 @@ export function registerDashboardEndpoints(app: Express) {
       const systemMode = getSystemMode();
       
       if (systemMode === 'test') {
-        // Demo data for presentations - some metrics intentionally lower
+        // Comprehensive demo data for dashboard presentation
         res.json({
+          // Top metrics cards
           totalLeads: 2847,
           totalCampaigns: 12,
           activeAutomations: 18,
-          successRate: 87.3, // Intentionally lower - shows improvement opportunity
+          successRate: 74.5, // Lower - shows improvement opportunity
           monthlyGrowth: 12.7,
+          
+          // Live Automation Engine metrics
+          automationEngine: {
+            status: "Active",
+            executionsToday: 1829,
+            successRate: 74.5,
+            avgResponseTime: 1.4,
+            activeConnections: 23,
+            queuedTasks: 7,
+            failedTasks: 3
+          },
+          
+          // Bot Health Monitor
+          botHealth: {
+            overall: "Good",
+            apiConnections: "Healthy",
+            databaseStatus: "Connected", 
+            systemLoad: 67,
+            memoryUsage: 45,
+            activeConnections: 23,
+            errorRate: 2.1,
+            uptime: "99.7%"
+          },
+          
+          // Revenue Forecast
+          revenueForecast: {
+            currentMonth: 47200,
+            projected: 52800,
+            growthRate: 11.8,
+            pipeline: 89400,
+            closingProbability: 67,
+            avgDealSize: 12500
+          },
+          
+          // Client Pulse
+          clientPulse: {
+            totalClients: 156,
+            activeThisWeek: 134,
+            satisfactionScore: 8.7,
+            supportTickets: 23,
+            escalations: 2,
+            renewalRate: 94.2
+          },
+          
+          // Ops Metrics
+          opsMetrics: {
+            systemUptime: 99.7,
+            apiCalls: 45892,
+            dataProcessed: "2.3TB",
+            automationsSaved: 847,
+            errorRate: 0.3,
+            avgProcessingTime: 1.2
+          },
+          
+          // Workflow Performance
+          workflowPerformance: {
+            totalWorkflows: 89,
+            activeWorkflows: 67,
+            completionRate: 92.4,
+            avgExecutionTime: 3.2,
+            successfulExecutions: 1683,
+            failedExecutions: 142,
+            pendingExecutions: 34
+          },
+          
+          // Analytics insights
+          analytics: {
+            conversionRate: 13.2, // Lower - improvement area
+            leadQuality: 78.4, // Lower - improvement area  
+            campaignROI: 245,
+            engagementScore: 67.8,
+            customerLifetimeValue: 24800,
+            churnRate: 5.2
+          },
+          
+          // SmartSpend metrics
+          smartSpend: {
+            totalSpend: 28400,
+            efficiency: 82.3, // Lower - improvement area
+            costPerLead: 47.50,
+            roi: 312,
+            budgetUtilization: 76.8,
+            topPerformingChannels: ["Google Ads", "LinkedIn", "Apollo.io"]
+          },
+          
+          // AI Assistant Insights
+          aiInsights: {
+            queriesProcessed: 2847,
+            accuracyRate: 91.2,
+            learningProgress: 78.5,
+            knowledgeBase: 15600,
+            responseTime: 0.8,
+            userSatisfaction: 8.9
+          },
+          
+          // Recent activity feed
           recentActivity: [
-            { type: "Lead Captured", details: "Apollo.io sync", timestamp: new Date(Date.now() - 300000).toISOString() },
-            { type: "Campaign Launched", details: "Real Estate Outreach Q2", timestamp: new Date(Date.now() - 900000).toISOString() },
-            { type: "Automation Success", details: "CRM sync completed", timestamp: new Date(Date.now() - 1800000).toISOString() }
+            { type: "Lead Captured", details: "Apollo.io sync - 47 leads", timestamp: new Date(Date.now() - 300000).toISOString(), status: "success" },
+            { type: "Campaign Launched", details: "Real Estate Outreach Q2", timestamp: new Date(Date.now() - 900000).toISOString(), status: "success" },
+            { type: "System Alert", details: "QuickBooks auth timeout", timestamp: new Date(Date.now() - 1200000).toISOString(), status: "warning" },
+            { type: "Automation Success", details: "CRM sync completed - 234 records", timestamp: new Date(Date.now() - 1800000).toISOString(), status: "success" },
+            { type: "Voice Call", details: "Support call resolved - 8.5/10", timestamp: new Date(Date.now() - 2400000).toISOString(), status: "success" }
           ],
+          
+          // Platform statistics
           platformStats: {
-            apollo: { count: 1234, quality: 91.2 },
-            apify: { count: 856, quality: 78.4 }, // Lower quality - improvement area
-            phantom: { count: 757, quality: 94.1 }
+            apollo: { count: 1234, quality: 91.2, conversionRate: 14.8 },
+            apify: { count: 856, quality: 78.4, conversionRate: 11.2 }, // Lower - improvement area
+            phantom: { count: 757, quality: 94.1, conversionRate: 16.3 },
+            hubspot: { count: 2847, quality: 89.7, conversionRate: 13.9 },
+            quickbooks: { count: 567, quality: 92.4, conversionRate: 18.2 }
           }
         });
       } else {
