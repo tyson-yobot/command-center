@@ -1,0 +1,17 @@
+[
+  {
+    "timestamp": "2025-06-12T03:20:00.013Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 25.518778654,
+      "lastHealthCheck": "2025-06-12T03:19:00.010Z",
+      "automationStatus": "paused"
+    }
+  }
+]
