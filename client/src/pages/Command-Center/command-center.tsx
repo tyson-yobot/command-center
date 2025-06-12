@@ -223,6 +223,12 @@ export default function CommandCenter() {
   const [showKnowledgeManager, setShowKnowledgeManager] = useState(false);
   const [showScheduleViewer, setShowScheduleViewer] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0); // 0 = today, 1 = tomorrow, etc.
+  const [showTicketModal, setShowTicketModal] = useState(false);
+  const [showCreateTicket, setShowCreateTicket] = useState(false);
+  const [newTicketSubject, setNewTicketSubject] = useState('');
+  const [chatMessages, setChatMessages] = useState<any[]>([]);
+  const [currentMessage, setCurrentMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const [activeCalls, setActiveCalls] = useState<any[]>([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [completedCalls, setCompletedCalls] = useState(0);
@@ -4925,6 +4931,191 @@ export default function CommandCenter() {
           }
         }}
       />
+
+      {/* Live Chat Modal */}
+      {showLiveChat && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl max-h-[80vh] bg-slate-900 rounded-lg border border-blue-400/50 flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b border-blue-400/30">
+              <h2 className="text-xl font-bold text-white flex items-center">
+                <MessageCircle className="w-5 h-5 mr-2 text-blue-400" />
+                YoBot Support Chat
+              </h2>
+              <Button
+                onClick={() => setShowLiveChat(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-[400px]">
+              {chatMessages.length === 0 ? (
+                <div className="text-center py-8">
+                  <div className="bg-blue-900/60 rounded-lg p-4 border border-blue-400/50">
+                    <MessageCircle className="w-8 h-8 mx-auto mb-2 text-blue-400" />
+                    <p className="text-white font-medium">Welcome to YoBot Support</p>
+                    <p className="text-slate-300 text-sm mt-1">How can we help you today?</p>
+                  </div>
+                </div>
+              ) : (
+                chatMessages.map((msg) => (
+                  <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[80%] rounded-lg p-3 ${
+                      msg.sender === 'user' 
+                        ? 'bg-blue-600 text-white' 
+                        : 'bg-slate-800 text-white border border-slate-600'
+                    }`}>
+                      <p className="text-sm">{msg.message}</p>
+                      <p className={`text-xs mt-1 ${
+                        msg.sender === 'user' ? 'text-blue-200' : 'text-slate-400'
+                      }`}>
+                        {msg.timestamp}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
+              
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-slate-800 border border-slate-600 rounded-lg p-3">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div className="p-4 border-t border-blue-400/30">
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  placeholder="Type your message..."
+                  value={currentMessage}
+                  onChange={(e) => setCurrentMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  className="flex-1 px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white placeholder-slate-400 focus:outline-none focus:border-blue-400"
+                />
+                <Button
+                  onClick={handleSendMessage}
+                  disabled={!currentMessage.trim()}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4"
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View All Tickets Modal */}
+      {showTicketModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-blue-400/50">
+            <div className="sticky top-0 bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white flex items-center">
+                <Ticket className="w-5 h-5 mr-2 text-blue-400" />
+                Support Tickets
+              </h2>
+              <Button
+                onClick={() => setShowTicketModal(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6">
+              {currentSystemMode === 'test' ? (
+                <div className="space-y-4">
+                  {[
+                    {
+                      id: 'TICK-2025-001',
+                      subject: 'Voice recognition not working in Chrome',
+                      status: 'Open',
+                      priority: 'High',
+                      created: '2 hours ago',
+                      assignee: 'Sarah Chen'
+                    },
+                    {
+                      id: 'TICK-2025-002',
+                      subject: 'Calendar integration sync issues',
+                      status: 'In Progress',
+                      priority: 'Medium',
+                      created: '1 day ago',
+                      assignee: 'Marcus Rodriguez'
+                    },
+                    {
+                      id: 'TICK-2025-003',
+                      subject: 'Automation function timeout errors',
+                      status: 'Resolved',
+                      priority: 'Low',
+                      created: '3 days ago',
+                      assignee: 'Daniel Thompson'
+                    },
+                    {
+                      id: 'TICK-2025-004',
+                      subject: 'Dashboard metrics not updating',
+                      status: 'Open',
+                      priority: 'Medium',
+                      created: '5 hours ago',
+                      assignee: 'Sarah Chen'
+                    },
+                    {
+                      id: 'TICK-2025-005',
+                      subject: 'API key configuration help needed',
+                      status: 'Pending',
+                      priority: 'Low',
+                      created: '1 week ago',
+                      assignee: 'Support Team'
+                    }
+                  ].map((ticket) => (
+                    <div key={ticket.id} className="bg-slate-800/60 border border-slate-600 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-white font-medium">{ticket.subject}</h3>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${
+                            ticket.status === 'Open' ? 'bg-red-600/20 text-red-400' :
+                            ticket.status === 'In Progress' ? 'bg-yellow-600/20 text-yellow-400' :
+                            ticket.status === 'Resolved' ? 'bg-green-600/20 text-green-400' :
+                            'bg-blue-600/20 text-blue-400'
+                          }`}>
+                            {ticket.status}
+                          </span>
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${
+                            ticket.priority === 'High' ? 'bg-red-600/20 text-red-400' :
+                            ticket.priority === 'Medium' ? 'bg-yellow-600/20 text-yellow-400' :
+                            'bg-blue-600/20 text-blue-400'
+                          }`}>
+                            {ticket.priority}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between text-sm text-slate-400">
+                        <span>Ticket #{ticket.id}</span>
+                        <span>Assigned to: {ticket.assignee}</span>
+                        <span>Created: {ticket.created}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <Ticket className="w-12 h-12 mx-auto mb-4 text-slate-400" />
+                  <p className="text-slate-400 text-lg">No support tickets found</p>
+                  <p className="text-slate-500 text-sm mt-2">Create a new ticket to get started</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Enhanced Schedule Viewer Modal */}
       {showScheduleViewer && (
