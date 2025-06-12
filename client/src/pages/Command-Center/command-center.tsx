@@ -1,13 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
+import yobotRobotHead from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749548966185.png';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
-import LiveChatWidget from '@/components/live-chat-widget';
-import TicketsListPopup from '@/components/tickets-list-popup';
-import CreateTicketPopup from '@/components/create-ticket-popup';
 // Live mode only - no test mode context needed
 import { 
   TrendingUp, 
@@ -224,13 +222,11 @@ export default function CommandCenter() {
   const [showCallMonitoring, setShowCallMonitoring] = useState(false);
   const [showCallDetails, setShowCallDetails] = useState(false);
   const [showLiveChat, setShowLiveChat] = useState(false);
-  const [showTicketsList, setShowTicketsList] = useState(false);
-  const [showCreateTicket, setShowCreateTicket] = useState(false);
-  const [ticketPopupPosition, setTicketPopupPosition] = useState<{x: number, y: number} | undefined>();
   const [showKnowledgeManager, setShowKnowledgeManager] = useState(false);
   const [showScheduleViewer, setShowScheduleViewer] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0); // 0 = today, 1 = tomorrow, etc.
   const [showTicketModal, setShowTicketModal] = useState(false);
+  const [showCreateTicket, setShowCreateTicket] = useState(false);
   const [newTicketSubject, setNewTicketSubject] = useState('');
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [currentMessage, setCurrentMessage] = useState('');
@@ -745,81 +741,14 @@ export default function CommandCenter() {
 
   const handleOpenLiveChat = () => {
     setShowLiveChat(true);
-  };
-
-  const handleViewAllTickets = (event: React.MouseEvent) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    setTicketPopupPosition({ 
-      x: rect.left, 
-      y: rect.bottom + 10 
-    });
-    setShowTicketsList(true);
-  };
-
-  const handleCreateNewTicket = (event: React.MouseEvent) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    setTicketPopupPosition({ 
-      x: rect.left, 
-      y: rect.bottom + 10 
-    });
-    setShowCreateTicket(true);
-  };
-
-  // Generate Voice functionality
-  const handleGenerateVoice = async () => {
-    if (!voiceGenerationText.trim()) {
-      toast({
-        title: "Text Required",
-        description: "Please enter text to generate voice",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      setVoiceStatus('Generating voice...');
-      const response = await fetch('/api/elevenlabs/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: voiceGenerationText,
-          voiceId: selectedPersona,
-          options: {
-            stability: 0.5,
-            similarity_boost: 0.8,
-            style: 0.0,
-            use_speaker_boost: true
-          }
-        })
-      });
-
-      if (response.ok) {
-        // Since the endpoint returns the audio file for download
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `voice_generation_${Date.now()}.mp3`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-        
-        setVoiceStatus('Voice generated and downloaded!');
-        toast({
-          title: "Voice Generated",
-          description: "Audio file has been downloaded"
-        });
-      } else {
-        throw new Error('Voice generation failed');
-      }
-    } catch (error: any) {
-      setVoiceStatus('Voice generation failed');
-      toast({
-        title: "Generation Failed",
-        description: error.message || "Failed to generate voice",
-        variant: "destructive"
-      });
+    // Initialize chat with welcome message if empty
+    if (chatMessages.length === 0) {
+      setChatMessages([{
+        id: '1',
+        sender: 'agent',
+        message: 'Hello! I\'m your YoBot support assistant. How can I help you today?',
+        timestamp: new Date().toLocaleTimeString()
+      }]);
     }
   };
 
@@ -2362,9 +2291,12 @@ export default function CommandCenter() {
         <div className="mb-8">
           <div className="text-center mb-6">
             <h1 className="text-6xl font-bold text-white mb-3 flex items-center justify-center">
-              <div className="w-20 h-20 mr-1 inline-block rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center" style={{ marginTop: '-8px' }}>
-                <Settings className="w-10 h-10 text-white" />
-              </div>
+              <img 
+                src={yobotRobotHead} 
+                alt="YoBot" 
+                className="w-20 h-20 mr-1 inline-block"
+                style={{ marginTop: '-8px' }}
+              />
               YoBot® Command Center
             </h1>
             <p className="text-slate-300 text-xl">Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}</p>
@@ -4114,7 +4046,7 @@ export default function CommandCenter() {
                         </div>
                         <div className="grid grid-cols-2 gap-2">
                           <Button 
-                            onClick={handleGenerateVoice}
+                            onClick={generateVoice}
                             className="bg-cyan-600 hover:bg-cyan-700 text-white border border-cyan-500"
                             disabled={!voiceGenerationText.trim()}
                           >
