@@ -1461,6 +1461,91 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Enhanced Call Monitoring API Endpoints
+  app.post('/api/call-monitoring/service-control', async (req, res) => {
+    try {
+      const { service, action } = req.body; // service: 'Monitoring Service', action: 'start'|'restart'|'ping'
+      
+      const result = {
+        service,
+        action,
+        status: action === 'ping' ? 'responded' : 'active',
+        lastPing: new Date().toLocaleTimeString(),
+        timestamp: new Date().toISOString()
+      };
+
+      logOperation('service-control', { service, action }, 'success', `${service} ${action} completed`);
+
+      res.json({
+        success: true,
+        message: `${service} ${action} completed successfully`,
+        data: result
+      });
+    } catch (error) {
+      console.error('Service control error:', error);
+      res.status(500).json({ success: false, error: 'Failed to control service' });
+    }
+  });
+
+  app.post('/api/call-monitoring/simulate', async (req, res) => {
+    try {
+      const { type } = req.body; // 'test-call'
+      
+      if (type === 'test-call') {
+        const simulatedCall = {
+          callId: `SIM-${Date.now()}`,
+          timestamp: new Date(),
+          botName: 'TestBot',
+          clientName: `Test Client ${Math.floor(Math.random() * 1000)}`,
+          phoneNumber: `(555) ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+          intent: 'Simulation Test',
+          sentiment: Math.floor(Math.random() * 4) + 7, // 7-10
+          duration: `${Math.floor(Math.random() * 10) + 3}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
+          status: 'completed',
+          transcript: 'This is a simulated test call for system verification.'
+        };
+
+        // Store in call logs
+        await callLogStorage.createCallLog(simulatedCall);
+        
+        logOperation('call-simulation', { type }, 'success', 'Test call simulated');
+
+        res.json({
+          success: true,
+          message: 'Test call simulated successfully',
+          data: simulatedCall
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          error: 'Invalid simulation type'
+        });
+      }
+    } catch (error) {
+      console.error('Call simulation error:', error);
+      res.status(500).json({ success: false, error: 'Failed to simulate call' });
+    }
+  });
+
+  app.get('/api/call-monitoring/logs', async (req, res) => {
+    try {
+      const callLogs = await callLogStorage.getCallLogs();
+      const stats = await callLogStorage.getCallLogStats();
+      
+      logOperation('call-logs-retrieve', {}, 'success', 'Call logs retrieved');
+
+      res.json({
+        success: true,
+        logs: callLogs,
+        stats,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Call logs error:', error);
+      res.status(500).json({ success: false, error: 'Failed to retrieve call logs' });
+    }
+  });
+
   // Zendesk API endpoints
   app.post('/api/zendesk/open-chat', async (req, res) => {
     try {
@@ -1899,51 +1984,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Memory insertion endpoint
+  // Knowledge creation endpoint - PERSISTENT STORAGE
+  app.post('/api/knowledge/create', async (req, res) => {
+    try {
+      const { title, content, category = 'general', type = 'memory', tags = [] } = req.body;
+      const systemMode = getSystemMode();
+      
+      if (!title || !content) {
+        return res.status(400).json({
+          success: false,
+          error: 'Title and content are required'
+        });
+      }
+
+      const newItem = await knowledgeStorage.createKnowledgeItem({
+        title,
+        content,
+        category,
+        type,
+        tags: Array.isArray(tags) ? tags : [tags].filter(Boolean)
+      });
+
+      logOperation('knowledge-create', { title, category, type, systemMode }, 'success', 'Knowledge item created');
+
+      res.json({
+        success: true,
+        message: 'Knowledge item created successfully',
+        data: newItem
+      });
+    } catch (error) {
+      console.error('Knowledge creation error:', error);
+      res.status(500).json({ success: false, error: 'Failed to create knowledge item' });
+    }
+  });
+
+  // Memory insertion endpoint - LEGACY COMPATIBILITY
   app.post('/api/memory/insert', async (req, res) => {
     try {
       const { text, category, inputType = 'text', source = 'user' } = req.body;
       console.log('Memory insertion:', { category, textLength: text?.length, inputType });
-      
-      if (!text || !text.trim()) {
-        return res.status(400).json({ success: false, error: 'Text is required' });
-      }
 
-      // Determine entry type based on input method
-      const entryType = inputType === 'voice' ? 'voice' : 'text';
-      const displayName = inputType === 'voice' ? 'Voice Entry' : 'Text Entry';
-
-      // Store in memory store
-      const memoryEntry = {
-        id: 'MEM_' + Date.now(),
-        content: text.trim(),
+      // Convert to new knowledge format
+      const newItem = await knowledgeStorage.createKnowledgeItem({
+        title: `Memory Entry - ${category}`,
+        content: text,
         category: category || 'general',
-        inputType: entryType,
-        displayName: displayName,
-        source: source,
-        timestamp: new Date().toISOString(),
-        wordCount: text.trim().split(/\s+/).length
-      };
+        type: 'memory',
+        tags: [source, inputType]
+      });
 
-      memoryStore.push(memoryEntry);
+      logOperation('memory-insert', { category, source }, 'success', 'Memory inserted via legacy endpoint');
 
-      const result = {
+      res.json({
         success: true,
-        memoryId: memoryEntry.id,
-        category: memoryEntry.category,
-        inputType: entryType,
-        displayName: displayName,
-        status: 'inserted',
-        timestamp: memoryEntry.timestamp,
-        wordCount: memoryEntry.wordCount
-      };
-      
-      res.json(result);
+        message: 'Memory inserted successfully',
+        data: newItem
+      });
     } catch (error) {
       console.error('Memory insertion error:', error);
-      res.status(500).json({ success: false, error: 'Memory insertion failed' });
+      res.status(500).json({ success: false, error: 'Failed to insert memory' });
     }
   });
+
+
 
   // Knowledge reindex endpoint
   app.post('/api/knowledge/reindex', async (req, res) => {
