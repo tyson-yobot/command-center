@@ -28,6 +28,9 @@ import {
   Calendar,
   Brain,
   Settings,
+  MessageCircle,
+  Send,
+  Ticket,
   Monitor,
   PieChart,
   FileText,
@@ -38,7 +41,6 @@ import {
   Upload,
   RefreshCw,
   Trash2,
-  Send,
   Eye,
   Download,
   Edit,
@@ -735,6 +737,94 @@ export default function CommandCenter() {
   const handleToggleAutomation = () => {
     setAutomationMode(!automationMode);
     setVoiceStatus(`Automation ${!automationMode ? 'enabled' : 'disabled'}`);
+  };
+
+  const handleOpenLiveChat = () => {
+    setShowLiveChat(true);
+    // Initialize chat with welcome message if empty
+    if (chatMessages.length === 0) {
+      setChatMessages([{
+        id: '1',
+        sender: 'agent',
+        message: 'Hello! I\'m your YoBot support assistant. How can I help you today?',
+        timestamp: new Date().toLocaleTimeString()
+      }]);
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!currentMessage.trim()) return;
+
+    const userMessage = {
+      id: Date.now().toString(),
+      sender: 'user' as const,
+      message: currentMessage,
+      timestamp: new Date().toLocaleTimeString()
+    };
+
+    setChatMessages(prev => [...prev, userMessage]);
+    setCurrentMessage('');
+    setIsTyping(true);
+
+    // Simulate agent response
+    setTimeout(() => {
+      const agentMessage = {
+        id: (Date.now() + 1).toString(),
+        sender: 'agent' as const,
+        message: getAgentResponse(currentMessage),
+        timestamp: new Date().toLocaleTimeString()
+      };
+      setChatMessages(prev => [...prev, agentMessage]);
+      setIsTyping(false);
+    }, 1500);
+  };
+
+  const getAgentResponse = (message: string) => {
+    const lowerMessage = message.toLowerCase();
+    if (lowerMessage.includes('schedule') || lowerMessage.includes('calendar')) {
+      return "I can help you with scheduling! You can use the Smart Calendar widget to view and manage team schedules. Is there a specific meeting you'd like to set up?";
+    } else if (lowerMessage.includes('automation') || lowerMessage.includes('function')) {
+      return "For automation questions, I can help you understand how our YoBot functions work. What specific automation are you looking to implement?";
+    } else if (lowerMessage.includes('ticket') || lowerMessage.includes('support')) {
+      return "I can help you create and track support tickets. You can use the Create New Ticket button or ask me about any existing tickets you have.";
+    } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+      return "Hello! I'm your YoBot support assistant. I can help you with scheduling, automation functions, support tickets, and general platform questions. How can I assist you today?";
+    } else {
+      return "Thank you for your message. I'm here to help with YoBot platform questions, scheduling, automation, and support tickets. Could you provide more details about what you need assistance with?";
+    }
+  };
+
+  const handleCreateTicket = async () => {
+    if (!newTicketSubject.trim()) return;
+    
+    try {
+      const response = await fetch('/api/zendesk/create-ticket', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          subject: newTicketSubject,
+          description: `Support request created from Command Center`,
+          priority: 'normal'
+        })
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Ticket Created",
+          description: `Ticket "${newTicketSubject}" has been created successfully`
+        });
+        setNewTicketSubject('');
+        setShowCreateTicket(false);
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to create ticket",
+        variant: "destructive"
+      });
+    }
   };
 
   // Core Automation Button Handlers - Wiring Guide Implementation
