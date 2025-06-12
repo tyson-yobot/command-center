@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:05:00.151Z",
-    "functionId": 132,
-    "functionName": "Intake Form Validator",
-    "batch": 14,
-    "category": "Forms",
-    "status": "success",
-    "duration": 84,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:05:00.166Z",
     "functionId": 147,
     "functionName": "Full API Health Check",
@@ -11432,6 +11421,21 @@
       "failedExecutions": 0,
       "systemUptime": 2169.651203653,
       "lastHealthCheck": "2025-06-11T23:59:00.012Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-12T00:10:00.012Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 141.308829872,
+      "lastHealthCheck": "2025-06-12T00:09:00.011Z",
       "automationStatus": "paused"
     }
   }
