@@ -67,7 +67,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Toast, ToastTitle, ToastDescription } from '@/components/ui/toast';
 import { KnowledgeViewerModal } from '@/components/knowledge-viewer-modal';
 import { ZendeskChatWidget } from '@/components/zendesk-chat-widget';
-import { CallMonitoringPopup } from '@/components/call-monitoring-popup';
+import CallMonitoringPopup from '@/components/call-monitoring-popup';
 import { CallMonitoringDetails } from '@/components/call-monitoring-details';
 import { LiveChatInterface } from '@/components/live-chat-interface';
 import { KnowledgeBaseManager } from '@/components/knowledge-base-manager';
@@ -2243,6 +2243,7 @@ export default function CommandCenter() {
         }
       } else {
         toast({
+          id: Date.now().toString(),
           title: "Command Failed",
           description: `${category} failed: ${result.error || result.message || 'Unknown error'}`,
           variant: "destructive"
@@ -2251,6 +2252,7 @@ export default function CommandCenter() {
     } catch (error: any) {
       console.error('Command execution error:', error);
       toast({
+        id: Date.now().toString(),
         title: "Execution Error",
         description: `Failed to execute ${category}: ${error.message}`,
         variant: "destructive"
