@@ -3759,14 +3759,134 @@ export default function CommandCenter() {
           </CardContent>
         </Card>
 
-        {/* Live Activity & System Monitoring */}
+        {/* Call Monitoring Panel & YoBot Support */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          {/* Live Activity Feed */}
+          {/* Call Monitoring Panel */}
+          <Card className="bg-slate-800/80 backdrop-blur-sm border border-blue-500/50">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Phone className="w-5 h-5 mr-2 text-blue-400" />
+                Call Monitoring Panel
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex gap-3">
+                  <Button 
+                    onClick={() => setShowCallMonitoring(true)}
+                    className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    View Call Records
+                  </Button>
+                  <Button 
+                    onClick={() => setShowCallDetails(true)}
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    Call Analytics
+                  </Button>
+                </div>
+                
+                {/* Active Calls List */}
+                <div className="bg-slate-700/40 rounded-lg p-4 border border-blue-400/30">
+                  <h4 className="text-white font-medium mb-3">📞 Active Call Sessions</h4>
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                    {activeCalls.length > 0 ? activeCalls.map((call, index) => (
+                      <div 
+                        key={index}
+                        className="flex items-center justify-between p-3 bg-slate-800/60 rounded border border-blue-400/30"
+                      >
+                        <div className="flex-1">
+                          <div className="text-white font-medium">{call.client || 'Unknown Caller'}</div>
+                          <div className="text-slate-400 text-sm flex items-center space-x-2">
+                            <span>{call.duration || '0:00'}</span>
+                            <span>•</span>
+                            <span>{call.status || 'Active'}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="px-2 py-1 rounded text-xs font-medium bg-green-600/30 text-green-400">
+                            ✅ Live
+                          </span>
+                          <Button
+                            onClick={() => setShowCallDetails(true)}
+                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1"
+                          >
+                            🔍 Monitor
+                          </Button>
+                        </div>
+                      </div>
+                    )) : (
+                      <div className="text-slate-400 text-center py-4">
+                        No active calls in session
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* YoBot Support */}
+          <Card className="bg-slate-800/80 backdrop-blur-sm border border-purple-500/50">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <MessageCircle className="w-5 h-5 mr-2 text-purple-400" />
+                YoBot Support
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex gap-3">
+                  <Button 
+                    onClick={() => setShowLiveChat(true)}
+                    className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
+                  >
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Start Live Chat
+                  </Button>
+                  <Button 
+                    onClick={() => setShowTicketModal(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    <Ticket className="w-4 h-4 mr-2" />
+                    Create Ticket
+                  </Button>
+                </div>
+                
+                {/* Support Status */}
+                <div className="bg-slate-700/40 rounded-lg p-4 border border-purple-400/30">
+                  <h4 className="text-white font-medium mb-3">🎧 Support Status</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-3 bg-slate-800/60 rounded border border-purple-400/30">
+                      <div className="flex-1">
+                        <div className="text-white font-medium">Team Availability</div>
+                        <div className="text-slate-400 text-sm flex items-center space-x-2">
+                          <span>Online</span>
+                          <span>•</span>
+                          <span>Avg response: 2 min</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="px-2 py-1 rounded text-xs font-medium bg-green-600/30 text-green-400">
+                          ✅ Available
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* System Monitoring */}
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8 mb-12">
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <Activity className="w-5 h-5 mr-2 text-green-400" />
-                Live Activity Feed
+                <Monitor className="w-5 h-5 mr-2 text-blue-400" />
+                System Monitoring
               </CardTitle>
             </CardHeader>
             <CardContent>
