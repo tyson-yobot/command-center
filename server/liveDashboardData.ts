@@ -41,13 +41,13 @@ export class LiveDashboardData {
           'Policy Distribution', 'Compliance Training'
         ];
 
-        // Extract function names and statuses from the integration name field - only count actual functions
+        // Extract function names and statuses from the proper fields
         const functionTests = records.map(record => {
-          const integrationName = record.fields['🔧 Integration Name'] || '';
-          const success = integrationName.includes('✅');
-          const functionName = integrationName.split(' - ')[0];
+          const functionName = record.fields['🔧 Integration Name'] || '';
+          const passFailField = record.fields['✅ Pass/Fail'] || '';
+          const success = passFailField === '✅ Pass';
           return { functionName, success, record };
-        }).filter(test => actualFunctions.includes(test.functionName));
+        }).filter(test => test.functionName && actualFunctions.includes(test.functionName));
 
         // Get unique functions and their latest status
         const uniqueFunctions: any = {};
