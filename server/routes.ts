@@ -25,9 +25,9 @@ import { registerCommandCenterRoutes } from "./commandCenterRoutes";
 import { registerQAValidationRoutes } from "./qaValidationSystem";
 import { registerContentCreatorRoutes } from "./contentCreatorRoutes";
 import { registerMailchimpRoutes } from "./mailchimpRoutes";
-import { registerIntegrationTestRoutes } from "./integrationTestLogger";
+
 import { registerPublerRoutes } from "./publerIntegration";
-import { registerLocalTestLoggerRoutes, localTestLogger } from "./localTestLogger";
+import { isLiveMode } from "./systemMode";
 import { configManager } from "./controlCenterConfig";
 import { logToAirtable } from "./airtableLogger";
 import { automationTester } from "./automationTester";
@@ -636,11 +636,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log('VoiceBot pipeline start:', action);
       
       const pipelineId = 'PIPE_' + Date.now();
+      // LIVE MODE: Only authentic data from voice pipeline system
+      if (isLiveMode()) {
+        throw new Error("Live mode requires authentic voice pipeline integration - no hardcoded values");
+      }
+      
       const result = {
         success: true,
         pipelineId,
         status: 'started',
-        callsQueued: 15,
+        callsQueued: 15, // TEST MODE ONLY
         timestamp: new Date().toISOString()
       };
       
