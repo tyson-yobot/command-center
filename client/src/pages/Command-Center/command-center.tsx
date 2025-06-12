@@ -214,8 +214,7 @@ export default function CommandCenter() {
   const [voiceRecordings, setVoiceRecordings] = useState<any[]>([]);
   const [selectedRecordings, setSelectedRecordings] = useState<string[]>([]);
   const [showRecordingList, setShowRecordingList] = useState(false);
-  const [knowledgeItems, setKnowledgeItems] = useState<any[]>([]);
-  const [showKnowledgeViewer, setShowKnowledgeViewer] = useState(false);
+
   const [selectedKnowledgeItems, setSelectedKnowledgeItems] = useState<string[]>([]);
   const [editingRecording, setEditingRecording] = useState<any>(null);
   const [showLeadScraping, setShowLeadScraping] = useState(false);
@@ -2342,12 +2341,12 @@ export default function CommandCenter() {
           <div className="text-center mb-6">
             <h1 className="text-6xl font-bold text-white mb-3 flex items-center justify-center">
               <img 
-                src={yobotRobotHead} 
-                alt="YoBot" 
-                className="w-20 h-20 mr-1 inline-block"
+                src="/assets/A_flat_vector_illustration_features_a_robot_face_i_1749713043354.png" 
+                alt="Robot Head" 
+                className="w-20 h-20 mr-2 inline-block"
                 style={{ marginTop: '-8px' }}
               />
-              YoBot® Command Center
+              Bot® Command Center
             </h1>
             <p className="text-slate-300 text-xl">Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}</p>
             
@@ -2811,7 +2810,7 @@ export default function CommandCenter() {
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-green-400" />
-                <img src={yobotRobotHead} alt="YoBot" className="w-6 h-6 mr-2" />
+                <img src="/assets/A_flat_vector_illustration_features_a_robot_face_i_1749713043354.png" alt="Robot Head" className="w-6 h-6 mr-2" />
                 Bot Health Monitor
               </CardTitle>
             </CardHeader>
