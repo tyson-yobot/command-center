@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749714084815.png';
 import { Link, useLocation } from 'wouter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -75,7 +76,6 @@ export default function CommandCenter() {
   const queryClient = useQueryClient();
   
   // Robot head image - using attached asset
-  const robotHeadImage = '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749713043354.png';
   
   // System mode state
   const [currentSystemMode, setCurrentSystemMode] = useState(() => {
@@ -2403,7 +2403,21 @@ export default function CommandCenter() {
         <div className="mb-8">
           <div className="text-center mb-6">
             <h1 className="text-6xl font-bold text-white mb-3 flex items-center justify-center">
-              🤖 YoBot® Command Center
+              <span className="flex items-center">
+                Y
+                <img 
+                  src={robotHeadImage} 
+                  alt="Robot Head" 
+                  className="inline-block mx-1"
+                  style={{ 
+                    height: '1em',
+                    width: 'auto',
+                    verticalAlign: 'baseline'
+                  }}
+                />
+                B
+              </span>
+              <span className="ml-1">t® Command Center</span>
             </h1>
             <p className="text-slate-300 text-xl">Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}</p>
             
