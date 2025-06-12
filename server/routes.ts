@@ -3460,8 +3460,12 @@ Report generated in Live Mode
       app.set('systemMode', newMode);
       
       // Synchronize mode with all modules
-      const { updateSystemMode } = await import('./commandCenterRoutes');
-      updateSystemMode(newMode);
+      try {
+        const { updateSystemMode } = await import('./commandCenterRoutes');
+        updateSystemMode(newMode);
+      } catch (moduleError) {
+        console.log('Command center routes not available, continuing...');
+      }
       
       const modeChange = {
         id: `mode_${Date.now()}`,
@@ -3476,7 +3480,7 @@ Report generated in Live Mode
       
       // Log mode switch to Airtable QA Log for audit tracking
       try {
-        await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU", {
+        await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5nHbtj9opU", {
           method: "POST",
           headers: {
             "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
@@ -3515,12 +3519,12 @@ Report generated in Live Mode
         message: `System mode toggled to ${systemMode}`,
         auditLogged: true
       });
-    } catch (error) {
-      console.error('System mode toggle error:', error);
-      logOperation('system-mode-toggle', req.body, 'error', `Mode toggle failed: ${error.message}`);
+    } catch (error: any) {
+      logOperation('system-mode-toggle', { error: error.message }, 'error', `Failed to toggle system mode: ${error.message}`);
       res.status(500).json({
         success: false,
-        error: 'System mode toggle failed'
+        error: 'Failed to toggle system mode',
+        details: error.message
       });
     }
   });

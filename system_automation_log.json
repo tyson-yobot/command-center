@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:05:00.307Z",
-    "functionId": 204,
-    "functionName": "Duplicate Record Detection",
-    "batch": 21,
-    "category": "Data Validation",
-    "status": "success",
-    "duration": 209,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:05:00.326Z",
     "functionId": 140,
     "functionName": "Live Error Push",
@@ -11464,6 +11453,21 @@
       "failedExecutions": 0,
       "systemUptime": 143.747366818,
       "lastHealthCheck": "2025-06-12T02:09:00.008Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-12T02:20:00.025Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 131.628193642,
+      "lastHealthCheck": "2025-06-12T02:19:00.007Z",
       "automationStatus": "paused"
     }
   }
