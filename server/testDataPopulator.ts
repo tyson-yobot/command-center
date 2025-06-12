@@ -459,11 +459,20 @@ export function registerTestDataRoutes(app: Express) {
     }
   });
 
-  // Integration health with mode-specific data
+  // Integration health with global environment gate
   app.get('/api/integration-health', (req, res) => {
-    const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'live';
+    const systemMode = getSystemMode();
     
-    if (systemMode === 'test') {
+    // Global environment gate enforcement
+    if (isLiveMode()) {
+      blockTestData(testModeMetrics.integrationHealth);
+      res.json({
+        success: true,
+        data: safeLiveData(null, liveModeMetrics.integrationHealth),
+        mode: 'live',
+        message: 'LIVE mode - hardcoded data blocked, authentic data only'
+      });
+    } else if (systemMode === 'test') {
       res.json({
         success: true,
         data: testModeMetrics.integrationHealth,
@@ -480,11 +489,21 @@ export function registerTestDataRoutes(app: Express) {
     }
   });
 
-  // QA test results with mode-specific data
+  // QA test results with global environment gate
   app.get('/api/qa-test-results', (req, res) => {
-    const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'live';
+    const systemMode = getSystemMode();
     
-    if (systemMode === 'test') {
+    // Global environment gate enforcement
+    if (isLiveMode()) {
+      blockTestData(testModeMetrics.qaTestResults);
+      res.json({
+        success: true,
+        data: [],
+        total: 0,
+        mode: 'live',
+        message: 'LIVE mode - hardcoded data blocked, authentic data only'
+      });
+    } else if (systemMode === 'test') {
       res.json({
         success: true,
         data: testModeMetrics.qaTestResults,
@@ -505,9 +524,17 @@ export function registerTestDataRoutes(app: Express) {
 
   // Test data population endpoint - admin only
   app.post('/api/populate-test-data', (req, res) => {
-    const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'live';
+    const systemMode = getSystemMode();
     
-    if (systemMode !== 'test') {
+    // Global environment gate enforcement
+    if (isLiveMode()) {
+      return res.status(403).json({
+        success: false,
+        error: 'LIVE mode - test data population blocked globally',
+        currentMode: 'live',
+        message: 'Global environment gate prevents any test data population'
+      });
+    } else if (systemMode !== 'test') {
       return res.status(403).json({
         success: false,
         error: 'Test data population only allowed in test mode',
