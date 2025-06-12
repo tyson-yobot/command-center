@@ -66,11 +66,11 @@ import { SocialContentCreator } from '@/components/social-content-creator';
 import { useToast } from '@/hooks/use-toast';
 import { Toast, ToastTitle, ToastDescription } from '@/components/ui/toast';
 import { KnowledgeViewerModal } from '@/components/knowledge-viewer-modal';
-import { KnowledgeLibraryModal } from '@/components/knowledge-library-modal';
 import { ZendeskChatWidget } from '@/components/zendesk-chat-widget';
-import CallMonitoringPopup from '@/components/call-monitoring-popup';
+import { CallMonitoringPopup } from '@/components/call-monitoring-popup';
 import { CallMonitoringDetails } from '@/components/call-monitoring-details';
-
+import { LiveChatInterface } from '@/components/live-chat-interface';
+import { KnowledgeBaseManager } from '@/components/knowledge-base-manager';
 
 
 export default function CommandCenter() {
@@ -134,10 +134,9 @@ export default function CommandCenter() {
   const [showPublyDashboard, setShowPublyDashboard] = useState(false);
   const [showMailchimpDashboard, setShowMailchimpDashboard] = useState(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
-
+  const [showLiveChat, setShowLiveChat] = useState(false);
   const [showTicketsList, setShowTicketsList] = useState(false);
   const [showCreateTicket, setShowCreateTicket] = useState(false);
-  const [showKnowledgeLibrary, setShowKnowledgeLibrary] = useState(false);
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
   const { toast } = useToast();
 
@@ -231,7 +230,7 @@ export default function CommandCenter() {
   // Call monitoring states
   const [showCallMonitoring, setShowCallMonitoring] = useState(false);
   const [showCallDetails, setShowCallDetails] = useState(false);
-
+  const [showKnowledgeManager, setShowKnowledgeManager] = useState(false);
   const [showScheduleViewer, setShowScheduleViewer] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0); // 0 = today, 1 = tomorrow, etc.
   const [showTicketModal, setShowTicketModal] = useState(false);
@@ -748,7 +747,7 @@ export default function CommandCenter() {
   };
 
   const handleOpenLiveChat = () => {
-    // Live chat functionality removed
+    setShowLiveChat(true);
   };
 
   const handleViewAllTickets = (event: React.MouseEvent) => {
@@ -2244,7 +2243,6 @@ export default function CommandCenter() {
         }
       } else {
         toast({
-          id: Date.now().toString(),
           title: "Command Failed",
           description: `${category} failed: ${result.error || result.message || 'Unknown error'}`,
           variant: "destructive"
@@ -2253,7 +2251,6 @@ export default function CommandCenter() {
     } catch (error: any) {
       console.error('Command execution error:', error);
       toast({
-        id: Date.now().toString(),
         title: "Execution Error",
         description: `Failed to execute ${category}: ${error.message}`,
         variant: "destructive"
@@ -4368,13 +4365,6 @@ export default function CommandCenter() {
                     <Eye className="w-4 h-4 mr-2" />
                     View Sources
                   </Button>
-                  <Button 
-                    onClick={() => setShowKnowledgeLibrary(true)}
-                    className="bg-cyan-600 hover:bg-cyan-700 text-white"
-                  >
-                    <Database className="w-4 h-4 mr-2" />
-                    View Knowledge Library
-                  </Button>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
@@ -4669,7 +4659,17 @@ export default function CommandCenter() {
         currentSystemMode={currentSystemMode}
       />
 
+      {/* Live Chat Interface Modal */}
+      <LiveChatInterface
+        isOpen={showLiveChat}
+        onClose={() => setShowLiveChat(false)}
+      />
 
+      {/* Knowledge Base Manager Modal */}
+      <KnowledgeBaseManager
+        isOpen={showKnowledgeManager}
+        onClose={() => setShowKnowledgeManager(false)}
+      />
 
       {/* Zendesk Chat Widget */}
       <ZendeskChatWidget />
@@ -5068,15 +5068,571 @@ export default function CommandCenter() {
         }}
       />
 
-      {/* Zendesk Chat Widget */}
-      <ZendeskChatWidget />
+      {/* Live Chat Modal */}
+      {showLiveChat && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl max-h-[80vh] bg-slate-900 rounded-lg border border-blue-400/50 flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b border-blue-400/30">
+              <h2 className="text-xl font-bold text-white flex items-center">
+                <MessageCircle className="w-5 h-5 mr-2 text-blue-400" />
+                YoBot Support Chat
+              </h2>
+              <Button
+                onClick={() => setShowLiveChat(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-[400px]">
+              {chatMessages.length === 0 ? (
+                <div className="text-center py-8">
+                  <div className="bg-blue-900/60 rounded-lg p-4 border border-blue-400/50">
+                    <MessageCircle className="w-8 h-8 mx-auto mb-2 text-blue-400" />
+                    <p className="text-white font-medium">Welcome to YoBot Support</p>
+                    <p className="text-slate-300 text-sm mt-1">How can we help you today?</p>
+                  </div>
+                </div>
+              ) : (
+                chatMessages.map((msg) => (
+                  <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[80%] rounded-lg p-3 ${
+                      msg.sender === 'user' 
+                        ? 'bg-blue-600 text-white' 
+                        : 'bg-slate-800 text-white border border-slate-600'
+                    }`}>
+                      <p className="text-sm">{msg.message}</p>
+                      <p className={`text-xs mt-1 ${
+                        msg.sender === 'user' ? 'text-blue-200' : 'text-slate-400'
+                      }`}>
+                        {msg.timestamp}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
+              
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-slate-800 border border-slate-600 rounded-lg p-3">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div className="p-4 border-t border-blue-400/30">
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  placeholder="Type your message..."
+                  value={currentMessage}
+                  onChange={(e) => setCurrentMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  className="flex-1 px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white placeholder-slate-400 focus:outline-none focus:border-blue-400"
+                />
+                <Button
+                  onClick={handleSendMessage}
+                  disabled={!currentMessage.trim()}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4"
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
-      {/* Knowledge Library Modal */}
-      <KnowledgeLibraryModal
-        isOpen={showKnowledgeLibrary}
-        onClose={() => setShowKnowledgeLibrary(false)}
-        currentSystemMode={currentSystemMode}
-      />
+      {/* View All Tickets Modal */}
+      {showTicketModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-blue-400/50">
+            <div className="sticky top-0 bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white flex items-center">
+                <Ticket className="w-5 h-5 mr-2 text-blue-400" />
+                Support Tickets
+              </h2>
+              <Button
+                onClick={() => setShowTicketModal(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6">
+              {currentSystemMode === 'test' ? (
+                <div className="space-y-4">
+                  {[
+                    {
+                      id: 'TICK-2025-001',
+                      subject: 'Voice recognition not working in Chrome',
+                      status: 'Open',
+                      priority: 'High',
+                      created: '2 hours ago',
+                      assignee: 'Sarah Chen'
+                    },
+                    {
+                      id: 'TICK-2025-002',
+                      subject: 'Calendar integration sync issues',
+                      status: 'In Progress',
+                      priority: 'Medium',
+                      created: '1 day ago',
+                      assignee: 'Marcus Rodriguez'
+                    },
+                    {
+                      id: 'TICK-2025-003',
+                      subject: 'Automation function timeout errors',
+                      status: 'Resolved',
+                      priority: 'Low',
+                      created: '3 days ago',
+                      assignee: 'Daniel Thompson'
+                    },
+                    {
+                      id: 'TICK-2025-004',
+                      subject: 'Dashboard metrics not updating',
+                      status: 'Open',
+                      priority: 'Medium',
+                      created: '5 hours ago',
+                      assignee: 'Sarah Chen'
+                    },
+                    {
+                      id: 'TICK-2025-005',
+                      subject: 'API key configuration help needed',
+                      status: 'Pending',
+                      priority: 'Low',
+                      created: '1 week ago',
+                      assignee: 'Support Team'
+                    }
+                  ].map((ticket) => (
+                    <div key={ticket.id} className="bg-slate-800/60 border border-slate-600 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-white font-medium">{ticket.subject}</h3>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${
+                            ticket.status === 'Open' ? 'bg-red-600/20 text-red-400' :
+                            ticket.status === 'In Progress' ? 'bg-yellow-600/20 text-yellow-400' :
+                            ticket.status === 'Resolved' ? 'bg-green-600/20 text-green-400' :
+                            'bg-blue-600/20 text-blue-400'
+                          }`}>
+                            {ticket.status}
+                          </span>
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${
+                            ticket.priority === 'High' ? 'bg-red-600/20 text-red-400' :
+                            ticket.priority === 'Medium' ? 'bg-yellow-600/20 text-yellow-400' :
+                            'bg-blue-600/20 text-blue-400'
+                          }`}>
+                            {ticket.priority}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between text-sm text-slate-400">
+                        <span>Ticket #{ticket.id}</span>
+                        <span>Assigned to: {ticket.assignee}</span>
+                        <span>Created: {ticket.created}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <Ticket className="w-12 h-12 mx-auto mb-4 text-slate-400" />
+                  <p className="text-slate-400 text-lg">No support tickets found</p>
+                  <p className="text-slate-500 text-sm mt-2">Create a new ticket to get started</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Enhanced Schedule Viewer Modal */}
+      {showScheduleViewer && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-7xl max-h-[95vh] overflow-y-auto bg-slate-900 rounded-lg border border-blue-400/50">
+            <div className="sticky top-0 bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white flex items-center">
+                <Calendar className="w-5 h-5 mr-2 text-blue-400" />
+                Team Calendar - {(() => {
+                  const today = new Date();
+                  const targetDate = new Date(today);
+                  targetDate.setDate(today.getDate() + selectedDay);
+                  return targetDate.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  });
+                })()}
+              </h2>
+              <Button
+                onClick={() => setShowScheduleViewer(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6">
+              {/* Day Navigation */}
+              <div className="flex items-center justify-center mb-8">
+                <div className="flex items-center space-x-2 bg-slate-800/60 rounded-lg p-2 border border-blue-400/30">
+                  {Array.from({ length: 7 }, (_, i) => {
+                    const targetDate = new Date();
+                    targetDate.setDate(targetDate.getDate() + i);
+                    const dayName = targetDate.toLocaleDateString('en-US', { weekday: 'short' });
+                    const dayNumber = targetDate.getDate();
+                    const isSelected = selectedDay === i;
+                    
+                    return (
+                      <Button
+                        key={i}
+                        onClick={() => setSelectedDay(i)}
+                        variant={isSelected ? "default" : "ghost"}
+                        className={`flex flex-col items-center px-3 py-2 min-w-[60px] ${
+                          isSelected 
+                            ? 'bg-blue-600 text-white' 
+                            : 'text-slate-300 hover:bg-slate-700 hover:text-white'
+                        }`}
+                      >
+                        <span className="text-xs font-medium">{dayName}</span>
+                        <span className="text-lg font-bold">{dayNumber}</span>
+                        {i === 0 && <span className="text-xs text-blue-400">Today</span>}
+                      </Button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Team Members Schedule Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                {/* Daniel's Schedule */}
+                <div className="bg-slate-800/60 border border-blue-400/50 rounded-lg p-4">
+                  <h3 className="text-white font-semibold mb-4 flex items-center">
+                    <div className="w-3 h-3 bg-blue-400 rounded-full mr-2"></div>
+                    Daniel Thompson
+                    <span className="ml-2 text-xs bg-blue-600/20 text-blue-400 px-2 py-1 rounded">CEO</span>
+                  </h3>
+                  <div className="space-y-3">
+                    {currentSystemMode === 'test' ? (() => {
+                      const schedules = [
+                        // Day 0 - Today
+                        [
+                          { time: "9:00 AM", event: "Team standup meeting", type: "meeting" },
+                          { time: "10:30 AM", event: "Client presentation - Acme Corp", type: "client" },
+                          { time: "12:00 PM", event: "Lunch with investors", type: "business" },
+                          { time: "2:00 PM", event: "YoBot system review", type: "internal" },
+                          { time: "3:30 PM", event: "Pipeline optimization call", type: "meeting" },
+                          { time: "5:00 PM", event: "Day wrap-up", type: "admin" }
+                        ],
+                        // Day 1 - Tomorrow
+                        [
+                          { time: "8:30 AM", event: "Board meeting prep", type: "admin" },
+                          { time: "10:00 AM", event: "Sales quarterly review", type: "meeting" },
+                          { time: "1:00 PM", event: "Product roadmap session", type: "planning" },
+                          { time: "3:00 PM", event: "Client onboarding - TechFlow", type: "client" },
+                          { time: "4:30 PM", event: "Team one-on-ones", type: "internal" }
+                        ],
+                        // Day 2
+                        [
+                          { time: "9:15 AM", event: "Marketing strategy call", type: "meeting" },
+                          { time: "11:00 AM", event: "Investor pitch practice", type: "business" },
+                          { time: "2:30 PM", event: "Technical architecture review", type: "internal" },
+                          { time: "4:00 PM", event: "Partnership negotiations", type: "business" }
+                        ],
+                        // Day 3
+                        [
+                          { time: "10:00 AM", event: "All-hands company meeting", type: "meeting" },
+                          { time: "1:30 PM", event: "Customer success review", type: "client" },
+                          { time: "3:15 PM", event: "Budget planning session", type: "admin" },
+                          { time: "5:00 PM", event: "Networking event", type: "business" }
+                        ],
+                        // Day 4
+                        [
+                          { time: "9:00 AM", event: "Product demo - Enterprise client", type: "client" },
+                          { time: "11:30 AM", event: "HR policy review", type: "admin" },
+                          { time: "2:00 PM", event: "Innovation workshop", type: "internal" },
+                          { time: "4:00 PM", event: "Quarterly goals review", type: "planning" }
+                        ],
+                        // Day 5
+                        [
+                          { time: "8:45 AM", event: "Vendor negotiations", type: "business" },
+                          { time: "10:30 AM", event: "Team performance reviews", type: "internal" },
+                          { time: "1:00 PM", event: "Client strategy session", type: "client" },
+                          { time: "3:30 PM", event: "Weekly wrap-up", type: "admin" }
+                        ],
+                        // Day 6
+                        [
+                          { time: "10:00 AM", event: "Weekend planning session", type: "planning" },
+                          { time: "12:00 PM", event: "Team building lunch", type: "internal" },
+                          { time: "2:00 PM", event: "Industry conference call", type: "business" }
+                        ]
+                      ];
+                      return schedules[selectedDay]?.map((item, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-slate-700/40 rounded border border-blue-400/30">
+                          <div>
+                            <div className="text-white font-medium">{item.event}</div>
+                            <div className="text-blue-400 text-sm">{item.time}</div>
+                          </div>
+                          <div className={`px-2 py-1 rounded text-xs font-medium ${
+                            item.type === 'client' ? 'bg-green-600/20 text-green-400' :
+                            item.type === 'meeting' ? 'bg-blue-600/20 text-blue-400' :
+                            item.type === 'business' ? 'bg-purple-600/20 text-purple-400' :
+                            item.type === 'planning' ? 'bg-cyan-600/20 text-cyan-400' :
+                            item.type === 'internal' ? 'bg-orange-600/20 text-orange-400' :
+                            'bg-yellow-600/20 text-yellow-400'
+                          }`}>
+                            {item.type}
+                          </div>
+                        </div>
+                      )) || (
+                        <div className="text-center py-8">
+                          <p className="text-slate-400 text-sm">No scheduled events</p>
+                        </div>
+                      );
+                    })() : (
+                      <div className="text-center py-8">
+                        <p className="text-slate-400 text-sm">No scheduled events</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Sarah Chen - CTO Schedule */}
+                <div className="bg-slate-800/60 border border-green-400/50 rounded-lg p-4">
+                  <h3 className="text-white font-semibold mb-4 flex items-center">
+                    <div className="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
+                    Sarah Chen
+                    <span className="ml-2 text-xs bg-green-600/20 text-green-400 px-2 py-1 rounded">CTO</span>
+                  </h3>
+                  <div className="space-y-3">
+                    {currentSystemMode === 'test' ? (() => {
+                      const sarahSchedules = [
+                        // Day 0 - Today
+                        [
+                          { time: "8:30 AM", event: "Architecture planning", type: "technical" },
+                          { time: "10:00 AM", event: "Code review session", type: "internal" },
+                          { time: "1:00 PM", event: "API optimization meeting", type: "technical" },
+                          { time: "3:00 PM", event: "Security audit review", type: "technical" },
+                          { time: "4:30 PM", event: "Dev team sync", type: "internal" }
+                        ],
+                        // Day 1 - Tomorrow
+                        [
+                          { time: "9:00 AM", event: "Sprint planning", type: "planning" },
+                          { time: "11:00 AM", event: "Database optimization", type: "technical" },
+                          { time: "2:00 PM", event: "Client technical call", type: "client" },
+                          { time: "4:00 PM", event: "Infrastructure review", type: "technical" }
+                        ],
+                        // Continue pattern for other days...
+                        [
+                          { time: "8:45 AM", event: "System architecture review", type: "technical" },
+                          { time: "10:30 AM", event: "Performance optimization", type: "technical" },
+                          { time: "1:30 PM", event: "Team training session", type: "internal" },
+                          { time: "3:30 PM", event: "Technology roadmap", type: "planning" }
+                        ],
+                        [
+                          { time: "9:30 AM", event: "Bug triage meeting", type: "internal" },
+                          { time: "11:30 AM", event: "Cloud migration planning", type: "technical" },
+                          { time: "2:30 PM", event: "Security compliance review", type: "technical" },
+                          { time: "4:15 PM", event: "Vendor technical evaluation", type: "business" }
+                        ],
+                        [
+                          { time: "8:30 AM", event: "DevOps pipeline review", type: "technical" },
+                          { time: "10:15 AM", event: "API documentation review", type: "internal" },
+                          { time: "1:45 PM", event: "Client integration support", type: "client" },
+                          { time: "3:45 PM", event: "Tech stack evaluation", type: "planning" }
+                        ],
+                        [
+                          { time: "9:45 AM", event: "Code quality review", type: "internal" },
+                          { time: "11:45 AM", event: "System monitoring setup", type: "technical" },
+                          { time: "2:15 PM", event: "Technical documentation", type: "internal" },
+                          { time: "4:00 PM", event: "Weekend maintenance planning", type: "planning" }
+                        ],
+                        [
+                          { time: "10:30 AM", event: "System health check", type: "technical" },
+                          { time: "1:00 PM", event: "Emergency response drill", type: "internal" }
+                        ]
+                      ];
+                      return sarahSchedules[selectedDay]?.map((item, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-slate-700/40 rounded border border-green-400/30">
+                          <div>
+                            <div className="text-white font-medium">{item.event}</div>
+                            <div className="text-green-400 text-sm">{item.time}</div>
+                          </div>
+                          <div className={`px-2 py-1 rounded text-xs font-medium ${
+                            item.type === 'technical' ? 'bg-emerald-600/20 text-emerald-400' :
+                            item.type === 'client' ? 'bg-green-600/20 text-green-400' :
+                            item.type === 'planning' ? 'bg-cyan-600/20 text-cyan-400' :
+                            item.type === 'business' ? 'bg-purple-600/20 text-purple-400' :
+                            'bg-orange-600/20 text-orange-400'
+                          }`}>
+                            {item.type}
+                          </div>
+                        </div>
+                      )) || (
+                        <div className="text-center py-8">
+                          <p className="text-slate-400 text-sm">No scheduled events</p>
+                        </div>
+                      );
+                    })() : (
+                      <div className="text-center py-8">
+                        <p className="text-slate-400 text-sm">No scheduled events</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Marcus Rodriguez - Sales Director Schedule */}
+                <div className="bg-slate-800/60 border border-purple-400/50 rounded-lg p-4">
+                  <h3 className="text-white font-semibold mb-4 flex items-center">
+                    <div className="w-3 h-3 bg-purple-400 rounded-full mr-2"></div>
+                    Marcus Rodriguez
+                    <span className="ml-2 text-xs bg-purple-600/20 text-purple-400 px-2 py-1 rounded">Sales</span>
+                  </h3>
+                  <div className="space-y-3">
+                    {currentSystemMode === 'test' ? (() => {
+                      const marcusSchedules = [
+                        // Day 0 - Today
+                        [
+                          { time: "8:00 AM", event: "Lead qualification calls", type: "sales" },
+                          { time: "10:00 AM", event: "Demo - Manufacturing Corp", type: "demo" },
+                          { time: "11:30 AM", event: "Pipeline review", type: "internal" },
+                          { time: "1:30 PM", event: "Proposal presentation", type: "client" },
+                          { time: "3:00 PM", event: "Follow-up calls", type: "sales" },
+                          { time: "4:30 PM", event: "Weekly numbers review", type: "internal" }
+                        ],
+                        // Continue with other days...
+                        [
+                          { time: "8:30 AM", event: "Cold outreach session", type: "sales" },
+                          { time: "10:30 AM", event: "Client needs assessment", type: "client" },
+                          { time: "1:00 PM", event: "Contract negotiations", type: "business" },
+                          { time: "3:30 PM", event: "Sales training", type: "internal" }
+                        ],
+                        [
+                          { time: "9:00 AM", event: "Quarterly targets review", type: "planning" },
+                          { time: "11:00 AM", event: "Customer success check-in", type: "client" },
+                          { time: "2:00 PM", event: "New prospect discovery", type: "sales" },
+                          { time: "4:00 PM", event: "Team coaching session", type: "internal" }
+                        ],
+                        [
+                          { time: "8:45 AM", event: "Enterprise sales call", type: "sales" },
+                          { time: "10:45 AM", event: "Competitive analysis", type: "planning" },
+                          { time: "1:15 PM", event: "Client retention meeting", type: "client" },
+                          { time: "3:15 PM", event: "Sales process optimization", type: "internal" }
+                        ],
+                        [
+                          { time: "9:15 AM", event: "Key account review", type: "client" },
+                          { time: "11:15 AM", event: "Proposal writing session", type: "internal" },
+                          { time: "2:30 PM", event: "Partnership opportunities", type: "business" },
+                          { time: "4:15 PM", event: "Weekly pipeline cleanup", type: "internal" }
+                        ],
+                        [
+                          { time: "8:30 AM", event: "Month-end reporting", type: "internal" },
+                          { time: "10:00 AM", event: "Client relationship review", type: "client" },
+                          { time: "1:30 PM", event: "Sales strategy planning", type: "planning" },
+                          { time: "3:00 PM", event: "Territory expansion", type: "planning" }
+                        ],
+                        [
+                          { time: "10:00 AM", event: "Weekend prospect research", type: "sales" },
+                          { time: "12:30 PM", event: "Industry networking", type: "business" }
+                        ]
+                      ];
+                      return marcusSchedules[selectedDay]?.map((item, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-slate-700/40 rounded border border-purple-400/30">
+                          <div>
+                            <div className="text-white font-medium">{item.event}</div>
+                            <div className="text-purple-400 text-sm">{item.time}</div>
+                          </div>
+                          <div className={`px-2 py-1 rounded text-xs font-medium ${
+                            item.type === 'sales' ? 'bg-emerald-600/20 text-emerald-400' :
+                            item.type === 'demo' ? 'bg-blue-600/20 text-blue-400' :
+                            item.type === 'client' ? 'bg-green-600/20 text-green-400' :
+                            item.type === 'business' ? 'bg-purple-600/20 text-purple-400' :
+                            item.type === 'planning' ? 'bg-cyan-600/20 text-cyan-400' :
+                            'bg-orange-600/20 text-orange-400'
+                          }`}>
+                            {item.type}
+                          </div>
+                        </div>
+                      )) || (
+                        <div className="text-center py-8">
+                          <p className="text-slate-400 text-sm">No scheduled events</p>
+                        </div>
+                      );
+                    })() : (
+                      <div className="text-center py-8">
+                        <p className="text-slate-400 text-sm">No scheduled events</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Day Summary */}
+              <div className="mt-8 bg-slate-800/40 rounded-lg p-4 border border-slate-600">
+                <h4 className="text-white font-semibold mb-3">Day Summary</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300">Total Meetings:</span>
+                    <span className="text-white font-medium">
+                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '15' : selectedDay === 1 ? '12' : selectedDay === 2 ? '10' : selectedDay === 3 ? '11' : selectedDay === 4 ? '9' : selectedDay === 5 ? '8' : '5') : '0'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300">Client Calls:</span>
+                    <span className="text-green-400 font-medium">
+                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '6' : selectedDay === 1 ? '4' : selectedDay === 2 ? '3' : selectedDay === 3 ? '4' : selectedDay === 4 ? '3' : selectedDay === 5 ? '3' : '2') : '0'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300">Internal Meetings:</span>
+                    <span className="text-blue-400 font-medium">
+                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '9' : selectedDay === 1 ? '8' : selectedDay === 2 ? '7' : selectedDay === 3 ? '7' : selectedDay === 4 ? '6' : selectedDay === 5 ? '5' : '3') : '0'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="mt-6 flex items-center justify-center space-x-4">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Add Meeting
+                </Button>
+                <Button variant="outline" className="border-green-400 text-green-400">
+                  <Clock className="w-4 h-4 mr-2" />
+                  Schedule Follow-up
+                </Button>
+                <Button variant="outline" className="border-purple-400 text-purple-400">
+                  <Settings className="w-4 h-4 mr-2" />
+                  Calendar Settings
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Footer - Support Contact - Moved to Bottom */}
+      <div className="text-center mt-8 mb-4">
+        <div className="bg-white/10 backdrop-blur-sm border border-blue-400 rounded-lg p-6">
+          <h3 className="text-xl font-semibold text-white mb-2">Need Support?</h3>
+          <p className="text-slate-300 mb-4">Our team is here to help optimize your automation</p>
+          <Button 
+            onClick={handleContactSupport}
+            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+          >
+            <Headphones className="w-4 h-4 mr-2" />
+            Contact Support
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

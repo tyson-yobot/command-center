@@ -71,7 +71,6 @@ export interface IStorage {
   createKnowledgeBase(knowledge: InsertKnowledgeBase): Promise<KnowledgeBase>;
   updateKnowledgeBase(id: number, updates: Partial<KnowledgeBase>): Promise<KnowledgeBase>;
   deleteKnowledgeBase(id: number): Promise<void>;
-  deleteKnowledgeItem(id: number): Promise<void>;
   searchKnowledgeBase(userId: number, query: string, tags?: string[]): Promise<KnowledgeBase[]>;
   
   // Phantombuster Lead methods
@@ -261,10 +260,6 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteKnowledgeBase(id: number): Promise<void> {
-    await db.delete(knowledgeBase).where(eq(knowledgeBase.id, id));
-  }
-
-  async deleteKnowledgeItem(id: number): Promise<void> {
     await db.delete(knowledgeBase).where(eq(knowledgeBase.id, id));
   }
 

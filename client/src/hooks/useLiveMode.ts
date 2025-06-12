@@ -5,7 +5,7 @@ export const useLiveMode = () => {
 
   useEffect(() => {
     // Check environment variable for live mode
-    const mode = (import.meta as any).env?.VITE_MODE;
+    const mode = import.meta.env.VITE_MODE;
     const isLiveMode = mode === 'LIVE';
     
     setIsLive(isLiveMode);
@@ -45,7 +45,7 @@ export const useLiveMode = () => {
 };
 
 export const blockTestDataInLive = (payload: any): void => {
-  const mode = (import.meta as any).env?.VITE_MODE;
+  const mode = import.meta.env.VITE_MODE;
   if (mode === 'LIVE' && payload) {
     const stringPayload = JSON.stringify(payload);
     const blocklist = ['Client A', 'Sample Company', 'John Smith', 'Jane Doe', 'Test User', 'Demo Client'];

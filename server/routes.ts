@@ -1604,113 +1604,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Knowledge Library - Get all items
-  app.get('/api/knowledge/library', async (req, res) => {
-    try {
-      const systemMode = req.headers['x-system-mode'] as string || 'live';
-      
-      if (systemMode === 'test') {
-        // Test mode - return demo library items
-        const demoItems = [
-          {
-            id: 1,
-            name: "YoBot Price List",
-            content: "YoBot Enterprise: $599/month\nYoBot Professional: $299/month\nYoBot Starter: $99/month\n\nAll plans include:\n- 24/7 support\n- API access\n- Custom integrations\n- Advanced analytics",
-            source: "document",
-            sourceType: "document",
-            createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-            size: "2.4 KB",
-            tags: ["pricing", "sales"]
-          },
-          {
-            id: 2,
-            name: "Support Escalation Process",
-            content: "Level 1: Basic support issues handled by tier 1 agents\nLevel 2: Technical issues requiring specialized knowledge\nLevel 3: Critical system issues requiring immediate attention\n\nEscalation timeline:\n- Level 1: 2 hours\n- Level 2: 4 hours\n- Level 3: Immediate",
-            source: "manual",
-            sourceType: "manual",
-            createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-            size: "1.8 KB",
-            tags: ["support", "process"]
-          },
-          {
-            id: 3,
-            name: "Product Feature Overview",
-            content: "Core Features:\n- AI-powered call monitoring\n- Real-time analytics\n- Integration with CRM systems\n- Voice synthesis capabilities\n- Automated reporting\n\nAdvanced Features:\n- Custom dashboards\n- API integrations\n- Workflow automation",
-            source: "manual",
-            sourceType: "manual",
-            createdAt: new Date(Date.now() - 86400000).toISOString(),
-            size: "3.2 KB",
-            tags: ["product", "features"]
-          },
-          {
-            id: 4,
-            name: "Sales Contract Template",
-            content: "Standard sales contract terms and conditions for YoBot services including payment terms, service level agreements, and cancellation policies.",
-            source: "document",
-            sourceType: "document",
-            createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-            size: "5.1 KB",
-            tags: ["sales", "legal"]
-          }
-        ];
-        
-        res.json(demoItems);
-      } else {
-        // Live mode - get actual items from database
-        const knowledgeItems = await storage.getKnowledgeBase(1);
-        
-        const formattedItems = knowledgeItems.map((item, index) => ({
-          id: item.id,
-          name: item.name || `Knowledge Entry ${index + 1}`,
-          content: item.content,
-          source: item.source || 'manual',
-          sourceType: item.source === 'document' ? 'document' : 'manual',
-          createdAt: item.createdAt?.toISOString() || new Date().toISOString(),
-          size: `${Math.round(item.content.length / 1024 * 10) / 10} KB`,
-          tags: item.tags || []
-        }));
-        
-        res.json(formattedItems);
-      }
-    } catch (error) {
-      console.error('Error fetching knowledge library:', error);
-      res.status(500).json({ 
-        success: false, 
-        error: 'Failed to fetch knowledge library' 
-      });
-    }
-  });
-
-  // Delete knowledge item
-  app.delete('/api/knowledge/:id', async (req, res) => {
-    try {
-      const { id } = req.params;
-      const systemMode = req.headers['x-system-mode'] as string || 'live';
-      
-      if (systemMode === 'test') {
-        // Test mode - simulate deletion
-        res.json({
-          success: true,
-          message: 'Knowledge item deleted (test mode)'
-        });
-      } else {
-        // Live mode - actually delete from database
-        await storage.deleteKnowledgeItem(parseInt(id));
-        
-        res.json({
-          success: true,
-          message: 'Knowledge item deleted successfully'
-        });
-      }
-    } catch (error) {
-      console.error('Error deleting knowledge item:', error);
-      res.status(500).json({ 
-        success: false, 
-        error: 'Failed to delete knowledge item' 
-      });
-    }
-  });
-
   // Document reindex endpoint
   app.post('/api/knowledge/reindex/:id', async (req, res) => {
     try {
@@ -1988,7 +1881,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Memory insertion endpoint with verification
+  // Memory insertion endpoint
   app.post('/api/memory/insert', async (req, res) => {
     try {
       const { text, category, inputType = 'text', source = 'user' } = req.body;
@@ -2016,35 +1909,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       memoryStore.push(memoryEntry);
 
-      // Extract key terms for database storage
-      const keyTerms = text.toLowerCase().split(/\s+/)
-        .filter(word => word.length > 3)
-        .slice(0, 10);
-
-      // Also store in database knowledge base for persistence
-      try {
-        const knowledgeEntry = await storage.createKnowledgeBase({
-          userId: 1,
-          name: `${displayName} - ${new Date().toISOString()}`,
-          content: text.trim(),
-          source: 'memory_insertion',
-          createdBy: 'system',
-          tags: keyTerms,
-          priority: 1,
-          confidence: 0.9,
-          enabled: true,
-          triggerConditions: {
-            textContains: keyTerms,
-            eventType: ['memory_query', 'knowledge_search'],
-            intent: ['information', 'help', 'support']
-          }
-        });
-        
-        console.log(`✓ Memory inserted and verified: ID ${memoryEntry.id}, DB ID ${knowledgeEntry.id}, Length: ${text.length} chars`);
-      } catch (dbError) {
-        console.error('Database storage failed, but memory store succeeded:', dbError);
-      }
-
       const result = {
         success: true,
         memoryId: memoryEntry.id,
@@ -2053,62 +1917,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         displayName: displayName,
         status: 'inserted',
         timestamp: memoryEntry.timestamp,
-        wordCount: memoryEntry.wordCount,
-        verified: true,
-        message: `Memory successfully inserted into ${category} category`
+        wordCount: memoryEntry.wordCount
       };
       
       res.json(result);
     } catch (error) {
       console.error('Memory insertion error:', error);
       res.status(500).json({ success: false, error: 'Memory insertion failed' });
-    }
-  });
-
-  // Document loading status endpoint
-  app.get('/api/documents/status', async (req, res) => {
-    try {
-      const documentCount = documentStore.length;
-      const memoryCount = memoryStore.length;
-      
-      // Get database knowledge entries
-      const dbKnowledge = await storage.getAllKnowledgeBase();
-      const dbCount = dbKnowledge.length;
-      
-      // Recent activity (last hour)
-      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-      const recentDocuments = documentStore.filter(doc => 
-        new Date(doc.uploadTime || doc.uploadedAt || 0) > oneHourAgo
-      );
-      
-      const recentMemory = memoryStore.filter(mem => 
-        new Date(mem.timestamp) > oneHourAgo
-      );
-      
-      console.log(`✓ Document Status: ${documentCount} docs, ${memoryCount} memory, ${dbCount} DB entries`);
-      
-      res.json({
-        success: true,
-        data: {
-          documentsLoaded: documentCount,
-          memoryEntries: memoryCount,
-          databaseEntries: dbCount,
-          totalKnowledge: documentCount + memoryCount + dbCount,
-          recentActivity: {
-            documents: recentDocuments.length,
-            memory: recentMemory.length,
-            lastUpdated: new Date().toISOString()
-          },
-          loadingVerified: true
-        }
-      });
-      
-    } catch (error) {
-      console.error('Document status error:', error);
-      res.status(500).json({
-        success: false,
-        error: 'Failed to check document status'
-      });
     }
   });
 

@@ -1,31 +1,5 @@
 // ElevenLabs Voice Synthesis Service
 
-// User info function for ElevenLabs API
-export const getUserInfo = async () => {
-  try {
-    const apiKey = process.env.ELEVENLABS_API_KEY;
-    if (!apiKey) {
-      throw new Error('ELEVENLABS_API_KEY not configured');
-    }
-
-    const response = await fetch('https://api.elevenlabs.io/v1/user', {
-      headers: {
-        'Accept': 'application/json',
-        'xi-api-key': apiKey
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`ElevenLabs API error: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('ElevenLabs getUserInfo error:', error);
-    throw error;
-  }
-};
-
 // Complete ElevenLabs voice library with all available default voices
 export const DEFAULT_VOICES = [
   // Premium Female Voices
