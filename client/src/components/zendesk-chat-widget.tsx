@@ -47,10 +47,13 @@ export function ZendeskChatWidget() {
         headers: { 'Content-Type': 'application/json' }
       });
       if (response.ok) {
-        console.log('Zendesk chat opened successfully');
+        console.log('YoBot chat opened successfully');
+        // Open chat interface or show success message
+        alert('Live chat session started. Our support team will assist you shortly.');
       }
     } catch (error) {
-      console.error('Failed to open Zendesk chat:', error);
+      console.error('Failed to open chat:', error);
+      alert('Chat service temporarily unavailable. Please try creating a ticket instead.');
     }
   };
 
@@ -59,30 +62,43 @@ export function ZendeskChatWidget() {
       const response = await fetch('/api/zendesk/tickets');
       if (response.ok) {
         const data = await response.json();
-        console.log('Zendesk tickets:', data);
+        console.log('Support tickets:', data);
+        // Show tickets in modal or navigate to tickets page
+        const ticketList = data.tickets?.map(t => `#${t.id}: ${t.subject} (${t.status})`).join('\n') || 'No tickets found';
+        alert(`Your Support Tickets:\n\n${ticketList}`);
       }
     } catch (error) {
       console.error('Failed to fetch tickets:', error);
+      alert('Unable to load tickets. Please try again later.');
     }
   };
 
   const handleCreateTicket = async () => {
     try {
+      const subject = prompt('Enter ticket subject:', 'YoBot Support Request');
+      const description = prompt('Describe your issue:', 'Issue reported from Command Center');
+      
+      if (!subject || !description) return;
+      
       const response = await fetch('/api/zendesk/create-ticket', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          subject: 'New Support Request',
-          description: 'Support ticket created from Command Center',
+          subject,
+          description,
           priority: 'normal'
         })
       });
+      
       if (response.ok) {
-        console.log('Zendesk ticket created successfully');
+        const result = await response.json();
+        console.log('Support ticket created successfully');
+        alert(`Support ticket created successfully!\nTicket ID: ${result.ticket?.id || 'Generated'}\nOur team will respond shortly.`);
         await fetchTickets(); // Refresh ticket data
       }
     } catch (error) {
       console.error('Failed to create ticket:', error);
+      alert('Failed to create ticket. Please try again or contact support directly.');
     }
   };
 
@@ -91,7 +107,7 @@ export function ZendeskChatWidget() {
       <CardHeader>
         <CardTitle className="text-white flex items-center">
           <MessageCircle className="w-5 h-5 mr-2" />
-          Zendesk Support
+          YoBot Support
         </CardTitle>
       </CardHeader>
       <CardContent>

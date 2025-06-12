@@ -60,16 +60,40 @@ export function CallMonitoringPopup() {
       });
       
       if (response.ok) {
+        const result = await response.json();
         setIsMonitoring(!isMonitoring);
         await fetchCallDetails(); // Refresh data
+        
+        // Show success message
+        alert(`Call monitoring ${action}ed successfully!\n${result.message || ''}`);
       }
     } catch (error) {
       console.error('Failed to toggle monitoring:', error);
+      alert('Failed to toggle call monitoring. Please try again.');
     }
   };
 
   const handleViewDetails = async () => {
+    setLoading(true);
     await fetchCallDetails();
+    
+    // Show detailed call information
+    if (callDetails) {
+      const details = `Call Monitoring Details:
+      
+Active Calls: ${callDetails.activeCalls?.length || 0}
+Today's Total: ${callDetails.todayStats?.totalCalls || 0}
+Average Duration: ${callDetails.todayStats?.averageDuration || 'N/A'}
+Success Rate: ${callDetails.todayStats?.successRate || 'N/A'}
+Conversion Rate: ${callDetails.todayStats?.conversionRate || 'N/A'}
+
+Recent Calls:
+${callDetails.recentCalls?.map(call => 
+  `• ${call.client}: ${call.outcome} (${call.duration})`
+).join('\n') || 'No recent calls'}`;
+      
+      alert(details);
+    }
   };
 
   return (
