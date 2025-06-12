@@ -1,16 +1,5 @@
 [
   {
-    "timestamp": "2025-06-10T16:05:00.170Z",
-    "functionId": 206,
-    "functionName": "Lead Score Calculator",
-    "batch": 21,
-    "category": "Lead Management",
-    "status": "success",
-    "duration": 85,
-    "successCount": 1,
-    "errorCount": 0
-  },
-  {
     "timestamp": "2025-06-10T16:05:00.193Z",
     "functionId": 151,
     "functionName": "VoiceBot Escalation Detection",
@@ -11440,6 +11429,21 @@
       "failedExecutions": 0,
       "systemUptime": 116.756000597,
       "lastHealthCheck": "2025-06-12T00:19:00.007Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-12T00:30:00.012Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 49.204452264,
+      "lastHealthCheck": "2025-06-12T00:29:00.014Z",
       "automationStatus": "paused"
     }
   }
