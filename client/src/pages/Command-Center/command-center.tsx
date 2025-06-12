@@ -5896,7 +5896,7 @@ export default function CommandCenter() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300 text-sm">Response Time</span>
-                    <span className="text-blue-400 text-xs">< 5 minutes</span>
+                    <span className="text-blue-400 text-xs">&lt; 5 minutes</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300 text-sm">Open Tickets</span>
