@@ -2357,10 +2357,10 @@ export default function CommandCenter() {
               <img 
                 src={robotHeadImage} 
                 alt="Robot Head" 
-                className="w-20 h-20 mr-2 inline-block"
+                className="w-20 h-20 mr-1 inline-block"
                 style={{ marginTop: '-8px' }}
               />
-              Bot® Command Center
+              YoBot® Command Center
             </h1>
             <p className="text-slate-300 text-xl">Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}</p>
             
@@ -2825,7 +2825,7 @@ export default function CommandCenter() {
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-green-400" />
                 <img src={robotHeadImage} alt="Robot Head" className="w-6 h-6 mr-2" />
-                Bot Health Monitor
+                YoBot® Health Monitor
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -4431,41 +4431,52 @@ export default function CommandCenter() {
                   </Button>
                 </div>
                 
-                <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {uploadedDocuments.map((doc) => (
-                    <div 
-                      key={doc.id}
-                      className={`p-3 rounded border cursor-pointer transition-colors ${
-                        selectedDocuments.includes(doc.id)
-                          ? 'bg-blue-600/30 border-blue-400 shadow-lg shadow-blue-400/20'
-                          : 'bg-slate-700/60 border-blue-400/50 hover:border-blue-500 shadow-lg shadow-blue-400/10'
-                      }`}
-                      onClick={() => toggleDocumentSelection(doc.id)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="text-white font-medium">{doc.originalname}</div>
-                          <div className="text-slate-400 text-sm">
-                            {(doc.size / 1024).toFixed(1)} KB • {doc.category}
+                {/* Enhanced Document List with Live Status */}
+                <div className="bg-slate-700/40 rounded-lg p-4 border border-blue-400/30">
+                  <h4 className="text-white font-medium mb-3">📄 Uploaded Documents</h4>
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                    {uploadedDocuments.length > 0 ? uploadedDocuments.map((doc) => (
+                      <div 
+                        key={doc.id}
+                        className="flex items-center justify-between p-3 bg-slate-800/60 rounded border border-blue-400/30"
+                      >
+                        <div className="flex-1">
+                          <div className="text-white font-medium">{doc.originalname || doc.filename || 'Untitled Document'}</div>
+                          <div className="text-slate-400 text-sm flex items-center space-x-2">
+                            <span>{(doc.size / 1024).toFixed(1)} KB</span>
+                            <span>•</span>
+                            <span>{new Date(doc.uploadTime || doc.uploadedAt || Date.now()).toLocaleDateString()}</span>
                           </div>
                         </div>
-                        <div className={`w-4 h-4 rounded border-2 ${
-                          selectedDocuments.includes(doc.id)
-                            ? 'bg-blue-500 border-blue-500'
-                            : 'border-slate-400'
-                        }`}>
-                          {selectedDocuments.includes(doc.id) && (
-                            <div className="text-white text-xs flex items-center justify-center">✓</div>
-                          )}
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${
+                            doc.status === 'processed' || doc.status === 'indexed' 
+                              ? 'bg-green-600/30 text-green-400' 
+                              : doc.status === 'processing' 
+                              ? 'bg-yellow-600/30 text-yellow-400' 
+                              : 'bg-blue-600/30 text-blue-400'
+                          }`}>
+                            {doc.status === 'processed' || doc.status === 'indexed' ? '✅ Indexed' : 
+                             doc.status === 'processing' ? '⏳ Processing' : '📄 Ready'}
+                          </span>
+                          <Button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // Preview functionality will be handled by existing modal
+                              setShowKnowledgeViewer(true);
+                            }}
+                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1"
+                          >
+                            🔍 Preview
+                          </Button>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                  {uploadedDocuments.length === 0 && (
-                    <div className="text-slate-400 text-center py-4">
-                      Upload documents to program knowledge
-                    </div>
-                  )}
+                    )) : (
+                      <div className="text-slate-400 text-center py-4">
+                        Upload documents to program knowledge
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </CardContent>
