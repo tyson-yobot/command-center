@@ -166,9 +166,9 @@ export default function CommandCenter() {
 
   // Test statistics for Live Integration Test Results
   const testStats = {
-    totalTests: automationPerformance?.data?.totalTests || 74,
-    passedTests: automationPerformance?.data?.passedTests || 71,
-    successRate: automationPerformance?.data?.successRate || 95.9
+    totalTests: currentSystemMode === 'test' ? (automationPerformance?.data?.totalTests || 74) : (automationPerformance?.data?.totalTests || 0),
+    passedTests: currentSystemMode === 'test' ? (automationPerformance?.data?.passedTests || 71) : (automationPerformance?.data?.passedTests || 0),
+    successRate: currentSystemMode === 'test' ? (automationPerformance?.data?.successRate || 95.9) : (automationPerformance?.data?.successRate || 0)
   };
 
   // Fetch current system mode on load and set up periodic sync
@@ -3015,7 +3015,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {currentSystemMode === 'test' ? '8' : (metrics?.activeCalls || 0)}
+                {currentSystemMode === 'test' ? '8' : (metrics?.activeCalls || '--')}
               </div>
               <p className="text-xs text-green-400">
                 Live voice sessions
@@ -3030,7 +3030,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {currentSystemMode === 'test' ? '47' : (metrics?.botProcessing || 0)}
+                {currentSystemMode === 'test' ? '47' : (metrics?.botProcessing || '--')}
               </div>
               <p className="text-xs text-blue-400">
                 {currentSystemMode === 'test' ? 'AI operations active' : 'Live AI processing'}
@@ -3045,7 +3045,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {currentSystemMode === 'test' ? '94.2%' : (automationPerformance?.successRate || '0%')}
+                {currentSystemMode === 'test' ? '94.2%' : (automationPerformance?.successRate || '--')}
               </div>
               <p className="text-xs text-emerald-400">
                 Live automation rate
