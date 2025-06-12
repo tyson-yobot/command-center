@@ -2804,11 +2804,12 @@ export default function CommandCenter() {
                     href="https://app.hubspot.com/contacts/[HUB-ID]"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block text-white font-semibold text-left p-3 rounded-lg transition-all duration-200 border-l-8"
+                    className="flex items-center justify-start text-white font-semibold p-3 rounded-lg transition-all duration-200 border-l-6 w-full"
                     style={{
                       backgroundColor: '#0d82da',
                       borderLeftColor: '#ff7a59',
-                      textDecoration: 'none'
+                      textDecoration: 'none',
+                      minHeight: '48px'
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = '#0864b1';
