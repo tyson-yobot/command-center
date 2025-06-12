@@ -49,7 +49,7 @@ import {
   MapPin,
   Globe
 } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 // Using placeholder for logo until asset path is fixed
 const yobotLogo = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTgiIGZpbGw9IiM2MzY2ZjEiLz4KPGNpcmNsZSBjeD0iMTQiIGN5PSIxNiIgcj0iMiIgZmlsbD0id2hpdGUiLz4KPGNpcmNsZSBjeD0iMjYiIGN5PSIxNiIgcj0iMiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTE0IDI2IFEyMCAzMCAyNiAyNiIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+Cjwvc3ZnPg==';
@@ -66,6 +66,8 @@ import { KnowledgeViewerModal } from '@/components/knowledge-viewer-modal';
 
 
 export default function CommandCenter() {
+  const queryClient = useQueryClient();
+  
   // System mode state
   const [currentSystemMode, setCurrentSystemMode] = useState(() => {
     return localStorage.getItem('systemMode') || 'live';
@@ -161,6 +163,17 @@ export default function CommandCenter() {
       
       if (response.success && response.modeChange) {
         setCurrentSystemMode(response.modeChange.newMode);
+        
+        // Force refresh all data queries when mode changes
+        queryClient.invalidateQueries({ queryKey: ['/api/dashboard-metrics'] });
+        queryClient.invalidateQueries({ queryKey: ['/api/automation-performance'] });
+        queryClient.invalidateQueries({ queryKey: ['/api/live-activity'] });
+        queryClient.invalidateQueries({ queryKey: ['/api/knowledge'] });
+        queryClient.invalidateQueries({ queryKey: ['/api/call-monitoring'] });
+        queryClient.invalidateQueries({ queryKey: ['/api/zendesk'] });
+        queryClient.invalidateQueries({ queryKey: ['/api/integration-health'] });
+        queryClient.invalidateQueries({ queryKey: ['/api/qa-test-results'] });
+        
         toast({
           title: "System Mode Changed",
           description: `Switched to ${response.modeChange.newMode} mode. ${response.modeChange.newMode === 'live' ? 'Production data active.' : 'Test mode - safe operations only.'}`,
