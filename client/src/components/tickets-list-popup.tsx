@@ -1,303 +1,226 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { X, Ticket, Clock, User, AlertCircle, CheckCircle, Filter } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { X, Search, Calendar, User, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
 
-interface TicketData {
+interface Ticket {
   id: string;
   subject: string;
-  customer: string;
-  priority: 'High' | 'Medium' | 'Low';
-  status: 'Open' | 'In Progress' | 'Resolved' | 'Closed';
-  assignedTo: string;
+  status: 'open' | 'in-progress' | 'resolved' | 'closed';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  assignee: string;
   created: string;
-  category?: string;
-  description?: string;
+  lastUpdate: string;
+  description: string;
 }
 
 interface TicketsListPopupProps {
   isOpen: boolean;
   onClose: () => void;
-  position?: { x: number; y: number };
+  position: { x: number; y: number };
 }
 
-export default function TicketsListPopup({ isOpen, onClose, position }: TicketsListPopupProps) {
-  const [tickets, setTickets] = useState<TicketData[]>([]);
-  const [filteredTickets, setFilteredTickets] = useState<TicketData[]>([]);
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [priorityFilter, setPriorityFilter] = useState<string>('all');
-  const [loading, setLoading] = useState(true);
+const TicketsListPopup: React.FC<TicketsListPopupProps> = ({ isOpen, onClose, position }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState<string>('all');
 
-  useEffect(() => {
-    if (isOpen) {
-      fetchTickets();
+  // Sample tickets data
+  const tickets: Ticket[] = [
+    {
+      id: 'TKT-001',
+      subject: 'Voice generation not working properly',
+      status: 'open',
+      priority: 'high',
+      assignee: 'Sarah Chen',
+      created: '2025-01-12',
+      lastUpdate: '2 hours ago',
+      description: 'ElevenLabs integration fails when generating voice samples'
+    },
+    {
+      id: 'TKT-002',
+      subject: 'Dashboard metrics showing zero values',
+      status: 'in-progress',
+      priority: 'urgent',
+      assignee: 'Mike Johnson',
+      created: '2025-01-11',
+      lastUpdate: '1 hour ago',
+      description: 'All dashboard metrics display zero despite active data'
+    },
+    {
+      id: 'TKT-003',
+      subject: 'Knowledge base upload timeout',
+      status: 'resolved',
+      priority: 'medium',
+      assignee: 'Alex Rodriguez',
+      created: '2025-01-10',
+      lastUpdate: '30 minutes ago',
+      description: 'Large PDF files timeout during knowledge base upload'
+    },
+    {
+      id: 'TKT-004',
+      subject: 'Call monitoring integration setup',
+      status: 'open',
+      priority: 'low',
+      assignee: 'Emma Davis',
+      created: '2025-01-09',
+      lastUpdate: '4 hours ago',
+      description: 'Need assistance configuring call monitoring webhooks'
     }
-  }, [isOpen]);
+  ];
 
-  useEffect(() => {
-    filterTickets();
-  }, [tickets, statusFilter, priorityFilter]);
-
-  const fetchTickets = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/zendesk/tickets');
-      const data = await response.json();
-      
-      if (data.success) {
-        // Generate demo tickets for test mode
-        const demoTickets: TicketData[] = [
-          {
-            id: 'TKT-001',
-            subject: 'Integration Setup Help',
-            customer: 'Sarah Johnson',
-            priority: 'High',
-            status: 'Open',
-            assignedTo: 'Mike Chen',
-            created: new Date(Date.now() - 1800000).toISOString(),
-            category: 'Technical Support',
-            description: 'Need assistance setting up Slack integration with YoBot automation'
-          },
-          {
-            id: 'TKT-002',
-            subject: 'API Key Configuration',
-            customer: 'David Rodriguez',
-            priority: 'Medium',
-            status: 'In Progress',
-            assignedTo: 'Lisa Wang',
-            created: new Date(Date.now() - 3600000).toISOString(),
-            category: 'Configuration',
-            description: 'Help configuring API keys for ElevenLabs voice generation'
-          },
-          {
-            id: 'TKT-003',
-            subject: 'Voice Persona Setup',
-            customer: 'Emily Carter',
-            priority: 'Low',
-            status: 'Resolved',
-            assignedTo: 'Alex Kim',
-            created: new Date(Date.now() - 7200000).toISOString(),
-            category: 'Voice Setup',
-            description: 'Assistance with custom voice persona configuration'
-          },
-          {
-            id: 'TKT-004',
-            subject: 'Automation Function Error',
-            customer: 'Robert Zhang',
-            priority: 'High',
-            status: 'Open',
-            assignedTo: 'Sarah Kumar',
-            created: new Date(Date.now() - 5400000).toISOString(),
-            category: 'Bug Report',
-            description: 'Function 247 automation failing with timeout errors'
-          },
-          {
-            id: 'TKT-005',
-            subject: 'Calendar Integration',
-            customer: 'Jennifer Lee',
-            priority: 'Medium',
-            status: 'In Progress',
-            assignedTo: 'Tom Wilson',
-            created: new Date(Date.now() - 9000000).toISOString(),
-            category: 'Integration',
-            description: 'Setting up Google Calendar sync for team scheduling'
-          }
-        ];
-        setTickets(demoTickets);
-      } else {
-        setTickets([]);
-      }
-    } catch (error) {
-      console.error('Failed to fetch tickets:', error);
-      setTickets([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filterTickets = () => {
-    let filtered = tickets;
-    
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(ticket => ticket.status === statusFilter);
-    }
-    
-    if (priorityFilter !== 'all') {
-      filtered = filtered.filter(ticket => ticket.priority === priorityFilter);
-    }
-    
-    setFilteredTickets(filtered);
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'High': return 'bg-red-600';
-      case 'Medium': return 'bg-yellow-600';
-      case 'Low': return 'bg-green-600';
-      default: return 'bg-gray-600';
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'open':
+        return <AlertTriangle className="w-4 h-4" />;
+      case 'in-progress':
+        return <Clock className="w-4 h-4" />;
+      case 'resolved':
+        return <CheckCircle className="w-4 h-4" />;
+      case 'closed':
+        return <CheckCircle className="w-4 h-4" />;
+      default:
+        return <AlertTriangle className="w-4 h-4" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Open': return 'bg-blue-600';
-      case 'In Progress': return 'bg-purple-600';
-      case 'Resolved': return 'bg-green-600';
-      case 'Closed': return 'bg-gray-600';
-      default: return 'bg-gray-600';
+      case 'open':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+      case 'in-progress':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
+      case 'resolved':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+      case 'closed':
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'Open': return <AlertCircle className="w-3 h-3" />;
-      case 'In Progress': return <Clock className="w-3 h-3" />;
-      case 'Resolved': return <CheckCircle className="w-3 h-3" />;
-      case 'Closed': return <CheckCircle className="w-3 h-3" />;
-      default: return <Ticket className="w-3 h-3" />;
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'urgent':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+      case 'high':
+        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300';
+      case 'medium':
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+      case 'low':
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
     }
   };
 
-  const formatTimeAgo = (dateString: string) => {
-    const now = new Date();
-    const date = new Date(dateString);
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
-    if (diffInMinutes < 60) {
-      return `${diffInMinutes}m ago`;
-    } else if (diffInMinutes < 1440) {
-      return `${Math.floor(diffInMinutes / 60)}h ago`;
-    } else {
-      return `${Math.floor(diffInMinutes / 1440)}d ago`;
-    }
-  };
+  const filteredTickets = tickets.filter(ticket => {
+    const matchesSearch = ticket.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         ticket.id.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter = filterStatus === 'all' || ticket.status === filterStatus;
+    return matchesSearch && matchesFilter;
+  });
 
   if (!isOpen) return null;
 
-  const popupStyle = position ? {
-    position: 'fixed' as const,
-    top: Math.min(position.y, window.innerHeight - 500),
-    right: Math.min(window.innerWidth - position.x, 20),
-    zIndex: 1000
-  } : {
-    position: 'fixed' as const,
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    zIndex: 1000
-  };
-
   return (
-    <div style={popupStyle}>
-      <Card className="bg-slate-800 border-blue-400/50 shadow-2xl shadow-blue-400/20 w-[500px] max-h-[600px]">
-        <CardHeader className="pb-3 border-b border-blue-400/30">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-4xl bg-white dark:bg-gray-900 shadow-2xl max-h-[80vh] flex flex-col">
+        <CardHeader className="pb-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-white flex items-center text-lg">
-              <Ticket className="w-5 h-5 mr-2 text-blue-400" />
-              All Support Tickets
+            <CardTitle className="text-xl flex items-center space-x-2">
+              <AlertTriangle className="w-6 h-6 text-blue-600" />
+              <span>Support Tickets</span>
             </CardTitle>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={onClose}
-              className="text-blue-400 hover:bg-blue-400/20 h-8 w-8 p-0"
-            >
-              <X className="w-4 h-4" />
+            <Button variant="ghost" size="sm" onClick={onClose}>
+              <X className="w-5 h-5" />
             </Button>
           </div>
           
-          {/* Filters */}
-          <div className="flex space-x-3 mt-3">
-            <div className="flex items-center space-x-2">
-              <Filter className="w-4 h-4 text-blue-400" />
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white"
-              >
-                <option value="all">All Status</option>
-                <option value="Open">Open</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Resolved">Resolved</option>
-                <option value="Closed">Closed</option>
-              </select>
+          <div className="flex items-center space-x-4 mt-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                placeholder="Search tickets..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
             </div>
-            
             <select
-              value={priorityFilter}
-              onChange={(e) => setPriorityFilter(e.target.value)}
-              className="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-sm text-white"
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
-              <option value="all">All Priority</option>
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
+              <option value="all">All Status</option>
+              <option value="open">Open</option>
+              <option value="in-progress">In Progress</option>
+              <option value="resolved">Resolved</option>
+              <option value="closed">Closed</option>
             </select>
           </div>
         </CardHeader>
 
-        <CardContent className="p-0">
-          <div className="max-h-[450px] overflow-y-auto">
-            {loading ? (
-              <div className="p-6 text-center text-slate-400">
-                <div className="animate-spin w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full mx-auto mb-2"></div>
-                Loading tickets...
-              </div>
-            ) : filteredTickets.length === 0 ? (
-              <div className="p-6 text-center text-slate-400">
-                <Ticket className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                <p>No tickets found matching your filters</p>
-              </div>
-            ) : (
-              <div className="space-y-2 p-3">
-                {filteredTickets.map((ticket) => (
-                  <div
-                    key={ticket.id}
-                    className="bg-slate-700/60 border border-slate-600/50 rounded-lg p-4 hover:border-blue-400/50 transition-all"
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-1">
-                          <h3 className="text-white font-medium text-sm">{ticket.subject}</h3>
-                          <Badge className={`${getPriorityColor(ticket.priority)} text-white text-xs px-2 py-1`}>
-                            {ticket.priority}
-                          </Badge>
-                        </div>
-                        <p className="text-slate-300 text-xs mb-2">{ticket.description}</p>
-                      </div>
+        <CardContent className="flex-1 overflow-y-auto p-6">
+          <div className="space-y-4">
+            {filteredTickets.map((ticket) => (
+              <div
+                key={ticket.id}
+                className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">
+                        {ticket.subject}
+                      </h3>
+                      <Badge variant="outline" className="text-sm font-mono">
+                        {ticket.id}
+                      </Badge>
                     </div>
                     
-                    <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-1">
-                          <User className="w-3 h-3 text-blue-400" />
-                          <span className="text-slate-400">{ticket.customer}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <span className="text-slate-400">Assigned to:</span>
-                          <span className="text-blue-400">{ticket.assignedTo}</span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-3">
-                        <Badge className={`${getStatusColor(ticket.status)} text-white text-xs px-2 py-1 flex items-center space-x-1`}>
-                          {getStatusIcon(ticket.status)}
-                          <span>{ticket.status}</span>
-                        </Badge>
-                        <span className="text-slate-500">{formatTimeAgo(ticket.created)}</span>
-                      </div>
-                    </div>
+                    <p className="text-gray-600 dark:text-gray-400 mb-3">
+                      {ticket.description}
+                    </p>
                     
-                    {ticket.category && (
-                      <div className="mt-2 pt-2 border-t border-slate-600/30">
-                        <Badge variant="outline" className="text-xs border-blue-400/50 text-blue-400">
-                          {ticket.category}
-                        </Badge>
+                    <div className="flex items-center space-x-4 text-sm">
+                      <div className="flex items-center space-x-1">
+                        <User className="w-4 h-4 text-gray-400" />
+                        <span className="text-gray-600 dark:text-gray-400">{ticket.assignee}</span>
                       </div>
-                    )}
+                      <div className="flex items-center space-x-1">
+                        <Calendar className="w-4 h-4 text-gray-400" />
+                        <span className="text-gray-600 dark:text-gray-400">{ticket.created}</span>
+                      </div>
+                      <span className="text-gray-500">Updated {ticket.lastUpdate}</span>
+                    </div>
                   </div>
-                ))}
+                  
+                  <div className="flex flex-col items-end space-y-2">
+                    <Badge className={`${getStatusColor(ticket.status)} flex items-center space-x-1`}>
+                      {getStatusIcon(ticket.status)}
+                      <span className="capitalize">{ticket.status.replace('-', ' ')}</span>
+                    </Badge>
+                    <Badge className={`${getPriorityColor(ticket.priority)} capitalize`}>
+                      {ticket.priority}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            {filteredTickets.length === 0 && (
+              <div className="text-center py-12">
+                <AlertTriangle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                  No tickets found
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {searchTerm || filterStatus !== 'all' 
+                    ? 'Try adjusting your search or filter criteria.' 
+                    : 'No support tickets available at the moment.'}
+                </p>
               </div>
             )}
           </div>
@@ -305,4 +228,6 @@ export default function TicketsListPopup({ isOpen, onClose, position }: TicketsL
       </Card>
     </div>
   );
-}
+};
+
+export default TicketsListPopup;

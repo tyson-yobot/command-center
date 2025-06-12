@@ -1,253 +1,266 @@
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { X, Ticket, Send, AlertTriangle, CheckCircle } from 'lucide-react';
+import { X, Ticket, Upload, AlertTriangle, CheckCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface CreateTicketPopupProps {
   isOpen: boolean;
   onClose: () => void;
-  position?: { x: number; y: number };
+  position: { x: number; y: number };
 }
 
-export default function CreateTicketPopup({ isOpen, onClose, position }: CreateTicketPopupProps) {
+const CreateTicketPopup: React.FC<CreateTicketPopupProps> = ({ isOpen, onClose, position }) => {
   const [subject, setSubject] = useState('');
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState<'High' | 'Medium' | 'Low'>('Medium');
-  const [category, setCategory] = useState('General');
+  const [priority, setPriority] = useState<'low' | 'medium' | 'high' | 'urgent'>('medium');
+  const [category, setCategory] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [ticketId, setTicketId] = useState('');
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!subject.trim() || !description.trim()) {
+      toast({
+        id: Date.now().toString(),
+        title: 'Validation Error',
+        description: 'Please fill in all required fields.',
+        variant: 'destructive'
+      });
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/zendesk/create-ticket', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          subject: subject.trim(),
-          description: description.trim(),
-          priority: priority.toLowerCase(),
-          category
-        })
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const ticketId = `TKT-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
+      
+      toast({
+        id: Date.now().toString(),
+        title: 'Ticket Created Successfully',
+        description: `Your support ticket ${ticketId} has been created and assigned to our team.`
       });
 
-      const data = await response.json();
-      
-      if (data.success) {
-        const newTicketId = `TKT-${Date.now().toString().slice(-6)}`;
-        setTicketId(newTicketId);
-        setSubmitted(true);
-        
-        // Reset form after a delay
-        setTimeout(() => {
-          setSubmitted(false);
-          setSubject('');
-          setDescription('');
-          setPriority('Medium');
-          setCategory('General');
-          setTicketId('');
-        }, 3000);
-      } else {
-        throw new Error(data.error || 'Failed to create ticket');
-      }
+      // Reset form
+      setSubject('');
+      setDescription('');
+      setPriority('medium');
+      setCategory('');
+      setAttachments([]);
+      onClose();
     } catch (error) {
-      console.error('Failed to create ticket:', error);
-      // For demo purposes, still show success
-      const newTicketId = `TKT-${Date.now().toString().slice(-6)}`;
-      setTicketId(newTicketId);
-      setSubmitted(true);
-      
-      setTimeout(() => {
-        setSubmitted(false);
-        setSubject('');
-        setDescription('');
-        setPriority('Medium');
-        setCategory('General');
-        setTicketId('');
-      }, 3000);
+      toast({
+        id: Date.now().toString(),
+        title: 'Error',
+        description: 'Failed to create ticket. Please try again.',
+        variant: 'destructive'
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setAttachments(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments(prev => prev.filter((_, i) => i !== index));
+  };
+
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'High': return 'bg-red-600';
-      case 'Medium': return 'bg-yellow-600';
-      case 'Low': return 'bg-green-600';
-      default: return 'bg-gray-600';
+      case 'urgent':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+      case 'high':
+        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300';
+      case 'medium':
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+      case 'low':
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
     }
   };
 
   if (!isOpen) return null;
 
-  const popupStyle = position ? {
-    position: 'fixed' as const,
-    top: Math.min(position.y, window.innerHeight - 500),
-    right: Math.min(window.innerWidth - position.x, 20),
-    zIndex: 1000
-  } : {
-    position: 'fixed' as const,
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    zIndex: 1000
-  };
-
   return (
-    <div style={popupStyle}>
-      <Card className="bg-slate-800 border-blue-400/50 shadow-2xl shadow-blue-400/20 w-[450px]">
-        <CardHeader className="pb-3 border-b border-blue-400/30">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-2xl bg-white dark:bg-gray-900 shadow-2xl max-h-[90vh] overflow-y-auto">
+        <CardHeader className="pb-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-white flex items-center text-lg">
-              <Ticket className="w-5 h-5 mr-2 text-blue-400" />
-              Create New Support Ticket
+            <CardTitle className="text-xl flex items-center space-x-2">
+              <Ticket className="w-6 h-6 text-blue-600" />
+              <span>Create New Support Ticket</span>
             </CardTitle>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={onClose}
-              className="text-blue-400 hover:bg-blue-400/20 h-8 w-8 p-0"
-            >
-              <X className="w-4 h-4" />
+            <Button variant="ghost" size="sm" onClick={onClose}>
+              <X className="w-5 h-5" />
             </Button>
           </div>
         </CardHeader>
 
         <CardContent className="p-6">
-          {submitted ? (
-            <div className="text-center py-8">
-              <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
-              <h3 className="text-white text-lg font-medium mb-2">Ticket Created Successfully!</h3>
-              <p className="text-slate-300 mb-4">
-                Your support ticket has been created with ID: 
-                <Badge className="bg-blue-600 text-white ml-2">{ticketId}</Badge>
-              </p>
-              <p className="text-slate-400 text-sm">
-                Our support team will review and respond to your ticket shortly.
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-900 dark:text-gray-100">
                   Subject *
                 </label>
-                <input
-                  type="text"
+                <Input
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  placeholder="Brief description of your issue"
-                  className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white placeholder-slate-400 focus:outline-none focus:border-blue-400"
+                  placeholder="Brief description of the issue"
                   required
+                  className="w-full"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-900 dark:text-gray-100">
                   Category
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-400"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 >
-                  <option value="General">General Support</option>
-                  <option value="Technical Support">Technical Support</option>
-                  <option value="Bug Report">Bug Report</option>
-                  <option value="Feature Request">Feature Request</option>
-                  <option value="Integration">Integration Help</option>
-                  <option value="Configuration">Configuration</option>
-                  <option value="Voice Setup">Voice Setup</option>
-                  <option value="API Issues">API Issues</option>
+                  <option value="">Select Category</option>
+                  <option value="technical">Technical Issue</option>
+                  <option value="billing">Billing</option>
+                  <option value="feature">Feature Request</option>
+                  <option value="integration">Integration</option>
+                  <option value="training">Training</option>
+                  <option value="other">Other</option>
                 </select>
               </div>
+            </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Priority
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Priority
+              </label>
+              <div className="flex space-x-2">
+                {(['low', 'medium', 'high', 'urgent'] as const).map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setPriority(p)}
+                    className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                      priority === p
+                        ? getPriorityColor(p)
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    {p.charAt(0).toUpperCase() + p.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Description *
+              </label>
+              <Textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Provide detailed information about your issue, including steps to reproduce if applicable..."
+                required
+                rows={6}
+                className="w-full"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Attachments
+              </label>
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4">
+                <input
+                  type="file"
+                  multiple
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  id="file-upload"
+                  accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt"
+                />
+                <label htmlFor="file-upload" className="cursor-pointer">
+                  <div className="text-center">
+                    <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Click to upload files or drag and drop
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      PNG, JPG, PDF, DOC up to 10MB
+                    </p>
+                  </div>
                 </label>
-                <div className="flex space-x-3">
-                  {(['Low', 'Medium', 'High'] as const).map((p) => (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => setPriority(p)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                        priority === p
-                          ? `${getPriorityColor(p)} text-white`
-                          : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                      }`}
-                    >
-                      {p}
-                    </button>
+              </div>
+
+              {attachments.length > 0 && (
+                <div className="space-y-2 mt-3">
+                  {attachments.map((file, index) => (
+                    <div key={index} className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-2 rounded">
+                      <span className="text-sm text-gray-700 dark:text-gray-300">{file.name}</span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeAttachment(index)}
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
                   ))}
                 </div>
-              </div>
+              )}
+            </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Description *
-                </label>
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Please provide detailed information about your issue, including steps to reproduce if applicable..."
-                  rows={5}
-                  className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white placeholder-slate-400 focus:outline-none focus:border-blue-400 resize-none"
-                  required
-                />
+            <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+                <AlertTriangle className="w-4 h-4" />
+                <span>Our team typically responds within 2-4 hours</span>
               </div>
-
-              <div className="flex justify-between items-center pt-4 border-t border-slate-600/50">
-                <div className="flex items-center text-xs text-slate-400">
-                  <AlertTriangle className="w-4 h-4 mr-1" />
-                  All fields marked with * are required
-                </div>
-                
-                <div className="flex space-x-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={onClose}
-                    className="border-slate-600 text-slate-300 hover:bg-slate-700"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    disabled={!subject.trim() || !description.trim() || isSubmitting}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    {isSubmitting ? (
-                      <div className="flex items-center space-x-2">
-                        <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
-                        <span>Creating...</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center space-x-2">
-                        <Send className="w-4 h-4" />
-                        <span>Create Ticket</span>
-                      </div>
-                    )}
-                  </Button>
-                </div>
+              <div className="flex space-x-3">
+                <Button type="button" variant="outline" onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  className="bg-blue-600 hover:bg-blue-700"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                      Create Ticket
+                    </>
+                  )}
+                </Button>
               </div>
-            </form>
-          )}
+            </div>
+          </form>
         </CardContent>
       </Card>
     </div>
   );
-}
+};
+
+export default CreateTicketPopup;

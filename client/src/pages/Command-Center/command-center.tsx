@@ -1245,6 +1245,85 @@ export default function CommandCenter() {
     }
   };
 
+  const generateVoice = async () => {
+    if (!voiceGenerationText.trim()) {
+      toast({
+        id: Date.now().toString(),
+        title: 'Input Required',
+        description: 'Please enter text to generate voice audio.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    try {
+      setVoiceStatus('Generating voice audio...');
+      
+      const response = await fetch('/api/elevenlabs/text-to-speech', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: voiceGenerationText,
+          voiceId: selectedPersona || 'default',
+          model: 'eleven_multilingual_v2'
+        })
+      });
+
+      if (response.ok) {
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+        
+        // Play the generated audio
+        const audio = new Audio(audioUrl);
+        audio.play();
+        
+        setVoiceStatus('Voice generated and playing');
+        toast({
+          id: Date.now().toString(),
+          title: 'Voice Generated',
+          description: 'Audio generated successfully and now playing.'
+        });
+        
+        // Store the audio URL for download
+        (window as any).lastGeneratedAudio = audioUrl;
+      } else {
+        const error = await response.json();
+        setVoiceStatus('Voice generation failed');
+        toast({
+          id: Date.now().toString(),
+          title: 'Generation Failed',
+          description: error.message || 'Failed to generate voice audio.',
+          variant: 'destructive'
+        });
+      }
+    } catch (error: any) {
+      setVoiceStatus('Voice generation error');
+      toast({
+        id: Date.now().toString(),
+        title: 'Error',
+        description: 'Network error during voice generation.',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const downloadAudio = () => {
+    const audioUrl = (window as any).lastGeneratedAudio;
+    if (audioUrl) {
+      const a = document.createElement('a');
+      a.href = audioUrl;
+      a.download = 'generated_voice.mp3';
+      a.click();
+    } else {
+      toast({
+        id: Date.now().toString(),
+        title: 'No Audio',
+        description: 'Please generate voice audio first.',
+        variant: 'destructive'
+      });
+    }
+  };
+
   const handleCriticalEscalation = async () => {
     try {
       setVoiceStatus('Triggering critical system alert...');
@@ -1256,7 +1335,12 @@ export default function CommandCenter() {
       
       if (response.ok) {
         setVoiceStatus('Critical alert sent - Slack notification + visual banner');
-        setToast({ title: "Critical Alert", description: "System alert triggered for failures or hot leads", variant: "destructive" });
+        setToast({ 
+          id: Date.now().toString(),
+          title: "Critical Alert", 
+          description: "System alert triggered for failures or hot leads", 
+          variant: "destructive" 
+        });
       } else {
         setVoiceStatus('Critical alert failed');
       }
@@ -1655,64 +1739,7 @@ export default function CommandCenter() {
     }
   };
 
-  // Voice Generation Functions
-  const generateVoice = async () => {
-    if (!voiceGenerationText.trim()) {
-      setToast({
-        title: "Text Required",
-        description: "Please enter text to convert to speech",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      setVoiceStatus('Generating voice...');
-      const response = await fetch('/api/elevenlabs/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          text: voiceGenerationText,
-          voice_id: selectedPersona || '21m00Tcm4TlvDq8ikWAM'
-        })
-      });
-
-      if (response.ok) {
-        // Handle audio blob for download
-        const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-        
-        // Create download link
-        const downloadLink = document.createElement('a');
-        downloadLink.href = audioUrl;
-        downloadLink.download = `voice_${Date.now()}.mp3`;
-        downloadLink.click();
-        
-        setVoiceStatus('Voice generated and downloaded');
-        setToast({
-          title: "Voice Generated",
-          description: "Audio file has been downloaded successfully",
-        });
-        setVoiceGenerationText(''); // Clear the text after successful generation
-      } else {
-        setVoiceStatus('Voice generation failed');
-        setToast({
-          title: "Generation Failed",
-          description: "Unable to generate voice audio",
-          variant: "destructive"
-        });
-      }
-    } catch (error) {
-      setVoiceStatus('Error during generation');
-      setToast({
-        title: "Generation Error",
-        description: "Network error during voice generation",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const downloadAudio = async () => {
+  const downloadLastRecording = async () => {
     if (!voiceGenerationText.trim()) {
       setToast({
         title: "Text Required",
