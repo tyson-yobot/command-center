@@ -144,6 +144,7 @@ export default function CommandCenter() {
   const [showDocumentPreview, setShowDocumentPreview] = useState(false);
   const [previewDocumentId, setPreviewDocumentId] = useState('');
   const [previewDocumentName, setPreviewDocumentName] = useState('');
+  const [selectedKnowledgeItems, setSelectedKnowledgeItems] = useState<string[]>([]);
   const [knowledgeItems, setKnowledgeItems] = useState([]);
   const [memoryActivityLog, setMemoryActivityLog] = useState([]);
   const { toast } = useToast();
@@ -218,8 +219,6 @@ export default function CommandCenter() {
   const [voiceRecordings, setVoiceRecordings] = useState<any[]>([]);
   const [selectedRecordings, setSelectedRecordings] = useState<string[]>([]);
   const [showRecordingList, setShowRecordingList] = useState(false);
-
-  const [selectedKnowledgeItems, setSelectedKnowledgeItems] = useState<string[]>([]);
   const [editingRecording, setEditingRecording] = useState<any>(null);
   const [showLeadScraping, setShowLeadScraping] = useState(false);
   const [activeModule, setActiveModule] = useState<string | null>(null);
@@ -4516,8 +4515,9 @@ export default function CommandCenter() {
                           <Button
                             onClick={(e) => {
                               e.stopPropagation();
-                              // Preview functionality will be handled by existing modal
-                              setShowKnowledgeViewer(true);
+                              setPreviewDocumentId(doc.documentId || doc.id);
+                              setPreviewDocumentName(doc.fileName || doc.filename || doc.name);
+                              setShowDocumentPreview(true);
                             }}
                             className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1"
                           >
@@ -5735,6 +5735,14 @@ export default function CommandCenter() {
           </div>
         </div>
       )}
+
+      {/* Document Preview Modal */}
+      <DocumentPreviewModal
+        isOpen={showDocumentPreview}
+        onClose={() => setShowDocumentPreview(false)}
+        documentId={previewDocumentId}
+        documentName={previewDocumentName}
+      />
 
       {/* Footer - Support Contact - Moved to Bottom */}
       <div className="text-center mt-8 mb-4">
