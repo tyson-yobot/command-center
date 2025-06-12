@@ -2403,13 +2403,7 @@ export default function CommandCenter() {
         <div className="mb-8">
           <div className="text-center mb-6">
             <h1 className="text-6xl font-bold text-white mb-3 flex items-center justify-center">
-              <img 
-                src={robotHeadImage} 
-                alt="Robot Head" 
-                className="w-20 h-20 mr-1 inline-block"
-                style={{ marginTop: '-8px' }}
-              />
-              YoBot® Command Center
+              🤖 YoBot® Command Center
             </h1>
             <p className="text-slate-300 text-xl">Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}</p>
             
