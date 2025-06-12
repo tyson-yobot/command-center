@@ -2406,9 +2406,9 @@ export default function CommandCenter() {
               <img 
                 src={robotHeadImage} 
                 alt="Robot Head" 
-                className="mr-4"
+                className="mr-2"
                 style={{ 
-                  height: '1.2em',
+                  height: '1.4em',
                   width: 'auto',
                   marginTop: '-0.1em'
                 }}
