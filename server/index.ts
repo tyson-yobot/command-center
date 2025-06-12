@@ -15,6 +15,7 @@ import { registerQATestEndpoints } from "./qaTestEndpoints";
 import { registerPublerRoutes } from "./publerIntegrationNew";
 import { registerAirtableTestLogger } from "./airtableTestLogger";
 import { testRoutes } from "./testRoutes";
+import { initializeLiveDataWipe, secureAdminDataWipe } from "./dataWipe";
 
 const app = express();
 app.use(express.json());
@@ -66,6 +67,23 @@ app.get('/api/test-slack-alert', async (req, res) => {
 });
 
 
+
+// LIVE Data Wipe Admin Endpoint
+app.post('/api/admin/wipe-live-data', async (req, res) => {
+  const { adminKey } = req.body;
+  
+  try {
+    const result = secureAdminDataWipe(adminKey);
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(403).json(result);
+    }
+  } catch (error) {
+    console.error("Data wipe failed:", error);
+    res.status(500).json({ error: "Data wipe failed" });
+  }
+});
 
 // PDF Report generation endpoint
 app.post('/api/reports/pdf', async (req, res) => {
@@ -318,6 +336,9 @@ print(json.dumps(result))
       reusePort: true,
     }, () => {
       log(`serving on port ${port}`);
+      
+      // Initialize LIVE data wipe on startup
+      initializeLiveDataWipe();
     });
   } catch (error) {
     console.error('Server startup failed:', error);
