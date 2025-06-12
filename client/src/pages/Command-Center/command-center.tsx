@@ -166,9 +166,9 @@ export default function CommandCenter() {
 
   // Test statistics for Live Integration Test Results
   const testStats = {
-    totalTests: currentSystemMode === 'test' ? (automationPerformance?.data?.totalTests || 74) : (automationPerformance?.data?.totalTests || 0),
-    passedTests: currentSystemMode === 'test' ? (automationPerformance?.data?.passedTests || 71) : (automationPerformance?.data?.passedTests || 0),
-    successRate: currentSystemMode === 'test' ? (automationPerformance?.data?.successRate || 95.9) : (automationPerformance?.data?.successRate || 0)
+    totalTests: currentSystemMode === 'test' ? (automationPerformance?.data?.totalTests || 74) : (automationPerformance?.data?.totalTests || null),
+    passedTests: currentSystemMode === 'test' ? (automationPerformance?.data?.passedTests || 71) : (automationPerformance?.data?.passedTests || null),
+    successRate: currentSystemMode === 'test' ? (automationPerformance?.data?.successRate || 95.9) : (automationPerformance?.data?.successRate || null)
   };
 
   // Fetch current system mode on load and set up periodic sync
@@ -4158,15 +4158,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Total Tests:</span>
-                  <span className="text-white font-bold">{testStats.totalTests}</span>
+                  <span className="text-white font-bold">{testStats.totalTests ?? '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Passed:</span>
-                  <span className="text-green-400 font-bold">{testStats.passedTests}</span>
+                  <span className="text-green-400 font-bold">{testStats.passedTests ?? '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-cyan-400 font-bold">{testStats.successRate}%</span>
+                  <span className="text-cyan-400 font-bold">{testStats.successRate ? testStats.successRate + '%' : '--'}</span>
                 </div>
               </div>
             </CardContent>
@@ -6763,13 +6763,13 @@ export default function CommandCenter() {
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Client Calls:</span>
                     <span className="text-green-400 font-medium">
-                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '6' : selectedDay === 1 ? '4' : selectedDay === 2 ? '3' : selectedDay === 3 ? '4' : selectedDay === 4 ? '3' : selectedDay === 5 ? '3' : '2') : '0'}
+                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '6' : selectedDay === 1 ? '4' : selectedDay === 2 ? '3' : selectedDay === 3 ? '4' : selectedDay === 4 ? '3' : selectedDay === 5 ? '3' : '2') : '--'}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Internal Meetings:</span>
                     <span className="text-blue-400 font-medium">
-                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '9' : selectedDay === 1 ? '8' : selectedDay === 2 ? '7' : selectedDay === 3 ? '7' : selectedDay === 4 ? '6' : selectedDay === 5 ? '5' : '3') : '0'}
+                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '9' : selectedDay === 1 ? '8' : selectedDay === 2 ? '7' : selectedDay === 3 ? '7' : selectedDay === 4 ? '6' : selectedDay === 5 ? '5' : '3') : '--'}
                     </span>
                   </div>
                 </div>
