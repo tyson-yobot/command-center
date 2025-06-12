@@ -2,9 +2,25 @@ import { Express } from 'express';
 
 export function registerDashboardEndpoints(app: Express) {
   
-  // Get overall dashboard metrics - LIVE DATA ONLY
+  // Get overall dashboard metrics - WITH TEST/LIVE MODE ISOLATION
   app.get("/api/dashboard-metrics", async (req, res) => {
     try {
+      const headerMode = req.headers['x-system-mode'] as 'test' | 'live';
+      const { getSystemMode } = await import('./systemMode');
+      const systemMode = getSystemMode();
+      const requestedMode = headerMode || systemMode;
+      console.log(`[DEBUG] Dashboard Metrics - Header: ${headerMode}, System Mode: ${systemMode}, Final Mode: ${requestedMode}`);
+      
+      // Complete isolation: serve test data when test mode is requested
+      if (requestedMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        const testOverview = TestModeData.getRealisticDashboardOverview();
+        console.log(`[DEBUG] Serving realistic test dashboard data`);
+        res.json(testOverview);
+        return;
+      }
+      
+      // Serve live data for live mode
       const { LiveDashboardData } = await import('./liveDashboardData');
       const metrics = await LiveDashboardData.getDashboardOverview();
       res.json(metrics);
@@ -17,11 +33,26 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get automation performance - LIVE DATA ONLY
+  // Get automation performance - WITH TEST/LIVE MODE ISOLATION
   app.get("/api/automation-performance", async (req, res) => {
     try {
+      const headerMode = req.headers['x-system-mode'] as 'test' | 'live';
+      const systemMode = global.systemMode || 'live';
+      const requestedMode = headerMode || systemMode;
+      console.log(`[DEBUG] Dashboard Automation Performance - Header: ${headerMode}, System Mode: ${systemMode}, Final Mode: ${requestedMode}`);
+      
+      // Complete isolation: serve test data when test mode is requested
+      if (requestedMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        const testMetrics = await TestModeData.getRealisticAutomationMetrics();
+        console.log(`[DEBUG] Serving realistic test data with ${testMetrics.successRate} success rate`);
+        res.json(testMetrics);
+        return;
+      }
+      
+      // Serve live data for live mode
       const { LiveDashboardData } = await import('./liveDashboardData');
-      const liveMetrics = await LiveDashboardData.getAutomationMetrics();
+      const liveMetrics = await LiveDashboardData.getAutomationMetrics('live');
       res.json(liveMetrics);
     } catch (error) {
       console.error("Automation performance error:", error);
@@ -32,9 +63,21 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get lead generation analytics - LIVE DATA ONLY
+  // Get lead generation analytics - WITH TEST/LIVE MODE SUPPORT
   app.get("/api/lead-analytics", async (req, res) => {
     try {
+      const headerMode = req.headers['x-system-mode'] as 'test' | 'live';
+      const { getSystemMode } = await import('./systemMode');
+      const systemMode = getSystemMode();
+      const requestedMode = headerMode || systemMode;
+      
+      if (requestedMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        const testLeadMetrics = TestModeData.getRealisticLeadMetrics();
+        res.json(testLeadMetrics);
+        return;
+      }
+      
       const { LiveDashboardData } = await import('./liveDashboardData');
       const analytics = await LiveDashboardData.getLeadMetrics();
       res.json(analytics);
@@ -47,9 +90,21 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get scraper status and history - LIVE DATA ONLY
+  // Get scraper status and history - WITH TEST/LIVE MODE SUPPORT
   app.get("/api/scraper-status", async (req, res) => {
     try {
+      const headerMode = req.headers['x-system-mode'] as 'test' | 'live';
+      const { getSystemMode } = await import('./systemMode');
+      const systemMode = getSystemMode();
+      const requestedMode = headerMode || systemMode;
+      
+      if (requestedMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        const testScraperData = TestModeData.getRealisticScraperStatus();
+        res.json(testScraperData);
+        return;
+      }
+      
       // Let the actual scraper system populate data
       res.json({
         success: true,
@@ -64,9 +119,21 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get system health status - LIVE DATA ONLY
+  // Get system health status - WITH TEST/LIVE MODE SUPPORT
   app.get("/api/system-health", async (req, res) => {
     try {
+      const headerMode = req.headers['x-system-mode'] as 'test' | 'live';
+      const { getSystemMode } = await import('./systemMode');
+      const systemMode = getSystemMode();
+      const requestedMode = headerMode || systemMode;
+      
+      if (requestedMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        const testSystemHealth = TestModeData.getRealisticSystemHealth();
+        res.json(testSystemHealth);
+        return;
+      }
+      
       // Let the actual health monitoring system populate data
       res.json({
         success: true,
@@ -166,9 +233,19 @@ export function registerDashboardEndpoints(app: Express) {
     }
   });
 
-  // Get live activity feed - LIVE DATA ONLY
+  // Get live activity feed - Supports both live and test modes
   app.get("/api/live-activity", async (req, res) => {
     try {
+      const systemModeHeader = req.headers['x-system-mode'] as string;
+      const { systemMode } = await import('./systemMode');
+      const finalMode = systemModeHeader || systemMode;
+
+      // Return test data in test mode
+      if (finalMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        return res.json(TestModeData.getRealisticLiveActivity());
+      }
+
       // Let the actual activity tracking system populate data
       res.json({
         success: true,

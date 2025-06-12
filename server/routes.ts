@@ -34,6 +34,7 @@ import { automationTester } from "./automationTester";
 import { registerZendeskRoutes } from "./zendeskIntegration";
 import { registerAutomationTestEndpoint } from "./automationTestEndpoint";
 import { registerAutomationLogsEndpoint } from "./automationLogsEndpoint";
+import { registerLiveAutomationEndpoints } from "./liveAutomationEndpoints";
 import { storage } from "./storage";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
@@ -517,6 +518,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register core automation endpoints
   registerCoreAutomationEndpoints(app);
+  
+  // Register live automation endpoints with automatic Airtable logging
+  registerLiveAutomationEndpoints(app);
   
   // Command Button API Endpoints - All Required Functions
   
@@ -1227,9 +1231,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Call Monitoring API endpoints
+  // Call Monitoring API endpoints - Supports both live and test modes
   app.get('/api/call-monitoring/details', async (req, res) => {
     try {
+      const systemModeHeader = req.headers['x-system-mode'] as string;
+      const { systemMode } = await import('./systemMode');
+      const finalMode = systemModeHeader || systemMode;
+
+      logOperation('call-monitoring-details', {}, 'success', 'Call monitoring details requested');
+
+      // Return test data in test mode
+      if (finalMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        return res.json(TestModeData.getRealisticCallMonitoring());
+      }
+
       const callDetails = {
         activeCalls: [],
         todayStats: {
@@ -1240,8 +1256,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         },
         recentCalls: []
       };
-
-      logOperation('call-monitoring-details', {}, 'success', 'Call monitoring details requested');
 
       res.json({
         success: true,
@@ -1302,11 +1316,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/zendesk/tickets', async (req, res) => {
     try {
-      // Only return authentic tickets from actual Zendesk integration
-      // No test data in live mode
-      const tickets = [];
+      const systemModeHeader = req.headers['x-system-mode'] as string;
+      const { systemMode } = await import('./systemMode');
+      const finalMode = systemModeHeader || systemMode;
 
       logOperation('zendesk-tickets', {}, 'success', 'Zendesk tickets retrieved');
+
+      // Return test data in test mode
+      if (finalMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        return res.json(TestModeData.getRealisticZendeskTickets());
+      }
+
+      // Only return authentic tickets from actual Zendesk integration
+      const tickets = [];
 
       res.json({
         success: true,
@@ -10267,10 +10290,20 @@ Always provide helpful, actionable guidance.`
     }
   });
 
-  // Knowledge Stats - Live Data Only
+  // Knowledge Stats - Supports both live and test modes
   app.get('/api/knowledge/stats', async (req, res) => {
     try {
+      const systemModeHeader = req.headers['x-system-mode'] as string;
+      const { systemMode } = await import('./systemMode');
+      const finalMode = systemModeHeader || systemMode;
+
       logOperation('knowledge-stats', {}, 'success', 'Knowledge stats requested');
+      
+      // Return test data in test mode
+      if (finalMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        return res.json(TestModeData.getRealisticKnowledgeStats());
+      }
       
       // Calculate stats from actual uploaded documents in both stores
       const totalDocuments = Math.max(documentDataStore.length, knowledgeDataStore.length);
@@ -12260,6 +12293,61 @@ CRM Data:
       res.status(500).json({
         success: false,
         error: 'Failed to get system mode',
+        details: error.message
+      });
+    }
+  });
+
+  // Automation Performance Endpoint with Test/Live Mode Isolation
+  app.get('/api/automation-performance', async (req, res) => {
+    try {
+      const headerMode = req.headers['x-system-mode'] as 'test' | 'live';
+      const requestedMode = headerMode || systemMode;
+      console.log(`[DEBUG] Automation Performance - Header: ${headerMode}, System Mode: ${systemMode}, Final Mode: ${requestedMode}`);
+      
+      // Complete isolation: serve test data when test mode is requested
+      if (requestedMode === 'test') {
+        const { TestModeData } = await import('./testModeData');
+        const testMetrics = await TestModeData.getRealisticAutomationMetrics();
+        console.log(`[DEBUG] Serving test data with ${testMetrics.successRate} success rate`);
+        res.json(testMetrics);
+        return;
+      }
+      
+      // Serve live data for live mode
+      const { LiveDashboardData } = await import('./liveDashboardData');
+      const automationMetrics = await LiveDashboardData.getAutomationMetrics('live');
+      
+      logOperation('automation-performance', { mode: requestedMode }, 'success', `Automation performance metrics retrieved in ${requestedMode} mode`);
+      
+      res.json(automationMetrics);
+    } catch (error: any) {
+      logOperation('automation-performance', {}, 'error', `Failed to get automation performance: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to get automation performance',
+        details: error.message
+      });
+    }
+  });
+
+  // Dashboard Metrics Endpoint with Test/Live Mode Isolation
+  app.get('/api/dashboard-metrics', async (req, res) => {
+    try {
+      const requestedMode = (req.headers['x-system-mode'] as 'test' | 'live') || systemMode;
+      console.log(`[DEBUG] Dashboard Metrics - Header: ${req.headers['x-system-mode']}, System Mode: ${systemMode}, Requested Mode: ${requestedMode}`);
+      
+      const { LiveDashboardData } = await import('./liveDashboardData');
+      const dashboardData = await LiveDashboardData.getDashboardOverview(requestedMode);
+      
+      logOperation('dashboard-metrics', { mode: requestedMode }, 'success', `Dashboard metrics retrieved in ${requestedMode} mode`);
+      
+      res.json(dashboardData);
+    } catch (error: any) {
+      logOperation('dashboard-metrics', {}, 'error', `Failed to get dashboard metrics: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to get dashboard metrics',
         details: error.message
       });
     }
