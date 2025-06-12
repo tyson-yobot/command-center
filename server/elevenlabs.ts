@@ -159,13 +159,6 @@ export async function generateSpeech(text: string, voiceId: string = '21m00Tcm4T
           style: 0.0,
           use_speaker_boost: true
         }
-        model_id: options.model_id || 'eleven_multilingual_v2',
-        voice_settings: {
-          stability: parseFloat(options.stability) || 0.5,
-          similarity_boost: parseFloat(options.similarity_boost) || 0.75,
-          style: parseFloat(options.style) || 0.0,
-          use_speaker_boost: options.use_speaker_boost !== false
-        }
       })
     });
 

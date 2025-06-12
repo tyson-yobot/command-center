@@ -13980,16 +13980,10 @@ export function registerContentCreationEndpoints(app: Express) {
         options 
       }, 'success', `Generated speech for ${text.length} characters`);
 
-      // Convert audio buffer to base64 for response
-      const audioBase64 = Buffer.from(audioResult.audio).toString('base64');
-      
-      res.json({
-        success: true,
-        audioData: audioBase64,
-        voiceId: voiceId || '21m00Tcm4TlvDq8ikWAM',
-        textLength: text.length,
-        timestamp: new Date().toISOString()
-      });
+      // Send audio buffer directly for download
+      res.setHeader('Content-Type', 'audio/mpeg');
+      res.setHeader('Content-Disposition', `attachment; filename="elevenlabs_${voiceId || 'voice'}_${Date.now()}.mp3"`);
+      res.send(audioResult);
     } catch (error) {
       logOperation('elevenlabs-generate', req.body, 'error', `Speech generation failed: ${error.message}`);
       res.status(500).json({
