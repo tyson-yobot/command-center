@@ -53,7 +53,7 @@
   height: 86px; /* Slightly taller to extend bottom baseline */
   margin-right: 3px; /* Moved even closer to Y */
   position: relative;
-  top: 12px; /* Keep top alignment perfect */
+  top: 14px; /* Moved entire head down slightly */
 }
 
 .header-title {
