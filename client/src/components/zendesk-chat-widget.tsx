@@ -103,81 +103,65 @@ export function ZendeskChatWidget() {
   };
 
   return (
-    <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
+    <Card className="bg-slate-800/80 backdrop-blur-sm border border-purple-500/50">
       <CardHeader>
         <CardTitle className="text-white flex items-center">
-          <MessageCircle className="w-5 h-5 mr-2" />
+          <MessageCircle className="w-5 h-5 mr-2 text-purple-400" />
           YoBot Support
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Badge 
-              variant={isConnected ? "default" : "secondary"} 
-              className={isConnected ? "bg-green-600 text-white" : "bg-red-600 text-white"}
-            >
-              {isConnected ? (
-                <span className="flex items-center">
-                  <CheckCircle className="w-3 h-3 mr-1" />
-                  Connected
-                </span>
-              ) : (
-                <span className="flex items-center">
-                  <AlertCircle className="w-3 h-3 mr-1" />
-                  Disconnected
-                </span>
-              )}
-            </Badge>
-            <div className="flex items-center text-white text-sm">
-              <Users className="w-4 h-4 mr-1" />
-              <span>{loading ? "..." : ticketData?.total || 0} Total Tickets</span>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <div className="bg-slate-800/50 rounded p-2">
-              <div className="flex items-center text-orange-300">
-                <Clock className="w-4 h-4 mr-1" />
-                <span>Pending</span>
-              </div>
-              <div className="text-white font-semibold">
-                {loading ? "..." : ticketData?.pending || 0} tickets
-              </div>
-            </div>
-            <div className="bg-slate-800/50 rounded p-2">
-              <div className="flex items-center text-green-300">
-                <CheckCircle className="w-4 h-4 mr-1" />
-                <span>Response Time</span>
-              </div>
-              <div className="text-white font-semibold">&lt; 2 mins</div>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 gap-2">
-            <Button
+          <div className="flex gap-3">
+            <Button 
               onClick={handleOpenChat}
-              className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+              className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
             >
               <MessageCircle className="w-4 h-4 mr-2" />
-              <span>Open Live Chat</span>
+              Start Live Chat
             </Button>
-            
-            <Button
-              onClick={handleViewTickets}
-              className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3"
-            >
-              <Users className="w-4 h-4 mr-2" />
-              <span>View All Tickets</span>
-            </Button>
-            
-            <Button
+            <Button 
               onClick={handleCreateTicket}
-              className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
             >
-              <CheckCircle className="w-4 h-4 mr-2" />
-              <span>Create New Ticket</span>
+              <Plus className="w-4 h-4 mr-2" />
+              Create Ticket
             </Button>
+          </div>
+          
+          {/* Support Status */}
+          <div className="bg-slate-700/40 rounded-lg p-4 border border-purple-400/30">
+            <h4 className="text-white font-medium mb-3">🎧 Support Status</h4>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between p-3 bg-slate-800/60 rounded border border-purple-400/30">
+                <div className="flex-1">
+                  <div className="text-white font-medium">Team Availability</div>
+                  <div className="text-slate-400 text-sm flex items-center space-x-2">
+                    <span>Online</span>
+                    <span>•</span>
+                    <span>Avg response: 2 min</span>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Badge 
+                    variant={isConnected ? "default" : "secondary"} 
+                    className={isConnected ? "bg-green-600 text-white" : "bg-red-600 text-white"}
+                  >
+                    {isConnected ? (
+                      <span className="flex items-center">
+                        <CheckCircle className="w-3 h-3 mr-1" />
+                        Connected
+                      </span>
+                    ) : (
+                      <span className="flex items-center">
+                        <AlertCircle className="w-3 h-3 mr-1" />
+                        Disconnected
+                      </span>
+                    )}
+                  </Badge>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </CardContent>
