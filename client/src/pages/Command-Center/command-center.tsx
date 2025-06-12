@@ -249,10 +249,14 @@ export default function CommandCenter() {
   const [showScheduleViewer, setShowScheduleViewer] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0); // 0 = today, 1 = tomorrow, etc.
   const [showTicketModal, setShowTicketModal] = useState(false);
+  const [showCreateTicketModal, setShowCreateTicketModal] = useState(false);
   const [showTicketHistory, setShowTicketHistory] = useState(false);
   const [newTicketSubject, setNewTicketSubject] = useState('');
   const [newTicketDescription, setNewTicketDescription] = useState('');
+  const [newTicketCategory, setNewTicketCategory] = useState('');
   const [newTicketPriority, setNewTicketPriority] = useState('medium');
+  const [newTicketName, setNewTicketName] = useState('');
+  const [newTicketEmail, setNewTicketEmail] = useState('');
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [currentMessage, setCurrentMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -4742,7 +4746,7 @@ export default function CommandCenter() {
                     Open Live Chat
                   </Button>
                   <Button 
-                    onClick={() => setShowTicketModal(true)}
+                    onClick={() => setShowCreateTicketModal(true)}
                     className="w-full bg-purple-600 hover:bg-purple-700 text-white border border-purple-400"
                   >
                     <Plus className="w-4 h-4 mr-2" />
@@ -4893,25 +4897,90 @@ export default function CommandCenter() {
       )}
 
       {/* Create New Ticket Modal */}
-      {showTicketModal && (
+      {showCreateTicketModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-slate-900 rounded-lg border border-purple-500">
-            <div className="bg-slate-900 border-b border-purple-400/30 p-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-white flex items-center">
-                <Plus className="w-5 h-5 mr-2 text-purple-400" />
+          <div className="w-full max-w-3xl bg-slate-900 rounded-lg border border-purple-500 shadow-2xl">
+            <div className="bg-slate-900 border-b border-purple-400/30 p-6 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-white flex items-center">
+                <Plus className="w-6 h-6 mr-3 text-purple-400" />
                 Create New Support Ticket
               </h2>
               <Button
-                onClick={() => setShowTicketModal(false)}
+                onClick={() => {
+                  setShowCreateTicketModal(false);
+                  setNewTicketSubject('');
+                  setNewTicketDescription('');
+                  setNewTicketCategory('');
+                  setNewTicketName('');
+                  setNewTicketEmail('');
+                  setNewTicketPriority('medium');
+                }}
                 variant="ghost"
                 className="text-white hover:bg-white/10"
               >
                 ✕
               </Button>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-6">
+              {/* Personal Information */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-white text-sm font-medium mb-2 block">👤 Name</label>
+                  <input
+                    type="text"
+                    value={newTicketName}
+                    onChange={(e) => setNewTicketName(e.target.value)}
+                    placeholder="Your full name"
+                    className="w-full p-3 bg-slate-700/60 border border-purple-400 rounded-lg text-white placeholder-slate-400 focus:border-purple-400 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="text-white text-sm font-medium mb-2 block">📧 Email</label>
+                  <input
+                    type="email"
+                    value={newTicketEmail}
+                    onChange={(e) => setNewTicketEmail(e.target.value)}
+                    placeholder="your.email@company.com"
+                    className="w-full p-3 bg-slate-700/60 border border-purple-400 rounded-lg text-white placeholder-slate-400 focus:border-purple-400 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Ticket Details */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-white text-sm font-medium mb-2 block">🏷️ Ticket Type</label>
+                  <select
+                    value={newTicketCategory}
+                    onChange={(e) => setNewTicketCategory(e.target.value)}
+                    className="w-full p-3 bg-slate-700/60 border border-purple-400 rounded-lg text-white focus:border-purple-400 focus:outline-none"
+                  >
+                    <option value="">Select ticket type...</option>
+                    <option value="bug-report">🐛 Bug Report</option>
+                    <option value="feature-request">✨ Feature Request</option>
+                    <option value="help-needed">❓ Help Needed</option>
+                    <option value="billing">💳 Billing Question</option>
+                    <option value="technology">⚙️ Technology Issue</option>
+                    <option value="other">📋 Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-white text-sm font-medium mb-2 block">⚡ Priority</label>
+                  <select
+                    value={newTicketPriority}
+                    onChange={(e) => setNewTicketPriority(e.target.value)}
+                    className="w-full p-3 bg-slate-700/60 border border-purple-400 rounded-lg text-white focus:border-purple-400 focus:outline-none"
+                  >
+                    <option value="low">🟢 Low - General inquiry</option>
+                    <option value="medium">🟡 Medium - Standard issue</option>
+                    <option value="high">🟠 High - Urgent problem</option>
+                    <option value="critical">🔴 Critical - System down</option>
+                  </select>
+                </div>
+              </div>
+
               <div>
-                <label className="text-white text-sm font-medium mb-2 block">Subject</label>
+                <label className="text-white text-sm font-medium mb-2 block">📋 Subject</label>
                 <input
                   type="text"
                   value={newTicketSubject}
@@ -4920,49 +4989,84 @@ export default function CommandCenter() {
                   className="w-full p-3 bg-slate-700/60 border border-purple-400 rounded-lg text-white placeholder-slate-400 focus:border-purple-400 focus:outline-none"
                 />
               </div>
+
               <div>
-                <label className="text-white text-sm font-medium mb-2 block">Priority</label>
-                <select
-                  value={newTicketPriority}
-                  onChange={(e) => setNewTicketPriority(e.target.value)}
-                  className="w-full p-3 bg-slate-700/60 border border-purple-400 rounded-lg text-white focus:border-purple-400 focus:outline-none"
-                >
-                  <option value="low">Low - General inquiry</option>
-                  <option value="medium">Medium - Standard issue</option>
-                  <option value="high">High - Urgent problem</option>
-                  <option value="critical">Critical - System down</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-white text-sm font-medium mb-2 block">Description</label>
+                <label className="text-white text-sm font-medium mb-2 block">📝 Description</label>
                 <textarea
                   value={newTicketDescription}
                   onChange={(e) => setNewTicketDescription(e.target.value)}
-                  placeholder="Detailed description of the issue, steps to reproduce, and any error messages..."
+                  placeholder="Please provide detailed information about your issue, including steps to reproduce, error messages, and any relevant context..."
                   rows={6}
                   className="w-full p-3 bg-slate-700/60 border border-purple-400 rounded-lg text-white placeholder-slate-400 focus:border-purple-400 focus:outline-none resize-none"
                 />
               </div>
-              <div className="flex gap-3 pt-4">
+
+              {/* File Upload */}
+              <div>
+                <label className="text-white text-sm font-medium mb-2 block">📎 Attach File (Optional)</label>
+                <div className="border-2 border-dashed border-purple-400/50 rounded-lg p-4 text-center">
+                  <input
+                    type="file"
+                    id="ticket-file-upload"
+                    className="hidden"
+                    accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.gif"
+                  />
+                  <label
+                    htmlFor="ticket-file-upload"
+                    className="cursor-pointer flex flex-col items-center space-y-2"
+                  >
+                    <Upload className="w-8 h-8 text-purple-400" />
+                    <span className="text-slate-300 text-sm">Click to upload or drag and drop</span>
+                    <span className="text-slate-400 text-xs">PDF, DOC, TXT, Images (Max 10MB)</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4 pt-4 border-t border-purple-400/30">
                 <Button
                   onClick={() => {
-                    // Handle ticket creation
-                    console.log('Creating ticket:', { subject: newTicketSubject, priority: newTicketPriority, description: newTicketDescription });
-                    setShowTicketModal(false);
+                    const ticketData = {
+                      name: newTicketName,
+                      email: newTicketEmail,
+                      category: newTicketCategory,
+                      subject: newTicketSubject,
+                      priority: newTicketPriority,
+                      description: newTicketDescription,
+                      timestamp: new Date().toISOString(),
+                      id: `TICK-${Date.now()}`
+                    };
+                    console.log('Creating ticket:', ticketData);
+                    
+                    // Show success message
+                    alert('✅ Your support ticket has been submitted! We\'ll get back to you shortly.');
+                    
+                    // Reset form and close modal
+                    setShowCreateTicketModal(false);
                     setNewTicketSubject('');
                     setNewTicketDescription('');
+                    setNewTicketCategory('');
+                    setNewTicketName('');
+                    setNewTicketEmail('');
                     setNewTicketPriority('medium');
                   }}
-                  disabled={!newTicketSubject.trim() || !newTicketDescription.trim()}
-                  className="bg-purple-600 hover:bg-purple-700 text-white border border-purple-400"
+                  disabled={!newTicketName.trim() || !newTicketEmail.trim() || !newTicketCategory || !newTicketSubject.trim() || !newTicketDescription.trim()}
+                  className="flex-1 bg-purple-600 hover:bg-purple-700 text-white border border-purple-400 py-3 text-lg font-medium"
                 >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Ticket
+                  🚀 Submit Ticket
                 </Button>
                 <Button
-                  onClick={() => setShowTicketModal(false)}
+                  onClick={() => {
+                    setShowCreateTicketModal(false);
+                    setNewTicketSubject('');
+                    setNewTicketDescription('');
+                    setNewTicketCategory('');
+                    setNewTicketName('');
+                    setNewTicketEmail('');
+                    setNewTicketPriority('medium');
+                  }}
                   variant="outline"
-                  className="border-slate-400 text-slate-400 hover:bg-slate-700"
+                  className="border-slate-400 text-slate-400 hover:bg-slate-700 px-8 py-3"
                 >
                   Cancel
                 </Button>
