@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import yobotRobotHead from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749548966185.png';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
+import LiveChatWidget from '@/components/live-chat-widget';
+import TicketsListPopup from '@/components/tickets-list-popup';
+import CreateTicketPopup from '@/components/create-ticket-popup';
 // Live mode only - no test mode context needed
 import { 
   TrendingUp, 
@@ -741,15 +743,24 @@ export default function CommandCenter() {
 
   const handleOpenLiveChat = () => {
     setShowLiveChat(true);
-    // Initialize chat with welcome message if empty
-    if (chatMessages.length === 0) {
-      setChatMessages([{
-        id: '1',
-        sender: 'agent',
-        message: 'Hello! I\'m your YoBot support assistant. How can I help you today?',
-        timestamp: new Date().toLocaleTimeString()
-      }]);
-    }
+  };
+
+  const handleViewAllTickets = (event: React.MouseEvent) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setTicketPopupPosition({ 
+      x: rect.left, 
+      y: rect.bottom + 10 
+    });
+    setShowTicketsList(true);
+  };
+
+  const handleCreateNewTicket = (event: React.MouseEvent) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setTicketPopupPosition({ 
+      x: rect.left, 
+      y: rect.bottom + 10 
+    });
+    setShowCreateTicket(true);
   };
 
   const handleSendMessage = async () => {
@@ -2291,12 +2302,9 @@ export default function CommandCenter() {
         <div className="mb-8">
           <div className="text-center mb-6">
             <h1 className="text-6xl font-bold text-white mb-3 flex items-center justify-center">
-              <img 
-                src={yobotRobotHead} 
-                alt="YoBot" 
-                className="w-20 h-20 mr-1 inline-block"
-                style={{ marginTop: '-8px' }}
-              />
+              <div className="w-20 h-20 mr-1 inline-block rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center" style={{ marginTop: '-8px' }}>
+                <Bot className="w-10 h-10 text-white" />
+              </div>
               YoBot® Command Center
             </h1>
             <p className="text-slate-300 text-xl">Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}</p>
