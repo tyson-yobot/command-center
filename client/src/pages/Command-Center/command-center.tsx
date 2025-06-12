@@ -1158,24 +1158,10 @@ export default function CommandCenter() {
     setShowFollowUpModal(true);
   };
 
-  const handleSalesOrder = async () => {
-    try {
-      setVoiceStatus('Launching sales order form...');
-      const response = await fetch('/api/command-sales-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scenario: 'command-sales-order' })
-      });
-      
-      if (response.ok) {
-        setVoiceStatus('Sales order form launched (Tally integration)');
-        setToast({ title: "Sales Order", description: "Order form opened - not processing yet" });
-      } else {
-        setVoiceStatus('Sales order launch failed');
-      }
-    } catch (error) {
-      setVoiceStatus('Sales order error');
-    }
+  const handleSalesOrder = () => {
+    // Open Tally form in new tab as per instructions
+    window.open('https://tally.so/r/mDb87X', '_blank');
+    setToast({ title: "Sales Order", description: "Opening sales order form in new tab" });
   };
 
 
@@ -5335,6 +5321,193 @@ export default function CommandCenter() {
                 </Button>
                 <Button
                   onClick={() => setShowSupportTicketModal(false)}
+                  variant="ghost"
+                  className="flex-1 bg-transparent hover:bg-white/10 text-white py-3 px-6 rounded-lg border border-gray-600"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Follow-up Form Modal */}
+      {showFollowUpModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-red-400/50 p-6 animate-in fade-in-0 duration-300">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-white">Create Follow-up</h2>
+              <Button
+                onClick={() => setShowFollowUpModal(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10 p-1"
+              >
+                ✕
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Contact or Deal Name</label>
+                <input 
+                  type="text"
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-red-500"
+                  placeholder="Start typing to search..."
+                />
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Follow-up Type</label>
+                <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-red-500">
+                  <option value="call">Call</option>
+                  <option value="email">Email</option>
+                  <option value="sms">SMS</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Follow-up Date</label>
+                <input 
+                  type="datetime-local"
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-red-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Notes</label>
+                <textarea 
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-red-500 h-24 resize-none"
+                  placeholder="Follow-up notes..."
+                />
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <input type="checkbox" id="slack-reminder" className="rounded" />
+                <label htmlFor="slack-reminder" className="text-white text-sm">Send Slack reminder</label>
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={async () => {
+                    try {
+                      const response = await fetch('/api/follow-up-caller', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          contactName: 'test-contact',
+                          followUpType: 'call',
+                          followUpDate: new Date().toISOString(),
+                          notes: 'Test follow-up'
+                        })
+                      });
+                      
+                      if (response.ok) {
+                        setToast({ title: "Follow-up Scheduled", description: "Follow-up added to tracker" });
+                        setShowFollowUpModal(false);
+                      }
+                    } catch (error) {
+                      setToast({ title: "Error", description: "Failed to schedule follow-up", variant: "destructive" });
+                    }
+                  }}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg"
+                >
+                  Schedule Follow-up
+                </Button>
+                <Button
+                  onClick={() => setShowFollowUpModal(false)}
+                  variant="ghost"
+                  className="flex-1 bg-transparent hover:bg-white/10 text-white py-3 px-6 rounded-lg border border-gray-600"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SMS Modal */}
+      {showSMSModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-green-400/50 p-6 animate-in fade-in-0 duration-300">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-white">Send SMS</h2>
+              <Button
+                onClick={() => setShowSMSModal(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10 p-1"
+              >
+                ✕
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Recipient Name/Number</label>
+                <input 
+                  type="text"
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500"
+                  placeholder="Enter phone number or contact name"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Pre-built Templates</label>
+                <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500">
+                  <option value="">Select template...</option>
+                  <option value="followup">Follow-up reminder</option>
+                  <option value="appointment">Appointment confirmation</option>
+                  <option value="thanks">Thank you message</option>
+                  <option value="custom">Custom message</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Message (max 160 chars)</label>
+                <textarea 
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500 h-24 resize-none"
+                  placeholder="Type your message..."
+                  maxLength="160"
+                />
+                <div className="text-right text-gray-400 text-xs mt-1">0/160 characters</div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <input type="radio" id="send-now" name="timing" className="rounded" defaultChecked />
+                <label htmlFor="send-now" className="text-white text-sm">Send now</label>
+                <input type="radio" id="schedule-later" name="timing" className="rounded ml-4" />
+                <label htmlFor="schedule-later" className="text-white text-sm">Schedule later</label>
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={async () => {
+                    try {
+                      const response = await fetch('/api/sms-send', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          recipient: 'test-number',
+                          message: 'Test SMS message',
+                          sendNow: true
+                        })
+                      });
+                      
+                      if (response.ok) {
+                        setToast({ title: "SMS Sent", description: "Message sent successfully via Twilio" });
+                        setShowSMSModal(false);
+                      }
+                    } catch (error) {
+                      setToast({ title: "Error", description: "Failed to send SMS", variant: "destructive" });
+                    }
+                  }}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg"
+                >
+                  Send SMS
+                </Button>
+                <Button
+                  onClick={() => setShowSMSModal(false)}
                   variant="ghost"
                   className="flex-1 bg-transparent hover:bg-white/10 text-white py-3 px-6 rounded-lg border border-gray-600"
                 >
