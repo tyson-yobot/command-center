@@ -272,11 +272,21 @@ export function registerTestDataRoutes(app: Express) {
     });
   });
 
-  // Dashboard metrics with mode-specific data
+  // Dashboard metrics with global environment gate
   app.get('/api/dashboard-metrics', (req, res) => {
-    const systemMode = req.headers['x-system-mode'] || getSystemMode();
+    const systemMode = getSystemMode();
     
-    if (systemMode === 'test') {
+    // Global environment gate enforcement
+    if (isLiveMode()) {
+      // LIVE mode: Block all hardcoded data, return only authentic values
+      blockTestData(testModeMetrics.dashboardMetrics);
+      res.json({
+        success: true,
+        data: safeLiveData(null, liveModeMetrics.dashboardMetrics),
+        mode: 'live',
+        message: 'LIVE mode - hardcoded data blocked, authentic data only'
+      });
+    } else if (systemMode === 'test') {
       res.json({
         success: true,
         data: testModeMetrics.dashboardMetrics,
@@ -293,11 +303,20 @@ export function registerTestDataRoutes(app: Express) {
     }
   });
 
-  // Automation performance with mode-specific data
+  // Automation performance with global environment gate
   app.get('/api/automation-performance', (req, res) => {
-    const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'live';
+    const systemMode = getSystemMode();
     
-    if (systemMode === 'test') {
+    // Global environment gate enforcement
+    if (isLiveMode()) {
+      blockTestData(testModeMetrics.automationPerformance);
+      res.json({
+        success: true,
+        data: safeLiveData(null, liveModeMetrics.automationPerformance),
+        mode: 'live',
+        message: 'LIVE mode - hardcoded data blocked, authentic data only'
+      });
+    } else if (systemMode === 'test') {
       res.json({
         success: true,
         data: testModeMetrics.automationPerformance,
@@ -314,9 +333,9 @@ export function registerTestDataRoutes(app: Express) {
     }
   });
 
-  // Live activity with mode-specific data
+  // Live activity with global environment gate
   app.get('/api/live-activity', (req, res) => {
-    const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'live';
+    const systemMode = getSystemMode();
     
     if (systemMode === 'test') {
       res.json({

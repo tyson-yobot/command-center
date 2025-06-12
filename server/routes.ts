@@ -37,6 +37,7 @@ import { registerAutomationLogsEndpoint } from "./automationLogsEndpoint";
 import { registerTestDataRoutes } from "./testDataPopulator";
 import { registerProductionLoggerRoutes } from "./productionLogger";
 import { getSystemMode, setSystemMode } from "./systemMode";
+import { isLiveMode, safeLiveData, blockTestData, validateLiveData } from "./liveMode";
 import { storage } from "./storage";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
@@ -190,9 +191,20 @@ function logOperation(operation: string, data: any, result: 'success' | 'error' 
   }
 }
 
-// System mode gate - enforces proper data isolation
+// Global environment gate - enforces live mode data integrity
 function enforceSystemModeGate(operation: string, isProductionWrite: boolean = true) {
   const currentMode = getSystemMode();
+  
+  // Global environment gate override
+  if (isLiveMode()) {
+    // In live mode, block all test/dummy data
+    if (operation.includes('test') || operation.includes('dummy') || operation.includes('mock')) {
+      console.log(`🚫 LIVE Mode - Blocking test operation: ${operation}`);
+      logOperation(`live-mode-block-${operation}`, {}, 'blocked', `Test operation blocked in live mode: ${operation}`);
+      return false;
+    }
+  }
+  
   if (currentMode === 'test' && isProductionWrite) {
     console.log(`🚫 Test Mode - Blocking production operation: ${operation}`);
     logOperation(`test-mode-block-${operation}`, {}, 'blocked', `Production operation blocked in test mode: ${operation}`);
