@@ -64,6 +64,7 @@ import { SocialContentCreator } from '@/components/social-content-creator';
 import { useToast } from '@/hooks/use-toast';
 import { Toast, ToastTitle, ToastDescription } from '@/components/ui/toast';
 import { KnowledgeViewerModal } from '@/components/knowledge-viewer-modal';
+import { DocumentPreviewModal } from '@/components/document-preview-modal';
 import { ZendeskChatWidget } from '@/components/zendesk-chat-widget';
 import { CallMonitoringPopup } from '@/components/call-monitoring-popup';
 import { CallMonitoringDetails } from '@/components/call-monitoring-details';
@@ -140,6 +141,9 @@ export default function CommandCenter() {
   const [showCreateTicket, setShowCreateTicket] = useState(false);
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
   const [showKnowledgeViewer, setShowKnowledgeViewer] = useState(false);
+  const [showDocumentPreview, setShowDocumentPreview] = useState(false);
+  const [previewDocumentId, setPreviewDocumentId] = useState('');
+  const [previewDocumentName, setPreviewDocumentName] = useState('');
   const [knowledgeItems, setKnowledgeItems] = useState([]);
   const [memoryActivityLog, setMemoryActivityLog] = useState([]);
   const { toast } = useToast();

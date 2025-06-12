@@ -1660,50 +1660,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Document preview endpoint
+  // Enhanced Document preview endpoint
   app.get('/api/knowledge/preview/:id', async (req, res) => {
     try {
       const { id } = req.params;
       
-      // Try to find document in knowledge base first
-      const dbDocument = await storage.getKnowledgeBase(parseInt(id));
-      if (dbDocument) {
-        return res.json({
-          success: true,
-          content: dbDocument.content,
-          extractedText: dbDocument.content,
-          metadata: {
-            name: dbDocument.name,
-            category: dbDocument.category,
-            tags: dbDocument.tags
-          }
+      // First try database storage for persistent knowledge items
+      try {
+        const dbDocument = await knowledgeStorage.getKnowledgeItem(parseInt(id));
+        if (dbDocument) {
+          return res.json({
+            success: true,
+            content: dbDocument.content || 'No content available',
+            extractedText: dbDocument.content,
+            metadata: {
+              name: dbDocument.title,
+              category: dbDocument.category,
+              type: dbDocument.type,
+              tags: dbDocument.tags
+            }
+          });
+        }
+      } catch (dbError) {
+        console.log('Database lookup failed for ID:', id, 'trying document store...');
+      }
+      
+      // Fallback to document store for uploaded files
+      const document = documentStore.find(doc => 
+        doc.id === id || 
+        doc.documentId === id || 
+        doc.filename === id ||
+        doc.originalname === id
+      );
+      
+      if (!document) {
+        console.log('Document not found in store. Available documents:', documentStore.map(d => ({
+          id: d.id,
+          documentId: d.documentId,
+          filename: d.filename,
+          originalname: d.originalname
+        })));
+        
+        return res.status(404).json({
+          success: false,
+          error: 'Document not found',
+          requestedId: id,
+          availableDocuments: documentStore.length
         });
       }
       
-      // Fallback to document store
-      const document = documentStore.find(doc => doc.id === id || doc.documentId === id);
-      if (!document) {
-        return res.status(404).json({
-          success: false,
-          error: 'Document not found'
-        });
-      }
+      const content = document.extractedText || document.content || document.text || 'No extracted content available';
       
       res.json({
         success: true,
-        content: document.extractedText || document.content || 'No content available',
-        extractedText: document.extractedText,
+        content: content,
+        extractedText: content,
         metadata: {
-          filename: document.filename,
-          category: document.category,
-          keyTerms: document.keyTerms
+          filename: document.filename || document.originalname,
+          category: document.category || 'general',
+          keyTerms: document.keyTerms || [],
+          fileSize: document.size,
+          uploadTime: document.uploadTime || document.uploadedAt
         }
       });
     } catch (error) {
       console.error('Document preview error:', error);
       res.status(500).json({
         success: false,
-        error: 'Failed to preview document'
+        error: 'Failed to preview document',
+        details: error.message
       });
     }
   });
