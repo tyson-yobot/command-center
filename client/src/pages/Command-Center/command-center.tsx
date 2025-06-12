@@ -69,8 +69,7 @@ import { KnowledgeViewerModal } from '@/components/knowledge-viewer-modal';
 import { ZendeskChatWidget } from '@/components/zendesk-chat-widget';
 import CallMonitoringPopup from '@/components/call-monitoring-popup';
 import { CallMonitoringDetails } from '@/components/call-monitoring-details';
-import { LiveChatInterface } from '@/components/live-chat-interface';
-import { KnowledgeBaseManager } from '@/components/knowledge-base-manager';
+
 
 
 export default function CommandCenter() {
@@ -134,7 +133,7 @@ export default function CommandCenter() {
   const [showPublyDashboard, setShowPublyDashboard] = useState(false);
   const [showMailchimpDashboard, setShowMailchimpDashboard] = useState(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
-  const [showLiveChat, setShowLiveChat] = useState(false);
+
   const [showTicketsList, setShowTicketsList] = useState(false);
   const [showCreateTicket, setShowCreateTicket] = useState(false);
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
@@ -230,7 +229,7 @@ export default function CommandCenter() {
   // Call monitoring states
   const [showCallMonitoring, setShowCallMonitoring] = useState(false);
   const [showCallDetails, setShowCallDetails] = useState(false);
-  const [showKnowledgeManager, setShowKnowledgeManager] = useState(false);
+
   const [showScheduleViewer, setShowScheduleViewer] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0); // 0 = today, 1 = tomorrow, etc.
   const [showTicketModal, setShowTicketModal] = useState(false);
@@ -747,7 +746,7 @@ export default function CommandCenter() {
   };
 
   const handleOpenLiveChat = () => {
-    setShowLiveChat(true);
+    // Live chat functionality removed
   };
 
   const handleViewAllTickets = (event: React.MouseEvent) => {
@@ -4661,17 +4660,7 @@ export default function CommandCenter() {
         currentSystemMode={currentSystemMode}
       />
 
-      {/* Live Chat Interface Modal */}
-      <LiveChatInterface
-        isOpen={showLiveChat}
-        onClose={() => setShowLiveChat(false)}
-      />
 
-      {/* Knowledge Base Manager Modal */}
-      <KnowledgeBaseManager
-        isOpen={showKnowledgeManager}
-        onClose={() => setShowKnowledgeManager(false)}
-      />
 
       {/* Zendesk Chat Widget */}
       <ZendeskChatWidget />
@@ -5070,73 +5059,7 @@ export default function CommandCenter() {
         }}
       />
 
-      {/* Live Chat Modal */}
-      {showLiveChat && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl max-h-[80vh] bg-slate-900 rounded-lg border border-blue-400/50 flex flex-col">
-            <div className="flex items-center justify-between p-4 border-b border-blue-400/30">
-              <h2 className="text-xl font-bold text-white flex items-center">
-                <MessageCircle className="w-5 h-5 mr-2 text-blue-400" />
-                YoBot Support Chat
-              </h2>
-              <Button
-                onClick={() => setShowLiveChat(false)}
-                variant="ghost"
-                className="text-white hover:bg-white/10"
-              >
-                ✕
-              </Button>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-[400px]">
-              {chatMessages.length === 0 ? (
-                <div className="text-center py-8">
-                  <div className="bg-blue-900/60 rounded-lg p-4 border border-blue-400/50">
-                    <MessageCircle className="w-8 h-8 mx-auto mb-2 text-blue-400" />
-                    <p className="text-white font-medium">Welcome to YoBot Support</p>
-                    <p className="text-slate-300 text-sm mt-1">How can we help you today?</p>
-                  </div>
-                </div>
-              ) : (
-                chatMessages.map((msg) => (
-                  <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[80%] rounded-lg p-3 ${
-                      msg.sender === 'user' 
-                        ? 'bg-blue-600 text-white' 
-                        : 'bg-slate-800 text-white border border-slate-600'
-                    }`}>
-                      <p className="text-sm">{msg.message}</p>
-                      <p className={`text-xs mt-1 ${
-                        msg.sender === 'user' ? 'text-blue-200' : 'text-slate-400'
-                      }`}>
-                        {msg.timestamp}
-                      </p>
-                    </div>
-                  </div>
-                ))
-              )}
-              
-              {isTyping && (
-                <div className="flex justify-start">
-                  <div className="bg-slate-800 border border-slate-600 rounded-lg p-3">
-                    <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            <div className="p-4 border-t border-blue-400/30">
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  placeholder="Type your message..."
-                  value={currentMessage}
-                  onChange={(e) => setCurrentMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+
                   className="flex-1 px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white placeholder-slate-400 focus:outline-none focus:border-blue-400"
                 />
                 <Button
