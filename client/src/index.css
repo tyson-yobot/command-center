@@ -51,9 +51,9 @@
 
 .logo-icon {
   height: 84px; /* Larger to match full Y height from top to bottom */
-  margin-right: 8px; /* Moved closer to Y */
+  margin-right: 6px; /* Moved even closer to Y */
   position: relative;
-  top: 2px; /* Moved further down to align with Y edges */
+  top: 6px; /* Moved down more to align with Y edges */
 }
 
 .header-title {
