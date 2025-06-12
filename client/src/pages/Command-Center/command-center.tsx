@@ -3094,7 +3094,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Executions Today</div>
                   <div className="text-2xl font-bold text-blue-400">
-                    {currentSystemMode === 'test' ? '47' : (automationPerformance?.data?.totalTests || 0)}
+                    {currentSystemMode === 'test' ? '47' : (automationPerformance?.data?.totalTests || '--')}
                   </div>
                   <div className="text-xs text-blue-400">
                     {currentSystemMode === 'test' ? 'Test executions completed' : 'Live executions'}
@@ -3112,7 +3112,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Recent Executions</div>
                   <div className="text-2xl font-bold text-blue-400">
-                    {currentSystemMode === 'test' ? '6' : (automationPerformance?.recentExecutions?.length || 0)}
+                    {currentSystemMode === 'test' ? '6' : (automationPerformance?.recentExecutions?.length || '--')}
                   </div>
                   <div className="text-xs text-blue-400">In queue</div>
                 </div>
@@ -3176,7 +3176,7 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Total Bots:</span>
-                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '5' : (metrics?.totalBots || 0)}</span>
+                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '5' : (metrics?.totalBots || '--')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Avg Response Time:</span>
@@ -3193,7 +3193,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Active Sessions:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '23' : (metrics?.data?.dailyActiveUsers || 0)}</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '23' : (metrics?.data?.dailyActiveUsers || '--')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">System Uptime:</span>
@@ -4018,7 +4018,7 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Calls Today:</span>
-                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '23' : (metrics?.activeCalls || 0)}</span>
+                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '23' : (metrics?.activeCalls || '--')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Avg Duration:</span>
@@ -5058,7 +5058,7 @@ export default function CommandCenter() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300 text-sm">Open Tickets</span>
-                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '4' : '0'}</span>
+                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '4' : '--'}</span>
                   </div>
                 </div>
 
@@ -6757,7 +6757,7 @@ export default function CommandCenter() {
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Total Meetings:</span>
                     <span className="text-white font-medium">
-                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '15' : selectedDay === 1 ? '12' : selectedDay === 2 ? '10' : selectedDay === 3 ? '11' : selectedDay === 4 ? '9' : selectedDay === 5 ? '8' : '5') : '0'}
+                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '15' : selectedDay === 1 ? '12' : selectedDay === 2 ? '10' : selectedDay === 3 ? '11' : selectedDay === 4 ? '9' : selectedDay === 5 ? '8' : '5') : '--'}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
