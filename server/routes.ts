@@ -36,6 +36,7 @@ import { registerAutomationTestEndpoint } from "./automationTestEndpoint";
 import { registerAutomationLogsEndpoint } from "./automationLogsEndpoint";
 import { registerTestDataRoutes } from "./testDataPopulator";
 import { registerProductionLoggerRoutes } from "./productionLogger";
+import { getSystemMode, setSystemMode } from "./systemMode";
 import { storage } from "./storage";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
@@ -47,11 +48,11 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// System mode state - toggleable between test and live
+// System mode state - now managed by centralized systemMode module
 let systemMode: 'test' | 'live' = 'live';
 
-// Export getter function for system mode
-export function getSystemMode(): 'test' | 'live' {
+// Export getter function for system mode - uses centralized module
+export function getSystemModeLocal(): 'test' | 'live' {
   return systemMode;
 }
 
@@ -170,17 +171,18 @@ interface LogEntry {
 const operationLogs: LogEntry[] = [];
 
 function logOperation(operation: string, data: any, result: 'success' | 'error' | 'blocked', message: string) {
+  const currentMode = getSystemMode();
   const logEntry: LogEntry = {
     timestamp: new Date().toISOString(),
     operation,
-    systemMode,
-    data: systemMode === 'live' ? data : '[TEST MODE - DATA MASKED]',
+    systemMode: currentMode,
+    data: currentMode === 'live' ? data : '[TEST MODE - DATA MASKED]',
     result,
     message
   };
   
   operationLogs.push(logEntry);
-  console.log(`[${systemMode.toUpperCase()}] ${operation}: ${message}`, logEntry);
+  console.log(`[${currentMode.toUpperCase()}] ${operation}: ${message}`, logEntry);
   
   // Keep only last 1000 logs to prevent memory issues
   if (operationLogs.length > 1000) {
@@ -3456,7 +3458,6 @@ Report generated in Live Mode
   // System mode toggle endpoint with audit logging
   app.post('/api/system-mode-toggle', async (req, res) => {
     try {
-      const { setSystemMode, getSystemMode } = await import('./systemMode');
       const previousMode = getSystemMode();
       const newMode = previousMode === 'live' ? 'test' : 'live';
       
@@ -3468,8 +3469,12 @@ Report generated in Live Mode
       app.set('systemMode', newMode);
       
       // Synchronize mode with all modules
-      const { updateSystemMode } = await import('./commandCenterRoutes');
-      updateSystemMode(newMode);
+      try {
+        const { updateSystemMode } = await import('./commandCenterRoutes');
+        updateSystemMode(newMode);
+      } catch (importError) {
+        console.log('Command center sync skipped - module not available');
+      }
       
       const modeChange = {
         id: `mode_${Date.now()}`,

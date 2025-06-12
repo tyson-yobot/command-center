@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import { getSystemMode } from "./systemMode";
 
 // Real test data for demo - comprehensive metrics across all dashboard sections
 const testModeMetrics = {
@@ -262,7 +263,7 @@ const liveModeMetrics = {
 export function registerTestDataRoutes(app: Express) {
   // System mode check endpoint
   app.get('/api/system-mode', (req, res) => {
-    const mode = process.env.SYSTEM_MODE || 'live';
+    const mode = getSystemMode();
     res.json({ 
       success: true, 
       systemMode: mode,
@@ -272,7 +273,7 @@ export function registerTestDataRoutes(app: Express) {
 
   // Dashboard metrics with mode-specific data
   app.get('/api/dashboard-metrics', (req, res) => {
-    const systemMode = req.headers['x-system-mode'] || process.env.SYSTEM_MODE || 'live';
+    const systemMode = req.headers['x-system-mode'] || getSystemMode();
     
     if (systemMode === 'test') {
       res.json({
