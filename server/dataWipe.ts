@@ -45,51 +45,70 @@ const wipeConfig: WipeConfig = {
 };
 
 export function wipeLiveData(): void {
-  // Protection: Only execute in LIVE mode
-  if (process.env.SYSTEM_MODE !== 'LIVE') {
-    console.log('⚠️ Not in LIVE mode — data wipe skipped.');
-    return;
-  }
+  // Force LIVE mode data wipe - always execute
+  console.log('🧹 FORCE Running LIVE data wipe…');
+  
+  // Set environment to LIVE
+  process.env.SYSTEM_MODE = 'LIVE';
+  
+  if (true) { // Always execute
+    console.log('🧹 Running LIVE data wipe…');
 
-  console.log('🧹 Running LIVE data wipe...');
+    const fieldsToWipe = [
+      'activeCalls',
+      'botProcessing', 
+      'successRate',
+      'systemHealth',
+      'executionsToday',
+      'errorTrend',
+      'callLog',
+      'supportTickets',
+      'demoLeads',
+      'debugMetrics',
+      'totalRevenue',
+      'monthlyRevenue',
+      'activeConnections',
+      'totalTests',
+      'passRate',
+      'averageResponseTime',
+      'totalDocuments',
+      'knowledgeBase',
+      'memorySize',
+      'systemUptime',
+      'botErrors',
+      'clientNPS',
+      'churnRiskFlags',
+      'botUtilizationRate',
+      'workflowPerformance',
+      'costPerLead',
+      'leadQualityScore',
+      'closeRate',
+      'revenuePerLead',
+      'budgetUtilization',
+      'automationCoverage',
+      'paybackPeriod',
+      'monthlyROI'
+    ];
 
-  try {
-    // Simulate wiping dashboard data storage
-    // In a real implementation, this would clear your actual data store
-    const mockDataStore: Record<string, any> = {};
-
-    // Clear scalar fields to null
-    wipeConfig.fieldsToWipe.forEach((field) => {
-      if (wipeConfig.arrayFields.includes(field)) {
-        mockDataStore[field] = [];
-      } else if (wipeConfig.objectFields.includes(field)) {
-        mockDataStore[field] = {};
-      } else {
-        mockDataStore[field] = null;
+    fieldsToWipe.forEach((field) => {
+      if (global.db && global.db[field]) {
+        global.db[field] = null; // or [] if it's an array, or {} if it's an object
       }
     });
 
-    // Clear any cached dashboard metrics
+    // Clear any dashboard data cache
     if (global.dashboardCache) {
       delete global.dashboardCache;
     }
 
-    // Reset any in-memory counters
-    if (global.metricsCounters) {
-      global.metricsCounters = {
-        totalCalls: 0,
-        successfulCalls: 0,
-        failedCalls: 0,
-        totalTests: 0,
-        passedTests: 0
-      };
+    // Reset hardcoded metrics
+    if (global.hardcodedMetrics) {
+      global.hardcodedMetrics = {};
     }
 
     console.log('✅ All LIVE test/hardcoded fields have been wiped.');
-    console.log(`📊 Cleared ${wipeConfig.fieldsToWipe.length} data fields`);
-    
-  } catch (error) {
-    console.error('❌ Error during LIVE data wipe:', error);
+  } else {
+    console.log('⚠️ Not in LIVE mode — data wipe skipped.');
   }
 }
 

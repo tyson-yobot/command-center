@@ -3115,7 +3115,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">System Uptime:</span>
-                  <span className="text-green-400 font-bold">{metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '99.8%'}</span>
+                  <span className="text-green-400 font-bold">{metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '--'}</span>
                 </div>
               </div>
             </CardContent>
@@ -3203,10 +3203,10 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Bot Utilization Rate:</span>
-                    <span className="text-cyan-400 font-bold">{automationPerformance?.data?.passRate || '93.6'}%</span>
+                    <span className="text-cyan-400 font-bold">{automationPerformance?.data?.passRate || '--'}%</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300" style={{width: `${automationPerformance?.data?.passRate || 93.6}%`}}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300" style={{width: `${automationPerformance?.data?.passRate || 0}%`}}></div>
                   </div>
                 </div>
               </div>
@@ -3233,7 +3233,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Error Trend (7d):</span>
-                  <span className="text-red-400 font-bold">{automationPerformance?.data?.failedTests || 54} errors</span>
+                  <span className="text-red-400 font-bold">{automationPerformance?.data?.failedTests || 0} errors</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">API Usage:</span>
