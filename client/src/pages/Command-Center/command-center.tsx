@@ -4874,43 +4874,46 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-4 gap-3">
                   <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
                     <div className="text-slate-300 text-xs mb-1">Active Calls</div>
-                    <div className="text-white font-bold text-lg">0</div>
+                    <div className="text-white font-bold text-lg">{callStats.activeCalls}</div>
                   </div>
                   <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
                     <div className="text-slate-300 text-xs mb-1">Avg Duration</div>
-                    <div className="text-white font-bold text-lg">0m</div>
+                    <div className="text-white font-bold text-lg">{callStats.avgDuration}</div>
                   </div>
                   <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
                     <div className="text-slate-300 text-xs mb-1">Success Rate</div>
-                    <div className="text-white font-bold text-lg">0%</div>
+                    <div className="text-white font-bold text-lg">{callStats.successRate}</div>
                   </div>
                   <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
                     <div className="text-slate-300 text-xs mb-1">Total Today</div>
-                    <div className="text-white font-bold text-lg">0</div>
+                    <div className="text-white font-bold text-lg">{callStats.totalToday}</div>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
                 <div className="grid grid-cols-3 gap-2">
                   <Button 
-                    onClick={() => setShowCallMonitoring(true)}
+                    onClick={handleSimulateTestCall}
                     className="bg-purple-600 hover:bg-purple-700 text-white text-xs border border-purple-400"
+                    title="Triggers a mock call event in the system"
                   >
-                    <TestTube className="w-3 h-3 mr-1" />
+                    <Phone className="w-3 h-3 mr-1" />
                     Simulate Test Call
                   </Button>
                   <Button 
-                    onClick={() => setShowCallDetails(true)}
+                    onClick={() => setShowCallReports(true)}
                     className="bg-blue-600 hover:bg-blue-700 text-white text-xs border border-blue-400"
+                    title="View call reports and analytics"
                   >
-                    <Eye className="w-3 h-3 mr-1" />
+                    <FileText className="w-3 h-3 mr-1" />
                     View Call Reports
                   </Button>
                   <Button 
-                    onClick={() => setShowCallMonitoring(true)}
+                    onClick={() => setShowCallLogs(true)}
                     className="bg-green-600 hover:bg-green-700 text-white text-xs border border-green-400"
+                    title="View detailed call log history"
                   >
-                    <FileText className="w-3 h-3 mr-1" />
+                    <Clock className="w-3 h-3 mr-1" />
                     Call Log History
                   </Button>
                 </div>
@@ -4943,25 +4946,31 @@ export default function CommandCenter() {
                 {/* Quick Actions */}
                 <div className="space-y-2">
                   <Button 
-                    onClick={() => setShowLiveChat(true)}
+                    onClick={() => {
+                      setShowLiveChat(true);
+                      addRecentActivity('Live chat session opened', 'chat');
+                    }}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-400"
+                    title="Opens built-in live chat window for real-time support"
                   >
                     <MessageCircle className="w-4 h-4 mr-2" />
-                    Open Live Chat
+                    💬 Open Live Chat
                   </Button>
                   <Button 
                     onClick={() => setShowCreateTicketModal(true)}
                     className="w-full bg-purple-600 hover:bg-purple-700 text-white border border-purple-400"
+                    title="Opens Support Ticket Form modal to submit new support requests"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Create New Ticket
+                    ➕ Create New Ticket
                   </Button>
                   <Button 
                     onClick={() => setShowTicketHistory(true)}
                     className="w-full bg-slate-600 hover:bg-slate-700 text-white border border-slate-400"
+                    title="View all previous support tickets with status filtering"
                   >
                     <FileText className="w-4 h-4 mr-2" />
-                    View Ticket History
+                    📜 View Ticket History
                   </Button>
                 </div>
 
@@ -6354,7 +6363,20 @@ export default function CommandCenter() {
         documentName={previewDocumentName}
       />
 
-      {/* Footer - Support Contact - Moved to Bottom */}
+      {/* Alert Banner */}
+      <div className="bg-blue-900/40 border border-blue-400 rounded-lg p-4 mb-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Bell className="w-5 h-5 text-blue-400" />
+            <span className="text-white font-medium">Next Scheduled Voice Test: Today @ 2:00 PM</span>
+          </div>
+          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+            View Details
+          </Button>
+        </div>
+      </div>
+
+      {/* Footer - Support Contact & YoBot Branding */}
       <div className="text-center mt-8 mb-4">
         <div className="bg-white/10 backdrop-blur-sm border border-blue-400 rounded-lg p-6">
           <h3 className="text-xl font-semibold text-white mb-2">Need Support?</h3>
@@ -6367,7 +6389,202 @@ export default function CommandCenter() {
             Contact Support
           </Button>
         </div>
+        
+        {/* YoBot® Branding Footer */}
+        <div className="mt-6 text-center">
+          <div className="text-slate-400 text-sm">
+            Powered by <span className="text-blue-400 font-bold">YoBot®</span> Enterprise Automation Platform
+          </div>
+          <div className="text-slate-500 text-xs mt-1">
+            Version 2.1.0 | Support: support@yobot.bot | © 2024 YoBot Technologies
+          </div>
+        </div>
       </div>
+
+      {/* Toast Notification System */}
+      {showToast && (
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg border shadow-lg transform transition-all duration-300 ${
+          showToast.type === 'success' 
+            ? 'bg-green-900/90 border-green-400 text-green-100' 
+            : 'bg-red-900/90 border-red-400 text-red-100'
+        }`}>
+          <div className="flex items-center space-x-2">
+            {showToast.type === 'success' ? (
+              <CheckCircle className="w-5 h-5" />
+            ) : (
+              <AlertTriangle className="w-5 h-5" />
+            )}
+            <span className="text-sm font-medium">{showToast.message}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Call Reports Modal */}
+      {showCallReports && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-blue-400/50">
+            <div className="sticky top-0 bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white flex items-center">
+                <FileText className="w-5 h-5 mr-2 text-blue-400" />
+                Call Reports & Analytics
+              </h2>
+              <Button
+                onClick={() => setShowCallReports(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400">
+                  <h3 className="text-white font-medium mb-2">Call Performance</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-slate-300 text-sm">Total Calls:</span>
+                      <span className="text-white font-bold">{currentSystemMode === 'test' ? '47' : '0'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-300 text-sm">Success Rate:</span>
+                      <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '94.7%' : '0%'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-300 text-sm">Avg Duration:</span>
+                      <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '3m 42s' : '0m'}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-slate-800/60 rounded-lg p-4 border border-green-400">
+                  <h3 className="text-white font-medium mb-2">Revenue Impact</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-slate-300 text-sm">Leads Generated:</span>
+                      <span className="text-white font-bold">{currentSystemMode === 'test' ? '23' : '0'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-300 text-sm">Conversions:</span>
+                      <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '12' : '0'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-300 text-sm">Est. Revenue:</span>
+                      <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '$34,200' : '$0'}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-slate-800/60 rounded-lg p-4 border border-purple-400">
+                  <h3 className="text-white font-medium mb-2">Recent Reports</h3>
+                  <div className="space-y-2">
+                    {currentSystemMode === 'test' ? [
+                      'Daily Summary (Today)',
+                      'Weekly Analytics',
+                      'Performance Trends'
+                    ].map((report, index) => (
+                      <div key={index} className="flex items-center justify-between">
+                        <span className="text-slate-300 text-sm">{report}</span>
+                        <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white text-xs">
+                          View
+                        </Button>
+                      </div>
+                    )) : (
+                      <div className="text-slate-400 text-sm text-center py-4">
+                        No reports available in live mode
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Call Logs Modal */}
+      {showCallLogs && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-green-400/50">
+            <div className="sticky top-0 bg-slate-900 border-b border-green-400/30 p-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white flex items-center">
+                <Clock className="w-5 h-5 mr-2 text-green-400" />
+                Call Log History
+              </h2>
+              <Button
+                onClick={() => setShowCallLogs(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-6">
+              <div className="space-y-4">
+                {currentSystemMode === 'test' ? [
+                  {
+                    id: 'CALL-001',
+                    caller: 'Sarah Johnson',
+                    phone: '(555) 123-4567',
+                    type: 'Inbound',
+                    duration: '8m 42s',
+                    status: 'Completed',
+                    timestamp: '2:15 PM',
+                    outcome: 'Lead Qualified'
+                  },
+                  {
+                    id: 'CALL-002',
+                    caller: 'Mike Chen',
+                    phone: '(555) 987-6543',
+                    type: 'Outbound',
+                    duration: '12m 18s',
+                    status: 'Completed',
+                    timestamp: '1:48 PM',
+                    outcome: 'Follow-up Scheduled'
+                  },
+                  {
+                    id: 'CALL-003',
+                    caller: 'Emily Davis',
+                    phone: '(555) 456-7890',
+                    type: 'Inbound',
+                    duration: '5m 33s',
+                    status: 'Completed',
+                    timestamp: '1:22 PM',
+                    outcome: 'Quote Requested'
+                  }
+                ].map((call) => (
+                  <div key={call.id} className="bg-slate-800/60 border border-green-400/30 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-white font-medium">{call.caller}</span>
+                        <span className="text-slate-400 text-sm">{call.phone}</span>
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${
+                          call.type === 'Inbound' ? 'bg-blue-600/20 text-blue-400' : 'bg-purple-600/20 text-purple-400'
+                        }`}>
+                          {call.type}
+                        </span>
+                      </div>
+                      <span className="text-green-400 text-sm font-medium">{call.outcome}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm text-slate-300">
+                      <span>Call ID: {call.id}</span>
+                      <span>Duration: {call.duration}</span>
+                      <span>Time: {call.timestamp}</span>
+                      <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs">
+                        Listen
+                      </Button>
+                    </div>
+                  </div>
+                )) : (
+                  <div className="text-center py-12">
+                    <Clock className="w-12 h-12 mx-auto mb-4 text-slate-400" />
+                    <p className="text-slate-400 text-lg">No call logs available</p>
+                    <p className="text-slate-500 text-sm mt-2">Call logs will appear here once calls are made</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
     </>
   );
