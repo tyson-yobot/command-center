@@ -70,24 +70,45 @@ def test_sendgrid_api_connection():
         log_integration_test_to_airtable("Email Receipt System", False, notes)
         return False
     
-    # Test SendGrid API endpoint
-    url = "https://api.sendgrid.com/v3/user/profile"
+    # Test with actual email send (dry run style test)
+    url = "https://api.sendgrid.com/v3/mail/send"
     headers = {
         'Authorization': f'Bearer {sendgrid_api_key}',
         'Content-Type': 'application/json'
     }
     
+    # Test payload - minimal email test
+    test_payload = {
+        "personalizations": [
+            {
+                "to": [{"email": "test@yobot.bot", "name": "Test User"}],
+                "subject": "YoBot Email System Test"
+            }
+        ],
+        "from": {"email": "noreply@yobot.bot", "name": "YoBot Test"},
+        "content": [
+            {
+                "type": "text/html",
+                "value": f"<p>YoBot Email Receipt System test - {datetime.now().isoformat()}</p>"
+            }
+        ],
+        "mail_settings": {
+            "sandbox_mode": {"enable": True}  # Sandbox mode for testing
+        }
+    }
+    
     try:
-        response = requests.get(url, headers=headers, timeout=10)
-        response.raise_for_status()
+        response = requests.post(url, headers=headers, json=test_payload, timeout=10)
         
-        if response.status_code == 200:
-            data = response.json()
-            user_email = data.get('email', 'unknown')
-            notes = f"SUCCESS: SendGrid API connected successfully. Account email: {user_email}. Test completed at {datetime.now().isoformat()}"
+        if response.status_code == 202:  # SendGrid returns 202 for accepted
+            notes = f"SUCCESS: SendGrid API connected successfully. Test email accepted in sandbox mode. Response: {response.status_code}. Test completed at {datetime.now().isoformat()}"
             log_integration_test_to_airtable("Email Receipt System", True, notes)
             print("✅ SendGrid Email test PASSED")
             return True
+        elif response.status_code == 401:
+            notes = f"FAILED: SendGrid API key unauthorized. Status: {response.status_code}. Response: {response.text}"
+            log_integration_test_to_airtable("Email Receipt System", False, notes)
+            return False
         else:
             notes = f"FAILED: SendGrid API returned status {response.status_code}: {response.text}"
             log_integration_test_to_airtable("Email Receipt System", False, notes)
