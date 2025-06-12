@@ -1154,24 +1154,8 @@ export default function CommandCenter() {
     }
   };
 
-  const handleManualFollowUp = async () => {
-    try {
-      setVoiceStatus('Triggering voice reminder for follow-up...');
-      const response = await fetch('/api/follow-up-caller', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scenario: 'follow-up-caller' })
-      });
-      
-      if (response.ok) {
-        setVoiceStatus('Follow-up reminder scheduled and logged');
-        setToast({ title: "Follow-up Scheduled", description: "Voice reminder created and logged to tracker" });
-      } else {
-        setVoiceStatus('Follow-up scheduling failed');
-      }
-    } catch (error) {
-      setVoiceStatus('Follow-up error');
-    }
+  const handleManualFollowUp = () => {
+    setShowFollowUpModal(true);
   };
 
   const handleSalesOrder = async () => {
@@ -5262,23 +5246,101 @@ export default function CommandCenter() {
       {/* Support Ticket Form Modal */}
       {showSupportTicketModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-blue-400/50">
-            <div className="sticky top-0 bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
+          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-blue-400/50 p-6 animate-in fade-in-0 duration-300">
+            <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Create Support Ticket</h2>
               <Button
                 onClick={() => setShowSupportTicketModal(false)}
                 variant="ghost"
-                className="text-white hover:bg-white/10"
+                className="text-white hover:bg-white/10 p-1"
               >
                 ✕
               </Button>
             </div>
-            <div className="p-6">
-              <iframe
-                src="https://tally.so/r/w7jep6"
-                className="w-full h-[600px] border border-blue-400/30 rounded-lg"
-                title="Support Ticket Form"
-              />
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Client Name</label>
+                <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500">
+                  <option value="">Select client...</option>
+                  <option value="acme-corp">Acme Corporation</option>
+                  <option value="tech-solutions">Tech Solutions Inc</option>
+                  <option value="global-systems">Global Systems Ltd</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Priority</label>
+                <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500">
+                  <option value="low">Low</option>
+                  <option value="normal" selected>Normal</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Issue Type</label>
+                <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500">
+                  <option value="tech">Tech</option>
+                  <option value="billing">Billing</option>
+                  <option value="onboarding">Onboarding</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Description</label>
+                <textarea 
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500 h-24 resize-none"
+                  placeholder="Describe the issue..."
+                />
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Attachments (Optional)</label>
+                <input 
+                  type="file" 
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500"
+                  multiple
+                />
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={async () => {
+                    // Submit support ticket
+                    try {
+                      const response = await fetch('/api/support-ticket', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          clientName: 'test-client',
+                          priority: 'normal',
+                          issueType: 'tech',
+                          description: 'Test ticket'
+                        })
+                      });
+                      
+                      if (response.ok) {
+                        setToast({ title: "Ticket Created", description: "✅ Ticket logged successfully" });
+                        setShowSupportTicketModal(false);
+                      }
+                    } catch (error) {
+                      setToast({ title: "Error", description: "Failed to create ticket", variant: "destructive" });
+                    }
+                  }}
+                  className="flex-1 bg-[#0d82da] hover:bg-[#0b6bb8] text-white font-semibold py-3 px-6 rounded-lg"
+                >
+                  Create Ticket
+                </Button>
+                <Button
+                  onClick={() => setShowSupportTicketModal(false)}
+                  variant="ghost"
+                  className="flex-1 bg-transparent hover:bg-white/10 text-white py-3 px-6 rounded-lg border border-gray-600"
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           </div>
         </div>
