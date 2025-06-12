@@ -2933,7 +2933,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {currentSystemMode === 'test' ? '8' : (metrics?.activeCalls || 0)}
+                {metrics?.activeCalls || 0}
               </div>
               <p className="text-xs text-green-400">
                 Live voice sessions
@@ -2948,7 +2948,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {currentSystemMode === 'test' ? '47' : (metrics?.botProcessing || 0)}
+                {metrics?.botProcessing || 0}
               </div>
               <p className="text-xs text-blue-400">
                 {currentSystemMode === 'test' ? 'AI operations active' : 'Live AI processing'}
@@ -3012,7 +3012,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Executions Today</div>
                   <div className="text-2xl font-bold text-blue-400">
-                    {currentSystemMode === 'test' ? '47' : (automationPerformance?.data?.totalTests || 0)}
+                    {automationPerformance?.data?.totalTests || 0}
                   </div>
                   <div className="text-xs text-blue-400">
                     {currentSystemMode === 'test' ? 'Test executions completed' : 'Live executions'}
@@ -3030,7 +3030,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Recent Executions</div>
                   <div className="text-2xl font-bold text-blue-400">
-                    {currentSystemMode === 'test' ? '6' : (automationPerformance?.recentExecutions?.length || 0)}
+                    {automationPerformance?.recentExecutions?.length || 0}
                   </div>
                   <div className="text-xs text-blue-400">In queue</div>
                 </div>
@@ -3103,7 +3103,7 @@ export default function CommandCenter() {
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Bot Errors:</span>
                   <div className="flex items-center space-x-2">
-                    <span className="text-red-400 font-bold">{automationPerformance?.data?.criticalErrors || '3'}</span>
+                    <span className="text-red-400 font-bold">{automationPerformance?.data?.criticalErrors || '0'}</span>
                     <Button size="sm" variant="ghost" className="text-cyan-400 hover:text-cyan-300 text-xs p-1">
                       👁 View Details
                     </Button>
@@ -3144,7 +3144,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">ROI This Quarter:</span>
                   <div className="text-right">
                     <span className="text-emerald-400 font-bold">
-                      {currentSystemMode === 'test' ? '18%' : 
+                      {
                        (metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : '--')}
                     </span>
                   </div>
@@ -6364,19 +6364,19 @@ export default function CommandCenter() {
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Total Meetings:</span>
                     <span className="text-white font-medium">
-                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '15' : selectedDay === 1 ? '12' : selectedDay === 2 ? '10' : selectedDay === 3 ? '11' : selectedDay === 4 ? '9' : selectedDay === 5 ? '8' : '5') : '0'}
+                      0
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Client Calls:</span>
                     <span className="text-green-400 font-medium">
-                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '6' : selectedDay === 1 ? '4' : selectedDay === 2 ? '3' : selectedDay === 3 ? '4' : selectedDay === 4 ? '3' : selectedDay === 5 ? '3' : '2') : '0'}
+                      0
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Internal Meetings:</span>
                     <span className="text-blue-400 font-medium">
-                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '9' : selectedDay === 1 ? '8' : selectedDay === 2 ? '7' : selectedDay === 3 ? '7' : selectedDay === 4 ? '6' : selectedDay === 5 ? '5' : '3') : '0'}
+                      0
                     </span>
                   </div>
                 </div>
