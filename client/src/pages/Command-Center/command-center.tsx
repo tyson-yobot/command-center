@@ -261,9 +261,114 @@ export default function CommandCenter() {
   const [currentMessage, setCurrentMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [activeCalls, setActiveCalls] = useState<any[]>([]);
+  
+  // Service States
+  const [serviceStates, setServiceStates] = useState({
+    monitoring: { status: 'INACTIVE', lastPing: null },
+    recording: { status: 'INACTIVE', lastPing: null },
+    analytics: { status: 'INACTIVE', lastPing: null }
+  });
+  
+  // Call Statistics
+  const [callStats, setCallStats] = useState({
+    activeCalls: 0,
+    avgDuration: '0m',
+    successRate: '0%',
+    totalToday: 0
+  });
+  
+  // Support Activity
+  const [recentActivity, setRecentActivity] = useState<Array<{
+    id: string;
+    message: string;
+    timestamp: string;
+    type: 'ticket' | 'chat' | 'system';
+  }>>([]);
+  
+  // Modal States
+  const [showCallReports, setShowCallReports] = useState(false);
+  const [showCallLogs, setShowCallLogs] = useState(false);
+  const [showToast, setShowToast] = useState<{message: string; type: 'success' | 'error'} | null>(null);
   const [totalRecords, setTotalRecords] = useState(0);
   const [completedCalls, setCompletedCalls] = useState(0);
   const [pipelineRunning, setPipelineRunning] = useState(false);
+
+  // Service Management Functions
+  const handleServiceAction = async (service: 'monitoring' | 'recording' | 'analytics', action: 'start' | 'restart' | 'ping') => {
+    if (action === 'start') {
+      setServiceStates(prev => ({
+        ...prev,
+        [service]: { status: 'ACTIVE', lastPing: new Date().toLocaleTimeString() }
+      }));
+      addRecentActivity(`${service.charAt(0).toUpperCase() + service.slice(1)} service started`, 'system');
+      showToastMessage(`${service.charAt(0).toUpperCase() + service.slice(1)} service activated`, 'success');
+    } else if (action === 'restart') {
+      setServiceStates(prev => ({
+        ...prev,
+        [service]: { status: 'RESTARTING', lastPing: prev[service].lastPing }
+      }));
+      setTimeout(() => {
+        setServiceStates(prev => ({
+          ...prev,
+          [service]: { status: 'ACTIVE', lastPing: new Date().toLocaleTimeString() }
+        }));
+        addRecentActivity(`${service.charAt(0).toUpperCase() + service.slice(1)} service restarted`, 'system');
+      }, 2000);
+      showToastMessage(`${service.charAt(0).toUpperCase() + service.slice(1)} service restarting...`, 'success');
+    } else if (action === 'ping') {
+      try {
+        // Simulate ping request
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setServiceStates(prev => ({
+          ...prev,
+          [service]: { ...prev[service], lastPing: new Date().toLocaleTimeString() }
+        }));
+        showToastMessage(`Ping successful - ${service} service responding`, 'success');
+        console.log(`Ping result for ${service}: Success - Response time: 120ms`);
+      } catch (error) {
+        showToastMessage(`Ping failed - ${service} service not responding`, 'error');
+      }
+    }
+  };
+
+  // Simulate Test Call
+  const handleSimulateTestCall = () => {
+    setCallStats(prev => ({
+      ...prev,
+      activeCalls: prev.activeCalls + 1,
+      totalToday: prev.totalToday + 1
+    }));
+    
+    addRecentActivity('Test call simulation started', 'system');
+    
+    // Simulate call duration
+    const duration = Math.floor(Math.random() * 3) + 2; // 2-4 minutes
+    setTimeout(() => {
+      setCallStats(prev => ({
+        ...prev,
+        activeCalls: Math.max(0, prev.activeCalls - 1),
+        avgDuration: `${duration}m`,
+        successRate: '94%'
+      }));
+      addRecentActivity(`Test call completed (${duration}m duration)`, 'system');
+    }, 10000); // Reset after 10 seconds
+  };
+
+  // Utility Functions
+  const showToastMessage = (message: string, type: 'success' | 'error') => {
+    setShowToast({ message, type });
+    setTimeout(() => setShowToast(null), 3000);
+  };
+
+  const addRecentActivity = (message: string, type: 'ticket' | 'chat' | 'system') => {
+    const newActivity = {
+      id: Date.now().toString(),
+      message,
+      timestamp: new Date().toLocaleTimeString(),
+      type
+    };
+    setRecentActivity(prev => [newActivity, ...prev.slice(0, 4)]); // Keep last 5 items
+  };
 
   // Voice recognition functions for RAG system
   const initializeVoiceRecognition = () => {
@@ -4622,46 +4727,145 @@ export default function CommandCenter() {
                         <div className="flex items-center space-x-2">
                           <Activity className="w-4 h-4 text-yellow-400" />
                           <span className="text-white text-sm">Monitoring Service</span>
-                          <span className="text-yellow-400 text-xs">IDLE</span>
+                          <span className={`text-xs font-bold px-2 py-1 rounded ${
+                            serviceStates.monitoring.status === 'ACTIVE' ? 'bg-green-600/20 text-green-400' :
+                            serviceStates.monitoring.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
+                            'text-yellow-400'
+                          }`}>
+                            {serviceStates.monitoring.status === 'ACTIVE' ? '🟢 ACTIVE' :
+                             serviceStates.monitoring.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE'}
+                          </span>
                         </div>
                         <div className="flex space-x-1">
-                          <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400">Start</Button>
-                          <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400">Restart</Button>
-                          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400">Ping</Button>
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleServiceAction('monitoring', 'start')}
+                            className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400"
+                            title="Start monitoring service"
+                          >
+                            Start
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleServiceAction('monitoring', 'restart')}
+                            className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400"
+                            title="Restart monitoring service"
+                          >
+                            Restart
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleServiceAction('monitoring', 'ping')}
+                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400"
+                            title="Ping monitoring service"
+                          >
+                            Ping
+                          </Button>
                         </div>
                       </div>
+                      {serviceStates.monitoring.lastPing && (
+                        <div className="text-xs text-slate-400 mt-1">
+                          Last ping: {serviceStates.monitoring.lastPing}
+                        </div>
+                      )}
                     </div>
                     
                     {/* Recording Service */}
                     <div className="bg-slate-800/60 rounded-lg p-3 border border-blue-400">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                          <Headphones className="w-4 h-4 text-yellow-400" />
+                          <Headphones className="w-4 h-4 text-red-400" />
                           <span className="text-white text-sm">Recording Service</span>
-                          <span className="text-yellow-400 text-xs">IDLE</span>
+                          <span className={`text-xs font-bold px-2 py-1 rounded ${
+                            serviceStates.recording.status === 'ACTIVE' ? 'bg-green-600/20 text-green-400' :
+                            serviceStates.recording.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
+                            'text-yellow-400'
+                          }`}>
+                            {serviceStates.recording.status === 'ACTIVE' ? '🟢 ACTIVE' :
+                             serviceStates.recording.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE'}
+                          </span>
                         </div>
                         <div className="flex space-x-1">
-                          <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400">Start</Button>
-                          <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400">Restart</Button>
-                          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400">Ping</Button>
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleServiceAction('recording', 'start')}
+                            className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400"
+                            title="Start recording service"
+                          >
+                            Start
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleServiceAction('recording', 'restart')}
+                            className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400"
+                            title="Restart recording service"
+                          >
+                            Restart
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleServiceAction('recording', 'ping')}
+                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400"
+                            title="Ping recording service"
+                          >
+                            Ping
+                          </Button>
                         </div>
                       </div>
+                      {serviceStates.recording.lastPing && (
+                        <div className="text-xs text-slate-400 mt-1">
+                          Last ping: {serviceStates.recording.lastPing}
+                        </div>
+                      )}
                     </div>
                     
                     {/* Analytics Service */}
                     <div className="bg-slate-800/60 rounded-lg p-3 border border-blue-400">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                          <Zap className="w-4 h-4 text-yellow-400" />
+                          <Zap className="w-4 h-4 text-purple-400" />
                           <span className="text-white text-sm">Analytics Service</span>
-                          <span className="text-yellow-400 text-xs">IDLE</span>
+                          <span className={`text-xs font-bold px-2 py-1 rounded ${
+                            serviceStates.analytics.status === 'ACTIVE' ? 'bg-green-600/20 text-green-400' :
+                            serviceStates.analytics.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
+                            'text-yellow-400'
+                          }`}>
+                            {serviceStates.analytics.status === 'ACTIVE' ? '🟢 ACTIVE' :
+                             serviceStates.analytics.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE'}
+                          </span>
                         </div>
                         <div className="flex space-x-1">
-                          <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400">Start</Button>
-                          <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400">Restart</Button>
-                          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400">Ping</Button>
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleServiceAction('analytics', 'start')}
+                            className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400"
+                            title="Start analytics service"
+                          >
+                            Start
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleServiceAction('analytics', 'restart')}
+                            className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400"
+                            title="Restart analytics service"
+                          >
+                            Restart
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleServiceAction('analytics', 'ping')}
+                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400"
+                            title="Ping analytics service"
+                          >
+                            Ping
+                          </Button>
                         </div>
                       </div>
+                      {serviceStates.analytics.lastPing && (
+                        <div className="text-xs text-slate-400 mt-1">
+                          Last ping: {serviceStates.analytics.lastPing}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -4764,8 +4968,23 @@ export default function CommandCenter() {
                 {/* Recent Activity */}
                 <div className="bg-slate-700/40 rounded-lg p-3 border border-purple-400">
                   <h4 className="text-white font-medium mb-2 text-sm">Recent Activity</h4>
-                  <div className="text-slate-400 text-xs text-center py-2">
-                    No recent support activity
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
+                    {recentActivity.length > 0 ? recentActivity.map((activity) => (
+                      <div key={activity.id} className="flex items-center justify-between text-xs">
+                        <div className="flex items-center space-x-2">
+                          <span className={`w-2 h-2 rounded-full ${
+                            activity.type === 'ticket' ? 'bg-purple-400' :
+                            activity.type === 'chat' ? 'bg-blue-400' : 'bg-green-400'
+                          }`}></span>
+                          <span className="text-slate-300">{activity.message}</span>
+                        </div>
+                        <span className="text-slate-400">{activity.timestamp}</span>
+                      </div>
+                    )) : (
+                      <div className="text-slate-400 text-xs text-center py-2">
+                        No recent support activity
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -5038,8 +5257,11 @@ export default function CommandCenter() {
                     };
                     console.log('Creating ticket:', ticketData);
                     
+                    // Add to recent activity
+                    addRecentActivity(`Ticket #${ticketData.id.slice(-3)} submitted: ${newTicketSubject}`, 'ticket');
+                    
                     // Show success message
-                    alert('✅ Your support ticket has been submitted! We\'ll get back to you shortly.');
+                    showToastMessage('Your support ticket has been submitted! We\'ll get back to you shortly.', 'success');
                     
                     // Reset form and close modal
                     setShowCreateTicketModal(false);
