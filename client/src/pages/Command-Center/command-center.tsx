@@ -2419,7 +2419,6 @@ export default function CommandCenter() {
   };
 
   return (
-    <>
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-8 p-8">
 
       
@@ -3921,7 +3920,8 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Second Row - Continue the grid */}
+        {/* Second Row - Bottom 3 panels */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           {/* AI Automation Engine */}
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
             <CardHeader>
@@ -4660,10 +4660,9 @@ export default function CommandCenter() {
       </div>
     </div>
 
-    {/* Clear Knowledge Confirmation Dialog */}
     {showClearConfirm && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-slate-800 border border-red-500/50 rounded-lg p-6 max-w-md w-full mx-4">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="bg-slate-800 border border-red-500/50 rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-xl font-semibold text-red-400 mb-4 flex items-center">
               <Trash2 className="w-5 h-5 mr-2" />
               Confirm Knowledge Deletion
