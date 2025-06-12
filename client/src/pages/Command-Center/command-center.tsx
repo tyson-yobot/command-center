@@ -5177,8 +5177,7 @@ export default function CommandCenter() {
         onClose={() => setShowKnowledgeManager(false)}
       />
 
-      {/* Zendesk Chat Widget */}
-      <ZendeskChatWidget />
+
 
       {/* Content Creator Module */}
       {activeModule === 'content-creator' && (
