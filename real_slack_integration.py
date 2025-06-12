@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
 Real Slack Integration - Actual API implementation
-No hardcoded returns - validates real Slack connectivity
+Function 3: Slack Notification System
 """
 
 import os
 import requests
 from datetime import datetime
+import json
 
 def log_integration_test_to_airtable(integration_name: str, passed: bool, notes: str, module_type: str = "Automation Test"):
     """Log real test results to production Airtable"""
@@ -66,51 +67,56 @@ def test_slack_webhook_connection():
     
     if not slack_webhook_url:
         notes = "FAILED: SLACK_WEBHOOK_URL environment variable not set"
-        log_integration_test_to_airtable("Slack Notifications", False, notes, "Communication")
+        log_integration_test_to_airtable("Slack Notification System", False, notes)
         return False
     
     # Test message payload
-    test_payload = {
-        "text": "YoBot Integration Test",
+    test_message = {
+        "text": f"🤖 YoBot Test Message - {datetime.now().isoformat()}",
         "blocks": [
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"🧠 *YoBot System Test*\n✅ Slack integration verified at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n🔧 Integration Name: Slack Notifications"
+                    "text": f"*YoBot Integration Test*\n✅ Slack webhook connection test successful\n⏰ Test time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
                 }
             }
         ]
     }
     
     try:
-        response = requests.post(slack_webhook_url, json=test_payload, timeout=10)
+        response = requests.post(
+            slack_webhook_url,
+            json=test_message,
+            headers={'Content-Type': 'application/json'},
+            timeout=10
+        )
         response.raise_for_status()
         
         if response.status_code == 200:
-            notes = f"SUCCESS: Slack webhook responded with 200. Message sent successfully at {datetime.now().isoformat()}"
-            log_integration_test_to_airtable("Slack Notifications", True, notes, "Communication")
+            notes = f"SUCCESS: Slack webhook connected successfully. Test message sent at {datetime.now().isoformat()}. Response: {response.text}"
+            log_integration_test_to_airtable("Slack Notification System", True, notes)
             print("✅ Slack webhook test PASSED")
             return True
         else:
             notes = f"FAILED: Slack webhook returned status {response.status_code}: {response.text}"
-            log_integration_test_to_airtable("Slack Notifications", False, notes, "Communication")
+            log_integration_test_to_airtable("Slack Notification System", False, notes)
             return False
             
     except requests.exceptions.Timeout:
         notes = "FAILED: Slack webhook request timed out after 10 seconds"
-        log_integration_test_to_airtable("Slack Notifications", False, notes, "Communication")
+        log_integration_test_to_airtable("Slack Notification System", False, notes)
         return False
     except requests.exceptions.RequestException as e:
         notes = f"FAILED: Slack webhook request error: {str(e)}"
-        log_integration_test_to_airtable("Slack Notifications", False, notes, "Communication")
+        log_integration_test_to_airtable("Slack Notification System", False, notes)
         return False
     except Exception as e:
         notes = f"FAILED: Unexpected error during Slack test: {str(e)}"
-        log_integration_test_to_airtable("Slack Notifications", False, notes, "Communication")
+        log_integration_test_to_airtable("Slack Notification System", False, notes)
         return False
 
-def send_slack_notification(message: str, channel: str = None):
+def send_slack_notification(message: str, channel: str = ""):
     """Send actual Slack notification - real implementation"""
     slack_webhook_url = os.getenv('SLACK_WEBHOOK_URL')
     
@@ -118,29 +124,55 @@ def send_slack_notification(message: str, channel: str = None):
         print("ERROR: SLACK_WEBHOOK_URL not configured")
         return False
     
-    payload = {
-        "text": message,
+    # Format message with YoBot branding
+    formatted_message = {
+        "text": f"🤖 YoBot Alert: {message}",
         "blocks": [
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"🤖 *YoBot Notification*\n{message}\n📅 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+                    "text": f"*YoBot Automation Alert*\n{message}\n⏰ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
                 }
             }
         ]
     }
     
+    # Add channel if specified
     if channel:
-        payload["channel"] = channel
+        formatted_message["channel"] = channel
     
     try:
-        response = requests.post(slack_webhook_url, json=payload, timeout=10)
+        response = requests.post(
+            slack_webhook_url,
+            json=formatted_message,
+            headers={'Content-Type': 'application/json'},
+            timeout=10
+        )
         response.raise_for_status()
-        return response.status_code == 200
-    except Exception as e:
-        print(f"Slack notification failed: {e}")
+        
+        if response.status_code == 200:
+            print(f"✅ Slack notification sent successfully")
+            return {
+                'success': True,
+                'message': 'Notification sent',
+                'timestamp': datetime.now().isoformat()
+            }
+        else:
+            print(f"❌ Slack notification failed: {response.status_code}")
+            return False
+            
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Slack API error: {e}")
         return False
+    except Exception as e:
+        print(f"❌ Unexpected error: {e}")
+        return False
+
+def function_send_slack_notification():
+    """Function wrapper for integration testing"""
+    test_message = "Integration test - Slack notification system operational"
+    return send_slack_notification(test_message)
 
 if __name__ == "__main__":
     print("Testing real Slack integration...")
