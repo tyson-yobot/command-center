@@ -3920,8 +3920,7 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* AI Automation & Analytics - Second Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        {/* Second Row - Continue the grid */}
           {/* AI Automation Engine */}
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
             <CardHeader>
@@ -4656,8 +4655,6 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
         </div>
-
-
 
       </div>
 
