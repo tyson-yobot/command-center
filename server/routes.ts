@@ -5955,28 +5955,74 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
 
   app.post('/api/knowledge/delete', async (req, res) => {
     try {
-      const { documentIds } = req.body;
+      const { documentIds, documentId } = req.body;
       
+      // Handle both single documentId and array of documentIds
+      const idsToDelete = documentIds || (documentId ? [documentId] : []);
+      
+      if (!idsToDelete || idsToDelete.length === 0) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Invalid request: documentIds or documentId required' 
+        });
+      }
+
       let deleted = 0;
-      for (const docId of documentIds) {
-        try {
-          const deleteResponse = await fetch(`https://www.googleapis.com/drive/v3/files/${docId}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${process.env.GOOGLE_ACCESS_TOKEN}` }
-          });
-          if (deleteResponse.ok) deleted++;
-        } catch (error) {
-          console.error(`Failed to delete document ${docId}:`, error);
+      
+      // Delete from in-memory stores
+      for (const docId of idsToDelete) {
+        // Remove from documentStore
+        const docIndex = documentStore.findIndex(doc => 
+          doc.documentId === docId || doc.id === docId
+        );
+        if (docIndex !== -1) {
+          documentStore.splice(docIndex, 1);
+          deleted++;
+        }
+        
+        // Remove from documentDataStore
+        const dataIndex = documentDataStore.findIndex(doc => 
+          doc.documentId === docId || doc.id === docId
+        );
+        if (dataIndex !== -1) {
+          documentDataStore.splice(dataIndex, 1);
+        }
+        
+        // Remove from knowledgeDataStore
+        const knowledgeIndex = knowledgeDataStore.findIndex(kb => 
+          kb.id === docId || kb.documentId === docId
+        );
+        if (knowledgeIndex !== -1) {
+          knowledgeDataStore.splice(knowledgeIndex, 1);
         }
       }
+
+      // Try to delete from database if available
+      try {
+        for (const docId of idsToDelete) {
+          await storage.deleteKnowledgeBase(parseInt(docId));
+        }
+      } catch (dbError) {
+        console.log('Database deletion not available:', dbError.message);
+      }
+
+      logOperation('knowledge-delete', { documentIds: idsToDelete }, 'success', `Deleted ${deleted} documents`);
 
       res.json({
         success: true,
         deleted: deleted,
-        total: documentIds.length
+        total: idsToDelete.length,
+        message: `Successfully deleted ${deleted} document(s)`
       });
+      
     } catch (error) {
-      res.status(500).json({ success: false, error: error.message });
+      console.error('Document deletion error:', error);
+      logOperation('knowledge-delete', req.body, 'error', `Delete failed: ${error.message}`);
+      
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to delete documents' 
+      });
     }
   });
 

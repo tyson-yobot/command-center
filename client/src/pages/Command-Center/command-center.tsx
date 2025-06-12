@@ -63,6 +63,11 @@ import { SocialContentCreator } from '@/components/social-content-creator';
 import { useToast } from '@/hooks/use-toast';
 import { Toast, ToastTitle, ToastDescription } from '@/components/ui/toast';
 import { KnowledgeViewerModal } from '@/components/knowledge-viewer-modal';
+import { ZendeskChatWidget } from '@/components/zendesk-chat-widget';
+import { CallMonitoringPopup } from '@/components/call-monitoring-popup';
+import { CallMonitoringDetails } from '@/components/call-monitoring-details';
+import { LiveChatInterface } from '@/components/live-chat-interface';
+import { KnowledgeBaseManager } from '@/components/knowledge-base-manager';
 
 
 export default function CommandCenter() {
@@ -217,6 +222,7 @@ export default function CommandCenter() {
   const [showCallMonitoring, setShowCallMonitoring] = useState(false);
   const [showCallDetails, setShowCallDetails] = useState(false);
   const [showLiveChat, setShowLiveChat] = useState(false);
+  const [showKnowledgeManager, setShowKnowledgeManager] = useState(false);
   const [activeCalls, setActiveCalls] = useState<any[]>([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [completedCalls, setCompletedCalls] = useState(0);
@@ -4474,6 +4480,25 @@ export default function CommandCenter() {
         accept=".pdf,.doc,.docx,.txt,.md"
         onChange={handleFileUpload}
         style={{ display: 'none' }}
+      />
+
+      {/* Call Monitoring Details Modal */}
+      <CallMonitoringDetails
+        isOpen={showCallDetails}
+        onClose={() => setShowCallDetails(false)}
+        currentSystemMode={currentSystemMode}
+      />
+
+      {/* Live Chat Interface Modal */}
+      <LiveChatInterface
+        isOpen={showLiveChat}
+        onClose={() => setShowLiveChat(false)}
+      />
+
+      {/* Knowledge Base Manager Modal */}
+      <KnowledgeBaseManager
+        isOpen={showKnowledgeManager}
+        onClose={() => setShowKnowledgeManager(false)}
       />
 
       {/* Zendesk Chat Widget */}
