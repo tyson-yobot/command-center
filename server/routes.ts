@@ -675,10 +675,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { action } = req.body;
       console.log('VoiceBot pipeline stop:', action);
       
+      // LIVE MODE: Only authentic data from voice pipeline system
+      if (isLiveMode()) {
+        throw new Error("Live mode requires authentic voice pipeline integration - no hardcoded values");
+      }
+      
       const result = {
         success: true,
         status: 'stopped',
-        callsCancelled: 8,
+        callsCancelled: 8, // TEST MODE ONLY
         timestamp: new Date().toISOString()
       };
       
@@ -12169,7 +12174,7 @@ CRM Data:
     }
   });
 
-  // Airtable QA Test Logging Function
+  // DISABLED: Legacy logger blocked - hardcoded API keys and unauthorized data removed
   async function logToAirtableQA(testData: {
     integrationName: string;
     passFail: string;
@@ -12181,38 +12186,15 @@ CRM Data:
     moduleType: string;
     scenarioLink?: string;
   }) {
-    try {
-      const response = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU", {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          records: [
-            {
-              fields: {
-                "Integration Name": testData.integrationName,
-                "✅ Pass/Fail": testData.passFail,
-                "🛠 Notes / Debug": testData.notes,
-                "📅 Test Date": new Date().toISOString(),
-                "🧑‍💻 QA Owner": testData.qaOwner,
-                "📤 Output Data Populated?": testData.outputDataPopulated,
-                "🧾 Record Created?": testData.recordCreated,
-                "🔁 Retry Attempted?": testData.retryAttempted,
-                "🧩 Module Type": testData.moduleType,
-                "📂 Related Scenario Link": testData.scenarioLink || "https://replit.dev/command-center"
-              },
-            },
-          ],
-        }),
-      });
-      
-      return response.ok;
-    } catch (error) {
-      console.error('Airtable QA logging failed:', error);
-      return false;
+    // LIVE MODE: Block all hardcoded data and unauthorized logging
+    if (isLiveMode()) {
+      console.log(`[LIVE MODE BLOCKED] Hardcoded logger rejected: ${testData.integrationName}`);
+      throw new Error("Live mode prohibits hardcoded data - use PRODUCTION_HARDENED_LOGGER only");
     }
+    
+    // TEST MODE: Only for demo purposes
+    console.log(`[TEST MODE DEMO] ${testData.integrationName} - ${testData.passFail}`);
+    return true;
   }
 
   // Command Center Dashboard Data Endpoint

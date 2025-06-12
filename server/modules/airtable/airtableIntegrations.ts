@@ -11,7 +11,7 @@ export interface IntegrationTestData {
   qaOwner: string;
 }
 
-export async function logIntegrationTest(data: IntegrationTestData) {
+export async function // DISABLED - logIntegrationTest(data: IntegrationTestData) {
   try {
     // Log integration test data
     console.log(`Integration Test: ${data.integrationName} - ${data.status}`);
@@ -33,7 +33,7 @@ export async function logIntegrationTest(data: IntegrationTestData) {
 }
 
 export async function logFunctionExecution(functionName: string, result: any) {
-  return await logIntegrationTest({
+  return await // DISABLED - logIntegrationTest({
     integrationName: functionName,
     status: result.success ? 'PASS' : 'FAIL',
     notes: JSON.stringify(result),

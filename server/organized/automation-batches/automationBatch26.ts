@@ -8,12 +8,13 @@ import { logIntegrationTest } from "./airtableIntegrations";
 
 // Helper functions for logging
 async function logToAirtable(tableName: string, data: Record<string, any>) {
-  return await logIntegrationTest({
+  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
+  console.log(`[DISABLED] Legacy logger call blocked: ${tableName}`);
+  return true;
     integrationName: tableName,
     status: 'PASS',
     notes: JSON.stringify(data),
     timestamp: new Date().toISOString(),
-    qaOwner: 'YoBot System'
   });
 }
 

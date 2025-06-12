@@ -75,7 +75,7 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         const script = generateScriptFromNotes("Sample CRM notes for client meeting");
-        await logIntegrationTest({
+        await // DISABLED - logIntegrationTest({
           testName: "Function 131: CRM to Call Script",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -98,7 +98,7 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         const isValid = validateIntake({ name: "Test User", email: "test@example.com", phone: "555-0123" });
-        await logIntegrationTest({
+        await // DISABLED - logIntegrationTest({
           testName: "Function 132: Validate Intake Fields",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -121,7 +121,7 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         const isSilent = isSilentCall({ duration: 3, transcript: null });
-        await logIntegrationTest({
+        await // DISABLED - logIntegrationTest({
           testName: "Function 133: Silent Call Detection",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -144,7 +144,7 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         await alertOnQAFail("Sample QA Test");
-        await logIntegrationTest({
+        await // DISABLED - logIntegrationTest({
           testName: "Function 134: QA Failure Alert",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -167,7 +167,7 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         const formatted = formatDateISO(new Date());
-        await logIntegrationTest({
+        await // DISABLED - logIntegrationTest({
           testName: "Function 135: Date Format ISO",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -190,7 +190,7 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         const personality = assignPersonality("Legal");
-        await logIntegrationTest({
+        await // DISABLED - logIntegrationTest({
           testName: "Function 136: Bot Personality Assignment",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -217,7 +217,7 @@ export function registerBatch14Routes(app: Express): void {
           amount: 1000,
           source: "API Test"
         });
-        await logIntegrationTest({
+        await // DISABLED - logIntegrationTest({
           testName: "Function 137: SmartSpend Sync",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -240,7 +240,7 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         const sessionId = generateVoiceSessionId("test_user_123");
-        await logIntegrationTest({
+        await // DISABLED - logIntegrationTest({
           testName: "Function 138: VoiceBot Session ID",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -266,7 +266,7 @@ export function registerBatch14Routes(app: Express): void {
           { client: "ABC Corp", result: "Meeting scheduled" },
           { client: "XYZ Inc", result: "Proposal sent" }
         ]);
-        await logIntegrationTest({
+        await // DISABLED - logIntegrationTest({
           testName: "Function 139: Call Digest",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -289,7 +289,7 @@ export function registerBatch14Routes(app: Express): void {
       
       if (testMode) {
         await pushLiveError({ message: "Test error for command center" });
-        await logIntegrationTest({
+        await // DISABLED - logIntegrationTest({
           testName: "Function 140: Live Error Push",
           status: "PASS",
           timestamp: new Date().toISOString(),
