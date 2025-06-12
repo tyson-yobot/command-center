@@ -192,13 +192,14 @@ function logOperation(operation: string, data: any, result: 'success' | 'error' 
 
 // System mode gate - enforces proper data isolation
 function enforceSystemModeGate(operation: string, isProductionWrite: boolean = true) {
-  if (systemMode === 'test' && isProductionWrite) {
+  const currentMode = getSystemMode();
+  if (currentMode === 'test' && isProductionWrite) {
     console.log(`🚫 Test Mode - Blocking production operation: ${operation}`);
     logOperation(`test-mode-block-${operation}`, {}, 'blocked', `Production operation blocked in test mode: ${operation}`);
     return false;
   }
   
-  if (systemMode === 'live') {
+  if (currentMode === 'live') {
     console.log(`✅ Live Mode - Executing production operation: ${operation}`);
     logOperation(`live-mode-execute-${operation}`, {}, 'success', `Production operation executed: ${operation}`);
     return true;
@@ -246,7 +247,8 @@ const upload = multer({
 
 // Function to get appropriate Airtable table based on system mode
 function getAirtableTable(baseTable: string) {
-  if (systemMode === 'test') {
+  const currentMode = getSystemMode();
+  if (currentMode === 'test') {
     return `${baseTable}_TEST`;
   }
   return baseTable;
@@ -3479,13 +3481,13 @@ Report generated in Live Mode
       const modeChange = {
         id: `mode_${Date.now()}`,
         previousMode,
-        newMode: systemMode,
+        newMode,
         changedAt: new Date().toISOString(),
         status: 'applied',
         userId: req.body.userId || 'system'
       };
       
-      logOperation('system-mode-toggle', { previousMode, newMode: systemMode }, 'success', `System mode toggled from ${previousMode} to ${systemMode}`);
+      logOperation('system-mode-toggle', { previousMode, newMode }, 'success', `System mode toggled from ${previousMode} to ${newMode}`);
       
       // Log mode switch to Airtable QA Log for audit tracking
       try {
@@ -3500,7 +3502,7 @@ Report generated in Live Mode
               fields: {
                 "Integration Name": "System Mode Toggle",
                 "✅ Pass/Fail": "✅ Pass",
-                "📝 Notes / Debug": `Mode switched from ${previousMode} to ${systemMode} at ${modeChange.changedAt}`,
+                "📝 Notes / Debug": `Mode switched from ${previousMode} to ${newMode} at ${modeChange.changedAt}`,
                 "📅 Test Date": new Date().toISOString(),
                 "👤 QA Owner": "System Audit",
                 "📤 Output Data Populated?": true,
@@ -3508,7 +3510,7 @@ Report generated in Live Mode
                 "🔁 Retry Attempted?": false,
                 "⚙️ Module Type": "System Control",
                 "🔗 Related Scenario Link": "https://replit.dev/command-center",
-                "System Mode": systemMode,
+                "System Mode": newMode,
                 "Previous Mode": previousMode,
                 "Change ID": modeChange.id
               }
@@ -3516,7 +3518,7 @@ Report generated in Live Mode
           })
         });
         
-        console.log(`✅ Mode switch audit logged to Airtable: ${previousMode} → ${systemMode}`);
+        console.log(`✅ Mode switch audit logged to Airtable: ${previousMode} → ${newMode}`);
       } catch (auditError) {
         console.error('Audit logging failed:', auditError);
         logOperation('audit-log-failure', modeChange, 'error', 'Failed to log mode switch to Airtable QA');
@@ -3525,7 +3527,7 @@ Report generated in Live Mode
       res.json({
         success: true,
         modeChange,
-        message: `System mode toggled to ${systemMode}`,
+        message: `System mode toggled to ${newMode}`,
         auditLogged: true
       });
     } catch (error) {
