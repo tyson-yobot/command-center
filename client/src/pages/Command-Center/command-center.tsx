@@ -2707,185 +2707,120 @@ export default function CommandCenter() {
           </div>
         </div>
 
-        {/* Live Command Center Buttons */}
-        <div className="mb-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Core Automation */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-              <CardHeader>
-                <CardTitle className="text-white">Core Automation</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 gap-3">
-                  <Button
-                    onClick={handleNewBookingSync}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                  >
-                    <span className="text-xl mr-3">📅</span>
-                    <span>Create Booking</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleNewSupportTicket}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                  >
-                    <span className="text-xl mr-3">🎧</span>
-                    <span>Create Support Ticket</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleManualFollowUp}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                  >
-                    <span className="text-xl mr-3">📞</span>
-                    <span>Create Follow-up</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleSalesOrder}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                  >
-                    <span className="text-xl mr-3">💰</span>
-                    <span>Create Sales Order</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleSendSMS}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                  >
-                    <span className="text-xl mr-3">💬</span>
-                    <span>Send SMS</span>
-                  </Button>
-
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Voice & Communication */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-              <CardHeader>
-                <CardTitle className="text-white">Voice & Communication</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 gap-3">
-                  <Button
-                    onClick={handleStartPipelineCalls}
-                    className="bg-lime-500 hover:bg-lime-600 text-white flex items-center justify-start p-3 font-semibold border-2 border-lime-400 shadow-lg shadow-lime-500/25"
-                  >
-                    <span className="text-xl mr-3">🚀</span>
-                    <span>Start Pipeline Calls</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleStopPipelineCalls}
-                    className="bg-red-500 hover:bg-red-600 text-white flex items-center justify-start p-3 border-2 border-red-400 shadow-lg shadow-red-500/25"
-                  >
-                    <span className="text-xl mr-3">🛑</span>
-                    <span>End Pipeline Calls</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleInitiateVoiceCall}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3 border border-green-500"
-                  >
-                    <span className="text-xl mr-3">📲</span>
-                    <span>Create Voice Call</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleVoiceToggle}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3 border border-green-500"
-                  >
-                    <span className="text-xl mr-3">🎤</span>
-                    <span>Voice Input</span>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Data & Reports */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-              <CardHeader>
-                <CardTitle className="text-white">Data & Reports</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 gap-3">
-                  <Button
-                    onClick={() => window.location.href = '/lead-scraper'}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
-                  >
-                    <span className="text-xl mr-3">🧲</span>
-                    <span>Lead Scraper Tool</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleDownloadPDF}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
-                  >
-                    <span className="text-xl mr-3">📄</span>
-                    <span>View PDF Report</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={async () => {
-                      try {
-                        console.log('Export Data button clicked');
-                        const response = await fetch('/api/data/export', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            format: 'csv',
-                            includeData: ['leads', 'calls', 'automation_logs']
-                          })
-                        });
-                        
-                        if (response.ok) {
-                          const blob = await response.blob();
-                          const url = window.URL.createObjectURL(blob);
-                          const a = document.createElement('a');
-                          a.href = url;
-                          a.download = `yobot_export_${new Date().toISOString().split('T')[0]}.csv`;
-                          document.body.appendChild(a);
-                          a.click();
-                          document.body.removeChild(a);
-                          window.URL.revokeObjectURL(url);
-                          alert('Data exported successfully');
-                        } else {
-                          alert('Data export failed');
-                        }
-                      } catch (error) {
-                        console.error('Export error:', error);
-                        alert('Data export failed');
-                      }
-                    }}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
-                  >
-                    <span className="text-xl mr-3">📊</span>
-                    <span>Export Data</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => setShowContentCreator(!showContentCreator)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
-                  >
-                    <span className="text-xl mr-3">✨</span>
-                    <span>Content Creator</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => setShowMailchimpSync(!showMailchimpSync)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
-                  >
-                    <span className="text-xl mr-3">📧</span>
-                    <span>Mailchimp Campaign</span>
-                  </Button>
-
-                </div>
-              </CardContent>
-            </Card>
-
-
+        {/* Sticky Navigation Bar */}
+        <div className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-sm border-b border-blue-400/30 rounded-lg mb-6 p-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-6">
+              <img 
+                src={yobotLogo} 
+                alt="YoBot Logo" 
+                className="w-10 h-10 rounded-full bg-blue-600/20 p-1"
+              />
+              <div className="flex items-center space-x-4">
+                <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+                  📇 Contacts
+                </Button>
+                <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
+                  📦 Sales Orders
+                </Button>
+                <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
+                  📊 Metrics
+                </Button>
+                <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white">
+                  ⚙️ Admin Tools
+                </Button>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <Button size="sm" variant="outline" className="text-white border-slate-400">
+                👤 Profile
+              </Button>
+              <div className="flex items-center space-x-2">
+                <Badge 
+                  variant={currentSystemMode === 'live' ? 'default' : 'secondary'}
+                  className={currentSystemMode === 'live' ? 'bg-green-600 text-white' : 'bg-yellow-600 text-white'}
+                >
+                  {currentSystemMode === 'live' ? 'LIVE' : 'TEST'}
+                </Badge>
+              </div>
+              <Button 
+                onClick={() => window.location.reload()}
+                size="sm"
+                variant="outline"
+                className="text-white border-blue-400 hover:bg-blue-600/20"
+              >
+                🔄 Refresh
+              </Button>
+              <Button size="sm" className="bg-red-600 hover:bg-red-700 text-white">
+                🔔 Alerts
+              </Button>
+            </div>
           </div>
+        </div>
+
+        {/* Header */}
+        <div className="mb-8">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-white mb-2">YoBot® Command Center</h1>
+            <p className="text-slate-300">Your Complete AI Automation Dashboard</p>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="mb-8">
+          <div className="flex justify-center">
+            <div className="bg-slate-800/60 rounded-lg p-2 border border-blue-400/30">
+              <div className="flex space-x-2">
+                {tabs.map((tab) => {
+                  const IconComponent = tab.icon;
+                  return (
+                    <Button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`px-4 py-2 rounded-md transition-all ${
+                        activeTab === tab.id
+                          ? 'bg-blue-600 text-white border border-blue-400'
+                          : 'bg-transparent text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                      }`}
+                    >
+                      <IconComponent className="w-4 h-4 mr-2" />
+                      {tab.label}
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tab Content - Organized Panels */}
+        <div className="mb-8">
+          <TabContentRenderer
+            activeTab={activeTab}
+            currentSystemMode={currentSystemMode}
+            metrics={metrics?.data}
+            automationPerformance={automationPerformance?.data}
+            liveActivity={liveActivityData?.data}
+            knowledgeStats={knowledgeStats?.data}
+            callStats={callStats}
+            handlers={{
+              handleNewBookingSync,
+              handleNewSupportTicket,
+              handleManualFollowUp,
+              handleSalesOrderSync: handleSalesOrder,
+              handleContentCreatorSync: () => setShowContentCreator(!showContentCreator),
+              handleMailchimpSync: () => setShowMailchimpSync(!showMailchimpSync),
+              handleSocialContentSync: () => setShowSocialContent(!showSocialContent),
+              handleSimulateTestCall,
+              handleUploadDocument: () => document.getElementById('file-upload')?.click(),
+              handleReindexKnowledge,
+              handleClearKnowledge,
+              handleViewKnowledge,
+              setShowCallReports,
+              setShowCallLogs
+            }}
+          />
         </div>
 
         {/* Hidden File Upload Input */}
