@@ -1,5 +1,38 @@
 [
   {
+    "timestamp": "2025-06-10T16:05:00.170Z",
+    "functionId": 206,
+    "functionName": "Lead Score Calculator",
+    "batch": 21,
+    "category": "Lead Management",
+    "status": "success",
+    "duration": 85,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-10T16:05:00.193Z",
+    "functionId": 151,
+    "functionName": "VoiceBot Escalation Detection",
+    "batch": 16,
+    "category": "Voice",
+    "status": "success",
+    "duration": 114,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
+    "timestamp": "2025-06-10T16:05:00.199Z",
+    "functionId": 149,
+    "functionName": "Manual Override Logger",
+    "batch": 15,
+    "category": "Audit",
+    "status": "success",
+    "duration": 122,
+    "successCount": 1,
+    "errorCount": 0
+  },
+  {
     "timestamp": "2025-06-10T16:05:00.225Z",
     "functionId": 153,
     "functionName": "System Health Metric Update",
@@ -11407,51 +11440,6 @@
       "failedExecutions": 0,
       "systemUptime": 116.756000597,
       "lastHealthCheck": "2025-06-12T00:19:00.007Z",
-      "automationStatus": "paused"
-    }
-  },
-  {
-    "timestamp": "2025-06-12T00:30:00.012Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "Health check: NaN% healthy",
-    "metrics": {
-      "totalFunctions": 0,
-      "activeFunctions": 0,
-      "successfulExecutions": 0,
-      "failedExecutions": 0,
-      "systemUptime": 49.204452264,
-      "lastHealthCheck": "2025-06-12T00:29:00.014Z",
-      "automationStatus": "paused"
-    }
-  },
-  {
-    "timestamp": "2025-06-12T00:40:00.016Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "Health check: NaN% healthy",
-    "metrics": {
-      "totalFunctions": 0,
-      "activeFunctions": 0,
-      "successfulExecutions": 0,
-      "failedExecutions": 0,
-      "systemUptime": 195.186951225,
-      "lastHealthCheck": "2025-06-12T00:39:00.007Z",
-      "automationStatus": "paused"
-    }
-  },
-  {
-    "timestamp": "2025-06-12T00:50:00.012Z",
-    "type": "system_event",
-    "level": "info",
-    "message": "Health check: NaN% healthy",
-    "metrics": {
-      "totalFunctions": 0,
-      "activeFunctions": 0,
-      "successfulExecutions": 0,
-      "failedExecutions": 0,
-      "systemUptime": 63.94997488,
-      "lastHealthCheck": "2025-06-12T00:49:00.009Z",
       "automationStatus": "paused"
     }
   }
