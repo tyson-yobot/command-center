@@ -2703,26 +2703,26 @@ export default function CommandCenter() {
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">MRR:</span>
                   <div className="text-right">
-                    <span className="text-green-400 font-bold">--</span>
+                    <span className="text-green-400 font-bold">${metrics?.data?.monthlyRecurringRevenue ? (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : '--'}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">ROI This Quarter:</span>
                   <div className="text-right">
-                    <span className="text-emerald-400 font-bold">--</span>
+                    <span className="text-emerald-400 font-bold">{metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : '--'}</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Pipeline Value:</span>
-                  <span className="text-blue-400 font-bold">--</span>
+                  <span className="text-blue-400 font-bold">${metrics?.data?.totalRevenue ? (metrics.data.totalRevenue / 1000).toFixed(0) + 'K' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Close Rate:</span>
-                  <span className="text-cyan-400 font-bold">--</span>
+                  <span className="text-cyan-400 font-bold">{metrics?.data?.conversionRate ? metrics.data.conversionRate + '%' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Sales Velocity:</span>
-                  <span className="text-purple-400 font-bold">--</span>
+                  <span className="text-purple-400 font-bold">{metrics?.data?.customerSatisfaction ? metrics.data.customerSatisfaction + '/5' : '--'}</span>
                 </div>
               </div>
             </CardContent>
@@ -2740,19 +2740,19 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Active Clients:</span>
-                  <span className="text-white font-bold">{metrics?.totalLeads || 0}</span>
+                  <span className="text-white font-bold">{metrics?.data?.activeClients || 0}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Client NPS:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-green-400 font-bold">{metrics?.data?.customerSatisfaction ? (metrics.data.customerSatisfaction * 20).toFixed(0) : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Churn Risk Flags:</span>
-                  <span className="text-red-400 font-bold">{automationPerformance?.errorCount || 0} flagged</span>
+                  <span className="text-red-400 font-bold">{automationPerformance?.data?.criticalErrors || 0} flagged</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Last Login:</span>
-                  <span className="text-green-400 font-bold">--</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '2 min ago' : '--'}</span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between">
@@ -2781,11 +2781,11 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Avg Bot Response:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-green-400 font-bold">{metrics?.data?.avgResponseTime ? metrics.data.avgResponseTime + 'ms' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-slate-400 font-bold">--</span>
+                  <span className="text-green-400 font-bold">{automationPerformance?.data?.passRate ? automationPerformance.data.passRate + '%' : '--'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Error Trend (7d):</span>
@@ -4262,21 +4262,6 @@ export default function CommandCenter() {
 
 
 
-        {/* Footer - Support Contact */}
-        <div className="text-center">
-          <div className="bg-white/10 backdrop-blur-sm border border-blue-400 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-white mb-2">Need Support?</h3>
-            <p className="text-slate-300 mb-4">Our team is here to help optimize your automation</p>
-            <Button 
-              onClick={handleContactSupport}
-              className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
-            >
-              <Headphones className="w-4 h-4 mr-2" />
-              Contact Support
-            </Button>
-          </div>
-        </div>
-
       </div>
 
       {/* Clear Knowledge Confirmation Dialog */}
@@ -4813,6 +4798,21 @@ export default function CommandCenter() {
           }
         }}
       />
+
+      {/* Footer - Support Contact - Moved to Bottom */}
+      <div className="text-center mt-8 mb-4">
+        <div className="bg-white/10 backdrop-blur-sm border border-blue-400 rounded-lg p-6">
+          <h3 className="text-xl font-semibold text-white mb-2">Need Support?</h3>
+          <p className="text-slate-300 mb-4">Our team is here to help optimize your automation</p>
+          <Button 
+            onClick={handleContactSupport}
+            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+          >
+            <Headphones className="w-4 h-4 mr-2" />
+            Contact Support
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
