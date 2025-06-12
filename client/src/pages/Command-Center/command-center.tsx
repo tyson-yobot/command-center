@@ -4421,7 +4421,7 @@ export default function CommandCenter() {
         {/* Document Management & Memory Insertion */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Document Manager */}
-          <Card className="bg-slate-800/80 backdrop-blur-sm border border-blue-500/50">
+          <Card className="bg-slate-800/80 backdrop-blur-sm border border-blue-500">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Database className="w-5 h-5 mr-2 text-blue-400" />
@@ -4433,7 +4433,7 @@ export default function CommandCenter() {
                 <div className="flex gap-3">
                   <Button 
                     onClick={() => document.getElementById('file-upload')?.click()}
-                    className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
+                    className="bg-green-600 hover:bg-green-700 text-white border border-green-400"
                   >
                     <Upload className="w-4 h-4 mr-2" />
                     Upload & Program Documents
@@ -4441,20 +4441,20 @@ export default function CommandCenter() {
                   <Button 
                     onClick={deleteSelectedDocuments}
                     disabled={selectedDocuments.length === 0}
-                    className="bg-red-600 hover:bg-red-700 text-white"
+                    className="bg-red-600 hover:bg-red-700 text-white border border-red-400"
                   >
                     Delete Selected ({selectedDocuments.length})
                   </Button>
                 </div>
                 
                 {/* Enhanced Document List with Live Status */}
-                <div className="bg-slate-700/40 rounded-lg p-4 border border-blue-400/30">
+                <div className="bg-slate-700/40 rounded-lg p-4 border border-blue-400">
                   <h4 className="text-white font-medium mb-3">📄 Uploaded Documents</h4>
                   <div className="space-y-2 max-h-64 overflow-y-auto">
                     {uploadedDocuments.length > 0 ? uploadedDocuments.map((doc) => (
                       <div 
                         key={doc.id}
-                        className="flex items-center justify-between p-3 bg-slate-800/60 rounded border border-blue-400/30"
+                        className="flex items-center justify-between p-3 bg-slate-800/60 rounded border border-blue-400"
                       >
                         <div className="flex-1">
                           <div className="text-white font-medium">{doc.originalname || doc.filename || 'Untitled Document'}</div>
@@ -4500,7 +4500,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Memory Text Insertion */}
-          <Card className="bg-slate-800/80 backdrop-blur-sm border border-purple-500/50">
+          <Card className="bg-purple-900/40 backdrop-blur-sm border border-purple-500">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Brain className="w-5 h-5 mr-2 text-purple-400" />
@@ -4557,14 +4557,14 @@ export default function CommandCenter() {
                 </Button>
                 
                 {/* Latest Memory Activity Log */}
-                <div className="bg-slate-700/40 rounded-lg p-4 border border-purple-400/30">
+                <div className="bg-slate-700/40 rounded-lg p-4 border border-purple-400">
                   <h4 className="text-white font-medium mb-3 flex items-center">
                     <Brain className="w-4 h-4 mr-2 text-purple-400" />
                     🧠 Latest Memory Activity Log
                   </h4>
                   <div className="space-y-2 max-h-40 overflow-y-auto">
                     {memoryActivityLog.length > 0 ? memoryActivityLog.slice(-5).reverse().map((entry, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 bg-slate-800/60 rounded border border-purple-400/20">
+                      <div key={index} className="flex items-center justify-between p-2 bg-slate-800/60 rounded border border-purple-400">
                         <div className="flex items-center space-x-3">
                           <span className="text-xs text-slate-400">{entry.timestamp}</span>
                           <span className="text-sm text-white">{entry.type}</span>
@@ -4593,31 +4593,121 @@ export default function CommandCenter() {
         {/* Call Monitoring & YoBot Support - Positioned Under Document Manager */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Call Monitoring Panel - Under Document Manager */}
-          <CallMonitoringPopup />
+          <Card className="bg-slate-800/80 backdrop-blur-sm border border-blue-500">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Phone className="w-5 h-5 mr-2 text-blue-400" />
+                Call Monitoring Panel
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {/* System Services */}
+                <div className="bg-slate-700/40 rounded-lg p-4 border border-blue-400">
+                  <h4 className="text-white font-medium mb-3 flex items-center">
+                    <Settings className="w-4 h-4 mr-2 text-blue-400" />
+                    System Services
+                  </h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Activity className="w-4 h-4 text-yellow-400" />
+                        <span className="text-white text-sm">Monitoring Service</span>
+                        <span className="text-yellow-400 text-xs">IDLE</span>
+                      </div>
+                      <div className="flex space-x-1">
+                        <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400">Start</Button>
+                        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400">Restart</Button>
+                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400">Ping</Button>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Headphones className="w-4 h-4 text-yellow-400" />
+                        <span className="text-white text-sm">Recording Service</span>
+                        <span className="text-yellow-400 text-xs">IDLE</span>
+                      </div>
+                      <div className="flex space-x-1">
+                        <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400">Start</Button>
+                        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400">Restart</Button>
+                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400">Ping</Button>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Zap className="w-4 h-4 text-yellow-400" />
+                        <span className="text-white text-sm">Analytics Service</span>
+                        <span className="text-yellow-400 text-xs">IDLE</span>
+                      </div>
+                      <div className="flex space-x-1">
+                        <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400">Start</Button>
+                        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400">Restart</Button>
+                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400">Ping</Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Call Statistics */}
+                <div className="grid grid-cols-4 gap-3">
+                  <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
+                    <div className="text-slate-300 text-xs mb-1">Active Calls</div>
+                    <div className="text-white font-bold text-lg">0</div>
+                  </div>
+                  <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
+                    <div className="text-slate-300 text-xs mb-1">Avg Duration</div>
+                    <div className="text-white font-bold text-lg">0m</div>
+                  </div>
+                  <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
+                    <div className="text-slate-300 text-xs mb-1">Success Rate</div>
+                    <div className="text-white font-bold text-lg">0%</div>
+                  </div>
+                  <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
+                    <div className="text-slate-300 text-xs mb-1">Total Today</div>
+                    <div className="text-white font-bold text-lg">0</div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="grid grid-cols-3 gap-2">
+                  <Button 
+                    onClick={() => setShowCallMonitoring(true)}
+                    className="bg-purple-600 hover:bg-purple-700 text-white text-xs border border-purple-400"
+                  >
+                    <TestTube className="w-3 h-3 mr-1" />
+                    Simulate Test Call
+                  </Button>
+                  <Button 
+                    onClick={() => setShowCallDetails(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs border border-blue-400"
+                  >
+                    <Eye className="w-3 h-3 mr-1" />
+                    View Call Reports
+                  </Button>
+                  <Button 
+                    onClick={() => setShowCallMonitoring(true)}
+                    className="bg-green-600 hover:bg-green-700 text-white text-xs border border-green-400"
+                  >
+                    <FileText className="w-3 h-3 mr-1" />
+                    Call Log History
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* YoBot Support Panel - Under Memory Text Insertion */}
-          <Card className="bg-slate-800/80 backdrop-blur-sm border border-purple-500/50">
+          <Card className="bg-purple-900/40 backdrop-blur-sm border border-purple-500">
             <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between">
-                <div className="flex items-center">
-                  <MessageCircle className="w-5 h-5 mr-2 text-purple-400" />
-                  YoBot Support
-                </div>
-                <Button
-                  onClick={() => setShowLiveChat(true)}
-                  variant="outline"
-                  size="sm"
-                  className="text-white border-purple-400 hover:bg-purple-700"
-                >
-                  <MessageCircle className="w-4 h-4 mr-1" />
-                  Open Chat
-                </Button>
+              <CardTitle className="text-white flex items-center">
+                <MessageCircle className="w-5 h-5 mr-2 text-purple-400" />
+                YoBot Support
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {/* Support Status */}
-                <div className="bg-slate-700/40 rounded-lg p-4 border border-purple-400/30">
+                <div className="bg-slate-700/40 rounded-lg p-4 border border-purple-400">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-slate-300 text-sm">Support Status</span>
                     <span className="text-green-400 font-bold text-sm">Online</span>
@@ -4632,20 +4722,20 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <Button 
                     onClick={() => setShowLiveChat(true)}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-400"
                   >
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Open Live Chat
                   </Button>
                   <Button 
                     onClick={() => setShowTicketModal(true)}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white border border-purple-400"
                   >
                     <Plus className="w-4 h-4 mr-2" />
                     Create New Ticket
                   </Button>
                   <Button 
-                    className="w-full bg-slate-600 hover:bg-slate-700 text-white"
+                    className="w-full bg-slate-600 hover:bg-slate-700 text-white border border-slate-400"
                   >
                     <FileText className="w-4 h-4 mr-2" />
                     View Ticket History
@@ -4653,7 +4743,7 @@ export default function CommandCenter() {
                 </div>
 
                 {/* Recent Activity */}
-                <div className="bg-slate-700/40 rounded-lg p-3 border border-purple-400/20">
+                <div className="bg-slate-700/40 rounded-lg p-3 border border-purple-400">
                   <h4 className="text-white font-medium mb-2 text-sm">Recent Activity</h4>
                   <div className="text-slate-400 text-xs text-center py-2">
                     No recent support activity
