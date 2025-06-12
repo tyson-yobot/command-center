@@ -2751,8 +2751,10 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleSendSMS}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500 border-l-6"
-                    style={{ borderLeftColor: '#06b6d4' }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
+                    style={{ 
+                      borderLeft: '8px solid #06b6d4'
+                    }}
                   >
                     <span className="text-xl mr-3">💬</span>
                     <span>Send SMS</span>
@@ -2803,10 +2805,10 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={() => window.open('https://app.hubspot.com/contacts/[HUB-ID]', '_blank')}
-                    className="text-white flex items-center justify-start p-3 border-l-6 transition-all duration-200"
+                    className="text-white flex items-center justify-start p-3 transition-all duration-200"
                     style={{
                       backgroundColor: '#0d82da',
-                      borderLeftColor: '#ff7a59'
+                      borderLeft: '8px solid #ff7a59'
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = '#0864b1';
@@ -2831,8 +2833,8 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={() => window.location.href = '/lead-scraper'}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500 border-l-6"
-                    style={{ borderLeftColor: '#ec4899' }}
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
+                    style={{ borderLeft: '8px solid #ec4899' }}
                   >
                     <span className="text-xl mr-3">🧲</span>
                     <span>Lead Scraper Tool</span>
@@ -2886,8 +2888,8 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={() => setShowContentCreator(!showContentCreator)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500 border-l-6"
-                    style={{ borderLeftColor: '#f59e0b' }}
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
+                    style={{ borderLeft: '8px solid #f59e0b' }}
                   >
                     <span className="text-xl mr-3">✨</span>
                     <span>Content Creator</span>
@@ -2895,8 +2897,8 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={() => setShowMailchimpSync(!showMailchimpSync)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500 border-l-6"
-                    style={{ borderLeftColor: '#fbbf24' }}
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
+                    style={{ borderLeft: '8px solid #fbbf24' }}
                   >
                     <span className="text-xl mr-3">📧</span>
                     <span>Mailchimp Campaign</span>
