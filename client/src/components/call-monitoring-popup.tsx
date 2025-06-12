@@ -272,9 +272,8 @@ export function CallMonitoringPopup() {
             </div>
             <Button
               onClick={handleRefreshStatus}
-              variant="outline"
               size="sm"
-              className="text-white border-blue-400 hover:bg-blue-700"
+              className="bg-cyan-600 hover:bg-cyan-700 text-white border border-cyan-500"
               disabled={loading}
             >
               <RefreshCw className={`w-4 h-4 mr-1 ${loading ? 'animate-spin' : ''}`} />
