@@ -276,121 +276,56 @@ export function registerTestDataRoutes(app: Express) {
   app.get('/api/dashboard-metrics', (req, res) => {
     const systemMode = getSystemMode();
     
-    // Global environment gate enforcement
-    if (isLiveMode()) {
-      // LIVE mode: Block all hardcoded data, return only authentic values
-      blockTestData(testModeMetrics.dashboardMetrics);
+    // FORCE LIVE MODE: Always return empty data, no test values
+    if (systemMode === 'live' || process.env.SYSTEM_MODE === 'LIVE' || true) {
       res.json({
         success: true,
-        data: safeLiveData(null, liveModeMetrics.dashboardMetrics),
+        data: liveModeMetrics.dashboardMetrics,
         mode: 'live',
-        message: 'LIVE mode - hardcoded data blocked, authentic data only'
+        message: 'LIVE mode - all hardcoded data eliminated, authentic data only'
       });
-    } else if (systemMode === 'test') {
+    } else {
+      // Only allow test data in explicit test mode
       res.json({
         success: true,
         data: testModeMetrics.dashboardMetrics,
         mode: 'test',
         message: 'Test mode - demo data populated for dashboard presentation'
       });
-    } else {
-      res.json({
-        success: true,
-        data: liveModeMetrics.dashboardMetrics,
-        mode: 'live',
-        message: 'Live mode - authentic data only (currently empty - awaiting real data)'
-      });
     }
   });
 
   // Automation performance with global environment gate
   app.get('/api/automation-performance', (req, res) => {
-    const systemMode = getSystemMode();
-    
-    // Global environment gate enforcement
-    if (isLiveMode()) {
-      blockTestData(testModeMetrics.automationPerformance);
-      res.json({
-        success: true,
-        data: safeLiveData(null, liveModeMetrics.automationPerformance),
-        mode: 'live',
-        message: 'LIVE mode - hardcoded data blocked, authentic data only'
-      });
-    } else if (systemMode === 'test') {
-      res.json({
-        success: true,
-        data: testModeMetrics.automationPerformance,
-        mode: 'test',
-        message: 'Test mode - comprehensive automation metrics for demo'
-      });
-    } else {
-      res.json({
-        success: true,
-        data: liveModeMetrics.automationPerformance,
-        mode: 'live',
-        message: 'Live mode - no hardcoded data, waiting for real automation results'
-      });
-    }
+    // FORCE LIVE MODE: Always return empty data, no test values
+    res.json({
+      success: true,
+      data: liveModeMetrics.automationPerformance,
+      mode: 'live',
+      message: 'LIVE mode - all hardcoded automation data eliminated'
+    });
   });
 
   // Live activity with global environment gate
   app.get('/api/live-activity', (req, res) => {
-    const systemMode = getSystemMode();
-    
-    // Global environment gate enforcement
-    if (isLiveMode()) {
-      blockTestData(testModeMetrics.liveActivity);
-      res.json({
-        success: true,
-        data: safeLiveData(null, liveModeMetrics.liveActivity),
-        mode: 'live',
-        message: 'LIVE mode - hardcoded data blocked, authentic data only'
-      });
-    } else if (systemMode === 'test') {
-      res.json({
-        success: true,
-        data: testModeMetrics.liveActivity,
-        mode: 'test',
-        message: 'Test mode - simulated live activity for demo'
-      });
-    } else {
-      res.json({
-        success: true,
-        data: liveModeMetrics.liveActivity,
-        mode: 'live',
-        message: 'Live mode - real activity monitoring (currently empty)'
-      });
-    }
+    // FORCE LIVE MODE: Always return empty data, no test values
+    res.json({
+      success: true,
+      data: liveModeMetrics.liveActivity,
+      mode: 'live',
+      message: 'LIVE mode - all hardcoded activity data eliminated'
+    });
   });
 
   // Knowledge stats with global environment gate
   app.get('/api/knowledge/stats', (req, res) => {
-    const systemMode = getSystemMode();
-    
-    // Global environment gate enforcement
-    if (isLiveMode()) {
-      blockTestData(testModeMetrics.knowledgeStats);
-      res.json({
-        success: true,
-        data: safeLiveData(null, liveModeMetrics.knowledgeStats),
-        mode: 'live',
-        message: 'LIVE mode - hardcoded data blocked, authentic data only'
-      });
-    } else if (systemMode === 'test') {
-      res.json({
-        success: true,
-        data: testModeMetrics.knowledgeStats,
-        mode: 'test',
-        message: 'Test mode - knowledge base demo data'
-      });
-    } else {
-      res.json({
-        success: true,
-        data: liveModeMetrics.knowledgeStats,
-        mode: 'live',
-        message: 'Live mode - authentic knowledge metrics only'
-      });
-    }
+    // FORCE LIVE MODE: Always return empty data, no test values
+    res.json({
+      success: true,
+      data: liveModeMetrics.knowledgeStats,
+      mode: 'live',
+      message: 'LIVE mode - all hardcoded knowledge data eliminated'
+    });
   });
 
   // Call monitoring with global environment gate

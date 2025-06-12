@@ -49,7 +49,7 @@ export default function YoBotMasterDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [services, setServices] = useState<AddOnService[]>([]);
   const [systemMetrics, setSystemMetrics] = useState({
-    totalAutomations: 1040,
+    totalAutomations: 0,
     activeServices: 0,
     monthlyROI: 0,
     leadsGenerated: 0
