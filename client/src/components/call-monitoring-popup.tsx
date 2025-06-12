@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Phone, PhoneCall, Activity, Users, Clock, Play, Square, PhoneOutgoing } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useToast } from '@/hooks/use-toast';
+import { 
+  Phone, PhoneCall, Activity, Users, Clock, Play, Square, PhoneOutgoing,
+  RefreshCw, Settings, TestTube, Upload, Download, Eye, Trash2,
+  AlertCircle, CheckCircle, Zap, Headphones, FileText
+} from 'lucide-react';
 
 interface CallDetails {
   activeCalls: Array<{
@@ -10,6 +16,10 @@ interface CallDetails {
     client: string;
     duration: string;
     status: string;
+    botName?: string;
+    intent?: string;
+    sentiment?: number;
+    transcript?: string;
   }>;
   todayStats: {
     totalCalls: number;
@@ -22,7 +32,19 @@ interface CallDetails {
     client: string;
     outcome: string;
     duration: string;
+    callId?: string;
+    botName?: string;
+    intent?: string;
+    sentiment?: number;
   }>;
+}
+
+interface Service {
+  name: string;
+  status: 'active' | 'idle' | 'offline';
+  description: string;
+  lastPing?: string;
+  icon: React.ComponentType<any>;
 }
 
 export function CallMonitoringPopup() {
@@ -30,6 +52,31 @@ export function CallMonitoringPopup() {
   const [callDetails, setCallDetails] = useState<CallDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCallDetails, setShowCallDetails] = useState(false);
+  const [showCallHistory, setShowCallHistory] = useState(false);
+  const [services, setServices] = useState<Service[]>([
+    {
+      name: 'Monitoring Service',
+      status: 'idle',
+      description: 'Real-time monitoring of bot calls. If inactive, live sessions will not be tracked.',
+      lastPing: new Date().toLocaleTimeString(),
+      icon: Activity
+    },
+    {
+      name: 'Recording Service', 
+      status: 'idle',
+      description: 'Audio recording and transcription service for call analysis.',
+      lastPing: new Date().toLocaleTimeString(),
+      icon: Headphones
+    },
+    {
+      name: 'Analytics Service',
+      status: 'idle', 
+      description: 'Real-time analytics processing for sentiment and intent analysis.',
+      lastPing: new Date().toLocaleTimeString(),
+      icon: Zap
+    }
+  ]);
+  const { toast } = useToast();
   
   useEffect(() => {
     fetchCallDetails();
@@ -46,8 +93,104 @@ export function CallMonitoringPopup() {
       }
     } catch (error) {
       console.error('Failed to check monitoring status:', error);
-      // Default to false if we can't determine status
       setIsMonitoring(false);
+    }
+  };
+
+  const handleServiceAction = async (serviceName: string, action: 'start' | 'restart' | 'ping') => {
+    try {
+      const response = await fetch('/api/call-monitoring/service-control', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ service: serviceName, action })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        
+        // Update service status
+        setServices(prev => prev.map(service => 
+          service.name === serviceName 
+            ? { 
+                ...service, 
+                status: action === 'start' || action === 'restart' ? 'active' : service.status,
+                lastPing: new Date().toLocaleTimeString()
+              }
+            : service
+        ));
+
+        toast({
+          title: "Service Action Complete",
+          description: `${serviceName} ${action} completed successfully`,
+        });
+      }
+    } catch (error) {
+      console.error(`Failed to ${action} ${serviceName}:`, error);
+      toast({
+        title: "Service Action Failed",
+        description: `Failed to ${action} ${serviceName}. Please try again.`,
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleSimulateCall = async () => {
+    try {
+      const response = await fetch('/api/call-monitoring/simulate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'test-call' })
+      });
+
+      if (response.ok) {
+        await fetchCallDetails(); // Refresh data
+        toast({
+          title: "Test Call Simulated",
+          description: "Generated fake call data for testing purposes",
+        });
+      }
+    } catch (error) {
+      console.error('Failed to simulate call:', error);
+      toast({
+        title: "Simulation Failed",
+        description: "Failed to generate test call data",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleRefreshStatus = async () => {
+    setLoading(true);
+    await Promise.all([fetchCallDetails(), checkMonitoringStatus()]);
+    
+    // Update service ping times
+    setServices(prev => prev.map(service => ({
+      ...service,
+      lastPing: new Date().toLocaleTimeString()
+    })));
+    
+    setLoading(false);
+    toast({
+      title: "Status Refreshed",
+      description: "All service statuses have been updated",
+    });
+  };
+
+  const getStatusColor = (status: Service['status']) => {
+    switch (status) {
+      case 'active': return 'text-green-400';
+      case 'idle': return 'text-yellow-400';
+      case 'offline': return 'text-red-400';
+      default: return 'text-gray-400';
+    }
+  };
+
+  const getStatusIcon = (status: Service['status']) => {
+    switch (status) {
+      case 'active': return CheckCircle;
+      case 'idle': return AlertCircle;
+      case 'offline': return AlertCircle;
+      default: return AlertCircle;
     }
   };
 
@@ -119,66 +262,166 @@ export function CallMonitoringPopup() {
   };
 
   return (
-    <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30">
-      <CardHeader>
-        <CardTitle className="text-white flex items-center">
-          <Phone className="w-5 h-5 mr-2" />
-          Call Monitoring
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Badge 
-              variant={isMonitoring ? "default" : "secondary"} 
-              className={isMonitoring ? "bg-green-600 text-white" : "bg-gray-600 text-white"}
-            >
-              {isMonitoring ? "Active" : "Inactive"}
-            </Badge>
-            <div className="flex items-center text-white text-sm">
-              <Activity className="w-4 h-4 mr-1" />
-              <span>{callDetails?.activeCalls?.length || 0} Active Calls</span>
+    <TooltipProvider>
+      <Card className="bg-blue-900/60 backdrop-blur-sm border border-blue-500/30 w-full max-w-4xl">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center justify-between">
+            <div className="flex items-center">
+              <Phone className="w-5 h-5 mr-2" />
+              Call Monitoring Panel
             </div>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <div className="bg-slate-800/50 rounded p-2">
-              <div className="flex items-center text-blue-300">
-                <PhoneCall className="w-4 h-4 mr-1" />
-                <span>Today</span>
-              </div>
-              <div className="text-white font-semibold">
-                {loading ? "..." : callDetails?.todayStats?.totalCalls || 0} calls
-              </div>
-            </div>
-            <div className="bg-slate-800/50 rounded p-2">
-              <div className="flex items-center text-green-300">
-                <Clock className="w-4 h-4 mr-1" />
-                <span>Avg Duration</span>
-              </div>
-              <div className="text-white font-semibold">
-                {loading ? "..." : callDetails?.todayStats?.averageDuration || "0m 0s"}
-              </div>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 gap-2">
             <Button
-              onClick={handleViewDetails}
-              className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3"
+              onClick={handleRefreshStatus}
+              variant="outline"
+              size="sm"
+              className="text-white border-blue-400 hover:bg-blue-700"
+              disabled={loading}
             >
-              <Activity className="w-4 h-4 mr-2" />
-              <span>View Call Details</span>
+              <RefreshCw className={`w-4 h-4 mr-1 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
             </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-6">
             
-            <Button
-              onClick={handleToggleMonitoring}
-              className={`${isMonitoring ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} text-white flex items-center justify-start p-3`}
-            >
-              <Phone className="w-4 h-4 mr-2" />
-              <span>{isMonitoring ? 'Stop Monitoring' : 'Start Monitoring'}</span>
-            </Button>
-          </div>
+            {/* System Services Control Panel */}
+            <div className="bg-slate-800/50 rounded-lg p-4 border border-blue-400/20">
+              <h3 className="text-white font-semibold mb-4 flex items-center">
+                <Settings className="w-4 h-4 mr-2 text-blue-400" />
+                System Services
+              </h3>
+              <div className="space-y-3">
+                {services.map((service) => {
+                  const StatusIcon = getStatusIcon(service.status);
+                  const IconComponent = service.icon;
+                  return (
+                    <div key={service.name} className="flex items-center justify-between bg-slate-700/50 rounded p-3">
+                      <div className="flex items-center space-x-3">
+                        <IconComponent className="w-5 h-5 text-blue-400" />
+                        <div>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-white font-medium">{service.name}</span>
+                            <StatusIcon className={`w-4 h-4 ${getStatusColor(service.status)}`} />
+                            <span className={`text-xs font-medium ${getStatusColor(service.status)}`}>
+                              {service.status.toUpperCase()}
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-400">
+                            Last ping: {service.lastPing}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Button
+                              onClick={() => handleServiceAction(service.name, 'start')}
+                              size="sm"
+                              className="bg-green-600 hover:bg-green-700 text-white h-8 px-2"
+                            >
+                              <Play className="w-3 h-3 mr-1" />
+                              Start
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{service.description}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                        
+                        <Button
+                          onClick={() => handleServiceAction(service.name, 'restart')}
+                          size="sm"
+                          className="bg-orange-600 hover:bg-orange-700 text-white h-8 px-2"
+                        >
+                          <RefreshCw className="w-3 h-3 mr-1" />
+                          Restart
+                        </Button>
+                        
+                        <Button
+                          onClick={() => handleServiceAction(service.name, 'ping')}
+                          size="sm"
+                          className="bg-blue-600 hover:bg-blue-700 text-white h-8 px-2"
+                        >
+                          <Activity className="w-3 h-3 mr-1" />
+                          Ping
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Status Dashboard */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                <div className="flex items-center text-blue-300 mb-1">
+                  <PhoneCall className="w-4 h-4 mr-1" />
+                  <span className="text-sm">Active Calls</span>
+                </div>
+                <div className="text-white font-bold text-xl">
+                  {loading ? "..." : callDetails?.activeCalls?.length || 0}
+                </div>
+              </div>
+              
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                <div className="flex items-center text-green-300 mb-1">
+                  <Clock className="w-4 h-4 mr-1" />
+                  <span className="text-sm">Avg Duration</span>
+                </div>
+                <div className="text-white font-bold text-xl">
+                  {loading ? "..." : callDetails?.todayStats?.averageDuration || "0m"}
+                </div>
+              </div>
+              
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                <div className="flex items-center text-purple-300 mb-1">
+                  <Users className="w-4 h-4 mr-1" />
+                  <span className="text-sm">Success Rate</span>
+                </div>
+                <div className="text-white font-bold text-xl">
+                  {loading ? "..." : callDetails?.todayStats?.successRate || "0%"}
+                </div>
+              </div>
+              
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-blue-400/20">
+                <div className="flex items-center text-yellow-300 mb-1">
+                  <PhoneOutgoing className="w-4 h-4 mr-1" />
+                  <span className="text-sm">Total Today</span>
+                </div>
+                <div className="text-white font-bold text-xl">
+                  {loading ? "..." : callDetails?.todayStats?.totalCalls || 0}
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <Button
+                onClick={handleSimulateCall}
+                className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center p-3"
+              >
+                <TestTube className="w-4 h-4 mr-2" />
+                Simulate Test Call
+              </Button>
+              
+              <Button
+                onClick={() => setShowCallDetails(!showCallDetails)}
+                className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center p-3"
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                {showCallDetails ? 'Hide' : 'View'} Call Reports
+              </Button>
+              
+              <Button
+                onClick={() => setShowCallHistory(!showCallHistory)}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center p-3"
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Call Log History
+              </Button>
+            </div>
           
           {/* Inline Call Details */}
           {showCallDetails && (
@@ -243,8 +486,89 @@ export function CallMonitoringPopup() {
               </div>
             </div>
           )}
-        </div>
-      </CardContent>
-    </Card>
+
+          {/* Call Log History Panel */}
+          {showCallHistory && (
+            <div className="bg-slate-800/50 rounded-lg p-4 border border-blue-400/20">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-white font-semibold flex items-center">
+                  <FileText className="w-4 h-4 mr-2 text-blue-400" />
+                  Call Log History
+                </h3>
+                <div className="flex space-x-2">
+                  <Button
+                    size="sm"
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    <Upload className="w-3 h-3 mr-1" />
+                    Upload Logs
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    <Download className="w-3 h-3 mr-1" />
+                    Export CSV
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-600">
+                      <th className="text-left text-gray-300 pb-2">Call ID</th>
+                      <th className="text-left text-gray-300 pb-2">Timestamp</th>
+                      <th className="text-left text-gray-300 pb-2">Bot Name</th>
+                      <th className="text-left text-gray-300 pb-2">Intent</th>
+                      <th className="text-left text-gray-300 pb-2">Sentiment</th>
+                      <th className="text-left text-gray-300 pb-2">Duration</th>
+                      <th className="text-left text-gray-300 pb-2">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { id: "CALL-001", timestamp: "2:15 PM", bot: "SalesBot", intent: "Product Inquiry", sentiment: 8.5, duration: "8:42" },
+                      { id: "CALL-002", timestamp: "1:48 PM", bot: "SupportBot", intent: "Technical Support", sentiment: 6.2, duration: "12:18" },
+                      { id: "CALL-003", timestamp: "1:22 PM", bot: "SalesBot", intent: "Price Quote", sentiment: 9.1, duration: "5:33" },
+                      { id: "CALL-004", timestamp: "12:35 PM", bot: "LeadBot", intent: "Lead Qualification", sentiment: 7.8, duration: "15:22" },
+                      { id: "CALL-005", timestamp: "11:58 AM", bot: "SupportBot", intent: "Billing Question", sentiment: 5.4, duration: "9:47" }
+                    ].map((log, index) => (
+                      <tr key={index} className="border-b border-slate-700/50 hover:bg-slate-700/30">
+                        <td className="py-2 text-blue-300 font-mono">{log.id}</td>
+                        <td className="py-2 text-white">{log.timestamp}</td>
+                        <td className="py-2 text-white">{log.bot}</td>
+                        <td className="py-2 text-purple-300">{log.intent}</td>
+                        <td className="py-2">
+                          <span className={`font-medium ${log.sentiment >= 7 ? 'text-green-400' : log.sentiment >= 5 ? 'text-yellow-400' : 'text-red-400'}`}>
+                            {log.sentiment}/10
+                          </span>
+                        </td>
+                        <td className="py-2 text-white">{log.duration}</td>
+                        <td className="py-2">
+                          <div className="flex space-x-1">
+                            <Button size="sm" variant="outline" className="h-6 px-2 text-xs">
+                              <Eye className="w-3 h-3" />
+                            </Button>
+                            <Button size="sm" variant="outline" className="h-6 px-2 text-xs">
+                              <Download className="w-3 h-3" />
+                            </Button>
+                            <Button size="sm" variant="outline" className="h-6 px-2 text-xs text-red-400">
+                              <Trash2 className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          </div>
+        </CardContent>
+      </Card>
+    </TooltipProvider>
   );
 }

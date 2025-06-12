@@ -1,0 +1,104 @@
+🔧 WHAT NEEDS TO BE FIXED / ADDED
+1. ❌ PROBLEM: All Services Show "Inactive" With No Way to Start Them
+✅ SOLUTION: Add manual control toggles or status refreshers
+
+Add Start / Restart / Ping Test buttons beside each:
+
+Monitoring Service: [ Start ⏵ | Restart 🔁 | Status 🔍 ]
+
+Show last ping time and health response
+
+Add tooltip on hover: “This service is responsible for real-time monitoring of bot calls. If inactive, live sessions will not be tracked.”
+
+2. ❌ PROBLEM: No Session or Call Report Triggers
+✅ SOLUTION: Add “Simulate Test Call” or “Force Session In”
+
+Add a dev-only button: 📞 Simulate Test Call
+
+Generates fake call data for testing call reports and session tracking
+
+Lets you verify call analytics and log ingestion
+
+3. ❌ PROBLEM: “No Call Reports” = Empty Forever
+✅ SOLUTION: Add sample call data or import option
+
+Add: 📁 Upload Call Logs or 🧪 Generate Dummy Reports
+
+Preview columns:
+
+🕓 Timestamp
+
+🧠 Bot Name
+
+🎯 Intent Triggered
+
+😠 Sentiment Score
+
+🔍 Transcript Preview
+
+Each row should have: ▶️ View | 📤 Export | 🗑 Delete
+
+4. ❌ PROBLEM: No Status Dashboard Feedback
+✅ SOLUTION: Add colored indicators + real-time refresh
+
+Add:
+
+🟢 "Active" when any call connects
+
+🟡 "Idle" when system is running but unused
+
+🔴 "Offline" with reason (e.g., Lambda not responding, API key missing)
+
+Add ↻ Refresh Status button at top right of panel
+
+5. ❌ PROBLEM: No Log History or Debugging
+✅ SOLUTION: Add Logs Panel
+
+Section: 📜 Call Log History
+
+Shows:
+
+Call ID
+
+Bot name
+
+Duration
+
+Fail/Success tag
+
+Link to voice/audio
+
+Show real-time updates as calls happen
+
+✅ FINAL REPLIT DEV TASK SUMMARY
+Here’s exactly what to tell your dev or paste into Replit tickets:
+
+🧩 Call Monitoring Panel Upgrade Scope
+🔄 SYSTEM SERVICE CONTROL:
+Add Start/Restart buttons to Monitoring, Recording, Analytics
+
+Auto-refresh status every 10 seconds or on manual click
+
+📞 CALL SESSION SIMULATION:
+Add “Simulate Test Call” to generate fake activity
+
+Display fake data in “Active Sessions” and “Recent Activity”
+
+📈 CALL REPORTS DISPLAY:
+Create schema: Call ID, Timestamp, Bot Name, Sentiment, Intent
+
+Allow row preview, export, and delete
+
+Add dummy data for test mode
+
+⚠️ STATUS FEEDBACK:
+Color-coded states (🟢 Active, 🟡 Idle, 🔴 Offline)
+
+Add tooltips to each service explaining function
+
+📋 LOGGING + HISTORY:
+Add new panel: Call Log History
+
+Allow export to CSV/PDF
+
+Show live ingestion of new calls
