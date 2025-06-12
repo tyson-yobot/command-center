@@ -187,6 +187,7 @@ export default function CommandCenter() {
         queryClient.invalidateQueries({ queryKey: ['/api/qa-test-results'] });
         
         toast({
+          id: Date.now().toString(),
           title: "System Mode Changed",
           description: `Switched to ${response.modeChange.newMode} mode. ${response.modeChange.newMode === 'live' ? 'Production data active.' : 'Test mode - safe operations only.'}`,
         });
@@ -195,6 +196,7 @@ export default function CommandCenter() {
     } catch (error) {
       console.error('Toggle failed:', error);
       toast({
+        id: Date.now().toString(),
         title: "Error",
         description: "Failed to toggle system mode",
         variant: "destructive"
@@ -820,6 +822,7 @@ export default function CommandCenter() {
 
       if (response.ok) {
         toast({
+          id: Date.now().toString(),
           title: "Ticket Created",
           description: `Ticket "${newTicketSubject}" has been created successfully`
         });
@@ -1723,11 +1726,13 @@ export default function CommandCenter() {
       if (response.ok) {
         const result = await response.json();
         setToast({
+          id: Date.now().toString(),
           title: "Context Search Complete",
           description: `Context analysis found ${result.contextMatches || 0} relevant sections`,
         });
       } else {
         setToast({
+          id: Date.now().toString(),
           title: "Context Search Failed",
           description: "Unable to perform context search",
           variant: "destructive"
@@ -1735,6 +1740,7 @@ export default function CommandCenter() {
       }
     } catch (error) {
       setToast({
+        id: Date.now().toString(),
         title: "Context Error",
         description: "Network error during context search",
         variant: "destructive"
@@ -1745,6 +1751,7 @@ export default function CommandCenter() {
   const downloadLastRecording = async () => {
     if (!voiceGenerationText.trim()) {
       setToast({
+        id: Date.now().toString(),
         title: "Text Required",
         description: "Please enter text first, then generate voice before downloading",
         variant: "destructive"
