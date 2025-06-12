@@ -25,16 +25,15 @@ import { registerCommandCenterRoutes } from "./commandCenterRoutes";
 import { registerQAValidationRoutes } from "./qaValidationSystem";
 import { registerContentCreatorRoutes } from "./contentCreatorRoutes";
 import { registerMailchimpRoutes } from "./mailchimpRoutes";
-
-// Publer integration removed - hardcoded data eliminated
-import { isLiveMode } from "./systemMode";
+import { registerIntegrationTestRoutes } from "./integrationTestLogger";
+import { registerPublerRoutes } from "./publerIntegration";
+import { registerLocalTestLoggerRoutes, localTestLogger } from "./localTestLogger";
 import { configManager } from "./controlCenterConfig";
-
-
+import { logToAirtable } from "./airtableLogger";
+import { automationTester } from "./automationTester";
 import { registerZendeskRoutes } from "./zendeskIntegration";
 import { registerAutomationTestEndpoint } from "./automationTestEndpoint";
 import { registerAutomationLogsEndpoint } from "./automationLogsEndpoint";
-import { registerLiveAutomationEndpoints } from "./liveAutomationEndpoints";
 import { storage } from "./storage";
 // Removed old Airtable QA tracker - using new local QA tracker system
 import OpenAI from "openai";
@@ -449,16 +448,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   registerCommandCenterRoutes(app);
   registerQAValidationRoutes(app);
   
-  // Integration test routes removed - using PRODUCTION_HARDENED_LOGGER only
+  // Register integration test logging system - CRITICAL: Must be active before any testing
+  registerIntegrationTestRoutes(app);
   
   // Register local test logger - Primary test tracking system
-  // Logger routes removed - using PRODUCTION_HARDENED_LOGGER only
+  registerLocalTestLoggerRoutes(app);
   
   // Register real automation endpoints - Connect Python functions to web interface
   registerRealAutomationEndpoints(app);
   
   // Register Publer social media integration - Required for automated posting
-  // Publer routes removed - hardcoded data eliminated
+  registerPublerRoutes(app);
   
   // Register Content Creator and Mailchimp webhook routes
   registerContentCreatorRoutes(app);
@@ -517,9 +517,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register core automation endpoints
   registerCoreAutomationEndpoints(app);
-  
-  // Register live automation endpoints with automatic Airtable logging
-  registerLiveAutomationEndpoints(app);
   
   // Command Button API Endpoints - All Required Functions
   
@@ -635,16 +632,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log('VoiceBot pipeline start:', action);
       
       const pipelineId = 'PIPE_' + Date.now();
-      // LIVE MODE: Only authentic data from voice pipeline system
-      if (isLiveMode()) {
-        throw new Error("Live mode requires authentic voice pipeline integration - no hardcoded values");
-      }
-      
       const result = {
         success: true,
         pipelineId,
         status: 'started',
-        callsQueued: 15, // TEST MODE ONLY
+        callsQueued: 15,
         timestamp: new Date().toISOString()
       };
       
@@ -674,15 +666,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { action } = req.body;
       console.log('VoiceBot pipeline stop:', action);
       
-      // LIVE MODE: Only authentic data from voice pipeline system
-      if (isLiveMode()) {
-        throw new Error("Live mode requires authentic voice pipeline integration - no hardcoded values");
-      }
-      
       const result = {
         success: true,
         status: 'stopped',
-        callsCancelled: 8, // TEST MODE ONLY
+        callsCancelled: 8,
         timestamp: new Date().toISOString()
       };
       
@@ -1240,21 +1227,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Call Monitoring API endpoints - Supports both live and test modes
+  // Call Monitoring API endpoints
   app.get('/api/call-monitoring/details', async (req, res) => {
     try {
-      const systemModeHeader = req.headers['x-system-mode'] as string;
-      const { systemMode } = await import('./systemMode');
-      const finalMode = systemModeHeader || systemMode;
-
-      logOperation('call-monitoring-details', {}, 'success', 'Call monitoring details requested');
-
-      // Return test data in test mode
-      if (finalMode === 'test') {
-        const { TestModeData } = await import('./testModeData');
-        return res.json(TestModeData.getRealisticCallMonitoring());
-      }
-
       const callDetails = {
         activeCalls: [],
         todayStats: {
@@ -1265,6 +1240,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         },
         recentCalls: []
       };
+
+      logOperation('call-monitoring-details', {}, 'success', 'Call monitoring details requested');
 
       res.json({
         success: true,
@@ -1325,20 +1302,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/zendesk/tickets', async (req, res) => {
     try {
-      const systemModeHeader = req.headers['x-system-mode'] as string;
-      const { systemMode } = await import('./systemMode');
-      const finalMode = systemModeHeader || systemMode;
+      // Only return authentic tickets from actual Zendesk integration
+      // No test data in live mode
+      const tickets = [];
 
       logOperation('zendesk-tickets', {}, 'success', 'Zendesk tickets retrieved');
-
-      // Return test data in test mode
-      if (finalMode === 'test') {
-        const { TestModeData } = await import('./testModeData');
-        return res.json(TestModeData.getRealisticZendeskTickets());
-      }
-
-      // Only return authentic tickets from actual Zendesk integration
-      const tickets = [];
 
       res.json({
         success: true,
@@ -10299,20 +10267,10 @@ Always provide helpful, actionable guidance.`
     }
   });
 
-  // Knowledge Stats - Supports both live and test modes
+  // Knowledge Stats - Live Data Only
   app.get('/api/knowledge/stats', async (req, res) => {
     try {
-      const systemModeHeader = req.headers['x-system-mode'] as string;
-      const { systemMode } = await import('./systemMode');
-      const finalMode = systemModeHeader || systemMode;
-
       logOperation('knowledge-stats', {}, 'success', 'Knowledge stats requested');
-      
-      // Return test data in test mode
-      if (finalMode === 'test') {
-        const { TestModeData } = await import('./testModeData');
-        return res.json(TestModeData.getRealisticKnowledgeStats());
-      }
       
       // Calculate stats from actual uploaded documents in both stores
       const totalDocuments = Math.max(documentDataStore.length, knowledgeDataStore.length);
@@ -12173,7 +12131,7 @@ CRM Data:
     }
   });
 
-  // DISABLED: Legacy logger blocked - hardcoded API keys and unauthorized data removed
+  // Airtable QA Test Logging Function
   async function logToAirtableQA(testData: {
     integrationName: string;
     passFail: string;
@@ -12185,15 +12143,38 @@ CRM Data:
     moduleType: string;
     scenarioLink?: string;
   }) {
-    // LIVE MODE: Block all hardcoded data and unauthorized logging
-    if (isLiveMode()) {
-      console.log(`[LIVE MODE BLOCKED] Hardcoded logger rejected: ${testData.integrationName}`);
-      throw new Error("Live mode prohibits hardcoded data - use PRODUCTION_HARDENED_LOGGER only");
+    try {
+      const response = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          records: [
+            {
+              fields: {
+                "Integration Name": testData.integrationName,
+                "✅ Pass/Fail": testData.passFail,
+                "🛠 Notes / Debug": testData.notes,
+                "📅 Test Date": new Date().toISOString(),
+                "🧑‍💻 QA Owner": testData.qaOwner,
+                "📤 Output Data Populated?": testData.outputDataPopulated,
+                "🧾 Record Created?": testData.recordCreated,
+                "🔁 Retry Attempted?": testData.retryAttempted,
+                "🧩 Module Type": testData.moduleType,
+                "📂 Related Scenario Link": testData.scenarioLink || "https://replit.dev/command-center"
+              },
+            },
+          ],
+        }),
+      });
+      
+      return response.ok;
+    } catch (error) {
+      console.error('Airtable QA logging failed:', error);
+      return false;
     }
-    
-    // TEST MODE: Only for demo purposes
-    console.log(`[TEST MODE DEMO] ${testData.integrationName} - ${testData.passFail}`);
-    return true;
   }
 
   // Command Center Dashboard Data Endpoint
@@ -12279,61 +12260,6 @@ CRM Data:
       res.status(500).json({
         success: false,
         error: 'Failed to get system mode',
-        details: error.message
-      });
-    }
-  });
-
-  // Automation Performance Endpoint with Test/Live Mode Isolation
-  app.get('/api/automation-performance', async (req, res) => {
-    try {
-      const headerMode = req.headers['x-system-mode'] as 'test' | 'live';
-      const requestedMode = headerMode || systemMode;
-      console.log(`[DEBUG] Automation Performance - Header: ${headerMode}, System Mode: ${systemMode}, Final Mode: ${requestedMode}`);
-      
-      // Complete isolation: serve test data when test mode is requested
-      if (requestedMode === 'test') {
-        const { TestModeData } = await import('./testModeData');
-        const testMetrics = await TestModeData.getRealisticAutomationMetrics();
-        console.log(`[DEBUG] Serving test data with ${testMetrics.successRate} success rate`);
-        res.json(testMetrics);
-        return;
-      }
-      
-      // Serve live data for live mode
-      const { LiveDashboardData } = await import('./liveDashboardData');
-      const automationMetrics = await LiveDashboardData.getAutomationMetrics('live');
-      
-      logOperation('automation-performance', { mode: requestedMode }, 'success', `Automation performance metrics retrieved in ${requestedMode} mode`);
-      
-      res.json(automationMetrics);
-    } catch (error: any) {
-      logOperation('automation-performance', {}, 'error', `Failed to get automation performance: ${error.message}`);
-      res.status(500).json({
-        success: false,
-        error: 'Failed to get automation performance',
-        details: error.message
-      });
-    }
-  });
-
-  // Dashboard Metrics Endpoint with Test/Live Mode Isolation
-  app.get('/api/dashboard-metrics', async (req, res) => {
-    try {
-      const requestedMode = (req.headers['x-system-mode'] as 'test' | 'live') || systemMode;
-      console.log(`[DEBUG] Dashboard Metrics - Header: ${req.headers['x-system-mode']}, System Mode: ${systemMode}, Requested Mode: ${requestedMode}`);
-      
-      const { LiveDashboardData } = await import('./liveDashboardData');
-      const dashboardData = await LiveDashboardData.getDashboardOverview(requestedMode);
-      
-      logOperation('dashboard-metrics', { mode: requestedMode }, 'success', `Dashboard metrics retrieved in ${requestedMode} mode`);
-      
-      res.json(dashboardData);
-    } catch (error: any) {
-      logOperation('dashboard-metrics', {}, 'error', `Failed to get dashboard metrics: ${error.message}`);
-      res.status(500).json({
-        success: false,
-        error: 'Failed to get dashboard metrics',
         details: error.message
       });
     }

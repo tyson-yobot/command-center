@@ -355,9 +355,13 @@ class SystemAutomationOrchestrator {
 
   private async logExecution(id: string, task: AutomationTask, status: string, duration: number, error?: string) {
     try {
-  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
-  console.log(`[DISABLED] Legacy logger call blocked`);
-  return true;
+      await logIntegrationTest({
+        testName: `Automation: ${task.name}`,
+        status: status === 'success' ? 'PASS' : 'FAIL',
+        timestamp: new Date().toISOString(),
+        details: `Scheduled execution completed in ${duration}ms. Category: ${task.category}, Priority: ${task.priority}`,
+        errorMessage: error || ''
+      });
     } catch (logError) {
       console.warn(`Failed to log execution for ${task.name}:`, logError);
     }

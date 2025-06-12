@@ -1,0 +1,28 @@
+YoBot System Overview
+===================
+
+YoBot is an advanced enterprise automation platform that leverages AI to transform business contact management and workflow optimization. The system includes:
+
+1. Command Center Dashboard - Central control interface for all automation functions
+2. ElevenLabs Voice Synthesis - Complete voice generation with all default voices
+3. RAG Knowledge Engine - Intelligent document processing and retrieval
+4. Automation Testing Framework - Comprehensive function validation system
+5. Integration Management - Airtable, Slack, Stripe, and other service connections
+
+Key Features:
+- Real-time monitoring and alerts
+- Intelligent lead capture and processing
+- Automated content creation
+- Voice command processing
+- Document analysis and insights
+- Multi-channel communication automation
+
+Technical Components:
+- React frontend with TypeScript
+- Express.js backend with comprehensive API endpoints
+- PostgreSQL database for persistent storage
+- OpenAI GPT-4o integration for AI processing
+- ElevenLabs API for voice synthesis
+- Comprehensive logging and analytics
+
+This platform is designed for enterprise-level automation and customer engagement.

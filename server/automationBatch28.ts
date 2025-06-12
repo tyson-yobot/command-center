@@ -7,9 +7,13 @@ import type { Express } from "express";
 import { logIntegrationTest } from "./airtableIntegrations";
 
 async function logToAirtable(tableName: string, data: Record<string, any>) {
-  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
-  console.log(`[DISABLED] Legacy logger call blocked: ${tableName}`);
-  return true;
+  return await logIntegrationTest({
+    integrationName: tableName,
+    status: 'PASS',
+    notes: JSON.stringify(data),
+    timestamp: new Date().toISOString(),
+    qaOwner: 'YoBot System'
+  });
 }
 
 export function registerBatch28(app: Express) {

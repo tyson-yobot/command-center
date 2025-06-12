@@ -1,0 +1,12 @@
+YoBot Automation System Test Document
+
+This is a test document to verify the document upload and indexing functionality.
+
+Key features:
+- Document processing
+- Text extraction
+- AI analysis
+- Knowledge base integration
+- Search functionality
+
+The system should extract this text and create searchable indexes for improved knowledge retrieval.

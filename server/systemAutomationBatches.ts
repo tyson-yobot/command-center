@@ -24,9 +24,15 @@ export async function runCompleteAutomationTest(req: Request, res: Response) {
     // Test Integration Test Log with each batch
     for (const batch of batches) {
       try {
-  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
-  console.log(`[DISABLED] Legacy logger call blocked`);
-  return true;
+        const logResult = await logIntegrationTest({
+          testName: batch.name,
+          status: batch.status,
+          timestamp: new Date().toISOString(),
+          details: `Automation functions ${batch.automations} implemented and tested`,
+          errorMessage: "",
+          batchNumber: batch.automations,
+          automationCount: 10
+        });
 
         testResults.results.push({
           batch: batch.name,
@@ -119,9 +125,15 @@ export async function createMilestoneTracker(req: Request, res: Response) {
     }
 
     // Log milestone creation to Integration Test Log
-  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
-  console.log(`[DISABLED] Legacy logger call blocked`);
-  return true;
+    await logIntegrationTest({
+      testName: "Milestone Tracker Creation",
+      status: "SUCCESS",
+      timestamp: new Date().toISOString(),
+      details: `Created milestone tracker for client ${clientId} - Phase: ${phase}`,
+      errorMessage: "",
+      batchNumber: "052",
+      automationCount: 1
+    });
 
     res.json({
       success: true,
@@ -148,9 +160,15 @@ export async function pingUptime(req: Request, res: Response) {
     const systemHealth = 97; // Based on current metrics
 
     // Log uptime ping to Integration Test Log
-  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
-  console.log(`[DISABLED] Legacy logger call blocked`);
-  return true;
+    await logIntegrationTest({
+      testName: "System Uptime Ping",
+      status: "SUCCESS",
+      timestamp: new Date().toISOString(),
+      details: `System uptime: ${uptimeHours} hours, Health: ${systemHealth}%`,
+      errorMessage: "",
+      batchNumber: "072",
+      automationCount: 1
+    });
 
     res.json({
       success: true,
@@ -188,9 +206,15 @@ export async function flagHighValueDeal(req: Request, res: Response) {
 
     if (isHighValue) {
       // Log high-value deal escalation
-  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
-  console.log(`[DISABLED] Legacy logger call blocked`);
-  return true;
+      await logIntegrationTest({
+        testName: "High-Value Deal Escalation",
+        status: "SUCCESS",
+        timestamp: new Date().toISOString(),
+        details: `High-value deal flagged: $${amount} for ${client}`,
+        errorMessage: "",
+        batchNumber: "075",
+        automationCount: 1
+      });
 
       escalated = true;
     }
@@ -224,9 +248,15 @@ export async function checkSystemEnvironment(req: Request, res: Response) {
     const environment = isProduction ? "production" : "development";
 
     // Log environment check
-  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
-  console.log(`[DISABLED] Legacy logger call blocked`);
-  return true;
+    await logIntegrationTest({
+      testName: "System Environment Check",
+      status: "SUCCESS",
+      timestamp: new Date().toISOString(),
+      details: `System running in ${environment} mode`,
+      errorMessage: "",
+      batchNumber: "076",
+      automationCount: 1
+    });
 
     res.json({
       success: true,
@@ -272,9 +302,15 @@ export async function getAutomationSummary(req: Request, res: Response) {
     };
 
     // Log summary generation
-  // DISABLED - All logging handled by PRODUCTION_HARDENED_LOGGER only
-  console.log(`[DISABLED] Legacy logger call blocked`);
-  return true;
+    await logIntegrationTest({
+      testName: "Automation System Summary",
+      status: "SUCCESS",
+      timestamp: new Date().toISOString(),
+      details: `Generated summary for ${summary.totalAutomations} automations across ${summary.totalBatches} batches`,
+      errorMessage: "",
+      batchNumber: "SUMMARY",
+      automationCount: summary.totalAutomations
+    });
 
     res.json({
       success: true,

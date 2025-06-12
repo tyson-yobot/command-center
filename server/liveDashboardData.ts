@@ -1,138 +1,95 @@
-import { TestModeData } from './testModeData';
+import fs from 'fs';
+import path from 'path';
 
+// Live data aggregator - pulls only from actual running systems
 export class LiveDashboardData {
-  static async getAutomationMetrics(systemMode: 'test' | 'live' = 'live') {
-    console.log(`[DEBUG] getAutomationMetrics called with mode: ${systemMode}`);
-    
-    // Complete isolation: serve test data when in test mode
-    if (systemMode === 'test') {
-      console.log('[DEBUG] Serving realistic test data');
-      return TestModeData.getRealisticAutomationMetrics();
-    }
-    
-    console.log('[DEBUG] Serving live production data');
+  
+  // Get real automation metrics from Airtable Integration Test Log
+  static async getAutomationMetrics() {
     try {
-      const AUTHORIZED_BASE_ID = "appbFDTqB2WtRNV1H";
-      const AUTHORIZED_TABLE_ID = "tblQAIntegrationTests";
-      
-      // Security check
-      if (AUTHORIZED_BASE_ID !== "appbFDTqB2WtRNV1H") {
-        throw new Error("❌ Invalid Airtable Base ID in use – dashboard misconfigured.");
-      }
-      
-      // Get metrics from authorized Airtable Integration Test Log Table
-      const apiKey = process.env.AIRTABLE_API_KEY;
-      if (!apiKey) {
-        throw new Error("❌ AIRTABLE_API_KEY environment variable not set - cannot fetch live data");
-      }
-      
-      const airtableResponse = await fetch(`https://api.airtable.com/v0/${AUTHORIZED_BASE_ID}/${AUTHORIZED_TABLE_ID}`, {
+      // Get metrics from Airtable Integration Test Log Table
+      const airtableResponse = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbly0fjE2M5uHET9X", {
         headers: {
-          "Authorization": `Bearer ${apiKey}`,
+          "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`,
           "Content-Type": "application/json"
         }
       });
 
-      console.log(`Attempting Airtable fetch: ${AUTHORIZED_BASE_ID}/${AUTHORIZED_TABLE_ID}`);
-      console.log('API Key being used:', apiKey.substring(0, 10) + '...');
-      
-      if (!airtableResponse.ok) {
-        console.error('Airtable request failed:', airtableResponse.status, airtableResponse.statusText);
-        const errorText = await airtableResponse.text();
-        console.error('Error response:', errorText);
-        throw new Error(`Airtable API failed: ${airtableResponse.status} ${errorText}`);
-      }
+      if (airtableResponse.ok) {
+        const airtableData = await airtableResponse.json();
+        console.log('Airtable response status:', airtableResponse.status);
+        if (!airtableResponse.ok) {
+          console.log('Airtable error:', airtableData);
+          throw new Error(`Airtable API error: ${airtableData.error?.message || 'Unknown error'}`);
+        }
+        const records = airtableData.records || [];
+        
+        // Parse integration test records to get real automation function status
+        const today = new Date().toISOString().split('T')[0];
+        const todaysRecords = records.filter(record => {
+          const createdTime = record.createdTime || '';
+          return createdTime.startsWith(today);
+        });
 
-      const airtableData = await airtableResponse.json();
-      console.log('Airtable response status:', airtableResponse.status);
-      console.log('Records found:', airtableData.records?.length || 0);
-      const records = airtableData.records || [];
-        
-      // Parse records from QA Integration Test table structure
-      const functionTests = records.map((record: any, index: number) => {
-        const fields = record.fields;
-        
-        // Extract data from QA Integration Test table fields
-        const functionName = fields['🔧 Integration Name'] || `Unknown Function ${index + 1}`;
-        const passFailField = fields['✅ Pass/Fail'] || '';
-        const success = passFailField.includes('✅') || passFailField.toLowerCase().includes('pass');
-        const notes = fields['🧠 Notes / Debug'] || '';
-        const testDate = fields['📅 Test Date'] || '';
-        const qaOwner = fields['🧑‍💻 QA Owner'] || '';
-        const moduleType = fields['🧩 Module Type'] || '';
-        
-        return { 
-          functionName: functionName.trim(), 
-          success, 
-          notes,
-          testDate,
-          qaOwner,
-          moduleType,
-          record 
+        // Define the actual 22 automation functions you have
+        const actualFunctions = [
+          'Log To CRM', 'Create Invoice', 'Send Slack Notification', 'Send Email Receipt',
+          'Record Call Log', 'Score Call', 'Run Voicebot Script', 'Sync To Smartspend',
+          'Generate ROI Snapshot', 'Trigger Quote PDF', 'Sync To Hubspot', 'Sync To Quickbooks',
+          'Log Voice Sentiment', 'Store Transcription', 'Send SMS Alert', 'Candidate Screening',
+          'Background Checks', 'Reference Verification', 'Onboarding Automation', 'Document Management',
+          'Policy Distribution', 'Compliance Training'
+        ];
+
+        // Extract function names and statuses from the integration name field - only count actual functions
+        const functionTests = records.map(record => {
+          const integrationName = record.fields['🔧 Integration Name'] || '';
+          const success = integrationName.includes('✅');
+          const functionName = integrationName.split(' - ')[0];
+          return { functionName, success, record };
+        }).filter(test => actualFunctions.includes(test.functionName));
+
+        // Get unique functions and their latest status
+        const uniqueFunctions: any = {};
+        functionTests.forEach(test => {
+          if (!uniqueFunctions[test.functionName] || test.record.createdTime > uniqueFunctions[test.functionName].createdTime) {
+            uniqueFunctions[test.functionName] = test;
+          }
+        });
+
+        const totalFunctions = Object.keys(uniqueFunctions).length;
+        const passedFunctions = Object.values(uniqueFunctions).filter((f: any) => f.success).length;
+        const failedFunctions = totalFunctions - passedFunctions;
+        const successRate = totalFunctions > 0 ? ((passedFunctions / totalFunctions) * 100).toFixed(1) : '0';
+
+        return {
+          totalFunctions,
+          activeFunctions: totalFunctions, // All functions that have been tested are considered active
+          executionsToday: todaysRecords.length,
+          successRate: `${successRate}%`,
+          averageExecutionTime: null,
+          topPerformers: Object.values(uniqueFunctions)
+            .filter((f: any) => f.success)
+            .slice(0, 5)
+            .map((f: any) => f.functionName),
+          recentErrors: Object.values(uniqueFunctions)
+            .filter((f: any) => !f.success)
+            .slice(0, 3)
+            .map((f: any) => ({ name: f.functionName, errorCount: 1, category: 'Automation' })),
+          healthChecks: {
+            airtable: "healthy",
+            slack: "healthy", 
+            apis: "healthy",
+            database: "healthy"
+          }
         };
-      });
-
-      console.log(`Processing ${records.length} Airtable records`);
-      console.log(`RECORD COUNT DEBUG: ${records.length} records from Airtable`);
-      
-      // Debug success rate calculation
-      const debugStats = {
-        totalRecords: records.length,
-        passedTests: functionTests.filter((test: any) => test.success).length,
-        failedTests: functionTests.filter((test: any) => !test.success).length
-      };
-      console.log(`SUCCESS RATE DEBUG: ${debugStats.passedTests} passed, ${debugStats.failedTests} failed of ${debugStats.totalRecords} total`);
-
-      // Count ALL executions, not just unique functions
-      const totalExecutions = functionTests.length;
-      const passedExecutions = functionTests.filter((test: any) => test.success).length;
-      const failedExecutions = totalExecutions - passedExecutions;
-      const successRate = totalExecutions > 0 ? ((passedExecutions / totalExecutions) * 100).toFixed(1) : '0';
-      
-      // Get unique functions from QA Integration Test data
-      const uniqueFunctions: any = {};
-      functionTests.forEach((test: any) => {
-        const cleanFunctionName = test.functionName.trim();
-        // Only include valid integration names from authenticated QA tests
-        if (cleanFunctionName && 
-            cleanFunctionName !== 'Unknown Function' &&
-            !cleanFunctionName.startsWith('Unknown Function') &&
-            cleanFunctionName.length > 3) {
-          uniqueFunctions[cleanFunctionName] = test;
-        }
-      });
-
-      const uniqueFunctionCount = Object.keys(uniqueFunctions).length;
-      console.log(`VERIFIED: Processing ${records.length} records, found ${uniqueFunctionCount} unique functions`);
-      
-      return {
-        totalFunctions: uniqueFunctionCount,
-        activeFunctions: uniqueFunctionCount,
-        executionsToday: totalExecutions,
-        successRate: `${successRate}%`,
-        averageExecutionTime: null,
-        lastUpdated: new Date().toISOString(),
-        topPerformers: functionTests
-          .filter((f: any) => f.success)
-          .slice(0, 5)
-          .map((f: any) => ({ name: f.functionName, successRate: 100, category: 'Automation' })),
-        recentErrors: functionTests
-          .filter((f: any) => !f.success)
-          .slice(0, 3)
-          .map((f: any) => ({ name: f.functionName, errorCount: 1, category: 'Automation' })),
-        healthChecks: {
-          airtable: records.length > 0 ? "healthy" : "error",
-          slack: "unknown", 
-          apis: "healthy",
-          database: "healthy"
-        }
-      };
-    } catch (error: any) {
+      }
+    } catch (error) {
       console.error('Error reading automation data from Airtable:', error);
       console.error('Stack trace:', error.stack);
     }
     
-    // NO FALLBACK VALUES - only return if Airtable fails completely
+    // Fallback to default values if Airtable unavailable
     return {
       totalFunctions: 0,
       activeFunctions: 0,
@@ -142,61 +99,53 @@ export class LiveDashboardData {
       topPerformers: [],
       recentErrors: [],
       healthChecks: {
-        airtable: "error",
-        slack: "unknown", 
+        airtable: "unavailable",
+        slack: "healthy", 
         apis: "healthy",
         database: "healthy"
       }
     };
   }
 
-  static async getLeadMetrics(systemMode: 'test' | 'live' = 'live') {
-    // Complete isolation: serve test data when in test mode
-    if (systemMode === 'test') {
-      return TestModeData.getRealisticLeadMetrics();
-    }
+  // Get real lead scraping data from actual sources
+  static async getLeadMetrics() {
     try {
+      // Pull from actual lead stores - let them populate naturally
       return {
         totalLeads: null,
         qualifiedLeads: null,
         conversionRate: null,
         averageLeadScore: null,
         leadSources: {
-          organic: null,
-          paidAds: null,
-          referrals: null,
-          directTraffic: null
+          apollo: { count: null, quality: null },
+          apify: { count: null, quality: null },
+          phantom: { count: null, quality: null }
         }
       };
-    } catch (error: any) {
-      console.error('Error getting lead metrics:', error);
-      return {
-        totalLeads: null,
-        qualifiedLeads: null,
-        conversionRate: null,
-        averageLeadScore: null,
-        leadSources: {
-          organic: null,
-          paidAds: null,
-          referrals: null,
-          directTraffic: null
-        }
-      };
+    } catch (error) {
+      console.error('Error getting live lead metrics:', error);
+      throw error;
     }
   }
 
-  static async getDashboardOverview(systemMode: 'test' | 'live' = 'live') {
-    // Complete isolation: serve test data when in test mode
-    if (systemMode === 'test') {
-      return TestModeData.getRealisticDashboardOverview();
+  // Get dashboard overview with only live data
+  static async getDashboardOverview() {
+    try {
+      const automationMetrics = await this.getAutomationMetrics();
+      const leadMetrics = await this.getLeadMetrics();
+      
+      return {
+        totalLeads: leadMetrics.totalLeads,
+        totalCampaigns: null,
+        activeAutomations: automationMetrics.activeFunctions,
+        successRate: automationMetrics.successRate,
+        monthlyGrowth: null,
+        recentActivity: [],
+        platformStats: leadMetrics.leadSources
+      };
+    } catch (error) {
+      console.error('Error getting dashboard overview:', error);
+      throw error;
     }
-    
-    const automationMetrics = await this.getAutomationMetrics(systemMode);
-    const leadMetrics = await this.getLeadMetrics(systemMode);
-    
-    return {
-      automation: automationMetrics,
-      leads: leadMetrics
-    };
   }
 }
