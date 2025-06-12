@@ -2800,16 +2800,12 @@ export default function CommandCenter() {
                     <span>Voice Input</span>
                   </Button>
                   
-                  <a
-                    href="https://app.hubspot.com/contacts/[HUB-ID]"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-start text-white font-semibold p-3 rounded-lg transition-all duration-200 border-l-6 w-full"
+                  <Button
+                    onClick={() => window.open('https://app.hubspot.com/contacts/[HUB-ID]', '_blank')}
+                    className="text-white flex items-center justify-start p-3 border-l-6 transition-all duration-200"
                     style={{
                       backgroundColor: '#0d82da',
-                      borderLeftColor: '#ff7a59',
-                      textDecoration: 'none',
-                      minHeight: '48px'
+                      borderLeftColor: '#ff7a59'
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = '#0864b1';
@@ -2820,7 +2816,7 @@ export default function CommandCenter() {
                   >
                     <span className="text-xl mr-3">🟠</span>
                     <span>HubSpot Contacts</span>
-                  </a>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
