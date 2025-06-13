@@ -172,6 +172,8 @@ export default function CommandCenter() {
   const [selectedKnowledgeItems, setSelectedKnowledgeItems] = useState<string[]>([]);
   const [knowledgeItems, setKnowledgeItems] = useState([]);
   const [memoryActivityLog, setMemoryActivityLog] = useState([]);
+  const [voiceActive, setVoiceActive] = useState(false);
+  const [showVoiceRecordings, setShowVoiceRecordings] = useState(false);
   const { toast } = useToast();
 
   // Test statistics for Live Integration Test Results
@@ -2769,17 +2771,17 @@ export default function CommandCenter() {
             <div className="flex items-center space-x-4">
               <Mic className="w-5 h-5 text-blue-400" />
               <span className="text-white font-medium">Voice Control</span>
-              <Badge className={`${voiceActive ? 'bg-green-500' : 'bg-gray-500'} text-white`}>
-                {voiceActive ? 'Active' : 'Inactive'}
+              <Badge className={`${isListening ? 'bg-green-500' : 'bg-gray-500'} text-white`}>
+                {isListening ? 'Active' : 'Inactive'}
               </Badge>
             </div>
             <div className="flex items-center space-x-3">
               <Button
                 onClick={handleVoiceToggle}
-                className={`${voiceActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white`}
+                className={`${isListening ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white`}
               >
-                {voiceActive ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
-                {voiceActive ? 'Stop Voice' : 'Start Voice'}
+                {isListening ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
+                {isListening ? 'Stop Voice' : 'Start Voice'}
               </Button>
               <Button
                 onClick={() => setShowVoiceRecordings(!showVoiceRecordings)}
@@ -2791,7 +2793,7 @@ export default function CommandCenter() {
               </Button>
             </div>
           </div>
-          {voiceActive && (
+          {isListening && (
             <div className="mt-3 text-sm text-green-400">
               Voice commands ready. Say "YoBot" to activate commands.
             </div>
@@ -2829,6 +2831,7 @@ export default function CommandCenter() {
                     <Button
                       onClick={handleCreateBooking}
                       className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
+                      title="Opens external Tally form to create a new booking appointment"
                     >
                       <div className="flex items-center">
                         <span className="text-xl mr-3">📅</span>
@@ -3104,7 +3107,7 @@ export default function CommandCenter() {
                 {currentSystemMode === 'test' ? '47' : (metrics?.botProcessing || '--')}
               </div>
               <p className="text-xs text-blue-400">
-                {currentSystemMode === 'test' ? 'AI operations active' : 'Live AI processing'}
+                {currentSystemMode === 'test' ? 'AI operations active' : (metrics?.botProcessing ? 'Live AI processing' : 'No AI processing')}
               </p>
             </CardContent>
           </Card>
@@ -3119,7 +3122,7 @@ export default function CommandCenter() {
                 {currentSystemMode === 'test' ? '94.2%' : (automationPerformance?.successRate || '--')}
               </div>
               <p className="text-xs text-emerald-400">
-                Live automation rate
+                {automationPerformance?.successRate ? 'Live automation rate' : 'No automation data'}
               </p>
             </CardContent>
           </Card>
