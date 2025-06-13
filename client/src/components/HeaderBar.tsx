@@ -23,31 +23,47 @@ export default function HeaderBar({
   const isLiveMode = currentSystemMode === 'live';
 
   return (
-    <div className="w-full bg-gradient-to-r from-blue-800 to-blue-900 shadow-lg z-50 sticky top-0">
-      <div className="flex flex-col items-center justify-center px-6 py-4">
-        {/* Logo & Title - Centered */}
-        <div className="flex items-center gap-3 mb-2">
-          <Bot className="text-white" size={32} />
-          <div className="text-white text-2xl font-bold">
-            YoBot<sup className="text-xs">®</sup> Command Center
+    <div className="w-full bg-gradient-to-r from-[#0b1627] to-[#071021] shadow-lg z-50 sticky top-0">
+      <div className="flex items-center justify-between px-6 py-4">
+        {/* Logo & System Mode */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <div className="text-white text-2xl font-bold flex items-center gap-2">
+              <Bot className="text-sky-400" size={28} />
+              YoBot<sup className="text-xs">®</sup>
+            </div>
           </div>
+          <span className={`ml-3 text-white text-xs px-2 py-1 rounded-md uppercase ${isLiveMode ? 'bg-green-600' : 'bg-yellow-600'}`}>
+            {isLiveMode ? 'Live Mode' : 'Test Mode'}
+          </span>
         </div>
 
-        <div className="text-slate-200 text-sm mb-3">Your Complete AI Automation Dashboard</div>
+        {/* Navigation */}
+        <div className="flex gap-6 text-sm text-gray-300">
+          <div className="hover:text-white cursor-pointer flex items-center gap-1"><LayoutDashboard size={16}/> Dashboard</div>
+          <div className="hover:text-white cursor-pointer flex items-center gap-1"><Mic size={16}/> Voice Logs</div>
+          <div className="hover:text-white cursor-pointer flex items-center gap-1"><BookOpen size={16}/> RAG + Knowledge</div>
+          <div className="hover:text-white cursor-pointer flex items-center gap-1"><MessageSquare size={16}/> QA & Scripts</div>
+          <div className="hover:text-white cursor-pointer flex items-center gap-1"><FileText size={16}/> Sales / Orders</div>
+          <div className="hover:text-white cursor-pointer flex items-center gap-1"><Users size={16}/> Clients</div>
+        </div>
 
-        {/* System Mode Toggle - Centered */}
-        <div className="flex items-center gap-3">
-          <span className="text-white text-sm">System Mode:</span>
-          <div className="flex items-center gap-2">
-            <span className="text-slate-200 text-sm">Test</span>
-            <div 
-              className={`relative inline-flex h-5 w-10 items-center rounded-full cursor-pointer transition-colors ${isLiveMode ? 'bg-green-500' : 'bg-gray-400'}`}
-              onClick={onModeToggle}
-            >
-              <div className={`inline-block h-3 w-3 transform rounded-full bg-white transition ${isLiveMode ? 'translate-x-6' : 'translate-x-1'}`} />
-            </div>
-            <span className="text-slate-200 text-sm">Live</span>
-          </div>
+        {/* Actions */}
+        <div className="flex items-center gap-4">
+          <Button variant="outline" className="text-white border-green-600 hover:bg-green-600">Start Demo</Button>
+          <Button variant="outline" className="text-white border-white hover:bg-white hover:text-black"><FileDown size={16} className="mr-1"/> Export</Button>
+          <Button variant="outline" className="text-white border-yellow-400 hover:bg-yellow-400 hover:text-black">Reset Demo</Button>
+
+          {/* Profile & Settings */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center gap-2 text-white hover:text-gray-200">
+              <User className="text-white" size={20}/> {userName} <ChevronDown size={16}/>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-[#0f172a] border border-gray-700 text-white">
+              <DropdownMenuItem className="hover:bg-slate-800"><Settings size={16} className="mr-2"/> Settings</DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-slate-800"><LogOut size={16} className="mr-2"/> Log out</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>

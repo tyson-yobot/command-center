@@ -88,6 +88,9 @@ import { TabContentRenderer } from '@/components/TabContentRenderer';
 export default function CommandCenter() {
   const queryClient = useQueryClient();
   
+  // Robot head image - using attached asset
+  const robotHeadImage = '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749713043354.png';
+  
   // System mode state
   const [currentSystemMode, setCurrentSystemMode] = useState(() => {
     return localStorage.getItem('systemMode') || 'live';
@@ -148,6 +151,8 @@ export default function CommandCenter() {
   const [voiceCommand, setVoiceCommand] = React.useState('');
   const [automationMode, setAutomationMode] = React.useState(true);
   const [collapsedSections, setCollapsedSections] = React.useState<{[key: string]: boolean}>({});
+  const [demoMode, setDemoMode] = React.useState(false);
+  const [demoStep, setDemoStep] = React.useState(0);
   const [currentRecognition, setCurrentRecognition] = React.useState<any>(null);
   
   // Voice recognition states for RAG programming
@@ -2732,7 +2737,20 @@ export default function CommandCenter() {
     }
   };
 
+  // Demo mode functions
+  const startDemo = () => {
+    setDemoMode(true);
+    setDemoStep(0);
+  };
 
+  const nextDemoStep = () => {
+    if (demoStep < 4) {
+      setDemoStep(demoStep + 1);
+    } else {
+      setDemoMode(false);
+      setDemoStep(0);
+    }
+  };
 
   // Section collapse functions
   const toggleSection = (sectionId: string) => {
@@ -2792,7 +2810,36 @@ export default function CommandCenter() {
 
   
 
-
+        {/* Demo Mode Overlay */}
+        {demoMode && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 flex items-center justify-center">
+            <div className="bg-white/10 backdrop-blur-md border border-blue-400/50 rounded-lg p-6 max-w-md mx-4">
+              <div className="text-center">
+                <div className="text-blue-400 mb-4">
+                  <Bot className="w-12 h-12 mx-auto mb-2" />
+                  <h3 className="text-xl font-bold text-white">Demo Mode Active</h3>
+                </div>
+                <p className="text-slate-300 mb-4">
+                  Step {demoStep + 1} of 5: {
+                    demoStep === 0 ? "Core Automation Overview" :
+                    demoStep === 1 ? "Voice Operations Demo" :
+                    demoStep === 2 ? "AI Intelligence Features" :
+                    demoStep === 3 ? "SmartSpend Integration" :
+                    "System Tools Walkthrough"
+                  }
+                </p>
+                <div className="flex space-x-3">
+                  <Button onClick={nextDemoStep} className="bg-blue-600 hover:bg-blue-700 text-white">
+                    {demoStep === 4 ? "Finish Demo" : "Next Step"}
+                  </Button>
+                  <Button variant="outline" onClick={() => setDemoMode(false)} className="border-blue-400 text-blue-400">
+                    Exit Demo
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Dashboard Title */}
         <div className="mb-8 text-center">
@@ -2800,6 +2847,16 @@ export default function CommandCenter() {
             <h1 className="text-4xl font-bold text-white mb-2">
               Command Center Dashboard
             </h1>
+            {!demoMode && (
+              <Button 
+                onClick={startDemo}
+                variant="outline" 
+                className="ml-4 border-blue-400 text-blue-400 hover:bg-blue-600/20"
+              >
+                <Bot className="w-4 h-4 mr-2" />
+                Start Demo
+              </Button>
+            )}
           </div>
           <p className="text-slate-300 text-lg">
             Your Complete AI Automation Control Panel {selectedTier !== 'All' && `(${selectedTier} Tier)`}
@@ -2863,7 +2920,16 @@ export default function CommandCenter() {
                 Export
                 <HelpCircle className="w-3 h-3 ml-1 text-green-300 opacity-70" />
               </Button>
-
+              <Button
+                onClick={handleResetDemo}
+                variant="outline"
+                className="border-purple-400 text-purple-400 hover:bg-purple-600/20 flex items-center"
+                title="Reset Demo - Clear all demo data and logs to start fresh presentation"
+              >
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Reset Demo
+                <HelpCircle className="w-3 h-3 ml-1 text-purple-300 opacity-70" />
+              </Button>
             </div>
           </div>
           {isListening && (
@@ -3340,6 +3406,7 @@ export default function CommandCenter() {
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-green-400" />
+                <img src={robotHeadImage} alt="Robot Head" className="w-6 h-6 mr-2" />
                 YoBot® Health Monitor
               </CardTitle>
             </CardHeader>
