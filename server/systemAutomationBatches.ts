@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { logIntegrationTest, logCommandCenterMetrics, logEventSync } from "./airtableIntegrations";
 
 // Complete automation system status with direct Airtable logging
 export async function runCompleteAutomationTest(req: Request, res: Response) {
@@ -24,7 +23,6 @@ export async function runCompleteAutomationTest(req: Request, res: Response) {
     // Test Integration Test Log with each batch
     for (const batch of batches) {
       try {
-        const logResult = await logIntegrationTest({
           testName: batch.name,
           status: batch.status,
           timestamp: new Date().toISOString(),
@@ -125,7 +123,6 @@ export async function createMilestoneTracker(req: Request, res: Response) {
     }
 
     // Log milestone creation to Integration Test Log
-    await logIntegrationTest({
       testName: "Milestone Tracker Creation",
       status: "SUCCESS",
       timestamp: new Date().toISOString(),
@@ -160,7 +157,6 @@ export async function pingUptime(req: Request, res: Response) {
     const systemHealth = 97; // Based on current metrics
 
     // Log uptime ping to Integration Test Log
-    await logIntegrationTest({
       testName: "System Uptime Ping",
       status: "SUCCESS",
       timestamp: new Date().toISOString(),
@@ -206,7 +202,6 @@ export async function flagHighValueDeal(req: Request, res: Response) {
 
     if (isHighValue) {
       // Log high-value deal escalation
-      await logIntegrationTest({
         testName: "High-Value Deal Escalation",
         status: "SUCCESS",
         timestamp: new Date().toISOString(),
@@ -248,7 +243,6 @@ export async function checkSystemEnvironment(req: Request, res: Response) {
     const environment = isProduction ? "production" : "development";
 
     // Log environment check
-    await logIntegrationTest({
       testName: "System Environment Check",
       status: "SUCCESS",
       timestamp: new Date().toISOString(),
@@ -302,7 +296,6 @@ export async function getAutomationSummary(req: Request, res: Response) {
     };
 
     // Log summary generation
-    await logIntegrationTest({
       testName: "Automation System Summary",
       status: "SUCCESS",
       timestamp: new Date().toISOString(),

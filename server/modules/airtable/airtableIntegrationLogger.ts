@@ -54,6 +54,5 @@ export async function logSystemHealth(component: string, status: string) {
   }, status === 'healthy' ? 'success' : 'warning', `Health check: ${component}`);
 }
 
-export async function logIntegrationTest(data: any) {
   return await logOperation('integration-test', data, 'success', 'Integration test logged');
 }

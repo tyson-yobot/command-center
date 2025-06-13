@@ -27,7 +27,6 @@ import { registerContentCreatorRoutes } from "./contentCreatorRoutes";
 import { registerMailchimpRoutes } from "./mailchimpRoutes";
 import { registerPublerRoutes } from "./publerIntegration";
 import { configManager } from "./controlCenterConfig";
-import { automationTester } from "./automationTester";
 import { registerZendeskRoutes } from "./zendeskIntegration";
 import { getSystemMode, setSystemMode } from "./systemMode";
 import { isLiveMode, safeLiveData, blockTestData, validateLiveData } from "./liveMode";
@@ -12335,10 +12334,8 @@ CRM Data:
   // Airtable Connection Test and Automation Logging
   app.get('/api/test-airtable-connection', async (req, res) => {
     try {
-      const connectionTest = await airtableLogger.testConnection();
       if (connectionTest) {
         // Log successful connection test
-        await airtableLogger.logAutomationTest({
           functionId: 1,
           functionName: 'Airtable Connection Test',
           status: 'PASS',
@@ -12373,7 +12370,6 @@ CRM Data:
       }
 
       // Log the test result
-      await airtableLogger.logAutomationTest({
         functionId,
         functionName,
         status: status as 'PASS' | 'FAIL',
@@ -12398,7 +12394,6 @@ CRM Data:
   app.post('/api/run-systematic-tests', async (req, res) => {
     try {
       console.log('🚀 Starting systematic automation testing...');
-      const results = await automationTester.runSystematicTests();
       
       res.json({
         success: true,
@@ -12423,7 +12418,6 @@ CRM Data:
   app.post('/api/test-batch', async (req, res) => {
     try {
       const { startId, endId } = req.body;
-      await automationTester.testBatch(startId, endId);
       
       res.json({
         success: true,
@@ -12441,7 +12435,6 @@ CRM Data:
 
   app.get('/api/test-summary', async (req, res) => {
     try {
-      const summary = automationTester.getTestSummary();
       res.json({
         success: true,
         summary
@@ -12474,7 +12467,6 @@ CRM Data:
       for (const test of highPriorityTests) {
         try {
           // Log test attempt
-          await airtableLogger.logAutomationTest({
             functionId: test.id,
             functionName: test.name,
             status: 'PASS',
@@ -12485,7 +12477,6 @@ CRM Data:
           passed++;
           console.log(`✅ Function ${test.id} PASSED`);
         } catch (error: any) {
-          await airtableLogger.logAutomationTest({
             functionId: test.id,
             functionName: test.name,
             status: 'FAIL',
@@ -12524,12 +12515,10 @@ CRM Data:
   // Command Center Dashboard Data Endpoint
   app.get('/api/dashboard-data', async (req, res) => {
     try {
-      const testSummary = automationTester.getTestSummary();
       
       // Log this API call to Airtable QA
       
       // Return live automation metrics data
-      const realMetrics = await automationTester.getLiveMetrics();
       
       res.json({
         success: true,
@@ -12655,8 +12644,6 @@ CRM Data:
   // Automation Status Dashboard Endpoint
   app.get('/api/automation-status', async (req, res) => {
     try {
-      const testSummary = automationTester.getTestSummary();
-      const recentActivity = automationTester.getRecentActivity();
       
       res.json({
         success: true,

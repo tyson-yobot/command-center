@@ -1,5 +1,4 @@
 import type { Express } from "express";
-import { logIntegrationTest } from "./airtableIntegrations";
 
 // 141 - Auto-Generate Bot Training Prompt
 function generateTrainingPrompt(qaList: any[]): string {
@@ -89,7 +88,6 @@ export function registerBatch15Routes(app: Express): void {
           { q: "What are your hours?", a: "We're open 9-5 Monday-Friday" },
           { q: "How do I reset my password?", a: "Click the forgot password link" }
         ]);
-        await logIntegrationTest({
           testName: "Function 141: Bot Training Prompt Generator",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -112,7 +110,6 @@ export function registerBatch15Routes(app: Express): void {
       
       if (testMode) {
         const event = await logColdStartEvent("Test Source");
-        await logIntegrationTest({
           testName: "Function 142: Cold Start Logger",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -135,7 +132,6 @@ export function registerBatch15Routes(app: Express): void {
       
       if (testMode) {
         const markdown = convertToMarkdown("**Important:** This is a test note\nWith multiple lines");
-        await logIntegrationTest({
           testName: "Function 143: Markdown Converter",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -162,7 +158,6 @@ export function registerBatch15Routes(app: Express): void {
           amount: 1500,
           date: new Date().toISOString()
         });
-        await logIntegrationTest({
           testName: "Function 144: QBO Invoice Summary",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -185,7 +180,6 @@ export function registerBatch15Routes(app: Express): void {
       
       if (testMode) {
         const role = assignRoleByDomain("test@lawfirm.com");
-        await logIntegrationTest({
           testName: "Function 145: Role Assignment by Domain",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -211,7 +205,6 @@ export function registerBatch15Routes(app: Express): void {
           [{ email: "test1@example.com" }, { email: "test2@example.com" }],
           [{ email: "test1@example.com" }]
         );
-        await logIntegrationTest({
           testName: "Function 146: Customer Reconciliation",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -234,7 +227,6 @@ export function registerBatch15Routes(app: Express): void {
       
       if (testMode) {
         const results = [200, 200, 404]; // Simulate mixed results
-        await logIntegrationTest({
           testName: "Function 147: Full API Health Check",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -261,7 +253,6 @@ export function registerBatch15Routes(app: Express): void {
           conversion: 25,
           revenue: 50000
         });
-        await logIntegrationTest({
           testName: "Function 148: ROI Summary Generator",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -284,7 +275,6 @@ export function registerBatch15Routes(app: Express): void {
       
       if (testMode) {
         const override = await logManualOverride("Test User", "Testing override functionality");
-        await logIntegrationTest({
           testName: "Function 149: Manual Override Logger",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -307,7 +297,6 @@ export function registerBatch15Routes(app: Express): void {
       
       if (testMode) {
         const formatted = formatSlackMsg("Test message for Slack", "success");
-        await logIntegrationTest({
           testName: "Function 150: Slack Message Formatter",
           status: "PASS",
           timestamp: new Date().toISOString(),

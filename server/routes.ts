@@ -27,7 +27,6 @@ import { registerContentCreatorRoutes } from "./contentCreatorRoutes";
 import { registerMailchimpRoutes } from "./mailchimpRoutes";
 import { registerPublerRoutes } from "./publerIntegration";
 import { configManager } from "./controlCenterConfig";
-import { automationTester } from "./automationTester";
 import { registerZendeskRoutes } from "./zendeskIntegration";
 import { getSystemMode, setSystemMode } from "./systemMode";
 import { isLiveMode, safeLiveData, blockTestData, validateLiveData } from "./liveMode";

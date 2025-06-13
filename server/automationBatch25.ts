@@ -4,11 +4,8 @@
  */
 
 import type { Express } from "express";
-import { logIntegrationTest } from "./airtableIntegrations";
 
 // Helper functions for logging
-async function logToAirtable(tableName: string, data: Record<string, any>) {
-  return await logIntegrationTest({
     integrationName: tableName,
     status: 'PASS',
     notes: JSON.stringify(data),
@@ -49,7 +46,6 @@ export function registerBatch25(app: Express) {
         ]
       };
 
-      await logToAirtable('Response Generation Log', {
         'Primary Intent': responseGeneration.contextAnalysis.primaryIntent,
         'Emotional Tone': responseGeneration.contextAnalysis.emotionalTone,
         'Confidence Score': `${(responseGeneration.generatedResponse.confidenceScore * 100).toFixed(1)}%`,
@@ -95,7 +91,6 @@ export function registerBatch25(app: Express) {
         }
       };
 
-      await logToAirtable('Sentiment Adaptation Log', {
         'Detected Sentiment': sentimentAdaptation.detectedSentiment.primary,
         'Sentiment Confidence': `${(sentimentAdaptation.detectedSentiment.confidence * 100).toFixed(1)}%`,
         'Adaptations Applied': sentimentAdaptation.adaptations.length,
@@ -140,7 +135,6 @@ export function registerBatch25(app: Express) {
         ]
       };
 
-      await logToAirtable('Conversation Flow Log', {
         'Current Step': flowManagement.currentFlowState.step,
         'Flow Progress': `${(flowManagement.currentFlowState.progress * 100).toFixed(1)}%`,
         'Estimated Completion Steps': flowManagement.flowOptimization.estimatedCompletionSteps,
@@ -186,7 +180,6 @@ export function registerBatch25(app: Express) {
         ]
       };
 
-      await logToAirtable('Channel Coordination Log', {
         'Active Channels': channelCoordination.activeChannels.length,
         'Primary Channel': channelCoordination.coordination.primaryChannel,
         'Message Consistency': `${(channelCoordination.coordination.messageConsistency * 100).toFixed(1)}%`,
@@ -240,7 +233,6 @@ export function registerBatch25(app: Express) {
         qualityAssessment.improvements.push('Add more comprehensive information');
       }
 
-      await logToAirtable('Response Quality Log', {
         'Overall Score': `${(qualityAssessment.overallScore * 100).toFixed(1)}%`,
         'Clarity Score': `${(qualityAssessment.metrics.clarity * 100).toFixed(1)}%`,
         'Relevance Score': `${(qualityAssessment.metrics.relevance * 100).toFixed(1)}%`,
@@ -286,7 +278,6 @@ export function registerBatch25(app: Express) {
         }
       };
 
-      await logToAirtable('Personalization Log', {
         'User Segment': personalization.userSegment.type,
         'Segment Confidence': `${(personalization.userSegment.confidence * 100).toFixed(1)}%`,
         'Personalizations Applied': personalization.personalizations.length,
@@ -335,7 +326,6 @@ export function registerBatch25(app: Express) {
 
       const shouldEscalate = escalationAnalysis.escalationScore > 0.7;
 
-      await logToAirtable('Escalation Intelligence Log', {
         'Escalation Score': `${(escalationAnalysis.escalationScore * 100).toFixed(1)}%`,
         'Recommendation': escalationAnalysis.recommendation,
         'Should Escalate': shouldEscalate ? 'Yes' : 'No',
@@ -388,7 +378,6 @@ export function registerBatch25(app: Express) {
         templateOptimization.templates.reduce((sum, t) => sum + t.effectiveness, 0) / 
         templateOptimization.templates.length;
 
-      await logToAirtable('Template Optimization Log', {
         'Total Templates': templateOptimization.metrics.totalTemplates,
         'Average Effectiveness': `${(templateOptimization.metrics.avgEffectiveness * 100).toFixed(1)}%`,
         'Total Usage': templateOptimization.metrics.totalUsage,
@@ -434,7 +423,6 @@ export function registerBatch25(app: Express) {
         ]
       };
 
-      await logToAirtable('Conversation Analytics Log', {
         'Total Conversations': analytics.overviewMetrics.totalConversations,
         'Resolution Rate': `${(analytics.overviewMetrics.resolutionRate * 100).toFixed(1)}%`,
         'Satisfaction Score': `${(analytics.overviewMetrics.userSatisfactionScore * 100).toFixed(1)}%`,
@@ -485,7 +473,6 @@ export function registerBatch25(app: Express) {
         }
       };
 
-      await logToAirtable('Follow-up Scheduling Log', {
         'Recommended Timing': followupScheduling.recommendation.timing,
         'Recommended Channel': followupScheduling.recommendation.channel,
         'Scheduled Actions': followupScheduling.schedule.length,

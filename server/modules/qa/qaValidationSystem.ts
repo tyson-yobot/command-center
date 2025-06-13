@@ -152,7 +152,6 @@ class QAValidationSystem {
     this.testResults.push(testResult);
     
     // Log to Airtable QA if credentials available
-    await this.logToAirtableQA(testResult);
     
     return testResult;
   }
@@ -174,7 +173,6 @@ class QAValidationSystem {
     return results;
   }
 
-  async logToAirtableQA(testResult: QATestResult): Promise<void> {
     if (!process.env.AIRTABLE_API_KEY) return;
     
     try {

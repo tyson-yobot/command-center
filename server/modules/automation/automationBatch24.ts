@@ -4,11 +4,8 @@
  */
 
 import type { Express } from "express";
-import { logIntegrationTest } from "./airtableIntegrations";
 
 // Helper functions for logging
-async function logToAirtable(tableName: string, data: Record<string, any>) {
-  return await logIntegrationTest({
     integrationName: tableName,
     status: 'PASS',
     notes: JSON.stringify(data),
@@ -42,7 +39,6 @@ export function registerBatch24(app: Express) {
         }
       };
 
-      await logToAirtable('Query Optimization Log', {
         'Query Type': 'User Status Lookup',
         'Performance Improvement': optimization.estimatedImprovement,
         'Execution Time Before': `${optimization.executionTimeBefore}ms`,
@@ -84,7 +80,6 @@ export function registerBatch24(app: Express) {
 
       const optimizationActions = cacheMetrics.recommendations.length;
 
-      await logToAirtable('Cache Intelligence Log', {
         'Hit Rate': `${(cacheMetrics.hitRate * 100).toFixed(1)}%`,
         'Miss Rate': `${(cacheMetrics.missRate * 100).toFixed(1)}%`,
         'Average Response Time': `${cacheMetrics.avgResponseTime}ms`,
@@ -131,7 +126,6 @@ export function registerBatch24(app: Express) {
 
       const totalOptimizations = poolOptimization.recommendations.length;
 
-      await logToAirtable('Resource Pool Log', {
         'Pool Types Analyzed': Object.keys(poolOptimization.connectionPools).length + Object.keys(poolOptimization.threadPools).length,
         'Optimization Recommendations': totalOptimizations,
         'Database Pool Utilization': `${(poolOptimization.connectionPools.database.utilization * 100).toFixed(1)}%`,
@@ -182,7 +176,6 @@ export function registerBatch24(app: Express) {
         }
       };
 
-      await logToAirtable('Algorithm Tuning Log', {
         'Algorithm Type': tuningResults.algorithm,
         'Speed Improvement': tuningResults.performanceGains.speed,
         'Memory Reduction': tuningResults.performanceGains.memory,
@@ -230,7 +223,6 @@ export function registerBatch24(app: Express) {
       const avgLoadBefore = distributionStrategy.nodes.reduce((sum, n) => sum + n.load, 0) / distributionStrategy.nodes.length;
       const avgLoadAfter = distributionStrategy.projectedBalance.reduce((sum, n) => sum + n.newLoad, 0) / distributionStrategy.projectedBalance.length;
 
-      await logToAirtable('Load Distribution Log', {
         'Nodes Managed': distributionStrategy.nodes.length,
         'Rebalancing Actions': distributionStrategy.rebalancingActions.length,
         'Average Load Before': `${(avgLoadBefore * 100).toFixed(1)}%`,
@@ -278,7 +270,6 @@ export function registerBatch24(app: Express) {
         }
       };
 
-      await logToAirtable('Memory Optimization Log', {
         'Memory Saved': memoryOptimization.savings.totalMemory,
         'Percentage Reduction': memoryOptimization.savings.percentageReduction,
         'Cost Savings': memoryOptimization.savings.estimatedCostSavings,
@@ -324,7 +315,6 @@ export function registerBatch24(app: Express) {
         }
       };
 
-      await logToAirtable('API Optimization Log', {
         'Endpoints Optimized': apiOptimization.overallMetrics.totalEndpointsOptimized,
         'Average Improvement': `${apiOptimization.overallMetrics.avgImprovementPercentage}%`,
         'Bandwidth Savings': apiOptimization.overallMetrics.estimatedBandwidthSavings,
@@ -368,7 +358,6 @@ export function registerBatch24(app: Express) {
         }
       };
 
-      await logToAirtable('Database Optimization Log', {
         'Connection Wait Time Reduction': dbOptimization.connectionPool.improvement.waitTime,
         'Resource Usage Reduction': dbOptimization.connectionPool.improvement.resourceUsage,
         'Query Execution Improvement': dbOptimization.performanceGains.queryExecutionTime,
@@ -419,7 +408,6 @@ export function registerBatch24(app: Express) {
         .reduce((sum, r) => sum + parseFloat(r.improvement.replace('%', '')), 0) / 
         cdnOptimization.globalPerformance.regions.length;
 
-      await logToAirtable('CDN Optimization Log', {
         'Regions Optimized': cdnOptimization.globalPerformance.regions.length,
         'Average Latency Reduction': cdnOptimization.globalPerformance.overallMetrics.avgLatencyReduction,
         'Hit Rate Improvement': cdnOptimization.globalPerformance.overallMetrics.avgHitRateImprovement,
@@ -478,7 +466,6 @@ export function registerBatch24(app: Express) {
       const highSeverityBottlenecks = bottleneckAnalysis.identifiedBottlenecks
         .filter(b => b.severity === 'HIGH').length;
 
-      await logToAirtable('Bottleneck Analysis Log', {
         'Total Bottlenecks': bottleneckAnalysis.identifiedBottlenecks.length,
         'High Severity Issues': highSeverityBottlenecks,
         'Estimated Total Improvement': bottleneckAnalysis.resolutionPlan.estimatedTotalImprovement,
