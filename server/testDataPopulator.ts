@@ -2,6 +2,8 @@ import type { Express } from "express";
 import { getSystemMode } from "./systemMode";
 import { isLiveMode, safeLiveData, blockTestData } from './liveMode';
 import LiveDataWiper from './liveDataWiper';
+import { airtableLogger } from './airtableLogger';
+import HardcodeDetector from './hardcodeDetector';
 
 // Realistic test data for demo - believable business metrics
 const testModeMetrics = {
@@ -273,20 +275,31 @@ export function registerTestDataRoutes(app: Express) {
     });
   });
 
-  // Dashboard metrics with aggressive data wiper
-  app.get('/api/dashboard-metrics', (req, res) => {
+  // Dashboard metrics with strict compliance
+  app.get('/api/dashboard-metrics', async (req, res) => {
     const systemMode = getSystemMode();
     
     if (systemMode === 'live') {
-      // LIVE MODE: Use aggressive data wiper
-      const emptyData = LiveDataWiper.getEmptyLiveData('dashboard-metrics');
-      LiveDataWiper.logLiveDataClear('/api/dashboard-metrics');
+      // LIVE MODE: Zero hardcoded data tolerance
+      const emptyData = HardcodeDetector.cleanLiveData({});
+      
+      // Log API access attempt
+      await airtableLogger.logTestExecution(
+        'dashboard-metrics-api',
+        true,
+        'LIVE mode API access - no hardcoded data served',
+        'System',
+        false,
+        true,
+        false,
+        'API Endpoint'
+      );
       
       res.json({
         success: true,
         data: emptyData,
         mode: 'live',
-        message: 'LIVE mode - all test data aggressively wiped'
+        message: 'LIVE mode - authentic data only'
       });
     } else {
       // TEST MODE: Allow test data
@@ -299,20 +312,31 @@ export function registerTestDataRoutes(app: Express) {
     }
   });
 
-  // Automation performance with aggressive data wiper
-  app.get('/api/automation-performance', (req, res) => {
+  // Automation performance with strict compliance
+  app.get('/api/automation-performance', async (req, res) => {
     const systemMode = getSystemMode();
     
     if (systemMode === 'live') {
-      // LIVE MODE: Use aggressive data wiper
-      const emptyData = LiveDataWiper.getEmptyLiveData('automation-performance');
-      LiveDataWiper.logLiveDataClear('/api/automation-performance');
+      // LIVE MODE: Zero hardcoded data tolerance
+      const emptyData = HardcodeDetector.cleanLiveData({});
+      
+      // Log API access attempt
+      await airtableLogger.logTestExecution(
+        'automation-performance-api',
+        true,
+        'LIVE mode API access - no hardcoded data served',
+        'System',
+        false,
+        true,
+        false,
+        'API Endpoint'
+      );
       
       res.json({
         success: true,
         data: emptyData,
         mode: 'live',
-        message: 'LIVE mode - all test data aggressively wiped'
+        message: 'LIVE mode - authentic data only'
       });
     } else {
       // TEST MODE: Allow test data
@@ -325,23 +349,32 @@ export function registerTestDataRoutes(app: Express) {
     }
   });
 
-  // Live activity with aggressive data wiper
-  app.get('/api/live-activity', (req, res) => {
+  // Live activity with strict compliance
+  app.get('/api/live-activity', async (req, res) => {
     const systemMode = getSystemMode();
     
     if (systemMode === 'live') {
-      // LIVE MODE: Use aggressive data wiper
-      const emptyData = LiveDataWiper.getEmptyLiveData('live-activity');
-      LiveDataWiper.logLiveDataClear('/api/live-activity');
+      // LIVE MODE: Zero hardcoded data tolerance
+      const emptyData = HardcodeDetector.cleanLiveData({});
+      
+      await airtableLogger.logTestExecution(
+        'live-activity-api',
+        true,
+        'LIVE mode API access - no hardcoded data served',
+        'System',
+        false,
+        true,
+        false,
+        'API Endpoint'
+      );
       
       res.json({
         success: true,
         data: emptyData,
         mode: 'live',
-        message: 'LIVE mode - all test data aggressively wiped'
+        message: 'LIVE mode - authentic data only'
       });
     } else {
-      // TEST MODE: Allow test data
       res.json({
         success: true,
         data: testModeMetrics.liveActivity,
