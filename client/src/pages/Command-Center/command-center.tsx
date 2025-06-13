@@ -5185,8 +5185,8 @@ export default function CommandCenter() {
                             serviceStates.recording.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
                             'text-yellow-400'
                           }`}>
-                            {serviceStates.recording.status === 'ACTIVE' ? '🟢 ACTIVE' :
-                             serviceStates.recording.status === 'RESTARTING' ? '🔄 RESTARTING' : (currentSystemMode === 'test' ? 'IDLE' : '')}
+                            {currentSystemMode === 'test' ? (serviceStates.recording.status === 'ACTIVE' ? '🟢 ACTIVE' :
+                             serviceStates.recording.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
                           </span>
                         </div>
                         <div className="flex space-x-1">
@@ -5234,8 +5234,8 @@ export default function CommandCenter() {
                             serviceStates.analytics.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
                             'text-yellow-400'
                           }`}>
-                            {serviceStates.analytics.status === 'ACTIVE' ? '🟢 ACTIVE' :
-                             serviceStates.analytics.status === 'RESTARTING' ? '🔄 RESTARTING' : (currentSystemMode === 'test' ? 'IDLE' : '')}
+                            {currentSystemMode === 'test' ? (serviceStates.analytics.status === 'ACTIVE' ? '🟢 ACTIVE' :
+                             serviceStates.analytics.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
                           </span>
                         </div>
                         <div className="flex space-x-1">
