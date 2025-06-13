@@ -2973,7 +2973,7 @@ export default function CommandCenter() {
                       }
                     </Button>
                   </div>
-                  <Badge className="bg-green-600 text-white">🟢 Active</Badge>
+                  <Badge className="bg-green-600 text-white">{currentSystemMode === 'test' ? '🟢 Active' : ''}</Badge>
                 </CardTitle>
               </CardHeader>
               {!collapsedSections['core-automation'] && (
@@ -3060,7 +3060,7 @@ export default function CommandCenter() {
                       }
                     </Button>
                   </div>
-                  <Badge className="bg-green-600 text-white">🟢 Active</Badge>
+                  <Badge className="bg-green-600 text-white">{currentSystemMode === 'test' ? '🟢 Active' : ''}</Badge>
                 </CardTitle>
               </CardHeader>
               {!collapsedSections['voice-communication'] && (
@@ -3891,15 +3891,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-blue-400 shadow-lg shadow-blue-400/20">
                   <span className="text-slate-300">"Show me today's leads"</span>
-                  <Badge variant="outline" className="text-green-400 border-green-400">Active</Badge>
+                  <Badge variant="outline" className="text-green-400 border-green-400">{currentSystemMode === 'test' ? 'Active' : ''}</Badge>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-blue-400 shadow-lg shadow-blue-400/20">
                   <span className="text-slate-300">"Call my top prospect"</span>
-                  <Badge variant="outline" className="text-green-400 border-green-400">Active</Badge>
+                  <Badge variant="outline" className="text-green-400 border-green-400">{currentSystemMode === 'test' ? 'Active' : ''}</Badge>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-blue-400 shadow-lg shadow-blue-400/20">
                   <span className="text-slate-300">"Schedule follow-up"</span>
-                  <Badge variant="outline" className="text-green-400 border-green-400">Active</Badge>
+                  <Badge variant="outline" className="text-green-400 border-green-400">{currentSystemMode === 'test' ? 'Active' : ''}</Badge>
                 </div>
                 {isListening && (
                   <div className="mt-4 p-3 bg-blue-500/20 border border-blue-400 rounded-lg">
@@ -4462,7 +4462,7 @@ export default function CommandCenter() {
               <CardTitle className="text-white flex items-center text-2xl font-bold">
                 <Brain className="w-7 h-7 mr-3 text-purple-400" />
                 🧠 RAG Knowledge Base
-                <Badge className="ml-3 bg-green-600 text-white">ACTIVE</Badge>
+                <Badge className="ml-3 bg-green-600 text-white">{currentSystemMode === 'test' ? 'ACTIVE' : ''}</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8">
@@ -5136,8 +5136,8 @@ export default function CommandCenter() {
                             serviceStates.monitoring.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
                             'text-yellow-400'
                           }`}>
-                            {serviceStates.monitoring.status === 'ACTIVE' ? '🟢 ACTIVE' :
-                             serviceStates.monitoring.status === 'RESTARTING' ? '🔄 RESTARTING' : (currentSystemMode === 'test' ? 'IDLE' : '')}
+                            {currentSystemMode === 'test' ? (serviceStates.monitoring.status === 'ACTIVE' ? '🟢 ACTIVE' :
+                             serviceStates.monitoring.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
                           </span>
                         </div>
                         <div className="flex space-x-1">
