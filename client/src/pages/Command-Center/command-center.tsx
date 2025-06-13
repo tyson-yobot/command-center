@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 // Live mode only - no test mode context needed
 import { 
   TrendingUp, 
@@ -2631,7 +2632,7 @@ export default function CommandCenter() {
   };
 
   return (
-    <>
+    <TooltipProvider>
       {/* Header Bar */}
       <HeaderBar 
         currentSystemMode={currentSystemMode}
@@ -2705,18 +2706,38 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 gap-3">
                   <Button
                     onClick={handleCreateBooking}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
                   >
-                    <span className="text-xl mr-3">📅</span>
-                    <span>Create Booking</span>
+                    <div className="flex items-center">
+                      <span className="text-xl mr-3">📅</span>
+                      <span>Create Booking</span>
+                    </div>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Opens external form to schedule client appointments and consultations</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </Button>
                   
                   <Button
                     onClick={handleCreateSupportTicket}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
                   >
-                    <span className="text-xl mr-3">🎧</span>
-                    <span>Create Support Ticket</span>
+                    <div className="flex items-center">
+                      <span className="text-xl mr-3">🎧</span>
+                      <span>Create Support Ticket</span>
+                    </div>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Creates internal support ticket for customer service and technical issues</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </Button>
                   
                   <Button
