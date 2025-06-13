@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749714890077.png';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import HeaderBar from '@/components/HeaderBar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -2629,7 +2630,15 @@ export default function CommandCenter() {
 
   return (
     <>
-    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-8 p-8">
+      {/* Header Bar */}
+      <HeaderBar 
+        currentSystemMode={currentSystemMode}
+        userName="Daniel Sharpe"
+        clientName="AMT66"
+        onModeToggle={toggleSystemMode}
+      />
+      
+      <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-8 p-8">
 
       
       <div className="w-full">
@@ -2669,86 +2678,16 @@ export default function CommandCenter() {
 
   
 
-        {/* Header */}
-        <div className="mb-8">
-          <div className="text-center mb-6">
-            <div className="header-logo-wrapper flex items-baseline justify-center mb-3">
-              <img 
-                src={yobotLogo} 
-                alt="YoBot Logo" 
-                className="logo-icon"
-              />
-              <h1 className="header-title text-6xl font-bold text-white leading-[60px]">
-                YoBot® Command Center
-              </h1>
-            </div>
-            <p className="text-slate-300 text-xl">Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}</p>
-            
+        {/* Dashboard Title */}
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold text-white mb-2">
+            Command Center Dashboard
+          </h1>
+          <p className="text-slate-300 text-lg">
+            Your Complete AI Automation Control Panel {selectedTier !== 'All' && `(${selectedTier} Tier)`}
+          </p>
+        </div>
 
-            
-            {/* System Mode Toggle - Controls Test/Live Data Isolation */}
-            <div className="flex justify-center mt-6">
-              <div className="flex items-center space-x-4 bg-slate-800/50 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
-                <label className="text-white font-medium">System Mode:</label>
-                <div className="flex items-center space-x-3">
-                  <span className={`text-sm ${currentSystemMode === 'test' ? 'text-yellow-400' : 'text-gray-400'}`}>
-                    Test
-                  </span>
-                  <Switch
-                    checked={currentSystemMode === 'live'}
-                    onCheckedChange={toggleSystemMode}
-                    className="data-[state=checked]:bg-green-500"
-                  />
-                  <span className={`text-sm ${currentSystemMode === 'live' ? 'text-green-400' : 'text-gray-400'}`}>
-                    Live
-                  </span>
-                </div>
-                <Badge variant={currentSystemMode === 'test' ? "secondary" : "default"} className="px-3 py-1">
-                  {currentSystemMode === 'test' ? "Test Mode - Safe Operations" : "Live Mode - Production Data"}
-                </Badge>
-              </div>
-            </div>
-            
-            {/* Small mode indicator text */}
-            <div className="text-center mt-2 mb-4">
-              <p className="text-xs text-slate-400">
-                {currentSystemMode === 'test' ? 
-                  'Demo data active - comprehensive metrics for presentations' : 
-                  'Production mode - only authentic data sources displayed'
-                }
-              </p>
-            </div>
-
-          </div>
-          <div className="flex items-center justify-end">
-            <div className="flex items-center space-x-4">
-              {/* Voice Command Input */}
-              <div className="flex items-center space-x-2">
-                <input
-                  type="text"
-                  value={voiceCommand}
-                  onChange={(e) => setVoiceCommand(e.target.value)}
-                  placeholder="Enter voice command..."
-                  className="px-3 py-2 bg-slate-700 text-white rounded border border-slate-500 w-48"
-                  onKeyPress={(e) => e.key === 'Enter' && sendVoiceCommand()}
-                />
-                <Button
-                  onClick={sendVoiceCommand}
-                  disabled={!voiceCommand.trim()}
-                  className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
-                  size="sm"
-                >
-                  <Send className="w-4 h-4 mr-1" />
-                  Send
-                </Button>
-              </div>
-
-              <Button
-                onClick={handleVoiceToggle}
-                className={`${isListening ? 'bg-red-600 hover:bg-red-700 shadow-lg shadow-red-500/25' : 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/25'} text-white border-2 ${isListening ? 'border-red-300' : 'border-blue-300'}`}
-              >
-                {isListening ? <MicOff className="w-5 h-5 mr-2 text-white" /> : <Mic className="w-5 h-5 mr-2 text-white" />}
-                {isListening ? 'Listening...' : 'Voice Input'}
               </Button>
               
               {/* Enhanced Controls */}
