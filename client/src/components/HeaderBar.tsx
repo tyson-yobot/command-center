@@ -6,7 +6,31 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { User, Settings, LogOut, ChevronDown, LayoutDashboard, MessageSquare, BookOpen, Mic, FileText, Users, FileDown, Bot } from 'lucide-react';
-import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749784150776.png';
+// Robot head SVG component
+const RobotHead = () => (
+  <svg width="48" height="48" viewBox="0 0 100 100" className="logo-icon">
+    <defs>
+      <linearGradient id="robotGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#3b82f6" />
+        <stop offset="100%" stopColor="#1d4ed8" />
+      </linearGradient>
+    </defs>
+    {/* Antenna */}
+    <circle cx="50" cy="15" r="4" fill="#1f2937" />
+    <rect x="48" y="15" width="4" height="20" fill="#1f2937" />
+    
+    {/* Main robot head body */}
+    <rect x="20" y="35" width="60" height="45" rx="8" ry="8" fill="#1f2937" stroke="#374151" strokeWidth="2" />
+    <rect x="25" y="40" width="50" height="35" rx="5" ry="5" fill="url(#robotGradient)" />
+    
+    {/* Eyes */}
+    <circle cx="35" cy="55" r="5" fill="#000" />
+    <circle cx="65" cy="55" r="5" fill="#000" />
+    
+    {/* Smile */}
+    <path d="M 35 70 Q 50 80 65 70" stroke="#000" strokeWidth="3" fill="none" strokeLinecap="round" />
+  </svg>
+);
 
 interface HeaderBarProps {
   currentSystemMode?: string;
@@ -29,15 +53,7 @@ export default function HeaderBar({
         {/* Logo & Title */}
         <div className="flex items-center gap-6">
           <div className="header-logo-wrapper">
-            <img 
-              src={robotHeadImage} 
-              alt="YoBot Robot Head" 
-              className="logo-icon"
-              onError={(e) => {
-                console.log('Image failed to load, using fallback');
-                e.currentTarget.style.display = 'none';
-              }}
-            />
+            <RobotHead />
             <div className="header-title text-white">
               YoBot<sup className="text-xs">®</sup> Command Center
             </div>
