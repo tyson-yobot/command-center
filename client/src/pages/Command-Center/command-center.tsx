@@ -97,6 +97,29 @@ export default function CommandCenter() {
   const [guidedTourActive, setGuidedTourActive] = useState(false);
   const [tourStep, setTourStep] = useState(0);
 
+  // Demo mode functions
+  const toggleDemoMode = () => {
+    setDemoMode(!demoMode);
+    if (!demoMode) {
+      setShowHelpTooltips(true);
+    }
+  };
+
+  const startGuidedTour = () => {
+    setGuidedTourActive(true);
+    setTourStep(0);
+    setShowHelpTooltips(true);
+  };
+
+  const nextTourStep = () => {
+    if (tourStep < 4) {
+      setTourStep(tourStep + 1);
+    } else {
+      setGuidedTourActive(false);
+      setTourStep(0);
+    }
+  };
+
   // Tab navigation state
   const [activeTab, setActiveTab] = useState('automation-ops');
   
