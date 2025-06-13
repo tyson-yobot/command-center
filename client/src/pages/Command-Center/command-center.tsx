@@ -3235,7 +3235,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {currentSystemMode === 'test' ? '8' : (metrics?.activeCalls || '--')}
+                {currentSystemMode === 'test' ? '8' : '--'}
               </div>
               <p className="text-xs text-green-400">
                 {metrics?.activeCalls ? 'Live voice sessions' : 'No active sessions'}
@@ -3250,7 +3250,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {currentSystemMode === 'test' ? '47' : (metrics?.botProcessing || '--')}
+                {currentSystemMode === 'test' ? '47' : '--'}
               </div>
               <p className="text-xs text-blue-400">
                 {currentSystemMode === 'test' ? 'AI operations active' : (metrics?.botProcessing ? 'Live AI processing' : 'No AI processing')}
@@ -3526,7 +3526,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Churn Risk Flags:</span>
-                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '0' : (automationPerformance?.data?.criticalErrors || 0)} flagged</span>
+                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '0' : '--'} flagged</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Last Login:</span>
@@ -3535,10 +3535,10 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Bot Utilization Rate:</span>
-                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '93.6' : (automationPerformance?.data?.passRate || '--')}%</span>
+                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '93.6' : '--'}%</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300" style={{width: `${currentSystemMode === 'test' ? '93.6' : (automationPerformance?.data?.passRate || 0)}%`}}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300" style={{width: `${currentSystemMode === 'test' ? '93.6' : '0'}%`}}></div>
                   </div>
                 </div>
               </div>
@@ -3559,27 +3559,27 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">Avg Bot Response:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.avgResponseTime && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1.2s' : (metrics?.data?.avgResponseTime ? metrics.data.avgResponseTime + 'ms' : '--')}</span>
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1.2s' : '--'}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Success Rate:</span>
                   <div className="flex items-center space-x-1">
                     {automationPerformance?.data?.passRate && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '94.2%' : (automationPerformance?.data?.passRate ? automationPerformance.data.passRate + '%' : '--')}</span>
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '94.2%' : '--'}</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Error Trend (7d):</span>
-                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '54' : (automationPerformance?.data?.failedTests || 0)} errors</span>
+                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '54' : '--'} errors</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">API Usage:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1,068' : (metrics?.data?.dailyActiveUsers ? (metrics.data.dailyActiveUsers * 12).toFixed(0) : '--')}/day</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1,068' : '--'}/day</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Bot Processing Load:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '94.2' : (metrics?.data?.automationEfficiency ? metrics.data.automationEfficiency.toFixed(1) : '--')}%</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '94.2' : '--'}%</span>
                 </div>
               </div>
             </CardContent>
