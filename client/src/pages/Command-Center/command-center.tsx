@@ -2688,46 +2688,6 @@ export default function CommandCenter() {
           </p>
         </div>
 
-              </Button>
-              
-              {/* Enhanced Controls */}
-              <div className="flex items-center space-x-2">
-                <Button 
-                  onClick={handleDownloadPDF}
-                  size="sm"
-                  className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
-                >
-                  <FileText className="w-4 h-4 mr-1" />
-                  📂 View Reports
-                </Button>
-                <Button 
-                  onClick={() => window.location.href = '/admin'}
-                  size="sm"
-                  className="bg-purple-600 hover:bg-purple-700 text-white border border-purple-500"
-                >
-                  <Settings className="w-4 h-4 mr-1" />
-                  Admin
-                </Button>
-              </div>
-              
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-3 h-3 rounded-full ${currentSystemMode === 'live' ? 'bg-green-400 status-active' : 'bg-amber-400'}`}></div>
-                  <span className="text-white text-sm">
-                    System Status: {currentSystemMode === 'live' ? 'Live Production' : 'Test Mode'}
-                  </span>
-                </div>
-                <div className="text-right border-l border-slate-600 pl-4">
-                  <div className="text-xs text-slate-400">Last Live Update:</div>
-                  <div className="text-white font-mono text-xs">
-                    {new Date().toLocaleTimeString()}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Live Command Center Buttons */}
         <div className="mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
