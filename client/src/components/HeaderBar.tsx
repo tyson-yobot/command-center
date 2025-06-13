@@ -50,9 +50,7 @@ export default function HeaderBar({
 
         {/* Actions */}
         <div className="flex items-center gap-4">
-          <Button variant="outline" className="text-white border-green-600 hover:bg-green-600">Start Demo</Button>
           <Button variant="outline" className="text-white border-white hover:bg-white hover:text-black"><FileDown size={16} className="mr-1"/> Export</Button>
-          <Button variant="outline" className="text-white border-yellow-400 hover:bg-yellow-400 hover:text-black">Reset Demo</Button>
 
           {/* Profile & Settings */}
           <DropdownMenu>

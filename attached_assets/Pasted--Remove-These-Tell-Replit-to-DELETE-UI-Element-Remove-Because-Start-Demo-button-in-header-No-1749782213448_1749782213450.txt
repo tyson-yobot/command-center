@@ -1,0 +1,84 @@
+ Remove These (Tell Replit to DELETE):
+UI Element	Remove Because…
+Start Demo button (in header)	❌ Not needed — you’re not running self-guided demos
+Demo Mode Active popups	❌ Adds unnecessary modal clutter, no value for screen recording
+Any “Step 1 of X” walkthroughs	❌ Not part of your automation — you’re not using a tour framework
+“Exit Demo” or “Finish Demo” flows	❌ No actual logic needed — demo ends when screen recording ends
+
+✅ Button Instructions for Replit (Live/Functional)
+Use these as the correct logic assignments for all buttons already in the UI:
+
+🟢 Start Voice
+Purpose: Begins voice command input (if mic is active)
+
+Instruction to Replit:
+Trigger the VoiceBot’s speech-to-text system and send result via webhook to Make.
+
+Optional: Use button state toggle (active/inactive) and pulse animation when listening.
+
+🎙️ Voice Input (in Voice & Communication)
+Purpose: Allows voice-triggered actions (e.g. “Schedule follow-up”)
+
+Instruction:
+Opens voice modal or connects to browser mic input → triggers Make scenario.
+
+🎧 Recordings
+Purpose: Opens recent call transcripts or playback log
+
+Instruction:
+Open panel or page showing 📞 Voice Call Log Airtable table data.
+
+⚡ Quick Ops
+Purpose: Shortcuts for internal admin tasks
+
+Instruction:
+Dropdown with links to:
+
+“Create Booking”
+
+“Send SMS”
+
+“Trigger Order Flow”
+All should POST to your existing Make webhooks.
+
+🧠 System
+Purpose: Access live stats + uptime monitor
+
+Instruction:
+Open summary modal pulling from:
+
+“Bot Status”
+
+“System Health”
+
+“Memory Active”
+Optional: can fetch from Airtable or dummy JSON for now.
+
+📤 Export
+Purpose: Save a screenshot or PDF of the current dashboard
+
+Instruction:
+Export a PDF (via jsPDF or html2canvas) of current view.
+Can also use static capture of div and auto-download.
+
+🔁 Reset Demo
+Purpose: Wipe test data so you can re-record a clean demo
+
+Instruction:
+Trigger a Make scenario that:
+
+Clears test rows in Airtable (Voice Logs, Orders, etc.)
+
+Resets session variables or UI states
+
+Toasts: “Demo reset successfully!”
+
+✅ Final Call to Action for Replit
+"DELETE all demo buttons/popups/modals. None should remain."
+Instead, make sure every operational button (Start Voice, Export, Quick Ops, etc.) is wired to:
+
+A Make webhook
+
+An Airtable record call
+
+Or a UI function (modal, download, audio capture)
