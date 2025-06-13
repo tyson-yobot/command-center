@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { getSystemMode } from "./systemMode";
 import { isLiveMode, safeLiveData, blockTestData } from './liveMode';
+import LiveDataWiper from './liveDataWiper';
 
 // Realistic test data for demo - believable business metrics
 const testModeMetrics = {
@@ -272,60 +273,108 @@ export function registerTestDataRoutes(app: Express) {
     });
   });
 
-  // Dashboard metrics with global environment gate
+  // Dashboard metrics with aggressive data wiper
   app.get('/api/dashboard-metrics', (req, res) => {
     const systemMode = getSystemMode();
     
-    // FORCE LIVE MODE: Always return empty data, no test values
-    if (systemMode === 'live' || process.env.SYSTEM_MODE === 'LIVE' || true) {
+    if (systemMode === 'live') {
+      // LIVE MODE: Use aggressive data wiper
+      const emptyData = LiveDataWiper.getEmptyLiveData('dashboard-metrics');
+      LiveDataWiper.logLiveDataClear('/api/dashboard-metrics');
+      
       res.json({
         success: true,
-        data: liveModeMetrics.dashboardMetrics,
+        data: emptyData,
         mode: 'live',
-        message: 'LIVE mode - all hardcoded data eliminated, authentic data only'
+        message: 'LIVE mode - all test data aggressively wiped'
       });
     } else {
-      // Only allow test data in explicit test mode
+      // TEST MODE: Allow test data
       res.json({
         success: true,
         data: testModeMetrics.dashboardMetrics,
         mode: 'test',
-        message: 'Test mode - demo data populated for dashboard presentation'
+        message: 'Test mode - demo data for presentation'
       });
     }
   });
 
-  // Automation performance with global environment gate
+  // Automation performance with aggressive data wiper
   app.get('/api/automation-performance', (req, res) => {
-    // FORCE LIVE MODE: Always return empty data, no test values
-    res.json({
-      success: true,
-      data: liveModeMetrics.automationPerformance,
-      mode: 'live',
-      message: 'LIVE mode - all hardcoded automation data eliminated'
-    });
+    const systemMode = getSystemMode();
+    
+    if (systemMode === 'live') {
+      // LIVE MODE: Use aggressive data wiper
+      const emptyData = LiveDataWiper.getEmptyLiveData('automation-performance');
+      LiveDataWiper.logLiveDataClear('/api/automation-performance');
+      
+      res.json({
+        success: true,
+        data: emptyData,
+        mode: 'live',
+        message: 'LIVE mode - all test data aggressively wiped'
+      });
+    } else {
+      // TEST MODE: Allow test data
+      res.json({
+        success: true,
+        data: testModeMetrics.automationPerformance,
+        mode: 'test',
+        message: 'Test mode - demo data for presentation'
+      });
+    }
   });
 
-  // Live activity with global environment gate
+  // Live activity with aggressive data wiper
   app.get('/api/live-activity', (req, res) => {
-    // FORCE LIVE MODE: Always return empty data, no test values
-    res.json({
-      success: true,
-      data: liveModeMetrics.liveActivity,
-      mode: 'live',
-      message: 'LIVE mode - all hardcoded activity data eliminated'
-    });
+    const systemMode = getSystemMode();
+    
+    if (systemMode === 'live') {
+      // LIVE MODE: Use aggressive data wiper
+      const emptyData = LiveDataWiper.getEmptyLiveData('live-activity');
+      LiveDataWiper.logLiveDataClear('/api/live-activity');
+      
+      res.json({
+        success: true,
+        data: emptyData,
+        mode: 'live',
+        message: 'LIVE mode - all test data aggressively wiped'
+      });
+    } else {
+      // TEST MODE: Allow test data
+      res.json({
+        success: true,
+        data: testModeMetrics.liveActivity,
+        mode: 'test',
+        message: 'Test mode - demo data for presentation'
+      });
+    }
   });
 
-  // Knowledge stats with global environment gate
+  // Knowledge stats with aggressive data wiper
   app.get('/api/knowledge/stats', (req, res) => {
-    // FORCE LIVE MODE: Always return empty data, no test values
-    res.json({
-      success: true,
-      data: liveModeMetrics.knowledgeStats,
-      mode: 'live',
-      message: 'LIVE mode - all hardcoded knowledge data eliminated'
-    });
+    const systemMode = getSystemMode();
+    
+    if (systemMode === 'live') {
+      // LIVE MODE: Use aggressive data wiper
+      const emptyData = LiveDataWiper.getEmptyLiveData('knowledge-stats');
+      LiveDataWiper.logLiveDataClear('/api/knowledge/stats');
+      
+      res.json({
+        success: true,
+        data: emptyData,
+        mode: 'live',
+        message: 'LIVE mode - all test data aggressively wiped'
+      });
+    } else {
+      // TEST MODE: Allow test data
+      res.json({
+        success: true,
+        data: testModeMetrics.knowledgeStats,
+        mode: 'test',
+        message: 'Test mode - demo data for presentation'
+      });
+    }
   });
 
   // Call monitoring with global environment gate
