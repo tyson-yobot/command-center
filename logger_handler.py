@@ -13,19 +13,10 @@ def log_to_airtable(data):
         "Content-Type": "application/json"
     }
     
-    # Map the data to Airtable field structure matching server schema
+    # Map the data to Airtable field structure matching actual table schema
     airtable_data = {
         "fields": {
-            "🔌 Integration Name": data["📛 Module Name"],
-            "✅ Pass/Fail": data["✅ Executed"],
-            "🧠 Notes / Debug": data["🧠 Notes"],
-            "🗓️ Test Date": datetime.now().isoformat() if data["📅 Date"] == "AUTO" else data["📅 Date"],
-            "👤 QA Owner": data["🛡️ Logger Source"],
-            "📤 Output Data Pop...": data["✅ Output Data"],
-            "🆕 Record Created?": True,
-            "🔁 Retry Attempted?": False,
-            "🧩 Module Type": "Logger Test",
-            "📁 Related Scenario Link": f"Raw Input: {data['📥 Raw Input']} | Raw Output: {data['📤 Raw Output']}"
+            "🔧 Integration Name": f"{data['📛 Module Name']} - {'✅' if data['✅ Executed'] else '❌'} - {data['🧠 Notes']} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - QA: {data['🛡️ Logger Source']} - Module: Logger Test"
         }
     }
     
