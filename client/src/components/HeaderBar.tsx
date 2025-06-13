@@ -31,13 +31,13 @@ export default function HeaderBar({
           <img 
             src={robotHeadImage} 
             alt="YoBot Robot Head" 
-            className="w-10 h-10 mr-1"
+            className="w-10 h-10 mr-0.5"
             onError={(e) => {
               console.log('Image failed to load, showing Bot icon fallback');
               (e.target as HTMLImageElement).style.display = 'none';
             }}
           />
-          <Bot className="text-white w-10 h-10 mr-1" style={{ display: 'none' }} />
+          <Bot className="text-white w-10 h-10 mr-0.5" style={{ display: 'none' }} />
           <div className="text-white text-xl font-bold">
             YoBot<sup className="text-xs">®</sup> Command Center
           </div>
