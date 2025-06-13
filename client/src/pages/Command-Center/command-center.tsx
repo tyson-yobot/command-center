@@ -3339,11 +3339,11 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">Success Rate</div>
                   <div className="text-2xl font-bold text-green-400">
-                    {currentSystemMode === 'test' ? '94.2%' : (automationPerformance?.data?.passRate + '%' || '')}
+                    {currentSystemMode === 'test' ? '94.2%' : ''}
                   </div>
                   <div className="text-xs text-green-400 flex items-center">
                     {automationPerformance?.data?.passRate && <div className="w-1 h-1 bg-green-400 rounded-full mr-1 animate-pulse"></div>}
-                    {currentSystemMode === 'test' ? 'Test mode performance' : (automationPerformance?.data?.passRate ? 'Live performance' : 'No performance data')}
+                    {currentSystemMode === 'test' ? 'Test mode performance' : ''}
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -3363,7 +3363,7 @@ export default function CommandCenter() {
                   </div>
                   <div className="text-xs text-green-400 flex items-center">
                     {metrics?.data?.systemUptime && <div className="w-1 h-1 bg-green-400 rounded-full mr-1 animate-pulse"></div>}
-                    Uptime
+                    {currentSystemMode === 'test' ? 'Uptime' : ''}
                   </div>
                 </div>
               </div>
@@ -3483,7 +3483,7 @@ export default function CommandCenter() {
                   <div className="text-right flex items-center space-x-1">
                     {metrics?.data?.revenueGrowth && <div className="w-1 h-1 bg-emerald-400 rounded-full animate-pulse"></div>}
                     <span className="text-emerald-400 font-bold">
-                      {currentSystemMode === 'test' ? '247%' : (metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : '')}
+                      {currentSystemMode === 'test' ? '247%' : ''}
                     </span>
                   </div>
                 </div>
@@ -3497,8 +3497,7 @@ export default function CommandCenter() {
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Close Rate:</span>
                   <span className="text-cyan-400 font-bold">
-                    {currentSystemMode === 'test' ? '8.5%' : 
-                     (metrics?.data?.conversionRate ? metrics.data.conversionRate + '%' : '')}
+                    {currentSystemMode === 'test' ? '8.5%' : ''}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -3733,7 +3732,7 @@ export default function CommandCenter() {
                     <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
                     <div className="flex items-center space-x-2">
                       <span className="text-yellow-400 font-bold">${currentSystemMode === 'test' ? '64' : (metrics?.data?.avgResponseTime ? (metrics.data.avgResponseTime * 0.5).toFixed(0) : '')}</span>
-                      <Badge className="bg-slate-600 text-white text-xs">--</Badge>
+                      <Badge className="bg-slate-600 text-white text-xs">{currentSystemMode === 'test' ? '--' : ''}</Badge>
                     </div>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
@@ -3743,7 +3742,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Time until positive return on investment">Payback Period</span>
-                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '3.2' : (metrics?.data?.conversionRate ? (metrics.data.conversionRate / 4).toFixed(1) : '')} months</span>
+                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '3.2 months' : ''}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
                     <div className="bg-blue-400 h-1 rounded-full" style={{ width: '0%' }}></div>
@@ -3761,8 +3760,8 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <div className="text-slate-300 text-sm mb-1">Monthly Savings vs Manual</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-green-400 font-bold">--</div>
-                    <Badge className="bg-green-600 text-white">--</Badge>
+                    <div className="text-green-400 font-bold">{currentSystemMode === 'test' ? '--' : ''}</div>
+                    <Badge className="bg-green-600 text-white">{currentSystemMode === 'test' ? '--' : ''}</Badge>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
                     <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
