@@ -3301,9 +3301,12 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">Total Bots:</span>
                   <span className="text-white font-bold">{currentSystemMode === 'test' ? '5' : (metrics?.totalBots || '--')}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Avg Response Time:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1.2s' : (metrics?.data?.avgResponseTime ? metrics.data.avgResponseTime + 'ms' : '0ms')}</span>
+                  <div className="flex items-center space-x-1">
+                    {metrics?.data?.avgResponseTime && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1.2s' : (metrics?.data?.avgResponseTime ? metrics.data.avgResponseTime + 'ms' : '0ms')}</span>
+                  </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Bot Errors:</span>
@@ -3314,9 +3317,12 @@ export default function CommandCenter() {
                     </Button>
                   </div>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Active Sessions:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '23' : (metrics?.data?.dailyActiveUsers || '--')}</span>
+                  <div className="flex items-center space-x-1">
+                    {metrics?.data?.dailyActiveUsers && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '23' : (metrics?.data?.dailyActiveUsers || '--')}</span>
+                  </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">System Uptime:</span>
@@ -3338,7 +3344,8 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">MRR:</span>
-                  <div className="text-right">
+                  <div className="text-right flex items-center space-x-1">
+                    {metrics?.data?.monthlyRecurringRevenue && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
                     <span className="text-green-400 font-bold">
                       {currentSystemMode === 'test' ? '$12.5K' : 
                        (metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : '--')}
@@ -3347,10 +3354,10 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">ROI This Quarter:</span>
-                  <div className="text-right">
+                  <div className="text-right flex items-center space-x-1">
+                    {metrics?.data?.revenueGrowth && <div className="w-1 h-1 bg-emerald-400 rounded-full animate-pulse"></div>}
                     <span className="text-emerald-400 font-bold">
-                      {
-                       (metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : '--')}
+                      {currentSystemMode === 'test' ? '247%' : (metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : '--')}
                     </span>
                   </div>
                 </div>
@@ -3389,13 +3396,19 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Active Clients:</span>
-                  <span className="text-white font-bold">{metrics?.data?.activeClients || 0}</span>
+                  <div className="flex items-center space-x-1">
+                    {metrics?.data?.activeClients && <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>}
+                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '47' : (metrics?.data?.activeClients || '--')}</span>
+                  </div>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Client NPS:</span>
-                  <span className="text-green-400 font-bold">{metrics?.data?.customerSatisfaction ? (metrics.data.customerSatisfaction * 20).toFixed(0) : '--'}</span>
+                  <div className="flex items-center space-x-1">
+                    {metrics?.data?.customerSatisfaction && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '87' : (metrics?.data?.customerSatisfaction ? (metrics.data.customerSatisfaction * 20).toFixed(0) : '--')}</span>
+                  </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Churn Risk Flags:</span>
@@ -3428,13 +3441,19 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Avg Bot Response:</span>
-                  <span className="text-green-400 font-bold">{metrics?.data?.avgResponseTime ? metrics.data.avgResponseTime + 'ms' : '--'}</span>
+                  <div className="flex items-center space-x-1">
+                    {metrics?.data?.avgResponseTime && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1.2s' : (metrics?.data?.avgResponseTime ? metrics.data.avgResponseTime + 'ms' : '--')}</span>
+                  </div>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-green-400 font-bold">{automationPerformance?.data?.passRate ? automationPerformance.data.passRate + '%' : '--'}</span>
+                  <div className="flex items-center space-x-1">
+                    {automationPerformance?.data?.passRate && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '94.2%' : (automationPerformance?.data?.passRate ? automationPerformance.data.passRate + '%' : '--')}</span>
+                  </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Error Trend (7d):</span>
