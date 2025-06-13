@@ -30,9 +30,15 @@ export default function HeaderBar({
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-3">
             <div className="text-white text-2xl font-bold flex items-center gap-2">
-              <Bot 
-                className="w-7 h-7 text-blue-400" 
+              <img 
+                src="/images/robot-head.png" 
+                alt="YoBot Robot Head" 
+                className="w-7 h-7 object-contain"
                 style={{ height: '28px', width: '28px' }}
+                onError={(e) => {
+                  console.log('Image failed to load, using fallback');
+                  e.currentTarget.style.display = 'none';
+                }}
               />
               YoBot<sup className="text-xs">®</sup>
             </div>
