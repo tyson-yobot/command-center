@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
 // Live mode only - no test mode context needed
 import { 
   TrendingUp, 
@@ -2632,7 +2632,7 @@ export default function CommandCenter() {
   };
 
   return (
-    <TooltipProvider>
+    <>
       {/* Header Bar */}
       <HeaderBar 
         currentSystemMode={currentSystemMode}
@@ -2712,14 +2712,7 @@ export default function CommandCenter() {
                       <span className="text-xl mr-3">📅</span>
                       <span>Create Booking</span>
                     </div>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Opens external form to schedule client appointments and consultations</p>
-                      </TooltipContent>
-                    </Tooltip>
+                    <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
                   </Button>
                   
                   <Button
@@ -6960,6 +6953,6 @@ export default function CommandCenter() {
       )}
 
     </div>
-    </>
+    </TooltipProvider>
   );
 }
