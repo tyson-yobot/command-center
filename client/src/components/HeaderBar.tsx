@@ -30,7 +30,7 @@ export default function HeaderBar({
           <div className="flex items-center gap-3">
             <div className="text-white text-2xl font-bold flex items-center gap-2">
               <img 
-                src="/@assets/A_flat_vector_illustration_features_a_robot_face_i_1749782517718.png" 
+                src="/attached_assets/A_flat_vector_illustration_features_a_robot_face_i_1749782517718.png" 
                 alt="YoBot Robot Head" 
                 className="w-8 h-8 object-contain"
                 style={{ height: '28px', width: '28px' }}
