@@ -31,7 +31,7 @@ export default function HeaderBar({
           <img 
             src={robotHeadImage} 
             alt="YoBot Robot Head" 
-            className="w-10 h-10 mr-0"
+            className="w-10 h-10 mr-0 -mb-1"
             onError={(e) => {
               console.log('Image failed to load, showing Bot icon fallback');
               (e.target as HTMLImageElement).style.display = 'none';
