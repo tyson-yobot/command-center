@@ -30,11 +30,10 @@ export default function HeaderBar({
           <div className="flex items-center gap-3">
             <div className="text-white text-2xl font-bold flex items-center gap-2">
               <img 
-                src="/@assets/A_flat_vector_illustration_features_a_robot_face_i_1749783262323.png" 
-                alt="YoBot Robot Head" 
-                className="w-6 h-6 object-contain"
+                src="/@assets/image_1749783385223.png" 
+                alt="YoBot Logo" 
+                className="h-8 object-contain"
               />
-              YoBot<sup className="text-xs">®</sup>
             </div>
           </div>
           <span className={`ml-3 text-white text-xs px-2 py-1 rounded-md uppercase ${isLiveMode ? 'bg-green-600' : 'bg-yellow-600'}`}>
