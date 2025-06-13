@@ -57,7 +57,10 @@ import {
   MapPin,
   Globe,
   TestTube,
-  Plus
+  Plus,
+  Play,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -136,6 +139,9 @@ export default function CommandCenter() {
   const [selectedTier, setSelectedTier] = React.useState('All');
   const [voiceCommand, setVoiceCommand] = React.useState('');
   const [automationMode, setAutomationMode] = React.useState(true);
+  const [collapsedSections, setCollapsedSections] = React.useState<{[key: string]: boolean}>({});
+  const [demoMode, setDemoMode] = React.useState(false);
+  const [demoStep, setDemoStep] = React.useState(0);
   const [currentRecognition, setCurrentRecognition] = React.useState<any>(null);
   
   // Voice recognition states for RAG programming
@@ -2631,6 +2637,29 @@ export default function CommandCenter() {
     }
   };
 
+  // Demo mode functions
+  const startDemo = () => {
+    setDemoMode(true);
+    setDemoStep(0);
+  };
+
+  const nextDemoStep = () => {
+    if (demoStep < 4) {
+      setDemoStep(demoStep + 1);
+    } else {
+      setDemoMode(false);
+      setDemoStep(0);
+    }
+  };
+
+  // Section collapse functions
+  const toggleSection = (sectionId: string) => {
+    setCollapsedSections(prev => ({
+      ...prev,
+      [sectionId]: !prev[sectionId]
+    }));
+  };
+
   return (
     <div>
       {/* Header Bar */}
@@ -2681,11 +2710,54 @@ export default function CommandCenter() {
 
   
 
+        {/* Demo Mode Overlay */}
+        {demoMode && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 flex items-center justify-center">
+            <div className="bg-white/10 backdrop-blur-md border border-blue-400/50 rounded-lg p-6 max-w-md mx-4">
+              <div className="text-center">
+                <div className="text-blue-400 mb-4">
+                  <Bot className="w-12 h-12 mx-auto mb-2" />
+                  <h3 className="text-xl font-bold text-white">Demo Mode Active</h3>
+                </div>
+                <p className="text-slate-300 mb-4">
+                  Step {demoStep + 1} of 5: {
+                    demoStep === 0 ? "Core Automation Overview" :
+                    demoStep === 1 ? "Voice Operations Demo" :
+                    demoStep === 2 ? "AI Intelligence Features" :
+                    demoStep === 3 ? "SmartSpend Integration" :
+                    "System Tools Walkthrough"
+                  }
+                </p>
+                <div className="flex space-x-3">
+                  <Button onClick={nextDemoStep} className="bg-blue-600 hover:bg-blue-700 text-white">
+                    {demoStep === 4 ? "Finish Demo" : "Next Step"}
+                  </Button>
+                  <Button variant="outline" onClick={() => setDemoMode(false)} className="border-blue-400 text-blue-400">
+                    Exit Demo
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Dashboard Title */}
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Command Center Dashboard
-          </h1>
+          <div className="flex items-center justify-center mb-4">
+            <h1 className="text-4xl font-bold text-white mb-2">
+              Command Center Dashboard
+            </h1>
+            {!demoMode && (
+              <Button 
+                onClick={startDemo}
+                variant="outline" 
+                className="ml-4 border-blue-400 text-blue-400 hover:bg-blue-600/20"
+              >
+                <Play className="w-4 h-4 mr-2" />
+                Start Demo
+              </Button>
+            )}
+          </div>
           <p className="text-slate-300 text-lg">
             Your Complete AI Automation Control Panel {selectedTier !== 'All' && `(${selectedTier} Tier)`}
           </p>
