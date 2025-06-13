@@ -445,7 +445,14 @@ export default function CommandCenter() {
 
   // Core Automation Button Handlers
   const handleCreateBooking = () => {
-    setShowBookingModal(true);
+    // Open Tally form in new tab for booking
+    window.open('https://tally.so/r/w7jep6', '_blank');
+    setVoiceStatus('Opening booking form...');
+    toast({
+      id: Date.now().toString(),
+      title: "Create Booking",
+      description: "Opening booking form in new tab"
+    });
   };
 
   const handleCreateSupportTicket = () => {
@@ -457,7 +464,14 @@ export default function CommandCenter() {
   };
 
   const handleAutomateSalesOrder = () => {
+    // Open Tally form in new tab for sales order
     window.open('https://tally.so/r/mDb87X', '_blank');
+    setVoiceStatus('Opening sales order form...');
+    toast({
+      id: Date.now().toString(),
+      title: "Sales Order Form",
+      description: "Opening sales order form in new tab"
+    });
   };
 
   const handleSendSMS = () => {
@@ -2988,7 +3002,7 @@ export default function CommandCenter() {
                     </Button>
                     
                     <Button
-                      onClick={handleSalesOrder}
+                      onClick={handleAutomateSalesOrder}
                       className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
                       title="Automate Sales Order Flow - Launch integrated workflow to process sales orders with automated client communications and CRM updates"
                     >
