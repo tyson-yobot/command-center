@@ -3613,14 +3613,14 @@ export default function CommandCenter() {
                   <span className="text-slate-300">Active Workflows</span>
                   <div className="flex items-center space-x-2">
                     {automationPerformance?.activeFunctions && <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>}
-                    <Badge className={currentSystemMode === 'test' ? "bg-green-600 text-white" : "bg-slate-600 text-slate-400"}>{currentSystemMode === 'test' ? '12' : (automationPerformance?.activeFunctions || 0)}</Badge>
+                    <Badge className={currentSystemMode === 'test' ? "bg-green-600 text-white" : "bg-slate-600 text-slate-400"}>{currentSystemMode === 'test' ? '12' : ''}</Badge>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Tasks Completed</span>
                   <div className="flex items-center space-x-1">
                     {automationPerformance?.completedTasks && <div className="w-1 h-1 bg-cyan-400 rounded-full animate-pulse"></div>}
-                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '1,847' : (automationPerformance?.completedTasks || 0)}</span>
+                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '1,847' : ''}</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
