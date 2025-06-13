@@ -5,7 +5,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { User, Settings, LogOut, ChevronDown, LayoutDashboard, MessageSquare, BookOpen, Mic, FileText, Users, FileDown, Bot } from 'lucide-react';
-// Logo will be handled via public assets
+
 
 interface HeaderBarProps {
   currentSystemMode?: string;
@@ -30,7 +30,7 @@ export default function HeaderBar({
           <div className="flex items-center gap-3">
             <div className="text-white text-2xl font-bold flex items-center gap-2">
               <img 
-                src="/attached_assets/A_flat_vector_illustration_features_a_robot_face_i_1749782517718.png" 
+                src="/@assets/A_flat_vector_illustration_features_a_robot_face_i_1749782517718.png" 
                 alt="YoBot Robot Head" 
                 className="w-8 h-8 object-contain"
                 style={{ height: '28px', width: '28px' }}
