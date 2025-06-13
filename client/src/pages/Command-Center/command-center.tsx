@@ -1243,6 +1243,22 @@ export default function CommandCenter() {
     }
   };
 
+  const handleCreateBooking = () => {
+    // Open Tally form in new tab for booking
+    window.open('https://tally.so/r/w7jep6', '_blank');
+    setVoiceStatus('Opening booking form...');
+    toast({
+      id: Date.now().toString(),
+      title: "Create Booking",
+      description: "Opening booking form in new tab"
+    });
+  };
+
+  const handleCreateSupportTicket = () => {
+    setShowCreateTicket(true);
+    setVoiceStatus('Opening support ticket creation...');
+  };
+
   const handleManualFollowUp = () => {
     setShowFollowUpModal(true);
   };
@@ -1250,7 +1266,12 @@ export default function CommandCenter() {
   const handleSalesOrder = () => {
     // Open Tally form in new tab as per instructions
     window.open('https://tally.so/r/mDb87X', '_blank');
-    setToast({ title: "Sales Order", description: "Opening sales order form in new tab" });
+    setVoiceStatus('Opening sales order form...');
+    toast({
+      id: Date.now().toString(),
+      title: "Sales Order",
+      description: "Opening sales order form in new tab"
+    });
   };
 
 
