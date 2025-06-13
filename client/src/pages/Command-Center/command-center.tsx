@@ -4094,7 +4094,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Processing:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '1 active' : '-- active'}</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '1 active' : ''}</span>
                 </div>
               </div>
             </CardContent>
