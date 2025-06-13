@@ -2753,7 +2753,7 @@ export default function CommandCenter() {
                 variant="outline" 
                 className="ml-4 border-blue-400 text-blue-400 hover:bg-blue-600/20"
               >
-                <Play className="w-4 h-4 mr-2" />
+                <Bot className="w-4 h-4 mr-2" />
                 Start Demo
               </Button>
             )}
@@ -2770,82 +2770,113 @@ export default function CommandCenter() {
             <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 relative">
               <CardHeader>
                 <CardTitle className="text-white flex items-center justify-between">
-                  Core Automation
+                  <div className="flex items-center">
+                    <Zap className="w-5 h-5 mr-2 text-blue-400" />
+                    Core Automation
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => toggleSection('core-automation')}
+                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                    >
+                      {collapsedSections['core-automation'] ? 
+                        <ChevronDown className="w-4 h-4" /> : 
+                        <ChevronUp className="w-4 h-4" />
+                      }
+                    </Button>
+                  </div>
                   <Badge className="bg-green-600 text-white">🟢 Active</Badge>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 gap-3">
-                  <Button
-                    onClick={handleCreateBooking}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
-                  >
-                    <div className="flex items-center">
-                      <span className="text-xl mr-3">📅</span>
-                      <span>Create Booking</span>
-                    </div>
-                    <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
-                  </Button>
-                  
-                  <Button
-                    onClick={handleCreateSupportTicket}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
-                  >
-                    <div className="flex items-center">
-                      <span className="text-xl mr-3">🎧</span>
-                      <span>Create Support Ticket</span>
-                    </div>
-                    <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
-                  </Button>
-                  
-                  <Button
-                    onClick={handleManualFollowUp}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                  >
-                    <span className="text-xl mr-3">📞</span>
-                    <span>Create Follow-up</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleSalesOrder}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                  >
-                    <span className="text-xl mr-3">💰</span>
-                    <span>Automate Sales Order Flow</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleSendSMS}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                    style={{ 
-                      borderLeft: '8px solid #06b6d4'
-                    }}
-                  >
-                    <span className="text-xl mr-3">💬</span>
-                    <span>Send SMS</span>
-                  </Button>
+              {!collapsedSections['core-automation'] && (
+                <CardContent>
+                  <div className="grid grid-cols-1 gap-3">
+                    <Button
+                      onClick={handleCreateBooking}
+                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
+                    >
+                      <div className="flex items-center">
+                        <span className="text-xl mr-3">📅</span>
+                        <span>Create Booking</span>
+                      </div>
+                      <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
+                    </Button>
+                    
+                    <Button
+                      onClick={handleCreateSupportTicket}
+                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
+                    >
+                      <div className="flex items-center">
+                        <span className="text-xl mr-3">🎧</span>
+                        <span>Create Support Ticket</span>
+                      </div>
+                      <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
+                    </Button>
+                    
+                    <Button
+                      onClick={handleManualFollowUp}
+                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
+                    >
+                      <span className="text-xl mr-3">📞</span>
+                      <span>Create Follow-up</span>
+                    </Button>
+                    
+                    <Button
+                      onClick={handleSalesOrder}
+                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
+                    >
+                      <span className="text-xl mr-3">💰</span>
+                      <span>Automate Sales Order Flow</span>
+                    </Button>
+                    
+                    <Button
+                      onClick={handleSendSMS}
+                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
+                      style={{ 
+                        borderLeft: '8px solid #06b6d4'
+                      }}
+                    >
+                      <span className="text-xl mr-3">💬</span>
+                      <span>Send SMS</span>
+                    </Button>
 
-                </div>
-              </CardContent>
+                  </div>
+                </CardContent>
+              )}
             </Card>
 
             {/* Voice & Communication */}
             <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 relative">
               <CardHeader>
                 <CardTitle className="text-white flex items-center justify-between">
-                  Voice & Communication
+                  <div className="flex items-center">
+                    <Headphones className="w-5 h-5 mr-2 text-blue-400" />
+                    Voice & Communication
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => toggleSection('voice-communication')}
+                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                    >
+                      {collapsedSections['voice-communication'] ? 
+                        <ChevronDown className="w-4 h-4" /> : 
+                        <ChevronUp className="w-4 h-4" />
+                      }
+                    </Button>
+                  </div>
                   <Badge className="bg-green-600 text-white">🟢 Active</Badge>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 gap-3">
-                  <Button
-                    onClick={handleStartPipelineCalls}
-                    className="bg-lime-500 hover:bg-lime-600 text-white flex items-center justify-start p-3 font-semibold border-2 border-lime-400 shadow-lg shadow-lime-500/25"
-                  >
-                    <span className="text-xl mr-3">🚀</span>
-                    <span>Start Pipeline Calls</span>
-                  </Button>
+              {!collapsedSections['voice-communication'] && (
+                <CardContent>
+                  <div className="grid grid-cols-1 gap-3">
+                    <Button
+                      onClick={handleStartPipelineCalls}
+                      className="bg-lime-500 hover:bg-lime-600 text-white flex items-center justify-start p-3 font-semibold border-2 border-lime-400 shadow-lg shadow-lime-500/25"
+                    >
+                      <span className="text-xl mr-3">🚀</span>
+                      <span>Start Pipeline Calls</span>
+                    </Button>
                   
                   <Button
                     onClick={handleStopPipelineCalls}
@@ -2890,6 +2921,7 @@ export default function CommandCenter() {
                   </Button>
                 </div>
               </CardContent>
+              )}
             </Card>
 
             {/* Data & Reports */}
