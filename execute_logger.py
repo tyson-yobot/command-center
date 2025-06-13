@@ -19,7 +19,7 @@ def log_integration_test_to_airtable(
     # Airtable configuration
     import os
     AIRTABLE_BASE_ID = os.environ.get('AIRTABLE_BASE_ID')
-    AIRTABLE_TABLE_NAME = "Integration%20Test%20Logger"
+    AIRTABLE_TABLE_NAME = "YoBot%20Integration%20Test%20Logger"
     AIRTABLE_API_KEY = os.environ.get('AIRTABLE_API_KEY')
     
     url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_TABLE_NAME}"
