@@ -48,9 +48,12 @@ import {
   Edit,
   Edit3,
   Share2,
+  FileDown,
+  Printer,
+  RotateCcw,
+  HelpCircle,
   Camera,
   Building,
-  HelpCircle,
   Info,
   Bot,
   User,
@@ -1125,6 +1128,74 @@ export default function CommandCenter() {
         id: Date.now().toString(),
         title: "Error",
         description: "Failed to create ticket",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Export Dashboard and Reset Demo Handlers
+  const handleExportDashboard = async () => {
+    try {
+      const exportData = {
+        dashboardMetrics: await fetch('/api/dashboard-metrics').then(r => r.json()),
+        automationPerformance: await fetch('/api/automation-performance').then(r => r.json()),
+        liveActivity: await fetch('/api/live-activity').then(r => r.json()),
+        knowledgeStats: await fetch('/api/knowledge/stats').then(r => r.json()),
+        timestamp: new Date().toISOString(),
+        exportType: 'dashboard_snapshot'
+      };
+
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `yobot-dashboard-export-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      toast({
+        id: Date.now().toString(),
+        title: "Dashboard Exported",
+        description: "Dashboard data exported successfully as JSON file"
+      });
+    } catch (error) {
+      toast({
+        id: Date.now().toString(),
+        title: "Export Failed",
+        description: "Failed to export dashboard data",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleResetDemo = async () => {
+    try {
+      const response = await fetch('/api/reset-demo-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reset_demo_data' })
+      });
+
+      if (response.ok) {
+        // Reset local state
+        setCallLogs([]);
+        setAutomationLogs([]);
+        setVoiceRecordings([]);
+        setVoiceStatus('Demo session reset successfully');
+        
+        toast({
+          id: Date.now().toString(),
+          title: "Demo Reset",
+          description: "Demo session has been reset for fresh presentation"
+        });
+      }
+    } catch (error) {
+      toast({
+        id: Date.now().toString(),
+        title: "Reset Failed",
+        description: "Failed to reset demo session",
         variant: "destructive"
       });
     }
@@ -2779,8 +2850,9 @@ export default function CommandCenter() {
             <div className="flex items-center space-x-4">
               <Mic className="w-5 h-5 text-blue-400" />
               <span className="text-white font-medium">Voice Control</span>
-              <Badge className={`${isListening ? 'bg-green-500' : 'bg-gray-500'} text-white`}>
-                {isListening ? 'Active' : 'Inactive'}
+              <Badge className={`${isListening ? 'bg-green-500' : 'bg-gray-500'} text-white flex items-center`}>
+                {isListening && <div className="w-2 h-2 bg-green-200 rounded-full mr-1 animate-pulse"></div>}
+                {isListening ? 'Listening...' : 'Idle'}
               </Badge>
             </div>
             <div className="flex items-center space-x-3">
@@ -2812,11 +2884,12 @@ export default function CommandCenter() {
               <Button
                 onClick={() => setActiveTab('system-tools')}
                 variant="outline"
-                className="border-amber-400 text-amber-400 hover:bg-amber-600/20"
-                title="Access system monitoring and tools"
+                className="border-amber-400 text-amber-400 hover:bg-amber-600/20 flex items-center"
+                title="System - Access advanced monitoring, diagnostics, and administrative tools for platform management"
               >
                 <Settings className="w-4 h-4 mr-2" />
                 System
+                <HelpCircle className="w-3 h-3 ml-1 text-amber-300 opacity-70" />
               </Button>
             </div>
           </div>
@@ -2891,11 +2964,14 @@ export default function CommandCenter() {
                     
                     <Button
                       onClick={handleSalesOrder}
-                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                      title="Opens external Tally form to automate sales order workflow"
+                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
+                      title="Automate Sales Order Flow - Launch integrated workflow to process sales orders with automated client communications and CRM updates"
                     >
-                      <span className="text-xl mr-3">💰</span>
-                      <span>Automate Sales Order Flow</span>
+                      <div className="flex items-center">
+                        <span className="text-xl mr-3">💰</span>
+                        <span>Automate Sales Order Flow</span>
+                      </div>
+                      <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
                     </Button>
                     
                     <Button
