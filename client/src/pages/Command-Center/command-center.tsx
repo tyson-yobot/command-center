@@ -3526,19 +3526,19 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">Active Clients:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.activeClients && <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>}
-                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '47' : '--'}</span>
+                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '47' : ''}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Client NPS:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.customerSatisfaction && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '87' : '--'}</span>
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '87' : ''}</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Churn Risk Flags:</span>
-                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '0' : '--'} flagged</span>
+                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '0' : ''} {currentSystemMode === 'test' ? 'flagged' : ''}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Last Login:</span>
