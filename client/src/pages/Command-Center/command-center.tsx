@@ -1243,21 +1243,7 @@ export default function CommandCenter() {
     }
   };
 
-  const handleCreateBooking = () => {
-    // Open Tally form in new tab for booking
-    window.open('https://tally.so/r/w7jep6', '_blank');
-    setVoiceStatus('Opening booking form...');
-    toast({
-      id: Date.now().toString(),
-      title: "Create Booking",
-      description: "Opening booking form in new tab"
-    });
-  };
 
-  const handleCreateSupportTicket = () => {
-    setShowCreateTicket(true);
-    setVoiceStatus('Opening support ticket creation...');
-  };
 
   const handleManualFollowUp = () => {
     setShowFollowUpModal(true);
