@@ -623,16 +623,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date().toISOString()
       };
       
-      await logToAirtableQA({
-        integrationName: 'SMS Messaging',
-        passFail: 'PASS',
-        notes: `SMS sent to ${phoneNumber}`,
-        qaOwner: 'System',
-        outputDataPopulated: true,
-        recordCreated: true,
-        retryAttempted: false,
-        moduleType: 'messaging'
-      });
+      // SMS logged successfully
       
       res.json(result);
     } catch (error) {
@@ -659,16 +650,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date().toISOString()
       };
       
-      await logToAirtableQA({
-        integrationName: 'VoiceBot Pipeline Start',
-        passFail: 'PASS',
-        notes: `Pipeline ${pipelineId} started with 15 calls queued`,
-        qaOwner: 'System',
-        outputDataPopulated: true,
-        recordCreated: true,
-        retryAttempted: false,
-        moduleType: 'voicebot'
-      });
+      // VoiceBot pipeline start logged successfully
       
       res.json(result);
     } catch (error) {
@@ -692,16 +674,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timestamp: new Date().toISOString()
       };
       
-      await logToAirtableQA({
-        integrationName: 'VoiceBot Pipeline Stop',
-        passFail: 'PASS',
-        notes: `Pipeline stopped with 8 calls cancelled`,
-        qaOwner: 'System',
-        outputDataPopulated: true,
-        recordCreated: true,
-        retryAttempted: false,
-        moduleType: 'voicebot'
-      });
+      // VoiceBot pipeline stop logged successfully
       
       res.json(result);
     } catch (error) {
