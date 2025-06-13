@@ -32,8 +32,8 @@ export default function HeaderBar({
               <img 
                 src="/@assets/A_flat_vector_illustration_features_a_robot_face_i_1749782517718.png" 
                 alt="YoBot Robot Head" 
-                className="w-6 h-6 object-contain"
-                style={{ height: '24px' }}
+                className="w-8 h-8 object-contain"
+                style={{ height: '28px', width: '28px' }}
               />
               YoBot<sup className="text-xs">®</sup>
             </div>
