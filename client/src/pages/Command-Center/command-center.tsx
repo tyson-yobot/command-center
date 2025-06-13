@@ -3293,11 +3293,11 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-400">
-                {currentSystemMode === 'test' ? '99.8%' : (metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '')}
+                {currentSystemMode === 'test' ? '99.8%' : ''}
               </div>
               <p className="text-xs text-green-400 flex items-center">
                 {metrics?.data?.systemUptime && <div className="w-1 h-1 bg-green-400 rounded-full mr-1 animate-pulse"></div>}
-                {currentSystemMode === 'test' ? 'All systems operational' : (metrics?.data?.systemUptime ? 'System uptime' : 'No system data')}
+                {currentSystemMode === 'test' ? 'All systems operational' : ''}
               </p>
             </CardContent>
           </Card>
@@ -3359,7 +3359,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">System Load</div>
                   <div className="text-2xl font-bold text-green-400">
-                    {currentSystemMode === 'test' ? '99.8%' : (metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '')}
+                    {currentSystemMode === 'test' ? '99.8%' : ''}
                   </div>
                   <div className="text-xs text-green-400 flex items-center">
                     {metrics?.data?.systemUptime && <div className="w-1 h-1 bg-green-400 rounded-full mr-1 animate-pulse"></div>}
@@ -3439,7 +3439,7 @@ export default function CommandCenter() {
                   <div className="flex items-center space-x-2">
                     <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '3' : (automationPerformance?.data?.criticalErrors || '0')}</span>
                     <Button size="sm" variant="ghost" className="text-cyan-400 hover:text-cyan-300 text-xs p-1">
-                      👁 View Details
+                      {currentSystemMode === 'test' ? '👁 View Details' : ''}
                     </Button>
                   </div>
                 </div>
@@ -3547,7 +3547,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Bot Utilization Rate:</span>
-                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '93.6' : ''}%</span>
+                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '93.6%' : ''}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
                     <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300" style={{width: `${currentSystemMode === 'test' ? '93.6' : '0'}%`}}></div>
@@ -3583,15 +3583,15 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Error Trend (7d):</span>
-                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '54' : ''} errors</span>
+                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '54 errors' : ''}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">API Usage:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1,068' : ''}/day</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1,068/day' : ''}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Bot Processing Load:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '94.2' : ''}%</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '94.2%' : ''}</span>
                 </div>
               </div>
             </CardContent>
