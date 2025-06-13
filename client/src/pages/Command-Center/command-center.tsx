@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-// Logo handled via HeaderBar component
+import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749785199597.png';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import HeaderBar from '@/components/HeaderBar';
 import { Badge } from '@/components/ui/badge';
@@ -2843,8 +2843,20 @@ export default function CommandCenter() {
         {/* Dashboard Title */}
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center mb-4">
-            <h1 className="text-4xl font-bold text-white mb-2">
-              Command Center Dashboard
+            <h1 className="text-4xl font-bold text-white mb-2 flex items-center">
+              <img 
+                src={robotHeadImage} 
+                alt="YoBot Robot Head" 
+                className="w-10 h-10 mr-3"
+                onError={(e) => {
+                  console.log('Image failed to load, showing Bot icon fallback');
+                  (e.target as HTMLImageElement).style.display = 'none';
+                  const botIcon = (e.target as HTMLImageElement).nextElementSibling as HTMLElement;
+                  if (botIcon) botIcon.style.display = 'block';
+                }}
+              />
+              <Bot className="w-10 h-10 mr-3 text-blue-400" style={{ display: 'none' }} />
+              YoBot<sup className="text-lg">®</sup> Command Center Dashboard
             </h1>
             {!demoMode && (
               <Button 
