@@ -2632,7 +2632,7 @@ export default function CommandCenter() {
   };
 
   return (
-    <>
+    <div>
       {/* Header Bar */}
       <HeaderBar 
         currentSystemMode={currentSystemMode}
@@ -2723,14 +2723,7 @@ export default function CommandCenter() {
                       <span className="text-xl mr-3">🎧</span>
                       <span>Create Support Ticket</span>
                     </div>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Creates internal support ticket for customer service and technical issues</p>
-                      </TooltipContent>
-                    </Tooltip>
+                    <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
                   </Button>
                   
                   <Button
@@ -6953,6 +6946,6 @@ export default function CommandCenter() {
       )}
 
     </div>
-    </TooltipProvider>
+    </div>
   );
 }
