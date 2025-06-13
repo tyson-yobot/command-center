@@ -2670,6 +2670,98 @@ export default function CommandCenter() {
         clientName="AMT66"
         onModeToggle={toggleSystemMode}
       />
+
+      {/* Demo Mode Controls */}
+      <div className="bg-white border-b shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={toggleDemoMode}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  demoMode 
+                    ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {demoMode ? 'Exit Demo Mode' : 'Enable Demo Mode'}
+              </button>
+              
+              {demoMode && (
+                <>
+                  <button
+                    onClick={startGuidedTour}
+                    className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700"
+                  >
+                    Start Guided Tour
+                  </button>
+                  <button
+                    onClick={() => setShowHelpTooltips(!showHelpTooltips)}
+                    className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700"
+                  >
+                    {showHelpTooltips ? 'Hide Help Tips' : 'Show Help Tips'}
+                  </button>
+                </>
+              )}
+            </div>
+            
+            {demoMode && (
+              <div className="flex items-center space-x-2 text-sm text-blue-600">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                <span>Demo Mode Active - Enhanced guidance enabled</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Guided Tour Overlay */}
+      {guidedTourActive && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-xl p-8 max-w-lg mx-4 shadow-2xl">
+            <div className="text-xl font-bold mb-4 text-gray-800">
+              {tourStep === 0 && "🎯 Welcome to YoBot Command Center"}
+              {tourStep === 1 && "⚡ Core Automation Tools"}
+              {tourStep === 2 && "🎤 VoiceOps™ Management"}
+              {tourStep === 3 && "📊 System Monitoring"}
+              {tourStep === 4 && "🚀 Quick Actions"}
+            </div>
+            <div className="text-gray-600 mb-6 leading-relaxed">
+              {tourStep === 0 && "This is your central hub for managing all automation systems and monitoring performance. Navigate between different operational areas using the tabs above."}
+              {tourStep === 1 && "Use these buttons to trigger core business processes like booking creation and sales orders. Each button connects to external forms and automation workflows."}
+              {tourStep === 2 && "Monitor and manage voice operations, call logs, and conversation analytics. Track call quality and manage voice bot interactions."}
+              {tourStep === 3 && "Track system health, integration status, and performance metrics in real-time. Monitor automation success rates and system uptime."}
+              {tourStep === 4 && "Access frequently used functions and emergency controls from the global action bar. Use voice commands and quick shortcuts for efficiency."}
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex space-x-1">
+                {[0, 1, 2, 3, 4].map((step) => (
+                  <div
+                    key={step}
+                    className={`w-2 h-2 rounded-full ${
+                      step === tourStep ? 'bg-blue-600' : 'bg-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => setGuidedTourActive(false)}
+                  className="text-gray-500 hover:text-gray-700 px-4 py-2"
+                >
+                  Skip Tour
+                </button>
+                <button
+                  onClick={nextTourStep}
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-medium"
+                >
+                  {tourStep < 4 ? 'Next' : 'Finish Tour'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
       <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-8 p-8">
         <div className="w-full">
