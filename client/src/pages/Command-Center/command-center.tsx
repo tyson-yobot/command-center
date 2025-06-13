@@ -88,8 +88,7 @@ import { TabContentRenderer } from '@/components/TabContentRenderer';
 export default function CommandCenter() {
   const queryClient = useQueryClient();
   
-  // Robot head image - using attached asset
-  const robotHeadImage = '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749713043354.png';
+
   
   // System mode state
   const [currentSystemMode, setCurrentSystemMode] = useState(() => {
@@ -3406,7 +3405,7 @@ export default function CommandCenter() {
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-green-400" />
-                <img src={robotHeadImage} alt="Robot Head" className="w-6 h-6 mr-2" />
+                <Bot className="w-5 h-5 mr-2 text-blue-400" />
                 YoBot® Health Monitor
               </CardTitle>
             </CardHeader>
@@ -3515,14 +3514,14 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">Active Clients:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.activeClients && <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>}
-                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '47' : (metrics?.data?.activeClients || '--')}</span>
+                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '47' : '--'}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Client NPS:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.customerSatisfaction && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '87' : (metrics?.data?.customerSatisfaction ? (metrics.data.customerSatisfaction * 20).toFixed(0) : '--')}</span>
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '87' : '--'}</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
