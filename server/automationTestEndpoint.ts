@@ -1,5 +1,4 @@
 import type { Express } from "express";
-import { logToAirtable } from "./airtableLogger";
 
 // Define the actual 22 automation functions
 const automationFunctions = [

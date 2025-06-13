@@ -9,20 +9,14 @@ import documentRoutes from "./documentManager";
 import { setupVite, serveStatic, log } from "./vite";
 import { sendSlackAlert } from "./alerts";
 import { generatePDFReport } from "./pdfReport";
-import { registerQATracker } from "./qaTracker";
-import { officialQATracker } from "./officialQATracker";
-import { registerQATestEndpoints } from "./qaTestEndpoints";
 import { registerPublerRoutes } from "./publerIntegrationNew";
-import { registerAirtableTestLogger } from "./airtableTestLogger";
-import { testRoutes } from "./testRoutes";
 import { initializeLiveDataWipe, secureAdminDataWipe } from "./dataWipe";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Register test logging routes FIRST (before any other middleware)
-app.use('/api/test', testRoutes);
+// All logging routes removed - ready for new implementation
 
 app.use((req, res, next) => {
   const start = Date.now();
