@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 // Live mode only - no test mode context needed
 import { 
@@ -6945,7 +6946,8 @@ export default function CommandCenter() {
         </div>
       )}
 
-    </div>
+        </div>
+      </div>
     </div>
   );
 }
