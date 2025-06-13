@@ -2847,7 +2847,7 @@ export default function CommandCenter() {
               <img 
                 src={robotHeadImage} 
                 alt="YoBot Robot Head" 
-                className="w-12 h-14 mr-0 -mt-3"
+                className="w-14 h-14 mr-0 -mt-3"
                 onError={(e) => {
                   console.log('Image failed to load, showing Bot icon fallback');
                   (e.target as HTMLImageElement).style.display = 'none';
