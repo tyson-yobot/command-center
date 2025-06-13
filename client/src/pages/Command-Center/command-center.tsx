@@ -3277,11 +3277,11 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {currentSystemMode === 'test' ? '94.2%' : (
+                {currentSystemMode === 'test' ? '94.2%' : ''}
               </div>
               <p className="text-xs text-emerald-400 flex items-center">
                 {automationPerformance?.successRate && <div className="w-1 h-1 bg-emerald-400 rounded-full mr-1"></div>}
-                {automationPerformance?.successRate ? 'Live automation rate' : 'No automation data'}
+                {currentSystemMode === 'test' ? (automationPerformance?.successRate ? 'Live automation rate' : 'No automation data') : ''}
               </p>
             </CardContent>
           </Card>
@@ -3431,7 +3431,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">Avg Response Time:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.avgResponseTime && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1.2s' : (metrics?.data?.avgResponseTime ? metrics.data.avgResponseTime + 'ms' : '0ms')}</span>
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1.2s' : ''}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
