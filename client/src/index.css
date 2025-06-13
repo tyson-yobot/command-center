@@ -46,19 +46,20 @@
 /* YoBot Logo Header Alignment Styles */
 .header-logo-wrapper {
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .logo-icon {
-  height: 86px; /* Slightly taller to extend bottom baseline */
-  margin-right: 3px; /* Moved even closer to Y */
-  position: relative;
-  top: 14px; /* Moved entire head down slightly */
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
 }
 
 .header-title {
-  font-size: 3.75rem; /* text-6xl equivalent */
-  line-height: 60px;
+  font-size: 2rem;
+  line-height: 1.2;
+  font-weight: 700;
 }
 
 /* Enhanced card system with uniform styling */

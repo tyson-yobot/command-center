@@ -89,7 +89,7 @@ export default function CommandCenter() {
   const queryClient = useQueryClient();
   
   // Robot head image - using attached asset
-  const robotHeadImage = '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749713043354.png';
+  const robotHeadImage = '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749784150776.png';
   
   // System mode state
   const [currentSystemMode, setCurrentSystemMode] = useState(() => {
