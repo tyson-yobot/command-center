@@ -119,7 +119,7 @@ export function CallMonitoringDetails({ isOpen, onClose, currentSystemMode }: Ca
             </div>
             <div className="bg-cyan-900/60 rounded-lg p-4 border border-cyan-400">
               <div className="text-center">
-                <div className="text-2xl font-bold text-cyan-400">{currentSystemMode === 'test' ? '8.7' : '--'}</div>
+                <div className="text-2xl font-bold text-cyan-400">{currentSystemMode === 'test' ? '8.7' : ''}</div>
                 <div className="text-slate-300 text-sm">Avg Score</div>
               </div>
             </div>

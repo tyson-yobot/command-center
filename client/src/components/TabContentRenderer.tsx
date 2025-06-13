@@ -251,15 +251,15 @@ export function TabContentRenderer({
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-slate-300 text-sm">Sentiment Score:</span>
-                <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '8.7/10' : '--'}</span>
+                <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '8.7/10' : ''}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-300 text-sm">Keywords Detected:</span>
-                <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '234' : '--'}</span>
+                <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '234' : ''}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-300 text-sm">Transcription Accuracy:</span>
-                <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '96.8%' : '--'}</span>
+                <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '96.8%' : ''}</span>
               </div>
             </div>
           </CardContent>
@@ -279,11 +279,11 @@ export function TabContentRenderer({
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-slate-300 text-sm">Commands Today:</span>
-                <span className="text-white font-bold">{currentSystemMode === 'test' ? '14' : '--'}</span>
+                <span className="text-white font-bold">{currentSystemMode === 'test' ? '14' : ''}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-300 text-sm">Success Rate:</span>
-                <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '92.3%' : '--'}</span>
+                <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '92.3%' : ''}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-300 text-sm">Processing:</span>
@@ -304,15 +304,15 @@ export function TabContentRenderer({
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-slate-300 text-sm">Positive:</span>
-                <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '78%' : '--'}</span>
+                <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '78%' : ''}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-300 text-sm">Neutral:</span>
-                <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '18%' : '--'}</span>
+                <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '18%' : ''}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-300 text-sm">Negative:</span>
-                <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '4%' : '--'}</span>
+                <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '4%' : ''}</span>
               </div>
             </div>
           </CardContent>
