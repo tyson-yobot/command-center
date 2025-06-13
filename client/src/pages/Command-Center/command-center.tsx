@@ -2882,7 +2882,7 @@ export default function CommandCenter() {
               <span className="text-white font-medium">Voice Control</span>
               <Badge className={`${isListening ? 'bg-green-500' : 'bg-gray-500'} text-white flex items-center`}>
                 {isListening && <div className="w-2 h-2 bg-green-200 rounded-full mr-1 animate-pulse"></div>}
-                {isListening ? 'Listening...' : 'Idle'}
+                {isListening ? 'Listening...' : (currentSystemMode === 'test' ? 'Idle' : '')}
               </Badge>
             </div>
             <div className="flex items-center space-x-3">
@@ -3250,7 +3250,7 @@ export default function CommandCenter() {
                 {currentSystemMode === 'test' ? '8' : ''}
               </div>
               <p className="text-xs text-green-400">
-                {metrics?.activeCalls ? 'Live voice sessions' : 'No active sessions'}
+                {currentSystemMode === 'test' ? (metrics?.activeCalls ? 'Live voice sessions' : 'No active sessions') : ''}
               </p>
             </CardContent>
           </Card>
@@ -3265,7 +3265,7 @@ export default function CommandCenter() {
                 {currentSystemMode === 'test' ? '47' : ''}
               </div>
               <p className="text-xs text-blue-400">
-                {currentSystemMode === 'test' ? 'AI operations active' : (metrics?.botProcessing ? 'Live AI processing' : 'No AI processing')}
+                {currentSystemMode === 'test' ? 'AI operations active' : ''}
               </p>
             </CardContent>
           </Card>
@@ -5137,7 +5137,7 @@ export default function CommandCenter() {
                             'text-yellow-400'
                           }`}>
                             {serviceStates.monitoring.status === 'ACTIVE' ? '🟢 ACTIVE' :
-                             serviceStates.monitoring.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE'}
+                             serviceStates.monitoring.status === 'RESTARTING' ? '🔄 RESTARTING' : (currentSystemMode === 'test' ? 'IDLE' : '')}
                           </span>
                         </div>
                         <div className="flex space-x-1">
@@ -5186,7 +5186,7 @@ export default function CommandCenter() {
                             'text-yellow-400'
                           }`}>
                             {serviceStates.recording.status === 'ACTIVE' ? '🟢 ACTIVE' :
-                             serviceStates.recording.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE'}
+                             serviceStates.recording.status === 'RESTARTING' ? '🔄 RESTARTING' : (currentSystemMode === 'test' ? 'IDLE' : '')}
                           </span>
                         </div>
                         <div className="flex space-x-1">
@@ -5235,7 +5235,7 @@ export default function CommandCenter() {
                             'text-yellow-400'
                           }`}>
                             {serviceStates.analytics.status === 'ACTIVE' ? '🟢 ACTIVE' :
-                             serviceStates.analytics.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE'}
+                             serviceStates.analytics.status === 'RESTARTING' ? '🔄 RESTARTING' : (currentSystemMode === 'test' ? 'IDLE' : '')}
                           </span>
                         </div>
                         <div className="flex space-x-1">
@@ -5339,7 +5339,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-700/40 rounded-lg p-4 border border-purple-400">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-slate-300 text-sm">Support Status</span>
-                    <span className="text-green-400 font-bold text-sm">Online</span>
+                    <span className="text-green-400 font-bold text-sm">{currentSystemMode === 'test' ? 'Online' : ''}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300 text-sm">Open Tickets</span>
@@ -7189,11 +7189,11 @@ export default function CommandCenter() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Conversions:</span>
-                      <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '12' : '0'}</span>
+                      <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '12' : ''}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Est. Revenue:</span>
-                      <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '$34,200' : '$0'}</span>
+                      <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '$34,200' : ''}</span>
                     </div>
                   </div>
                 </div>
