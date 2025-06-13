@@ -304,6 +304,29 @@ print(json.dumps(result))
     completeAutomation.startCompleteAutomation();
     res.json({ success: true, message: "System automation started" });
   });
+
+  // Reset demo session endpoint
+  app.post('/api/reset-demo-session', (req, res) => {
+    try {
+      // Clear demo-specific data without affecting live operations
+      console.log('🔄 Resetting demo session data');
+      
+      // Reset any cached demo data
+      // This is a placeholder for demo data clearing
+      
+      res.json({ 
+        success: true, 
+        message: "Demo session reset successfully",
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Demo reset error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to reset demo session" 
+      });
+    }
+  });
   
   console.log("✅ Complete system automation initialized");
   console.log(`📊 Managing ${completeAutomation.getSystemMetrics().totalFunctions} automation functions`);

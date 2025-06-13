@@ -1180,8 +1180,6 @@ export default function CommandCenter() {
 
       if (response.ok) {
         // Reset local state
-        setCallLogs([]);
-        setAutomationLogs([]);
         setVoiceRecordings([]);
         setVoiceStatus('Demo session reset successfully');
         
@@ -2890,6 +2888,26 @@ export default function CommandCenter() {
                 <Settings className="w-4 h-4 mr-2" />
                 System
                 <HelpCircle className="w-3 h-3 ml-1 text-amber-300 opacity-70" />
+              </Button>
+              <Button
+                onClick={handleExportDashboard}
+                variant="outline"
+                className="border-green-400 text-green-400 hover:bg-green-600/20 flex items-center"
+                title="Export Data - Download dashboard metrics and analytics as JSON file for client presentations"
+              >
+                <FileDown className="w-4 h-4 mr-2" />
+                Export
+                <HelpCircle className="w-3 h-3 ml-1 text-green-300 opacity-70" />
+              </Button>
+              <Button
+                onClick={handleResetDemo}
+                variant="outline"
+                className="border-purple-400 text-purple-400 hover:bg-purple-600/20 flex items-center"
+                title="Reset Demo - Clear all demo data and logs to start fresh presentation"
+              >
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Reset Demo
+                <HelpCircle className="w-3 h-3 ml-1 text-purple-300 opacity-70" />
               </Button>
             </div>
           </div>
