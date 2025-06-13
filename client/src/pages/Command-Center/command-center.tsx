@@ -3153,7 +3153,8 @@ export default function CommandCenter() {
               <div className="text-2xl font-bold text-white">
                 {currentSystemMode === 'test' ? '94.2%' : (automationPerformance?.successRate || '--')}
               </div>
-              <p className="text-xs text-emerald-400">
+              <p className="text-xs text-emerald-400 flex items-center">
+                {automationPerformance?.successRate && <div className="w-1 h-1 bg-emerald-400 rounded-full mr-1"></div>}
                 {automationPerformance?.successRate ? 'Live automation rate' : 'No automation data'}
               </p>
             </CardContent>
@@ -3168,8 +3169,9 @@ export default function CommandCenter() {
               <div className="text-2xl font-bold text-green-400">
                 {currentSystemMode === 'test' ? '99.8%' : (metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '--')}
               </div>
-              <p className="text-xs text-green-400">
-                {currentSystemMode === 'test' ? 'All systems operational' : 'System uptime'}
+              <p className="text-xs text-green-400 flex items-center">
+                {metrics?.data?.systemUptime && <div className="w-1 h-1 bg-green-400 rounded-full mr-1 animate-pulse"></div>}
+                {currentSystemMode === 'test' ? 'All systems operational' : (metrics?.data?.systemUptime ? 'System uptime' : 'No system data')}
               </p>
             </CardContent>
           </Card>
@@ -3185,13 +3187,14 @@ export default function CommandCenter() {
                   🚀 Live Automation Engine
                 </span>
                 <div className="flex items-center space-x-4">
-                  <span className="text-sm text-green-400">
+                  <Badge className="bg-green-600/20 text-green-300 border border-green-400">
                     {automationPerformance?.activeFunctions || 0} Functions Active
+                  </Badge>
+                  <span className="text-xs text-slate-400 flex items-center">
+                    <Clock className="w-3 h-3 mr-1" />
+                    {new Date().toLocaleTimeString()}
                   </span>
-                  <span className="text-xs text-slate-400">
-                    Last Updated: {new Date().toLocaleTimeString()}
-                  </span>
-                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
                 </div>
               </CardTitle>
             </CardHeader>
@@ -3202,8 +3205,9 @@ export default function CommandCenter() {
                   <div className="text-2xl font-bold text-blue-400">
                     {currentSystemMode === 'test' ? '47' : (automationPerformance?.data?.totalTests || '--')}
                   </div>
-                  <div className="text-xs text-blue-400">
-                    {currentSystemMode === 'test' ? 'Test executions completed' : 'Live executions'}
+                  <div className="text-xs text-blue-400 flex items-center">
+                    {automationPerformance?.data?.totalTests && <div className="w-1 h-1 bg-blue-400 rounded-full mr-1 animate-pulse"></div>}
+                    {currentSystemMode === 'test' ? 'Test executions completed' : (automationPerformance?.data?.totalTests ? 'Live executions' : 'No execution data')}
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -3211,8 +3215,9 @@ export default function CommandCenter() {
                   <div className="text-2xl font-bold text-green-400">
                     {currentSystemMode === 'test' ? '94.2%' : (automationPerformance?.data?.passRate + '%' || '--')}
                   </div>
-                  <div className="text-xs text-green-400">
-                    {currentSystemMode === 'test' ? 'Test mode performance' : 'Live performance'}
+                  <div className="text-xs text-green-400 flex items-center">
+                    {automationPerformance?.data?.passRate && <div className="w-1 h-1 bg-green-400 rounded-full mr-1 animate-pulse"></div>}
+                    {currentSystemMode === 'test' ? 'Test mode performance' : (automationPerformance?.data?.passRate ? 'Live performance' : 'No performance data')}
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -3220,22 +3225,34 @@ export default function CommandCenter() {
                   <div className="text-2xl font-bold text-blue-400">
                     {currentSystemMode === 'test' ? '6' : (automationPerformance?.recentExecutions?.length || '--')}
                   </div>
-                  <div className="text-xs text-blue-400">In queue</div>
+                  <div className="text-xs text-blue-400 flex items-center">
+                    {automationPerformance?.recentExecutions?.length && <div className="w-1 h-1 bg-blue-400 rounded-full mr-1 animate-pulse"></div>}
+                    {automationPerformance?.recentExecutions?.length ? 'In queue' : 'No queue data'}
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-slate-300 text-sm">System Load</div>
                   <div className="text-2xl font-bold text-green-400">
                     {currentSystemMode === 'test' ? '99.8%' : (metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '--')}
                   </div>
-                  <div className="text-xs text-green-400">Uptime</div>
+                  <div className="text-xs text-green-400 flex items-center">
+                    {metrics?.data?.systemUptime && <div className="w-1 h-1 bg-green-400 rounded-full mr-1 animate-pulse"></div>}
+                    Uptime
+                  </div>
                 </div>
               </div>
               
               {/* Recent Execution Log */}
               <div className="mt-6">
-                <h4 className="text-white font-medium mb-3 flex items-center">
-                  <Clock className="w-4 h-4 mr-2 text-cyan-400" />
-                  Live Execution Stream
+                <h4 className="text-white font-medium mb-3 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Clock className="w-4 h-4 mr-2 text-cyan-400" />
+                    Live Execution Stream
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                    <span className="text-xs text-cyan-400">Real-time</span>
+                  </div>
                 </h4>
                 <div className="bg-black/40 rounded-lg p-4 max-h-32 overflow-y-auto">
                   {automationPerformance?.recentExecutions?.slice(-5).reverse().map((execution: any, index: number) => (
