@@ -27,17 +27,17 @@ export default function HeaderBar({
     <div className="w-full bg-[#1e3a8a] shadow-lg z-50 sticky top-0">
       <div className="flex items-center justify-between px-6 py-3">
         {/* Logo & Title */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1">
           <img 
             src={robotHeadImage} 
             alt="YoBot Robot Head" 
-            className="w-10 h-10 mr-0.5"
+            className="w-10 h-10 mr-1"
             onError={(e) => {
               console.log('Image failed to load, showing Bot icon fallback');
               (e.target as HTMLImageElement).style.display = 'none';
             }}
           />
-          <Bot className="text-white w-10 h-10 mr-0.5" style={{ display: 'none' }} />
+          <Bot className="text-white w-10 h-10 mr-1" style={{ display: 'none' }} />
           <div className="text-white text-xl font-bold">
             YoBot<sup className="text-xs">®</sup> Command Center
           </div>

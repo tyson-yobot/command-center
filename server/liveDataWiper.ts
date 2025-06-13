@@ -79,55 +79,52 @@ export class LiveDataWiper {
     switch (dataType) {
       case 'dashboard-metrics':
         return {
-          totalRevenue: null,
-          monthlyRecurringRevenue: null,
-          activeClients: null,
-          completedJobs: null,
-          pendingOrders: null,
-          automationEfficiency: null,
-          systemUptime: null,
-          avgResponseTime: null,
-          dailyActiveUsers: null,
-          conversionRate: null,
-          customerSatisfaction: null,
-          revenueGrowth: null
+          totalRevenue: "",
+          monthlyRecurringRevenue: "",
+          activeClients: "",
+          completedJobs: "",
+          pendingOrders: "",
+          automationEfficiency: "",
+          systemUptime: "",
+          avgResponseTime: "",
+          dailyActiveUsers: "",
+          conversionRate: "",
+          customerSatisfaction: "",
+          revenueGrowth: ""
         };
 
       case 'automation-performance':
         return {
-          totalTests: null,
-          passedTests: null,
-          failedTests: null,
-          passRate: null,
-          avgExecutionTime: null,
-          criticalErrors: null,
-          warnings: null,
-          lastRunTime: null,
+          totalTests: "",
+          passedTests: "",
+          failedTests: "",
+          passRate: "",
+          avgExecutionTime: "",
+          criticalErrors: "",
+          warnings: "",
+          lastRunTime: "",
           automationFunctions: []
         };
 
       case 'live-activity':
         return {
-          activeConnections: null,
-          requestsPerMinute: null,
-          errorRate: null,
-          recentActivity: [],
-          connectionStats: {
-            total: null,
-            active: null,
-            idle: null,
-            failed: null
-          }
+          activeConnections: "",
+          requestsPerMinute: "",
+          errorRate: "",
+          avgLatency: "",
+          queuedJobs: "",
+          processingJobs: "",
+          recentActivity: []
         };
 
       case 'knowledge-stats':
         return {
-          totalDocuments: null,
-          recentlyUpdated: null,
-          pendingReview: null,
+          totalDocuments: "",
+          recentlyUpdated: "",
+          pendingReview: "",
           categories: [],
-          lastSync: null,
-          searchQueries: null,
+          lastSync: "",
+          searchQueries: "",
           topQueries: []
         };
 
