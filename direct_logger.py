@@ -5,9 +5,9 @@ from datetime import datetime
 # Execute the log_to_airtable function exactly as specified
 def log_to_airtable(data):
     AIRTABLE_BASE_ID = os.environ.get('AIRTABLE_BASE_ID')
-    AIRTABLE_API_KEY = os.environ.get('AIRTABLE_API_KEY')
+    AIRTABLE_API_KEY = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
     
-    url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/Integration%20Test%20Log"
+    url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/tblCLo4Sv6XvFXoaq"
     
     headers = {
         "Authorization": f"Bearer {AIRTABLE_API_KEY}",
