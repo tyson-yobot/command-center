@@ -68,25 +68,10 @@ import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 
 export default function CommandCenter() {
-  const queryClient = useQueryClient();
-  
-  // System mode state
-  const [currentSystemMode, setCurrentSystemMode] = useState(() => {
-    return localStorage.getItem('systemMode') || 'live';
-  });
-
-  // Tab navigation state
-  const [activeTab, setActiveTab] = useState('automation-ops');
-
-  // Voice control state
-  const [isListening, setIsListening] = useState(false);
-  const [voiceCommand, setVoiceCommand] = useState('');
-  const [voiceStatus, setVoiceStatus] = useState('Ready');
-  const recognitionRef = useRef<any>(null);
-  const [currentRecognition, setCurrentRecognition] = useState<any>(null);
-
-  // Toast system
-  const { toast } = useToast();
+  return (
+    <div className="min-h-screen bg-black">
+    </div>
+  );
 
   // Fetch system mode from API
   const { data: systemModeData } = useQuery({
