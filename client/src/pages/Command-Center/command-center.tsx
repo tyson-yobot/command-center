@@ -105,33 +105,41 @@ export default function CommandCenter() {
     { id: 'system-tools', label: 'System Tools', icon: Settings }
   ];
   
-  // Dashboard metrics queries
+  // Dashboard metrics queries with performance optimization
   const { data: metrics } = useQuery({ 
     queryKey: ['/api/dashboard-metrics', currentSystemMode],
     queryFn: () => fetch('/api/dashboard-metrics', {
       headers: { 'x-system-mode': currentSystemMode }
-    }).then(res => res.json())
+    }).then(res => res.json()),
+    refetchInterval: 30000,
+    staleTime: 15000,
   });
   
   const { data: automationPerformance } = useQuery({ 
     queryKey: ['/api/automation-performance', currentSystemMode],
     queryFn: () => fetch('/api/automation-performance', {
       headers: { 'x-system-mode': currentSystemMode }
-    }).then(res => res.json())
+    }).then(res => res.json()),
+    refetchInterval: 60000,
+    staleTime: 30000,
   });
 
   const { data: liveActivityData } = useQuery({ 
     queryKey: ['/api/live-activity', currentSystemMode],
     queryFn: () => fetch('/api/live-activity', {
       headers: { 'x-system-mode': currentSystemMode }
-    }).then(res => res.json())
+    }).then(res => res.json()),
+    refetchInterval: 10000,
+    staleTime: 5000,
   });
   
   const { data: knowledgeStats, refetch: refetchKnowledge } = useQuery({ 
     queryKey: ['/api/knowledge/stats', currentSystemMode],
     queryFn: () => fetch('/api/knowledge/stats', {
       headers: { 'x-system-mode': currentSystemMode }
-    }).then(res => res.json())
+    }).then(res => res.json()),
+    refetchInterval: 120000,
+    staleTime: 60000,
   });
   
   const [isListening, setIsListening] = React.useState(false);
@@ -2787,14 +2795,34 @@ export default function CommandCenter() {
                 onClick={() => setShowVoiceRecordings(!showVoiceRecordings)}
                 variant="outline"
                 className="border-blue-400 text-blue-400 hover:bg-blue-600/20"
+                title="View and manage voice recordings"
               >
                 <Headphones className="w-4 h-4 mr-2" />
                 Recordings
               </Button>
+              <Button
+                onClick={() => setActiveTab('automation-ops')}
+                variant="outline"
+                className="border-green-400 text-green-400 hover:bg-green-600/20"
+                title="Quick access to automation operations"
+              >
+                <Zap className="w-4 h-4 mr-2" />
+                Quick Ops
+              </Button>
+              <Button
+                onClick={() => setActiveTab('system-tools')}
+                variant="outline"
+                className="border-amber-400 text-amber-400 hover:bg-amber-600/20"
+                title="Access system monitoring and tools"
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                System
+              </Button>
             </div>
           </div>
           {isListening && (
-            <div className="mt-3 text-sm text-green-400">
+            <div className="mt-3 text-sm text-green-400 flex items-center">
+              <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
               Voice commands ready. Say "YoBot" to activate commands.
             </div>
           )}
