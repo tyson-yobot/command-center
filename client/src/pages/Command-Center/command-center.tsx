@@ -7093,17 +7093,19 @@ export default function CommandCenter() {
       />
 
       {/* Alert Banner */}
-      <div className="bg-blue-900/40 border border-blue-400 rounded-lg p-4 mb-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <Bell className="w-5 h-5 text-blue-400" />
-            <span className="text-white font-medium">Next Scheduled Voice Test: Today @ 2:00 PM</span>
+      {currentSystemMode === 'test' && (
+        <div className="bg-blue-900/40 border border-blue-400 rounded-lg p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Bell className="w-5 h-5 text-blue-400" />
+              <span className="text-white font-medium">Next Scheduled Voice Test: Today @ 2:00 PM</span>
+            </div>
+            <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+              View Details
+            </Button>
           </div>
-          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
-            View Details
-          </Button>
         </div>
-      </div>
+      )}
 
       {/* Footer - Support Contact & YoBot Branding */}
       <div className="text-center mt-8 mb-4">
