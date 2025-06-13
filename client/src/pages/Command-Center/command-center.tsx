@@ -5278,19 +5278,19 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-4 gap-3">
                   <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
                     <div className="text-slate-300 text-xs mb-1">Active Calls</div>
-                    <div className="text-white font-bold text-lg">{callStats.activeCalls}</div>
+                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.activeCalls : ''}</div>
                   </div>
                   <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
                     <div className="text-slate-300 text-xs mb-1">Avg Duration</div>
-                    <div className="text-white font-bold text-lg">{callStats.avgDuration}</div>
+                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.avgDuration : ''}</div>
                   </div>
                   <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
                     <div className="text-slate-300 text-xs mb-1">Success Rate</div>
-                    <div className="text-white font-bold text-lg">{callStats.successRate}</div>
+                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.successRate : ''}</div>
                   </div>
                   <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
                     <div className="text-slate-300 text-xs mb-1">Total Today</div>
-                    <div className="text-white font-bold text-lg">{callStats.totalToday}</div>
+                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.totalToday : ''}</div>
                   </div>
                 </div>
 
@@ -5405,7 +5405,7 @@ export default function CommandCenter() {
                       </div>
                     )) : (
                       <div className="text-slate-400 text-xs text-center py-2">
-                        No recent support activity
+                        {currentSystemMode === 'test' ? 'No recent support activity' : ''}
                       </div>
                     )}
                   </div>
@@ -7168,15 +7168,15 @@ export default function CommandCenter() {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Total Calls:</span>
-                      <span className="text-white font-bold">{currentSystemMode === 'test' ? '47' : '0'}</span>
+                      <span className="text-white font-bold">{currentSystemMode === 'test' ? '47' : ''}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Success Rate:</span>
-                      <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '94.7%' : '0%'}</span>
+                      <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '94.7%' : ''}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Avg Duration:</span>
-                      <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '3m 42s' : '0m'}</span>
+                      <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '3m 42s' : ''}</span>
                     </div>
                   </div>
                 </div>
@@ -7185,7 +7185,7 @@ export default function CommandCenter() {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Leads Generated:</span>
-                      <span className="text-white font-bold">{currentSystemMode === 'test' ? '23' : '0'}</span>
+                      <span className="text-white font-bold">{currentSystemMode === 'test' ? '23' : ''}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Conversions:</span>
