@@ -3437,7 +3437,7 @@ export default function CommandCenter() {
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Bot Errors:</span>
                   <div className="flex items-center space-x-2">
-                    <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '3' : (automationPerformance?.data?.criticalErrors || '0')}</span>
+                    <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '3' : ''}</span>
                     <Button size="sm" variant="ghost" className="text-cyan-400 hover:text-cyan-300 text-xs p-1">
                       {currentSystemMode === 'test' ? '👁 View Details' : ''}
                     </Button>
@@ -3642,7 +3642,7 @@ export default function CommandCenter() {
                     <div className="text-slate-300 text-sm">Next Automation</div>
                     {currentSystemMode === 'test' && <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>}
                   </div>
-                  <div className="text-blue-400 font-medium">{currentSystemMode === 'test' ? 'Lead follow-up in 15 min' : (automationPerformance?.nextAutomation || 'No scheduled automations')}</div>
+                  <div className="text-blue-400 font-medium">{currentSystemMode === 'test' ? 'Lead follow-up in 15 min' : ''}</div>
                 </div>
               </div>
             </CardContent>
@@ -3731,7 +3731,7 @@ export default function CommandCenter() {
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-yellow-400 font-bold">${currentSystemMode === 'test' ? '64' : (metrics?.data?.avgResponseTime ? (metrics.data.avgResponseTime * 0.5).toFixed(0) : '')}</span>
+                      <span className="text-yellow-400 font-bold">{currentSystemMode === 'test' ? '$64' : ''}</span>
                       <Badge className="bg-slate-600 text-white text-xs">{currentSystemMode === 'test' ? '--' : ''}</Badge>
                     </div>
                   </div>
@@ -3841,7 +3841,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="text-slate-300 text-sm mb-1">System Status</div>
-                  <div className="text-green-400 font-medium">{currentSystemMode === 'test' ? 'All Systems Operational' : 'All Systems Operational'}</div>
+                  <div className="text-green-400 font-medium">{currentSystemMode === 'test' ? 'All Systems Operational' : ''}</div>
                 </div>
               </div>
             </CardContent>
