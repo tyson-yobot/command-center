@@ -5140,7 +5140,7 @@ export default function CommandCenter() {
                             serviceStates.monitoring.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
                             'text-yellow-400'
                           }`}>
-                            {currentSystemMode === 'test' ? (serviceStates.monitoring.status === 'ACTIVE' ? '🟢 ACTIVE' :
+                            {currentSystemMode === 'development' ? (serviceStates.monitoring.status === 'ACTIVE' ? '🟢 ACTIVE' :
                              serviceStates.monitoring.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
                           </span>
                         </div>
@@ -5189,7 +5189,7 @@ export default function CommandCenter() {
                             serviceStates.recording.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
                             'text-yellow-400'
                           }`}>
-                            {currentSystemMode === 'test' ? (serviceStates.recording.status === 'ACTIVE' ? '🟢 ACTIVE' :
+                            {currentSystemMode === 'development' ? (serviceStates.recording.status === 'ACTIVE' ? '🟢 ACTIVE' :
                              serviceStates.recording.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
                           </span>
                         </div>
