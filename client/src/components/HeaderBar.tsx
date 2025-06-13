@@ -29,7 +29,12 @@ export default function HeaderBar({
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-3">
             <div className="text-white text-2xl font-bold flex items-center gap-2">
-              <Bot className="text-sky-400" size={28} />
+              <img 
+                src="/@assets/A_flat_vector_illustration_features_a_robot_face_i_1749713043354.png" 
+                alt="YoBot Robot Head" 
+                className="w-8 h-8 object-contain"
+                style={{ height: '32px' }}
+              />
               YoBot<sup className="text-xs">®</sup>
             </div>
           </div>

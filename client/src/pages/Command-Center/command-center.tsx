@@ -88,9 +88,6 @@ import { TabContentRenderer } from '@/components/TabContentRenderer';
 export default function CommandCenter() {
   const queryClient = useQueryClient();
   
-  // Robot head image - using attached asset
-  const robotHeadImage = '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749713043354.png';
-  
   // System mode state
   const [currentSystemMode, setCurrentSystemMode] = useState(() => {
     return localStorage.getItem('systemMode') || 'live';
@@ -3343,7 +3340,6 @@ export default function CommandCenter() {
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-green-400" />
-                <img src={robotHeadImage} alt="Robot Head" className="w-6 h-6 mr-2" />
                 YoBot® Health Monitor
               </CardTitle>
             </CardHeader>
