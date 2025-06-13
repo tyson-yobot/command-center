@@ -3,34 +3,9 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { User, Settings, LogOut, ChevronDown, LayoutDashboard, MessageSquare, BookOpen, Mic, FileText, Users, FileDown, Bot } from 'lucide-react';
-// Robot head SVG component
-const RobotHead = () => (
-  <svg width="48" height="48" viewBox="0 0 100 100" className="logo-icon">
-    <defs>
-      <linearGradient id="robotGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#3b82f6" />
-        <stop offset="100%" stopColor="#1d4ed8" />
-      </linearGradient>
-    </defs>
-    {/* Antenna */}
-    <circle cx="50" cy="15" r="4" fill="#1f2937" />
-    <rect x="48" y="15" width="4" height="20" fill="#1f2937" />
-    
-    {/* Main robot head body */}
-    <rect x="20" y="35" width="60" height="45" rx="8" ry="8" fill="#1f2937" stroke="#374151" strokeWidth="2" />
-    <rect x="25" y="40" width="50" height="35" rx="5" ry="5" fill="url(#robotGradient)" />
-    
-    {/* Eyes */}
-    <circle cx="35" cy="55" r="5" fill="#000" />
-    <circle cx="65" cy="55" r="5" fill="#000" />
-    
-    {/* Smile */}
-    <path d="M 35 70 Q 50 80 65 70" stroke="#000" strokeWidth="3" fill="none" strokeLinecap="round" />
-  </svg>
-);
+// Logo will be handled via public assets
 
 interface HeaderBarProps {
   currentSystemMode?: string;
@@ -50,33 +25,17 @@ export default function HeaderBar({
   return (
     <div className="w-full bg-gradient-to-r from-[#0b1627] to-[#071021] shadow-lg z-50 sticky top-0">
       <div className="flex items-center justify-between px-6 py-4">
-        {/* Logo & Title */}
-        <div className="flex items-center gap-6">
-          <div className="header-logo-wrapper">
-            <RobotHead />
-            <div className="header-title text-white">
-              YoBot<sup className="text-xs">®</sup> Command Center
+        {/* Logo & System Mode */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <div className="text-white text-2xl font-bold flex items-center gap-2">
+              <Bot className="text-sky-400" size={28} />
+              YoBot<sup className="text-xs">®</sup>
             </div>
           </div>
-          
-          {/* System Mode Toggle */}
-          <div className="flex items-center gap-3 bg-slate-800/50 px-4 py-2 rounded-lg">
-            <span className="text-sm text-gray-300">System Mode:</span>
-            <div className="flex items-center gap-2">
-              <span className={`text-sm ${!isLiveMode ? 'text-yellow-400 font-semibold' : 'text-gray-400'}`}>Test</span>
-              <Switch
-                checked={isLiveMode}
-                onCheckedChange={onModeToggle}
-                className="data-[state=checked]:bg-green-600"
-              />
-              <span className={`text-sm ${isLiveMode ? 'text-green-400 font-semibold' : 'text-gray-400'}`}>Live</span>
-            </div>
-            {isLiveMode && (
-              <span className="text-xs text-green-400 bg-green-400/20 px-2 py-1 rounded">
-                Live Mode - Production Data
-              </span>
-            )}
-          </div>
+          <span className={`ml-3 text-white text-xs px-2 py-1 rounded-md uppercase ${isLiveMode ? 'bg-green-600' : 'bg-yellow-600'}`}>
+            {isLiveMode ? 'Live Mode' : 'Test Mode'}
+          </span>
         </div>
 
         {/* Navigation */}
