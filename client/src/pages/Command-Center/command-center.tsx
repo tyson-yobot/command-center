@@ -3700,9 +3700,11 @@ export default function CommandCenter() {
                     <div className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '$184' : ''}</div>
                     <Badge className="bg-cyan-600 text-white">{currentSystemMode === 'test' ? '+15%' : ''}</Badge>
                   </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-cyan-400 h-1 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
+                  {currentSystemMode === 'test' && (
+                    <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                      <div className="bg-cyan-400 h-1 rounded-full" style={{ width: '0%' }}></div>
+                    </div>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -3763,9 +3765,11 @@ export default function CommandCenter() {
                     <div className="text-green-400 font-bold">{currentSystemMode === 'test' ? '--' : ''}</div>
                     <Badge className="bg-green-600 text-white">{currentSystemMode === 'test' ? '--' : ''}</Badge>
                   </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
+                  {currentSystemMode === 'test' && (
+                    <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                      <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
+                    </div>
+                  )}
                 </div>
               </div>
             </CardContent>
