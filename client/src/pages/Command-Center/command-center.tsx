@@ -2763,6 +2763,41 @@ export default function CommandCenter() {
           </p>
         </div>
 
+        {/* Global Voice Control Bar */}
+        <div className="mb-6 bg-white/10 backdrop-blur-sm border border-blue-400 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Mic className="w-5 h-5 text-blue-400" />
+              <span className="text-white font-medium">Voice Control</span>
+              <Badge className={`${voiceActive ? 'bg-green-500' : 'bg-gray-500'} text-white`}>
+                {voiceActive ? 'Active' : 'Inactive'}
+              </Badge>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Button
+                onClick={handleVoiceToggle}
+                className={`${voiceActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white`}
+              >
+                {voiceActive ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
+                {voiceActive ? 'Stop Voice' : 'Start Voice'}
+              </Button>
+              <Button
+                onClick={() => setShowVoiceRecordings(!showVoiceRecordings)}
+                variant="outline"
+                className="border-blue-400 text-blue-400 hover:bg-blue-600/20"
+              >
+                <Headphones className="w-4 h-4 mr-2" />
+                Recordings
+              </Button>
+            </div>
+          </div>
+          {voiceActive && (
+            <div className="mt-3 text-sm text-green-400">
+              Voice commands ready. Say "YoBot" to activate commands.
+            </div>
+          )}
+        </div>
+
         {/* Live Command Center Buttons */}
         <div className="mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -2928,20 +2963,35 @@ export default function CommandCenter() {
             <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 relative">
               <CardHeader>
                 <CardTitle className="text-white flex items-center justify-between">
-                  Data & Reports
+                  <div className="flex items-center">
+                    <BarChart3 className="w-5 h-5 mr-2 text-blue-400" />
+                    Data & Reports
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => toggleSection('data-reports')}
+                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                    >
+                      {collapsedSections['data-reports'] ? 
+                        <ChevronDown className="w-4 h-4" /> : 
+                        <ChevronUp className="w-4 h-4" />
+                      }
+                    </Button>
+                  </div>
                   <Badge className="bg-blue-600 text-white">🔒 Admin-Only</Badge>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 gap-3">
-                  <Button
-                    onClick={() => window.location.href = '/lead-scraper'}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
-                    style={{ borderLeft: '8px solid #ec4899' }}
-                  >
-                    <span className="text-xl mr-3">🧲</span>
-                    <span>Lead Scraper Tool</span>
-                  </Button>
+              {!collapsedSections['data-reports'] && (
+                <CardContent>
+                  <div className="grid grid-cols-1 gap-3">
+                    <Button
+                      onClick={() => window.location.href = '/lead-scraper'}
+                      className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
+                      style={{ borderLeft: '8px solid #ec4899' }}
+                    >
+                      <span className="text-xl mr-3">🧲</span>
+                      <span>Lead Scraper Tool</span>
+                    </Button>
                   
                   <Button
                     onClick={handleDownloadPDF}
@@ -3006,9 +3056,9 @@ export default function CommandCenter() {
                     <span className="text-xl mr-3">📧</span>
                     <span>Mailchimp Campaign</span>
                   </Button>
-
                 </div>
               </CardContent>
+              )}
             </Card>
 
 
@@ -3039,7 +3089,7 @@ export default function CommandCenter() {
                 {currentSystemMode === 'test' ? '8' : (metrics?.activeCalls || '--')}
               </div>
               <p className="text-xs text-green-400">
-                Live voice sessions
+                {metrics?.activeCalls ? 'Live voice sessions' : 'No active sessions'}
               </p>
             </CardContent>
           </Card>
