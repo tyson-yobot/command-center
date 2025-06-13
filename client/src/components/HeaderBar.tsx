@@ -5,8 +5,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { User, Settings, LogOut, ChevronDown, LayoutDashboard, MessageSquare, BookOpen, Mic, FileText, Users, FileDown, Bot } from 'lucide-react';
-
-
+// Logo will be handled via public assets
 
 interface HeaderBarProps {
   currentSystemMode?: string;
@@ -31,14 +30,10 @@ export default function HeaderBar({
           <div className="flex items-center gap-3">
             <div className="text-white text-2xl font-bold flex items-center gap-2">
               <img 
-                src="/images/robot-head.png" 
+                src="/@assets/A_flat_vector_illustration_features_a_robot_face_i_1749713043354.png" 
                 alt="YoBot Robot Head" 
-                className="w-7 h-7 object-contain"
-                style={{ height: '28px', width: '28px' }}
-                onError={(e) => {
-                  console.log('Image failed to load, using fallback');
-                  e.currentTarget.style.display = 'none';
-                }}
+                className="w-8 h-8 object-contain"
+                style={{ height: '32px' }}
               />
               YoBot<sup className="text-xs">®</sup>
             </div>
