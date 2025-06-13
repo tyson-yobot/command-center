@@ -3486,23 +3486,38 @@ export default function CommandCenter() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Active Workflows</span>
-                  <Badge className={currentSystemMode === 'test' ? "bg-green-600 text-white" : "bg-slate-600 text-slate-400"}>{currentSystemMode === 'test' ? '12' : (automationPerformance?.activeFunctions || 0)}</Badge>
+                  <div className="flex items-center space-x-2">
+                    {automationPerformance?.activeFunctions && <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>}
+                    <Badge className={currentSystemMode === 'test' ? "bg-green-600 text-white" : "bg-slate-600 text-slate-400"}>{currentSystemMode === 'test' ? '12' : (automationPerformance?.activeFunctions || 0)}</Badge>
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Tasks Completed</span>
-                  <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '1,847' : (automationPerformance?.completedTasks || 0)}</span>
+                  <div className="flex items-center space-x-1">
+                    {automationPerformance?.completedTasks && <div className="w-1 h-1 bg-cyan-400 rounded-full animate-pulse"></div>}
+                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '1,847' : (automationPerformance?.completedTasks || 0)}</span>
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Success Rate</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '97.3%' : '--'}</span>
+                  <div className="flex items-center space-x-1">
+                    {currentSystemMode === 'test' && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '97.3%' : (automationPerformance?.data?.passRate ? automationPerformance.data.passRate + '%' : '--')}</span>
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Avg Completion Time</span>
-                  <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '2.1s' : '--'}</span>
+                  <div className="flex items-center space-x-1">
+                    {currentSystemMode === 'test' && <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>}
+                    <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '2.1s' : (metrics?.data?.avgResponseTime ? metrics.data.avgResponseTime + 'ms' : '--')}</span>
+                  </div>
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
-                  <div className="text-slate-300 text-sm mb-1">Next Automation</div>
-                  <div className="text-blue-400 font-medium">{currentSystemMode === 'test' ? 'Lead follow-up in 15 min' : '--'}</div>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="text-slate-300 text-sm">Next Automation</div>
+                    {currentSystemMode === 'test' && <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>}
+                  </div>
+                  <div className="text-blue-400 font-medium">{currentSystemMode === 'test' ? 'Lead follow-up in 15 min' : (automationPerformance?.nextAutomation || 'No scheduled automations')}</div>
                 </div>
               </div>
             </CardContent>
