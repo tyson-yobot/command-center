@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { getSystemMode } from "./systemMode";
 import { isLiveMode, safeLiveData, blockTestData } from './liveMode';
 import LiveDataWiper from './liveDataWiper';
+import { airtableLogger } from './airtableLogger';
 import HardcodeDetector from './hardcodeDetector';
 
 // Realistic test data for demo - believable business metrics
@@ -283,6 +284,7 @@ export function registerTestDataRoutes(app: Express) {
       const emptyData = HardcodeDetector.cleanLiveData({});
       
       // Log API access attempt
+      await airtableLogger.logTestExecution(
         'dashboard-metrics-api',
         true,
         'LIVE mode API access - no hardcoded data served',
@@ -319,6 +321,7 @@ export function registerTestDataRoutes(app: Express) {
       const emptyData = HardcodeDetector.cleanLiveData({});
       
       // Log API access attempt
+      await airtableLogger.logTestExecution(
         'automation-performance-api',
         true,
         'LIVE mode API access - no hardcoded data served',
@@ -354,6 +357,7 @@ export function registerTestDataRoutes(app: Express) {
       // LIVE MODE: Zero hardcoded data tolerance
       const emptyData = HardcodeDetector.cleanLiveData({});
       
+      await airtableLogger.logTestExecution(
         'live-activity-api',
         true,
         'LIVE mode API access - no hardcoded data served',

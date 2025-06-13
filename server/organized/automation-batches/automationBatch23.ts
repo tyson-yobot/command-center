@@ -4,8 +4,11 @@
  */
 
 import type { Express } from "express";
+import { logIntegrationTest } from "./airtableIntegrations";
 
 // Helper functions for logging
+async function logToAirtable(tableName: string, data: Record<string, any>) {
+  return await logIntegrationTest({
     integrationName: tableName,
     status: 'PASS',
     notes: JSON.stringify(data),
@@ -35,6 +38,7 @@ export function registerBatch23(app: Express) {
         estimatedCompletion: new Date(Date.now() + Math.random() * 3600000) // 0-1 hour
       };
 
+      await logToAirtable('ML Training Log', {
         'Job ID': trainingJob.jobId,
         'Model Type': trainingJob.modelType,
         'Dataset Size': trainingJob.datasetSize,
@@ -68,6 +72,7 @@ export function registerBatch23(app: Express) {
 
       const highConfidencePredictions = predictions.filter(p => p.confidence > 0.85);
 
+      await logToAirtable('Predictive Analytics Log', {
         'Predictions Generated': predictions.length,
         'High Confidence Predictions': highConfidencePredictions.length,
         'Average Confidence': `${(predictions.reduce((sum, p) => sum + p.confidence, 0) / predictions.length * 100).toFixed(1)}%`,
@@ -102,6 +107,7 @@ export function registerBatch23(app: Express) {
 
       const criticalAnomalies = anomalies.filter(a => a.severity === 'HIGH');
 
+      await logToAirtable('Anomaly Detection Log', {
         'Total Anomalies': anomalies.length,
         'Critical Anomalies': criticalAnomalies.length,
         'Detection Sensitivity': sensitivity || 'MEDIUM',
@@ -144,6 +150,7 @@ export function registerBatch23(app: Express) {
         processingTime: Math.random() * 100 + 50 // 50-150ms
       };
 
+      await logToAirtable('Classification Log', {
         'Items Classified': processingStats.totalClassified,
         'Average Confidence': `${(processingStats.avgConfidence * 100).toFixed(1)}%`,
         'Model Accuracy': `${(processingStats.modelAccuracy * 100).toFixed(1)}%`,
@@ -183,6 +190,7 @@ export function registerBatch23(app: Express) {
         dominantEmotions: ['satisfaction', 'frustration', 'curiosity', 'excitement']
       };
 
+      await logToAirtable('Sentiment Analysis Log', {
         'Texts Analyzed': aggregateStats.totalAnalyzed,
         'Positive Sentiment': aggregateStats.positiveCount,
         'Negative Sentiment': aggregateStats.negativeCount,
@@ -216,6 +224,7 @@ export function registerBatch23(app: Express) {
 
       const strongPatterns = patterns.filter(p => p.strength > 0.75);
 
+      await logToAirtable('Pattern Recognition Log', {
         'Patterns Detected': patterns.length,
         'Strong Patterns': strongPatterns.length,
         'Average Strength': patterns.reduce((sum, p) => sum + p.strength, 0) / patterns.length,
@@ -249,6 +258,7 @@ export function registerBatch23(app: Express) {
 
       const topRecommendations = recommendations.filter(r => r.score > 0.8);
 
+      await logToAirtable('Recommendation Log', {
         'User ID': userId || 'anonymous',
         'Recommendations Generated': recommendations.length,
         'High Score Recommendations': topRecommendations.length,
@@ -287,6 +297,7 @@ export function registerBatch23(app: Express) {
         processingTime: Math.random() * 200 + 100
       };
 
+      await logToAirtable('Feature Engineering Log', {
         'Features Generated': featureStats.totalFeatures,
         'High Importance Features': featureStats.highImportanceFeatures,
         'Average Importance': featureStats.averageImportance.toFixed(3),
@@ -327,6 +338,7 @@ export function registerBatch23(app: Express) {
                           performanceMetrics.drift < 0.05 && 
                           performanceMetrics.errorRate < 0.01 ? 'HEALTHY' : 'DEGRADED';
 
+      await logToAirtable('Model Performance Log', {
         'Model ID': performanceMetrics.modelId,
         'Accuracy': `${(performanceMetrics.accuracy * 100).toFixed(1)}%`,
         'F1 Score': performanceMetrics.f1Score.toFixed(3),
@@ -374,6 +386,7 @@ export function registerBatch23(app: Express) {
         estimatedCompletion: new Date(Date.now() + 20 * 60 * 1000) // 20 minutes
       };
 
+      await logToAirtable('AutoML Pipeline Log', {
         'Pipeline ID': pipeline.pipelineId,
         'Current Stage': 'Model Selection',
         'Completed Stages': pipeline.stages.filter(s => s.status === 'COMPLETED').length,

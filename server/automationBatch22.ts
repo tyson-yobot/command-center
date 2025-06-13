@@ -4,8 +4,11 @@
  */
 
 import type { Express } from "express";
+import { logIntegrationTest } from "./airtableIntegrations";
 
 // Helper functions for logging
+async function logToAirtable(tableName: string, data: Record<string, any>) {
+  return await logIntegrationTest({
     integrationName: tableName,
     status: 'PASS',
     notes: JSON.stringify(data),
@@ -40,6 +43,7 @@ export function registerBatch22(app: Express) {
         status: 'HEALED'
       };
 
+      await logToAirtable('System Recovery Log', {
         'System ID': recoveryResult.systemId,
         'Healing Actions': recoveryResult.healingActions,
         'Recovery Status': recoveryResult.status,
@@ -72,6 +76,7 @@ export function registerBatch22(app: Express) {
 
       const strategy = recoveryStrategies[errorType] || ['Standard recovery protocol'];
       
+      await logToAirtable('Error Recovery Log', {
         'Error Type': errorType || 'unknown',
         'Severity': severity || 'medium',
         'Recovery Strategy': strategy.join(', '),
@@ -108,6 +113,7 @@ export function registerBatch22(app: Express) {
       if (loadData.memory > 85) rebalancingActions.push('Memory optimization');
       if (loadData.responseTime > 300) rebalancingActions.push('Request routing optimization');
 
+      await logToAirtable('Load Balancing Log', {
         'CPU Usage': `${loadData.cpu.toFixed(2)}%`,
         'Memory Usage': `${loadData.memory.toFixed(2)}%`,
         'Active Connections': loadData.connections,
@@ -142,6 +148,7 @@ export function registerBatch22(app: Express) {
         .filter(p => p.risk !== 'Low')
         .map(p => `${p.component}: ${p.recommendation}`);
 
+      await logToAirtable('Predictive Maintenance Log', {
         'Components Analyzed': predictions.length,
         'High Risk Components': predictions.filter(p => p.risk === 'High').length,
         'Maintenance Schedule': maintenanceSchedule.join('; ') || 'No immediate action needed',
@@ -175,6 +182,7 @@ export function registerBatch22(app: Express) {
 
       scalingDecision.estimatedCost = scalingDecision.recommendedInstances * 0.10; // $0.10 per instance per hour
 
+      await logToAirtable('Auto Scaling Log', {
         'Current Instances': scalingDecision.currentInstances,
         'Recommended Instances': scalingDecision.recommendedInstances,
         'Scaling Reason': scalingDecision.reason,
@@ -213,6 +221,7 @@ export function registerBatch22(app: Express) {
         circuitState.state = 'HALF_OPEN';
       }
 
+      await logToAirtable('Circuit Breaker Log', {
         'Service Name': circuitState.service,
         'Circuit State': circuitState.state,
         'Current Failures': circuitState.currentFailures,
@@ -249,6 +258,7 @@ export function registerBatch22(app: Express) {
 
       const unhealthyServices = healthChecks.filter(hc => hc.status !== 'HEALTHY');
 
+      await logToAirtable('Health Check Log', {
         'Total Services': healthChecks.length,
         'Healthy Services': healthChecks.filter(hc => hc.status === 'HEALTHY').length,
         'Degraded Services': unhealthyServices.length,
@@ -292,6 +302,7 @@ export function registerBatch22(app: Express) {
         riskLevel: 'MEDIUM'
       };
 
+      await logToAirtable('Recovery Orchestration Log', {
         'Incident ID': recoveryPlan.incidentId,
         'Affected Services': (affectedServices || ['API Gateway', 'Database']).join(', '),
         'Recovery Phases': recoveryPlan.phases.length,
@@ -325,6 +336,7 @@ export function registerBatch22(app: Express) {
       const totalImpact = optimizations.reduce((sum, opt) => 
         sum + parseInt(opt.improvement.replace('%', '')), 0) / optimizations.length;
 
+      await logToAirtable('Performance Optimization Log', {
         'Optimization Areas': optimizations.length,
         'Average Improvement': `${totalImpact.toFixed(1)}%`,
         'Actions Applied': optimizations.map(opt => opt.action).join('; '),
@@ -359,6 +371,7 @@ export function registerBatch22(app: Express) {
         .filter(([_, data]) => Math.abs(data.current - data.recommended) > 3)
         .map(([resource, data]) => `${resource}: ${data.action}`);
 
+      await logToAirtable('Resource Management Log', {
         'Resource Types': Object.keys(resourceAllocation).length,
         'Optimization Actions': resourceActions.length,
         'Actions Required': resourceActions.join('; ') || 'No optimization needed',

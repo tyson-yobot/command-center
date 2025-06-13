@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { officialQATracker } from "./officialQATracker";
 import { sendSlackAlert } from "./alerts";
+import { logToAirtable } from "./airtableLogger";
 
 export function registerCoreAutomationEndpoints(app: Express) {
   

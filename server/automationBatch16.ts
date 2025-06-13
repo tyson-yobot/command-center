@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import { logIntegrationTest } from "./airtableIntegrations";
 
 // 151 - VoiceBot: Detect Escalation Intent
 function detectEscalationIntent(transcript: string): boolean {
@@ -87,6 +88,7 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const needsEscalation = detectEscalationIntent("I need to speak to a human about this issue");
+        await logIntegrationTest({
           testName: "Function 151: VoiceBot Escalation Detection",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -109,6 +111,7 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const category = categorizeFailure("stripe-payment-processor");
+        await logIntegrationTest({
           testName: "Function 152: Failure Categorization",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -131,6 +134,7 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const metric = await updateSystemHealthMetric("cpu_usage", "optimal");
+        await logIntegrationTest({
           testName: "Function 153: System Health Metric Update",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -153,6 +157,7 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const hasBrokenLinks = findBrokenLinks({ contacts: [] }, "contacts");
+        await logIntegrationTest({
           testName: "Function 154: Broken Link Detection",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -175,6 +180,7 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const script = await expandToScript("Schedule a follow-up meeting");
+        await logIntegrationTest({
           testName: "Function 155: AI Script Expansion",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -197,6 +203,7 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const backup = await triggerDriveBackup({ test: "data" }, "test_backup.json");
+        await logIntegrationTest({
           testName: "Function 156: Google Drive Backup",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -219,6 +226,7 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         await notifyNewLead({ name: "John Doe", email: "john@example.com" });
+        await logIntegrationTest({
           testName: "Function 157: New Lead Notification",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -241,6 +249,7 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         const domain = getDomainFromUrl("https://www.example.com/page");
+        await logIntegrationTest({
           testName: "Function 158: Domain Extraction",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -263,6 +272,7 @@ export function registerBatch16Routes(app: Express): void {
       
       if (testMode) {
         await autoCompleteTask({ id: "task_123", label: "autofinish" });
+        await logIntegrationTest({
           testName: "Function 159: Auto-Complete Task",
           status: "PASS",
           timestamp: new Date().toISOString(),
@@ -289,6 +299,7 @@ export function registerBatch16Routes(app: Express): void {
           status: "PASS",
           qaOwner: "YoBot System"
         });
+        await logIntegrationTest({
           testName: "Function 160: Test Snapshot Creation",
           status: "PASS",
           timestamp: new Date().toISOString(),

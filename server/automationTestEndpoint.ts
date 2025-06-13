@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import { logToAirtable } from "./airtableLogger";
 
 // Define the actual 22 automation functions
 const automationFunctions = [
@@ -65,6 +66,7 @@ export function registerAutomationTestEndpoint(app: Express) {
       const executionTime = Date.now() - startTime;
 
       // Log to Airtable
+      await logToAirtable({
         functionName,
         result: success,
         notes: `${notes} - Execution time: ${executionTime}ms`,
@@ -81,6 +83,7 @@ export function registerAutomationTestEndpoint(app: Express) {
 
     } catch (error) {
       // Log failure to Airtable
+      await logToAirtable({
         functionName,
         result: false,
         notes: `Test failed: ${error}`,
@@ -109,6 +112,7 @@ export function registerAutomationTestEndpoint(app: Express) {
           const executionTime = Date.now() - startTime + Math.floor(Math.random() * 100);
           
           // Log to Airtable
+          await logToAirtable({
             functionName,
             result: success,
             notes: success ? `Function executed successfully - ${executionTime}ms` : "Function test failed",
@@ -123,6 +127,7 @@ export function registerAutomationTestEndpoint(app: Express) {
           });
 
         } catch (error) {
+          await logToAirtable({
             functionName,
             result: false,
             notes: `Batch test error: ${error}`,

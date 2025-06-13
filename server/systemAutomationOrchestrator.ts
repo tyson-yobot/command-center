@@ -5,6 +5,7 @@
 
 import { Express } from 'express';
 import cron from 'node-cron';
+import { logIntegrationTest } from './airtableIntegrations';
 
 interface AutomationTask {
   id: string;
@@ -354,6 +355,7 @@ class SystemAutomationOrchestrator {
 
   private async logExecution(id: string, task: AutomationTask, status: string, duration: number, error?: string) {
     try {
+      await logIntegrationTest({
         testName: `Automation: ${task.name}`,
         status: status === 'success' ? 'PASS' : 'FAIL',
         timestamp: new Date().toISOString(),

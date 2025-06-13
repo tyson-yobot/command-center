@@ -20,6 +20,7 @@ interface PublerResponse {
 }
 
 // Airtable Integration Test Logger with correct field mappings
+async function logToAirtable(
   integrationName: string,
   passed: boolean,
   notes: string,
@@ -83,6 +84,7 @@ class PublerIntegration {
   async postToSocialMedia(postData: PublerPost): Promise<PublerResponse> {
     try {
       if (!this.apiKey) {
+        await logToAirtable(
           'Publer Social Media Posting',
           false,
           'Publer API key not configured in environment variables',
@@ -115,6 +117,7 @@ class PublerIntegration {
 
       if (!response.ok) {
         const errorText = await response.text();
+        await logToAirtable(
           'Publer Social Media Posting',
           false,
           `Publer API error: ${response.status} - ${errorText}`,
@@ -130,6 +133,7 @@ class PublerIntegration {
 
       const result = await response.json();
       
+      await logToAirtable(
         'Publer Social Media Posting',
         true,
         `Successfully posted to ${postData.platforms.join(', ')} - Post ID: ${result.id}`,
@@ -152,6 +156,7 @@ class PublerIntegration {
       };
 
     } catch (error) {
+      await logToAirtable(
         'Publer Social Media Posting',
         false,
         `Integration failed: ${error.message}`,
@@ -173,6 +178,7 @@ class PublerIntegration {
   async getAccountStatus(): Promise<{ success: boolean; accounts?: any[]; error?: string }> {
     try {
       if (!this.apiKey) {
+        await logToAirtable(
           'Publer Account Status Check',
           false,
           'Publer API key not configured',
@@ -194,6 +200,7 @@ class PublerIntegration {
 
       if (!response.ok) {
         const errorText = await response.text();
+        await logToAirtable(
           'Publer Account Status Check',
           false,
           `Failed to fetch accounts: ${response.status} - ${errorText}`,
@@ -209,6 +216,7 @@ class PublerIntegration {
 
       const accounts = await response.json();
       
+      await logToAirtable(
         'Publer Account Status Check',
         true,
         `Retrieved ${accounts.length} connected accounts`,
@@ -226,6 +234,7 @@ class PublerIntegration {
       };
 
     } catch (error) {
+      await logToAirtable(
         'Publer Account Status Check',
         false,
         `Account status check failed: ${error.message}`,
@@ -266,6 +275,7 @@ export function registerPublerRoutes(app: Express) {
       const { text, platforms, media, scheduleDate } = req.body;
 
       if (!text || !platforms || !Array.isArray(platforms)) {
+        await logToAirtable(
           'Publer API Endpoint Validation',
           false,
           'Missing required fields: text and platforms array are required',
@@ -293,6 +303,7 @@ export function registerPublerRoutes(app: Express) {
       res.json(result);
 
     } catch (error) {
+      await logToAirtable(
         'Publer API Endpoint Error',
         false,
         `API endpoint error: ${error.message}`,
@@ -317,6 +328,7 @@ export function registerPublerRoutes(app: Express) {
       const { content, platforms, schedule } = req.body;
 
       if (!content || !platforms || !Array.isArray(platforms)) {
+        await logToAirtable(
           'Publer Create Post Validation',
           false,
           'Missing required fields: content and platforms array are required',
@@ -343,6 +355,7 @@ export function registerPublerRoutes(app: Express) {
       res.json(result);
 
     } catch (error) {
+      await logToAirtable(
         'Publer Create Post Error',
         false,
         `Create post error: ${error.message}`,
@@ -367,6 +380,7 @@ export function registerPublerRoutes(app: Express) {
       const result = await publerIntegration.getAccountStatus();
       res.json(result);
     } catch (error) {
+      await logToAirtable(
         'Publer Accounts Endpoint Error',
         false,
         `Accounts endpoint error: ${error.message}`,
@@ -388,6 +402,7 @@ export function registerPublerRoutes(app: Express) {
   // Test Publer integration
   app.post('/api/publer/test', async (req, res) => {
     try {
+      await logToAirtable(
         'Publer Integration Test',
         true,
         'Publer integration test endpoint called successfully',
@@ -405,6 +420,7 @@ export function registerPublerRoutes(app: Express) {
         timestamp: new Date().toISOString()
       });
     } catch (error) {
+      await logToAirtable(
         'Publer Integration Test',
         false,
         `Test endpoint error: ${error.message}`,

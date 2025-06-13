@@ -4,7 +4,10 @@
  */
 
 import type { Express } from "express";
+import { logIntegrationTest } from "./airtableIntegrations";
 
+async function logToAirtable(tableName: string, data: Record<string, any>) {
+  return await logIntegrationTest({
     integrationName: tableName,
     status: 'PASS',
     notes: JSON.stringify(data),
@@ -96,6 +99,7 @@ export function registerBatch30(app: Express) {
           lastOptimized: new Date().toISOString()
         };
 
+        await logToAirtable(`Enterprise ${func.category} Log`, {
           'Function ID': func.id,
           'Function Name': func.name,
           'Category': func.category,
@@ -159,6 +163,7 @@ export function registerBatch30(app: Express) {
         }
       };
 
+      await logToAirtable('Master Orchestration Log', {
         'Orchestrator ID': masterOrchestration.orchestratorId,
         'Total Functions': masterOrchestration.totalFunctions,
         'Overall Status': masterOrchestration.systemHealth.overallStatus,
@@ -220,6 +225,7 @@ export function registerBatch30(app: Express) {
         }
       };
 
+      await logToAirtable('Ultimate System Validation Log', {
         'Validator ID': ultimateValidation.validatorId,
         'Total Functions': ultimateValidation.totalSystemFunctions,
         'Functions Passed': ultimateValidation.validationResults.passedValidation,

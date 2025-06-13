@@ -1,4 +1,5 @@
 import { Express } from 'express';
+import { integrationLogger } from './integrationTestLogger';
 
 interface PublerPost {
   text: string;

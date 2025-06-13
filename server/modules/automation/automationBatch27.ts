@@ -4,7 +4,10 @@
  */
 
 import type { Express } from "express";
+import { logIntegrationTest } from "./airtableIntegrations";
 
+async function logToAirtable(tableName: string, data: Record<string, any>) {
+  return await logIntegrationTest({
     integrationName: tableName,
     status: 'PASS',
     notes: JSON.stringify(data),
@@ -45,6 +48,7 @@ export function registerBatch27(app: Express) {
         ]
       };
 
+      await logToAirtable('Contextual Memory Log', {
         'Conversation ID': memoryManagement.conversationId,
         'Context Layers': memoryManagement.contextLayers.length,
         'Compression Ratio': `${(memoryManagement.memoryOptimization.compressionRatio * 100).toFixed(1)}%`,
@@ -90,6 +94,7 @@ export function registerBatch27(app: Express) {
         }
       };
 
+      await logToAirtable('Emotional Intelligence Log', {
         'Primary Emotion': emotionalIntelligence.emotionDetection.primaryEmotion,
         'Confidence Level': `${(emotionalIntelligence.emotionDetection.confidenceLevel * 100).toFixed(1)}%`,
         'Emotional Intensity': `${(emotionalIntelligence.emotionDetection.emotionalIntensity * 100).toFixed(1)}%`,
@@ -139,6 +144,7 @@ export function registerBatch27(app: Express) {
         }
       };
 
+      await logToAirtable('Intent Prediction Log', {
         'Primary Intent': intentPrediction.primaryIntent.intent,
         'Intent Confidence': `${(intentPrediction.primaryIntent.confidence * 100).toFixed(1)}%`,
         'Predicted Steps': intentPrediction.predictedUserPath.length,
@@ -188,6 +194,7 @@ export function registerBatch27(app: Express) {
         }
       };
 
+      await logToAirtable('Flow Optimization Log', {
         'Current Flow Type': flowOptimization.currentFlowAnalysis.flowType,
         'Completion Probability': `${(flowOptimization.currentFlowAnalysis.completionProbability * 100).toFixed(1)}%`,
         'User Engagement': `${(flowOptimization.currentFlowAnalysis.userEngagement * 100).toFixed(1)}%`,
@@ -239,6 +246,7 @@ export function registerBatch27(app: Express) {
         }
       };
 
+      await logToAirtable('NLU Enhancement Log', {
         'Sentiment Analysis': nluEnhancement.linguisticAnalysis.sentiment,
         'Entities Extracted': nluEnhancement.entityExtraction.length,
         'Domain Relevance': `${(nluEnhancement.contextEnrichment.domainRelevance * 100).toFixed(1)}%`,
@@ -286,6 +294,7 @@ export function registerBatch27(app: Express) {
         recommendation: 'APPROVED_WITH_MINOR_ENHANCEMENTS'
       };
 
+      await logToAirtable('Coherence Validation Log', {
         'Logical Flow Score': `${(coherenceValidation.coherenceMetrics.logicalFlow * 100).toFixed(1)}%`,
         'Contextual Relevance': `${(coherenceValidation.coherenceMetrics.contextualRelevance * 100).toFixed(1)}%`,
         'Quality Checks Passed': coherenceValidation.qualityChecks.filter(c => c.status === 'PASSED').length,
@@ -335,6 +344,7 @@ export function registerBatch27(app: Express) {
         }
       };
 
+      await logToAirtable('Adaptive Learning Log', {
         'Learning Insights': learningControl.learningInsights.length,
         'Adaptation Rules': learningControl.adaptationRules.length,
         'Satisfaction Improvement': learningControl.performanceImprovements.userSatisfaction,
@@ -386,6 +396,7 @@ export function registerBatch27(app: Express) {
         ]
       };
 
+      await logToAirtable('Conversation Analytics Log', {
         'Total Conversations': conversationAnalytics.conversationMetrics.totalConversations,
         'Resolution Rate': `${(conversationAnalytics.conversationMetrics.resolutionRate * 100).toFixed(1)}%`,
         'Satisfaction Score': `${conversationAnalytics.conversationMetrics.satisfactionScore}/5`,
@@ -438,6 +449,7 @@ export function registerBatch27(app: Express) {
         }
       };
 
+      await logToAirtable('Interruption Handling Log', {
         'Interruption Type': interruptionHandling.interruptionAnalysis.type,
         'Handling Strategy': interruptionHandling.handlingStrategy.approach,
         'Context Retention': `${(interruptionHandling.successMetrics.contextRetentionRate * 100).toFixed(1)}%`,
@@ -489,6 +501,7 @@ export function registerBatch27(app: Express) {
         }
       };
 
+      await logToAirtable('Completion Optimization Log', {
         'Primary Goal': completionOptimization.goalAssessment.primaryGoal,
         'Goal Progress': `${(completionOptimization.goalAssessment.goalProgress * 100).toFixed(1)}%`,
         'Success Probability': `${(completionOptimization.goalAssessment.successProbability * 100).toFixed(1)}%`,

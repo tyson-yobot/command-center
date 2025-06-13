@@ -69,6 +69,7 @@ export function updateSystemMode(mode: 'test' | 'live') {
 }
 
 // QA Logger for Airtable Integration Test Log with System Mode Control
+async function logToAirtableQA(testData: {
   integrationName: string;
   passFail: string;
   notes: string;
@@ -136,6 +137,7 @@ export function registerCommandCenterRoutes(app: Express) {
       logOperation('new-booking-sync', { clientId, date, service }, 'success', 'New booking sync executed');
       
       // Log to Airtable QA
+      await logToAirtableQA({
         integrationName: "New Booking Sync",
         passFail: "✅ Pass",
         notes: `Booking sync for client ${clientId || 'Unknown'} on ${date || 'No date'}`,
@@ -200,6 +202,7 @@ export function registerCommandCenterRoutes(app: Express) {
       logOperation('new-support-ticket', { subject, priority, clientId, zendeskTicketId }, 'success', 'Support ticket created');
       
       // Log to Airtable QA
+      await logToAirtableQA({
         integrationName: "New Support Ticket",
         passFail: zendeskTicketId ? "✅ Pass" : "⚠️ Partial",
         notes: `Ticket created: ${subject || 'No subject'} ${zendeskTicketId ? `(Zendesk ID: ${zendeskTicketId})` : '(Local only)'}`,
@@ -280,6 +283,7 @@ export function registerCommandCenterRoutes(app: Express) {
       
       logOperation('sales-orders', { orderId, clientName, amount, airtableRecordId }, 'success', 'Sales order processed');
       
+      await logToAirtableQA({
         integrationName: "Sales Order Interface → Process",
         passFail: airtableRecordId ? "✅ Pass" : "⚠️ Partial",
         notes: `Order ${orderId} for ${clientName}: $${amount} ${airtableRecordId ? '(Synced to Airtable)' : '(Local only)'}`,
@@ -341,6 +345,7 @@ export function registerCommandCenterRoutes(app: Express) {
       
       logOperation('send-sms', { to, clientId, twilioMessageSid }, 'success', 'SMS sent');
       
+      await logToAirtableQA({
         integrationName: "Send SMS",
         passFail: twilioMessageSid ? "✅ Pass" : "⚠️ Partial",
         notes: `SMS to ${to}: ${message?.substring(0, 50) || 'No message'}${twilioMessageSid ? ` (Twilio SID: ${twilioMessageSid})` : ' (Local only)'}`,
@@ -420,6 +425,7 @@ export function registerCommandCenterRoutes(app: Express) {
       
       logOperation('critical-escalation', { severity, clientId, slackMessageTs }, 'success', 'Critical escalation triggered');
       
+      await logToAirtableQA({
         integrationName: "Critical Escalation",
         passFail: slackMessageTs ? "✅ Pass" : "⚠️ Partial",
         notes: `Critical escalation: ${description || 'No description'} ${slackMessageTs ? `(Slack sent)` : '(Local only)'}`,
@@ -466,6 +472,7 @@ export function registerCommandCenterRoutes(app: Express) {
       
       logOperation('start-pipeline', { campaignId, pipelineId, callsInitiated }, 'success', 'Pipeline calls started');
       
+      await logToAirtableQA({
         integrationName: "VoiceBot → Live Call Trigger",
         passFail: "✅ Pass",
         notes: `Pipeline started: ${campaignId || 'Default'}, ${callsInitiated} calls queued`,
@@ -551,6 +558,7 @@ ${new Date().toISOString().split('T')[0]},Automation,Success,${Math.floor(record
         
         logOperation('data-export', { format, recordCount }, 'success', 'CSV export generated');
         
+        await logToAirtableQA({
           integrationName: "Export Data",
           passFail: "✅ Pass",
           notes: `CSV export generated with ${recordCount} records from ${table || 'default table'}`,
@@ -567,6 +575,7 @@ ${new Date().toISOString().split('T')[0]},Automation,Success,${Math.floor(record
         // JSON format
         logOperation('data-export', { format, recordCount }, 'success', 'JSON export generated');
         
+        await logToAirtableQA({
           integrationName: "Export Data",
           passFail: exportData ? "✅ Pass" : "⚠️ Partial",
           notes: `JSON export generated with ${recordCount} records from ${table || 'default table'}`,

@@ -59,6 +59,7 @@ export async function validateTestEnvironment(): Promise<boolean> {
   }
 }
 
+export const automationTester = {
   testAutomationFunction,
   runAutomationTests,
   validateTestEnvironment

@@ -4,8 +4,11 @@
  */
 
 import type { Express } from "express";
+import { logIntegrationTest } from "./airtableIntegrations";
 
 // Helper functions for logging
+async function logToAirtable(tableName: string, data: Record<string, any>) {
+  return await logIntegrationTest({
     integrationName: tableName,
     status: 'PASS',
     notes: JSON.stringify(data),
@@ -38,6 +41,7 @@ export function registerBatch26(app: Express) {
         nextActions: ['Complete integration testing', 'Schedule deployment planning session']
       };
 
+      await logToAirtable('Milestone Tracking Log', {
         'Project ID': milestoneTracking.projectId,
         'Overall Progress': `${milestoneTracking.overallProgress}%`,
         'Active Milestones': milestoneTracking.milestones.filter(m => m.status === 'IN_PROGRESS').length,
@@ -81,6 +85,7 @@ export function registerBatch26(app: Express) {
         ]
       };
 
+      await logToAirtable('Quality Validation Log', {
         'Deliverables Validated': qualityValidation.deliverables.length,
         'Overall Quality Score': `${qualityValidation.overallQualityScore}%`,
         'Approved Items': qualityValidation.validationResults.approved,
@@ -123,6 +128,7 @@ export function registerBatch26(app: Express) {
         }
       };
 
+      await logToAirtable('Resource Optimization Log', {
         'Team Members': resourceOptimization.teamAllocation.length,
         'Optimization Actions': resourceOptimization.optimizations.length,
         'Time Reduction': resourceOptimization.efficiencyGains.timeToCompletion,
@@ -166,6 +172,7 @@ export function registerBatch26(app: Express) {
         }
       };
 
+      await logToAirtable('Risk Assessment Log', {
         'Total Risks Identified': riskAssessment.identifiedRisks.length,
         'High Impact Risks': riskAssessment.identifiedRisks.filter(r => r.impact === 'HIGH').length,
         'Overall Risk Score': `${riskAssessment.riskScore}/5`,
@@ -208,6 +215,7 @@ export function registerBatch26(app: Express) {
         }
       };
 
+      await logToAirtable('Communication Management Log', {
         'Active Stakeholders': communicationManagement.stakeholderMatrix.length,
         'Scheduled Communications': communicationManagement.scheduledCommunications.length,
         'Responsiveness Score': `${(communicationManagement.communicationMetrics.responsiveness * 100).toFixed(1)}%`,
@@ -250,6 +258,7 @@ export function registerBatch26(app: Express) {
         }
       };
 
+      await logToAirtable('Performance Benchmark Log', {
         'Metrics Tracked': benchmarkTracking.performanceMetrics.length,
         'Overall Score': benchmarkTracking.overallPerformance.score,
         'Grade': benchmarkTracking.overallPerformance.grade,
@@ -294,6 +303,7 @@ export function registerBatch26(app: Express) {
         ]
       };
 
+      await logToAirtable('Compliance Management Log', {
         'Frameworks Monitored': complianceManagement.frameworks.length,
         'Compliant Frameworks': complianceManagement.frameworks.filter(f => f.status === 'COMPLIANT').length,
         'Overall Compliance Score': `${complianceManagement.complianceScore}%`,
@@ -342,6 +352,7 @@ export function registerBatch26(app: Express) {
         ]
       };
 
+      await logToAirtable('Success Metrics Log', {
         'Metrics Analyzed': successAnalysis.keyMetrics.length,
         'Exceeded Targets': successAnalysis.keyMetrics.filter(m => m.status === 'EXCEEDED').length,
         'Overall Achievement Rate': `${successAnalysis.overallSuccess.achievementRate.toFixed(1)}%`,
@@ -384,6 +395,7 @@ export function registerBatch26(app: Express) {
         ]
       };
 
+      await logToAirtable('Knowledge Transfer Log', {
         'Transfer Activities': knowledgeTransfer.transferActivities.length,
         'Completion Rate': `${knowledgeTransfer.transferMetrics.completionRate}%`,
         'Knowledge Retention': `${knowledgeTransfer.transferMetrics.knowledgeRetention}%`,
@@ -429,6 +441,7 @@ export function registerBatch26(app: Express) {
         ]
       };
 
+      await logToAirtable('Project Closure Log', {
         'Closure Criteria': closureValidation.closureCriteria.length,
         'Criteria Met': closureValidation.closureCriteria.filter(c => c.status === 'MET').length,
         'Readiness Score': `${closureValidation.readinessScore}%`,

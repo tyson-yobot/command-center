@@ -4,7 +4,10 @@
  */
 
 import type { Express } from "express";
+import { logIntegrationTest } from "./airtableIntegrations";
 
+async function logToAirtable(tableName: string, data: Record<string, any>) {
+  return await logIntegrationTest({
     integrationName: tableName,
     status: 'PASS',
     notes: JSON.stringify(data),
@@ -42,6 +45,7 @@ export function registerBatch28(app: Express) {
         ]
       };
 
+      await logToAirtable('Predictive Analytics Log', {
         'Business Forecasts': predictiveAnalytics.businessForecasts.length,
         'Trend Indicators': predictiveAnalytics.trendIdentification.length,
         'Risk Factors': predictiveAnalytics.riskIndicators.length,
@@ -83,6 +87,7 @@ export function registerBatch28(app: Express) {
         }
       };
 
+      await logToAirtable('CLV Analysis Log', {
         'Customer Segments': clvCalculation.segmentAnalysis.length,
         'Value Drivers': clvCalculation.valueDrivers.length,
         'Current Quarter Revenue': clvCalculation.revenueProjections.currentQuarter,
@@ -170,6 +175,7 @@ export function registerBatch28(app: Express) {
           ]
         };
 
+        await logToAirtable(`${func.category} Function Log`, {
           'Function ID': func.id,
           'Function Name': func.name,
           'Category': func.category,

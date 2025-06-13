@@ -43,6 +43,7 @@ export async function logAutomationStatus(
   };
 
   // Log to Airtable
+  await logToAirtable(logData);
 
   // Send Slack alert on failure
   if (status === 'Failed') {
@@ -53,6 +54,7 @@ export async function logAutomationStatus(
   console.log(`🧠 ${moduleOwner} owns ${moduleType} module - ${functionName}: ${status}`);
 }
 
+async function logToAirtable(logData: AutomationLog): Promise<void> {
   try {
     const airtableKey = process.env.AIRTABLE_VALID_TOKEN || process.env.AIRTABLE_API_KEY;
     

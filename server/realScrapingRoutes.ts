@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import { logIntegrationTest } from "./airtableIntegrationLogger";
 
 // Real API integration for lead scraping with proper test/live mode separation
 export function registerRealScrapingRoutes(app: Express) {
@@ -139,6 +140,7 @@ export function registerRealScrapingRoutes(app: Express) {
       console.log('Apollo Scraping Log:', logEntry);
 
       // Log to Airtable Integration Test Log per specification
+      await logIntegrationTest({
         integrationName: "Apollo Lead Scraper",
         passOrFail: logEntry.status === 'SUCCESS',
         notes: `Validated Airtable + Slack delivery. Mode: ${mode}, Leads: ${leads.length}, Live Data: ${isLiveData}`,
@@ -294,6 +296,7 @@ export function registerRealScrapingRoutes(app: Express) {
       console.log('Apify Scraping Log:', logEntry);
 
       // Log to Airtable Integration Test Log per specification
+      await logIntegrationTest({
         integrationName: "Apify Business Scraper",
         passOrFail: logEntry.status === 'SUCCESS',
         notes: `Google Maps business scraping completed. Mode: ${mode}, Leads: ${leads.length}, Live Data: ${isLiveData}`,
@@ -452,6 +455,7 @@ export function registerRealScrapingRoutes(app: Express) {
       console.log('PhantomBuster Scraping Log:', logEntry);
 
       // Log to Airtable Integration Test Log per specification
+      await logIntegrationTest({
         integrationName: "PhantomBuster LinkedIn Scraper",
         passOrFail: logEntry.status === 'SUCCESS',
         notes: `LinkedIn professional network scraping completed. Mode: ${mode}, Leads: ${leads.length}, Live Data: ${isLiveData}`,
