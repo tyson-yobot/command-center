@@ -49,6 +49,8 @@ import {
   Share2,
   Camera,
   Building,
+  HelpCircle,
+  Info,
   Bot,
   User,
   MapPin,
@@ -2692,9 +2694,12 @@ export default function CommandCenter() {
         <div className="mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Core Automation */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 relative">
               <CardHeader>
-                <CardTitle className="text-white">Core Automation</CardTitle>
+                <CardTitle className="text-white flex items-center justify-between">
+                  Core Automation
+                  <Badge className="bg-green-600 text-white">🟢 Active</Badge>
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 gap-3">
@@ -2746,9 +2751,12 @@ export default function CommandCenter() {
             </Card>
 
             {/* Voice & Communication */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 relative">
               <CardHeader>
-                <CardTitle className="text-white">Voice & Communication</CardTitle>
+                <CardTitle className="text-white flex items-center justify-between">
+                  Voice & Communication
+                  <Badge className="bg-green-600 text-white">🟢 Active</Badge>
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 gap-3">
@@ -2806,9 +2814,12 @@ export default function CommandCenter() {
             </Card>
 
             {/* Data & Reports */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 relative">
               <CardHeader>
-                <CardTitle className="text-white">Data & Reports</CardTitle>
+                <CardTitle className="text-white flex items-center justify-between">
+                  Data & Reports
+                  <Badge className="bg-blue-600 text-white">🔒 Admin-Only</Badge>
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 gap-3">
@@ -4551,11 +4562,14 @@ export default function CommandCenter() {
         {/* Document Management & Memory Insertion */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Document Manager */}
-          <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500">
+          <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500 relative">
             <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Database className="w-5 h-5 mr-2 text-blue-400" />
-                Document Manager
+              <CardTitle className="text-white flex items-center justify-between">
+                <div className="flex items-center">
+                  <Database className="w-5 h-5 mr-2 text-blue-400" />
+                  Document Manager
+                </div>
+                <Badge className="bg-yellow-600 text-white">🧪 Test-Only</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent>

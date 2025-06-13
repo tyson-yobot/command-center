@@ -124,7 +124,7 @@ export default function HeaderBar({
         </div>
       </div>
 
-      {/* System Status Bar */}
+      {/* Enhanced System Status Bar */}
       <div className="bg-slate-900/50 px-6 py-2 border-t border-slate-800">
         <div className="flex items-center justify-between text-xs text-slate-400">
           <div className="flex items-center gap-4">
@@ -132,12 +132,21 @@ export default function HeaderBar({
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
               Bot Status: Active
             </span>
+            <span className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+              Voice Engine: Ready
+            </span>
             <span>Last Deploy: 2 hours ago</span>
             <span>Uptime: 99.8%</span>
+            <span className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+              Memory: 847MB Active
+            </span>
           </div>
           <div className="flex items-center gap-4">
             <span>Version: 2.4.1</span>
             <span>Environment: {isLiveMode ? 'Production' : 'Development'}</span>
+            <span>Session: {new Date().toLocaleTimeString('en-US', { hour12: false })}</span>
           </div>
         </div>
       </div>
