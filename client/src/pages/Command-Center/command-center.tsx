@@ -2843,6 +2843,7 @@ export default function CommandCenter() {
                     <Button
                       onClick={handleCreateSupportTicket}
                       className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
+                      title="Open live chat interface to create a new support ticket"
                     >
                       <div className="flex items-center">
                         <span className="text-xl mr-3">🎧</span>
@@ -2854,6 +2855,7 @@ export default function CommandCenter() {
                     <Button
                       onClick={handleManualFollowUp}
                       className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
+                      title="Create a manual follow-up task for customer engagement"
                     >
                       <span className="text-xl mr-3">📞</span>
                       <span>Create Follow-up</span>
@@ -2862,6 +2864,7 @@ export default function CommandCenter() {
                     <Button
                       onClick={handleSalesOrder}
                       className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
+                      title="Opens external Tally form to automate sales order workflow"
                     >
                       <span className="text-xl mr-3">💰</span>
                       <span>Automate Sales Order Flow</span>
@@ -2870,6 +2873,7 @@ export default function CommandCenter() {
                     <Button
                       onClick={handleSendSMS}
                       className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
+                      title="Send SMS messages to customers or leads"
                       style={{ 
                         borderLeft: '8px solid #06b6d4'
                       }}
