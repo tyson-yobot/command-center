@@ -91,6 +91,12 @@ export default function CommandCenter() {
     return localStorage.getItem('systemMode') || 'live';
   });
 
+  // Demo mode enhancements
+  const [demoMode, setDemoMode] = useState(false);
+  const [showHelpTooltips, setShowHelpTooltips] = useState(false);
+  const [guidedTourActive, setGuidedTourActive] = useState(false);
+  const [tourStep, setTourStep] = useState(0);
+
   // Tab navigation state
   const [activeTab, setActiveTab] = useState('automation-ops');
   
@@ -6944,7 +6950,6 @@ export default function CommandCenter() {
         </div>
       )}
 
-        </div>
       </div>
     </div>
   );
