@@ -1,4 +1,5 @@
 import { useState } from "react";
+import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750002410783.png';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
@@ -709,7 +710,7 @@ export default function SystemControls() {
         <div className="text-center mb-6">
           <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center">
             <img 
-              src="/attached_assets/A_flat_vector_illustration_features_a_robot_face_i_1750002410783.png" 
+              src={robotHeadImage} 
               alt="YoBot Robot Head" 
               className="w-14 h-14 mr-0 -mt-3"
               onError={(e) => {
