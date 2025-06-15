@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import robotHeadImage from '@/assets/images/A_flat_vector_illustration_features_a_robot_face_i_1749714890077.png';
+import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750002410783.png';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import HeaderBar from '@/components/HeaderBar';
 import { Badge } from '@/components/ui/badge';
@@ -91,7 +91,7 @@ import { CalendarUploadModal } from '@/components/CalendarUploadModal';
 import { ExportDashboardModal } from '@/components/ExportDashboardModal';
 import { ManualCallStartModal } from '@/components/ManualCallStartModal';
 import { LiveCallBanner } from '@/components/LiveCallBanner';
-import { EnhancedTooltip } from '@/components/EnhancedTooltip';
+import { EnhancedTooltip, QuickTooltip } from '@/components/EnhancedTooltip';
 
 
 export default function CommandCenter() {
