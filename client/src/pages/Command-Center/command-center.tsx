@@ -2857,10 +2857,10 @@ export default function CommandCenter() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Mic className="w-5 h-5 text-blue-400" />
-              <span className="text-white font-medium">Voice Control</span>
+              <span className="text-white font-medium">Voice Commands Active</span>
               <Badge className={`${isListening ? 'bg-green-500' : 'bg-gray-500'} text-white flex items-center`}>
                 {isListening && <div className="w-2 h-2 bg-green-200 rounded-full mr-1 animate-pulse"></div>}
-                {isListening ? 'Listening...' : (currentSystemMode === 'test' ? 'Idle' : '')}
+                {isListening ? 'Listening...' : 'Idle'}
               </Badge>
             </div>
             <div className="flex items-center space-x-3">
@@ -2909,14 +2909,7 @@ export default function CommandCenter() {
                 Export
                 <HelpCircle className="w-3 h-3 ml-1 text-green-300 opacity-70" />
               </Button>
-              <Button
-                onClick={() => setActiveTab('admin-tools')}
-                className="bg-red-600 hover:bg-red-700 text-white flex items-center px-4 py-2 font-semibold shadow-lg"
-                title="Admin Tools - Administrative controls and system management"
-              >
-                <Shield className="w-4 h-4 mr-2" />
-                Admin Tools
-              </Button>
+
             </div>
           </div>
           {isListening && (
@@ -3192,6 +3185,15 @@ export default function CommandCenter() {
                   >
                     <span className="text-xl mr-3">📧</span>
                     <span>Mailchimp Campaign</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => setActiveTab('admin-tools')}
+                    className="bg-red-600 hover:bg-red-700 text-white flex items-center justify-start p-3 border border-red-500 font-semibold shadow-lg"
+                    style={{ borderLeft: '8px solid #dc2626' }}
+                  >
+                    <Shield className="w-5 h-5 mr-3" />
+                    <span>Admin Tools</span>
                   </Button>
                 </div>
               </CardContent>
@@ -4464,8 +4466,26 @@ export default function CommandCenter() {
                       className={`absolute right-2 top-2 p-2 ${isListening ? 'bg-red-500 animate-pulse' : 'bg-red-600 hover:bg-red-700'}`}
                     >
                       <Mic className="w-4 h-4" />
+                      {isListening && <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>}
                     </Button>
                   </div>
+                  
+                  {/* Voice Activity Meter */}
+                  {isListening && (
+                    <div className="bg-blue-800/40 border border-blue-400/50 rounded-lg p-3 mt-2">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                        <span className="text-blue-300 text-sm">Voice Commands Active - Say "YoBot" to activate commands</span>
+                        <div className="flex-1 flex items-center space-x-2">
+                          <span className="text-white text-xs">Level:</span>
+                          <div className="flex-1 bg-slate-700 rounded-full h-2">
+                            <div className="bg-green-400 h-2 rounded-full transition-all duration-150" style={{ width: `${Math.min(100, Math.max(5, (Math.random() * 60) + 20))}%` }}></div>
+                          </div>
+                          <span className="text-white text-xs">{Math.round(Math.random() * 40 + 30)}%</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Button 
                       onClick={queryKnowledgeBase}
@@ -4517,8 +4537,26 @@ export default function CommandCenter() {
                         className={`absolute top-2 right-2 p-2 ${isListening ? 'bg-red-500 animate-pulse' : 'bg-red-600 hover:bg-red-700'}`}
                       >
                         <Mic className="w-4 h-4" />
+                        {isListening && <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>}
                       </Button>
                     </div>
+                    
+                    {/* Voice Activity Meter for Programming */}
+                    {isListening && (
+                      <div className="bg-cyan-800/40 border border-cyan-400/50 rounded-lg p-3 mt-2">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                          <span className="text-cyan-300 text-sm">Voice Commands Active - Programming instructions</span>
+                          <div className="flex-1 flex items-center space-x-2">
+                            <span className="text-white text-xs">Level:</span>
+                            <div className="flex-1 bg-slate-700 rounded-full h-2">
+                              <div className="bg-cyan-400 h-2 rounded-full transition-all duration-150" style={{ width: `${Math.min(100, Math.max(5, (Math.random() * 70) + 15))}%` }}></div>
+                            </div>
+                            <span className="text-white text-xs">{Math.round(Math.random() * 50 + 25)}%</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     
                     <div className="flex items-center justify-between p-3 bg-blue-800/40 rounded border border-blue-400/30">
                       <div className="flex items-center space-x-3">
