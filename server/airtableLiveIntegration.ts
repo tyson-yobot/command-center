@@ -115,44 +115,44 @@ class AirtableLiveIntegration {
    * Table: SmartSpend Dashboard
    */
   async getSmartSpendData(clientId?: string): Promise<SmartSpendData | null> {
+    const baseId = 'appGtcRZU6QJngkQS'; // YoBot® SmartSpend Tracker base
+    const tableId = 'SmartSpend Dashboard'; // SmartSpend Dashboard table
+    
     try {
-      // Calculate SmartSpend metrics from live Botalytics data
-      const botalyticsData = await this.getBotalyticsData(undefined, clientId);
+      let url = `${this.baseUrl}/${baseId}/${tableId}`;
       
-      if (!botalyticsData || botalyticsData.length === 0) {
-        return null;
+      if (clientId) {
+        url += `?filterByFormula=OR({Client ID}="${clientId}",{Client Email}="${clientId}")&sort[0][field]=Last Updated&sort[0][direction]=desc&maxRecords=1`;
+      } else {
+        url += `?sort[0][field]=Last Updated&sort[0][direction]=desc&maxRecords=1`;
       }
+
+      const response = await fetch(url, {
+        headers: this.getHeaders()
+      });
+
+      if (!response.ok) {
+        throw new Error(`Airtable API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const record = data.records?.[0];
       
-      const latestRecord = botalyticsData[0];
-      const fields = latestRecord.fields;
-      
-      // Extract authentic metrics from Botalytics
-      const laborSavings = fields['💸 Estimated Labor Savings ($)'] || 0;
-      const revenueLift = fields['📈 Revenue Lift Attributed ($)'] || 0;
-      const leadsGenerated = fields['🎯 Lead Conversions Attributed'] || 0;
-      const totalCalls = fields['📞 Total Calls'] || 1;
-      const botHandledCalls = fields['🤖 Calls Handled by Bot'] || 0;
-      
-      // Calculate derived SmartSpend metrics
-      const costPerLead = leadsGenerated > 0 ? laborSavings / leadsGenerated : 0;
-      const roiPercentage = laborSavings > 0 ? ((revenueLift - laborSavings) / laborSavings) * 100 : 0;
-      const conversionRate = totalCalls > 0 ? (leadsGenerated / totalCalls) * 100 : 0;
-      const budgetUtilization = botHandledCalls > 0 ? (botHandledCalls / totalCalls) * 100 : 0;
-      const budgetEfficiencyScore = roiPercentage > 0 ? Math.min(roiPercentage / 2, 100) : 0;
+      if (!record) return null;
 
       return {
-        'Client ID': fields['🏢 Client'] || clientId || 'Unknown',
-        'Budget Utilization': Math.round(budgetUtilization * 100) / 100,
-        'Cost Per Lead': Math.round(costPerLead * 100) / 100,
-        'ROI Percentage': Math.round(roiPercentage * 100) / 100,
-        'Total Spend': laborSavings,
-        'Leads Generated': leadsGenerated,
-        'Conversion Rate': Math.round(conversionRate * 100) / 100,
-        'Budget Efficiency Score': Math.round(budgetEfficiencyScore * 100) / 100,
-        'Last Updated': fields['⏱ Created Time'] || new Date().toISOString()
+        'Client ID': record.fields['Client ID'] || '',
+        'Budget Utilization': record.fields['Budget Utilization'] || 0,
+        'Cost Per Lead': record.fields['Cost Per Lead'] || 0,
+        'ROI Percentage': record.fields['ROI Percentage'] || 0,
+        'Total Spend': record.fields['Total Spend'] || 0,
+        'Leads Generated': record.fields['Leads Generated'] || 0,
+        'Conversion Rate': record.fields['Conversion Rate'] || 0,
+        'Budget Efficiency Score': record.fields['Budget Efficiency Score'] || 0,
+        'Last Updated': record.fields['Last Updated'] || ''
       };
     } catch (error) {
-      console.error('SmartSpend data calculation failed:', error);
+      console.error('SmartSpend data fetch failed:', error);
       throw error;
     }
   }
@@ -317,6 +317,289 @@ class AirtableLiveIntegration {
     } catch (error) {
       console.error('Airtable health check failed:', error);
       return false;
+    }
+  }
+
+  /**
+   * 🎯 Client Pulse + Metrics Integration
+   * Base: YoBot® Client CRM
+   * Table: Client Overview or Pulse Tracker
+   * Action: Pull latest values by client record
+   * Optional: Trigger Slack alert if NPS < 6
+   */
+  async getClientPulseData(clientId?: string): Promise<any> {
+    const baseId = 'appMbVQJ0n3nWRl1N'; // YoBot® Client CRM
+    const tableId = 'Client Overview'; // Client Overview table
+    
+    try {
+      let url = `${this.baseUrl}/${baseId}/${tableId}`;
+      
+      if (clientId) {
+        url += `?filterByFormula=OR({Client ID}="${clientId}",{Client Email}="${clientId}")&sort[0][field]=Last Updated&sort[0][direction]=desc&maxRecords=1`;
+      } else {
+        url += `?sort[0][field]=Last Updated&sort[0][direction]=desc&maxRecords=10`;
+      }
+
+      const response = await fetch(url, {
+        headers: this.getHeaders()
+      });
+
+      if (!response.ok) {
+        throw new Error(`Airtable API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.records || [];
+    } catch (error) {
+      console.error('Client pulse data fetch failed:', error);
+      // Try Pulse Tracker table as fallback
+      try {
+        const fallbackTableId = 'Pulse Tracker';
+        let fallbackUrl = `${this.baseUrl}/${baseId}/${fallbackTableId}`;
+        
+        if (clientId) {
+          fallbackUrl += `?filterByFormula=OR({Client ID}="${clientId}",{Client Email}="${clientId}")&sort[0][field]=Last Updated&sort[0][direction]=desc&maxRecords=1`;
+        } else {
+          fallbackUrl += `?sort[0][field]=Last Updated&sort[0][direction]=desc&maxRecords=10`;
+        }
+
+        const fallbackResponse = await fetch(fallbackUrl, {
+          headers: this.getHeaders()
+        });
+
+        if (!fallbackResponse.ok) {
+          throw new Error(`Airtable API error: ${fallbackResponse.status}`);
+        }
+
+        const fallbackData = await fallbackResponse.json();
+        return fallbackData.records || [];
+      } catch (fallbackError) {
+        console.error('Client pulse fallback fetch failed:', fallbackError);
+        throw error;
+      }
+    }
+  }
+
+  /**
+   * 📞 Call Logs + Sentiment Integration
+   * Base: YoBot® VoiceBot Logs
+   * Tables: 📞 Voice Call Log, 📊 Call Sentiment Log
+   * Action: Pull last 5 calls + stats by client ID
+   */
+  async getVoiceCallLogs(clientId?: string): Promise<any[]> {
+    const baseId = 'appVoiceBotLogs'; // YoBot® VoiceBot Logs (need actual base ID)
+    const tableId = '📞 Voice Call Log';
+    
+    try {
+      let url = `${this.baseUrl}/${baseId}/${tableId}`;
+      
+      if (clientId) {
+        url += `?filterByFormula={Client ID}="${clientId}"&sort[0][field]=Call Date&sort[0][direction]=desc&maxRecords=5`;
+      } else {
+        url += `?sort[0][field]=Call Date&sort[0][direction]=desc&maxRecords=5`;
+      }
+
+      const response = await fetch(url, {
+        headers: this.getHeaders()
+      });
+
+      if (!response.ok) {
+        throw new Error(`Airtable API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.records || [];
+    } catch (error) {
+      console.error('Voice call logs fetch failed:', error);
+      throw error;
+    }
+  }
+
+  async getCallSentimentLogs(clientId?: string): Promise<any[]> {
+    const baseId = 'appVoiceBotLogs'; // YoBot® VoiceBot Logs (need actual base ID)
+    const tableId = '📊 Call Sentiment Log';
+    
+    try {
+      let url = `${this.baseUrl}/${baseId}/${tableId}`;
+      
+      if (clientId) {
+        url += `?filterByFormula={Client ID}="${clientId}"&sort[0][field]=Analysis Date&sort[0][direction]=desc&maxRecords=5`;
+      } else {
+        url += `?sort[0][field]=Analysis Date&sort[0][direction]=desc&maxRecords=5`;
+      }
+
+      const response = await fetch(url, {
+        headers: this.getHeaders()
+      });
+
+      if (!response.ok) {
+        throw new Error(`Airtable API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.records || [];
+    } catch (error) {
+      console.error('Call sentiment logs fetch failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Slack Alert for NPS < 6
+   */
+  async triggerNPSAlert(clientData: any): Promise<void> {
+    const nps = clientData.fields?.['NPS Score'] || clientData.fields?.['Client NPS'];
+    
+    if (nps < 6) {
+      // Import and use Slack integration
+      const { sendSlackMessage } = await import('./alerts');
+      
+      const message = `🚨 LOW NPS ALERT: Client ${clientData.fields['Client Name'] || clientData.fields['Client ID']} has NPS score of ${nps}. Immediate attention required.`;
+      
+      await sendSlackMessage(message);
+    }
+  }
+
+  /**
+   * 🧠 AI Assistant Insights Integration
+   * Base: YoBot® NLP Tracker
+   * Table: 🧠 NLP Keyword Tracker
+   * Action: Pull by week → aggregate accuracy, escalations
+   */
+  async getNLPInsights(week?: string): Promise<any[]> {
+    const baseId = 'appNLPTracker'; // YoBot® NLP Tracker (need actual base ID)
+    const tableId = '🧠 NLP Keyword Tracker';
+    
+    try {
+      let url = `${this.baseUrl}/${baseId}/${tableId}`;
+      
+      if (week) {
+        url += `?filterByFormula={Week}="${week}"&sort[0][field]=Week&sort[0][direction]=desc`;
+      } else {
+        url += `?sort[0][field]=Week&sort[0][direction]=desc&maxRecords=10`;
+      }
+
+      const response = await fetch(url, {
+        headers: this.getHeaders()
+      });
+
+      if (!response.ok) {
+        throw new Error(`Airtable API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.records || [];
+    } catch (error) {
+      console.error('NLP insights fetch failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 📅 Smart Calendar Integration
+   * Base: YoBot® Sales & Automation
+   * Table: 📅 Calendar Bookings
+   * Action: Filter by today's date and client
+   */
+  async getTodayCalendarBookings(clientId?: string): Promise<any[]> {
+    const baseId = 'appe0OSJtB1In1kn5'; // YoBot® Sales & Automation
+    const tableId = '📅 Calendar Bookings';
+    
+    try {
+      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+      let url = `${this.baseUrl}/${baseId}/${tableId}`;
+      
+      if (clientId) {
+        url += `?filterByFormula=AND({Date}="${today}",{Client ID}="${clientId}")&sort[0][field]=Time&sort[0][direction]=asc`;
+      } else {
+        url += `?filterByFormula={Date}="${today}"&sort[0][field]=Time&sort[0][direction]=asc`;
+      }
+
+      const response = await fetch(url, {
+        headers: this.getHeaders()
+      });
+
+      if (!response.ok) {
+        throw new Error(`Airtable API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.records || [];
+    } catch (error) {
+      console.error('Calendar bookings fetch failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 📤 Export Data Functions
+   * Export Sales Orders or SmartSpend data as CSV
+   */
+  async exportSalesOrdersCSV(): Promise<string> {
+    try {
+      const salesOrders = await this.getSalesOrders();
+      
+      if (!salesOrders.length) {
+        return 'No data available for export';
+      }
+
+      // Convert to CSV format
+      const headers = Object.keys(salesOrders[0].fields);
+      const csvHeaders = headers.join(',');
+      
+      const csvRows = salesOrders.map(record => {
+        return headers.map(header => {
+          const value = record.fields[header];
+          // Handle arrays and objects
+          if (Array.isArray(value)) {
+            return `"${value.join('; ')}"`;
+          }
+          if (typeof value === 'object' && value !== null) {
+            return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
+          }
+          // Handle strings with commas or quotes
+          if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+            return `"${value.replace(/"/g, '""')}"`;
+          }
+          return value || '';
+        }).join(',');
+      });
+
+      return [csvHeaders, ...csvRows].join('\n');
+    } catch (error) {
+      console.error('Sales orders export failed:', error);
+      throw error;
+    }
+  }
+
+  async exportSmartSpendCSV(): Promise<string> {
+    try {
+      // Get SmartSpend data from multiple clients
+      const smartSpendData = await this.getSmartSpendData();
+      
+      if (!smartSpendData) {
+        return 'No SmartSpend data available for export';
+      }
+
+      // Convert single record to array for CSV processing
+      const dataArray = [smartSpendData];
+      const headers = Object.keys(dataArray[0]);
+      const csvHeaders = headers.join(',');
+      
+      const csvRows = dataArray.map(record => {
+        return headers.map(header => {
+          const value = record[header];
+          if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+            return `"${value.replace(/"/g, '""')}"`;
+          }
+          return value || '';
+        }).join(',');
+      });
+
+      return [csvHeaders, ...csvRows].join('\n');
+    } catch (error) {
+      console.error('SmartSpend export failed:', error);
+      throw error;
     }
   }
 }

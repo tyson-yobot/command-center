@@ -15220,6 +15220,195 @@ export function registerContentCreationEndpoints(app: Express) {
     }
   });
 
+  // 🎯 Client Pulse + Metrics Endpoint
+  // Base: YoBot® Client CRM - Table: Client Overview or Pulse Tracker
+  app.get('/api/client-pulse/metrics', async (req, res) => {
+    try {
+      const { clientId } = req.query;
+      
+      const clientPulseData = await airtableLive.getClientPulseData(clientId as string);
+      
+      // Check for NPS alerts
+      for (const record of clientPulseData) {
+        await airtableLive.triggerNPSAlert(record);
+      }
+      
+      logOperation('client-pulse-metrics', { clientId }, 'success', `Retrieved ${clientPulseData.length} client pulse records`);
+      
+      res.json({
+        success: true,
+        data: clientPulseData,
+        count: clientPulseData.length,
+        message: 'Client pulse data retrieved successfully'
+      });
+    } catch (error: any) {
+      console.error('Client Pulse API Error:', error);
+      logOperation('client-pulse-metrics', { clientId: req.query.clientId }, 'error', `Client pulse failed: ${error.message}`);
+      
+      res.status(500).json({
+        success: false,
+        error: 'Client pulse metrics retrieval failed',
+        details: error.message
+      });
+    }
+  });
+
+  // 📞 Voice Call Logs Endpoint
+  // Base: YoBot® VoiceBot Logs - Table: 📞 Voice Call Log
+  app.get('/api/voice-calls/logs', async (req, res) => {
+    try {
+      const { clientId } = req.query;
+      
+      const voiceCallLogs = await airtableLive.getVoiceCallLogs(clientId as string);
+      
+      logOperation('voice-call-logs', { clientId }, 'success', `Retrieved ${voiceCallLogs.length} voice call records`);
+      
+      res.json({
+        success: true,
+        data: voiceCallLogs,
+        count: voiceCallLogs.length,
+        message: 'Voice call logs retrieved successfully'
+      });
+    } catch (error: any) {
+      console.error('Voice Call Logs API Error:', error);
+      logOperation('voice-call-logs', { clientId: req.query.clientId }, 'error', `Voice call logs failed: ${error.message}`);
+      
+      res.status(500).json({
+        success: false,
+        error: 'Voice call logs retrieval failed',
+        details: error.message
+      });
+    }
+  });
+
+  // 📊 Call Sentiment Logs Endpoint
+  // Base: YoBot® VoiceBot Logs - Table: 📊 Call Sentiment Log
+  app.get('/api/call-sentiment/logs', async (req, res) => {
+    try {
+      const { clientId } = req.query;
+      
+      const sentimentLogs = await airtableLive.getCallSentimentLogs(clientId as string);
+      
+      logOperation('call-sentiment-logs', { clientId }, 'success', `Retrieved ${sentimentLogs.length} sentiment analysis records`);
+      
+      res.json({
+        success: true,
+        data: sentimentLogs,
+        count: sentimentLogs.length,
+        message: 'Call sentiment logs retrieved successfully'
+      });
+    } catch (error: any) {
+      console.error('Call Sentiment API Error:', error);
+      logOperation('call-sentiment-logs', { clientId: req.query.clientId }, 'error', `Call sentiment logs failed: ${error.message}`);
+      
+      res.status(500).json({
+        success: false,
+        error: 'Call sentiment logs retrieval failed',
+        details: error.message
+      });
+    }
+  });
+
+  // 🧠 AI Assistant Insights Endpoint
+  // Base: YoBot® NLP Tracker - Table: 🧠 NLP Keyword Tracker
+  app.get('/api/nlp-insights/data', async (req, res) => {
+    try {
+      const { week } = req.query;
+      
+      const nlpInsights = await airtableLive.getNLPInsights(week as string);
+      
+      logOperation('nlp-insights-data', { week }, 'success', `Retrieved ${nlpInsights.length} NLP insight records`);
+      
+      res.json({
+        success: true,
+        data: nlpInsights,
+        count: nlpInsights.length,
+        message: 'NLP insights retrieved successfully'
+      });
+    } catch (error: any) {
+      console.error('NLP Insights API Error:', error);
+      logOperation('nlp-insights-data', { week: req.query.week }, 'error', `NLP insights failed: ${error.message}`);
+      
+      res.status(500).json({
+        success: false,
+        error: 'NLP insights retrieval failed',
+        details: error.message
+      });
+    }
+  });
+
+  // 📅 Smart Calendar Endpoint
+  // Base: YoBot® Sales & Automation - Table: 📅 Calendar Bookings
+  app.get('/api/calendar/today', async (req, res) => {
+    try {
+      const { clientId } = req.query;
+      
+      const todayBookings = await airtableLive.getTodayCalendarBookings(clientId as string);
+      
+      logOperation('calendar-today', { clientId }, 'success', `Retrieved ${todayBookings.length} calendar bookings for today`);
+      
+      res.json({
+        success: true,
+        data: todayBookings,
+        count: todayBookings.length,
+        message: 'Today\'s calendar bookings retrieved successfully'
+      });
+    } catch (error: any) {
+      console.error('Calendar API Error:', error);
+      logOperation('calendar-today', { clientId: req.query.clientId }, 'error', `Calendar bookings failed: ${error.message}`);
+      
+      res.status(500).json({
+        success: false,
+        error: 'Calendar bookings retrieval failed',
+        details: error.message
+      });
+    }
+  });
+
+  // 📤 Export Sales Orders CSV Endpoint
+  app.get('/api/export/sales-orders', async (req, res) => {
+    try {
+      const csvData = await airtableLive.exportSalesOrdersCSV();
+      
+      logOperation('export-sales-orders', {}, 'success', 'Sales orders CSV export generated');
+      
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="sales-orders-export.csv"');
+      res.send(csvData);
+    } catch (error: any) {
+      console.error('Export Sales Orders Error:', error);
+      logOperation('export-sales-orders', {}, 'error', `Sales orders export failed: ${error.message}`);
+      
+      res.status(500).json({
+        success: false,
+        error: 'Sales orders export failed',
+        details: error.message
+      });
+    }
+  });
+
+  // 📤 Export SmartSpend CSV Endpoint
+  app.get('/api/export/smartspend', async (req, res) => {
+    try {
+      const csvData = await airtableLive.exportSmartSpendCSV();
+      
+      logOperation('export-smartspend', {}, 'success', 'SmartSpend CSV export generated');
+      
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="smartspend-export.csv"');
+      res.send(csvData);
+    } catch (error: any) {
+      console.error('Export SmartSpend Error:', error);
+      logOperation('export-smartspend', {}, 'error', `SmartSpend export failed: ${error.message}`);
+      
+      res.status(500).json({
+        success: false,
+        error: 'SmartSpend export failed',
+        details: error.message
+      });
+    }
+  });
+
   // Airtable Health Check
   app.get('/api/airtable/health', async (req, res) => {
     try {
