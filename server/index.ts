@@ -14,7 +14,7 @@ import { officialQATracker } from "./officialQATracker";
 import { registerQATestEndpoints } from "./qaTestEndpoints";
 import { registerPublerRoutes } from "./publerIntegrationNew";
 import { registerAirtableTestLogger } from "./airtableTestLogger";
-import { testRoutes } from "./testRoutes";
+
 import { initializeLiveDataWipe, secureAdminDataWipe } from "./dataWipe";
 
 const app = express();
