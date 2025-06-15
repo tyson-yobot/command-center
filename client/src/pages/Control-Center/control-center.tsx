@@ -189,7 +189,8 @@ export default function SystemControls() {
     performanceTracking: true,
     usageAnalytics: false,
     errorMonitoring: true,
-    
+    diagnosticsEngine: true,
+
     // Integrations
     googleCalendar: false,
     stripePayments: false,
@@ -324,6 +325,21 @@ export default function SystemControls() {
         return <Wifi className="w-3 h-3 text-green-400" />;
     }
   };
+  {modules.diagnosticsEngine && (
+    <Tile
+      title="Run Diagnostics Engine"
+      description="Triggers test mode in your Replit Python runner"
+      onToggle={() => {
+        fetch("https://YoBotAssistant.tyson44.repl.co/test")
+          .then(res => res.text())
+          .then(data => alert("🧪 Diagnostics Triggered: " + data))
+          .catch(err => alert("❌ Error triggering diagnostics: " + err));
+      }}
+      toggleLabel="Run Diagnostics"
+    />
+  )}
+
+  
 
   // Get status details for tooltip
   const getStatusDetails = (moduleKey: string) => {

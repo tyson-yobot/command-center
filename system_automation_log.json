@@ -13,5 +13,80 @@
       "lastHealthCheck": "2025-06-15T13:29:00.014Z",
       "automationStatus": "paused"
     }
+  },
+  {
+    "timestamp": "2025-06-15T13:40:00.012Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 100.267131235,
+      "lastHealthCheck": "2025-06-15T13:39:00.008Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-15T13:50:00.011Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 700.271922012,
+      "lastHealthCheck": "2025-06-15T13:49:00.013Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-15T14:00:00.010Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 1300.265422833,
+      "lastHealthCheck": "2025-06-15T13:59:00.007Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-15T14:10:00.011Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 1900.264703688,
+      "lastHealthCheck": "2025-06-15T14:09:00.006Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-15T14:20:00.010Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 2500.26624597,
+      "lastHealthCheck": "2025-06-15T14:19:00.007Z",
+      "automationStatus": "paused"
+    }
   }
 ]
