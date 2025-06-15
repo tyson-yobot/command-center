@@ -3180,6 +3180,46 @@ export default function CommandCenter() {
 
         {/* Essential Business Modules */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+          {/* Live Automation Engine */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-cyan-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Zap className="w-5 h-5 mr-2 text-cyan-400" />
+                ⚡ Live Automation Engine
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Active Workflows:</span>
+                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '15' : (automationPerformance?.data?.activeWorkflows || '')}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-300 text-sm">Make Logs Status:</span>
+                  <div className="flex items-center space-x-1">
+                    {automationPerformance?.data?.makeLogs && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? 'Connected' : (automationPerformance?.data?.makeLogs ? 'Live' : '')}</span>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-300 text-sm">Executions Today:</span>
+                  <div className="flex items-center space-x-1">
+                    {liveActivityData?.data?.executionsToday && <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse"></div>}
+                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '247' : (liveActivityData?.data?.executionsToday || '')}</span>
+                  </div>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Engine Status:</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? 'LIVE' : (automationPerformance?.status === 'active' ? 'LIVE' : '')}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Processing Queue:</span>
+                  <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '8 pending' : (automationPerformance?.data?.queueSize ? automationPerformance.data.queueSize + ' pending' : '')}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Bot Health Monitor */}
           <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
             <CardHeader>
@@ -3196,26 +3236,26 @@ export default function CommandCenter() {
                   <span className="text-white font-bold">{currentSystemMode === 'test' ? '5' : (metrics?.totalBots || '')}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">Avg Response Time:</span>
+                  <span className="text-slate-300 text-sm">Last Execution:</span>
                   <div className="flex items-center space-x-1">
-                    {metrics?.data?.avgResponseTime && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1.2s' : ''}</span>
+                    {liveActivityData?.data?.recentExecutions?.length > 0 && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '2m ago' : (liveActivityData?.data?.lastExecution ? new Date(liveActivityData.data.lastExecution).toLocaleTimeString() : '')}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">Bot Errors:</span>
+                  <span className="text-slate-300 text-sm">Error Count:</span>
                   <div className="flex items-center space-x-2">
-                    <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '3' : ''}</span>
+                    <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '3' : (automationPerformance?.errorCount || '')}</span>
                     <Button size="sm" variant="ghost" className="text-cyan-400 hover:text-cyan-300 text-xs p-1">
                       {currentSystemMode === 'test' ? '👁 View Details' : ''}
                     </Button>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">Active Sessions:</span>
+                  <span className="text-slate-300 text-sm">Bot Status:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.dailyActiveUsers && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '23' : (metrics?.data?.dailyActiveUsers || '')}</span>
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? 'All Online' : (metrics?.data?.dailyActiveUsers ? 'Active' : '')}</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
@@ -3325,40 +3365,40 @@ export default function CommandCenter() {
           </Card>
 
           {/* Ops Metrics */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <Card className="bg-white/10 backdrop-blur-sm border border-orange-400">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <Gauge className="w-5 h-5 mr-2 text-yellow-400" />
+                <Gauge className="w-5 h-5 mr-2 text-orange-400" />
                 📊 Ops Metrics
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">Avg Bot Response:</span>
+                  <span className="text-slate-300 text-sm">API Errors:</span>
                   <div className="flex items-center space-x-1">
-                    {metrics?.data?.avgResponseTime && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1.2s' : ''}</span>
+                    {automationPerformance?.data?.apiErrors && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
+                    <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '12' : (automationPerformance?.data?.apiErrors || '')}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">Success Rate:</span>
+                  <span className="text-slate-300 text-sm">Slack Alert Rate:</span>
                   <div className="flex items-center space-x-1">
-                    {automationPerformance?.data?.passRate && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '94.2%' : ''}</span>
+                    {automationPerformance?.data?.slackAlertRate && <div className="w-1 h-1 bg-yellow-400 rounded-full animate-pulse"></div>}
+                    <span className="text-yellow-400 font-bold">{currentSystemMode === 'test' ? '5.2%' : (automationPerformance?.data?.slackAlertRate || '')}</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Error Trend (7d):</span>
-                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '54 errors' : ''}</span>
+                  <span className="text-slate-300 text-sm">Usage %:</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '87.4%' : (automationPerformance?.data?.usagePercentage || '')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">API Usage:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1,068/day' : ''}</span>
+                  <span className="text-slate-300 text-sm">System Load:</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '68.3%' : (metrics?.data?.systemLoad || '')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Bot Processing Load:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '94.2%' : ''}</span>
+                  <span className="text-slate-300 text-sm">Uptime Today:</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '99.9%' : (metrics?.data?.dailyUptime || '')}</span>
                 </div>
               </div>
             </CardContent>
@@ -3367,50 +3407,50 @@ export default function CommandCenter() {
 
         {/* Main Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {/* Automation Engine */}
+          {/* Workflow Performance */}
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Zap className="w-5 h-5 mr-2 text-yellow-400" />
-                Workflow Performance
+                🔄 Workflow Performance
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Active Workflows</span>
+                  <span className="text-slate-300">Automation Success:</span>
+                  <div className="flex items-center space-x-1">
+                    {automationPerformance?.data?.automationSuccess && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '94.7%' : (automationPerformance?.data?.automationSuccess ? automationPerformance.data.automationSuccess + '%' : '')}</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">Total Executions:</span>
+                  <div className="flex items-center space-x-1">
+                    {automationPerformance?.data?.totalExecutions && <div className="w-1 h-1 bg-cyan-400 rounded-full animate-pulse"></div>}
+                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '2,847' : (automationPerformance?.data?.totalExecutions || '')}</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">Make Workflows:</span>
                   <div className="flex items-center space-x-2">
-                    {automationPerformance?.activeFunctions && <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>}
-                    <Badge className={currentSystemMode === 'test' ? "bg-green-600 text-white" : "bg-slate-600 text-slate-400"}>{currentSystemMode === 'test' ? '12' : ''}</Badge>
+                    {automationPerformance?.data?.makeWorkflows && <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>}
+                    <Badge className={currentSystemMode === 'test' ? "bg-green-600 text-white" : "bg-slate-600 text-slate-400"}>{currentSystemMode === 'test' ? '18 Active' : (automationPerformance?.data?.makeWorkflows ? automationPerformance.data.makeWorkflows + ' Active' : '')}</Badge>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Tasks Completed</span>
-                  <div className="flex items-center space-x-1">
-                    {automationPerformance?.completedTasks && <div className="w-1 h-1 bg-cyan-400 rounded-full animate-pulse"></div>}
-                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '1,847' : ''}</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Success Rate</span>
-                  <div className="flex items-center space-x-1">
-                    {currentSystemMode === 'test' && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '97.3%' : (automationPerformance?.data?.passRate ? automationPerformance.data.passRate + '%' : '')}</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Avg Completion Time</span>
+                  <span className="text-slate-300">Avg Runtime:</span>
                   <div className="flex items-center space-x-1">
                     {currentSystemMode === 'test' && <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>}
-                    <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '2.1s' : (metrics?.data?.avgResponseTime ? metrics.data.avgResponseTime + 'ms' : '')}</span>
+                    <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '3.2s' : (automationPerformance?.data?.avgRuntime ? automationPerformance.data.avgRuntime + 's' : '')}</span>
                   </div>
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="flex items-center justify-between mb-1">
-                    <div className="text-slate-300 text-sm">Next Automation</div>
-                    {currentSystemMode === 'test' && <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>}
+                    <div className="text-slate-300 text-sm">Make Status:</div>
+                    {currentSystemMode === 'test' && <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>}
                   </div>
-                  <div className="text-blue-400 font-medium">{currentSystemMode === 'test' ? 'Lead follow-up in 15 min' : ''}</div>
+                  <div className="text-green-400 font-medium">{currentSystemMode === 'test' ? 'Connected & Logging' : (automationPerformance?.data?.makeStatus || '')}</div>
                 </div>
               </div>
             </CardContent>
@@ -3482,62 +3522,60 @@ export default function CommandCenter() {
           <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <PieChart className="w-5 h-5 mr-2 text-green-400" />
-                SmartSpend™
+                <DollarSign className="w-5 h-5 mr-2 text-green-400" />
+                💰 SmartSpend™
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-300">Budget Utilization</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '87%' : (metrics?.data?.automationEfficiency ? metrics.data.automationEfficiency + '%' : '')}</span>
+                    <span className="text-slate-300">Monthly Ad Spend:</span>
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '$4,850' : (metrics?.data?.smartSpendData?.monthlyAdSpend || '')}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-green-400 h-1 rounded-full" style={{ width: `${metrics?.data?.automationEfficiency || 0}%` }}></div>
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.spendUtilization || 87}%` }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-yellow-400 shadow-lg shadow-yellow-400/20">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-300" title="Cost to acquire each new customer">Cost Per Lead Trend</span>
+                    <span className="text-slate-300">Cost Per Lead:</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-yellow-400 font-bold">{currentSystemMode === 'test' ? '$64' : ''}</span>
-                      <Badge className="bg-slate-600 text-white text-xs">{currentSystemMode === 'test' ? '--' : ''}</Badge>
+                      <span className="text-yellow-400 font-bold">{currentSystemMode === 'test' ? '$24.50' : (metrics?.data?.smartSpendData?.costPerLead || '')}</span>
+                      <Badge className="bg-green-600 text-white text-xs">{currentSystemMode === 'test' ? '-12%' : (metrics?.data?.smartSpendData?.costPerLeadChange || '')}</Badge>
                     </div>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-yellow-400 h-1 rounded-full" style={{ width: `${metrics?.data?.avgResponseTime || 0}%` }}></div>
+                    <div className="bg-yellow-400 h-1 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.costEfficiency || 73}%` }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-300" title="Time until positive return on investment">Payback Period</span>
-                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '3.2 months' : ''}</span>
+                    <span className="text-slate-300">ROI This Month:</span>
+                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '312%' : (metrics?.data?.smartSpendData?.monthlyROI || '')}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: '0%' }}></div>
+                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.roiProgress || 78}%` }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-300">Automation Coverage</span>
-                    <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '93.6%' : (automationPerformance?.data?.passRate ? automationPerformance.data.passRate + '%' : '')}</span>
+                    <span className="text-slate-300">Conversion Rate:</span>
+                    <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '8.7%' : (metrics?.data?.smartSpendData?.conversionRate || '')}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: `${automationPerformance?.data?.passRate || 0}%` }}></div>
+                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.conversionRate || 87}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
-                  <div className="text-slate-300 text-sm mb-1">Monthly Savings vs Manual</div>
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-cyan-400 shadow-lg shadow-cyan-400/20">
+                  <div className="text-slate-300 text-sm mb-1">Budget Efficiency Score:</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-green-400 font-bold">{currentSystemMode === 'test' ? '--' : ''}</div>
-                    <Badge className="bg-green-600 text-white">{currentSystemMode === 'test' ? '--' : ''}</Badge>
+                    <div className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '94.2/100' : (metrics?.data?.smartSpendData?.budgetEfficiency || '')}</div>
+                    <Badge className="bg-cyan-600 text-white">{currentSystemMode === 'test' ? 'Optimal' : (metrics?.data?.smartSpendData?.efficiencyStatus || '')}</Badge>
                   </div>
-                  {currentSystemMode === 'test' && (
-                    <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                      <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
-                    </div>
-                  )}
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-cyan-400 h-1 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.budgetEfficiency || 94}%` }}></div>
+                  </div>
                 </div>
               </div>
             </CardContent>
