@@ -1,111 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, FileText, Download, Eye, Printer, BarChart3, TrendingUp, Phone, DollarSign } from 'lucide-react';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
+import { TrendingUp, Download, Calendar, Users, Phone, Target, Activity, DollarSign } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface AnalyticsReportModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-interface ReportSection {
-  id: string;
-  name: string;
-  description: string;
-  icon: React.ReactNode;
+interface MetricData {
+  period: string;
+  leads: number;
+  calls: number;
+  conversions: number;
+  revenue: number;
 }
 
-const reportSections: ReportSection[] = [
-  {
-    id: 'botalytics',
-    name: 'Botalytics™',
-    description: 'Bot performance, automation metrics, and efficiency tracking',
-    icon: <BarChart3 className="w-4 h-4" />
-  },
-  {
-    id: 'smartspend',
-    name: 'SmartSpend™',
-    description: 'Budget utilization, cost per lead, ROI analysis',
-    icon: <DollarSign className="w-4 h-4" />
-  },
-  {
-    id: 'voice-analytics',
-    name: 'Voice Analytics',
-    description: 'Call logs, sentiment analysis, voice command performance',
-    icon: <Phone className="w-4 h-4" />
-  },
-  {
-    id: 'performance',
-    name: 'Performance Metrics',
-    description: 'Lead generation, conversion rates, pipeline analytics',
-    icon: <TrendingUp className="w-4 h-4" />
-  }
-];
-
-const reportTypes = [
-  { value: 'daily', label: 'Daily Report' },
-  { value: 'weekly', label: 'Weekly Report' },
-  { value: 'monthly', label: 'Monthly Report' },
-  { value: 'custom', label: 'Custom Date Range' }
-];
-
-const reportFormats = [
-  { value: 'pdf', label: 'PDF Report', icon: <FileText className="w-4 h-4" /> },
-  { value: 'csv', label: 'CSV Data', icon: <FileText className="w-4 h-4" /> },
-  { value: 'xlsx', label: 'Excel Spreadsheet', icon: <FileText className="w-4 h-4" /> }
-];
+interface PerformanceMetric {
+  name: string;
+  value: number;
+  change: number;
+  trend: 'up' | 'down' | 'stable';
+}
 
 export function AnalyticsReportModal({ isOpen, onClose }: AnalyticsReportModalProps) {
-  const [reportType, setReportType] = useState('weekly');
-  const [selectedSections, setSelectedSections] = useState<string[]>(['botalytics', 'smartspend']);
-  const [reportFormat, setReportFormat] = useState('pdf');
-  const [dateFrom, setDateFrom] = useState<Date | undefined>(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
-  const [dateTo, setDateTo] = useState<Date | undefined>(new Date());
+  const [reportType, setReportType] = useState<'daily' | 'weekly' | 'monthly'>('weekly');
+  const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d'>('30d');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
+  const [analyticsData, setAnalyticsData] = useState<MetricData[]>([]);
+  const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
+  const { toast } = useToast();
 
-  const handleSectionToggle = (sectionId: string) => {
-    setSelectedSections(prev => 
-      prev.includes(sectionId) 
-        ? prev.filter(id => id !== sectionId)
-        : [...prev, sectionId]
-    );
+  useEffect(() => {
+    if (isOpen) {
+      loadAnalyticsData();
+    }
+  }, [isOpen, reportType, timeRange]);
+
+  const loadAnalyticsData = async () => {
+    try {
+      const response = await fetch(`/api/analytics/report?type=${reportType}&range=${timeRange}`);
+      const result = await response.json();
+      
+      if (result.success) {
+        setAnalyticsData(result.data.metrics || []);
+        setPerformanceMetrics(result.data.performance || []);
+      }
+    } catch (error) {
+      console.error('Analytics load error:', error);
+    }
   };
 
-  const handleGeneratePreview = async () => {
-    setIsGenerating(true);
-    setShowPreview(false);
-    
-    // Simulate generation delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsGenerating(false);
-    setShowPreview(true);
-  };
-
-  const handleDownload = async () => {
+  const generateReport = async () => {
     setIsGenerating(true);
     
     try {
-      const reportData = {
-        type: reportType,
-        sections: selectedSections,
-        format: reportFormat,
-        dateRange: reportType === 'custom' ? { from: dateFrom, to: dateTo } : null,
-        timestamp: new Date().toISOString()
-      };
-
       const response = await fetch('/api/analytics/generate-report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reportData)
+        body: JSON.stringify({
+          type: reportType,
+          range: timeRange,
+          includeCharts: true,
+          format: 'pdf'
+        })
       });
 
       if (response.ok) {
@@ -113,246 +76,273 @@ export function AnalyticsReportModal({ isOpen, onClose }: AnalyticsReportModalPr
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `analytics-report-${format(new Date(), 'yyyy-MM-dd')}.${reportFormat}`;
+        a.download = `analytics-report-${reportType}-${Date.now()}.pdf`;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
+        
+        toast({
+          title: "Report Generated",
+          description: "Analytics report has been downloaded successfully"
+        });
       }
     } catch (error) {
-      console.error('Download failed:', error);
+      toast({
+        title: "Generation Failed",
+        description: "Failed to generate analytics report",
+        variant: "destructive"
+      });
     } finally {
       setIsGenerating(false);
     }
   };
 
-  const handlePrint = () => {
-    window.print();
+  const chartData = analyticsData.map(item => ({
+    name: item.period,
+    leads: item.leads,
+    calls: item.calls,
+    conversions: item.conversions,
+    revenue: item.revenue / 1000 // Convert to thousands for better display
+  }));
+
+  const pieData = [
+    { name: 'Apollo', value: 35, color: '#3b82f6' },
+    { name: 'Apify', value: 45, color: '#10b981' },
+    { name: 'PhantomBuster', value: 20, color: '#f59e0b' }
+  ];
+
+  const getTrendIcon = (trend: string) => {
+    switch (trend) {
+      case 'up': return <TrendingUp className="w-3 h-3 text-green-400" />;
+      case 'down': return <TrendingUp className="w-3 h-3 text-red-400 rotate-180" />;
+      default: return <Activity className="w-3 h-3 text-gray-400" />;
+    }
+  };
+
+  const formatChange = (change: number) => {
+    const sign = change >= 0 ? '+' : '';
+    return `${sign}${change.toFixed(1)}%`;
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 border border-blue-400">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 border border-blue-400">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center">
-            <BarChart3 className="w-5 h-5 mr-2 text-blue-400" />
-            Generate Analytics Report
+            <BarChart className="w-5 h-5 mr-2 text-blue-400" />
+            Analytics Dashboard Report
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Configuration Panel */}
-          <div className="space-y-6">
-            {/* Report Type */}
+        {/* Controls */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <label className="text-slate-300 text-sm">Report Type:</label>
+              <Select value={reportType} onValueChange={(value: any) => setReportType(value)}>
+                <SelectTrigger className="w-32 bg-slate-800 border-slate-600 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-800 border-slate-600">
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <label className="text-slate-300 text-sm">Time Range:</label>
+              <Select value={timeRange} onValueChange={(value: any) => setTimeRange(value)}>
+                <SelectTrigger className="w-32 bg-slate-800 border-slate-600 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-800 border-slate-600">
+                  <SelectItem value="7d">Last 7 Days</SelectItem>
+                  <SelectItem value="30d">Last 30 Days</SelectItem>
+                  <SelectItem value="90d">Last 90 Days</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <Button
+            onClick={generateReport}
+            disabled={isGenerating}
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            {isGenerating ? 'Generating...' : 'Download PDF'}
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Key Metrics */}
+          <div className="lg:col-span-1 space-y-4">
             <Card className="bg-slate-800/50 border border-slate-600">
               <CardHeader>
-                <CardTitle className="text-white text-sm">Report Type</CardTitle>
+                <CardTitle className="text-white text-sm">Key Performance Indicators</CardTitle>
               </CardHeader>
-              <CardContent>
-                <Select value={reportType} onValueChange={setReportType}>
-                  <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-slate-800 border-slate-600">
-                    {reportTypes.map(type => (
-                      <SelectItem key={type.value} value={type.value} className="text-white hover:bg-slate-700">
-                        {type.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </CardContent>
-            </Card>
-
-            {/* Custom Date Range */}
-            {reportType === 'custom' && (
-              <Card className="bg-slate-800/50 border border-slate-600">
-                <CardHeader>
-                  <CardTitle className="text-white text-sm">Date Range</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-slate-300 text-xs mb-1 block">From</label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left font-normal bg-slate-700 border-slate-600 text-white",
-                              !dateFrom && "text-slate-400"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {dateFrom ? format(dateFrom, "PPP") : "Pick a date"}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 bg-slate-800 border-slate-600">
-                          <Calendar
-                            mode="single"
-                            selected={dateFrom}
-                            onSelect={setDateFrom}
-                            initialFocus
-                            className="text-white"
-                          />
-                        </PopoverContent>
-                      </Popover>
+              <CardContent className="space-y-4">
+                {performanceMetrics.map((metric, index) => (
+                  <div key={index} className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      {metric.name === 'Total Leads' && <Users className="w-4 h-4 text-blue-400" />}
+                      {metric.name === 'Total Calls' && <Phone className="w-4 h-4 text-green-400" />}
+                      {metric.name === 'Conversions' && <Target className="w-4 h-4 text-purple-400" />}
+                      {metric.name === 'Revenue' && <DollarSign className="w-4 h-4 text-yellow-400" />}
+                      <span className="text-slate-300 text-sm">{metric.name}</span>
                     </div>
-                    <div>
-                      <label className="text-slate-300 text-xs mb-1 block">To</label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left font-normal bg-slate-700 border-slate-600 text-white",
-                              !dateTo && "text-slate-400"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {dateTo ? format(dateTo, "PPP") : "Pick a date"}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 bg-slate-800 border-slate-600">
-                          <Calendar
-                            mode="single"
-                            selected={dateTo}
-                            onSelect={setDateTo}
-                            initialFocus
-                            className="text-white"
-                          />
-                        </PopoverContent>
-                      </Popover>
+                    <div className="text-right">
+                      <div className="text-white font-bold">
+                        {metric.name === 'Revenue' ? `$${metric.value.toLocaleString()}` : metric.value.toLocaleString()}
+                      </div>
+                      <div className={`flex items-center space-x-1 text-xs ${
+                        metric.trend === 'up' ? 'text-green-400' : 
+                        metric.trend === 'down' ? 'text-red-400' : 'text-gray-400'
+                      }`}>
+                        {getTrendIcon(metric.trend)}
+                        <span>{formatChange(metric.change)}</span>
+                      </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Report Sections */}
-            <Card className="bg-slate-800/50 border border-slate-600">
-              <CardHeader>
-                <CardTitle className="text-white text-sm">Report Sections</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {reportSections.map(section => (
-                    <div key={section.id} className="flex items-start space-x-3">
-                      <Checkbox
-                        id={section.id}
-                        checked={selectedSections.includes(section.id)}
-                        onCheckedChange={() => handleSectionToggle(section.id)}
-                        className="border-slate-600 data-[state=checked]:bg-blue-600"
-                      />
-                      <div className="flex-1">
-                        <label htmlFor={section.id} className="text-white text-sm font-medium flex items-center cursor-pointer">
-                          {section.icon}
-                          <span className="ml-2">{section.name}</span>
-                        </label>
-                        <p className="text-slate-400 text-xs mt-1">{section.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                ))}
               </CardContent>
             </Card>
 
-            {/* Format Selection */}
+            {/* Lead Sources */}
             <Card className="bg-slate-800/50 border border-slate-600">
               <CardHeader>
-                <CardTitle className="text-white text-sm">Output Format</CardTitle>
+                <CardTitle className="text-white text-sm">Lead Sources Distribution</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 gap-2">
-                  {reportFormats.map(format => (
-                    <label key={format.value} className="flex items-center space-x-3 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="format"
-                        value={format.value}
-                        checked={reportFormat === format.value}
-                        onChange={(e) => setReportFormat(e.target.value)}
-                        className="text-blue-600"
-                      />
-                      <div className="flex items-center">
-                        {format.icon}
-                        <span className="text-white text-sm ml-2">{format.label}</span>
+                <ResponsiveContainer width="100%" height={200}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={40}
+                      outerRadius={80}
+                      dataKey="value"
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: '#1e293b', 
+                        border: '1px solid #475569',
+                        borderRadius: '6px'
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="mt-3 space-y-2">
+                  {pieData.map((item, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: item.color }}></div>
+                        <span className="text-slate-300 text-sm">{item.name}</span>
                       </div>
-                    </label>
+                      <span className="text-white text-sm font-medium">{item.value}%</span>
+                    </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Preview Panel */}
-          <div className="space-y-6">
+          {/* Charts */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Performance Trend */}
             <Card className="bg-slate-800/50 border border-slate-600">
               <CardHeader>
-                <CardTitle className="text-white text-sm">Report Preview</CardTitle>
+                <CardTitle className="text-white text-sm">Performance Trends</CardTitle>
               </CardHeader>
               <CardContent>
-                {!showPreview ? (
-                  <div className="text-center py-8">
-                    <FileText className="w-16 h-16 text-slate-600 mx-auto mb-4" />
-                    <p className="text-slate-400 text-sm mb-4">Generate preview to see report structure</p>
-                    <Button
-                      onClick={handleGeneratePreview}
-                      disabled={isGenerating || selectedSections.length === 0}
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
-                    >
-                      {isGenerating ? (
-                        <div className="flex items-center">
-                          <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          Generating...
-                        </div>
-                      ) : (
-                        <>
-                          <Eye className="w-4 h-4 mr-2" />
-                          Generate Preview
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-4">
-                      <h3 className="text-white font-medium mb-2">
-                        {reportTypes.find(t => t.value === reportType)?.label}
-                      </h3>
-                      <p className="text-slate-300 text-sm">
-                        {selectedSections.length} section{selectedSections.length !== 1 ? 's' : ''} selected
-                      </p>
-                      <div className="mt-3 space-y-2">
-                        {selectedSections.map(sectionId => {
-                          const section = reportSections.find(s => s.id === sectionId);
-                          return section ? (
-                            <div key={sectionId} className="flex items-center text-sm text-slate-300">
-                              {section.icon}
-                              <span className="ml-2">{section.name}</span>
-                            </div>
-                          ) : null;
-                        })}
-                      </div>
-                    </div>
-                    
-                    <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-4">
-                      <h4 className="text-white text-sm font-medium mb-2">Report Details</h4>
-                      <div className="space-y-1 text-xs text-slate-300">
-                        <p>Format: {reportFormats.find(f => f.value === reportFormat)?.label}</p>
-                        <p>Date Range: {reportType === 'custom' ? 
-                          `${dateFrom ? format(dateFrom, 'MMM dd') : '...'} - ${dateTo ? format(dateTo, 'MMM dd') : '...'}` :
-                          reportType.charAt(0).toUpperCase() + reportType.slice(1)
-                        }</p>
-                        <p>Generated: {format(new Date(), 'PPP p')}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <XAxis dataKey="name" stroke="#9ca3af" />
+                    <YAxis stroke="#9ca3af" />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: '#1e293b', 
+                        border: '1px solid #475569',
+                        borderRadius: '6px'
+                      }}
+                    />
+                    <Line type="monotone" dataKey="leads" stroke="#3b82f6" strokeWidth={2} />
+                    <Line type="monotone" dataKey="calls" stroke="#10b981" strokeWidth={2} />
+                    <Line type="monotone" dataKey="conversions" stroke="#f59e0b" strokeWidth={2} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Revenue Analysis */}
+            <Card className="bg-slate-800/50 border border-slate-600">
+              <CardHeader>
+                <CardTitle className="text-white text-sm">Revenue Analysis (in thousands)</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <XAxis dataKey="name" stroke="#9ca3af" />
+                    <YAxis stroke="#9ca3af" />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: '#1e293b', 
+                        border: '1px solid #475569',
+                        borderRadius: '6px'
+                      }}
+                    />
+                    <Bar dataKey="revenue" fill="#8b5cf6" />
+                  </BarChart>
+                </ResponsiveContainer>
               </CardContent>
             </Card>
           </div>
         </div>
+
+        {/* Summary Statistics */}
+        <Card className="bg-slate-800/50 border border-slate-600 mt-6">
+          <CardHeader>
+            <CardTitle className="text-white text-sm">Report Summary</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-400">
+                  {analyticsData.reduce((sum, item) => sum + item.leads, 0).toLocaleString()}
+                </div>
+                <div className="text-slate-400 text-sm">Total Leads</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-400">
+                  {analyticsData.reduce((sum, item) => sum + item.calls, 0).toLocaleString()}
+                </div>
+                <div className="text-slate-400 text-sm">Total Calls</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-purple-400">
+                  {analyticsData.reduce((sum, item) => sum + item.conversions, 0).toLocaleString()}
+                </div>
+                <div className="text-slate-400 text-sm">Conversions</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-yellow-400">
+                  ${(analyticsData.reduce((sum, item) => sum + item.revenue, 0) / 1000).toFixed(1)}K
+                </div>
+                <div className="text-slate-400 text-sm">Revenue</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Action Buttons */}
         <div className="flex justify-between pt-4 border-t border-slate-600">
@@ -361,37 +351,26 @@ export function AnalyticsReportModal({ isOpen, onClose }: AnalyticsReportModalPr
             variant="outline"
             className="border-slate-600 text-slate-300 hover:bg-slate-700"
           >
-            Cancel
+            Close
           </Button>
           
-          <div className="flex space-x-3">
-            {showPreview && (
-              <Button
-                onClick={handlePrint}
-                variant="outline"
-                className="border-slate-600 text-slate-300 hover:bg-slate-700"
-              >
-                <Printer className="w-4 h-4 mr-2" />
-                Print
-              </Button>
-            )}
+          <div className="flex space-x-2">
+            <Button
+              onClick={() => window.print()}
+              variant="outline"
+              className="border-blue-600 text-blue-400 hover:bg-blue-600/20"
+            >
+              <Calendar className="w-4 h-4 mr-2" />
+              Print Report
+            </Button>
             
             <Button
-              onClick={handleDownload}
-              disabled={isGenerating || selectedSections.length === 0}
-              className="bg-green-600 hover:bg-green-700 text-white"
+              onClick={generateReport}
+              disabled={isGenerating}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
             >
-              {isGenerating ? (
-                <div className="flex items-center">
-                  <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Generating...
-                </div>
-              ) : (
-                <>
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Report
-                </>
-              )}
+              <Download className="w-4 h-4 mr-2" />
+              Export Data
             </Button>
           </div>
         </div>

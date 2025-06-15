@@ -93,12 +93,11 @@ class ScrapingService {
         organization_locations: [filters.location || 'United States']
       };
 
-      const response = await fetch('https://api.apollo.io/v1/mixed_people/search', {
+      const response = await fetch(`https://api.apollo.io/v1/mixed_people/search?api_key=${apolloApiKey}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache',
-          'X-Api-Key': apolloApiKey
+          'Cache-Control': 'no-cache'
         },
         body: JSON.stringify(searchParams)
       });

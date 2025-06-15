@@ -33,9 +33,22 @@ export function VoiceCommandInterface({
       recognitionInstance.continuous = true;
       recognitionInstance.interimResults = true;
       recognitionInstance.lang = 'en-US';
+      recognitionInstance.maxAlternatives = 1;
+
+      let silenceTimer: NodeJS.Timeout;
+      let isManualStop = false;
 
       recognitionInstance.onstart = () => {
+        console.log('Voice recognition started');
         onMicStatusChange('listening');
+        isManualStop = false;
+        
+        // Auto-stop after 30 seconds to prevent indefinite listening
+        silenceTimer = setTimeout(() => {
+          if (!isManualStop) {
+            recognitionInstance.stop();
+          }
+        }, 30000);
       };
 
       recognitionInstance.onresult = (event: any) => {
@@ -46,26 +59,95 @@ export function VoiceCommandInterface({
           const transcript = event.results[i][0].transcript;
           if (event.results[i].isFinal) {
             finalTranscript += transcript;
+            
+            // Process command when final transcript is available
+            if (finalTranscript.trim()) {
+              console.log('Final transcript:', finalTranscript);
+              processVoiceCommand(finalTranscript.trim());
+            }
           } else {
             interimTranscript += transcript;
           }
         }
 
         onTranscriptChange(finalTranscript + interimTranscript);
+        
+        // Reset silence timer on speech activity
+        if (silenceTimer) {
+          clearTimeout(silenceTimer);
+          silenceTimer = setTimeout(() => {
+            if (!isManualStop) {
+              recognitionInstance.stop();
+            }
+          }, 30000);
+        }
       };
 
       recognitionInstance.onend = () => {
+        console.log('Voice recognition ended');
+        if (silenceTimer) clearTimeout(silenceTimer);
         onMicStatusChange('idle');
       };
 
       recognitionInstance.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
-        onMicStatusChange('idle');
+        if (silenceTimer) clearTimeout(silenceTimer);
+        
+        // Auto-restart on network errors
+        if (event.error === 'network' && !isManualStop) {
+          setTimeout(() => {
+            if (micStatus === 'listening') {
+              recognitionInstance.start();
+            }
+          }, 1000);
+        } else {
+          onMicStatusChange('idle');
+        }
       };
 
       setRecognition(recognitionInstance);
     }
   }, [onMicStatusChange, onTranscriptChange]);
+
+  // Voice command processing function
+  const processVoiceCommand = async (command: string) => {
+    console.log('Processing voice command:', command);
+    onMicStatusChange('processing');
+    
+    try {
+      const response = await fetch('/api/voice-command', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          command,
+          timestamp: new Date().toISOString(),
+          userId: 'voice_user'
+        })
+      });
+
+      const result = await response.json();
+      console.log('Voice command result:', result);
+      
+      // Execute actual command actions
+      if (command.toLowerCase().includes('start pipeline')) {
+        // Trigger pipeline start
+        window.location.hash = '#automation-ops';
+      } else if (command.toLowerCase().includes('scrape leads')) {
+        // Navigate to lead scraper
+        window.location.hash = '#lead-scraper';
+      } else if (command.toLowerCase().includes('show dashboard')) {
+        // Navigate to dashboard
+        window.location.hash = '#';
+      }
+      
+    } catch (error) {
+      console.error('Voice command processing failed:', error);
+    } finally {
+      setTimeout(() => {
+        onMicStatusChange('idle');
+      }, 1000);
+    }
+  };
 
   // Audio visualization setup
   useEffect(() => {
