@@ -406,7 +406,7 @@ export default function SystemControls() {
     emergencyStop: { category: 'Webhook Management', name: 'EMERGENCY STOP', visibleTo: ['admin', 'support'] },
     scenarioControl: { category: 'Webhook Management', name: 'Scenario Control', visibleTo: ['admin'] },
     rateLimiting: { category: 'Webhook Management', name: 'Rate Limiting', visibleTo: ['admin'] },
-    systemDiagnostics: { category: 'Webhook Management', name: 'Run System Diagnostics', visibleTo: ['admin'] },
+    systemDiagnostics: { category: 'Runtime Control', name: 'Run System Diagnostics', visibleTo: ['admin'] },
     
     // Security & Compliance
     dataEncryption: { category: 'Security & Compliance', name: 'Data Encryption', visibleTo: ['admin'] },
@@ -1276,9 +1276,24 @@ export default function SystemControls() {
               />
             </div>
 
+
+            
+
+          </CardContent>
+        </Card>
+
+        {/* ⚙️ Runtime Control */}
+        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-white text-base flex items-center space-x-2">
+              <Settings className="w-4 h-4 text-orange-400" />
+              <span>⚙️ Runtime Control</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
             {/* Run System Diagnostics - Single Consolidated Tile */}
             {isModuleVisible('systemDiagnostics') && (
-              <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-4 mt-3">
+              <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className={`w-2 h-2 ${getStatusColor(true)} rounded-full`}></div>
@@ -1338,8 +1353,6 @@ export default function SystemControls() {
                 </div>
               </div>
             )}
-            
-
           </CardContent>
         </Card>
 
