@@ -7555,6 +7555,18 @@ export default function CommandCenter() {
         onClose={() => setShowCreateVoiceCallModal(false)} 
       />
 
+      {/* Enhanced Analytics Report Modal */}
+      <AnalyticsReportModal 
+        isOpen={showAnalyticsModal} 
+        onClose={() => setShowAnalyticsModal(false)} 
+      />
+
+      {/* Calendar Upload Modal */}
+      <CalendarUploadModal 
+        isOpen={showCalendarUpload} 
+        onClose={() => setShowCalendarUpload(false)} 
+      />
+
     </div>
     </div>
   );
