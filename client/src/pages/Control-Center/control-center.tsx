@@ -827,30 +827,30 @@ export default function SystemControls() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Starter Bot */}
-          <Card className="bg-blue-900/40 backdrop-blur-sm border-2 border-blue-500 hover:border-blue-400 transition-colors cursor-pointer shadow-lg shadow-blue-500/20"
+          <Card className="bg-gradient-to-br from-slate-700 to-slate-600 border-2 border-slate-400 hover:border-slate-300 transition-colors cursor-pointer shadow-lg shadow-slate-400/30"
                 onClick={() => applyPackageSettings('starter')}>
             <CardContent className="p-4 text-center">
-              <Settings className="w-8 h-8 text-blue-400 mx-auto mb-2" />
+              <Settings className="w-8 h-8 text-slate-300 mx-auto mb-2" />
               <h3 className="text-white font-semibold mb-1">Starter Bot</h3>
               <p className="text-white/60 text-xs">Basic AI & Dashboard</p>
             </CardContent>
           </Card>
 
           {/* Pro Bot */}
-          <Card className="bg-purple-900/40 backdrop-blur-sm border-2 border-purple-500 hover:border-purple-400 transition-colors cursor-pointer shadow-lg shadow-purple-500/20"
+          <Card className="bg-gradient-to-br from-purple-700 to-purple-600 border-2 border-purple-400 hover:border-purple-300 transition-colors cursor-pointer shadow-lg shadow-purple-400/30"
                 onClick={() => applyPackageSettings('pro')}>
             <CardContent className="p-4 text-center">
-              <Brain className="w-8 h-8 text-purple-400 mx-auto mb-2" />
+              <Brain className="w-8 h-8 text-purple-300 mx-auto mb-2" />
               <h3 className="text-white font-semibold mb-1">Pro Bot</h3>
               <p className="text-white/60 text-xs">Voice + Integrations</p>
             </CardContent>
           </Card>
 
           {/* Enterprise Bot */}
-          <Card className="bg-green-900/40 backdrop-blur-sm border-2 border-green-500 hover:border-green-400 transition-colors cursor-pointer shadow-lg shadow-green-500/20"
+          <Card className="bg-gradient-to-br from-green-700 to-green-600 border-2 border-green-400 hover:border-green-300 transition-colors cursor-pointer shadow-lg shadow-green-400/30"
                 onClick={() => applyPackageSettings('enterprise')}>
             <CardContent className="p-4 text-center">
-              <Building className="w-8 h-8 text-green-400 mx-auto mb-2" />
+              <Building className="w-8 h-8 text-green-300 mx-auto mb-2" />
               <h3 className="text-white font-semibold mb-1">Enterprise Bot</h3>
               <p className="text-white/60 text-xs">Advanced Features</p>
             </CardContent>

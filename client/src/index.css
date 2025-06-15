@@ -55,16 +55,18 @@
   background-color: #000000 !important;
 }
 
-.control-center-switch[data-state="unchecked"] .switch-thumb {
+.control-center-switch[data-state="unchecked"] span {
   background-color: #3b82f6 !important;
+  transform: translateX(0px) !important;
 }
 
 .control-center-switch[data-state="checked"] {
   background-color: #3b82f6 !important;
 }
 
-.control-center-switch[data-state="checked"] .switch-thumb {
+.control-center-switch[data-state="checked"] span {
   background-color: #000000 !important;
+  transform: translateX(20px) !important;
 }
 
 .logo-icon {
