@@ -315,11 +315,11 @@ export default function SystemControls() {
   };
 
   const getStatusColor = (isActive: boolean) => {
-    return isActive ? "bg-green-400" : "bg-gray-400";
+    return isActive ? "bg-green-400" : "bg-red-500";
   };
 
   const getStatusIcon = (isActive: boolean) => {
-    return isActive ? <CheckCircle className="w-4 h-4 text-green-500" /> : <AlertTriangle className="w-4 h-4 text-gray-500" />;
+    return isActive ? <CheckCircle className="w-4 h-4 text-green-500" /> : <AlertTriangle className="w-4 h-4 text-red-500" />;
   };
 
   // Get live status indicator
@@ -1011,10 +1011,10 @@ export default function SystemControls() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-green-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.smartWorkflows)} rounded-full`}></div>
-                  <span className="text-white text-sm border border-green-400 px-2 py-1 rounded bg-slate-600/60">Lead Scoring Engine</span>
+                  <span className="text-white text-sm">Lead Scoring Engine</span>
                   {getStatusIcon(moduleStates.smartWorkflows)}
                 </div>
                 <Switch 
