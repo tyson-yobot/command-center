@@ -55,6 +55,11 @@ export default function SystemControls() {
   const [billingMode, setBillingMode] = useState<'subscription' | 'usage' | 'trial'>('subscription');
   const [showActionLog, setShowActionLog] = useState(false);
   
+  // System mode state
+  const [currentSystemMode, setCurrentSystemMode] = useState<'test' | 'live'>(() => {
+    return (localStorage.getItem('systemMode') as 'test' | 'live') || 'live';
+  });
+  
   // Module status tracking (live, warning, failed)
   const [moduleStatus, setModuleStatus] = useState<Record<string, 'live' | 'warning' | 'failed'>>({
     voiceBotCore: 'live',
@@ -1318,112 +1323,7 @@ export default function SystemControls() {
               />
             </div>
             
-            {/* Diagnostics Engine Tiles */}
-            <div className="space-y-3 pt-3 border-t border-slate-700/50">
-              {/* Test Mode Diagnostics */}
-              <div className="p-4 bg-blue-900/30 rounded-lg border border-blue-500/30">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="text-white font-medium text-sm">Run Diagnostics Engine (Test Mode)</h4>
-                  <Button
-                    size="sm"
-                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1"
-                    onClick={async () => {
-                      try {
-                        setActionLog(prev => [...prev, {
-                          id: Date.now(),
-                          timestamp: new Date().toISOString(),
-                          module: 'Diagnostics Engine',
-                          action: 'Test Mode Started',
-                          status: 'Processing',
-                          details: 'Triggering test mode diagnostics...'
-                        }]);
 
-                        const response = await fetch('https://YoBotAssistant.tyson44.repl.co/test', {
-                          method: 'GET'
-                        });
-
-                        if (response.ok) {
-                          setActionLog(prev => [...prev, {
-                            id: Date.now() + 1,
-                            timestamp: new Date().toISOString(),
-                            module: 'Diagnostics Engine',
-                            action: 'Test Mode',
-                            status: 'Success',
-                            details: 'Test mode diagnostics completed successfully'
-                          }]);
-                        } else {
-                          throw new Error(`HTTP ${response.status}`);
-                        }
-                      } catch (error) {
-                        setActionLog(prev => [...prev, {
-                          id: Date.now() + 2,
-                          timestamp: new Date().toISOString(),
-                          module: 'Diagnostics Engine',
-                          action: 'Test Mode',
-                          status: 'Failed',
-                          details: `Test mode failed: ${error.message}`
-                        }]);
-                      }
-                    }}
-                  >
-                    Run Test Diagnostics
-                  </Button>
-                </div>
-                <p className="text-slate-300 text-xs">Triggers TEST MODE in the Replit Python runner</p>
-              </div>
-
-              {/* Live Mode Automation */}
-              <div className="p-4 bg-red-900/30 rounded-lg border border-red-500/30">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="text-white font-medium text-sm">Run Automation Engine (Live Mode)</h4>
-                  <Button
-                    size="sm"
-                    className="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1"
-                    onClick={async () => {
-                      try {
-                        setActionLog(prev => [...prev, {
-                          id: Date.now(),
-                          timestamp: new Date().toISOString(),
-                          module: 'Automation Engine',
-                          action: 'Live Mode Started',
-                          status: 'Processing',
-                          details: 'Triggering live mode automation...'
-                        }]);
-
-                        const response = await fetch('https://YoBotAssistant.tyson44.repl.co/', {
-                          method: 'GET'
-                        });
-
-                        if (response.ok) {
-                          setActionLog(prev => [...prev, {
-                            id: Date.now() + 1,
-                            timestamp: new Date().toISOString(),
-                            module: 'Automation Engine',
-                            action: 'Live Mode',
-                            status: 'Success',
-                            details: 'Live mode automation completed successfully'
-                          }]);
-                        } else {
-                          throw new Error(`HTTP ${response.status}`);
-                        }
-                      } catch (error) {
-                        setActionLog(prev => [...prev, {
-                          id: Date.now() + 2,
-                          timestamp: new Date().toISOString(),
-                          module: 'Automation Engine',
-                          action: 'Live Mode',
-                          status: 'Failed',
-                          details: `Live mode failed: ${error.message}`
-                        }]);
-                      }
-                    }}
-                  >
-                    Run Live Automation
-                  </Button>
-                </div>
-                <p className="text-slate-300 text-xs">Triggers LIVE MODE in the Replit Python runner</p>
-              </div>
-            </div>
           </CardContent>
         </Card>
 
@@ -1594,6 +1494,132 @@ export default function SystemControls() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Runtime Execution Section */}
+      <Card className="bg-gradient-to-r from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-600/30 mt-6">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-white text-base flex items-center space-x-2">
+            <Settings className="w-4 h-4 text-slate-400" />
+            <span>⚙️ Runtime Execution</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Run System Diagnostics */}
+            <div className="p-4 bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-lg border border-blue-500/30">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-white font-medium text-sm">Run System Diagnostics</h4>
+                <Button
+                  size="sm"
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1"
+                  onClick={async () => {
+                    try {
+                      const endpoint = currentSystemMode === 'test' ? 'https://YoBotAssistant.tyson44.repl.co/test' : 'https://YoBotAssistant.tyson44.repl.co/';
+                      
+                      setActionLog(prev => [...prev, {
+                        id: Date.now(),
+                        timestamp: new Date().toISOString(),
+                        module: 'System Diagnostics',
+                        action: `${currentSystemMode.toUpperCase()} Mode Started`,
+                        status: 'Processing',
+                        details: `Triggering ${currentSystemMode} mode diagnostics...`
+                      }]);
+
+                      const response = await fetch(endpoint, {
+                        method: 'GET'
+                      });
+
+                      if (response.ok) {
+                        setActionLog(prev => [...prev, {
+                          id: Date.now() + 1,
+                          timestamp: new Date().toISOString(),
+                          module: 'System Diagnostics',
+                          action: `${currentSystemMode.toUpperCase()} Mode`,
+                          status: 'Success',
+                          details: `${currentSystemMode} mode diagnostics completed successfully`
+                        }]);
+                      } else {
+                        throw new Error(`HTTP ${response.status}`);
+                      }
+                    } catch (error) {
+                      setActionLog(prev => [...prev, {
+                        id: Date.now() + 2,
+                        timestamp: new Date().toISOString(),
+                        module: 'System Diagnostics',
+                        action: 'Diagnostics',
+                        status: 'Failed',
+                        details: `Diagnostics failed: ${error.message}`
+                      }]);
+                    }
+                  }}
+                >
+                  Run Diagnostics
+                </Button>
+              </div>
+              <p className="text-slate-300 text-xs">
+                Executes {currentSystemMode === 'test' ? 'TEST' : 'LIVE'} mode diagnostics based on current system mode
+              </p>
+            </div>
+
+            {/* Internal System Check */}
+            <div className="p-4 bg-gradient-to-r from-green-900/30 to-emerald-900/30 rounded-lg border border-green-500/30">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-white font-medium text-sm">Internal System Check</h4>
+                <Button
+                  size="sm"
+                  className="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1"
+                  onClick={async () => {
+                    try {
+                      setActionLog(prev => [...prev, {
+                        id: Date.now(),
+                        timestamp: new Date().toISOString(),
+                        module: 'Internal System Check',
+                        action: 'Health Check Started',
+                        status: 'Processing',
+                        details: 'Running internal system health diagnostics...'
+                      }]);
+
+                      const response = await fetch('/api/diagnostics/run', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                      });
+
+                      const data = await response.json();
+
+                      if (data.success) {
+                        setActionLog(prev => [...prev, {
+                          id: Date.now() + 1,
+                          timestamp: new Date().toISOString(),
+                          module: 'Internal System Check',
+                          action: 'Health Check',
+                          status: 'Success',
+                          details: `System health: ${data.systemHealth} - ${data.checksPerformed} checks completed`
+                        }]);
+                      } else {
+                        throw new Error(data.error || 'Health check failed');
+                      }
+                    } catch (error) {
+                      setActionLog(prev => [...prev, {
+                        id: Date.now() + 2,
+                        timestamp: new Date().toISOString(),
+                        module: 'Internal System Check',
+                        action: 'Health Check',
+                        status: 'Failed',
+                        details: `Internal health check failed: ${error.message}`
+                      }]);
+                    }
+                  }}
+                >
+                  Run Health Check
+                </Button>
+              </div>
+              <p className="text-slate-300 text-xs">
+                Performs internal system health checks and component validation
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Critical System Management Section - Live Mode Only */}
       <Card className="bg-red-900/60 backdrop-blur-sm border border-red-500/30 mt-6">
