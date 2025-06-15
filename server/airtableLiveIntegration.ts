@@ -59,10 +59,8 @@ class AirtableLiveIntegration {
             '🧑‍💼 Name': orderData['Client Name'] || 'Sales Order Client',
             '✉️ Email': orderData['Client Email'] || 'sales@example.com',
             '🏢 Company': `${orderData['Bot Package']} Order`,
-            '💼 Title': 'Sales Order',
-            '📍 Location': 'Command Center',
-            '🛠️ Lead Source': 'Sales Order Flow',
-            '📅 Date Added': '2025-06-15'
+            '💼 Title': 'Sales Order Representative',
+            '🛠️ Lead Source': 'Sales Order Flow'
           }
         })
       });
