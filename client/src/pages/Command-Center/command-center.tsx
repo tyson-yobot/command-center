@@ -200,6 +200,8 @@ export default function CommandCenter() {
   const [selectedKnowledgeItems, setSelectedKnowledgeItems] = useState<string[]>([]);
   const [knowledgeItems, setKnowledgeItems] = useState([]);
   const [memoryActivityLog, setMemoryActivityLog] = useState([]);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [showManualCallModal, setShowManualCallModal] = useState(false);
   const [voiceActive, setVoiceActive] = useState(false);
   const [showVoiceRecordings, setShowVoiceRecordings] = useState(false);
   const [showSupportTicketModal, setShowSupportTicketModal] = useState(false);
@@ -3088,7 +3090,7 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={handleInitiateVoiceCall}
+                    onClick={() => setShowManualCallModal(true)}
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
                   >
                     <span className="text-xl mr-3">📞</span>
@@ -3171,37 +3173,7 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={async () => {
-                      try {
-                        console.log('Export Data button clicked');
-                        const response = await fetch('/api/data/export', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            format: 'csv',
-                            includeData: ['leads', 'calls', 'automation_logs']
-                          })
-                        });
-                        
-                        if (response.ok) {
-                          const blob = await response.blob();
-                          const url = window.URL.createObjectURL(blob);
-                          const a = document.createElement('a');
-                          a.href = url;
-                          a.download = `yobot_export_${new Date().toISOString().split('T')[0]}.csv`;
-                          document.body.appendChild(a);
-                          a.click();
-                          document.body.removeChild(a);
-                          window.URL.revokeObjectURL(url);
-                          alert('Data exported successfully');
-                        } else {
-                          alert('Data export failed');
-                        }
-                      } catch (error) {
-                        console.error('Export error:', error);
-                        alert('Data export failed');
-                      }
-                    }}
+                    onClick={() => setShowExportModal(true)}
                     className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
                   >
                     <span className="text-xl mr-3">💾</span>
@@ -7916,6 +7888,18 @@ export default function CommandCenter() {
       <CalendarUploadModal 
         isOpen={showCalendarUpload} 
         onClose={() => setShowCalendarUpload(false)} 
+      />
+
+      {/* Export Dashboard Modal */}
+      <ExportDashboardModal 
+        isOpen={showExportModal} 
+        onClose={() => setShowExportModal(false)} 
+      />
+
+      {/* Manual Call Start Modal */}
+      <ManualCallStartModal 
+        isOpen={showManualCallModal} 
+        onClose={() => setShowManualCallModal(false)} 
       />
 
     </div>
