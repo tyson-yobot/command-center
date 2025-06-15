@@ -3052,7 +3052,11 @@ export default function CommandCenter() {
             </Card>
 
             {/* Data & Reports */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 relative">
+            <Card className="bg-white/10 backdrop-blur-sm border-2 border-purple-500 relative shadow-[0_0_20px_rgba(168,85,247,0.4)] animate-pulse"
+                  style={{
+                    background: 'linear-gradient(45deg, rgba(168,85,247,0.1), rgba(147,51,234,0.1))',
+                    boxShadow: '0 0 30px rgba(168,85,247,0.6), inset 0 0 20px rgba(168,85,247,0.1)'
+                  }}>
               <CardHeader>
                 <CardTitle className="text-white flex items-center justify-between">
                   <div className="flex items-center">
