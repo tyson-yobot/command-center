@@ -466,15 +466,50 @@ export default function CommandCenter() {
     setShowFollowUpModal(true);
   };
 
-  const handleAutomateSalesOrder = () => {
-    // Open Tally form in new tab for sales order
-    window.open('https://tally.so/r/mDb87X', '_blank');
-    setVoiceStatus('Opening sales order form...');
-    toast({
-      id: Date.now().toString(),
-      title: "Sales Order Form",
-      description: "Opening sales order form in new tab"
-    });
+  const handleAutomateSalesOrder = async () => {
+    try {
+      setVoiceStatus('Creating sales order...');
+      
+      const orderData = {
+        botPackage: 'Basic Bot Package',
+        addOns: ['SMS Integration', 'Voice Calling'],
+        clientEmail: 'client@example.com',
+        clientName: 'Demo Client',
+        total: 2500,
+        paymentStatus: 'Pending'
+      };
+
+      const response = await fetch('/api/sales-order/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        setVoiceStatus('Sales order created successfully');
+        toast({
+          id: Date.now().toString(),
+          title: "Sales Order Created",
+          description: "Order has been submitted to Airtable"
+        });
+      } else {
+        setVoiceStatus('Sales order creation failed');
+        toast({
+          id: Date.now().toString(),
+          title: "Error",
+          description: result.error || "Failed to create sales order"
+        });
+      }
+    } catch (error) {
+      setVoiceStatus('Sales order error');
+      toast({
+        id: Date.now().toString(),
+        title: "Error",
+        description: "Failed to connect to sales order system"
+      });
+    }
   };
 
   const handleSendSMS = () => {

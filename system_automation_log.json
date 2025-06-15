@@ -358,5 +358,20 @@
       "lastHealthCheck": "2025-06-15T17:20:00.013Z",
       "automationStatus": "paused"
     }
+  },
+  {
+    "timestamp": "2025-06-15T17:30:00.015Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 24.17243695,
+      "lastHealthCheck": "2025-06-15T17:30:00.014Z",
+      "automationStatus": "paused"
+    }
   }
 ]
