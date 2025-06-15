@@ -83,8 +83,8 @@ class AirtableLiveIntegration {
   }
 
   async getSalesOrders(filterByEmail?: string): Promise<any[]> {
-    const baseId = 'appbFDTqB2WtRNV1H';
-    const tableId = 'tblSalesOrders';
+    const baseId = 'appe05t1B1tn1Kn5';
+    const tableId = 'Sales Orders Table';
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
@@ -115,8 +115,8 @@ class AirtableLiveIntegration {
    * Table: SmartSpend Dashboard
    */
   async getSmartSpendData(clientId?: string): Promise<SmartSpendData | null> {
-    const baseId = 'appGtcRZU6QJngkQS'; // YoBot® SmartSpend Tracker base
-    const tableId = 'SmartSpend Dashboard'; // SmartSpend Dashboard table
+    const baseId = 'appGtcRZUd0JqnkQS'; // YoBot® SmartSpend Tracker (Main)
+    const tableId = 'SmartSpend - Budget & ROI Tracker Table'; // SmartSpend Dashboard table
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
@@ -262,8 +262,8 @@ class AirtableLiveIntegration {
    * Table: 🧮 Botalytics Monthly Log
    */
   async getBotalyticsData(month?: string, clientId?: string): Promise<any[]> {
-    const baseId = 'appe0OSJtB1In1kn5'; // YoBot® Sales & Automation base
-    const tableId = '🧮 Botalytics Monthly Log'; // Botalytics Monthly Log table
+    const baseId = 'appe05t1B1tn1Kn5'; // YoBot® Sales & Automation base
+    const tableId = 'Botalytics - ROI'; // Botalytics Monthly Log table
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
@@ -502,8 +502,8 @@ class AirtableLiveIntegration {
    * Action: Filter by today's date and client
    */
   async getTodayCalendarBookings(clientId?: string): Promise<any[]> {
-    const baseId = 'appe0OSJtB1In1kn5'; // YoBot® Sales & Automation
-    const tableId = '📅 Calendar Bookings';
+    const baseId = 'appMbVQJ0n3nWR11N'; // YoBot® Client CRM
+    const tableId = 'Client Bookings Table';
     
     try {
       const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
