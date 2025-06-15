@@ -136,30 +136,73 @@ export function VoiceCommandInterface({
     draw();
   };
 
-  const startListening = () => {
+  const startListening = async () => {
     if (recognition && micStatus === 'idle') {
       onTranscriptChange('');
+      onMicStatusChange('listening');
+      
+      // Update backend voice status
+      try {
+        await fetch('/api/voice-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mic_status: 'listening', transcript: '', isProcessing: false })
+        });
+      } catch (error) {
+        console.error('Failed to update voice status:', error);
+      }
+      
       recognition.start();
     }
   };
 
-  const stopListening = () => {
+  const stopListening = async () => {
     if (recognition && micStatus === 'listening') {
       recognition.stop();
       onMicStatusChange('processing');
       
+      // Update backend voice status
+      try {
+        await fetch('/api/voice-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mic_status: 'idle', transcript: realTimeTranscript, isProcessing: true })
+        });
+      } catch (error) {
+        console.error('Failed to update voice status:', error);
+      }
+      
       // Simulate processing time
-      setTimeout(() => {
+      setTimeout(async () => {
         onMicStatusChange('idle');
+        try {
+          await fetch('/api/voice-status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mic_status: 'idle', transcript: realTimeTranscript, isProcessing: false })
+          });
+        } catch (error) {
+          console.error('Failed to update voice status:', error);
+        }
       }, 1000);
     }
   };
 
-  const cancelListening = () => {
+  const cancelListening = async () => {
     if (recognition) {
       recognition.abort();
       onMicStatusChange('idle');
       onTranscriptChange('');
+      
+      // Update backend voice status and send stop signal
+      try {
+        await fetch('/api/stop-listening', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } catch (error) {
+        console.error('Failed to stop listening:', error);
+      }
     }
   };
 

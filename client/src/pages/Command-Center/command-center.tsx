@@ -2796,8 +2796,6 @@ export default function CommandCenter() {
 
         {/* Live Call Banner */}
         <LiveCallBanner 
-          activeCalls={activeCalls} 
-          isVisible={activeCalls > 0}
           onViewDetails={() => setShowCreateVoiceCallModal(true)}
         />
 

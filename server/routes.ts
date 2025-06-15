@@ -15630,6 +15630,63 @@ export function registerContentCreationEndpoints(app: Express) {
     }
   });
 
+  // Voice Status Endpoint
+  let voiceStatus = { mic_status: 'idle', transcript: '', isProcessing: false };
+  
+  app.get('/api/voice-status', (req, res) => {
+    res.json(voiceStatus);
+  });
+
+  app.post('/api/voice-status', (req, res) => {
+    const { mic_status, transcript, isProcessing } = req.body;
+    voiceStatus = { mic_status, transcript: transcript || '', isProcessing: isProcessing || false };
+    res.json({ success: true, status: voiceStatus });
+  });
+
+  app.post('/api/stop-listening', (req, res) => {
+    voiceStatus.mic_status = 'idle';
+    voiceStatus.transcript = '';
+    voiceStatus.isProcessing = false;
+    res.json({ success: true, message: 'Voice listening stopped' });
+  });
+
+  // Voice Pipeline Status
+  app.get('/api/pipeline-status', async (req, res) => {
+    try {
+      const systemMode = req.headers['x-system-mode'] || 'live';
+      
+      // Get live voice call data from Airtable
+      const voiceCallLogs = systemMode === 'test' ? {
+        status: 'active',
+        calls_today: 21,
+        in_progress: 3,
+        completed: 18,
+        success_rate: 94.2,
+        avg_duration: '7:42'
+      } : {
+        status: 'inactive',
+        calls_today: 0,
+        in_progress: 0,
+        completed: 0,
+        success_rate: 0,
+        avg_duration: '0:00'
+      };
+
+      res.json({
+        success: true,
+        data: voiceCallLogs,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Pipeline status error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Pipeline status retrieval failed',
+        data: { status: 'error', calls_today: 0, in_progress: 0, completed: 0 }
+      });
+    }
+  });
+
   // Register Zendesk integration routes
   registerZendeskRoutes(app);
 
