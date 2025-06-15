@@ -194,7 +194,6 @@ export default function SystemControls() {
     performanceTracking: true,
     usageAnalytics: false,
     errorMonitoring: true,
-    diagnosticsEngine: true,
 
     // Integrations
     googleCalendar: false,
@@ -356,11 +355,7 @@ export default function SystemControls() {
     callRouting: { category: 'Voice & Communication', name: 'Call Routing', visibleTo: ['admin', 'client'] },
     emergencyEscalation: { category: 'Voice & Communication', name: 'Emergency Escalation', visibleTo: ['admin', 'support'] },
     slackNotifications: { category: 'Voice & Communication', name: 'Slack Notifications', visibleTo: ['admin', 'support'] },
-    diagnosticsEngine: {
-    category: 'Analytics & Monitoring',
-    name: 'Run Diagnostics Engine',
-    visibleTo: ['admin']
-},
+
 
     // CRM & Data
     hubspotSync: { category: 'CRM & Data', name: 'HubSpot Sync', visibleTo: ['admin', 'client'] },
@@ -472,7 +467,6 @@ export default function SystemControls() {
       smartWorkflows: true,
       emailAutomation: true,
       followupTasks: true,
-      diagnosticsEngine: true,
       missedCallResponder: true,  
       pdfGeneration: false,
       quoteGenerator: false,
