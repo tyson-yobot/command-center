@@ -279,136 +279,55 @@ export function registerTestDataRoutes(app: Express) {
   app.get('/api/dashboard-metrics', async (req, res) => {
     const systemMode = getSystemMode();
     
-    if (systemMode === 'live') {
-      // LIVE MODE: Zero hardcoded data tolerance
-      const emptyData = HardcodeDetector.cleanLiveData({});
-      
-      // Log API access attempt
-      await airtableLogger.logTestExecution(
-        'dashboard-metrics-api',
-        true,
-        'LIVE mode API access - no hardcoded data served',
-        'System',
-        false,
-        true,
-        false,
-        'API Endpoint'
-      );
-      
-      res.json({
-        success: true,
-        data: emptyData,
-        mode: 'live',
-        message: 'LIVE mode - authentic data only'
-      });
-    } else {
-      // TEST MODE: Allow test data
-      res.json({
-        success: true,
-        data: testModeMetrics.dashboardMetrics,
-        mode: 'test',
-        message: 'Test mode - demo data for presentation'
-      });
-    }
+    // LIVE MODE: Always return empty data - no hardcoded values
+    res.json({
+      success: true,
+      data: {},
+      mode: systemMode,
+      message: systemMode === 'live' ? 'LIVE mode - authentic data only' : 'TEST mode - no data'
+    });
   });
 
   // Automation performance with strict compliance
   app.get('/api/automation-performance', async (req, res) => {
     const systemMode = getSystemMode();
     
-    if (systemMode === 'live') {
-      // LIVE MODE: Zero hardcoded data tolerance
-      const emptyData = HardcodeDetector.cleanLiveData({});
-      
-      // Log API access attempt
-      await airtableLogger.logTestExecution(
-        'automation-performance-api',
-        true,
-        'LIVE mode API access - no hardcoded data served',
-        'System',
-        false,
-        true,
-        false,
-        'API Endpoint'
-      );
-      
-      res.json({
-        success: true,
-        data: emptyData,
-        mode: 'live',
-        message: 'LIVE mode - authentic data only'
-      });
-    } else {
-      // TEST MODE: Allow test data
-      res.json({
-        success: true,
-        data: testModeMetrics.automationPerformance,
-        mode: 'test',
-        message: 'Test mode - demo data for presentation'
-      });
-    }
+    // Always return empty data - no hardcoded values
+    res.json({
+      success: true,
+      data: {},
+      mode: systemMode,
+      message: systemMode === 'live' ? 'LIVE mode - authentic data only' : 'TEST mode - no data'
+    });
   });
 
   // Live activity with strict compliance
   app.get('/api/live-activity', async (req, res) => {
     const systemMode = getSystemMode();
     
-    if (systemMode === 'live') {
-      // LIVE MODE: Zero hardcoded data tolerance
-      const emptyData = HardcodeDetector.cleanLiveData({});
-      
-      await airtableLogger.logTestExecution(
-        'live-activity-api',
-        true,
-        'LIVE mode API access - no hardcoded data served',
-        'System',
-        false,
-        true,
-        false,
-        'API Endpoint'
-      );
-      
-      res.json({
-        success: true,
-        data: emptyData,
-        mode: 'live',
-        message: 'LIVE mode - authentic data only'
-      });
-    } else {
-      res.json({
-        success: true,
-        data: testModeMetrics.liveActivity,
-        mode: 'test',
-        message: 'Test mode - demo data for presentation'
-      });
-    }
+    // Always return empty data - no hardcoded values
+    res.json({
+      success: true,
+      data: {},
+      mode: systemMode,
+      message: systemMode === 'live' ? 'LIVE mode - authentic data only' : 'TEST mode - no data'
+    });
   });
 
-  // Knowledge stats with aggressive data wiper
-  app.get('/api/knowledge/stats', (req, res) => {
+  // Knowledge stats with strict compliance
+  app.get('/api/knowledge/stats', async (req, res) => {
     const systemMode = getSystemMode();
     
-    if (systemMode === 'live') {
-      // LIVE MODE: Use aggressive data wiper
-      const emptyData = LiveDataWiper.getEmptyLiveData('knowledge-stats');
-      LiveDataWiper.logLiveDataClear('/api/knowledge/stats');
-      
-      res.json({
-        success: true,
-        data: emptyData,
-        mode: 'live',
-        message: 'LIVE mode - all test data aggressively wiped'
-      });
-    } else {
-      // TEST MODE: Allow test data
-      res.json({
-        success: true,
-        data: testModeMetrics.knowledgeStats,
-        mode: 'test',
-        message: 'Test mode - demo data for presentation'
-      });
-    }
+    // Always return empty data - no hardcoded values
+    res.json({
+      success: true,
+      data: null,
+      mode: systemMode,
+      message: systemMode === 'live' ? 'LIVE mode - authentic data only' : 'TEST mode - no data'
+    });
   });
+
+
 
   // Call monitoring with global environment gate
   app.get('/api/call-monitoring/details', (req, res) => {
