@@ -455,32 +455,32 @@ export default function SystemControls() {
   // Package tier configurations based on YoBot price sheet
   const packageConfigurations = {
     starter: {
-      // Starter ($499/mo): AI Chatbot, SMS/Email Flows, Basic CRM Logging, Simple Integrations
-      voiceBotCore: false,
+      // Starter: Botalytics ROI Dashboard ✔️, AI Chatbot (SMS + Email) ✔️
+      voiceBotCore: false,  // VoiceBot - Not included in Starter
       callRouting: false,
-      emergencyEscalation: true,
+      emergencyEscalation: false,
       slackNotifications: false,
-      hubspotSync: true,
-      airtableLogging: true,
-      leadScoring: false,
+      hubspotSync: false,  // CRM Integration - Not included in Starter
+      airtableLogging: true,  // Basic CRM Logging included
+      leadScoring: false,  // Lead Scoring - Not in Starter
       contactEnrichment: false,
-      smartWorkflows: true,
-      emailAutomation: true,
-      followupTasks: true,
-      missedCallResponder: true,  
+      smartWorkflows: true,  // SMS/Email Flows
+      emailAutomation: true,  // AI Chatbot includes email
+      followupTasks: false,  // Smart Follow-Up not in Starter
+      missedCallResponder: false,
       pdfGeneration: false,
-      quoteGenerator: false,
-      calendarBooking: false,
+      quoteGenerator: false,  // AI Quote Generation - Not in Starter
+      calendarBooking: false,  // Booking Tool - Not in Starter
       ndaGenerator: false,
-      businessCardOcr: true,
-      realtimeMetrics: true,
-      performanceTracking: false,
-      usageAnalytics: false,
+      businessCardOcr: false,
+      realtimeMetrics: true,  // Botalytics ROI Dashboard
+      performanceTracking: true,  // Botalytics ROI Dashboard
+      usageAnalytics: true,  // Botalytics ROI Dashboard
       errorMonitoring: true,
       googleCalendar: false,
-      stripePayments: false,
-      quickbooks: false,
-      twilioSms: true,
+      stripePayments: false,  // Payment Integration - Not in Starter
+      quickbooks: false,  // QuickBooks - Not in Starter
+      twilioSms: true,  // SMS flows included
       documentGeneration: false,
       pdfProcessor: false,
       fileStorage: true,
@@ -492,83 +492,122 @@ export default function SystemControls() {
       dataEncryption: true,
       gdprCompliance: false,
       accessLogging: false,
-      auditTrail: false
+      auditTrail: false,
+      systemDiagnostics: true
     },
     pro: {
-      // Pro: All Starter + VoiceBot, Calendar Tools, Smart Follow-Ups, AI Quote Generation
-      voiceBotCore: true,
+      // Pro: All Starter + VoiceBot ✔️, CRM Integration ✔️, Booking Tool ✔️, AI Quote Generation ✔️, 
+      // Live Transfer Routing ✔️, A/B Script Testing ✔️, Custom Branded Persona ✔️, 24/7 Customer Engagement ✔️, ChatGPT Booster ✔️
+      voiceBotCore: true,  // VoiceBot (Inbound + Outbound) ✔️
       callRouting: true,
       emergencyEscalation: true,
-      slackNotifications: false,
-      hubspotSync: true,
-      airtableLogging: true,
-      leadScoring: false,
+      slackNotifications: false,  // Slack/Email/CRM Notifications - Not in Pro
+      hubspotSync: true,  // CRM Integration ✔️
+      airtableLogging: true,  // All Starter features
+      leadScoring: false,  // Lead Scoring - Not in Pro
       contactEnrichment: true,
-      smartWorkflows: true,
-      emailAutomation: true,
-      followupTasks: true,
+      smartWorkflows: true,  // All Starter + enhanced
+      emailAutomation: true,  // All Starter + enhanced
+      followupTasks: true,  // Smart Follow-Up via 24/7 Customer Engagement
+      missedCallResponder: true,  // Live Transfer Routing ✔️
       pdfGeneration: true,
-      quoteGenerator: true,
-      calendarBooking: true,
+      quoteGenerator: true,  // AI Quote Generation ✔️
+      calendarBooking: true,  // Booking Tool (Calendar Integration) ✔️
       ndaGenerator: false,
-      businessCardOcr: true,
-      realtimeMetrics: true,
+      businessCardOcr: true,  // Custom Branded Persona ✔️
+      realtimeMetrics: true,  // All Starter + Botalytics
       performanceTracking: true,
-      usageAnalytics: false,
+      usageAnalytics: true,
       errorMonitoring: true,
-      googleCalendar: true,
-      stripePayments: false,
-      quickbooks: false,
-      twilioSms: true
+      googleCalendar: true,  // Booking Tool integration
+      stripePayments: false,  // Payment Integration - Not in Pro
+      quickbooks: false,  // QuickBooks - Not in Pro
+      twilioSms: true,  // All Starter + enhanced
+      documentGeneration: true,
+      pdfProcessor: true,
+      fileStorage: true,
+      backupSystem: false,
+      webhookMonitoring: true,
+      emergencyStop: true,
+      scenarioControl: true,
+      rateLimiting: true,
+      dataEncryption: true,
+      gdprCompliance: false,
+      accessLogging: false,
+      auditTrail: false,
+      systemDiagnostics: true
     },
     enterprise: {
-      // Enterprise: All Pro + Lead Scoring, Performance Dashboards, Multi-Platform Sync, Payment Integration
-      voiceBotCore: true,
+      // Enterprise: All Pro + Payment Integration ✔️, QuickBooks Online Integration ✔️, 
+      // Google Ads/Facebook Funnel Integration ✔️, Lead Scoring + Smart Follow-Up ✔️,
+      // Slack/Email/CRM Notifications ✔️, Customer Journey Orchestration ✔️, Command Center Pro ✔️,
+      // Lead Generation & Scraping Tools ✔️, Advanced Data Integration Hub ✔️, Automated Content Generation Studio ✔️
+      voiceBotCore: true,  // All Pro features
       callRouting: true,
       emergencyEscalation: true,
-      slackNotifications: true,
-      hubspotSync: true,
+      slackNotifications: true,  // Slack/Email/CRM Notifications ✔️
+      hubspotSync: true,  // All Pro + enhanced
       airtableLogging: true,
-      leadScoring: true,
+      leadScoring: true,  // Lead Scoring + Smart Follow-Up ✔️
       contactEnrichment: true,
-      smartWorkflows: true,
-      emailAutomation: true,
-      followupTasks: true,
+      smartWorkflows: true,  // All Pro + Customer Journey Orchestration
+      emailAutomation: true,  // All Pro + Automated Content Generation
+      followupTasks: true,  // Lead Scoring + Smart Follow-Up ✔️
+      missedCallResponder: true,
       pdfGeneration: true,
       quoteGenerator: true,
       calendarBooking: true,
       ndaGenerator: true,
       businessCardOcr: true,
-      realtimeMetrics: true,
-      performanceTracking: true,
+      realtimeMetrics: true,  // Command Center Pro ✔️
+      performanceTracking: true,  // Performance Dashboards
       usageAnalytics: true,
       errorMonitoring: true,
-      googleCalendar: true,
-      stripePayments: true,
-      quickbooks: true,
-      twilioSms: true
+      googleCalendar: true,  // Google Ads/Facebook Funnel Integration ✔️
+      stripePayments: true,  // Payment Integration ✔️
+      quickbooks: true,  // QuickBooks Online Integration ✔️
+      twilioSms: true,
+      documentGeneration: true,  // Automated Content Generation Studio ✔️
+      pdfProcessor: true,
+      fileStorage: true,
+      backupSystem: true,
+      webhookMonitoring: true,
+      emergencyStop: true,
+      scenarioControl: true,
+      rateLimiting: true,
+      dataEncryption: true,
+      gdprCompliance: true,
+      accessLogging: true,
+      auditTrail: true,
+      systemDiagnostics: true,
+      // Advanced features specific to Enterprise
+      apifyGoogleMapsScraping: true,  // Lead Generation & Scraping Tools ✔️
+      apolloLeadGeneration: true,  // Lead Generation & Scraping Tools ✔️
+      launchPhantombuster: true  // Lead Generation & Scraping Tools ✔️
     },
     platinum: {
-      // Platinum: Everything + White Label, Advanced Analytics, Unlimited Workflows
-      voiceBotCore: true,
+      // Platinum: All Enterprise + White Label Mode ✔️, SmartSpend™ Dashboard ✔️, 
+      // Predictive Analytics Engine ✔️, Competitive Intelligence Radar ✔️
+      voiceBotCore: true,  // All Enterprise features
       callRouting: true,
       emergencyEscalation: true,
-      slackNotifications: true,
+      slackNotifications: true,  // All Enterprise features
       hubspotSync: true,
       airtableLogging: true,
       leadScoring: true,
       contactEnrichment: true,
-      smartWorkflows: true,
+      smartWorkflows: true,  // Unlimited Workflows
       emailAutomation: true,
       followupTasks: true,
+      missedCallResponder: true,
       pdfGeneration: true,
       quoteGenerator: true,
       calendarBooking: true,
       ndaGenerator: true,
       businessCardOcr: true,
-      realtimeMetrics: true,
-      performanceTracking: true,
-      usageAnalytics: true,
+      realtimeMetrics: true,  // SmartSpend™ Dashboard ✔️
+      performanceTracking: true,  // Custom Analytics
+      usageAnalytics: true,  // Advanced Analytics
       errorMonitoring: true,
       googleCalendar: true,
       stripePayments: true,
@@ -585,7 +624,25 @@ export default function SystemControls() {
       dataEncryption: true,
       gdprCompliance: true,
       accessLogging: true,
-      auditTrail: true
+      auditTrail: true,
+      systemDiagnostics: true,
+      // All Enterprise features plus Platinum exclusives
+      apifyGoogleMapsScraping: true,
+      apolloLeadGeneration: true,
+      launchPhantombuster: true,
+      // Platinum exclusive features
+      voiceTranscription: true,  // Advanced voice capabilities
+      pipelineCalls: true,  // Full pipeline automation
+      smsAutomation: true,  // Advanced SMS automation
+      aiFollowup: true,  // AI Follow-up System
+      commandCenterDispatcher: true,  // Support Rep included
+      webhookInboundSMS: true,  // Complete webhook management
+      triggerVoiceCall: true,  // Advanced voice triggers
+      logCommandCenterEvent: true,  // Complete logging
+      webhookCalendly: true,  // Advanced integrations
+      voicebotSocket: true,  // Real-time voice processing
+      retryCallbackScheduler: true,  // Advanced callback management
+      triggerPipelineCalls: true  // Complete pipeline control
     }
   };
 
