@@ -2911,8 +2911,7 @@ export default function CommandCenter() {
               </Button>
               <Button
                 onClick={() => setActiveTab('admin-tools')}
-                variant="outline"
-                className="border-red-400 text-red-400 hover:bg-red-600/20 flex items-center"
+                className="bg-red-600 hover:bg-red-700 text-white flex items-center"
                 title="Admin Tools - Administrative controls and system management"
               >
                 <Shield className="w-4 h-4 mr-2" />
