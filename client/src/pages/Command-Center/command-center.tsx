@@ -152,6 +152,14 @@ export default function CommandCenter() {
   const [selectedTier, setSelectedTier] = React.useState('All');
   const [voiceCommand, setVoiceCommand] = React.useState('');
   const [automationMode, setAutomationMode] = React.useState(true);
+  
+  // Enhanced voice command states
+  const [micStatus, setMicStatus] = React.useState<'idle' | 'listening' | 'processing'>('idle');
+  const [realTimeTranscript, setRealTimeTranscript] = React.useState('');
+  const [showAnalyticsModal, setShowAnalyticsModal] = React.useState(false);
+  const [showCalendarUpload, setShowCalendarUpload] = React.useState(false);
+  const [activeCalls, setActiveCalls] = React.useState(0);
+  const [dashboardPreset, setDashboardPreset] = React.useState('full');
   const [collapsedSections, setCollapsedSections] = React.useState<{[key: string]: boolean}>({});
   const [demoMode, setDemoMode] = React.useState(false);
   const [demoStep, setDemoStep] = React.useState(0);
