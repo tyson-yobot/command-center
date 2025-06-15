@@ -850,17 +850,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Pipeline start endpoint - pulls leads from Airtable
+  // Pipeline start endpoint - pulls leads from Scraped Leads (Universal) Airtable
   app.post('/api/pipeline/start', async (req, res) => {
     try {
       const { baseId, tableId, leadSource } = req.body;
       console.log('Pipeline start request received:', { baseId, tableId, leadSource });
       
+      // Import the Airtable Leads Service
+      const airtableLeadsService = (await import('./airtableLeadsService')).default;
+      
       // Log test operation to Integration Test Log
       await logToAirtableQA({
         integrationName: 'Pipeline Start',
         passFail: 'Pass',
-        notes: `Starting pipeline with source ${baseId}/${tableId}`,
+        notes: `Starting pipeline with Scraped Leads (Universal) table`,
         qaOwner: 'YoBot System',
         outputDataPopulated: true,
         recordCreated: true,
@@ -868,29 +871,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
         moduleType: 'Pipeline'
       });
       
-      // Fetch leads from Scraped Leads (Universal) table
-      const airtableUrl = `https://api.airtable.com/v0/${baseId}/${tableId}`;
-      const airtableResponse = await fetch(airtableUrl, {
-        headers: {
-          'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
-          'Content-Type': 'application/json'
-        }
+      // Fetch leads from Scraped Leads (Universal) table using proper service
+      const leads = await airtableLeadsService.getScrapedLeads({
+        syncedToYoBot: false, // Only get leads not yet synced to YoBot
+        maxRecords: 50 // Limit to manageable batch size
       });
       
-      if (!airtableResponse.ok) {
-        throw new Error(`Airtable API error: ${airtableResponse.status}`);
+      console.log(`📥 Pipeline loaded ${leads.length} leads from Scraped Leads (Universal) table`);
+      
+      // Format leads for pipeline processing
+      const formattedLeads = airtableLeadsService.formatLeadsForPipeline(leads);
+      
+      // Mark leads as synced to YoBot Queue
+      for (const lead of leads) {
+        try {
+          await airtableLeadsService.markLeadAsSyncedToYoBot(lead.id);
+        } catch (syncError) {
+          console.warn(`Failed to mark lead ${lead.id} as synced:`, syncError);
+        }
       }
-      
-      const airtableData = await airtableResponse.json();
-      const leads = airtableData.records || [];
-      
-      console.log(`Pipeline loaded ${leads.length} leads from Airtable`);
       
       // Log successful lead retrieval
       await logToAirtableQA({
         integrationName: 'Pipeline Leads Loaded',
         passFail: 'Pass',
-        notes: `Successfully loaded ${leads.length} leads from ${baseId}`,
+        notes: `Successfully loaded ${leads.length} leads from Scraped Leads (Universal)`,
         qaOwner: 'YoBot System',
         outputDataPopulated: true,
         recordCreated: true,
@@ -903,13 +908,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         pipelineId: 'PIPELINE_' + Date.now(),
         leadCount: leads.length,
         status: 'started',
-        leads: leads.slice(0, 5).map(lead => ({
-          id: lead.id,
-          name: lead.fields?.Name || lead.fields?.name || 'Unknown',
-          email: lead.fields?.Email || lead.fields?.email,
-          phone: lead.fields?.Phone || lead.fields?.phone,
-          company: lead.fields?.Company || lead.fields?.company
-        })),
+        leads: formattedLeads.slice(0, 5),
+        source: 'Scraped Leads (Universal)',
         timestamp: new Date().toISOString()
       };
       
@@ -931,7 +931,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.status(500).json({ 
         success: false, 
-        error: 'Pipeline start failed - check Airtable connection and API key',
+        error: 'Pipeline start failed - unable to access Scraped Leads (Universal) table',
         details: error.message
       });
     }
