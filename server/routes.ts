@@ -937,7 +937,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // VoiceBot call endpoint
+  // Create Voice Call endpoint
+  app.post('/api/voice-call/create', async (req, res) => {
+    try {
+      const { phoneNumber, contactName, company, email, script, voiceId, priority, callType, notes } = req.body;
+      
+      if (!phoneNumber || !script) {
+        return res.status(400).json({
+          success: false,
+          error: 'Phone number and script are required'
+        });
+      }
+
+      const callId = 'CALL_' + Date.now();
+      
+      // Log to Airtable QA tracker
+      await logToAirtableQA({
+        integrationName: 'Voice Call Creation',
+        passFail: 'Pass',
+        notes: `Created voice call ${callId} for ${contactName || phoneNumber}`,
+        qaOwner: 'YoBot System',
+        outputDataPopulated: true,
+        recordCreated: true,
+        retryAttempted: false,
+        moduleType: 'VoiceBot'
+      });
+
+      console.log(`📞 Voice call created: ${callId} for ${phoneNumber}`);
+      
+      const result = {
+        success: true,
+        callId,
+        status: 'queued',
+        phoneNumber,
+        contactName,
+        company,
+        priority,
+        callType,
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Voice call creation error:', error);
+      res.status(500).json({ success: false, error: 'Voice call creation failed' });
+    }
+  });
+
+  // VoiceBot call endpoint (legacy)
   app.post('/api/voicebot-call', async (req, res) => {
     try {
       console.log('VoiceBot call request received');

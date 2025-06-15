@@ -37,6 +37,7 @@ export function CreateVoiceCallModal({ isOpen, onClose }: CreateVoiceCallModalPr
   const handleSubmit = async () => {
     if (!formData.phoneNumber || !formData.script) {
       toast({
+        id: Date.now().toString(),
         title: "Missing Information",
         description: "Phone number and script are required",
         variant: "destructive"
@@ -63,6 +64,7 @@ export function CreateVoiceCallModal({ isOpen, onClose }: CreateVoiceCallModalPr
 
       if (response.success) {
         toast({
+          id: Date.now().toString(),
           title: "Voice Call Created",
           description: `Call ${response.callId} has been queued successfully`
         });
@@ -83,6 +85,7 @@ export function CreateVoiceCallModal({ isOpen, onClose }: CreateVoiceCallModalPr
       }
     } catch (error: any) {
       toast({
+        id: Date.now().toString(),
         title: "Call Creation Failed",
         description: error.message || "Unable to create voice call",
         variant: "destructive"

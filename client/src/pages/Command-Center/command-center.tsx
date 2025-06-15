@@ -83,6 +83,7 @@ import { CallMonitoringDetails } from '@/components/call-monitoring-details';
 import { LiveChatInterface } from '@/components/live-chat-interface';
 import { KnowledgeBaseManager } from '@/components/knowledge-base-manager';
 import { TabContentRenderer } from '@/components/TabContentRenderer';
+import { CreateVoiceCallModal } from '@/components/create-voice-call-modal';
 
 
 export default function CommandCenter() {
@@ -266,6 +267,7 @@ export default function CommandCenter() {
   const [editingRecording, setEditingRecording] = useState<any>(null);
   const [showLeadScraping, setShowLeadScraping] = useState(false);
   const [activeModule, setActiveModule] = useState<string | null>(null);
+  const [showCreateVoiceCallModal, setShowCreateVoiceCallModal] = useState(false);
   
   // Replace all setToast calls with toast
   const setToast = (config: any) => toast(config);
@@ -1335,24 +1337,8 @@ export default function CommandCenter() {
     }
   };
 
-  const handleInitiateVoiceCall = async () => {
-    try {
-      setVoiceStatus('Initiating manual voice call...');
-      const response = await fetch('/api/voicebot-directcall', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scenario: 'voicebot-directcall' })
-      });
-      
-      if (response.ok) {
-        setVoiceStatus('Voice call initiated with logging & sentiment capture');
-        setToast({ title: "Call Initiated", description: "1:1 voicebot call started with full logging" });
-      } else {
-        setVoiceStatus('Voice call failed');
-      }
-    } catch (error) {
-      setVoiceStatus('Voice call error');
-    }
+  const handleInitiateVoiceCall = () => {
+    setShowCreateVoiceCallModal(true);
   };
 
   const handleVoiceInput = async () => {
@@ -7315,6 +7301,12 @@ export default function CommandCenter() {
           </div>
         </div>
       )}
+
+      {/* Create Voice Call Modal */}
+      <CreateVoiceCallModal 
+        isOpen={showCreateVoiceCallModal} 
+        onClose={() => setShowCreateVoiceCallModal(false)} 
+      />
 
     </div>
     </div>
