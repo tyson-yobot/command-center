@@ -1074,10 +1074,10 @@ export default function SystemControls() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-gray-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.slackNotifications)} rounded-full`}></div>
-                  <span className="text-white text-sm border border-gray-400 px-2 py-1 rounded bg-slate-600/60">Slack Notifications</span>
+                  <span className="text-white text-sm">Slack Notifications</span>
                   {getStatusIcon(moduleStates.slackNotifications)}
                 </div>
                 <Switch 
@@ -1087,10 +1087,10 @@ export default function SystemControls() {
                 />
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-gray-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.quoteGenerator)} rounded-full`}></div>
-                  <span className="text-white text-sm border border-gray-400 px-2 py-1 rounded bg-slate-600/60">Smart Quoting Engine</span>
+                  <span className="text-white text-sm">Smart Quoting Engine</span>
                   {getStatusIcon(moduleStates.quoteGenerator)}
                 </div>
                 <Switch 
@@ -1100,10 +1100,10 @@ export default function SystemControls() {
                 />
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-gray-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.missedCallResponder)} rounded-full`}></div>
-                  <span className="text-white text-sm border border-gray-400 px-2 py-1 rounded bg-slate-600/60">Live Transfer Routing</span>
+                  <span className="text-white text-sm">Live Transfer Routing</span>
                   {getStatusIcon(moduleStates.missedCallResponder)}
                 </div>
                 <Switch 
@@ -1113,10 +1113,10 @@ export default function SystemControls() {
                 />
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-gray-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.calendarBooking)} rounded-full`}></div>
-                  <span className="text-white text-sm border border-gray-400 px-2 py-1 rounded bg-slate-600/60">Booking Tool Setup</span>
+                  <span className="text-white text-sm">Booking Tool Setup</span>
                   {getStatusIcon(moduleStates.calendarBooking)}
                 </div>
                 <Switch 
@@ -1129,7 +1129,7 @@ export default function SystemControls() {
           </Card>
 
           {/* 📡 Lead & Data Tools */}
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <Card className="bg-white/5 backdrop-blur-sm border-2 border-orange-400 shadow-lg">
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
                 <Target className="w-4 h-4 text-orange-400" />
@@ -1137,7 +1137,7 @@ export default function SystemControls() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-blue-900/20 rounded-lg hover:bg-blue-800/30 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-orange-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.apifyGoogleMapsScraping)} rounded-full`}></div>
                   <span className="text-white text-sm">Lead Generation & Scraping Tools</span>
@@ -1150,7 +1150,7 @@ export default function SystemControls() {
                 />
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-blue-900/20 rounded-lg hover:bg-blue-800/30 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-orange-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.pdfProcessor)} rounded-full`}></div>
                   <span className="text-white text-sm">Advanced Data Integration Hub</span>
@@ -1174,7 +1174,7 @@ export default function SystemControls() {
           <span>Runtime Control</span>
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <Card className="bg-white/5 backdrop-blur-sm border-2 border-red-400 shadow-lg">
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
                 <Activity className="w-4 h-4 text-red-400" />
