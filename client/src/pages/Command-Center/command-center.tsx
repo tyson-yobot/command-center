@@ -147,6 +147,7 @@ export default function CommandCenter() {
   });
   
   const [isListening, setIsListening] = React.useState(false);
+  const [userInitiatedVoice, setUserInitiatedVoice] = React.useState(false);
   const [showEscalation, setShowEscalation] = React.useState(false);
   const [selectedTier, setSelectedTier] = React.useState('All');
   const [voiceCommand, setVoiceCommand] = React.useState('');
@@ -1914,126 +1915,26 @@ export default function CommandCenter() {
   const handleVoiceToggle = () => {
     if (!isListening) {
       // Start voice recording
-      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-        
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = 'en-US';
-        recognition.maxAlternatives = 1;
-        
-        // Store recognition instance for cleanup
-        setCurrentRecognition(recognition);
-        recognitionRef.current = recognition;
-        
-        recognition.onstart = () => {
-          setIsListening(true);
-          console.log('Voice recognition started');
-        };
-        
-        recognition.onresult = (event) => {
-          let transcript = '';
-          for (let i = event.resultIndex; i < event.results.length; i++) {
-            if (event.results[i].isFinal) {
-              transcript += event.results[i][0].transcript;
-            }
-          }
-          if (transcript) {
-            setVoiceCommand(transcript);
-          }
-        };
-        
-        recognition.onerror = (event) => {
-          console.error('Speech recognition error:', event.error);
-          
-          // Handle network errors by attempting restart
-          if (event.error === 'network') {
-            console.log('Network error - will restart automatically');
-            // Don't stop listening, let onend handle restart
-            return;
-          }
-          
-          // Stop for other critical errors
-          if (event.error !== 'aborted' && event.error !== 'no-speech') {
-            setIsListening(false);
-            setCurrentRecognition(null);
-            setToast({
-              title: "Voice Recognition Error",
-              description: `Error: ${event.error}. Please check microphone permissions.`,
-              variant: "destructive"
-            });
-          }
-        };
-        
-        recognition.onend = () => {
-          console.log('Voice recognition ended');
-          // Use ref to check current state instead of closure values
-          setTimeout(() => {
-            if (recognitionRef.current && !recognitionRef.current._stopped) {
-              try {
-                const newRecognition = new SpeechRecognition();
-                newRecognition.continuous = true;
-                newRecognition.interimResults = true;
-                newRecognition.lang = 'en-US';
-                newRecognition.maxAlternatives = 1;
-                
-                // Copy all handlers
-                newRecognition.onstart = recognition.onstart;
-                newRecognition.onresult = recognition.onresult;
-                newRecognition.onerror = recognition.onerror;
-                newRecognition.onend = recognition.onend;
-                
-                recognitionRef.current = newRecognition;
-                setCurrentRecognition(newRecognition);
-                newRecognition.start();
-                console.log('Voice recognition restarted with new instance');
-              } catch (error) {
-                console.error('Failed to restart recognition:', error);
-                setIsListening(false);
-                setCurrentRecognition(null);
-                recognitionRef.current = null;
-              }
-            }
-          }, 300);
-        };
-        
-        try {
-          recognition.start();
-        } catch (error) {
-          console.error('Failed to start recognition:', error);
-          setIsListening(false);
-          setToast({
-            title: "Microphone Access Required",
-            description: "Please allow microphone access for voice commands",
-            variant: "destructive"
-          });
-        }
-      } else {
-        setToast({
-          title: "Voice Recognition Unavailable",
-          description: "Voice recognition not supported in this browser",
-          variant: "destructive"
-        });
-      }
+      setUserInitiatedVoice(true);
+      setIsListening(true);
+      console.log('Voice recognition started by user');
     } else {
       // Stop voice recording
+      setUserInitiatedVoice(false);
       setIsListening(false);
       if (currentRecognition) {
         try {
-          currentRecognition._stopped = true;
           currentRecognition.stop();
-          currentRecognition.abort();
           setCurrentRecognition(null);
         } catch (error) {
           console.error('Error stopping recognition:', error);
         }
       }
       if (recognitionRef.current) {
-        recognitionRef.current._stopped = true;
+        recognitionRef.current.stop();
         recognitionRef.current = null;
       }
-      setVoiceCommand('');
+      console.log('Voice recognition stopped by user');
     }
   };
 
@@ -2909,6 +2810,15 @@ export default function CommandCenter() {
                 Export
                 <HelpCircle className="w-3 h-3 ml-1 text-green-300 opacity-70" />
               </Button>
+              <Button
+                onClick={() => setActiveTab('admin-tools')}
+                variant="outline"
+                className="border-red-400 text-red-400 hover:bg-red-600/20 flex items-center"
+                title="Admin Tools - Administrative controls and system management"
+              >
+                <Shield className="w-4 h-4 mr-2" />
+                Admin Tools
+              </Button>
 
             </div>
           </div>
@@ -3108,7 +3018,7 @@ export default function CommandCenter() {
                       }
                     </Button>
                   </div>
-                  <Badge className="bg-blue-600 text-white">🔒 Admin-Only</Badge>
+                  <Badge className="bg-blue-600 text-white">Reports</Badge>
                 </CardTitle>
               </CardHeader>
               {!collapsedSections['data-reports'] && (
@@ -3187,14 +3097,7 @@ export default function CommandCenter() {
                     <span>Mailchimp Campaign</span>
                   </Button>
                   
-                  <Button
-                    onClick={() => setActiveTab('admin-tools')}
-                    className="bg-red-600 hover:bg-red-700 text-white flex items-center justify-start p-3 border border-red-500 font-semibold shadow-lg"
-                    style={{ borderLeft: '8px solid #dc2626' }}
-                  >
-                    <Shield className="w-5 h-5 mr-3" />
-                    <span>Admin Tools</span>
-                  </Button>
+
                 </div>
               </CardContent>
               )}
@@ -4470,18 +4373,18 @@ export default function CommandCenter() {
                     </Button>
                   </div>
                   
-                  {/* Voice Activity Meter */}
+                  {/* Voice Activity Meter - Compact */}
                   {isListening && (
-                    <div className="bg-blue-800/40 border border-blue-400/50 rounded-lg p-3 mt-2">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        <span className="text-blue-300 text-sm">Voice Commands Active - Say "YoBot" to activate commands</span>
-                        <div className="flex-1 flex items-center space-x-2">
-                          <span className="text-white text-xs">Level:</span>
-                          <div className="flex-1 bg-slate-700 rounded-full h-2">
-                            <div className="bg-green-400 h-2 rounded-full transition-all duration-150" style={{ width: `${Math.min(100, Math.max(5, (Math.random() * 60) + 20))}%` }}></div>
+                    <div className="bg-blue-800/30 border border-blue-400/30 rounded px-3 py-1 mt-1">
+                      <div className="flex items-center space-x-2 text-xs">
+                        <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                        <span className="text-blue-300">Voice Commands Active</span>
+                        <div className="flex items-center space-x-1 ml-auto">
+                          <span className="text-white opacity-70">Level:</span>
+                          <div className="w-16 bg-slate-700 rounded-full h-1">
+                            <div className="bg-green-400 h-1 rounded-full transition-all duration-150" style={{ width: `${Math.min(100, Math.max(5, (Math.random() * 60) + 20))}%` }}></div>
                           </div>
-                          <span className="text-white text-xs">{Math.round(Math.random() * 40 + 30)}%</span>
+                          <span className="text-white opacity-70 w-8">{Math.round(Math.random() * 40 + 30)}%</span>
                         </div>
                       </div>
                     </div>
@@ -4541,18 +4444,18 @@ export default function CommandCenter() {
                       </Button>
                     </div>
                     
-                    {/* Voice Activity Meter for Programming */}
+                    {/* Voice Activity Meter for Programming - Compact */}
                     {isListening && (
-                      <div className="bg-cyan-800/40 border border-cyan-400/50 rounded-lg p-3 mt-2">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                          <span className="text-cyan-300 text-sm">Voice Commands Active - Programming instructions</span>
-                          <div className="flex-1 flex items-center space-x-2">
-                            <span className="text-white text-xs">Level:</span>
-                            <div className="flex-1 bg-slate-700 rounded-full h-2">
-                              <div className="bg-cyan-400 h-2 rounded-full transition-all duration-150" style={{ width: `${Math.min(100, Math.max(5, (Math.random() * 70) + 15))}%` }}></div>
+                      <div className="bg-cyan-800/30 border border-cyan-400/30 rounded px-3 py-1 mt-1">
+                        <div className="flex items-center space-x-2 text-xs">
+                          <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                          <span className="text-cyan-300">Voice Commands Active - Programming instructions</span>
+                          <div className="flex items-center space-x-1 ml-auto">
+                            <span className="text-white opacity-70">Level:</span>
+                            <div className="w-16 bg-slate-700 rounded-full h-1">
+                              <div className="bg-cyan-400 h-1 rounded-full transition-all duration-150" style={{ width: `${Math.min(100, Math.max(5, (Math.random() * 70) + 15))}%` }}></div>
                             </div>
-                            <span className="text-white text-xs">{Math.round(Math.random() * 50 + 25)}%</span>
+                            <span className="text-white opacity-70 w-8">{Math.round(Math.random() * 50 + 25)}%</span>
                           </div>
                         </div>
                       </div>
