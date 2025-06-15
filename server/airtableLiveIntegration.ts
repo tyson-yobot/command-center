@@ -66,7 +66,7 @@ class AirtableLiveIntegration {
    */
   async createSalesOrder(orderData: Partial<SalesOrder>): Promise<any> {
     const baseId = 'appe0OSJtB1In1kn5'; // YoBot® Sales & Automation
-    const tableName = 'Sales Orders Table';
+    const tableName = 'Sales%20Orders%20Table'; // URL encoded table name
     
     try {
       const response = await fetch(`${this.baseUrl}/${baseId}/${tableName}`, {
@@ -107,7 +107,7 @@ class AirtableLiveIntegration {
 
   async getSalesOrders(filterByEmail?: string): Promise<any[]> {
     const baseId = 'appe0OSJtB1In1kn5';
-    const tableName = 'Sales Orders Table';
+    const tableName = 'Sales%20Orders%20Table';
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableName}`;
@@ -142,7 +142,7 @@ class AirtableLiveIntegration {
     const tableName = 'SmartSpend Master Table';
     
     try {
-      let url = `${this.baseUrl}/${baseId}/${tableId}`;
+      let url = `${this.baseUrl}/${baseId}/${tableName}`;
       
       if (clientId) {
         url += `?filterByFormula=OR({Client ID}="${clientId}",{Client Email}="${clientId}")&sort[0][field]=Last Updated&sort[0][direction]=desc&maxRecords=1`;
@@ -622,6 +622,106 @@ class AirtableLiveIntegration {
       return [csvHeaders, ...csvRows].join('\n');
     } catch (error) {
       console.error('SmartSpend export failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 📈 Revenue Forecast Integration
+   * Base: YoBot® Sales & Automation
+   * Table: Revenue Tracker (from CSV: no specific revenue table found, using Sales Orders Table)
+   */
+  async getRevenueForecast(): Promise<RevenueForecast | null> {
+    const baseId = 'appe0OSJtB1In1kn5'; // YoBot® Sales & Automation
+    const tableName = 'Sales%20Orders%20Table';
+    
+    try {
+      const url = `${this.baseUrl}/${baseId}/${tableName}?sort[0][field]=Order Date&sort[0][direction]=desc&maxRecords=10`;
+
+      const response = await fetch(url, {
+        headers: this.getHeaders()
+      });
+
+      if (!response.ok) {
+        throw new Error(`Airtable API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const records = data.records || [];
+      
+      // Calculate revenue metrics from sales orders
+      let totalMRR = 0;
+      let totalPipelineValue = 0;
+      let closedDeals = 0;
+      
+      records.forEach((record: any) => {
+        const fields = record.fields;
+        const total = fields.Total || 0;
+        const status = fields.Status || '';
+        
+        totalPipelineValue += total;
+        if (status.toLowerCase().includes('closed') || status.toLowerCase().includes('paid')) {
+          totalMRR += total;
+          closedDeals++;
+        }
+      });
+
+      const closeRate = records.length > 0 ? (closedDeals / records.length) * 100 : 0;
+      const roi = totalMRR > 0 ? ((totalMRR - (totalMRR * 0.3)) / (totalMRR * 0.3)) * 100 : 0; // Assuming 30% cost
+
+      return {
+        'MRR': Math.round(totalMRR),
+        'ROI': Math.round(roi * 100) / 100,
+        'Close %': Math.round(closeRate * 100) / 100,
+        'Pipeline Value': Math.round(totalPipelineValue),
+        'Last Updated': new Date().toISOString()
+      };
+    } catch (error) {
+      console.error('Revenue forecast fetch failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 🧾 Support Ticket Creation
+   * Base: YoBot® Ops & Alerts Log
+   * Table: Support Ticket Log Table
+   */
+  async createSupportTicket(ticketData: Partial<SupportTicket>): Promise<any> {
+    const baseId = 'appCoAtCZdARb4AM2'; // YoBot® Ops & Alerts Log
+    const tableName = 'Support%20Ticket%20Log%20Table';
+    
+    try {
+      const response = await fetch(`${this.baseUrl}/${baseId}/${tableName}`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({
+          records: [{
+            fields: {
+              'Subject': ticketData.Subject || 'Support Request',
+              'Body': ticketData.Body || 'Support ticket created from YoBot Command Center',
+              'Client Email': ticketData['Client Email'] || 'support@example.com',
+              'Urgency': ticketData.Urgency || 'Medium',
+              'Status': ticketData.Status || 'New',
+              'Date Created': ticketData['Date Created'] || new Date().toISOString()
+            }
+          }]
+        })
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        console.error('Support Ticket API Error Details:', {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorBody
+        });
+        throw new Error(`Airtable API error: ${response.status} - ${errorBody}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Support ticket creation failed:', error);
       throw error;
     }
   }

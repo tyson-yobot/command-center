@@ -15409,6 +15409,55 @@ export function registerContentCreationEndpoints(app: Express) {
     }
   });
 
+  // Revenue Forecast Integration (9/10)
+  app.get('/api/revenue/forecast', async (req, res) => {
+    try {
+      const forecastData = await airtableLive.getRevenueForecast();
+      logOperation('revenue-forecast', {}, 'success', 'Revenue forecast retrieved successfully');
+      
+      res.json({
+        success: true,
+        data: forecastData,
+        message: 'Revenue forecast retrieved successfully',
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Revenue Forecast API Error:', error);
+      logOperation('revenue-forecast', {}, 'error', `Revenue forecast failed: ${error.message}`);
+      
+      res.status(500).json({
+        success: false,
+        error: 'Revenue forecast retrieval failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Support Ticket Creation Integration (10/10)
+  app.post('/api/support/ticket/create', async (req, res) => {
+    try {
+      const ticketData = req.body;
+      const result = await airtableLive.createSupportTicket(ticketData);
+      logOperation('support-ticket-create', ticketData, 'success', 'Support ticket created successfully');
+      
+      res.json({
+        success: true,
+        data: result,
+        message: 'Support ticket created successfully',
+        ticketId: result.records?.[0]?.id || 'unknown'
+      });
+    } catch (error: any) {
+      console.error('Support Ticket Creation Error:', error);
+      logOperation('support-ticket-create', req.body, 'error', `Support ticket creation failed: ${error.message}`);
+      
+      res.status(500).json({
+        success: false,
+        error: 'Support ticket creation failed',
+        details: error.message
+      });
+    }
+  });
+
   // Airtable Health Check
   app.get('/api/airtable/health', async (req, res) => {
     try {
