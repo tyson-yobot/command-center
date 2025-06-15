@@ -877,7 +877,7 @@ export default function SystemControls() {
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           
           {/* Core Package Features */}
-          <Card className="bg-white/5 backdrop-blur-sm shadow-lg">
+          <Card className="bg-white/5 backdrop-blur-sm border-2 border-blue-400 shadow-lg">
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
                 <Settings className="w-6 h-6 text-blue-400" />
@@ -940,7 +940,7 @@ export default function SystemControls() {
           </Card>
 
           {/* 🔧 Professional Add-Ons */}
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <Card className="bg-white/5 backdrop-blur-sm border-2 border-purple-400 shadow-lg">
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
                 <Brain className="w-4 h-4 text-purple-400" />
@@ -1003,10 +1003,10 @@ export default function SystemControls() {
           </Card>
 
           {/* 🏢 Enterprise Features */}
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <Card className="bg-white/5 backdrop-blur-sm border-2 border-green-400 shadow-lg">
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
-                <Crown className="w-4 h-4 text-yellow-400" />
+                <Crown className="w-4 h-4 text-green-400" />
                 <span>Enterprise Features</span>
               </CardTitle>
             </CardHeader>
@@ -1066,7 +1066,7 @@ export default function SystemControls() {
           </Card>
 
           {/* 📢 Communication & Conversion */}
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+          <Card className="bg-white/5 backdrop-blur-sm border-2 border-gray-400 shadow-lg">
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
                 <MessageSquare className="w-4 h-4 text-green-400" />
