@@ -1,0 +1,75 @@
+🛠️ IMPLEMENTATION PLAN (REPLIT + AIRTABLE)
+1. 🔘 Start Pipeline Calls Button
+Action:
+Triggers Lambda or Replit API to begin outbound voice pipeline
+
+Enhancement Needed:
+➡️ When triggered, set a global flag in your Airtable (or Redis/db if Replit backend):
+
+Field	Value
+Pipeline Status	Active / Idle
+Start Time	Timestamp
+Active Call Count	Auto-updated every 5s
+
+This allows any tile to read status instantly.
+
+2. 📞 Live Call Tracking (Airtable Table)
+Table: 📞 Voice Call Log
+Add or ensure these fields:
+
+Field	Purpose
+Call Status	Started, Completed, Failed, In Progress
+Pipeline Batch ID	Group calls for today/session
+Call Start Time	Use this to calculate daily totals
+Conversion	Boolean or Score
+
+This is where all call stats get pulled from.
+
+3. 📊 Voice Analytics Tile – Updated Stats
+Use your existing Voice Analytics tile and inject:
+
+Metric	How to Calculate	Source
+✅ Calls Today	Count where Call Start Time = TODAY()	📞 Voice Call Log
+✅ Avg Duration	AVG(Call End - Call Start)	📞 Voice Call Log
+✅ Conversion Rate	# marked converted / total	📞 Voice Call Log
+🔄 Calls In Progress	Count where Call Status = In Progress	📞 Voice Call Log
+🎯 Calls Remaining	If batch preloaded, subtract in-progress + completed from total	Optional Preload Logic
+
+4. ✅ Visual Indicators on “Start Pipeline Calls” Button
+Enhance the button with:
+
+🔄 Loading spinner if active
+
+🔢 Live call count badge: e.g. 5 Active
+
+🟢 Button state = "Active – Pause?" if pipeline is running
+
+5. ✅ Suggested Schema Update in Airtable
+Field Name	Type
+📞 Call Status	Single select (Queued, Calling, Completed, Failed)
+🗓️ Date	Formula from Start Time
+📦 Pipeline Run ID	Text or Autonumber
+📈 Converted	Checkbox or % field
+🎧 Duration	Formula (End - Start)
+🧾 Outcome Notes	Long text
+
+✅ Bonus: Optional Auto-Pause Logic
+If no contacts remain → set status to Idle
+
+If X errors in a row → trigger alert or Slack
+
+🔁 REPLIT: What to Implement
+Track and expose call status via REST (simple JSON endpoint or Redis)
+
+Endpoint /call-status-summary → returns:
+
+json
+Copy
+Edit
+{
+  "pipelineStatus": "Active",
+  "callsToday": 23,
+  "inProgress": 3,
+  "conversionRate": "21%",
+  "avgDuration": "2m 10s"
+}

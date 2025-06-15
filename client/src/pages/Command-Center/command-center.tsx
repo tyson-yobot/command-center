@@ -4168,6 +4168,33 @@ export default function CommandCenter() {
         {/* Dashboard Content - Filtered by Preset */}
         {dashboardPreset === 'full' && (
           <>
+            {/* TabContentRenderer for Full View */}
+            <TabContentRenderer
+              activeTab={activeTab}
+              currentSystemMode={currentSystemMode}
+              metrics={metrics}
+              automationPerformance={automationPerformance}
+              liveActivity={liveActivityData}
+              knowledgeStats={knowledgeStats}
+              callStats={testStats}
+              handlers={{
+                handleNewBookingSync: handleCreateBooking,
+                handleNewSupportTicket: handleCreateSupportTicket,
+                handleManualFollowUp: handleManualFollowUp,
+                handleSalesOrderSync: handleAutomateSalesOrder,
+                handleContentCreatorSync: () => console.log('Content creator sync'),
+                handleMailchimpSync: () => console.log('Mailchimp sync'),
+                handleSocialContentSync: () => console.log('Social content sync'),
+                handleSimulateTestCall: () => console.log('Simulate test call'),
+                handleUploadDocument: () => console.log('Upload document'),
+                handleReindexKnowledge: () => console.log('Reindex knowledge'),
+                handleClearKnowledge: () => console.log('Clear knowledge'),
+                handleViewKnowledge: () => setShowKnowledgeViewer(true),
+                setShowCallReports: (show: boolean) => console.log('Show call reports:', show),
+                setShowCallLogs: (show: boolean) => console.log('Show call logs:', show),
+              }}
+            />
+            
             {/* Analytics Dashboard - 2x3 Grid Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
               {/* Top Row - First 3 Panels */}
@@ -5341,6 +5368,164 @@ export default function CommandCenter() {
           </Card>
             </div>
           </>
+        )}
+
+        {/* Voice Ops Only Preset */}
+        {dashboardPreset === 'voice' && (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-white text-center mb-6">Voice Operations Dashboard</h2>
+            
+            {/* Voice Analytics Section */}
+            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 min-h-[200px]">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center space-x-2">
+                  <Mic className="w-5 h-5 text-cyan-400" />
+                  <span>Voice Analytics & Performance</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
+                    <div className="text-center">
+                      <div className="text-2xl font-black text-green-400 mb-1">{currentSystemMode === 'test' ? '23' : '0'}</div>
+                      <div className="text-slate-300 text-sm">Total Calls Today</div>
+                      <div className="text-xs text-slate-400 mt-2">+5 from yesterday</div>
+                    </div>
+                  </div>
+                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
+                    <div className="text-center">
+                      <div className="text-2xl font-black text-blue-400 mb-1">{currentSystemMode === 'test' ? '7:42' : '0:00'}</div>
+                      <div className="text-slate-300 text-sm">Avg Call Duration</div>
+                      <div className="text-xs text-slate-400 mt-2">Above target</div>
+                    </div>
+                  </div>
+                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
+                    <div className="text-center">
+                      <div className="text-2xl font-black text-purple-400 mb-1">{currentSystemMode === 'test' ? '94.2%' : '0%'}</div>
+                      <div className="text-slate-300 text-sm">Success Rate</div>
+                      <div className="text-xs text-slate-400 mt-2">Industry leading</div>
+                    </div>
+                  </div>
+                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
+                    <div className="text-center">
+                      <div className="text-2xl font-black text-cyan-400 mb-1">{currentSystemMode === 'test' ? '15.2%' : '0%'}</div>
+                      <div className="text-slate-300 text-sm">Conversion Rate</div>
+                      <div className="text-xs text-slate-400 mt-2">+2.1% this week</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Voice Commands Section */}
+            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 min-h-[200px]">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center space-x-2">
+                  <Bot className="w-5 h-5 text-green-400" />
+                  <span>Voice Command Center</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <Button
+                    onClick={() => setShowCreateVoiceCallModal(true)}
+                    className="bg-green-600 hover:bg-green-700 text-white h-20 text-lg font-semibold"
+                    title="Start a new voice call with advanced options"
+                  >
+                    <Phone className="w-6 h-6 mr-3" />
+                    Start Voice Call
+                  </Button>
+                  <Button
+                    onClick={() => setShowVoiceRecordings(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white h-20 text-lg font-semibold"
+                    title="Review and analyze voice call recordings"
+                  >
+                    <Play className="w-6 h-6 mr-3" />
+                    Review Recordings
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* SmartSpend Only Preset */}
+        {dashboardPreset === 'smartspend' && (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-white text-center mb-6">SmartSpend™ Dashboard</h2>
+            
+            {/* SmartSpend Analytics */}
+            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 min-h-[200px]">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center space-x-2">
+                  <DollarSign className="w-5 h-5 text-green-400" />
+                  <span>💰 SmartSpend™ Analytics</span>
+                  <div className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full">PROPRIETARY</div>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
+                    <div className="text-center">
+                      <div className="text-2xl font-black text-green-400 mb-1">{currentSystemMode === 'test' ? '$4,850' : '$0'}</div>
+                      <div className="text-slate-300 text-sm">Monthly Spend</div>
+                      <div className="text-xs text-slate-400 mt-2">Within budget</div>
+                    </div>
+                  </div>
+                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
+                    <div className="text-center">
+                      <div className="text-2xl font-black text-blue-400 mb-1">{currentSystemMode === 'test' ? '$24.50' : '$0'}</div>
+                      <div className="text-slate-300 text-sm">Cost Per Lead</div>
+                      <div className="text-xs text-slate-400 mt-2">-15% vs last month</div>
+                    </div>
+                  </div>
+                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
+                    <div className="text-center">
+                      <div className="text-2xl font-black text-purple-400 mb-1">{currentSystemMode === 'test' ? '312%' : '0%'}</div>
+                      <div className="text-slate-300 text-sm">ROI</div>
+                      <div className="text-xs text-slate-400 mt-2">Exceptional performance</div>
+                    </div>
+                  </div>
+                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
+                    <div className="text-center">
+                      <div className="text-2xl font-black text-cyan-400 mb-1">{currentSystemMode === 'test' ? '8.7%' : '0%'}</div>
+                      <div className="text-slate-300 text-sm">Conversion Rate</div>
+                      <div className="text-xs text-slate-400 mt-2">Above industry avg</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Budget Controls */}
+            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 min-h-[200px]">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center space-x-2">
+                  <Settings className="w-5 h-5 text-amber-400" />
+                  <span>Budget Management</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <Button
+                    className="bg-amber-600 hover:bg-amber-700 text-white h-20 text-lg font-semibold"
+                    title="Adjust your monthly budget allocation and spending limits"
+                  >
+                    <TrendingUp className="w-6 h-6 mr-3" />
+                    Adjust Budget
+                  </Button>
+                  <Button
+                    onClick={() => setShowAnalyticsModal(true)}
+                    className="bg-purple-600 hover:bg-purple-700 text-white h-20 text-lg font-semibold"
+                    title="Generate detailed SmartSpend analytics reports"
+                  >
+                    <BarChart className="w-6 h-6 mr-3" />
+                    View Reports
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         )}
 
         {/* Voice Ops Only Preset */}
@@ -7727,168 +7912,6 @@ export default function CommandCenter() {
         isOpen={showCalendarUpload} 
         onClose={() => setShowCalendarUpload(false)} 
       />
-
-            </div>
-          </>
-        )}
-
-        {/* Voice Ops Only Preset */}
-        {dashboardPreset === 'voice' && (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-white text-center mb-6">Voice Operations Dashboard</h2>
-            
-            {/* Voice Analytics Section */}
-            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 min-h-[200px]">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center space-x-2">
-                  <Mic className="w-5 h-5 text-cyan-400" />
-                  <span>Voice Analytics & Performance</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-green-400 mb-1">{currentSystemMode === 'test' ? '23' : '0'}</div>
-                      <div className="text-slate-300 text-sm">Total Calls Today</div>
-                      <div className="text-xs text-slate-400 mt-2">+5 from yesterday</div>
-                    </div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-blue-400 mb-1">{currentSystemMode === 'test' ? '7:42' : '0:00'}</div>
-                      <div className="text-slate-300 text-sm">Avg Call Duration</div>
-                      <div className="text-xs text-slate-400 mt-2">Above target</div>
-                    </div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-purple-400 mb-1">{currentSystemMode === 'test' ? '94.2%' : '0%'}</div>
-                      <div className="text-slate-300 text-sm">Success Rate</div>
-                      <div className="text-xs text-slate-400 mt-2">Industry leading</div>
-                    </div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-cyan-400 mb-1">{currentSystemMode === 'test' ? '15.2%' : '0%'}</div>
-                      <div className="text-slate-300 text-sm">Conversion Rate</div>
-                      <div className="text-xs text-slate-400 mt-2">+2.1% this week</div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Voice Commands Section */}
-            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 min-h-[200px]">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center space-x-2">
-                  <Bot className="w-5 h-5 text-green-400" />
-                  <span>Voice Command Center</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <Button
-                    onClick={() => setShowCreateVoiceCallModal(true)}
-                    className="bg-green-600 hover:bg-green-700 text-white h-20 text-lg font-semibold"
-                    title="Start a new voice call with advanced options"
-                  >
-                    <Phone className="w-6 h-6 mr-3" />
-                    Start Voice Call
-                  </Button>
-                  <Button
-                    onClick={() => setShowVoiceRecordings(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white h-20 text-lg font-semibold"
-                    title="Review and analyze voice call recordings"
-                  >
-                    <Play className="w-6 h-6 mr-3" />
-                    Review Recordings
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* SmartSpend Only Preset */}
-        {dashboardPreset === 'smartspend' && (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-white text-center mb-6">SmartSpend™ Dashboard</h2>
-            
-            {/* SmartSpend Analytics */}
-            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 min-h-[200px]">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center space-x-2">
-                  <DollarSign className="w-5 h-5 text-green-400" />
-                  <span>💰 SmartSpend™ Analytics</span>
-                  <div className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full">PROPRIETARY</div>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-green-400 mb-1">{currentSystemMode === 'test' ? '$4,850' : '$0'}</div>
-                      <div className="text-slate-300 text-sm">Monthly Spend</div>
-                      <div className="text-xs text-slate-400 mt-2">Within budget</div>
-                    </div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-blue-400 mb-1">{currentSystemMode === 'test' ? '$24.50' : '$0'}</div>
-                      <div className="text-slate-300 text-sm">Cost Per Lead</div>
-                      <div className="text-xs text-slate-400 mt-2">-15% vs last month</div>
-                    </div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-purple-400 mb-1">{currentSystemMode === 'test' ? '312%' : '0%'}</div>
-                      <div className="text-slate-300 text-sm">ROI</div>
-                      <div className="text-xs text-slate-400 mt-2">Exceptional performance</div>
-                    </div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-cyan-400 mb-1">{currentSystemMode === 'test' ? '8.7%' : '0%'}</div>
-                      <div className="text-slate-300 text-sm">Conversion Rate</div>
-                      <div className="text-xs text-slate-400 mt-2">Above industry avg</div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Budget Controls */}
-            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 min-h-[200px]">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center space-x-2">
-                  <Settings className="w-5 h-5 text-amber-400" />
-                  <span>Budget Management</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <Button
-                    className="bg-amber-600 hover:bg-amber-700 text-white h-20 text-lg font-semibold"
-                    title="Adjust your monthly budget allocation and spending limits"
-                  >
-                    <TrendingUp className="w-6 h-6 mr-3" />
-                    Adjust Budget
-                  </Button>
-                  <Button
-                    onClick={() => setShowAnalyticsModal(true)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white h-20 text-lg font-semibold"
-                    title="Generate detailed SmartSpend analytics reports"
-                  >
-                    <BarChart className="w-6 h-6 mr-3" />
-                    View Reports
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
 
     </div>
     </div>
