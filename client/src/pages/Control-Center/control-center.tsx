@@ -837,36 +837,30 @@ export default function SystemControls() {
           </Card>
 
           {/* Pro Bot */}
-          <Card className="bg-white/5 backdrop-blur-sm border-2 border-cyan-400 hover:border-cyan-300 transition-colors cursor-pointer shadow-lg shadow-cyan-400/20"
+          <Card className="bg-white/5 backdrop-blur-sm border-2 border-blue-500 hover:border-blue-400 transition-colors cursor-pointer shadow-lg shadow-blue-500/20"
                 onClick={() => applyPackageSettings('pro')}>
             <CardContent className="p-4 text-center">
-              <div className="w-8 h-8 bg-cyan-400 rounded-full flex items-center justify-center mx-auto mb-2">
-                <Crown className="w-5 h-5 text-slate-900" />
-              </div>
+              <Brain className="w-8 h-8 text-blue-400 mx-auto mb-2" />
               <h3 className="text-white font-semibold mb-1">Pro Bot</h3>
               <p className="text-white/60 text-xs">Voice + Integrations</p>
             </CardContent>
           </Card>
 
           {/* Enterprise Bot */}
-          <Card className="bg-white/5 backdrop-blur-sm border-2 border-cyan-400 hover:border-cyan-300 transition-colors cursor-pointer shadow-lg shadow-cyan-400/20"
+          <Card className="bg-white/5 backdrop-blur-sm border-2 border-blue-500 hover:border-blue-400 transition-colors cursor-pointer shadow-lg shadow-blue-500/20"
                 onClick={() => applyPackageSettings('enterprise')}>
             <CardContent className="p-4 text-center">
-              <div className="w-8 h-8 bg-cyan-400 rounded-full flex items-center justify-center mx-auto mb-2">
-                <Building className="w-5 h-5 text-slate-900" />
-              </div>
+              <Building className="w-8 h-8 text-blue-400 mx-auto mb-2" />
               <h3 className="text-white font-semibold mb-1">Enterprise Bot</h3>
               <p className="text-white/60 text-xs">Advanced Features</p>
             </CardContent>
           </Card>
 
           {/* Platinum Bot */}
-          <Card className="bg-white/5 backdrop-blur-sm border-2 border-cyan-400 hover:border-cyan-300 transition-colors cursor-pointer shadow-lg shadow-cyan-400/20"
+          <Card className="bg-white/5 backdrop-blur-sm border-2 border-blue-500 hover:border-blue-400 transition-colors cursor-pointer shadow-lg shadow-blue-500/20"
                 onClick={() => applyPackageSettings('platinum')}>
             <CardContent className="p-4 text-center">
-              <div className="w-8 h-8 bg-cyan-400 rounded-full flex items-center justify-center mx-auto mb-2">
-                <Zap className="w-5 h-5 text-slate-900" />
-              </div>
+              <Zap className="w-8 h-8 text-blue-400 mx-auto mb-2" />
               <h3 className="text-white font-semibold mb-1">Platinum Bot</h3>
               <p className="text-white/60 text-xs">Complete Suite</p>
             </CardContent>
@@ -883,33 +877,31 @@ export default function SystemControls() {
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           
           {/* Core Package Features */}
-          <Card className="bg-white/5 backdrop-blur-sm border-2 border-cyan-400 shadow-lg shadow-cyan-400/20">
+          <Card className="bg-white/5 backdrop-blur-sm border-2 border-blue-500 shadow-lg shadow-blue-500/20">
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
-                <div className="w-6 h-6 bg-cyan-400 rounded-full flex items-center justify-center">
-                  <Settings className="w-4 h-4 text-slate-900" />
-                </div>
-                <span className="border border-cyan-400 px-2 py-1 rounded bg-cyan-400/10 text-cyan-300 font-semibold">Core Package Features</span>
+                <Settings className="w-6 h-6 text-blue-400" />
+                <span className="text-white font-semibold">Core Package Features</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between p-3 bg-blue-900/20 rounded-lg hover:bg-blue-800/30 transition-colors border border-cyan-400/30">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.errorMonitoring)} rounded-full`}></div>
-                  <span className="text-cyan-200 text-sm font-medium border border-cyan-400/50 px-2 py-1 rounded bg-cyan-400/5">Basic AI Chat</span>
+                  <span className="text-white text-sm font-medium">Basic AI Chat</span>
                   {getStatusIcon(moduleStates.errorMonitoring)}
                 </div>
                 <Switch 
                   checked={moduleStates.errorMonitoring} 
                   onCheckedChange={() => toggleModule('errorMonitoring')}
-                  className="border border-cyan-400"
+                  className="control-center-switch"
                 />
               </div>
               
               <div className="flex items-center justify-between p-3 bg-blue-900/20 rounded-lg hover:bg-blue-800/30 transition-colors border border-cyan-400/30">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.quickbooks)} rounded-full`}></div>
-                  <span className="text-cyan-200 text-sm font-medium border border-cyan-400/50 px-2 py-1 rounded bg-cyan-400/5">SMS Automation</span>
+                  <span className="text-white text-sm font-medium">SMS Automation</span>
                   {getStatusIcon(moduleStates.quickbooks)}
                 </div>
                 <Switch 
@@ -922,7 +914,7 @@ export default function SystemControls() {
               <div className="flex items-center justify-between p-3 bg-blue-900/20 rounded-lg hover:bg-blue-800/30 transition-colors border border-cyan-400/30">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.systemDiagnostics)} rounded-full`}></div>
-                  <span className="text-cyan-200 text-sm font-medium border border-cyan-400/50 px-2 py-1 rounded bg-cyan-400/5">Email Automation</span>
+                  <span className="text-white text-sm font-medium">Email Automation</span>
                   {getStatusIcon(moduleStates.systemDiagnostics)}
                 </div>
                 <Switch 
