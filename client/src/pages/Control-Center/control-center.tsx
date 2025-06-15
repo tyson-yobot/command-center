@@ -325,21 +325,6 @@ export default function SystemControls() {
         return <Wifi className="w-3 h-3 text-green-400" />;
     }
   };
-  {modules.diagnosticsEngine && (
-    <Tile
-      title="Run Diagnostics Engine"
-      description="Triggers test mode in your Replit Python runner"
-      onToggle={() => {
-        fetch("https://YoBotAssistant.tyson44.repl.co/test")
-          .then(res => res.text())
-          .then(data => alert("🧪 Diagnostics Triggered: " + data))
-          .catch(err => alert("❌ Error triggering diagnostics: " + err));
-      }}
-      toggleLabel="Run Diagnostics"
-    />
-  )}
-
-  
 
   // Get status details for tooltip
   const getStatusDetails = (moduleKey: string) => {
@@ -365,7 +350,12 @@ export default function SystemControls() {
     callRouting: { category: 'Voice & Communication', name: 'Call Routing', visibleTo: ['admin', 'client'] },
     emergencyEscalation: { category: 'Voice & Communication', name: 'Emergency Escalation', visibleTo: ['admin', 'support'] },
     slackNotifications: { category: 'Voice & Communication', name: 'Slack Notifications', visibleTo: ['admin', 'support'] },
-    
+    diagnosticsEngine: {
+    category: 'Analytics & Monitoring',
+    name: 'Run Diagnostics Engine',
+    visibleTo: ['admin']
+},
+
     // CRM & Data
     hubspotSync: { category: 'CRM & Data', name: 'HubSpot Sync', visibleTo: ['admin', 'client'] },
     airtableLogging: { category: 'CRM & Data', name: 'Airtable Logging', visibleTo: ['admin'] },
@@ -475,6 +465,8 @@ export default function SystemControls() {
       smartWorkflows: true,
       emailAutomation: true,
       followupTasks: true,
+      diagnosticsEngine: true,
+      missedCallResponder: true,  
       pdfGeneration: false,
       quoteGenerator: false,
       calendarBooking: false,
