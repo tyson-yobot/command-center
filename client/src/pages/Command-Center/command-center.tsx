@@ -2936,7 +2936,7 @@ export default function CommandCenter() {
                       className="bg-lime-500 hover:bg-lime-600 text-white flex items-center justify-start p-3 font-semibold border-2 border-lime-400 shadow-lg shadow-lime-500/25"
                     >
                       <span className="text-xl mr-3">🚀</span>
-                      <span>Start Pipeline Calls</span>
+                      <span>Launch Voice Pipeline</span>
                     </Button>
                   
                   <Button
@@ -2944,15 +2944,15 @@ export default function CommandCenter() {
                     className="bg-red-500 hover:bg-red-600 text-white flex items-center justify-start p-3 border-2 border-red-400 shadow-lg shadow-red-500/25"
                   >
                     <span className="text-xl mr-3">🛑</span>
-                    <span>End Pipeline Calls</span>
+                    <span>Stop Voice Pipeline</span>
                   </Button>
                   
                   <Button
                     onClick={handleInitiateVoiceCall}
                     className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3 border border-green-500"
                   >
-                    <span className="text-xl mr-3">📲</span>
-                    <span>Create Voice Call</span>
+                    <span className="text-xl mr-3">📞</span>
+                    <span>Manual Voice Call</span>
                   </Button>
                   
                   <Button
@@ -2960,7 +2960,7 @@ export default function CommandCenter() {
                     className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3 border border-green-500"
                   >
                     <span className="text-xl mr-3">🎤</span>
-                    <span>Voice Input</span>
+                    <span>Voice Command Mode</span>
                   </Button>
                   
                   <Button
@@ -2977,8 +2977,8 @@ export default function CommandCenter() {
                       e.currentTarget.style.backgroundColor = '#0d82da';
                     }}
                   >
-                    <span className="text-xl mr-3">🟠</span>
-                    <span>HubSpot Contacts</span>
+                    <span className="text-xl mr-3">🔗</span>
+                    <span>Open HubSpot CRM</span>
                   </Button>
                 </div>
               </CardContent>
@@ -3015,16 +3015,16 @@ export default function CommandCenter() {
                       className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
                       style={{ borderLeft: '8px solid #ec4899' }}
                     >
-                      <span className="text-xl mr-3">🧲</span>
-                      <span>Lead Scraper Tool</span>
+                      <span className="text-xl mr-3">🎯</span>
+                      <span>Lead Generation Tools</span>
                     </Button>
                   
                   <Button
                     onClick={handleDownloadPDF}
                     className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
                   >
-                    <span className="text-xl mr-3">📄</span>
-                    <span>View PDF Report</span>
+                    <span className="text-xl mr-3">📋</span>
+                    <span>Generate Analytics Report</span>
                   </Button>
                   
                   <Button
@@ -3061,8 +3061,8 @@ export default function CommandCenter() {
                     }}
                     className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
                   >
-                    <span className="text-xl mr-3">📊</span>
-                    <span>Export Data</span>
+                    <span className="text-xl mr-3">💾</span>
+                    <span>Export Dashboard Data</span>
                   </Button>
                   
                   <Button
@@ -3070,8 +3070,8 @@ export default function CommandCenter() {
                     className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
                     style={{ borderLeft: '8px solid #f59e0b' }}
                   >
-                    <span className="text-xl mr-3">✨</span>
-                    <span>Content Creator</span>
+                    <span className="text-xl mr-3">✏️</span>
+                    <span>AI Content Generator</span>
                   </Button>
                   
                   <Button
