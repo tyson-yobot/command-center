@@ -20,22 +20,16 @@ export async function testAirtableConnection(): Promise<{
   bases?: any[];
 }> {
   try {
-    const rawApiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
+    const apiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
     
-    if (!rawApiKey) {
+    if (!apiKey) {
       return { success: false, error: 'No Airtable API key found' };
-    }
-
-    const cleanedApiKey = extractValidApiKey(rawApiKey);
-    
-    if (!cleanedApiKey) {
-      return { success: false, error: 'Invalid API key format' };
     }
     
     // Test basic connection by listing bases
     const response = await axios.get('https://api.airtable.com/v0/meta/bases', {
       headers: {
-        'Authorization': `Bearer ${cleanedApiKey}`,
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json'
       }
     });

@@ -39,34 +39,15 @@ class AirtableLeadsService {
   private apiKey: string;
 
   constructor() {
-    // Try both available API keys
-    let rawApiKey = process.env.AIRTABLE_API_KEY || '';
+    // Use the same API key pattern as other working Airtable operations
+    const rawKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
     
-    // If the API key is corrupted, try the personal access token
-    if (!rawApiKey || rawApiKey.includes('Please re-run')) {
-      rawApiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || '';
-    }
-    
-    if (!rawApiKey) {
+    if (!rawKey) {
       throw new Error('Airtable API key not configured');
     }
     
-    // Extract valid API key (starts with 'pat' for personal access tokens or 'key' for legacy)
-    const patMatch = rawApiKey.match(/pat[a-zA-Z0-9.]+/);
-    const keyMatch = rawApiKey.match(/key[a-zA-Z0-9]+/);
-    
-    if (patMatch) {
-      this.apiKey = patMatch[0];
-    } else if (keyMatch) {
-      this.apiKey = keyMatch[0];
-    } else {
-      // Clean the key and use first valid portion
-      this.apiKey = rawApiKey.substring(0, 100).trim().replace(/[\r\n\t"'\s]/g, '');
-    }
-    
-    if (!this.apiKey || this.apiKey.length < 10) {
-      throw new Error('Invalid Airtable API key format');
-    }
+    // Clean the API key to remove any invalid characters
+    this.apiKey = rawKey.trim().replace(/[\r\n\t"'\s]/g, '');
   }
 
   private getHeaders() {
