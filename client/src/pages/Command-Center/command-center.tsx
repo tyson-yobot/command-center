@@ -2923,11 +2923,11 @@ export default function CommandCenter() {
             </Card>
 
             {/* Voice & Communication */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 relative">
+            <Card className="bg-white/10 backdrop-blur-sm border border-green-400 relative">
               <CardHeader>
                 <CardTitle className="text-white flex items-center justify-between">
                   <div className="flex items-center">
-                    <Headphones className="w-5 h-5 mr-2 text-blue-400" />
+                    <Headphones className="w-5 h-5 mr-2 text-green-400" />
                     Voice & Communication
                     <Button
                       variant="ghost"
@@ -2982,18 +2982,18 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleVoiceToggle}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-between p-3 border border-purple-500"
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-between p-3 border border-green-500"
                   >
                     <div className="flex items-center">
                       <span className="text-xl mr-3">🎙️</span>
                       <span>Live Voice Command</span>
                     </div>
-                    {/* Voice waveform meter for Voice Input */}
+                    {/* Voice waveform meter for Live Voice Command */}
                     <div className="flex items-center space-x-1">
-                      <div className="w-1 h-2 bg-purple-300 rounded animate-pulse"></div>
-                      <div className="w-1 h-4 bg-purple-300 rounded animate-pulse delay-100"></div>
-                      <div className="w-1 h-3 bg-purple-300 rounded animate-pulse delay-200"></div>
-                      <div className="w-1 h-5 bg-purple-300 rounded animate-pulse delay-300"></div>
+                      <div className="w-1 h-2 bg-green-300 rounded animate-pulse"></div>
+                      <div className="w-1 h-4 bg-green-300 rounded animate-pulse delay-100"></div>
+                      <div className="w-1 h-3 bg-green-300 rounded animate-pulse delay-200"></div>
+                      <div className="w-1 h-5 bg-green-300 rounded animate-pulse delay-300"></div>
                     </div>
                   </Button>
                   
@@ -3634,79 +3634,50 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          {/* Bot Health Monitor */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Monitor className="w-5 h-5 mr-2 text-cyan-400" />
-                Bot Health Monitor
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Bot Utilization Rate</span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-16 bg-slate-700 rounded-full h-2">
-                      <div className="bg-green-400 h-2 rounded-full" style={{ width: '0%' }}></div>
-                    </div>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '84%' : ''}</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Response Time</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1.2s' : ''}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Active Connections</span>
-                  <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '147' : ''}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Error Rate</span>
-                  <span className="text-yellow-400 font-bold">{currentSystemMode === 'test' ? '0.3%' : ''}</span>
-                </div>
-                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
-                  <div className="text-slate-300 text-sm mb-1">System Status</div>
-                  <div className="text-green-400 font-medium">{currentSystemMode === 'test' ? 'All Systems Operational' : ''}</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+
         </div>
 
 
 
         {/* Voice & Conversation Analytics */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <Mic className="w-5 h-5 mr-2" />
+                <Mic className="w-5 h-5 mr-2 text-green-400" />
                 Voice Commands
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="mb-3 pb-2 border-b border-slate-600">
-                <h4 className="text-slate-200 font-medium text-sm">Suggested Prompts</h4>
+                <h4 className="text-slate-200 font-medium text-sm">Voice Commands Active</h4>
+                <div className="flex items-center space-x-2 mt-1">
+                  <div className="flex space-x-1">
+                    {[1,2,3,4,5].map(i => (
+                      <div key={i} className="w-1 bg-green-400 rounded animate-pulse" style={{height: `${Math.random() * 8 + 4}px`, animationDelay: `${i * 100}ms`}}></div>
+                    ))}
+                  </div>
+                  <span className="text-green-400 text-xs">🎤 Listening</span>
+                </div>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-blue-400 shadow-lg shadow-blue-400/20">
+                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <span className="text-slate-300">"Show me today's leads"</span>
                   <Badge variant="outline" className="text-green-400 border-green-400">{currentSystemMode === 'test' ? 'Active' : ''}</Badge>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-blue-400 shadow-lg shadow-blue-400/20">
+                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <span className="text-slate-300">"Call my top prospect"</span>
                   <Badge variant="outline" className="text-green-400 border-green-400">{currentSystemMode === 'test' ? 'Active' : ''}</Badge>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-blue-400 shadow-lg shadow-blue-400/20">
+                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <span className="text-slate-300">"Schedule follow-up"</span>
                   <Badge variant="outline" className="text-green-400 border-green-400">{currentSystemMode === 'test' ? 'Active' : ''}</Badge>
                 </div>
                 {isListening && (
-                  <div className="mt-4 p-3 bg-blue-500/20 border border-blue-400 rounded-lg">
-                    <div className="flex items-center text-blue-400">
-                      <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse mr-2"></div>
-                      Listening for commands...
+                  <div className="mt-4 p-3 bg-green-500/20 border border-green-400 rounded-lg">
+                    <div className="flex items-center text-green-400">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse mr-2"></div>
+                      Voice Commands Active - Listening...
                     </div>
                   </div>
                 )}
@@ -3714,30 +3685,38 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <Card className="bg-white/10 backdrop-blur-sm border border-purple-400">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <MessageSquare className="w-5 h-5 mr-2 text-blue-400" />
+                <MessageSquare className="w-5 h-5 mr-2 text-purple-400" />
                 Conversation Analytics
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Sentiment Score</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '7.8/10' : ''}</span>
+                  <span className="text-slate-300">Sentiment Analysis:</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '7.8/10 Positive' : ''}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Avg Call Duration</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '8:42' : ''}</span>
+                  <span className="text-slate-300">Emotion Detection:</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? 'Confident' : ''}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Resolution Rate</span>
-                  <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '89.2%' : ''}</span>
+                  <span className="text-slate-300">Avg Call Duration:</span>
+                  <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '8:42' : ''}</span>
                 </div>
-                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
-                  <div className="text-slate-300 text-sm mb-1">Top Intent</div>
-                  <div className="text-cyan-400 font-medium">{currentSystemMode === 'test' ? 'Product pricing inquiry' : 'No data available'}</div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">Resolution Rate:</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '89.2%' : ''}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">Satisfaction Score:</span>
+                  <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '9.1/10' : ''}</span>
+                </div>
+                <div className="bg-purple-900/60 rounded-lg p-3 border border-purple-400 shadow-lg shadow-purple-400/20">
+                  <div className="text-slate-300 text-sm mb-1">Top Intent Detected:</div>
+                  <div className="text-purple-400 font-medium">{currentSystemMode === 'test' ? 'Product pricing inquiry' : 'No data available'}</div>
                 </div>
               </div>
             </CardContent>
@@ -3843,59 +3822,44 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Advanced Intelligence & Analytics Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
-          {/* Sentiment Analysis */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Brain className="w-5 h-5 mr-2 text-green-400" />
-                Sentiment Analysis
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Positive:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '68%' : ''}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Neutral:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '24%' : ''}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Negative:</span>
-                  <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '8%' : ''}</span>
-                </div>
-                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
-                  <div className="text-slate-300 text-sm mb-1">Overall Score</div>
-                  <div className="text-green-400 font-bold">{currentSystemMode === 'test' ? '7.8/10' : ''}</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
+        {/* Insight Panels Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Voice Command Center */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <Headphones className="w-5 h-5 mr-2 text-purple-400" />
+                <Headphones className="w-5 h-5 mr-2 text-green-400" />
                 Voice Command Center
               </CardTitle>
             </CardHeader>
             <CardContent>
+              <div className="mb-3 pb-2 border-b border-slate-600">
+                <h4 className="text-slate-200 font-medium text-sm">Voice Commands Active</h4>
+                <div className="flex items-center space-x-2 mt-1">
+                  <div className="flex space-x-1">
+                    {[1,2,3,4,5].map(i => (
+                      <div key={i} className="w-1 bg-green-400 rounded animate-pulse" style={{height: `${Math.random() * 8 + 4}px`, animationDelay: `${i * 100}ms`}}></div>
+                    ))}
+                  </div>
+                  <span className="text-green-400 text-xs">🎤 Processing Commands</span>
+                </div>
+              </div>
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Commands Today:</span>
-                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '14' : ''}</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '14' : ''}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Success Rate:</span>
                   <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '92.3%' : ''}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Processing:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '1 active' : ''}</span>
+                  <span className="text-slate-300 text-sm">Currently Processing:</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1 active' : ''}</span>
+                </div>
+                <div className="bg-green-900/60 rounded-lg p-3 border border-green-400 shadow-lg shadow-green-400/20">
+                  <div className="text-slate-300 text-sm mb-1">Latest Command:</div>
+                  <div className="text-green-400 font-medium">{currentSystemMode === 'test' ? '"Show today\'s revenue"' : 'No recent commands'}</div>
                 </div>
               </div>
             </CardContent>
