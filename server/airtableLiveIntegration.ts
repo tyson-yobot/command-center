@@ -139,7 +139,7 @@ class AirtableLiveIntegration {
    */
   async getSmartSpendData(clientId?: string): Promise<SmartSpendData | null> {
     const baseId = 'appGtcRZU6QJngkQS'; // YoBot® SmartSpend Tracker (Main)
-    const tableName = 'SmartSpend Master Table';
+    const tableName = 'SmartSpend%20Master%20Table';
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableName}`;
