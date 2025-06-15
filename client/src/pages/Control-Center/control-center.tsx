@@ -987,10 +987,10 @@ export default function SystemControls() {
                 />
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-purple-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.ndaGenerator)} rounded-full`}></div>
-                  <span className="text-white text-sm border border-purple-400 px-2 py-1 rounded bg-slate-600/60">Advanced Reporting Suite</span>
+                  <span className="text-white text-sm">Advanced Reporting Suite</span>
                   {getStatusIcon(moduleStates.ndaGenerator)}
                 </div>
                 <Switch 
