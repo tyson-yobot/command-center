@@ -2725,6 +2725,7 @@ export default function CommandCenter() {
               YoBot<sup className="text-xl">®</sup>&nbsp;Command Center Dashboard
             </h1>
           </div>
+          <p className="text-slate-300 text-lg mb-2">Your Complete AI Automation Dashboard</p>
           <p className="text-slate-300 text-lg">
             {selectedTier !== 'All' && `${selectedTier} Tier`}
           </p>

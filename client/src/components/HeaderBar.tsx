@@ -41,9 +41,6 @@ export default function HeaderBar({
           <div className="text-white text-xl font-bold">
             YoBot<sup className="text-xs">®</sup> Command Center
           </div>
-          <div className="text-blue-200 text-sm">
-            Your Complete AI Automation Dashboard
-          </div>
         </div>
 
         {/* System Mode Toggle */}
