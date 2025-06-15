@@ -115,8 +115,8 @@ class AirtableLiveIntegration {
    * Table: SmartSpend Dashboard
    */
   async getSmartSpendData(clientId?: string): Promise<SmartSpendData | null> {
-    const baseId = 'appGtcRZUd0JqnkQS'; // YoBot® SmartSpend Tracker (Main)
-    const tableId = 'SmartSpend - Budget & ROI Tracker Table'; // SmartSpend Dashboard table
+    const baseId = 'appGtcRZU6QJngkQS'; // YoBot® SmartSpend Tracker (Main)
+    const tableId = 'SmartSpend Dashboard'; // SmartSpend Dashboard table
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
@@ -262,8 +262,8 @@ class AirtableLiveIntegration {
    * Table: 🧮 Botalytics Monthly Log
    */
   async getBotalyticsData(month?: string, clientId?: string): Promise<any[]> {
-    const baseId = 'appe05t1B1tn1Kn5'; // YoBot® Sales & Automation base
-    const tableId = 'Botalytics - ROI'; // Botalytics Monthly Log table
+    const baseId = 'appe0OSJtB1In1kn5'; // YoBot® Sales & Automation base
+    const tableId = '🧮 Botalytics Monthly Log'; // Botalytics Monthly Log table
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
