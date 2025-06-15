@@ -270,17 +270,17 @@ class AirtableLiveIntegration {
       let filters = [];
       
       if (month) {
-        filters.push(`{Month}="${month}"`);
+        filters.push(`{📅 Month}="${month}"`);
       }
       
       if (clientId) {
-        filters.push(`OR({Client ID}="${clientId}",{Client Email}="${clientId}")`);
+        filters.push(`{🏢 Client}="${clientId}"`);
       }
       
       if (filters.length > 0) {
-        url += `?filterByFormula=AND(${filters.join(',')})&sort[0][field]=Month&sort[0][direction]=desc`;
+        url += `?filterByFormula=AND(${filters.join(',')})&sort[0][field]=📅 Month&sort[0][direction]=desc`;
       } else {
-        url += `?sort[0][field]=Month&sort[0][direction]=desc&maxRecords=12`;
+        url += `?sort[0][field]=📅 Month&sort[0][direction]=desc&maxRecords=12`;
       }
 
       const response = await fetch(url, {

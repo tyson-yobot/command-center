@@ -15186,14 +15186,19 @@ export function registerContentCreationEndpoints(app: Express) {
       
       // Process and format data for dashboard
       const analytics = botalyticsData.map(record => ({
-        month: record.fields['Month'],
-        closeRate: record.fields['Close Rate'] || 0,
-        roi: record.fields['ROI'] || 0,
-        interactions: record.fields['Interactions'] || 0,
-        accuracy: record.fields['Accuracy'] || 0,
-        learningRate: record.fields['Learning Rate'] || 0,
-        clientId: record.fields['Client ID'],
-        lastUpdated: record.fields['Last Updated']
+        month: record.fields['📅 Month'],
+        client: record.fields['🏢 Client'],
+        totalCalls: record.fields['📞 Total Calls'] || 0,
+        botHandledCalls: record.fields['🤖 Calls Handled by Bot'] || 0,
+        transferredCalls: record.fields['🙋 Calls Transferred to Rep'] || 0,
+        avgResponseTime: record.fields['⏳ Avg Response Time (Bot)'] || 0,
+        laborSavings: record.fields['💸 Estimated Labor Savings ($)'] || 0,
+        revenueLift: record.fields['📈 Revenue Lift Attributed ($)'] || 0,
+        leadConversions: record.fields['🎯 Lead Conversions Attributed'] || 0,
+        keywordsTriggered: record.fields['🧠 Keywords Triggered'] || [],
+        summary: record.fields['📊 Monthly Summary'],
+        reportLink: record.fields['📁 PDF Report Link'],
+        createdTime: record.fields['⏱ Created Time']
       }));
       
       logOperation('botalytics-data', { month, clientId }, 'success', `Retrieved ${analytics.length} Botalytics records`);

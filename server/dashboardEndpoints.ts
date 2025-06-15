@@ -40,13 +40,16 @@ export function registerDashboardEndpoints(app: Express) {
               lastUpdated: revenueForecast[0]?.fields?.['Last Updated'] || new Date().toISOString()
             } : null,
             botalyticsData: latestBotalytics ? {
-              closeRate: latestBotalytics.fields['Close Rate'] || 0,
-              roi: latestBotalytics.fields['ROI'] || 0,
-              interactions: latestBotalytics.fields['Interactions'] || 0,
-              accuracy: latestBotalytics.fields['Accuracy'] || 0,
-              learningRate: latestBotalytics.fields['Learning Rate'] || 0,
-              month: latestBotalytics.fields['Month'],
-              lastUpdated: latestBotalytics.fields['Last Updated']
+              totalCalls: latestBotalytics.fields['📞 Total Calls'] || 0,
+              botHandledCalls: latestBotalytics.fields['🤖 Calls Handled by Bot'] || 0,
+              transferredCalls: latestBotalytics.fields['🙋 Calls Transferred to Rep'] || 0,
+              avgResponseTime: latestBotalytics.fields['⏳ Avg Response Time (Bot)'] || 0,
+              laborSavings: latestBotalytics.fields['💸 Estimated Labor Savings ($)'] || 0,
+              revenueLift: latestBotalytics.fields['📈 Revenue Lift Attributed ($)'] || 0,
+              leadConversions: latestBotalytics.fields['🎯 Lead Conversions Attributed'] || 0,
+              client: latestBotalytics.fields['🏢 Client'],
+              month: latestBotalytics.fields['📅 Month'],
+              summary: latestBotalytics.fields['📊 Monthly Summary']
             } : null
           };
           
