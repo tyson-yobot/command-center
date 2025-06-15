@@ -1096,6 +1096,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.quoteGenerator} 
                   onCheckedChange={() => toggleModule('quoteGenerator')}
+                  className="control-center-switch"
                 />
               </div>
               
@@ -1108,6 +1109,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.missedCallResponder} 
                   onCheckedChange={() => toggleModule('missedCallResponder')}
+                  className="control-center-switch"
                 />
               </div>
               
@@ -1120,6 +1122,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.calendarBooking} 
                   onCheckedChange={() => toggleModule('calendarBooking')}
+                  className="control-center-switch"
                 />
               </div>
             </CardContent>
@@ -1130,7 +1133,7 @@ export default function SystemControls() {
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
                 <Target className="w-4 h-4 text-orange-400" />
-                <span>📡 Lead & Data Tools</span>
+                <span>Lead & Data Tools</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -1143,6 +1146,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.apifyGoogleMapsScraping} 
                   onCheckedChange={() => toggleModule('apifyGoogleMapsScraping')}
+                  className="control-center-switch"
                 />
               </div>
               
@@ -1155,6 +1159,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.pdfProcessor} 
                   onCheckedChange={() => toggleModule('pdfProcessor')}
+                  className="control-center-switch"
                 />
               </div>
             </CardContent>
@@ -1164,9 +1169,9 @@ export default function SystemControls() {
 
       {/* ⚙️ Runtime Control */}
       <div className="mb-8">
-        <h2 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
-          <Settings className="w-5 h-5 text-red-400" />
-          <span>⚙️ Runtime Control</span>
+        <h2 className="text-xl font-bold text-white mb-4 flex items-center space-x-2 border border-blue-500 p-3 rounded bg-blue-500/10">
+          <Settings className="w-5 h-5 text-blue-400" />
+          <span>Runtime Control</span>
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
