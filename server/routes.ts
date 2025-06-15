@@ -4419,19 +4419,19 @@ New York, NY 10001`;
       // Use the ScrapingService for proper data handling and Airtable upload
       const scrapingService = (await import('./scrapingService.js')).default;
       
-      // Generate leads based on platform
+      // Scrape real leads based on platform
       const leadCount = Math.min(maxResults, 50);
       let leads;
       
       switch (platform) {
         case 'apollo':
-          leads = scrapingService.generateApolloLeads(leadCount, filters);
+          leads = await scrapingService.scrapeApolloLeads(leadCount, filters);
           break;
         case 'apify':
-          leads = scrapingService.generateApifyLeads(leadCount, filters);
+          leads = await scrapingService.scrapeApifyLeads(leadCount, filters);
           break;
         case 'phantombuster':
-          leads = scrapingService.generatePhantomBusterLeads(leadCount, filters);
+          leads = await scrapingService.scrapePhantomBusterLeads(leadCount, filters);
           break;
         default:
           return res.status(400).json({
