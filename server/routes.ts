@@ -15650,6 +15650,101 @@ export function registerContentCreationEndpoints(app: Express) {
     res.json({ success: true, message: 'Voice listening stopped' });
   });
 
+  // Call status summary endpoint for live pipeline tracking
+  app.get("/api/call-status-summary", async (req, res) => {
+    try {
+      const currentMode = getSystemMode();
+      
+      if (currentMode === 'test') {
+        // Test mode data
+        res.json({
+          success: true,
+          data: {
+            pipelineStatus: "Active",
+            callsToday: 23,
+            inProgress: 3,
+            conversionRate: "21.4%",
+            avgDuration: "2m 10s",
+            totalCalls: 47,
+            completedCalls: 20,
+            failedCalls: 1,
+            queuedCalls: 8,
+            lastCallTime: "2 minutes ago",
+            dailyTarget: 50,
+            targetProgress: 46
+          },
+          mode: currentMode,
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        // Live mode - return empty/inactive data
+        res.json({
+          success: true,
+          data: {
+            pipelineStatus: "Idle",
+            callsToday: 0,
+            inProgress: 0,
+            conversionRate: "0%",
+            avgDuration: "0m 0s",
+            totalCalls: 0,
+            completedCalls: 0,
+            failedCalls: 0,
+            queuedCalls: 0,
+            lastCallTime: "Never",
+            dailyTarget: 0,
+            targetProgress: 0
+          },
+          mode: currentMode,
+          timestamp: new Date().toISOString()
+        });
+      }
+    } catch (error) {
+      console.error('Call status summary error:', error);
+      res.status(500).json({ error: 'Failed to get call status summary' });
+    }
+  });
+
+  // Start pipeline calls endpoint
+  app.post("/api/start-pipeline", async (req, res) => {
+    try {
+      const currentMode = getSystemMode();
+      
+      if (currentMode === 'test') {
+        res.json({
+          success: true,
+          message: "Voice pipeline started",
+          pipelineStatus: "Active",
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        res.json({
+          success: false,
+          message: "Pipeline not available in live mode",
+          pipelineStatus: "Idle",
+          timestamp: new Date().toISOString()
+        });
+      }
+    } catch (error) {
+      console.error('Start pipeline error:', error);
+      res.status(500).json({ error: 'Failed to start pipeline' });
+    }
+  });
+
+  // Stop pipeline calls endpoint
+  app.post("/api/stop-pipeline", async (req, res) => {
+    try {
+      res.json({
+        success: true,
+        message: "Voice pipeline stopped",
+        pipelineStatus: "Idle",
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Stop pipeline error:', error);
+      res.status(500).json({ error: 'Failed to stop pipeline' });
+    }
+  });
+
   // Voice Pipeline Status
   app.get('/api/pipeline-status', async (req, res) => {
     try {
