@@ -1317,6 +1317,113 @@ export default function SystemControls() {
                 onCheckedChange={() => toggleModule('rateLimiting')}
               />
             </div>
+            
+            {/* Diagnostics Engine Tiles */}
+            <div className="space-y-3 pt-3 border-t border-slate-700/50">
+              {/* Test Mode Diagnostics */}
+              <div className="p-4 bg-blue-900/30 rounded-lg border border-blue-500/30">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-white font-medium text-sm">Run Diagnostics Engine (Test Mode)</h4>
+                  <Button
+                    size="sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1"
+                    onClick={async () => {
+                      try {
+                        setActionLog(prev => [...prev, {
+                          id: Date.now(),
+                          timestamp: new Date().toISOString(),
+                          module: 'Diagnostics Engine',
+                          action: 'Test Mode Started',
+                          status: 'Processing',
+                          details: 'Triggering test mode diagnostics...'
+                        }]);
+
+                        const response = await fetch('https://YoBotAssistant.tyson44.repl.co/test', {
+                          method: 'GET'
+                        });
+
+                        if (response.ok) {
+                          setActionLog(prev => [...prev, {
+                            id: Date.now() + 1,
+                            timestamp: new Date().toISOString(),
+                            module: 'Diagnostics Engine',
+                            action: 'Test Mode',
+                            status: 'Success',
+                            details: 'Test mode diagnostics completed successfully'
+                          }]);
+                        } else {
+                          throw new Error(`HTTP ${response.status}`);
+                        }
+                      } catch (error) {
+                        setActionLog(prev => [...prev, {
+                          id: Date.now() + 2,
+                          timestamp: new Date().toISOString(),
+                          module: 'Diagnostics Engine',
+                          action: 'Test Mode',
+                          status: 'Failed',
+                          details: `Test mode failed: ${error.message}`
+                        }]);
+                      }
+                    }}
+                  >
+                    Run Test Diagnostics
+                  </Button>
+                </div>
+                <p className="text-slate-300 text-xs">Triggers TEST MODE in the Replit Python runner</p>
+              </div>
+
+              {/* Live Mode Automation */}
+              <div className="p-4 bg-red-900/30 rounded-lg border border-red-500/30">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-white font-medium text-sm">Run Automation Engine (Live Mode)</h4>
+                  <Button
+                    size="sm"
+                    className="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1"
+                    onClick={async () => {
+                      try {
+                        setActionLog(prev => [...prev, {
+                          id: Date.now(),
+                          timestamp: new Date().toISOString(),
+                          module: 'Automation Engine',
+                          action: 'Live Mode Started',
+                          status: 'Processing',
+                          details: 'Triggering live mode automation...'
+                        }]);
+
+                        const response = await fetch('https://YoBotAssistant.tyson44.repl.co/', {
+                          method: 'GET'
+                        });
+
+                        if (response.ok) {
+                          setActionLog(prev => [...prev, {
+                            id: Date.now() + 1,
+                            timestamp: new Date().toISOString(),
+                            module: 'Automation Engine',
+                            action: 'Live Mode',
+                            status: 'Success',
+                            details: 'Live mode automation completed successfully'
+                          }]);
+                        } else {
+                          throw new Error(`HTTP ${response.status}`);
+                        }
+                      } catch (error) {
+                        setActionLog(prev => [...prev, {
+                          id: Date.now() + 2,
+                          timestamp: new Date().toISOString(),
+                          module: 'Automation Engine',
+                          action: 'Live Mode',
+                          status: 'Failed',
+                          details: `Live mode failed: ${error.message}`
+                        }]);
+                      }
+                    }}
+                  >
+                    Run Live Automation
+                  </Button>
+                </div>
+                <p className="text-slate-300 text-xs">Triggers LIVE MODE in the Replit Python runner</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
