@@ -1,0 +1,142 @@
+ here’s a complete wiring blueprint for everything you mentioned, designed specifically for your Replit-based backend. This covers how to wire up:
+
+🔊 Live Voice Command visual feedback
+
+📈 Analytics Report Generator modal
+
+📅 Smart Calendar uploads + Google Calendar sync
+
+🧠 Voice Pipeline live metrics
+
+🧼 General UI enhancements (tooltips, loading states, live banners)
+
+✅ 1. 🔊 LIVE VOICE COMMAND — “Speak Now” + Waveform
+🔧 Backend
+Add a new mic_status variable in memory (or Redis/DB):
+
+python
+Copy
+Edit
+mic_status = "idle"  # options: idle, listening, transcribing
+When “Start Voice Command” is triggered:
+
+Set mic_status = "listening"
+
+When transcription is complete, set mic_status = "idle"
+
+📡 API Endpoint
+http
+Copy
+Edit
+GET /voice-status
+Returns:
+
+json
+Copy
+Edit
+{ "mic_status": "listening" }
+🎨 Frontend
+If mic_status == "listening", display:
+
+🔊 “🎙️ Speak now...”
+
+🔁 Animated waveform (GIF or canvas animation)
+
+❌ Cancel button (sends POST /stop-listening)
+
+✅ 2. 📈 GENERATE ANALYTICS REPORT — Modal with Options
+🔧 Backend
+Add endpoint:
+
+http
+Copy
+Edit
+POST /generate-report
+Payload Example:
+
+json
+Copy
+Edit
+{
+  "type": "daily",
+  "sections": ["botalytics", "smartspend"],
+  "format": "pdf"
+}
+Backend uses Jinja2 + WeasyPrint (or pdfkit) to build PDF
+
+Returns file URL or file stream
+
+🎨 Frontend Modal
+Triggered on “Generate Report” button click
+
+Dropdowns:
+
+Report Type (daily, weekly, monthly)
+
+Sections (checkboxes)
+
+Format (PDF, CSV)
+
+Button: “📤 Generate + Download”
+
+✅ 3. 📅 SMART CALENDAR UPLOAD + GOOGLE CALENDAR SYNC
+🔧 Backend
+Upload .ICS or .CSV:
+http
+Copy
+Edit
+POST /upload-calendar
+Parse calendar file
+
+Extract events (title, date, time, description)
+
+Save to Airtable → 📅 Calendar Bookings table
+
+Google Calendar Sync:
+Add support for OAuth 2.0 or service account
+
+Scheduled job pulls events via:
+
+http
+Copy
+Edit
+GET https://www.googleapis.com/calendar/v3/calendars/{calendarId}/events
+🎨 Frontend:
+📁 File upload for ICS/CSV
+
+Optional Google OAuth connect (or just sync from service account)
+
+Show events for next 7 days (auto-refresh daily)
+
+✅ 4. 📞 VOICE PIPELINE — Live Banner + Stats
+🔧 Backend:
+Track and return live status of outbound calling:
+
+http
+Copy
+Edit
+GET /pipeline-status
+Returns:
+
+json
+Copy
+Edit
+{
+  "status": "active",
+  "calls_today": 21,
+  "in_progress": 3,
+  "completed": 18
+}
+Data source: 📞 Voice Call Log Airtable
+
+Filter by Call Date = TODAY()
+
+Count status = In Progress and Completed
+
+🎨 Frontend:
+When status = active, show green banner:
+
+📞 Pipeline Active — 3 Calls in Progress | 18 Completed Today
+
+Update every 30–60 seconds via polling
+
