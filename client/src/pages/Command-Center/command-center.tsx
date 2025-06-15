@@ -2911,11 +2911,11 @@ export default function CommandCenter() {
               </Button>
               <Button
                 onClick={() => setActiveTab('admin-tools')}
-                className="bg-red-600 hover:bg-red-700 text-white flex items-center"
+                className="bg-red-600 hover:bg-red-700 text-white flex items-center px-4 py-2 font-semibold shadow-lg"
                 title="Admin Tools - Administrative controls and system management"
               >
                 <Shield className="w-4 h-4 mr-2" />
-                Admin
+                Admin Tools
               </Button>
             </div>
           </div>
