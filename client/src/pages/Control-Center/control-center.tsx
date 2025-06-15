@@ -31,6 +31,7 @@ import {
   Crown,
   CheckCircle,
   AlertTriangle,
+  Package,
   Lock,
   Unlock,
   Search,
