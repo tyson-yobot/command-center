@@ -1145,7 +1145,7 @@ export default function SystemControls() {
                 Run System Diagnostics
               </Button>
               <p className="text-white/60 text-xs text-center">
-                Toggle-aware execution: {systemMode === 'test' ? 'Test Mode' : 'Live Mode'}
+                Toggle-aware execution: {currentSystemMode === 'test' ? 'Test Mode' : 'Live Mode'}
               </p>
             </CardContent>
           </Card>
@@ -1156,7 +1156,7 @@ export default function SystemControls() {
 
   // Helper function for system diagnostics
   const handleSystemDiagnostics = () => {
-    const route = systemMode === 'test' ? '/test' : '/';
+    const route = currentSystemMode === 'test' ? '/test' : '/';
     window.open(route, '_blank');
   };
 
