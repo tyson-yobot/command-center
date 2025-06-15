@@ -1,22 +1,41 @@
 import axios from 'axios';
 
 // Test Airtable connection to verify credentials and base access
+function extractValidApiKey(rawKey: string): string {
+  if (!rawKey) return '';
+  
+  // Extract the actual API key (starts with 'pat' for personal access tokens)
+  const patMatch = rawKey.match(/pat[a-zA-Z0-9.]+/);
+  if (patMatch) {
+    return patMatch[0];
+  }
+  
+  // Fallback: take first 100 characters and clean
+  return rawKey.substring(0, 100).trim().replace(/[\r\n\t"'\s]/g, '');
+}
+
 export async function testAirtableConnection(): Promise<{
   success: boolean;
   error?: string;
   bases?: any[];
 }> {
   try {
-    const apiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
+    const rawApiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
     
-    if (!apiKey) {
+    if (!rawApiKey) {
       return { success: false, error: 'No Airtable API key found' };
     }
 
+    const cleanedApiKey = extractValidApiKey(rawApiKey);
+    
+    if (!cleanedApiKey) {
+      return { success: false, error: 'Invalid API key format' };
+    }
+    
     // Test basic connection by listing bases
     const response = await axios.get('https://api.airtable.com/v0/meta/bases', {
       headers: {
-        'Authorization': `Bearer ${apiKey.trim()}`,
+        'Authorization': `Bearer ${cleanedApiKey}`,
         'Content-Type': 'application/json'
       }
     });
@@ -43,10 +62,13 @@ export async function testBaseAccess(baseId: string, tableName: string): Promise
   try {
     const apiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
     
+    // Clean the API key thoroughly
+    const cleanedApiKey = apiKey.trim().replace(/[\r\n\t"']/g, '');
+    
     // Get base schema
     const response = await axios.get(`https://api.airtable.com/v0/meta/bases/${baseId}/tables`, {
       headers: {
-        'Authorization': `Bearer ${apiKey.trim()}`,
+        'Authorization': `Bearer ${cleanedApiKey}`,
         'Content-Type': 'application/json'
       }
     });

@@ -39,12 +39,12 @@ class AirtableLeadsService {
   private apiKey: string;
 
   constructor() {
-    this.apiKey = process.env.AIRTABLE_VALID_TOKEN || process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
+    this.apiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
     if (!this.apiKey) {
       throw new Error('Airtable API key not configured');
     }
-    // Clean the API key of any whitespace or invalid characters
-    this.apiKey = this.apiKey.trim().replace(/[\r\n\t]/g, '');
+    // Clean the API key of any whitespace or invalid characters including quotes
+    this.apiKey = this.apiKey.trim().replace(/[\r\n\t"']/g, '');
   }
 
   private getHeaders() {
