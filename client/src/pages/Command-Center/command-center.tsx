@@ -63,7 +63,8 @@ import {
   Plus,
   Play,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Shield
 } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -2844,16 +2845,7 @@ export default function CommandCenter() {
               <Bot className="w-14 h-14 mr-1 -mt-2 text-blue-400" style={{ display: 'none' }} />
               YoBot<sup className="text-lg">®</sup> Command Center Dashboard
             </h1>
-            {!demoMode && (
-              <Button 
-                onClick={startDemo}
-                variant="outline" 
-                className="ml-4 border-blue-400 text-blue-400 hover:bg-blue-600/20"
-              >
-                <Bot className="w-4 h-4 mr-2" />
-                Start Demo
-              </Button>
-            )}
+
           </div>
           <p className="text-slate-300 text-lg">
             Your Complete AI Automation Control Panel {selectedTier !== 'All' && `(${selectedTier} Tier)`}
@@ -2918,14 +2910,13 @@ export default function CommandCenter() {
                 <HelpCircle className="w-3 h-3 ml-1 text-green-300 opacity-70" />
               </Button>
               <Button
-                onClick={handleResetDemo}
+                onClick={() => setActiveTab('admin-tools')}
                 variant="outline"
-                className="border-purple-400 text-purple-400 hover:bg-purple-600/20 flex items-center"
-                title="Reset Demo - Clear all demo data and logs to start fresh presentation"
+                className="border-red-400 text-red-400 hover:bg-red-600/20 flex items-center"
+                title="Admin Tools - Administrative controls and system management"
               >
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset Demo
-                <HelpCircle className="w-3 h-3 ml-1 text-purple-300 opacity-70" />
+                <Shield className="w-4 h-4 mr-2" />
+                Admin
               </Button>
             </div>
           </div>
