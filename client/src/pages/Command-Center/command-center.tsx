@@ -5594,58 +5594,370 @@ export default function CommandCenter() {
                 <label className="block text-white text-sm font-medium mb-2">Pre-built Templates</label>
                 <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500">
                   <option value="">Select template...</option>
-                  <option value="followup">Follow-up reminder</option>
+                  <option value="follow-up">Follow-up reminder</option>
                   <option value="appointment">Appointment confirmation</option>
-                  <option value="thanks">Thank you message</option>
+                  <option value="welcome">Welcome message</option>
                   <option value="custom">Custom message</option>
                 </select>
               </div>
               
               <div>
-                <label className="block text-white text-sm font-medium mb-2">Message (max 160 chars)</label>
+                <label className="block text-white text-sm font-medium mb-2">Message</label>
                 <textarea 
                   className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500 h-24 resize-none"
-                  placeholder="Type your message..."
-                  maxLength={160}
+                  placeholder="Type your SMS message..."
                 />
-                <div className="text-right text-gray-400 text-xs mt-1">0/160 characters</div>
               </div>
               
               <div className="flex items-center gap-3">
-                <input type="radio" id="send-now" name="timing" className="rounded" defaultChecked />
-                <label htmlFor="send-now" className="text-white text-sm">Send now</label>
-                <input type="radio" id="schedule-later" name="timing" className="rounded ml-4" />
-                <label htmlFor="schedule-later" className="text-white text-sm">Schedule later</label>
+                <input type="checkbox" id="sms-schedule" className="rounded" />
+                <label htmlFor="sms-schedule" className="text-white text-sm">Schedule for later</label>
               </div>
               
               <div className="flex gap-3 pt-4">
                 <Button
                   onClick={async () => {
                     try {
-                      const response = await fetch('/api/sms-send', {
+                      const response = await fetch('/api/send-sms', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                           recipient: 'test-number',
                           message: 'Test SMS message',
-                          sendNow: true
+                          scheduled: false
                         })
                       });
                       
                       if (response.ok) {
-                        setToast({ title: "SMS Sent", description: "Message sent successfully via Twilio" });
+                        setToast({ title: "SMS Sent", description: "Message delivered successfully" });
                         setShowSMSModal(false);
                       }
                     } catch (error) {
                       setToast({ title: "Error", description: "Failed to send SMS", variant: "destructive" });
                     }
                   }}
-                  className="flex-1 bg-[#0d82da] hover:bg-[#0b6bb8] text-white font-semibold py-3 px-6 rounded-lg"
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg"
                 >
                   Send SMS
                 </Button>
                 <Button
                   onClick={() => setShowSMSModal(false)}
+                  variant="ghost"
+                  className="flex-1 bg-transparent hover:bg-white/10 text-white py-3 px-6 rounded-lg border border-gray-600"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Support Ticket Modal */}
+      {showSupportTicketModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-[520px] bg-[#1a1a1a] rounded-xl border border-green-400/50 p-6 animate-in fade-in-0 duration-300">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-white">Create Support Ticket</h2>
+              <Button
+                onClick={() => setShowSupportTicketModal(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10 p-1"
+              >
+                ✕
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Client Email</label>
+                <input 
+                  type="email"
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500"
+                  placeholder="client@company.com"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Subject</label>
+                <input 
+                  type="text"
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500"
+                  placeholder="Brief description of the issue"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Urgency Level</label>
+                <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500">
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                  <option value="Critical">Critical</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Issue Description</label>
+                <textarea 
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500 h-32 resize-none"
+                  placeholder="Detailed description of the issue..."
+                />
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <input type="checkbox" id="urgent-escalation" className="rounded" />
+                <label htmlFor="urgent-escalation" className="text-white text-sm">Requires immediate escalation</label>
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={async () => {
+                    try {
+                      const response = await fetch('/api/support-ticket', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          clientEmail: 'test@client.com',
+                          subject: 'Test Support Ticket',
+                          urgency: 'Medium',
+                          body: 'Test ticket description'
+                        })
+                      });
+                      
+                      if (response.ok) {
+                        setToast({ title: "Ticket Created", description: "Support ticket submitted successfully" });
+                        setShowSupportTicketModal(false);
+                      }
+                    } catch (error) {
+                      setToast({ title: "Error", description: "Failed to create ticket", variant: "destructive" });
+                    }
+                  }}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg"
+                >
+                  Submit Ticket
+                </Button>
+                <Button
+                  onClick={() => setShowSupportTicketModal(false)}
+                  variant="ghost"
+                  className="flex-1 bg-transparent hover:bg-white/10 text-white py-3 px-6 rounded-lg border border-gray-600"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sales Order Automation Modal */}
+      {showSalesOrderProcessor && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-[600px] bg-[#1a1a1a] rounded-xl border border-purple-400/50 p-6 animate-in fade-in-0 duration-300">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-white">Automate Sales Order</h2>
+              <Button
+                onClick={() => setShowSalesOrderProcessor(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10 p-1"
+              >
+                ✕
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-white text-sm font-medium mb-2">Client Name</label>
+                  <input 
+                    type="text"
+                    className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-purple-500"
+                    placeholder="Enter client name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-white text-sm font-medium mb-2">Client Email</label>
+                  <input 
+                    type="email"
+                    className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-purple-500"
+                    placeholder="client@company.com"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Bot Package</label>
+                <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-purple-500">
+                  <option value="starter">Starter Bot Package - $997/month</option>
+                  <option value="professional">Professional Bot Package - $1,997/month</option>
+                  <option value="enterprise">Enterprise Bot Package - $4,997/month</option>
+                  <option value="custom">Custom Enterprise Solution</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Add-Ons</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <label className="flex items-center text-white text-sm">
+                    <input type="checkbox" className="mr-2 rounded" />
+                    Voice AI Module (+$497/month)
+                  </label>
+                  <label className="flex items-center text-white text-sm">
+                    <input type="checkbox" className="mr-2 rounded" />
+                    SMS Automation (+$297/month)
+                  </label>
+                  <label className="flex items-center text-white text-sm">
+                    <input type="checkbox" className="mr-2 rounded" />
+                    Advanced Analytics (+$197/month)
+                  </label>
+                  <label className="flex items-center text-white text-sm">
+                    <input type="checkbox" className="mr-2 rounded" />
+                    Custom Integrations (+$997/month)
+                  </label>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Payment Status</label>
+                <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-purple-500">
+                  <option value="pending">Pending Payment</option>
+                  <option value="paid">Paid</option>
+                  <option value="partial">Partial Payment</option>
+                  <option value="failed">Payment Failed</option>
+                </select>
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={async () => {
+                    try {
+                      const response = await fetch('/api/sales-order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          clientName: 'Test Client',
+                          clientEmail: 'test@client.com',
+                          botPackage: 'Professional Bot Package',
+                          addOns: ['Voice AI Module'],
+                          total: 2494,
+                          status: 'Processing',
+                          paymentStatus: 'Pending Payment'
+                        })
+                      });
+                      
+                      if (response.ok) {
+                        setToast({ title: "Order Created", description: "Sales order automated successfully" });
+                        setShowSalesOrderProcessor(false);
+                      }
+                    } catch (error) {
+                      setToast({ title: "Error", description: "Failed to process order", variant: "destructive" });
+                    }
+                  }}
+                  className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg"
+                >
+                  Process Order
+                </Button>
+                <Button
+                  onClick={() => setShowSalesOrderProcessor(false)}
+                  variant="ghost"
+                  className="flex-1 bg-transparent hover:bg-white/10 text-white py-3 px-6 rounded-lg border border-gray-600"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Manual Call Modal */}
+      {showCreateVoiceCallModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-[500px] bg-[#1a1a1a] rounded-xl border border-orange-400/50 p-6 animate-in fade-in-0 duration-300">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-white">Start Manual Call</h2>
+              <Button
+                onClick={() => setShowCreateVoiceCallModal(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10 p-1"
+              >
+                ✕
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Contact Name</label>
+                <input 
+                  type="text"
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-orange-500"
+                  placeholder="Enter contact name"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Phone Number</label>
+                <input 
+                  type="tel"
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-orange-500"
+                  placeholder="+1 (555) 123-4567"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Call Purpose</label>
+                <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-orange-500">
+                  <option value="sales">Sales Call</option>
+                  <option value="follow-up">Follow-up Call</option>
+                  <option value="support">Support Call</option>
+                  <option value="demo">Product Demo</option>
+                  <option value="consultation">Consultation</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">Call Script/Notes</label>
+                <textarea 
+                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-orange-500 h-24 resize-none"
+                  placeholder="Notes or talking points for the call..."
+                />
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <input type="checkbox" id="record-call" className="rounded" />
+                <label htmlFor="record-call" className="text-white text-sm">Record this call</label>
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={async () => {
+                    try {
+                      const response = await fetch('/api/manual-call', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          contactName: 'Test Contact',
+                          phoneNumber: '+1555123467',
+                          callPurpose: 'Sales Call',
+                          notes: 'Manual call test',
+                          recordCall: true
+                        })
+                      });
+                      
+                      if (response.ok) {
+                        setToast({ title: "Call Started", description: "Manual call initiated successfully" });
+                        setShowCreateVoiceCallModal(false);
+                      }
+                    } catch (error) {
+                      setToast({ title: "Error", description: "Failed to start call", variant: "destructive" });
+                    }
+                  }}
+                  className="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-6 rounded-lg"
+                >
+                  Start Call
+                </Button>
+                <Button
+                  onClick={() => setShowCreateVoiceCallModal(false)}
                   variant="ghost"
                   className="flex-1 bg-transparent hover:bg-white/10 text-white py-3 px-6 rounded-lg border border-gray-600"
                 >
