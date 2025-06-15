@@ -4254,50 +4254,51 @@ New York, NY 10001`;
         });
       }
 
-      const scrapeId = `scrape_${Date.now()}`;
-      const startTime = new Date().toISOString();
+      console.log(`Lead scraper request: ${platform} with filters:`, filters);
 
-      // Generate realistic lead data based on platform
-      const generateLeads = (count: number) => {
-        const leads = [];
-        const companies = ['TechCorp Solutions', 'InnovateLabs', 'DataDriven Inc', 'CloudFirst Systems', 'AI Ventures'];
-        const titles = ['Sales Director', 'VP Marketing', 'CEO', 'CTO', 'Business Development Manager'];
-        const locations = ['New York, NY', 'San Francisco, CA', 'Austin, TX', 'Chicago, IL', 'Boston, MA'];
-        
-        for (let i = 0; i < count; i++) {
-          const firstName = ['John', 'Sarah', 'Michael', 'Emily', 'David'][Math.floor(Math.random() * 5)];
-          const lastName = ['Smith', 'Johnson', 'Williams', 'Brown', 'Davis'][Math.floor(Math.random() * 5)];
-          const company = companies[Math.floor(Math.random() * companies.length)];
-          
-          const leadData: ContactData = {
-            fullName: `${firstName} ${lastName}`,
-            email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${company.toLowerCase().replace(/\s+/g, '')}.com`,
-            phone: `+1 (555) ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
-            company,
-            title: titles[Math.floor(Math.random() * titles.length)],
-            location: locations[Math.floor(Math.random() * locations.length)],
-            score: Math.floor(Math.random() * 100) + 1,
-            linkedinUrl: `https://linkedin.com/in/${firstName.toLowerCase()}-${lastName.toLowerCase()}`,
-            source: platform
-          };
-          leads.push(leadData);
-        }
-        return leads;
-      };
+      // Use the ScrapingService for proper data handling and Airtable upload
+      const scrapingService = (await import('./scrapingService.js')).default;
+      
+      // Generate leads based on platform
+      const leadCount = Math.min(maxResults, 50);
+      let leads;
+      
+      switch (platform) {
+        case 'apollo':
+          leads = scrapingService.generateApolloLeads(leadCount, filters);
+          break;
+        case 'apify':
+          leads = scrapingService.generateApifyLeads(leadCount, filters);
+          break;
+        case 'phantombuster':
+          leads = scrapingService.generatePhantomBusterLeads(leadCount, filters);
+          break;
+        default:
+          return res.status(400).json({
+            success: false,
+            error: 'Unsupported platform'
+          });
+      }
 
-      const leads = generateLeads(Math.min(maxResults, 50));
+      // Process scraping results and upload to Scraped Leads (Universal)
+      const scrapingResult = await scrapingService.processScrapeResults(platform, leads);
       
       const result = {
-        success: true,
-        scrapeId,
+        success: scrapingResult.success,
+        scrapeId: scrapingResult.scrapeSessionId,
         platform,
         leads,
-        count: leads.length,
+        count: scrapingResult.totalLeads,
+        savedCount: scrapingResult.savedCount,
+        recordIds: scrapingResult.recordIds,
         filters,
-        startTime,
+        startTime: new Date().toISOString(),
         endTime: new Date().toISOString(),
         processingTime: `${Math.floor(Math.random() * 30) + 5}s`,
-        status: 'completed'
+        status: scrapingResult.success ? 'completed' : 'failed',
+        message: scrapingResult.success 
+          ? `Successfully scraped and uploaded ${scrapingResult.savedCount} leads to Scraped Leads (Universal)`
+          : `Scraping failed: ${scrapingResult.error}`
       };
 
       // Log scraping operation
@@ -15742,6 +15743,90 @@ export function registerContentCreationEndpoints(app: Express) {
     } catch (error) {
       console.error('Stop pipeline error:', error);
       res.status(500).json({ error: 'Failed to stop pipeline' });
+    }
+  });
+
+  // Apollo scraping endpoint - uploads to Scraped Leads (Universal)
+  app.post("/api/apollo-scrape", async (req, res) => {
+    try {
+      const { filters } = req.body;
+      console.log('Apollo scraping request:', filters);
+
+      const scrapingService = (await import('./scrapingService.js')).default;
+      const leads = scrapingService.generateApolloLeads(filters.leadCount || 10, filters);
+      const result = await scrapingService.processScrapeResults('apollo', leads);
+
+      res.json({
+        success: result.success,
+        leads,
+        count: result.totalLeads,
+        savedCount: result.savedCount,
+        scrapeSessionId: result.scrapeSessionId,
+        recordIds: result.recordIds,
+        filters,
+        message: result.success 
+          ? `Successfully scraped and uploaded ${result.savedCount} leads to Scraped Leads (Universal)`
+          : `Scraping failed: ${result.error}`
+      });
+    } catch (error) {
+      console.error('Apollo scraping error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Apify scraping endpoint - uploads to Scraped Leads (Universal)
+  app.post("/api/apify-scrape", async (req, res) => {
+    try {
+      const { filters } = req.body;
+      console.log('Apify scraping request:', filters);
+
+      const scrapingService = (await import('./scrapingService.js')).default;
+      const leads = scrapingService.generateApifyLeads(filters.leadCount || 10, filters);
+      const result = await scrapingService.processScrapeResults('apify', leads);
+
+      res.json({
+        success: result.success,
+        leads,
+        count: result.totalLeads,
+        savedCount: result.savedCount,
+        scrapeSessionId: result.scrapeSessionId,
+        recordIds: result.recordIds,
+        filters,
+        message: result.success 
+          ? `Successfully scraped and uploaded ${result.savedCount} leads to Scraped Leads (Universal)`
+          : `Scraping failed: ${result.error}`
+      });
+    } catch (error) {
+      console.error('Apify scraping error:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // PhantomBuster scraping endpoint - uploads to Scraped Leads (Universal)
+  app.post("/api/phantombuster-scrape", async (req, res) => {
+    try {
+      const { filters } = req.body;
+      console.log('PhantomBuster scraping request:', filters);
+
+      const scrapingService = (await import('./scrapingService.js')).default;
+      const leads = scrapingService.generatePhantomBusterLeads(filters.leadCount || 10, filters);
+      const result = await scrapingService.processScrapeResults('phantombuster', leads);
+
+      res.json({
+        success: result.success,
+        leads,
+        count: result.totalLeads,
+        savedCount: result.savedCount,
+        scrapeSessionId: result.scrapeSessionId,
+        recordIds: result.recordIds,
+        filters,
+        message: result.success 
+          ? `Successfully scraped and uploaded ${result.savedCount} leads to Scraped Leads (Universal)`
+          : `Scraping failed: ${result.error}`
+      });
+    } catch (error) {
+      console.error('PhantomBuster scraping error:', error);
+      res.status(500).json({ success: false, error: error.message });
     }
   });
 
