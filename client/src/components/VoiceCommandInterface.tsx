@@ -317,12 +317,45 @@ export function VoiceCommandInterface({
             )}
           </div>
 
+          {/* Enhanced Voice Status Display */}
+          {micStatus === 'listening' && (
+            <div className="text-center mb-4">
+              <div className="flex items-center justify-center space-x-2 mb-3">
+                <Mic className="w-5 h-5 text-green-400 animate-pulse" />
+                <span className="text-green-400 font-medium">🎙️ Speak Now...</span>
+              </div>
+              
+              {/* Animated Voice Waveform */}
+              <div className="flex items-center justify-center space-x-1 mb-3">
+                {[1,2,3,4,5,6,7,8,9,10].map(i => (
+                  <div 
+                    key={i} 
+                    className="w-1 bg-green-400 rounded-full animate-pulse transition-all duration-150" 
+                    style={{
+                      height: `${Math.random() * 16 + 8}px`,
+                      animationDelay: `${i * 80}ms`,
+                      animationDuration: `${Math.random() * 0.5 + 0.5}s`
+                    }}
+                  />
+                ))}
+              </div>
+              
+              {/* Real-time Transcript Preview */}
+              {realTimeTranscript && (
+                <div className="bg-slate-800/50 border border-green-400/30 rounded-lg p-3 mb-3">
+                  <div className="text-xs text-slate-400 mb-1">Real-time transcript:</div>
+                  <div className="text-green-300 text-sm">"{realTimeTranscript}"</div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Control Buttons */}
           <div className="flex justify-center space-x-3">
             {micStatus === 'idle' && (
               <Button
                 onClick={startListening}
-                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2"
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 shadow-lg"
                 title="Start Voice Commands"
               >
                 <Mic className="w-4 h-4 mr-2" />
@@ -334,7 +367,7 @@ export function VoiceCommandInterface({
               <>
                 <Button
                   onClick={stopListening}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 shadow-lg"
                   title="Stop and Process"
                 >
                   <MicOff className="w-4 h-4 mr-2" />
@@ -342,10 +375,11 @@ export function VoiceCommandInterface({
                 </Button>
                 <Button
                   onClick={cancelListening}
-                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2"
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 shadow-lg"
                   title="Cancel Voice Command"
                 >
                   <X className="w-4 h-4" />
+                  Cancel
                 </Button>
               </>
             )}
@@ -353,9 +387,12 @@ export function VoiceCommandInterface({
             {micStatus === 'processing' && (
               <Button
                 disabled
-                className="bg-yellow-600 text-white px-6 py-2 opacity-75"
+                className="bg-yellow-600 text-white px-6 py-2 opacity-75 shadow-lg"
               >
-                Processing...
+                <div className="flex items-center">
+                  <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Processing...
+                </div>
               </Button>
             )}
           </div>
