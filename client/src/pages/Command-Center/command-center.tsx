@@ -2966,10 +2966,17 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleStopPipelineCalls}
-                    className="bg-red-600 hover:bg-red-700 text-white flex items-center justify-start p-3 border border-red-500"
+                    className="bg-red-600 hover:bg-red-700 text-white flex items-center justify-between p-3 border border-red-500"
                   >
-                    <span className="text-xl mr-3">🛑</span>
-                    <span>End Pipeline Calls</span>
+                    <div className="flex items-center">
+                      <span className="text-xl mr-3">🛑</span>
+                      <span>End Pipeline Calls</span>
+                    </div>
+                    {/* Emergency indicator for terminate action */}
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-red-300 rounded-full animate-pulse"></div>
+                      <span className="text-red-200 text-xs">EMERGENCY</span>
+                    </div>
                   </Button>
                   
                   <Button
@@ -4246,10 +4253,16 @@ export default function CommandCenter() {
                     />
                     <Button 
                       onClick={startQueryVoiceRecognition}
-                      className={`absolute right-2 top-2 p-2 ${userInitiatedVoice && isListening ? 'bg-red-500 animate-pulse' : 'bg-red-600 hover:bg-red-700'}`}
+                      className={`absolute right-2 top-2 p-2 flex items-center space-x-1 ${userInitiatedVoice && isListening ? 'bg-green-500 animate-pulse' : 'bg-green-600 hover:bg-green-700'}`}
                     >
                       <Mic className="w-4 h-4" />
-                      {userInitiatedVoice && isListening && <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>}
+                      {userInitiatedVoice && isListening && (
+                        <div className="flex items-center space-x-0.5 ml-1">
+                          {[1,2,3].map(i => (
+                            <div key={i} className="w-0.5 bg-green-300 rounded animate-pulse" style={{height: `${Math.random() * 6 + 3}px`, animationDelay: `${i * 100}ms`}}></div>
+                          ))}
+                        </div>
+                      )}
                     </Button>
                   </div>
                   
