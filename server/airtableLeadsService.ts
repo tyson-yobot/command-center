@@ -140,6 +140,114 @@ class AirtableLeadsService {
     }
   }
 
+  async createScrapedLead(leadData: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    company?: string;
+    website?: string;
+    title?: string;
+    location?: string;
+    leadSource?: string;
+    platform?: string;
+    sourceCampaignId?: string;
+    leadOwner?: string;
+  }): Promise<string> {
+    try {
+      const url = `https://api.airtable.com/v0/${this.baseId}/${encodeURIComponent(this.tableName)}`;
+      
+      const createData = {
+        fields: {
+          '🧑‍💼 Name': leadData.name || '',
+          '✉️ Email': leadData.email || '',
+          '📞 Phone': leadData.phone || '',
+          '🏢 Company': leadData.company || '',
+          '🔗 Website': leadData.website || '',
+          '💼 Title': leadData.title || '',
+          '📍 Location': leadData.location || '',
+          '🛠️ Lead Source': leadData.leadSource || 'Scraping Tool',
+          '🌐 Platform': leadData.platform || 'Unknown',
+          '🆔 Source Campaign ID': leadData.sourceCampaignId || '',
+          '👤 Lead Owner': leadData.leadOwner || 'YoBot System',
+          '📞 Call Status': 'Not Called',
+          '✅ Synced to HubSpot?': false,
+          '🤖 Synced to YoBot Queue?': false,
+          '📈 Enrichment Score': 0,
+          '📅 Date Added': new Date().toISOString().split('T')[0],
+          '# Call Attempts': 0,
+          '🚨 Slack Alert Sent': false,
+          '🧠 Escalated': false,
+          '🚦 Status': 'New Lead'
+        }
+      };
+
+      const response = await axios.post(url, createData, {
+        headers: this.getHeaders()
+      });
+
+      console.log(`📥 Created new lead in Scraped Leads (Universal): ${leadData.name || 'Unknown'}`);
+      return response.data.id;
+    } catch (error: any) {
+      console.error('Failed to create scraped lead:', error.response?.data || error.message);
+      throw new Error(`Airtable create failed: ${error.response?.data?.error?.message || error.message}`);
+    }
+  }
+
+  async bulkCreateScrapedLeads(leadsData: Array<{
+    name?: string;
+    email?: string;
+    phone?: string;
+    company?: string;
+    website?: string;
+    title?: string;
+    location?: string;
+    leadSource?: string;
+    platform?: string;
+    sourceCampaignId?: string;
+    leadOwner?: string;
+  }>): Promise<string[]> {
+    try {
+      const url = `https://api.airtable.com/v0/${this.baseId}/${encodeURIComponent(this.tableName)}`;
+      
+      const createData = {
+        records: leadsData.map(leadData => ({
+          fields: {
+            '🧑‍💼 Name': leadData.name || '',
+            '✉️ Email': leadData.email || '',
+            '📞 Phone': leadData.phone || '',
+            '🏢 Company': leadData.company || '',
+            '🔗 Website': leadData.website || '',
+            '💼 Title': leadData.title || '',
+            '📍 Location': leadData.location || '',
+            '🛠️ Lead Source': leadData.leadSource || 'Scraping Tool',
+            '🌐 Platform': leadData.platform || 'Unknown',
+            '🆔 Source Campaign ID': leadData.sourceCampaignId || '',
+            '👤 Lead Owner': leadData.leadOwner || 'YoBot System',
+            '📞 Call Status': 'Not Called',
+            '✅ Synced to HubSpot?': false,
+            '🤖 Synced to YoBot Queue?': false,
+            '📈 Enrichment Score': 0,
+            '📅 Date Added': new Date().toISOString().split('T')[0],
+            '# Call Attempts': 0,
+            '🚨 Slack Alert Sent': false,
+            '🧠 Escalated': false,
+            '🚦 Status': 'New Lead'
+          }
+        }))
+      };
+
+      const response = await axios.post(url, createData, {
+        headers: this.getHeaders()
+      });
+
+      console.log(`📥 Created ${response.data.records.length} new leads in Scraped Leads (Universal)`);
+      return response.data.records.map((record: any) => record.id);
+    } catch (error: any) {
+      console.error('Failed to bulk create scraped leads:', error.response?.data || error.message);
+      throw new Error(`Airtable bulk create failed: ${error.response?.data?.error?.message || error.message}`);
+    }
+  }
+
   formatLeadsForPipeline(leads: ScrapedLead[]) {
     return leads.map(lead => ({
       recordId: lead.id,
