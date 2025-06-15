@@ -1,0 +1,92 @@
+YoBot® Command Center – Final Control Panel Structuring Request
+Hi team — we’re ready to clean up and finalize the layout of the Control Panel UI to make it user-friendly, scalable, and aligned to product logic.
+
+✅ Primary Goals:
+Organize toggles by Package vs Add-On
+
+Reflect exact module names from our pricing sheet
+
+Enable clear preset support for each Bot Package (Starter, Pro, Enterprise, Platinum)
+
+Remove or reclassify anything that is not tied to a system module
+
+📦 1. Core Packages = Preset Toggle Groups
+These 4 presets should be available as top-right dropdowns or quick-preset buttons, which when selected, activate only the correct modules:
+
+Starter Bot
+
+Pro Bot
+
+Enterprise Bot
+
+Platinum Bot
+
+Each preset activates modules included in that tier. The full matrix is outlined at the end of this message.
+
+🧩 2. Add-On Modules = Individual Toggles (Under Proper Categories)
+These should be set as individually toggled tiles, separate from the core packages, organized under logical sections like:
+
+⚙️ Core System Enhancements:
+SmartSpend™ Dashboard
+
+QuickBooks Online Sync
+
+Command Center Pro
+
+Botalytics ROI Dashboard
+
+Predictive Analytics Engine
+
+🤖 AI & Intelligence:
+ChatGPT Booster
+
+A/B Script Testing
+
+Custom Personality Pack
+
+Automated Content Generation Studio
+
+Conversational Intelligence Suite
+
+Customer Journey Orchestration
+
+Voice Pattern Recognition & Analysis
+
+Competitive Intelligence Radar
+
+📢 Communication & Conversion:
+Slack Notifications
+
+Smart Quoting Engine
+
+Live Transfer Routing
+
+Booking Tool Setup
+
+📡 Lead & Data Tools:
+Lead Generation & Scraping Tools
+
+Advanced Data Integration Hub
+
+🧼 3. Clean Up or Reclassify These UI Elements:
+From the current image:
+
+❌ Remove: “Scenario Control,” “Error Monitoring,” and any tile that does not tie to a module or system in the pricing sheet.
+
+❌ Remove: Any legacy or unclear tiles (e.g., “PDF Generation” not tied to Smart Quoting)
+
+🌀 Reclassify: “PDF Processor” and “Document Generation” should be grouped under “File Management Tools” only if tied to Smart Quoting or Content Gen.
+
+🧪 Move: Diagnostics execution now lives under ⚙️ Runtime Control, already toggle-aware.
+
+🧪 4. System-Wide Changes
+Keep current tile styling
+
+Use exact emoji naming and capitalization from pricing doc
+
+Enable toggle-based state save
+
+All tiles must support Admin/Agent/Viewer role visibility restrictions
+
+Add a “View Only” mode for client dashboards (Viewer Seat logic)
+
