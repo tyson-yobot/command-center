@@ -187,6 +187,10 @@ export default function CommandCenter() {
   const [memoryActivityLog, setMemoryActivityLog] = useState([]);
   const [voiceActive, setVoiceActive] = useState(false);
   const [showVoiceRecordings, setShowVoiceRecordings] = useState(false);
+  const [showSupportTicketModal, setShowSupportTicketModal] = useState(false);
+  const [showFollowUpModal, setShowFollowUpModal] = useState(false);
+  const [showSMSModal, setShowSMSModal] = useState(false);
+  const [showCreateVoiceCallModal, setShowCreateVoiceCallModal] = useState(false);
   const { toast } = useToast();
 
   // Test statistics for Live Integration Test Results
@@ -269,7 +273,6 @@ export default function CommandCenter() {
   const [editingRecording, setEditingRecording] = useState<any>(null);
   const [showLeadScraping, setShowLeadScraping] = useState(false);
   const [activeModule, setActiveModule] = useState<string | null>(null);
-  const [showCreateVoiceCallModal, setShowCreateVoiceCallModal] = useState(false);
   
   // Replace all setToast calls with toast
   const setToast = (config: any) => toast(config);
@@ -292,9 +295,6 @@ export default function CommandCenter() {
   
   // Core Automation Modal States
   const [showBookingModal, setShowBookingModal] = useState(false);
-  const [showSupportTicketModal, setShowSupportTicketModal] = useState(false);
-  const [showFollowUpModal, setShowFollowUpModal] = useState(false);
-  const [showSMSModal, setShowSMSModal] = useState(false);
   const [showTicketHistory, setShowTicketHistory] = useState(false);
   const [newTicketSubject, setNewTicketSubject] = useState('');
   const [newTicketDescription, setNewTicketDescription] = useState('');
@@ -471,10 +471,10 @@ export default function CommandCenter() {
       setVoiceStatus('Creating sales order...');
       
       const orderData = {
-        botPackage: 'Basic Bot Package',
+        botPackage: 'YoBot Standard Package',
         addOns: ['SMS Integration', 'Voice Calling'],
-        clientEmail: 'client@example.com',
-        clientName: 'Demo Client',
+        clientEmail: 'demo@yobot.com',
+        clientName: 'YoBot Demo Client',
         total: 2500,
         paymentStatus: 'Pending'
       };
