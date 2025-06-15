@@ -6446,6 +6446,92 @@ Provide helpful, technical responses with actionable solutions. Always suggest s
     }
   });
 
+  // Run Diagnostics Engine endpoint
+  app.post('/api/diagnostics/run', async (req, res) => {
+    try {
+      console.log('🔧 Running comprehensive system diagnostics...');
+      
+      const diagnosticsResults = {
+        timestamp: new Date().toISOString(),
+        systemHealth: 'Healthy',
+        checksPerformed: 0,
+        results: [],
+        warnings: [],
+        errors: []
+      };
+
+      // Check database connectivity
+      try {
+        await knowledgeStorage.getKnowledgeItems();
+        diagnosticsResults.results.push('Database connectivity: OK');
+        diagnosticsResults.checksPerformed++;
+      } catch (dbError) {
+        diagnosticsResults.errors.push('Database connectivity: Failed');
+        diagnosticsResults.systemHealth = 'Warning';
+        diagnosticsResults.checksPerformed++;
+      }
+
+      // Check API endpoints
+      const criticalEndpoints = ['/api/system-mode', '/api/dashboard-metrics', '/api/live-activity'];
+      for (const endpoint of criticalEndpoints) {
+        try {
+          const response = await fetch(`http://localhost:5000${endpoint}`);
+          if (response.ok) {
+            diagnosticsResults.results.push(`Endpoint ${endpoint}: OK`);
+          } else {
+            diagnosticsResults.warnings.push(`Endpoint ${endpoint}: Status ${response.status}`);
+            diagnosticsResults.systemHealth = 'Warning';
+          }
+          diagnosticsResults.checksPerformed++;
+        } catch (endpointError) {
+          diagnosticsResults.errors.push(`Endpoint ${endpoint}: Failed`);
+          diagnosticsResults.systemHealth = 'Critical';
+          diagnosticsResults.checksPerformed++;
+        }
+      }
+
+      // Check environment variables
+      const requiredEnvVars = ['AIRTABLE_API_KEY', 'OPENAI_API_KEY'];
+      for (const envVar of requiredEnvVars) {
+        if (process.env[envVar]) {
+          diagnosticsResults.results.push(`Environment variable ${envVar}: OK`);
+        } else {
+          diagnosticsResults.warnings.push(`Environment variable ${envVar}: Missing`);
+          diagnosticsResults.systemHealth = 'Warning';
+        }
+        diagnosticsResults.checksPerformed++;
+      }
+
+      // Memory usage check
+      const memUsage = process.memoryUsage();
+      const memUsageMB = Math.round(memUsage.rss / 1024 / 1024);
+      diagnosticsResults.results.push(`Memory usage: ${memUsageMB}MB`);
+      diagnosticsResults.checksPerformed++;
+
+      if (memUsageMB > 500) {
+        diagnosticsResults.warnings.push('High memory usage detected');
+        diagnosticsResults.systemHealth = 'Warning';
+      }
+
+      console.log('🔧 Diagnostics completed:', diagnosticsResults);
+
+      res.json({
+        success: true,
+        checksPerformed: diagnosticsResults.checksPerformed,
+        systemHealth: diagnosticsResults.systemHealth,
+        diagnostics: diagnosticsResults
+      });
+
+    } catch (error) {
+      console.error('Diagnostics engine error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Diagnostics engine failed',
+        details: error.message
+      });
+    }
+  });
+
   app.post('/api/knowledge/delete', async (req, res) => {
     try {
       const { documentIds, documentId } = req.body;

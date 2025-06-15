@@ -1098,6 +1098,57 @@ export default function SystemControls() {
                 onCheckedChange={() => toggleModule('errorMonitoring')}
               />
             </div>
+            
+            {/* Run Diagnostics Engine Button */}
+            <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-4 mt-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className={`w-2 h-2 ${getStatusColor(moduleStates.diagnosticsEngine)} rounded-full`}></div>
+                  <div>
+                    <span className="text-white text-sm font-medium">Run Diagnostics Engine</span>
+                    <p className="text-slate-400 text-xs">Execute comprehensive system diagnostics</p>
+                  </div>
+                  {getStatusIcon(moduleStates.diagnosticsEngine)}
+                </div>
+                <Button
+                  onClick={() => {
+                    fetch('/api/diagnostics/run', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                      if (data.success) {
+                        console.log('Diagnostics completed:', data);
+                        // Add to action log
+                        setActionLog(prev => [...prev, {
+                          id: Date.now(),
+                          timestamp: new Date().toISOString(),
+                          module: 'Diagnostics Engine',
+                          action: 'Full System Scan',
+                          status: 'Success',
+                          details: `Diagnosed ${data.checksPerformed || 0} system components`
+                        }]);
+                      }
+                    })
+                    .catch(err => {
+                      console.error('Diagnostics failed:', err);
+                      setActionLog(prev => [...prev, {
+                        id: Date.now(),
+                        timestamp: new Date().toISOString(),
+                        module: 'Diagnostics Engine',
+                        action: 'Full System Scan',
+                        status: 'Failed',
+                        details: 'Failed to execute diagnostics: ' + err.message
+                      }]);
+                    });
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm"
+                >
+                  Run Diagnostics
+                </Button>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
