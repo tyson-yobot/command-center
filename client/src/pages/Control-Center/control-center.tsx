@@ -885,10 +885,10 @@ export default function SystemControls() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-blue-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.errorMonitoring)} rounded-full`}></div>
-                  <span className="text-white text-sm font-medium border border-blue-400 px-2 py-1 rounded bg-slate-600/60">Basic AI Chat</span>
+                  <span className="text-white text-sm font-medium">Basic AI Chat</span>
                   {getStatusIcon(moduleStates.errorMonitoring)}
                 </div>
                 <Switch 
@@ -898,10 +898,10 @@ export default function SystemControls() {
                 />
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-blue-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.quickbooks)} rounded-full`}></div>
-                  <span className="text-white text-sm font-medium border border-blue-400 px-2 py-1 rounded bg-slate-600/60">SMS Automation</span>
+                  <span className="text-white text-sm font-medium">SMS Automation</span>
                   {getStatusIcon(moduleStates.quickbooks)}
                 </div>
                 <Switch 
@@ -911,10 +911,10 @@ export default function SystemControls() {
                 />
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-blue-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.systemDiagnostics)} rounded-full`}></div>
-                  <span className="text-white text-sm font-medium border border-blue-400 px-2 py-1 rounded bg-slate-600/60">Email Automation</span>
+                  <span className="text-white text-sm font-medium">Email Automation</span>
                   {getStatusIcon(moduleStates.systemDiagnostics)}
                 </div>
                 <Switch 
@@ -924,10 +924,10 @@ export default function SystemControls() {
                 />
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-blue-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.realtimeMetrics)} rounded-full`}></div>
-                  <span className="text-white text-sm border border-blue-400 px-2 py-1 rounded bg-slate-600/60">CRM Basic Integration</span>
+                  <span className="text-white text-sm">CRM Basic Integration</span>
                   {getStatusIcon(moduleStates.realtimeMetrics)}
                 </div>
                 <Switch 
@@ -948,10 +948,10 @@ export default function SystemControls() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-purple-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.pdfGeneration)} rounded-full`}></div>
-                  <span className="text-white text-sm border border-purple-400 px-2 py-1 rounded bg-slate-600/60">Voice Call Pipeline</span>
+                  <span className="text-white text-sm">Voice Call Pipeline</span>
                   {getStatusIcon(moduleStates.pdfGeneration)}
                 </div>
                 <Switch 
@@ -961,10 +961,10 @@ export default function SystemControls() {
                 />
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-purple-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.businessCardOcr)} rounded-full`}></div>
-                  <span className="text-white text-sm border border-purple-400 px-2 py-1 rounded bg-slate-600/60">Advanced Integrations</span>
+                  <span className="text-white text-sm">Advanced Integrations</span>
                   {getStatusIcon(moduleStates.businessCardOcr)}
                 </div>
                 <Switch 
