@@ -983,6 +983,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.contactEnrichment} 
                   onCheckedChange={() => toggleModule('contactEnrichment')}
+                  className="control-center-switch"
                 />
               </div>
               
@@ -995,6 +996,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.ndaGenerator} 
                   onCheckedChange={() => toggleModule('ndaGenerator')}
+                  className="control-center-switch"
                 />
               </div>
             </CardContent>
@@ -1005,7 +1007,7 @@ export default function SystemControls() {
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
                 <Crown className="w-4 h-4 text-yellow-400" />
-                <span>🏢 Enterprise Features</span>
+                <span>Enterprise Features</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -1018,6 +1020,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.smartWorkflows} 
                   onCheckedChange={() => toggleModule('smartWorkflows')}
+                  className="control-center-switch"
                 />
               </div>
               
@@ -1030,6 +1033,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.documentGeneration} 
                   onCheckedChange={() => toggleModule('documentGeneration')}
+                  className="control-center-switch"
                 />
               </div>
               
@@ -1042,6 +1046,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.voiceBotCore} 
                   onCheckedChange={() => toggleModule('voiceBotCore')}
+                  className="control-center-switch"
                 />
               </div>
               
@@ -1054,6 +1059,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.webhookMonitoring} 
                   onCheckedChange={() => toggleModule('webhookMonitoring')}
+                  className="control-center-switch"
                 />
               </div>
             </CardContent>
@@ -1064,7 +1070,7 @@ export default function SystemControls() {
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
                 <MessageSquare className="w-4 h-4 text-green-400" />
-                <span>📢 Communication & Conversion</span>
+                <span>Communication & Conversion</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -1077,6 +1083,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.slackNotifications} 
                   onCheckedChange={() => toggleModule('slackNotifications')}
+                  className="control-center-switch"
                 />
               </div>
               
