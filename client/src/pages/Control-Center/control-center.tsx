@@ -452,197 +452,144 @@ export default function SystemControls() {
     return metadata && metadata.visibleTo.includes(userRole);
   };
 
-  // Package tier configurations based on YoBot price sheet
+  // Package tier configurations based on YoBot pricing matrix
   const packageConfigurations = {
     starter: {
-      // Starter: Botalytics ROI Dashboard ✔️, AI Chatbot (SMS + Email) ✔️
-      voiceBotCore: false,  // VoiceBot - Not included in Starter
-      callRouting: false,
-      emergencyEscalation: false,
-      slackNotifications: false,
-      hubspotSync: false,  // CRM Integration - Not included in Starter
-      airtableLogging: true,  // Basic CRM Logging included
-      leadScoring: false,  // Lead Scoring - Not in Starter
-      contactEnrichment: false,
-      smartWorkflows: true,  // SMS/Email Flows
-      emailAutomation: true,  // AI Chatbot includes email
-      followupTasks: false,  // Smart Follow-Up not in Starter
-      missedCallResponder: false,
-      pdfGeneration: false,
-      quoteGenerator: false,  // AI Quote Generation - Not in Starter
-      calendarBooking: false,  // Booking Tool - Not in Starter
-      ndaGenerator: false,
-      businessCardOcr: false,
-      realtimeMetrics: true,  // Botalytics ROI Dashboard
-      performanceTracking: true,  // Botalytics ROI Dashboard
-      usageAnalytics: true,  // Botalytics ROI Dashboard
-      errorMonitoring: true,
-      googleCalendar: false,
-      stripePayments: false,  // Payment Integration - Not in Starter
-      quickbooks: false,  // QuickBooks - Not in Starter
-      twilioSms: true,  // SMS flows included
-      documentGeneration: false,
-      pdfProcessor: false,
-      fileStorage: true,
-      backupSystem: false,
-      webhookMonitoring: false,
-      emergencyStop: true,
-      scenarioControl: false,
-      rateLimiting: true,
-      dataEncryption: true,
-      gdprCompliance: false,
-      accessLogging: false,
-      auditTrail: false,
+      // Starter Package: Botalytics ROI Dashboard ✔️, AI Chatbot (SMS + Email) ✔️
+      // Core features from pricing matrix
+      realtimeMetrics: true,      // Botalytics ROI Dashboard ✔️
+      performanceTracking: true,  // Botalytics ROI Dashboard ✔️ 
+      usageAnalytics: true,       // Botalytics ROI Dashboard ✔️
+      emailAutomation: true,      // AI Chatbot (SMS + Email) ✔️
+      twilioSms: true,           // AI Chatbot (SMS + Email) ✔️
+      airtableLogging: true,     // Basic CRM Logging (mentioned in description)
+      
+      // Everything else disabled for Starter
+      voiceBotCore: false,       // VoiceBot - Pro+
+      hubspotSync: false,        // CRM Integration - Pro+
+      calendarBooking: false,    // Booking Tool - Pro+
+      stripePayments: false,     // Payment Integration - Enterprise+
+      quickbooks: false,         // QuickBooks - Enterprise+
+      leadScoring: false,        // Lead Scoring - Enterprise+
+      followupTasks: false,      // Smart Follow-Up - Enterprise+
+      quoteGenerator: false,     // AI Quote Generation - Pro+
+      missedCallResponder: false, // Live Transfer Routing - Pro+
+      slackNotifications: false,  // Slack/Email/CRM Notifications - Enterprise+
+      businessCardOcr: false,    // A/B Script Testing - Pro+
+      contactEnrichment: false,  // Custom Branded Persona - Pro+
+      smartWorkflows: false,     // 24/7 Customer Engagement - Pro+
       systemDiagnostics: true
     },
     pro: {
-      // Pro: All Starter + VoiceBot ✔️, CRM Integration ✔️, Booking Tool ✔️, AI Quote Generation ✔️, 
-      // Live Transfer Routing ✔️, A/B Script Testing ✔️, Custom Branded Persona ✔️, 24/7 Customer Engagement ✔️, ChatGPT Booster ✔️
-      voiceBotCore: true,  // VoiceBot (Inbound + Outbound) ✔️
-      callRouting: true,
-      emergencyEscalation: true,
-      slackNotifications: false,  // Slack/Email/CRM Notifications - Not in Pro
-      hubspotSync: true,  // CRM Integration ✔️
-      airtableLogging: true,  // All Starter features
-      leadScoring: false,  // Lead Scoring - Not in Pro
-      contactEnrichment: true,
-      smartWorkflows: true,  // All Starter + enhanced
-      emailAutomation: true,  // All Starter + enhanced
-      followupTasks: true,  // Smart Follow-Up via 24/7 Customer Engagement
-      missedCallResponder: true,  // Live Transfer Routing ✔️
-      pdfGeneration: true,
-      quoteGenerator: true,  // AI Quote Generation ✔️
-      calendarBooking: true,  // Booking Tool (Calendar Integration) ✔️
-      ndaGenerator: false,
-      businessCardOcr: true,  // Custom Branded Persona ✔️
-      realtimeMetrics: true,  // All Starter + Botalytics
-      performanceTracking: true,
-      usageAnalytics: true,
-      errorMonitoring: true,
-      googleCalendar: true,  // Booking Tool integration
-      stripePayments: false,  // Payment Integration - Not in Pro
-      quickbooks: false,  // QuickBooks - Not in Pro
-      twilioSms: true,  // All Starter + enhanced
-      documentGeneration: true,
-      pdfProcessor: true,
-      fileStorage: true,
-      backupSystem: false,
-      webhookMonitoring: true,
-      emergencyStop: true,
-      scenarioControl: true,
-      rateLimiting: true,
-      dataEncryption: true,
-      gdprCompliance: false,
-      accessLogging: false,
-      auditTrail: false,
+      // Pro Package: All Starter + VoiceBot ✔️, CRM Integration ✔️, Booking Tool ✔️, 
+      // AI Quote Generation ✔️, Live Transfer Routing ✔️, A/B Script Testing ✔️, 
+      // Custom Branded Persona ✔️, 24/7 Customer Engagement ✔️, ChatGPT Booster ✔️
+      
+      // All Starter features
+      realtimeMetrics: true,      // Botalytics ROI Dashboard ✔️
+      performanceTracking: true,  // Botalytics ROI Dashboard ✔️
+      usageAnalytics: true,       // Botalytics ROI Dashboard ✔️
+      emailAutomation: true,      // AI Chatbot (SMS + Email) ✔️
+      twilioSms: true,           // AI Chatbot (SMS + Email) ✔️
+      airtableLogging: true,     // Basic CRM Logging
+      
+      // Pro additions from pricing matrix
+      voiceBotCore: true,        // VoiceBot (Inbound + Outbound) ✔️
+      hubspotSync: true,         // CRM Integration ✔️
+      calendarBooking: true,     // Booking Tool (Calendar Integration) ✔️
+      quoteGenerator: true,      // AI Quote Generation ✔️
+      missedCallResponder: true, // Live Transfer Routing ✔️
+      businessCardOcr: true,     // A/B Script Testing ✔️
+      contactEnrichment: true,   // Custom Branded Persona ✔️
+      smartWorkflows: true,      // 24/7 Customer Engagement Engine ✔️
+      pdfGeneration: true,       // ChatGPT Booster ✔️
+      
+      // Still disabled in Pro
+      stripePayments: false,     // Payment Integration - Enterprise+
+      quickbooks: false,         // QuickBooks - Enterprise+
+      leadScoring: false,        // Lead Scoring - Enterprise+
+      followupTasks: false,      // Smart Follow-Up - Enterprise+
+      slackNotifications: false, // Slack/Email/CRM Notifications - Enterprise+
       systemDiagnostics: true
     },
     enterprise: {
-      // Enterprise: All Pro + Payment Integration ✔️, QuickBooks Online Integration ✔️, 
+      // Enterprise Package: All Pro + Payment Integration ✔️, QuickBooks Online Integration ✔️,
       // Google Ads/Facebook Funnel Integration ✔️, Lead Scoring + Smart Follow-Up ✔️,
-      // Slack/Email/CRM Notifications ✔️, Customer Journey Orchestration ✔️, Command Center Pro ✔️,
+      // Slack/Email/CRM Notifications ✔️, Customer Journey Orchestration ✔️, SmartSpend™ Dashboard ✔️,
       // Lead Generation & Scraping Tools ✔️, Advanced Data Integration Hub ✔️, Automated Content Generation Studio ✔️
-      voiceBotCore: true,  // All Pro features
-      callRouting: true,
-      emergencyEscalation: true,
+      
+      // All Pro features
+      realtimeMetrics: true,      // Botalytics ROI Dashboard ✔️
+      performanceTracking: true,  // Botalytics ROI Dashboard ✔️
+      usageAnalytics: true,       // Botalytics ROI Dashboard ✔️
+      emailAutomation: true,      // AI Chatbot (SMS + Email) ✔️
+      twilioSms: true,           // AI Chatbot (SMS + Email) ✔️
+      airtableLogging: true,     // Basic CRM Logging
+      voiceBotCore: true,        // VoiceBot (Inbound + Outbound) ✔️
+      hubspotSync: true,         // CRM Integration ✔️
+      calendarBooking: true,     // Booking Tool (Calendar Integration) ✔️
+      quoteGenerator: true,      // AI Quote Generation ✔️
+      missedCallResponder: true, // Live Transfer Routing ✔️
+      businessCardOcr: true,     // A/B Script Testing ✔️
+      contactEnrichment: true,   // Custom Branded Persona ✔️
+      smartWorkflows: true,      // 24/7 Customer Engagement Engine ✔️
+      pdfGeneration: true,       // ChatGPT Booster ✔️
+      
+      // Enterprise additions from pricing matrix
+      stripePayments: true,      // Payment Integration ✔️
+      quickbooks: true,          // QuickBooks Online Integration ✔️
+      googleCalendar: true,      // Google Ads/Facebook Funnel Integration ✔️
+      leadScoring: true,         // Lead Scoring + Smart Follow-Up ✔️
+      followupTasks: true,       // Lead Scoring + Smart Follow-Up ✔️
       slackNotifications: true,  // Slack/Email/CRM Notifications ✔️
-      hubspotSync: true,  // All Pro + enhanced
-      airtableLogging: true,
-      leadScoring: true,  // Lead Scoring + Smart Follow-Up ✔️
-      contactEnrichment: true,
-      smartWorkflows: true,  // All Pro + Customer Journey Orchestration
-      emailAutomation: true,  // All Pro + Automated Content Generation
-      followupTasks: true,  // Lead Scoring + Smart Follow-Up ✔️
-      missedCallResponder: true,
-      pdfGeneration: true,
-      quoteGenerator: true,
-      calendarBooking: true,
-      ndaGenerator: true,
-      businessCardOcr: true,
-      realtimeMetrics: true,  // Command Center Pro ✔️
-      performanceTracking: true,  // Performance Dashboards
-      usageAnalytics: true,
-      errorMonitoring: true,
-      googleCalendar: true,  // Google Ads/Facebook Funnel Integration ✔️
-      stripePayments: true,  // Payment Integration ✔️
-      quickbooks: true,  // QuickBooks Online Integration ✔️
-      twilioSms: true,
-      documentGeneration: true,  // Automated Content Generation Studio ✔️
-      pdfProcessor: true,
-      fileStorage: true,
-      backupSystem: true,
-      webhookMonitoring: true,
-      emergencyStop: true,
-      scenarioControl: true,
-      rateLimiting: true,
-      dataEncryption: true,
-      gdprCompliance: true,
-      accessLogging: true,
-      auditTrail: true,
-      systemDiagnostics: true,
-      // Advanced features specific to Enterprise
+      documentGeneration: true,  // Customer Journey Orchestration ✔️
+      errorMonitoring: true,     // SmartSpend™ Dashboard ✔️
       apifyGoogleMapsScraping: true,  // Lead Generation & Scraping Tools ✔️
-      apolloLeadGeneration: true,  // Lead Generation & Scraping Tools ✔️
-      launchPhantombuster: true  // Lead Generation & Scraping Tools ✔️
+      apolloLeadGeneration: true,     // Lead Generation & Scraping Tools ✔️
+      launchPhantombuster: true,      // Lead Generation & Scraping Tools ✔️
+      pdfProcessor: true,        // Advanced Data Integration Hub ✔️
+      ndaGenerator: true,        // Automated Content Generation Studio ✔️
+      systemDiagnostics: true
     },
     platinum: {
-      // Platinum: All Enterprise + White Label Mode ✔️, SmartSpend™ Dashboard ✔️, 
-      // Predictive Analytics Engine ✔️, Competitive Intelligence Radar ✔️
-      voiceBotCore: true,  // All Enterprise features
-      callRouting: true,
-      emergencyEscalation: true,
-      slackNotifications: true,  // All Enterprise features
-      hubspotSync: true,
-      airtableLogging: true,
-      leadScoring: true,
-      contactEnrichment: true,
-      smartWorkflows: true,  // Unlimited Workflows
-      emailAutomation: true,
-      followupTasks: true,
-      missedCallResponder: true,
-      pdfGeneration: true,
-      quoteGenerator: true,
-      calendarBooking: true,
-      ndaGenerator: true,
-      businessCardOcr: true,
-      realtimeMetrics: true,  // SmartSpend™ Dashboard ✔️
-      performanceTracking: true,  // Custom Analytics
-      usageAnalytics: true,  // Advanced Analytics
-      errorMonitoring: true,
-      googleCalendar: true,
-      stripePayments: true,
-      quickbooks: true,
-      twilioSms: true,
-      documentGeneration: true,
-      pdfProcessor: true,
-      fileStorage: true,
-      backupSystem: true,
-      webhookMonitoring: true,
-      emergencyStop: true,
-      scenarioControl: true,
-      rateLimiting: true,
-      dataEncryption: true,
-      gdprCompliance: true,
-      accessLogging: true,
-      auditTrail: true,
-      systemDiagnostics: true,
-      // All Enterprise features plus Platinum exclusives
-      apifyGoogleMapsScraping: true,
-      apolloLeadGeneration: true,
-      launchPhantombuster: true,
-      // Platinum exclusive features
-      voiceTranscription: true,  // Advanced voice capabilities
-      pipelineCalls: true,  // Full pipeline automation
-      smsAutomation: true,  // Advanced SMS automation
-      aiFollowup: true,  // AI Follow-up System
-      commandCenterDispatcher: true,  // Support Rep included
-      webhookInboundSMS: true,  // Complete webhook management
-      triggerVoiceCall: true,  // Advanced voice triggers
-      logCommandCenterEvent: true,  // Complete logging
-      webhookCalendly: true,  // Advanced integrations
-      voicebotSocket: true,  // Real-time voice processing
-      retryCallbackScheduler: true,  // Advanced callback management
-      triggerPipelineCalls: true  // Complete pipeline control
+      // Platinum Package: All Enterprise + White Label Mode ✔️, Predictive Analytics Engine ✔️,
+      // Competitive Intelligence Radar (Optional in Enterprise, ✔️ in Platinum)
+      
+      // All Enterprise features
+      realtimeMetrics: true,      // Botalytics ROI Dashboard ✔️
+      performanceTracking: true,  // Botalytics ROI Dashboard ✔️
+      usageAnalytics: true,       // Botalytics ROI Dashboard ✔️
+      emailAutomation: true,      // AI Chatbot (SMS + Email) ✔️
+      twilioSms: true,           // AI Chatbot (SMS + Email) ✔️
+      airtableLogging: true,     // Basic CRM Logging
+      voiceBotCore: true,        // VoiceBot (Inbound + Outbound) ✔️
+      hubspotSync: true,         // CRM Integration ✔️
+      calendarBooking: true,     // Booking Tool (Calendar Integration) ✔️
+      quoteGenerator: true,      // AI Quote Generation ✔️
+      missedCallResponder: true, // Live Transfer Routing ✔️
+      businessCardOcr: true,     // A/B Script Testing ✔️
+      contactEnrichment: true,   // Custom Branded Persona ✔️
+      smartWorkflows: true,      // 24/7 Customer Engagement Engine ✔️
+      pdfGeneration: true,       // ChatGPT Booster ✔️
+      stripePayments: true,      // Payment Integration ✔️
+      quickbooks: true,          // QuickBooks Online Integration ✔️
+      googleCalendar: true,      // Google Ads/Facebook Funnel Integration ✔️
+      leadScoring: true,         // Lead Scoring + Smart Follow-Up ✔️
+      followupTasks: true,       // Lead Scoring + Smart Follow-Up ✔️
+      slackNotifications: true,  // Slack/Email/CRM Notifications ✔️
+      documentGeneration: true,  // Customer Journey Orchestration ✔️
+      errorMonitoring: true,     // SmartSpend™ Dashboard ✔️
+      apifyGoogleMapsScraping: true,  // Lead Generation & Scraping Tools ✔️
+      apolloLeadGeneration: true,     // Lead Generation & Scraping Tools ✔️
+      launchPhantombuster: true,      // Lead Generation & Scraping Tools ✔️
+      pdfProcessor: true,        // Advanced Data Integration Hub ✔️
+      ndaGenerator: true,        // Automated Content Generation Studio ✔️
+      
+      // Platinum exclusive features from pricing matrix
+      fileStorage: true,         // White Label Mode ✔️
+      backupSystem: true,        // Predictive Analytics Engine ✔️
+      webhookMonitoring: true,   // Competitive Intelligence Radar ✔️
+      systemDiagnostics: true
     }
   };
 
