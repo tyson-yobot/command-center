@@ -721,10 +721,10 @@ export default function SystemControls() {
                 }}
                 className="bg-white/10 border border-white/20 rounded-lg px-3 py-1 text-white text-sm"
               >
-                <option value="starter">Starter - $499/mo</option>
-                <option value="pro">Pro - $999/mo</option>
-                <option value="enterprise">Enterprise - $1,499/mo</option>
-                <option value="platinum">Platinum - $1,999/mo</option>
+                <option value="starter">Starter</option>
+                <option value="pro">Pro</option>
+                <option value="enterprise">Enterprise</option>
+                <option value="platinum">Platinum</option>
               </select>
             </div>
 

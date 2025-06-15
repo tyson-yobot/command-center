@@ -148,5 +148,35 @@
       "lastHealthCheck": "2025-06-15T15:00:00.011Z",
       "automationStatus": "paused"
     }
+  },
+  {
+    "timestamp": "2025-06-15T15:10:00.011Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 771.597613044,
+      "lastHealthCheck": "2025-06-15T15:09:00.006Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-15T15:20:00.009Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 1371.598460012,
+      "lastHealthCheck": "2025-06-15T15:19:00.007Z",
+      "automationStatus": "paused"
+    }
   }
 ]
