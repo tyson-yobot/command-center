@@ -45,6 +45,7 @@ import { liveKnowledgePurge } from "./liveKnowledgePurge";
 import OpenAI from "openai";
 import { generateSocialMediaPost, generateEmailCampaign, postToSocialMedia, sendEmailCampaign } from './contentCreator';
 import * as ElevenLabs from './elevenlabs';
+import { airtableLive } from './airtableLiveIntegration';
 
 // Initialize OpenAI
 const openai = new OpenAI({
@@ -15019,6 +15020,181 @@ export function registerContentCreationEndpoints(app: Express) {
         success: false,
         message: 'Failed to load voice library',
         error: error.message
+      });
+    }
+  });
+
+  // ============================================================================
+  // Live Airtable Integration Endpoints
+  // ============================================================================
+
+  // Sales Order Flow - Automate Sales Order Creation
+  app.post('/api/sales-order/create', async (req, res) => {
+    try {
+      const { botPackage, addOns, clientEmail, clientName, total, paymentStatus } = req.body;
+      
+      const orderData = {
+        'Bot Package': botPackage,
+        'Add-Ons': addOns || [],
+        'Total': total,
+        'Status': 'Pending',
+        'Client Email': clientEmail,
+        'Client Name': clientName,
+        'Order Date': new Date().toISOString(),
+        'Payment Status': paymentStatus || 'Pending'
+      };
+
+      const result = await airtableLive.createSalesOrder(orderData);
+      
+      logOperation('sales-order-create', orderData, 'success', `Sales order created for ${clientName}`);
+      
+      res.json({
+        success: true,
+        salesOrder: result,
+        message: 'Sales order created successfully'
+      });
+    } catch (error: any) {
+      console.error('Sales order creation failed:', error);
+      logOperation('sales-order-create', req.body, 'error', `Sales order creation failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Sales order creation failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Sales Order Flow - Get Sales Orders
+  app.get('/api/sales-order/list', async (req, res) => {
+    try {
+      const { clientEmail } = req.query;
+      
+      const orders = await airtableLive.getSalesOrders(clientEmail as string);
+      
+      logOperation('sales-order-list', { clientEmail }, 'success', `Retrieved ${orders.length} sales orders`);
+      
+      res.json({
+        success: true,
+        orders,
+        count: orders.length
+      });
+    } catch (error: any) {
+      console.error('Sales order retrieval failed:', error);
+      logOperation('sales-order-list', req.query, 'error', `Sales order retrieval failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Sales order retrieval failed',
+        details: error.message
+      });
+    }
+  });
+
+  // SmartSpend™ Dashboard - Get Live Metrics
+  app.get('/api/smartspend/metrics', async (req, res) => {
+    try {
+      const { clientId } = req.query;
+      
+      const smartSpendData = await airtableLive.getSmartSpendData(clientId as string);
+      
+      if (!smartSpendData) {
+        return res.json({
+          success: true,
+          data: null,
+          message: 'No SmartSpend data found for client'
+        });
+      }
+      
+      logOperation('smartspend-metrics', { clientId }, 'success', 'SmartSpend metrics retrieved');
+      
+      res.json({
+        success: true,
+        data: smartSpendData,
+        message: 'SmartSpend metrics retrieved successfully'
+      });
+    } catch (error: any) {
+      console.error('SmartSpend metrics retrieval failed:', error);
+      logOperation('smartspend-metrics', req.query, 'error', `SmartSpend metrics failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'SmartSpend metrics retrieval failed',
+        details: error.message
+      });
+    }
+  });
+
+  // SmartSpend™ Dashboard - Update Metrics
+  app.post('/api/smartspend/update', async (req, res) => {
+    try {
+      const { clientId, ...updateData } = req.body;
+      
+      if (!clientId) {
+        return res.status(400).json({
+          success: false,
+          error: 'Client ID is required'
+        });
+      }
+
+      const result = await airtableLive.updateSmartSpendData(clientId, updateData);
+      
+      logOperation('smartspend-update', req.body, 'success', `SmartSpend data updated for client ${clientId}`);
+      
+      res.json({
+        success: true,
+        data: result,
+        message: 'SmartSpend data updated successfully'
+      });
+    } catch (error: any) {
+      console.error('SmartSpend update failed:', error);
+      logOperation('smartspend-update', req.body, 'error', `SmartSpend update failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'SmartSpend data update failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Revenue Forecast - Get Live Projections
+  app.get('/api/revenue/forecast', async (req, res) => {
+    try {
+      const forecastData = await airtableLive.getRevenueForecast();
+      
+      logOperation('revenue-forecast', {}, 'success', `Retrieved ${forecastData.length} revenue projections`);
+      
+      res.json({
+        success: true,
+        data: forecastData,
+        message: 'Revenue forecast retrieved successfully'
+      });
+    } catch (error: any) {
+      console.error('Revenue forecast retrieval failed:', error);
+      logOperation('revenue-forecast', {}, 'error', `Revenue forecast failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Revenue forecast retrieval failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Airtable Health Check
+  app.get('/api/airtable/health', async (req, res) => {
+    try {
+      const isHealthy = await airtableLive.healthCheck();
+      
+      res.json({
+        success: true,
+        healthy: isHealthy,
+        message: isHealthy ? 'Airtable connection is healthy' : 'Airtable connection failed',
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Airtable health check failed:', error);
+      res.status(500).json({
+        success: false,
+        healthy: false,
+        error: 'Health check failed',
+        details: error.message
       });
     }
   });

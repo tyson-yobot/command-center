@@ -1,25 +1,59 @@
 import { Express } from 'express';
 import LiveDataCleaner from './liveDataCleaner';
 import { getSystemMode } from './systemMode';
+import { airtableLive } from './airtableLiveIntegration';
 
 export function registerDashboardEndpoints(app: Express) {
   
-  // Get overall dashboard metrics
+  // Get overall dashboard metrics with live Airtable data
   app.get("/api/dashboard-metrics", async (req, res) => {
     try {
       const systemMode = getSystemMode();
       
       if (systemMode === 'live') {
-        // LIVE MODE: Serve only empty states
-        const emptyMetrics = LiveDataCleaner.getEmptyDashboardMetrics();
-        LiveDataCleaner.logLiveModeAccess('dashboard-metrics', '/api/dashboard-metrics', systemMode);
-        
-        res.json({
-          success: true,
-          data: emptyMetrics,
-          mode: 'live',
-          message: 'Live mode - authentic dashboard metrics only'
-        });
+        // LIVE MODE: Fetch real data from Airtable
+        try {
+          const smartSpendData = await airtableLive.getSmartSpendData();
+          const revenueForecast = await airtableLive.getRevenueForecast();
+          
+          const liveMetrics = {
+            smartSpendData: smartSpendData ? {
+              budgetUtilization: smartSpendData['Budget Utilization'],
+              costPerLead: smartSpendData['Cost Per Lead'],
+              roiPercentage: smartSpendData['ROI Percentage'],
+              totalSpend: smartSpendData['Total Spend'],
+              leadsGenerated: smartSpendData['Leads Generated'],
+              conversionRate: smartSpendData['Conversion Rate'],
+              budgetEfficiency: smartSpendData['Budget Efficiency Score'],
+              efficiencyStatus: smartSpendData['Budget Efficiency Score'] > 90 ? 'Optimal' : 'Good',
+              lastUpdated: smartSpendData['Last Updated']
+            } : null,
+            revenueForecast: revenueForecast.length > 0 ? {
+              currentQuarter: revenueForecast[0]?.fields?.['Current Quarter'] || 0,
+              projectedQuarter: revenueForecast[0]?.fields?.['Projected Quarter'] || 0,
+              yearlyProjection: revenueForecast[0]?.fields?.['Yearly Projection'] || 0,
+              growthRate: revenueForecast[0]?.fields?.['Growth Rate'] || 0,
+              lastUpdated: revenueForecast[0]?.fields?.['Last Updated'] || new Date().toISOString()
+            } : null
+          };
+          
+          LiveDataCleaner.logLiveModeAccess('dashboard-metrics', '/api/dashboard-metrics', systemMode);
+          
+          res.json({
+            success: true,
+            data: liveMetrics,
+            mode: 'live',
+            message: 'Live mode - authentic Airtable data'
+          });
+        } catch (airtableError) {
+          console.error('Airtable data fetch failed:', airtableError);
+          res.json({
+            success: true,
+            data: {},
+            mode: 'live',
+            message: 'Live mode - Airtable connection failed, showing empty state'
+          });
+        }
       } else {
         // TEST MODE: Serve hardcoded test data
         const { LiveDashboardData } = await import('./liveDashboardData');
