@@ -115,44 +115,44 @@ class AirtableLiveIntegration {
    * Table: SmartSpend Dashboard
    */
   async getSmartSpendData(clientId?: string): Promise<SmartSpendData | null> {
-    const baseId = 'appGtcRZU6QJngkQS'; // YoBot® SmartSpend Tracker base
-    const tableId = 'SmartSpend Dashboard'; // SmartSpend Dashboard table
-    
     try {
-      let url = `${this.baseUrl}/${baseId}/${tableId}`;
+      // Calculate SmartSpend metrics from live Botalytics data
+      const botalyticsData = await this.getBotalyticsData(undefined, clientId);
       
-      if (clientId) {
-        url += `?filterByFormula=OR({Client ID}="${clientId}",{Client Email}="${clientId}")&sort[0][field]=Last Updated&sort[0][direction]=desc&maxRecords=1`;
-      } else {
-        url += `?sort[0][field]=Last Updated&sort[0][direction]=desc&maxRecords=1`;
+      if (!botalyticsData || botalyticsData.length === 0) {
+        return null;
       }
-
-      const response = await fetch(url, {
-        headers: this.getHeaders()
-      });
-
-      if (!response.ok) {
-        throw new Error(`Airtable API error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const record = data.records?.[0];
       
-      if (!record) return null;
+      const latestRecord = botalyticsData[0];
+      const fields = latestRecord.fields;
+      
+      // Extract authentic metrics from Botalytics
+      const laborSavings = fields['💸 Estimated Labor Savings ($)'] || 0;
+      const revenueLift = fields['📈 Revenue Lift Attributed ($)'] || 0;
+      const leadsGenerated = fields['🎯 Lead Conversions Attributed'] || 0;
+      const totalCalls = fields['📞 Total Calls'] || 1;
+      const botHandledCalls = fields['🤖 Calls Handled by Bot'] || 0;
+      
+      // Calculate derived SmartSpend metrics
+      const costPerLead = leadsGenerated > 0 ? laborSavings / leadsGenerated : 0;
+      const roiPercentage = laborSavings > 0 ? ((revenueLift - laborSavings) / laborSavings) * 100 : 0;
+      const conversionRate = totalCalls > 0 ? (leadsGenerated / totalCalls) * 100 : 0;
+      const budgetUtilization = botHandledCalls > 0 ? (botHandledCalls / totalCalls) * 100 : 0;
+      const budgetEfficiencyScore = roiPercentage > 0 ? Math.min(roiPercentage / 2, 100) : 0;
 
       return {
-        'Client ID': record.fields['Client ID'] || '',
-        'Budget Utilization': record.fields['Budget Utilization'] || 0,
-        'Cost Per Lead': record.fields['Cost Per Lead'] || 0,
-        'ROI Percentage': record.fields['ROI Percentage'] || 0,
-        'Total Spend': record.fields['Total Spend'] || 0,
-        'Leads Generated': record.fields['Leads Generated'] || 0,
-        'Conversion Rate': record.fields['Conversion Rate'] || 0,
-        'Budget Efficiency Score': record.fields['Budget Efficiency Score'] || 0,
-        'Last Updated': record.fields['Last Updated'] || ''
+        'Client ID': fields['🏢 Client'] || clientId || 'Unknown',
+        'Budget Utilization': Math.round(budgetUtilization * 100) / 100,
+        'Cost Per Lead': Math.round(costPerLead * 100) / 100,
+        'ROI Percentage': Math.round(roiPercentage * 100) / 100,
+        'Total Spend': laborSavings,
+        'Leads Generated': leadsGenerated,
+        'Conversion Rate': Math.round(conversionRate * 100) / 100,
+        'Budget Efficiency Score': Math.round(budgetEfficiencyScore * 100) / 100,
+        'Last Updated': fields['⏱ Created Time'] || new Date().toISOString()
       };
     } catch (error) {
-      console.error('SmartSpend data fetch failed:', error);
+      console.error('SmartSpend data calculation failed:', error);
       throw error;
     }
   }
@@ -278,9 +278,9 @@ class AirtableLiveIntegration {
       }
       
       if (filters.length > 0) {
-        url += `?filterByFormula=AND(${filters.join(',')})&sort[0][field]=📅 Month&sort[0][direction]=desc`;
+        url += `?filterByFormula=AND(${filters.join(',')})&sort[0][field]=${encodeURIComponent('📅 Month')}&sort[0][direction]=desc`;
       } else {
-        url += `?sort[0][field]=📅 Month&sort[0][direction]=desc&maxRecords=12`;
+        url += `?sort[0][field]=${encodeURIComponent('📅 Month')}&sort[0][direction]=desc&maxRecords=12`;
       }
 
       const response = await fetch(url, {
