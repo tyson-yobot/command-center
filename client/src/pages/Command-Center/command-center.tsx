@@ -2722,7 +2722,7 @@ export default function CommandCenter() {
                 }}
               />
               <Bot className="w-16 h-16 mr-2 -mt-2 text-blue-400" style={{ display: 'none' }} />
-              YoBot<sup className="text-xl">®</sup> Command Center Dashboard
+              YoBot<sup className="text-xl">®</sup>&nbsp;Command Center Dashboard
             </h1>
           </div>
           <p className="text-slate-300 text-lg">
