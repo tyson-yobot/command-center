@@ -418,5 +418,65 @@
       "lastHealthCheck": "2025-06-15T17:59:27.248Z",
       "automationStatus": "paused"
     }
+  },
+  {
+    "timestamp": "2025-06-15T18:10:00.010Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 155.991407047,
+      "lastHealthCheck": "2025-06-15T18:09:00.007Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-15T18:20:00.014Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 755.991411279,
+      "lastHealthCheck": "2025-06-15T18:19:00.007Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-15T18:30:00.009Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 1355.993643256,
+      "lastHealthCheck": "2025-06-15T18:29:00.009Z",
+      "automationStatus": "paused"
+    }
+  },
+  {
+    "timestamp": "2025-06-15T18:40:00.010Z",
+    "type": "system_event",
+    "level": "info",
+    "message": "Health check: NaN% healthy",
+    "metrics": {
+      "totalFunctions": 0,
+      "activeFunctions": 0,
+      "successfulExecutions": 0,
+      "failedExecutions": 0,
+      "systemUptime": 1955.989187533,
+      "lastHealthCheck": "2025-06-15T18:39:00.005Z",
+      "automationStatus": "paused"
+    }
   }
 ]

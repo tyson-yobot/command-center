@@ -26,6 +26,24 @@ interface SmartSpendData {
   'Last Updated': string;
 }
 
+interface RevenueForecast {
+  'MRR': number;
+  'ROI': number;
+  'Close %': number;
+  'Pipeline Value': number;
+  'Client ID'?: string;
+  'Last Updated': string;
+}
+
+interface SupportTicket {
+  'Subject': string;
+  'Body': string;
+  'Client Email': string;
+  'Urgency': 'Low' | 'Medium' | 'High' | 'Critical';
+  'Status': string;
+  'Date Created': string;
+}
+
 class AirtableLiveIntegration {
   private apiKey: string;
   private baseUrl = 'https://api.airtable.com/v0';
@@ -44,24 +62,29 @@ class AirtableLiveIntegration {
   /**
    * Sales Order Flow Integration
    * Base: YoBot® Sales & Automation
-   * Table: 🧾 Sales Orders
+   * Table: Sales Orders Table
    */
   async createSalesOrder(orderData: Partial<SalesOrder>): Promise<any> {
-    const baseId = 'appb2f3D77Tc4DWAr'; // YoBot Lead Engine base
-    const tableId = 'tbluqrDSomu5UVhDw'; // Scraped Leads table
+    const baseId = 'appe0OSJtB1In1kn5'; // YoBot® Sales & Automation
+    const tableName = 'Sales Orders Table';
     
     try {
-      const response = await fetch(`${this.baseUrl}/${baseId}/${tableId}`, {
+      const response = await fetch(`${this.baseUrl}/${baseId}/${tableName}`, {
         method: 'POST',
         headers: this.getHeaders(),
         body: JSON.stringify({
-          fields: {
-            '🧑‍💼 Name': orderData['Client Name'] || 'Sales Order Client',
-            '✉️ Email': orderData['Client Email'] || 'sales@example.com',
-            '🏢 Company': `${orderData['Bot Package']} Order`,
-            '💼 Title': 'Sales Order Representative',
-            '🛠️ Lead Source': 'Sales Order Flow'
-          }
+          records: [{
+            fields: {
+              'Bot Package': orderData['Bot Package'] || 'YoBot Standard',
+              'Add-Ons': orderData['Add-Ons'] || [],
+              'Total': orderData['Total'] || 0,
+              'Status': orderData['Status'] || 'New',
+              'Client Email': orderData['Client Email'] || 'test@example.com',
+              'Client Name': orderData['Client Name'] || 'Test Client',
+              'Order Date': orderData['Order Date'] || new Date().toISOString(),
+              'Payment Status': orderData['Payment Status'] || 'Pending'
+            }
+          }]
         })
       });
 
@@ -84,10 +107,10 @@ class AirtableLiveIntegration {
 
   async getSalesOrders(filterByEmail?: string): Promise<any[]> {
     const baseId = 'appe0OSJtB1In1kn5';
-    const tableId = 'Sales Orders';
+    const tableName = 'Sales Orders Table';
     
     try {
-      let url = `${this.baseUrl}/${baseId}/${tableId}`;
+      let url = `${this.baseUrl}/${baseId}/${tableName}`;
       
       if (filterByEmail) {
         url += `?filterByFormula={Client Email}="${filterByEmail}"`;
@@ -111,12 +134,12 @@ class AirtableLiveIntegration {
 
   /**
    * SmartSpend™ Dashboard Integration
-   * Base: YoBot® SmartSpend Tracker
-   * Table: SmartSpend Dashboard
+   * Base: YoBot® SmartSpend Tracker (Main)
+   * Table: SmartSpend Master Table
    */
   async getSmartSpendData(clientId?: string): Promise<SmartSpendData | null> {
     const baseId = 'appGtcRZU6QJngkQS'; // YoBot® SmartSpend Tracker (Main)
-    const tableId = 'SmartSpend Dashboard'; // SmartSpend Dashboard table
+    const tableName = 'SmartSpend Master Table';
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
