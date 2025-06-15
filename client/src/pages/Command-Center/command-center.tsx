@@ -2933,52 +2933,60 @@ export default function CommandCenter() {
                   <div className="grid grid-cols-1 gap-3">
                     <Button
                       onClick={handleStartPipelineCalls}
-                      className="bg-lime-500 hover:bg-lime-600 text-white flex items-center justify-start p-3 font-semibold border-2 border-lime-400 shadow-lg shadow-lime-500/25"
+                      className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-between p-3 border border-green-500"
                     >
-                      <span className="text-xl mr-3">🚀</span>
-                      <span>Launch Voice Pipeline</span>
+                      <div className="flex items-center">
+                        <span className="text-xl mr-3">🚀</span>
+                        <span>Start Pipeline Calls</span>
+                      </div>
+                      {/* Voice waveform meter for Start Pipeline Calls */}
+                      <div className="flex items-center space-x-1">
+                        <div className="w-1 h-3 bg-green-300 rounded animate-pulse"></div>
+                        <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-75"></div>
+                        <div className="w-1 h-4 bg-green-300 rounded animate-pulse delay-150"></div>
+                        <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-300"></div>
+                      </div>
                     </Button>
                   
                   <Button
                     onClick={handleStopPipelineCalls}
-                    className="bg-red-500 hover:bg-red-600 text-white flex items-center justify-start p-3 border-2 border-red-400 shadow-lg shadow-red-500/25"
+                    className="bg-red-600 hover:bg-red-700 text-white flex items-center justify-start p-3 border border-red-500"
                   >
                     <span className="text-xl mr-3">🛑</span>
-                    <span>Stop Voice Pipeline</span>
+                    <span>End Pipeline Calls</span>
                   </Button>
                   
                   <Button
                     onClick={handleInitiateVoiceCall}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3 border border-green-500"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
                   >
                     <span className="text-xl mr-3">📞</span>
-                    <span>Manual Voice Call</span>
+                    <span>Manual Call Start</span>
                   </Button>
                   
                   <Button
                     onClick={handleVoiceToggle}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-start p-3 border border-green-500"
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-between p-3 border border-purple-500"
                   >
-                    <span className="text-xl mr-3">🎤</span>
-                    <span>Voice Command Mode</span>
+                    <div className="flex items-center">
+                      <span className="text-xl mr-3">🎙️</span>
+                      <span>Live Voice Command</span>
+                    </div>
+                    {/* Voice waveform meter for Voice Input */}
+                    <div className="flex items-center space-x-1">
+                      <div className="w-1 h-2 bg-purple-300 rounded animate-pulse"></div>
+                      <div className="w-1 h-4 bg-purple-300 rounded animate-pulse delay-100"></div>
+                      <div className="w-1 h-3 bg-purple-300 rounded animate-pulse delay-200"></div>
+                      <div className="w-1 h-5 bg-purple-300 rounded animate-pulse delay-300"></div>
+                    </div>
                   </Button>
                   
                   <Button
                     onClick={() => window.open('https://app-na2.hubspot.com/contacts/242375511/objects/0-1/views/all/list', '_blank')}
-                    className="text-white flex items-center justify-start p-3 transition-all duration-200"
-                    style={{
-                      backgroundColor: '#0d82da',
-                      borderLeft: '8px solid #ff7a59'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#0864b1';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = '#0d82da';
-                    }}
+                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3 border border-orange-500"
                   >
                     <span className="text-xl mr-3">🔗</span>
-                    <span>Open HubSpot CRM</span>
+                    <span>Sync HubSpot Contacts</span>
                   </Button>
                 </div>
               </CardContent>
@@ -3612,32 +3620,7 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Customer Success Milestones */}
-        <div className="mb-8">
-          <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 backdrop-blur-sm border border-blue-400 shadow-lg shadow-blue-400/20">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-white">Live Automation Active</h3>
-                  <p className="text-slate-300">System ready for live data connections</p>
-                  <p className="text-slate-300">Configure your integrations to begin tracking</p>
-                </div>
-                <div className="flex space-x-3">
-                  <Button 
-                    className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
-                  >
-                    View Reports
-                  </Button>
-                  <Button 
-                    className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
-                  >
-                    Create Campaign
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+
 
         {/* Voice & Conversation Analytics */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
