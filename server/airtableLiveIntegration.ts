@@ -328,8 +328,8 @@ class AirtableLiveIntegration {
    * Optional: Trigger Slack alert if NPS < 6
    */
   async getClientPulseData(clientId?: string): Promise<any> {
-    const baseId = 'appMbVQJ0n3nWRl1N'; // YoBot® Client CRM
-    const tableId = 'Client Overview'; // Client Overview table
+    const baseId = 'appMbVQJ0n3nWR11N'; // YoBot® Client CRM
+    const tableId = 'Client Pulse Tracker Table'; // Client Pulse Tracker table
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
@@ -354,7 +354,7 @@ class AirtableLiveIntegration {
       console.error('Client pulse data fetch failed:', error);
       // Try Pulse Tracker table as fallback
       try {
-        const fallbackTableId = 'Pulse Tracker';
+        const fallbackTableId = 'CRM Contacts Table';
         let fallbackUrl = `${this.baseUrl}/${baseId}/${fallbackTableId}`;
         
         if (clientId) {
@@ -387,8 +387,8 @@ class AirtableLiveIntegration {
    * Action: Pull last 5 calls + stats by client ID
    */
   async getVoiceCallLogs(clientId?: string): Promise<any[]> {
-    const baseId = 'appVoiceBotLogs'; // YoBot® VoiceBot Logs (need actual base ID)
-    const tableId = '📞 Voice Call Log';
+    const baseId = 'appe05t1B1tn1Kn5'; // YoBot® Sales & Automation
+    const tableId = 'Call Recording Tracker Table';
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
@@ -416,8 +416,8 @@ class AirtableLiveIntegration {
   }
 
   async getCallSentimentLogs(clientId?: string): Promise<any[]> {
-    const baseId = 'appVoiceBotLogs'; // YoBot® VoiceBot Logs (need actual base ID)
-    const tableId = '📊 Call Sentiment Log';
+    const baseId = 'appe05t1B1tn1Kn5'; // YoBot® Sales & Automation
+    const tableId = 'Call Sentiment Log Table';
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
@@ -467,8 +467,8 @@ class AirtableLiveIntegration {
    * Action: Pull by week → aggregate accuracy, escalations
    */
   async getNLPInsights(week?: string): Promise<any[]> {
-    const baseId = 'appNLPTracker'; // YoBot® NLP Tracker (need actual base ID)
-    const tableId = '🧠 NLP Keyword Tracker';
+    const baseId = 'appe05t1B1tn1Kn5'; // YoBot® Sales & Automation
+    const tableId = 'NLP Keyword Tracker Table';
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
