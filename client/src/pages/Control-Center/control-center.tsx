@@ -28,6 +28,7 @@ import {
   Bell,
   MessageSquare,
   Activity,
+  Crown,
   CheckCircle,
   AlertTriangle,
   Lock,
@@ -848,19 +849,19 @@ export default function SystemControls() {
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           
-          {/* ⚙️ Core System Enhancements */}
+          {/* 📦 Core Package Features */}
           <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
                 <Settings className="w-4 h-4 text-blue-400" />
-                <span>⚙️ Core System Enhancements</span>
+                <span>📦 Core Package Features</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.errorMonitoring)} rounded-full`}></div>
-                  <span className="text-white text-sm">SmartSpend™ Dashboard</span>
+                  <span className="text-white text-sm">Basic AI Chat</span>
                   {getStatusIcon(moduleStates.errorMonitoring)}
                 </div>
                 <Switch 
@@ -872,7 +873,7 @@ export default function SystemControls() {
               <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.quickbooks)} rounded-full`}></div>
-                  <span className="text-white text-sm">QuickBooks Online Sync</span>
+                  <span className="text-white text-sm">SMS Automation</span>
                   {getStatusIcon(moduleStates.quickbooks)}
                 </div>
                 <Switch 
@@ -884,7 +885,7 @@ export default function SystemControls() {
               <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.systemDiagnostics)} rounded-full`}></div>
-                  <span className="text-white text-sm">Command Center Pro</span>
+                  <span className="text-white text-sm">Email Automation</span>
                   {getStatusIcon(moduleStates.systemDiagnostics)}
                 </div>
                 <Switch 
@@ -896,7 +897,7 @@ export default function SystemControls() {
               <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.realtimeMetrics)} rounded-full`}></div>
-                  <span className="text-white text-sm">Botalytics ROI Dashboard</span>
+                  <span className="text-white text-sm">CRM Basic Integration</span>
                   {getStatusIcon(moduleStates.realtimeMetrics)}
                 </div>
                 <Switch 
@@ -904,34 +905,22 @@ export default function SystemControls() {
                   onCheckedChange={() => toggleModule('realtimeMetrics')}
                 />
               </div>
-              
-              <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-2 h-2 ${getStatusColor(moduleStates.backupSystem)} rounded-full`}></div>
-                  <span className="text-white text-sm">Predictive Analytics Engine</span>
-                  {getStatusIcon(moduleStates.backupSystem)}
-                </div>
-                <Switch 
-                  checked={moduleStates.backupSystem} 
-                  onCheckedChange={() => toggleModule('backupSystem')}
-                />
-              </div>
             </CardContent>
           </Card>
 
-          {/* 🤖 AI & Intelligence */}
+          {/* 🔧 Professional Add-Ons */}
           <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
                 <Brain className="w-4 h-4 text-purple-400" />
-                <span>🤖 AI & Intelligence</span>
+                <span>🔧 Professional Add-Ons</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.pdfGeneration)} rounded-full`}></div>
-                  <span className="text-white text-sm">ChatGPT Booster</span>
+                  <span className="text-white text-sm">Voice Call Pipeline</span>
                   {getStatusIcon(moduleStates.pdfGeneration)}
                 </div>
                 <Switch 
@@ -943,7 +932,7 @@ export default function SystemControls() {
               <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.businessCardOcr)} rounded-full`}></div>
-                  <span className="text-white text-sm">A/B Script Testing</span>
+                  <span className="text-white text-sm">Advanced Integrations</span>
                   {getStatusIcon(moduleStates.businessCardOcr)}
                 </div>
                 <Switch 
@@ -955,7 +944,7 @@ export default function SystemControls() {
               <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.contactEnrichment)} rounded-full`}></div>
-                  <span className="text-white text-sm">Custom Personality Pack</span>
+                  <span className="text-white text-sm">Calendar Booking System</span>
                   {getStatusIcon(moduleStates.contactEnrichment)}
                 </div>
                 <Switch 
@@ -967,7 +956,7 @@ export default function SystemControls() {
               <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.ndaGenerator)} rounded-full`}></div>
-                  <span className="text-white text-sm">Automated Content Generation Studio</span>
+                  <span className="text-white text-sm">Advanced Reporting Suite</span>
                   {getStatusIcon(moduleStates.ndaGenerator)}
                 </div>
                 <Switch 
@@ -975,11 +964,22 @@ export default function SystemControls() {
                   onCheckedChange={() => toggleModule('ndaGenerator')}
                 />
               </div>
-              
+            </CardContent>
+          </Card>
+
+          {/* 🏢 Enterprise Features */}
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-white text-base flex items-center space-x-2">
+                <Crown className="w-4 h-4 text-yellow-400" />
+                <span>🏢 Enterprise Features</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
               <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.smartWorkflows)} rounded-full`}></div>
-                  <span className="text-white text-sm">Conversational Intelligence Suite</span>
+                  <span className="text-white text-sm">Lead Scoring Engine</span>
                   {getStatusIcon(moduleStates.smartWorkflows)}
                 </div>
                 <Switch 
@@ -991,7 +991,7 @@ export default function SystemControls() {
               <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.documentGeneration)} rounded-full`}></div>
-                  <span className="text-white text-sm">Customer Journey Orchestration</span>
+                  <span className="text-white text-sm">Multi-Channel Analytics</span>
                   {getStatusIcon(moduleStates.documentGeneration)}
                 </div>
                 <Switch 
@@ -1003,7 +1003,7 @@ export default function SystemControls() {
               <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.voiceBotCore)} rounded-full`}></div>
-                  <span className="text-white text-sm">Voice Pattern Recognition & Analysis</span>
+                  <span className="text-white text-sm">Custom Workflow Builder</span>
                   {getStatusIcon(moduleStates.voiceBotCore)}
                 </div>
                 <Switch 
@@ -1159,672 +1159,4 @@ export default function SystemControls() {
     window.open(route, '_blank');
   };
 
-}
-
-export default SystemControls;
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.hubspotSync)} rounded-full`}></div>
-                <span className="text-white text-sm">HubSpot Sync</span>
-                {getStatusIcon(moduleStates.hubspotSync)}
-              </div>
-              <Switch 
-                checked={moduleStates.hubspotSync} 
-                onCheckedChange={() => toggleModule('hubspotSync')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.airtableLogging)} rounded-full`}></div>
-                <span className="text-white text-sm">Airtable Logging</span>
-                {getStatusIcon(moduleStates.airtableLogging)}
-              </div>
-              <Switch 
-                checked={moduleStates.airtableLogging} 
-                onCheckedChange={() => toggleModule('airtableLogging')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.leadScoring)} rounded-full`}></div>
-                <span className="text-white text-sm">Lead Scoring</span>
-                {getStatusIcon(moduleStates.leadScoring)}
-              </div>
-              <Switch 
-                checked={moduleStates.leadScoring} 
-                onCheckedChange={() => toggleModule('leadScoring')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.contactEnrichment)} rounded-full`}></div>
-                <span className="text-white text-sm">Contact Enrichment</span>
-                {getStatusIcon(moduleStates.contactEnrichment)}
-              </div>
-              <Switch 
-                checked={moduleStates.contactEnrichment} 
-                onCheckedChange={() => toggleModule('contactEnrichment')}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Automation & AI */}
-        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-white text-base flex items-center space-x-2">
-              <Brain className="w-4 h-4 text-purple-400" />
-              <span>Automation & AI</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.smartWorkflows)} rounded-full`}></div>
-                <span className="text-white text-sm">Smart Workflows</span>
-                {getStatusIcon(moduleStates.smartWorkflows)}
-              </div>
-              <Switch 
-                checked={moduleStates.smartWorkflows} 
-                onCheckedChange={() => toggleModule('smartWorkflows')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.emailAutomation)} rounded-full`}></div>
-                <span className="text-white text-sm">Email Automation</span>
-                {getStatusIcon(moduleStates.emailAutomation)}
-              </div>
-              <Switch 
-                checked={moduleStates.emailAutomation} 
-                onCheckedChange={() => toggleModule('emailAutomation')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.followupTasks)} rounded-full`}></div>
-                <span className="text-white text-sm">Follow-up Tasks</span>
-                {getStatusIcon(moduleStates.followupTasks)}
-              </div>
-              <Switch 
-                checked={moduleStates.followupTasks} 
-                onCheckedChange={() => toggleModule('followupTasks')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.pdfGeneration)} rounded-full`}></div>
-                <span className="text-white text-sm">PDF Generation</span>
-                {getStatusIcon(moduleStates.pdfGeneration)}
-              </div>
-              <Switch 
-                checked={moduleStates.pdfGeneration} 
-                onCheckedChange={() => toggleModule('pdfGeneration')}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Business Tools */}
-        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-white text-base flex items-center space-x-2">
-              <FileText className="w-4 h-4 text-yellow-400" />
-              <span>Business Tools</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.quoteGenerator)} rounded-full`}></div>
-                <span className="text-white text-sm">Quote Generator</span>
-                {getStatusIcon(moduleStates.quoteGenerator)}
-              </div>
-              <Switch 
-                checked={moduleStates.quoteGenerator} 
-                onCheckedChange={() => toggleModule('quoteGenerator')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.calendarBooking)} rounded-full`}></div>
-                <span className="text-white text-sm">Calendar Booking</span>
-                {getStatusIcon(moduleStates.calendarBooking)}
-              </div>
-              <Switch 
-                checked={moduleStates.calendarBooking} 
-                onCheckedChange={() => toggleModule('calendarBooking')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.ndaGenerator)} rounded-full`}></div>
-                <span className="text-white text-sm">NDA Generator</span>
-                {getStatusIcon(moduleStates.ndaGenerator)}
-              </div>
-              <Switch 
-                checked={moduleStates.ndaGenerator} 
-                onCheckedChange={() => toggleModule('ndaGenerator')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.businessCardOcr)} rounded-full`}></div>
-                <span className="text-white text-sm">Business Card OCR</span>
-                {getStatusIcon(moduleStates.businessCardOcr)}
-              </div>
-              <Switch 
-                checked={moduleStates.businessCardOcr} 
-                onCheckedChange={() => toggleModule('businessCardOcr')}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Analytics & Monitoring */}
-        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-white text-base flex items-center space-x-2">
-              <BarChart3 className="w-4 h-4 text-cyan-400" />
-              <span>Analytics & Monitoring</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.realtimeMetrics)} rounded-full`}></div>
-                <span className="text-white text-sm">Real-time Metrics</span>
-                {getStatusIcon(moduleStates.realtimeMetrics)}
-              </div>
-              <Switch 
-                checked={moduleStates.realtimeMetrics} 
-                onCheckedChange={() => toggleModule('realtimeMetrics')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.performanceTracking)} rounded-full`}></div>
-                <span className="text-white text-sm">Performance Tracking</span>
-                {getStatusIcon(moduleStates.performanceTracking)}
-              </div>
-              <Switch 
-                checked={moduleStates.performanceTracking} 
-                onCheckedChange={() => toggleModule('performanceTracking')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.usageAnalytics)} rounded-full`}></div>
-                <span className="text-white text-sm">Usage Analytics</span>
-                {getStatusIcon(moduleStates.usageAnalytics)}
-              </div>
-              <Switch 
-                checked={moduleStates.usageAnalytics} 
-                onCheckedChange={() => toggleModule('usageAnalytics')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.errorMonitoring)} rounded-full`}></div>
-                <span className="text-white text-sm">Error Monitoring</span>
-                {getStatusIcon(moduleStates.errorMonitoring)}
-              </div>
-              <Switch 
-                checked={moduleStates.errorMonitoring} 
-                onCheckedChange={() => toggleModule('errorMonitoring')}
-              />
-            </div>
-            
-
-          </CardContent>
-        </Card>
-
-        {/* Integrations */}
-        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-white text-base flex items-center space-x-2">
-              <Network className="w-4 h-4 text-orange-400" />
-              <span>Integrations</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.googleCalendar)} rounded-full`}></div>
-                <span className="text-white text-sm">Google Calendar</span>
-                {getStatusIcon(moduleStates.googleCalendar)}
-              </div>
-              <Switch 
-                checked={moduleStates.googleCalendar} 
-                onCheckedChange={() => toggleModule('googleCalendar')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.stripePayments)} rounded-full`}></div>
-                <span className="text-white text-sm">Stripe Payments</span>
-                {getStatusIcon(moduleStates.stripePayments)}
-              </div>
-              <Switch 
-                checked={moduleStates.stripePayments} 
-                onCheckedChange={() => toggleModule('stripePayments')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.quickbooks)} rounded-full`}></div>
-                <span className="text-white text-sm">QuickBooks</span>
-                {getStatusIcon(moduleStates.quickbooks)}
-              </div>
-              <Switch 
-                checked={moduleStates.quickbooks} 
-                onCheckedChange={() => toggleModule('quickbooks')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.twilioSms)} rounded-full`}></div>
-                <span className="text-white text-sm">Twilio SMS</span>
-                {getStatusIcon(moduleStates.twilioSms)}
-              </div>
-              <Switch 
-                checked={moduleStates.twilioSms} 
-                onCheckedChange={() => toggleModule('twilioSms')}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* File Management */}
-        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-white text-base flex items-center space-x-2">
-              <FileText className="w-4 h-4 text-indigo-400" />
-              <span>File Management</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.documentGeneration)} rounded-full`}></div>
-                <span className="text-white text-sm">Document Generation</span>
-                {getStatusIcon(moduleStates.documentGeneration)}
-              </div>
-              <Switch 
-                checked={moduleStates.documentGeneration} 
-                onCheckedChange={() => toggleModule('documentGeneration')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.pdfProcessor)} rounded-full`}></div>
-                <span className="text-white text-sm">PDF Processor</span>
-                {getStatusIcon(moduleStates.pdfProcessor)}
-              </div>
-              <Switch 
-                checked={moduleStates.pdfProcessor} 
-                onCheckedChange={() => toggleModule('pdfProcessor')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.fileStorage)} rounded-full`}></div>
-                <span className="text-white text-sm">File Storage</span>
-                {getStatusIcon(moduleStates.fileStorage)}
-              </div>
-              <Switch 
-                checked={moduleStates.fileStorage} 
-                onCheckedChange={() => toggleModule('fileStorage')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.backupSystem)} rounded-full`}></div>
-                <span className="text-white text-sm">Backup System</span>
-                {getStatusIcon(moduleStates.backupSystem)}
-              </div>
-              <Switch 
-                checked={moduleStates.backupSystem} 
-                onCheckedChange={() => toggleModule('backupSystem')}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Webhook Management */}
-        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-white text-base flex items-center space-x-2">
-              <Activity className="w-4 h-4 text-red-400" />
-              <span>Webhook Management</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.webhookMonitoring)} rounded-full`}></div>
-                <span className="text-white text-sm">Webhook Monitoring</span>
-                {getStatusIcon(moduleStates.webhookMonitoring)}
-                <div title={getStatusDetails('webhookMonitoring')}>
-                  {getStatusIndicator('webhookMonitoring')}
-                </div>
-              </div>
-              <Switch 
-                checked={moduleStates.webhookMonitoring} 
-                onCheckedChange={() => toggleModule('webhookMonitoring')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.scenarioControl)} rounded-full`}></div>
-                <span className="text-white text-sm">Scenario Control</span>
-                {getStatusIcon(moduleStates.scenarioControl)}
-              </div>
-              <Switch 
-                checked={moduleStates.scenarioControl} 
-                onCheckedChange={() => toggleModule('scenarioControl')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.rateLimiting)} rounded-full`}></div>
-                <span className="text-white text-sm">Rate Limiting</span>
-                {getStatusIcon(moduleStates.rateLimiting)}
-              </div>
-              <Switch 
-                checked={moduleStates.rateLimiting} 
-                onCheckedChange={() => toggleModule('rateLimiting')}
-              />
-            </div>
-
-
-            
-
-          </CardContent>
-        </Card>
-
-        {/* ⚙️ Runtime Control */}
-        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-white text-base flex items-center space-x-2">
-              <Settings className="w-4 h-4 text-orange-400" />
-              <span>⚙️ Runtime Control</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {/* Run System Diagnostics - Single Consolidated Tile */}
-            {isModuleVisible('systemDiagnostics') && (
-              <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-2 h-2 ${getStatusColor(true)} rounded-full`}></div>
-                    <div>
-                      <span className="text-white text-sm font-medium">Run System Diagnostics</span>
-                      <p className="text-slate-400 text-xs">
-                        Triggers full diagnostics based on system mode ({currentSystemMode.toUpperCase()})
-                      </p>
-                    </div>
-                    <Settings className="w-4 h-4 text-blue-400" />
-                  </div>
-                  <Button
-                    onClick={async () => {
-                      try {
-                        const endpoint = currentSystemMode === 'test' ? '/test' : '/';
-                        
-                        setActionLog(prev => [...prev, {
-                          id: Date.now(),
-                          timestamp: new Date().toISOString(),
-                          module: 'System Diagnostics',
-                          action: `${currentSystemMode.toUpperCase()} Mode Diagnostics`,
-                          status: 'Processing',
-                          details: `Running ${currentSystemMode} diagnostics via ${endpoint}`
-                        }]);
-
-                        const response = await fetch(endpoint, {
-                          method: 'GET'
-                        });
-
-                        if (response.ok) {
-                          setActionLog(prev => [...prev, {
-                            id: Date.now() + 1,
-                            timestamp: new Date().toISOString(),
-                            module: 'System Diagnostics',
-                            action: `${currentSystemMode.toUpperCase()} Mode`,
-                            status: 'Success',
-                            details: `${currentSystemMode} diagnostics completed - results logged to Airtable`
-                          }]);
-                        } else {
-                          throw new Error(`HTTP ${response.status}`);
-                        }
-                      } catch (error) {
-                        setActionLog(prev => [...prev, {
-                          id: Date.now() + 2,
-                          timestamp: new Date().toISOString(),
-                          module: 'System Diagnostics',
-                          action: 'Diagnostics Execution',
-                          status: 'Failed',
-                          details: `Failed to execute ${currentSystemMode} diagnostics: ${error.message}`
-                        }]);
-                      }
-                    }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm"
-                  >
-                    Run Diagnostics
-                  </Button>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Security & Compliance */}
-        <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-white text-base flex items-center space-x-2">
-              <Shield className="w-4 h-4 text-emerald-400" />
-              <span>Security & Compliance</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.dataEncryption)} rounded-full`}></div>
-                <span className="text-white text-sm">Data Encryption</span>
-                {getStatusIcon(moduleStates.dataEncryption)}
-              </div>
-              <Switch 
-                checked={moduleStates.dataEncryption} 
-                onCheckedChange={() => toggleModule('dataEncryption')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.gdprCompliance)} rounded-full`}></div>
-                <span className="text-white text-sm">GDPR Compliance</span>
-                {getStatusIcon(moduleStates.gdprCompliance)}
-              </div>
-              <Switch 
-                checked={moduleStates.gdprCompliance} 
-                onCheckedChange={() => toggleModule('gdprCompliance')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.accessLogging)} rounded-full`}></div>
-                <span className="text-white text-sm">Access Logging</span>
-                {getStatusIcon(moduleStates.accessLogging)}
-              </div>
-              <Switch 
-                checked={moduleStates.accessLogging} 
-                onCheckedChange={() => toggleModule('accessLogging')}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg hover:bg-slate-700/40 transition-colors">
-              <div className="flex items-center space-x-3">
-                <div className={`w-2 h-2 ${getStatusColor(moduleStates.auditTrail)} rounded-full`}></div>
-                <span className="text-white text-sm">Audit Trail</span>
-                {getStatusIcon(moduleStates.auditTrail)}
-              </div>
-              <Switch 
-                checked={moduleStates.auditTrail} 
-                onCheckedChange={() => toggleModule('auditTrail')}
-              />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Footer Actions */}
-      <div className="mt-8 flex items-center justify-between p-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg">
-        <div className="flex items-center space-x-4">
-          <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-          <span className="text-white text-sm">System Status: Operational</span>
-        </div>
-        <div className="flex space-x-3">
-          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
-            Reset All
-          </Button>
-          <Button 
-            onClick={handleLogout}
-            variant="outline" 
-            className="border-red-500/30 text-red-300 hover:bg-red-500/10"
-          >
-            <Lock className="w-4 h-4 mr-2" />
-            Logout
-          </Button>
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-            Save Configuration
-          </Button>
-        </div>
-      </div>
-
-      {/* Action Log Modal */}
-      <Dialog open={showActionLog} onOpenChange={setShowActionLog}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-slate-900 border-slate-700">
-          <DialogHeader>
-            <DialogTitle className="text-white flex items-center space-x-2">
-              <ScrollText className="w-5 h-5" />
-              <span>System Action Log</span>
-            </DialogTitle>
-            <DialogDescription className="text-slate-300">
-              Real-time module activity and troubleshooting details
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="space-y-4">
-            {/* Filter Controls */}
-            <div className="flex items-center space-x-4 p-4 bg-slate-800/50 rounded-lg">
-              <Label className="text-white text-sm">Filter:</Label>
-              <Button size="sm" variant="outline" className="text-xs border-slate-600 text-white hover:bg-slate-700">All</Button>
-              <Button size="sm" variant="outline" className="text-xs border-red-600 text-red-300 hover:bg-red-900/20">Errors Only</Button>
-              <Button size="sm" variant="outline" className="text-xs border-yellow-600 text-yellow-300 hover:bg-yellow-900/20">Warnings</Button>
-              <Button size="sm" variant="outline" className="text-xs border-slate-600 text-white hover:bg-slate-700">Last 24h</Button>
-            </div>
-
-            {/* Log Entries */}
-            <div className="space-y-2 max-h-96 overflow-y-auto">
-              {actionLog.map((log) => (
-                <div 
-                  key={log.id}
-                  className={`p-3 rounded-lg border-l-4 ${
-                    log.status === 'Failed' || log.status === 'Error' 
-                      ? 'bg-red-900/20 border-red-500' 
-                      : log.status === 'Warning'
-                      ? 'bg-yellow-900/20 border-yellow-500'
-                      : 'bg-green-900/20 border-green-500'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <span className="text-white font-medium text-sm">{log.module}</span>
-                      <Badge variant="outline" className="text-xs border-slate-600 text-slate-300">
-                        {log.action}
-                      </Badge>
-                      <Badge 
-                        className={`text-xs ${
-                          log.status === 'Failed' || log.status === 'Error'
-                            ? 'bg-red-500/20 text-red-300 border-red-500/30'
-                            : log.status === 'Warning'
-                            ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
-                            : 'bg-green-500/20 text-green-300 border-green-500/30'
-                        }`}
-                      >
-                        {log.status}
-                      </Badge>
-                    </div>
-                    <span className="text-slate-400 text-xs">
-                      {new Date(log.timestamp).toLocaleTimeString()}
-                    </span>
-                  </div>
-                  <p className="text-slate-300 text-sm mt-1">{log.details}</p>
-                </div>
-              ))}
-            </div>
-            
-            <div className="flex justify-end space-x-2 pt-4 border-t border-slate-700">
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="border-slate-600 text-white hover:bg-slate-700"
-                onClick={() => setActionLog([])}
-              >
-                Clear Log
-              </Button>
-              <Button 
-                size="sm"
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-                onClick={() => setShowActionLog(false)}
-              >
-                Close
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-
-
-      {/* Critical System Management Section - Live Mode Only */}
-      <Card className="bg-red-900/60 backdrop-blur-sm border border-red-500/30 mt-6">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-white text-base flex items-center space-x-2">
-            <AlertTriangle className="w-4 h-4 text-red-400" />
-            <span>Critical System Management</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="text-center text-slate-400 py-8">
-            Live Mode - All test controls removed
-            <br />
-            System operating in production environment
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
 }
