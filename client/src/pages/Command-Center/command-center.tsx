@@ -3079,8 +3079,8 @@ export default function CommandCenter() {
                     className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
                     style={{ borderLeft: '8px solid #fbbf24' }}
                   >
-                    <span className="text-xl mr-3">📧</span>
-                    <span>Mailchimp Campaign</span>
+                    <span className="text-xl mr-3">📬</span>
+                    <span>Email Marketing Platform</span>
                   </Button>
                   
 
