@@ -1024,10 +1024,10 @@ export default function SystemControls() {
                 />
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-green-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.documentGeneration)} rounded-full`}></div>
-                  <span className="text-white text-sm border border-green-400 px-2 py-1 rounded bg-slate-600/60">Multi-Channel Analytics</span>
+                  <span className="text-white text-sm">Multi-Channel Analytics</span>
                   {getStatusIcon(moduleStates.documentGeneration)}
                 </div>
                 <Switch 
@@ -1037,10 +1037,10 @@ export default function SystemControls() {
                 />
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-green-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.voiceBotCore)} rounded-full`}></div>
-                  <span className="text-white text-sm border border-green-400 px-2 py-1 rounded bg-slate-600/60">Custom Workflow Builder</span>
+                  <span className="text-white text-sm">Custom Workflow Builder</span>
                   {getStatusIcon(moduleStates.voiceBotCore)}
                 </div>
                 <Switch 
@@ -1050,10 +1050,10 @@ export default function SystemControls() {
                 />
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-colors">
+              <div className="flex items-center justify-between p-3 bg-slate-700/50 border border-green-400 rounded-lg hover:bg-slate-600/50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 ${getStatusColor(moduleStates.webhookMonitoring)} rounded-full`}></div>
-                  <span className="text-white text-sm border border-green-400 px-2 py-1 rounded bg-slate-600/60">Competitive Intelligence Radar</span>
+                  <span className="text-white text-sm">Competitive Intelligence Radar</span>
                   {getStatusIcon(moduleStates.webhookMonitoring)}
                 </div>
                 <Switch 
