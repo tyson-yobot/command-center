@@ -717,23 +717,39 @@ export default function CommandCenter() {
       });
 
       if (response.ok) {
-        const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-        const audio = new Audio(audioUrl);
+        const result = await response.json();
         
-        audio.onloadeddata = () => {
-          setVoiceStatus('Playing voice test...');
-        };
-        
-        audio.onended = () => {
-          setVoiceStatus('Voice test completed successfully');
-        };
-        
-        audio.onerror = () => {
-          setVoiceStatus('Audio playback error');
-        };
-        
-        await audio.play();
+        if (result.success && result.audioData) {
+          // Convert base64 to audio blob
+          const audioBytes = atob(result.audioData);
+          const audioArray = new Uint8Array(audioBytes.length);
+          for (let i = 0; i < audioBytes.length; i++) {
+            audioArray[i] = audioBytes.charCodeAt(i);
+          }
+          
+          const audioBlob = new Blob([audioArray], { type: 'audio/mpeg' });
+          const audioUrl = URL.createObjectURL(audioBlob);
+          const audio = new Audio(audioUrl);
+          
+          audio.onloadeddata = () => {
+            setVoiceStatus('Playing voice test...');
+          };
+          
+          audio.onended = () => {
+            setVoiceStatus('Voice test completed successfully');
+            URL.revokeObjectURL(audioUrl);
+          };
+          
+          audio.onerror = (e) => {
+            setVoiceStatus('Audio playback error');
+            console.error('Audio playback error:', e);
+            URL.revokeObjectURL(audioUrl);
+          };
+          
+          await audio.play();
+        } else {
+          setVoiceStatus(`Voice test failed: ${result.error || 'Unknown error'}`);
+        }
       } else {
         const errorData = await response.text();
         setVoiceStatus(`Voice test failed: ${response.status}`);
