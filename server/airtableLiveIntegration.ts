@@ -83,8 +83,8 @@ class AirtableLiveIntegration {
   }
 
   async getSalesOrders(filterByEmail?: string): Promise<any[]> {
-    const baseId = 'appe05t1B1tn1Kn5';
-    const tableId = 'Sales Orders Table';
+    const baseId = 'appe0OSJtB1In1kn5';
+    const tableId = 'Sales Orders';
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
@@ -328,8 +328,8 @@ class AirtableLiveIntegration {
    * Optional: Trigger Slack alert if NPS < 6
    */
   async getClientPulseData(clientId?: string): Promise<any> {
-    const baseId = 'appMbVQJ0n3nWR11N'; // YoBot® Client CRM
-    const tableId = 'Client Pulse Tracker Table'; // Client Pulse Tracker table
+    const baseId = 'appMbVQJ0n3nWRl1N'; // YoBot® Client CRM
+    const tableId = 'Client Overview'; // Client Overview table
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
@@ -387,8 +387,8 @@ class AirtableLiveIntegration {
    * Action: Pull last 5 calls + stats by client ID
    */
   async getVoiceCallLogs(clientId?: string): Promise<any[]> {
-    const baseId = 'appe05t1B1tn1Kn5'; // YoBot® Sales & Automation
-    const tableId = 'Call Recording Tracker Table';
+    const baseId = 'appe0OSJtB1In1kn5'; // YoBot® Sales & Automation
+    const tableId = 'Voice Call Log';
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
@@ -416,8 +416,8 @@ class AirtableLiveIntegration {
   }
 
   async getCallSentimentLogs(clientId?: string): Promise<any[]> {
-    const baseId = 'appe05t1B1tn1Kn5'; // YoBot® Sales & Automation
-    const tableId = 'Call Sentiment Log Table';
+    const baseId = 'appe0OSJtB1In1kn5'; // YoBot® Sales & Automation
+    const tableId = 'Call Sentiment Log';
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
@@ -467,8 +467,8 @@ class AirtableLiveIntegration {
    * Action: Pull by week → aggregate accuracy, escalations
    */
   async getNLPInsights(week?: string): Promise<any[]> {
-    const baseId = 'appe05t1B1tn1Kn5'; // YoBot® Sales & Automation
-    const tableId = 'NLP Keyword Tracker Table';
+    const baseId = 'appe0OSJtB1In1kn5'; // YoBot® Sales & Automation
+    const tableId = 'NLP Keyword Tracker';
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
@@ -502,8 +502,8 @@ class AirtableLiveIntegration {
    * Action: Filter by today's date and client
    */
   async getTodayCalendarBookings(clientId?: string): Promise<any[]> {
-    const baseId = 'appMbVQJ0n3nWR11N'; // YoBot® Client CRM
-    const tableId = 'Client Bookings Table';
+    const baseId = 'appe0OSJtB1In1kn5'; // YoBot® Sales & Automation
+    const tableId = 'Calendar Bookings';
     
     try {
       const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
