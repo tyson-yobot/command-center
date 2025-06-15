@@ -594,52 +594,30 @@ export default function CommandCenter() {
   };
 
   const startQueryVoiceRecognition = () => {
-    const recognition = initializeVoiceRecognition();
-    if (recognition) {
-      recognition.onresult = (event: any) => {
-        const lastResult = event.results[event.results.length - 1];
-        if (lastResult.isFinal) {
-          setQueryText(lastResult[0].transcript);
-          setVoiceStatus('Query captured');
-        }
-      };
-
-      recognition.onstart = () => {
-        setIsListening(true);
-        setVoiceStatus('Listening for query...');
-      };
-
-      recognition.onend = () => {
-        setIsListening(false);
-        setVoiceStatus('Ready');
-      };
-
-      recognition.start();
+    if (!isListening) {
+      setUserInitiatedVoice(true);
+      setIsListening(true);
+      setVoiceStatus('Listening for query...');
+      console.log('Query voice recognition started');
+    } else {
+      setUserInitiatedVoice(false);
+      setIsListening(false);
+      setVoiceStatus('Ready');
+      console.log('Query voice recognition stopped');
     }
   };
 
   const startProgrammingVoiceRecognition = () => {
-    const recognition = initializeVoiceRecognition();
-    if (recognition) {
-      recognition.onresult = (event: any) => {
-        const lastResult = event.results[event.results.length - 1];
-        if (lastResult.isFinal) {
-          setProgrammingText(prev => prev + ' ' + lastResult[0].transcript);
-          setVoiceStatus('Programming command captured');
-        }
-      };
-
-      recognition.onstart = () => {
-        setIsListening(true);
-        setVoiceStatus('Listening for programming...');
-      };
-
-      recognition.onend = () => {
-        setIsListening(false);
-        setVoiceStatus('Ready');
-      };
-
-      recognition.start();
+    if (!isListening) {
+      setUserInitiatedVoice(true);
+      setIsListening(true);
+      setVoiceStatus('Listening for programming...');
+      console.log('Programming voice recognition started');
+    } else {
+      setUserInitiatedVoice(false);
+      setIsListening(false);
+      setVoiceStatus('Ready');
+      console.log('Programming voice recognition stopped');
     }
   };
 
@@ -2759,9 +2737,9 @@ export default function CommandCenter() {
             <div className="flex items-center space-x-4">
               <Mic className="w-5 h-5 text-blue-400" />
               <span className="text-white font-medium">Voice Commands Active</span>
-              <Badge className={`${isListening ? 'bg-green-500' : 'bg-gray-500'} text-white flex items-center`}>
-                {isListening && <div className="w-2 h-2 bg-green-200 rounded-full mr-1 animate-pulse"></div>}
-                {isListening ? 'Listening...' : 'Idle'}
+              <Badge className={`${userInitiatedVoice && isListening ? 'bg-green-500' : 'bg-gray-500'} text-white flex items-center`}>
+                {userInitiatedVoice && isListening && <div className="w-2 h-2 bg-green-200 rounded-full mr-1 animate-pulse"></div>}
+                {userInitiatedVoice && isListening ? 'Listening...' : 'Ready'}
               </Badge>
             </div>
             <div className="flex items-center space-x-3">
@@ -4366,15 +4344,15 @@ export default function CommandCenter() {
                     />
                     <Button 
                       onClick={startQueryVoiceRecognition}
-                      className={`absolute right-2 top-2 p-2 ${isListening ? 'bg-red-500 animate-pulse' : 'bg-red-600 hover:bg-red-700'}`}
+                      className={`absolute right-2 top-2 p-2 ${userInitiatedVoice && isListening ? 'bg-red-500 animate-pulse' : 'bg-red-600 hover:bg-red-700'}`}
                     >
                       <Mic className="w-4 h-4" />
-                      {isListening && <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>}
+                      {userInitiatedVoice && isListening && <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>}
                     </Button>
                   </div>
                   
                   {/* Voice Activity Meter - Compact */}
-                  {isListening && (
+                  {userInitiatedVoice && isListening && (
                     <div className="bg-blue-800/30 border border-blue-400/30 rounded px-3 py-1 mt-1">
                       <div className="flex items-center space-x-2 text-xs">
                         <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
@@ -4437,15 +4415,15 @@ export default function CommandCenter() {
                       />
                       <Button 
                         onClick={startProgrammingVoiceRecognition}
-                        className={`absolute top-2 right-2 p-2 ${isListening ? 'bg-red-500 animate-pulse' : 'bg-red-600 hover:bg-red-700'}`}
+                        className={`absolute top-2 right-2 p-2 ${userInitiatedVoice && isListening ? 'bg-red-500 animate-pulse' : 'bg-red-600 hover:bg-red-700'}`}
                       >
                         <Mic className="w-4 h-4" />
-                        {isListening && <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>}
+                        {userInitiatedVoice && isListening && <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>}
                       </Button>
                     </div>
                     
                     {/* Voice Activity Meter for Programming - Compact */}
-                    {isListening && (
+                    {userInitiatedVoice && isListening && (
                       <div className="bg-cyan-800/30 border border-cyan-400/30 rounded px-3 py-1 mt-1">
                         <div className="flex items-center space-x-2 text-xs">
                           <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
@@ -4463,8 +4441,8 @@ export default function CommandCenter() {
                     
                     <div className="flex items-center justify-between p-3 bg-blue-800/40 rounded border border-blue-400/30">
                       <div className="flex items-center space-x-3">
-                        <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red-400 animate-pulse' : 'bg-blue-400'}`}></div>
-                        <span className="text-blue-300 text-sm">Voice Recognition Ready</span>
+                        <div className={`w-3 h-3 rounded-full ${userInitiatedVoice && isListening ? 'bg-red-400 animate-pulse' : 'bg-blue-400'}`}></div>
+                        <span className="text-blue-300 text-sm">{userInitiatedVoice && isListening ? 'Voice Recognition Active' : 'Voice Recognition Ready'}</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <span className="text-blue-400 text-xs">Status: {voiceStatus}</span>
