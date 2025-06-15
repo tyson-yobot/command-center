@@ -89,6 +89,7 @@ import { AnalyticsReportModal } from '@/components/AnalyticsReportModal';
 import { VoiceCommandInterface } from '@/components/VoiceCommandInterface';
 import { CalendarUploadModal } from '@/components/CalendarUploadModal';
 import { LiveCallBanner } from '@/components/LiveCallBanner';
+import { EnhancedTooltip } from '@/components/EnhancedTooltip';
 
 
 export default function CommandCenter() {
@@ -4203,7 +4204,9 @@ export default function CommandCenter() {
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 h-64">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <Mic className="w-5 h-5 mr-2 text-red-400" />
+                <EnhancedTooltip content="Real-time voice call analytics and performance metrics">
+                  <Mic className="w-5 h-5 mr-2 text-red-400" />
+                </EnhancedTooltip>
                 Voice Analytics
               </CardTitle>
             </CardHeader>

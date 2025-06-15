@@ -4,27 +4,24 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 interface EnhancedTooltipProps {
   children: React.ReactNode;
   content: string;
-  side?: 'top' | 'right' | 'bottom' | 'left';
-  delay?: number;
+  side?: 'top' | 'bottom' | 'left' | 'right';
+  delayDuration?: number;
 }
 
 export function EnhancedTooltip({ 
   children, 
   content, 
-  side = 'top',
-  delay = 300 
+  side = 'top', 
+  delayDuration = 300 
 }: EnhancedTooltipProps) {
   return (
-    <TooltipProvider delayDuration={delay}>
+    <TooltipProvider delayDuration={delayDuration}>
       <Tooltip>
         <TooltipTrigger asChild>
           {children}
         </TooltipTrigger>
-        <TooltipContent 
-          side={side}
-          className="bg-slate-800 border border-slate-600 text-white text-sm max-w-xs px-3 py-2"
-        >
-          {content}
+        <TooltipContent side={side} className="bg-slate-800 border border-slate-600 text-white text-sm px-3 py-2 rounded shadow-lg">
+          <p>{content}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

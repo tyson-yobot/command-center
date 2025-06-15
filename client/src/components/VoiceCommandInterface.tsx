@@ -276,11 +276,43 @@ export function VoiceCommandInterface({
               </div>
             )}
 
-            {/* Real-time Transcript */}
-            {realTimeTranscript && (
-              <div className="bg-slate-700 rounded-lg p-3 border border-green-400/30">
-                <p className="text-green-400 text-sm font-medium mb-1">Transcript:</p>
-                <p className="text-white text-sm">{realTimeTranscript}</p>
+            {/* Enhanced Real-time Transcript Display */}
+            {(realTimeTranscript || micStatus === 'listening') && (
+              <div className={`rounded-lg p-4 border-2 transition-all duration-300 ${
+                micStatus === 'listening' 
+                  ? 'bg-green-900/30 border-green-400 shadow-lg shadow-green-400/20' 
+                  : 'bg-slate-700 border-slate-500'
+              }`}>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-green-400 font-medium flex items-center">
+                    <Mic className="w-4 h-4 mr-2" />
+                    Live Transcription
+                  </p>
+                  {micStatus === 'listening' && (
+                    <div className="flex space-x-1">
+                      {[...Array(3)].map((_, i) => (
+                        <div
+                          key={i}
+                          className="w-2 h-2 bg-green-400 rounded-full animate-pulse"
+                          style={{ animationDelay: `${i * 0.3}s` }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className={`min-h-[60px] p-3 rounded border ${
+                  micStatus === 'listening' 
+                    ? 'bg-slate-900/50 border-green-400/30' 
+                    : 'bg-slate-800 border-slate-600'
+                }`}>
+                  {realTimeTranscript ? (
+                    <p className="text-white text-lg leading-relaxed">{realTimeTranscript}</p>
+                  ) : micStatus === 'listening' ? (
+                    <p className="text-slate-400 italic">Listening for speech...</p>
+                  ) : (
+                    <p className="text-slate-500 text-sm">Transcript will appear here</p>
+                  )}
+                </div>
               </div>
             )}
           </div>
