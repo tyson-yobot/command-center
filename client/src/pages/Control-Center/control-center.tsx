@@ -788,30 +788,30 @@ export default function SystemControls() {
           </div>
         </div>
         
-        <div className="flex items-center space-x-4">
-          <Badge className="bg-green-500/20 text-green-300 border-green-500/30">
+        <div className="flex items-center space-x-3">
+          <Badge className="bg-green-500/20 text-white border-green-500/30 px-3 py-1 h-8 flex items-center">
             {filteredModules.filter(([key, value]) => value).length} Active Modules
           </Badge>
-          <Badge className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
+          <Badge className="bg-yellow-500/20 text-white border-yellow-500/30 px-3 py-1 h-8 flex items-center">
             {filteredModules.filter(([key, value]) => !value).length} Disabled
           </Badge>
-          <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30">
+          <Badge className="bg-blue-500/20 text-white border-blue-500/30 px-3 py-1 h-8 flex items-center">
             {userRole.charAt(0).toUpperCase() + userRole.slice(1)} View
           </Badge>
           {searchQuery && (
-            <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30">
+            <Badge className="bg-purple-500/20 text-white border-purple-500/30 px-3 py-1 h-8 flex items-center">
               Filtered: {filteredModules.length} results
             </Badge>
           )}
-          <Badge className="bg-red-500/20 text-red-300 border-red-500/30 animate-pulse">
+          <Badge className="bg-red-500/20 text-white border-red-500/30 animate-pulse px-3 py-1 h-8 flex items-center">
             Emergency Controls Available
           </Badge>
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white border-2 border-blue-500 h-8 px-4">
             Apply Changes
           </Button>
           <Button 
             onClick={() => setShowActionLog(true)}
-            className="bg-slate-600 hover:bg-slate-700 text-white flex items-center space-x-2"
+            className="bg-slate-600 hover:bg-slate-700 text-white border-2 border-slate-500 flex items-center space-x-2 h-8 px-4"
           >
             <ScrollText className="w-4 h-4" />
             <span>Logs</span>
@@ -870,14 +870,14 @@ export default function SystemControls() {
 
       {/* Add-On Modules */}
       <div className="mb-8">
-        <h2 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
-          <Settings className="w-5 h-5 text-green-400" />
-          <span>🧩 Add-On Modules - Individual Toggles</span>
+        <h2 className="text-xl font-bold text-white mb-4 flex items-center space-x-2 border border-blue-500 p-3 rounded bg-blue-500/10">
+          <Settings className="w-5 h-5 text-blue-400" />
+          <span>Add-On Modules - Individual Toggles</span>
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           
           {/* Core Package Features */}
-          <Card className="bg-white/5 backdrop-blur-sm border-2 border-blue-500 shadow-lg shadow-blue-500/20">
+          <Card className="bg-white/5 backdrop-blur-sm shadow-lg">
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
                 <Settings className="w-6 h-6 text-blue-400" />
@@ -907,7 +907,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.quickbooks} 
                   onCheckedChange={() => toggleModule('quickbooks')}
-                  className="border border-cyan-400"
+                  className="control-center-switch"
                 />
               </div>
               
@@ -920,7 +920,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.systemDiagnostics} 
                   onCheckedChange={() => toggleModule('systemDiagnostics')}
-                  className="border border-cyan-400"
+                  className="control-center-switch"
                 />
               </div>
               
@@ -933,6 +933,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.realtimeMetrics} 
                   onCheckedChange={() => toggleModule('realtimeMetrics')}
+                  className="control-center-switch"
                 />
               </div>
             </CardContent>
@@ -943,7 +944,7 @@ export default function SystemControls() {
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-base flex items-center space-x-2">
                 <Brain className="w-4 h-4 text-purple-400" />
-                <span>🔧 Professional Add-Ons</span>
+                <span>Professional Add-Ons</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -956,6 +957,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.pdfGeneration} 
                   onCheckedChange={() => toggleModule('pdfGeneration')}
+                  className="control-center-switch"
                 />
               </div>
               
@@ -968,6 +970,7 @@ export default function SystemControls() {
                 <Switch 
                   checked={moduleStates.businessCardOcr} 
                   onCheckedChange={() => toggleModule('businessCardOcr')}
+                  className="control-center-switch"
                 />
               </div>
               
