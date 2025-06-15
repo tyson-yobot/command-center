@@ -85,6 +85,10 @@ import { LiveChatInterface } from '@/components/live-chat-interface';
 import { KnowledgeBaseManager } from '@/components/knowledge-base-manager';
 import { TabContentRenderer } from '@/components/TabContentRenderer';
 import { CreateVoiceCallModal } from '@/components/create-voice-call-modal';
+import { AnalyticsReportModal } from '@/components/AnalyticsReportModal';
+import { VoiceCommandInterface } from '@/components/VoiceCommandInterface';
+import { CalendarUploadModal } from '@/components/CalendarUploadModal';
+import { LiveCallBanner } from '@/components/LiveCallBanner';
 
 
 export default function CommandCenter() {
@@ -344,7 +348,7 @@ export default function CommandCenter() {
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [currentMessage, setCurrentMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [activeCalls, setActiveCalls] = useState<any[]>([]);
+  const [callDetails, setCallDetails] = useState<any[]>([]);
   
   // Service States
   const [serviceStates, setServiceStates] = useState({
@@ -2790,24 +2794,84 @@ export default function CommandCenter() {
           </p>
         </div>
 
-        {/* Global Voice Control Bar */}
+        {/* Live Call Banner */}
+        <LiveCallBanner 
+          activeCalls={activeCalls} 
+          isVisible={activeCalls > 0}
+          onViewDetails={() => setShowCreateVoiceCallModal(true)}
+        />
+
+        {/* Enhanced Voice Command Interface */}
+        <div className="mb-6">
+          <VoiceCommandInterface
+            micStatus={micStatus}
+            onMicStatusChange={setMicStatus}
+            realTimeTranscript={realTimeTranscript}
+            onTranscriptChange={setRealTimeTranscript}
+          />
+        </div>
+
+        {/* Dashboard Preset Selector */}
+        <div className="mb-6">
+          <Card className="bg-slate-800/40 backdrop-blur-sm border border-cyan-400">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <Settings className="w-5 h-5 text-cyan-400" />
+                    <span className="text-white font-medium">Dashboard View:</span>
+                  </div>
+                  <div className="flex space-x-2">
+                    {[
+                      { id: 'full', label: 'Full Ops View', icon: Monitor },
+                      { id: 'voice', label: 'Voice Ops Only', icon: Mic },
+                      { id: 'smartspend', label: 'SmartSpend Only', icon: DollarSign }
+                    ].map(preset => (
+                      <Button
+                        key={preset.id}
+                        onClick={() => setDashboardPreset(preset.id)}
+                        size="sm"
+                        className={`${
+                          dashboardPreset === preset.id 
+                            ? 'bg-cyan-600 text-white' 
+                            : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                        }`}
+                        title={`Switch to ${preset.label}`}
+                      >
+                        <preset.icon className="w-4 h-4 mr-1" />
+                        {preset.label}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Button
+                    onClick={() => setShowAnalyticsModal(true)}
+                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                    title="Generate Analytics Report with customizable options"
+                  >
+                    <FileText className="w-4 h-4 mr-2" />
+                    Enhanced Reports
+                  </Button>
+                  <Button
+                    onClick={() => setShowCalendarUpload(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                    title="Upload calendar files or sync with Google Calendar"
+                  >
+                    <Calendar className="w-4 h-4 mr-2" />
+                    Calendar Sync
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Original Voice Control Buttons */}
         <div className="mb-6 bg-white/10 backdrop-blur-sm border border-blue-400 rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Mic className="w-5 h-5 text-blue-400" />
-              <span className="text-white font-medium">Voice Commands Active</span>
-              <Badge className={`${userInitiatedVoice && isListening ? 'bg-green-500' : 'bg-gray-500'} text-white flex items-center`}>
-                {userInitiatedVoice && isListening && <div className="w-2 h-2 bg-green-200 rounded-full mr-1 animate-pulse"></div>}
-                {userInitiatedVoice && isListening ? 'Listening...' : 'Ready'}
-              </Badge>
-              {userInitiatedVoice && isListening && (
-                <div className="flex items-center space-x-1">
-                  <span className="text-white text-xs opacity-70">Level:</span>
-                  <div className="w-1 h-6 bg-slate-700 rounded-full">
-                    <div className="bg-green-400 w-1 rounded-full transition-all duration-150" style={{ height: `${Math.min(100, Math.max(10, (Math.random() * 80) + 10))}%` }}></div>
-                  </div>
-                </div>
-              )}
+              <span className="text-white font-medium">Quick Actions</span>
             </div>
             <div className="flex items-center space-x-3">
               <Button
