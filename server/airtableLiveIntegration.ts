@@ -62,8 +62,7 @@ class AirtableLiveIntegration {
             '💼 Title': 'Sales Order',
             '📍 Location': 'Command Center',
             '🛠️ Lead Source': 'Sales Order Flow',
-            '🚦 Status': 'New Lead',
-            '📅 Date Added': new Date().toISOString()
+            '📅 Date Added': '2025-06-15'
           }
         })
       });
