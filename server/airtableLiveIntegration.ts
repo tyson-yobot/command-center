@@ -47,8 +47,8 @@ class AirtableLiveIntegration {
    * Table: 🧾 Sales Orders
    */
   async createSalesOrder(orderData: Partial<SalesOrder>): Promise<any> {
-    const baseId = 'appb2f3D77Tc4DWAr'; // Scraped Leads (Universal) base
-    const tableId = 'tbluqrDSomu5UVhDw'; // Scraped Leads (Universal) table
+    const baseId = 'appbFDTqB2WtRNV1H'; // YoBot® Sales & Automation base
+    const tableId = 'tblSalesOrders'; // 🧾 Sales Orders table
     
     try {
       const response = await fetch(`${this.baseUrl}/${baseId}/${tableId}`, {
@@ -56,20 +56,26 @@ class AirtableLiveIntegration {
         headers: this.getHeaders(),
         body: JSON.stringify({
           fields: {
-            '🧑‍💼 Name': orderData['Client Name'] || 'Sales Order Client',
-            '✉️ Email': orderData['Client Email'] || 'sales@example.com',
-            '🏢 Company': `${orderData['Bot Package']} Order`,
-            '💼 Title': 'Sales Order',
-            '📍 Location': 'Command Center',
-            '🛠️ Lead Source': 'Sales Order Flow',
-            '🚦 Status': 'New Lead',
-            '📅 Date Added': new Date().toISOString()
+            'Bot Package': orderData['Bot Package'] || '',
+            'Add-Ons': orderData['Add-Ons'] || [],
+            'Total': orderData['Total'] || 0,
+            'Status': orderData['Status'] || 'Pending',
+            'Client Email': orderData['Client Email'] || '',
+            'Client Name': orderData['Client Name'] || '',
+            'Order Date': orderData['Order Date'] || new Date().toISOString(),
+            'Payment Status': orderData['Payment Status'] || 'Pending'
           }
         })
       });
 
       if (!response.ok) {
-        throw new Error(`Airtable API error: ${response.status}`);
+        const errorBody = await response.text();
+        console.error('Airtable API Error Details:', {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorBody
+        });
+        throw new Error(`Airtable API error: ${response.status} - ${errorBody}`);
       }
 
       return await response.json();

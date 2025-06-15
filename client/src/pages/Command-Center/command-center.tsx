@@ -468,24 +468,46 @@ export default function CommandCenter() {
 
   const handleAutomateSalesOrder = async () => {
     try {
-      setVoiceStatus('Processing sales order...');
+      setVoiceStatus('Creating sales order...');
       
-      // Simulate successful sales order processing
-      setTimeout(() => {
-        setVoiceStatus('Sales order processed - tracking ID: ORD-' + Date.now());
+      const orderData = {
+        botPackage: 'Basic Bot Package',
+        addOns: ['SMS Integration', 'Voice Calling'],
+        clientEmail: 'client@example.com',
+        clientName: 'Demo Client',
+        total: 2500,
+        paymentStatus: 'Pending'
+      };
+
+      const response = await fetch('/api/sales-order/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        setVoiceStatus('Sales order created successfully');
         toast({
           id: Date.now().toString(),
-          title: "Sales Order Processed",
-          description: "Order logged and queued for processing"
+          title: "Sales Order Created",
+          description: "Order has been submitted to Airtable"
         });
-      }, 1500);
-      
+      } else {
+        setVoiceStatus('Sales order creation failed');
+        toast({
+          id: Date.now().toString(),
+          title: "Error",
+          description: result.error || "Failed to create sales order"
+        });
+      }
     } catch (error) {
       setVoiceStatus('Sales order error');
       toast({
         id: Date.now().toString(),
         title: "Error",
-        description: "Failed to process sales order"
+        description: "Failed to connect to sales order system"
       });
     }
   };
