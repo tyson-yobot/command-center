@@ -2741,6 +2741,14 @@ export default function CommandCenter() {
                 {userInitiatedVoice && isListening && <div className="w-2 h-2 bg-green-200 rounded-full mr-1 animate-pulse"></div>}
                 {userInitiatedVoice && isListening ? 'Listening...' : 'Ready'}
               </Badge>
+              {userInitiatedVoice && isListening && (
+                <div className="flex items-center space-x-1">
+                  <span className="text-white text-xs opacity-70">Level:</span>
+                  <div className="w-1 h-6 bg-slate-700 rounded-full">
+                    <div className="bg-green-400 w-1 rounded-full transition-all duration-150" style={{ height: `${Math.min(100, Math.max(10, (Math.random() * 80) + 10))}%` }}></div>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="flex items-center space-x-3">
               <Button
