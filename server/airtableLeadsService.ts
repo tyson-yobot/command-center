@@ -39,12 +39,23 @@ class AirtableLeadsService {
   private apiKey: string;
 
   constructor() {
-    this.apiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
-    if (!this.apiKey) {
+    const rawApiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
+    if (!rawApiKey) {
       throw new Error('Airtable API key not configured');
     }
-    // Clean the API key of any whitespace or invalid characters including quotes
-    this.apiKey = this.apiKey.trim().replace(/[\r\n\t"']/g, '');
+    
+    // Extract valid API key (starts with 'pat' for personal access tokens)
+    const patMatch = rawApiKey.match(/pat[a-zA-Z0-9.]+/);
+    if (patMatch) {
+      this.apiKey = patMatch[0];
+    } else {
+      // Fallback: take first 100 characters and clean
+      this.apiKey = rawApiKey.substring(0, 100).trim().replace(/[\r\n\t"'\s]/g, '');
+    }
+    
+    if (!this.apiKey) {
+      throw new Error('Invalid Airtable API key format');
+    }
   }
 
   private getHeaders() {
