@@ -216,6 +216,7 @@ export default function SystemControls() {
     emergencyStop: true,
     scenarioControl: true,
     rateLimiting: true,
+    systemDiagnostics: true,
     
     // Security & Compliance
     dataEncryption: true,
@@ -405,6 +406,7 @@ export default function SystemControls() {
     emergencyStop: { category: 'Webhook Management', name: 'EMERGENCY STOP', visibleTo: ['admin', 'support'] },
     scenarioControl: { category: 'Webhook Management', name: 'Scenario Control', visibleTo: ['admin'] },
     rateLimiting: { category: 'Webhook Management', name: 'Rate Limiting', visibleTo: ['admin'] },
+    systemDiagnostics: { category: 'Webhook Management', name: 'Run System Diagnostics', visibleTo: ['admin'] },
     
     // Security & Compliance
     dataEncryption: { category: 'Security & Compliance', name: 'Data Encryption', visibleTo: ['admin'] },
@@ -1104,56 +1106,7 @@ export default function SystemControls() {
               />
             </div>
             
-            {/* Run Diagnostics Engine Button */}
-            <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-4 mt-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-2 h-2 ${getStatusColor(moduleStates.diagnosticsEngine)} rounded-full`}></div>
-                  <div>
-                    <span className="text-white text-sm font-medium">Run Diagnostics Engine</span>
-                    <p className="text-slate-400 text-xs">Execute comprehensive system diagnostics</p>
-                  </div>
-                  {getStatusIcon(moduleStates.diagnosticsEngine)}
-                </div>
-                <Button
-                  onClick={() => {
-                    fetch('/api/diagnostics/run', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' }
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                      if (data.success) {
-                        console.log('Diagnostics completed:', data);
-                        // Add to action log
-                        setActionLog(prev => [...prev, {
-                          id: Date.now(),
-                          timestamp: new Date().toISOString(),
-                          module: 'Diagnostics Engine',
-                          action: 'Full System Scan',
-                          status: 'Success',
-                          details: `Diagnosed ${data.checksPerformed || 0} system components`
-                        }]);
-                      }
-                    })
-                    .catch(err => {
-                      console.error('Diagnostics failed:', err);
-                      setActionLog(prev => [...prev, {
-                        id: Date.now(),
-                        timestamp: new Date().toISOString(),
-                        module: 'Diagnostics Engine',
-                        action: 'Full System Scan',
-                        status: 'Failed',
-                        details: 'Failed to execute diagnostics: ' + err.message
-                      }]);
-                    });
-                  }}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm"
-                >
-                  Run Diagnostics
-                </Button>
-              </div>
-            </div>
+
           </CardContent>
         </Card>
 
@@ -1322,6 +1275,69 @@ export default function SystemControls() {
                 onCheckedChange={() => toggleModule('rateLimiting')}
               />
             </div>
+
+            {/* Run System Diagnostics - Single Consolidated Tile */}
+            {isModuleVisible('systemDiagnostics') && (
+              <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-4 mt-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-2 h-2 ${getStatusColor(true)} rounded-full`}></div>
+                    <div>
+                      <span className="text-white text-sm font-medium">Run System Diagnostics</span>
+                      <p className="text-slate-400 text-xs">
+                        Triggers full diagnostics based on system mode ({currentSystemMode.toUpperCase()})
+                      </p>
+                    </div>
+                    <Settings className="w-4 h-4 text-blue-400" />
+                  </div>
+                  <Button
+                    onClick={async () => {
+                      try {
+                        const endpoint = currentSystemMode === 'test' ? '/test' : '/';
+                        
+                        setActionLog(prev => [...prev, {
+                          id: Date.now(),
+                          timestamp: new Date().toISOString(),
+                          module: 'System Diagnostics',
+                          action: `${currentSystemMode.toUpperCase()} Mode Diagnostics`,
+                          status: 'Processing',
+                          details: `Running ${currentSystemMode} diagnostics via ${endpoint}`
+                        }]);
+
+                        const response = await fetch(endpoint, {
+                          method: 'GET'
+                        });
+
+                        if (response.ok) {
+                          setActionLog(prev => [...prev, {
+                            id: Date.now() + 1,
+                            timestamp: new Date().toISOString(),
+                            module: 'System Diagnostics',
+                            action: `${currentSystemMode.toUpperCase()} Mode`,
+                            status: 'Success',
+                            details: `${currentSystemMode} diagnostics completed - results logged to Airtable`
+                          }]);
+                        } else {
+                          throw new Error(`HTTP ${response.status}`);
+                        }
+                      } catch (error) {
+                        setActionLog(prev => [...prev, {
+                          id: Date.now() + 2,
+                          timestamp: new Date().toISOString(),
+                          module: 'System Diagnostics',
+                          action: 'Diagnostics Execution',
+                          status: 'Failed',
+                          details: `Failed to execute ${currentSystemMode} diagnostics: ${error.message}`
+                        }]);
+                      }
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm"
+                  >
+                    Run Diagnostics
+                  </Button>
+                </div>
+              </div>
+            )}
             
 
           </CardContent>
@@ -1495,141 +1511,7 @@ export default function SystemControls() {
         </DialogContent>
       </Dialog>
 
-      {/* Runtime Execution Section */}
-      <Card className="bg-gradient-to-r from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-600/30 mt-6">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-white text-base flex items-center space-x-2">
-            <Settings className="w-4 h-4 text-slate-400" />
-            <span>⚙️ Runtime Execution</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Run System Diagnostics */}
-            <div className="p-4 bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-lg border border-blue-500/30">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="text-white font-medium text-sm">Run System Diagnostics</h4>
-                <Button
-                  size="sm"
-                  className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1"
-                  onClick={async () => {
-                    try {
-                      const endpoint = currentSystemMode === 'test' 
-                        ? 'https://yobot-test.tyson44.repl.co/test' 
-                        : 'https://yobot.tyson44.repl.co/';
-                      
-                      setActionLog(prev => [...prev, {
-                        id: Date.now(),
-                        timestamp: new Date().toISOString(),
-                        module: 'System Diagnostics',
-                        action: `${currentSystemMode.toUpperCase()} Environment Started`,
-                        status: 'Processing',
-                        details: `Connecting to ${currentSystemMode} environment: ${endpoint}`
-                      }]);
 
-                      const response = await fetch(endpoint, {
-                        method: 'GET'
-                      });
-
-                      if (response.ok) {
-                        setActionLog(prev => [...prev, {
-                          id: Date.now() + 1,
-                          timestamp: new Date().toISOString(),
-                          module: 'System Diagnostics',
-                          action: `${currentSystemMode.toUpperCase()} Environment`,
-                          status: 'Success',
-                          details: `${currentSystemMode} environment diagnostics completed successfully`
-                        }]);
-                      } else {
-                        throw new Error(`HTTP ${response.status}`);
-                      }
-                    } catch (error) {
-                      setActionLog(prev => [...prev, {
-                        id: Date.now() + 2,
-                        timestamp: new Date().toISOString(),
-                        module: 'System Diagnostics',
-                        action: 'Environment Connection',
-                        status: 'Failed',
-                        details: `Failed to connect to ${currentSystemMode} environment: ${error.message}`
-                      }]);
-                    }
-                  }}
-                >
-                  Run Diagnostics
-                </Button>
-              </div>
-              <p className="text-slate-300 text-xs">
-                Connects to {currentSystemMode === 'test' 
-                  ? 'TEST environment (yobot-test.tyson44.repl.co/test)' 
-                  : 'LIVE environment (yobot.tyson44.repl.co)'}
-              </p>
-              <div className="mt-2 flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${currentSystemMode === 'test' ? 'bg-blue-400' : 'bg-red-400'}`}></div>
-                <span className="text-xs text-slate-400">
-                  {currentSystemMode.toUpperCase()} Environment Selected
-                </span>
-              </div>
-            </div>
-
-            {/* Internal System Check */}
-            <div className="p-4 bg-gradient-to-r from-green-900/30 to-emerald-900/30 rounded-lg border border-green-500/30">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="text-white font-medium text-sm">Internal System Check</h4>
-                <Button
-                  size="sm"
-                  className="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1"
-                  onClick={async () => {
-                    try {
-                      setActionLog(prev => [...prev, {
-                        id: Date.now(),
-                        timestamp: new Date().toISOString(),
-                        module: 'Internal System Check',
-                        action: 'Health Check Started',
-                        status: 'Processing',
-                        details: 'Running internal system health diagnostics...'
-                      }]);
-
-                      const response = await fetch('/api/diagnostics/run', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' }
-                      });
-
-                      const data = await response.json();
-
-                      if (data.success) {
-                        setActionLog(prev => [...prev, {
-                          id: Date.now() + 1,
-                          timestamp: new Date().toISOString(),
-                          module: 'Internal System Check',
-                          action: 'Health Check',
-                          status: 'Success',
-                          details: `System health: ${data.systemHealth} - ${data.checksPerformed} checks completed`
-                        }]);
-                      } else {
-                        throw new Error(data.error || 'Health check failed');
-                      }
-                    } catch (error) {
-                      setActionLog(prev => [...prev, {
-                        id: Date.now() + 2,
-                        timestamp: new Date().toISOString(),
-                        module: 'Internal System Check',
-                        action: 'Health Check',
-                        status: 'Failed',
-                        details: `Internal health check failed: ${error.message}`
-                      }]);
-                    }
-                  }}
-                >
-                  Run Health Check
-                </Button>
-              </div>
-              <p className="text-slate-300 text-xs">
-                Performs internal system health checks and component validation
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Critical System Management Section - Live Mode Only */}
       <Card className="bg-red-900/60 backdrop-blur-sm border border-red-500/30 mt-6">
