@@ -2848,7 +2848,7 @@ export default function CommandCenter() {
 
           </div>
           <p className="text-slate-300 text-lg">
-            Your Complete AI Automation Control Panel {selectedTier !== 'All' && `(${selectedTier} Tier)`}
+            Your Complete AI Automation Dashboard {selectedTier !== 'All' && `(${selectedTier} Tier)`}
           </p>
         </div>
 

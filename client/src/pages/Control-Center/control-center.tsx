@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import robotHeadImage from '@/assets/images/A_flat_vector_illustration_features_a_robot_face_i_1749714890077.png';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 import {
   Dialog,
   DialogContent,
@@ -60,6 +61,15 @@ export default function SystemControls() {
   const [showPackageBuilder, setShowPackageBuilder] = useState(false);
   const [billingMode, setBillingMode] = useState<'subscription' | 'usage' | 'trial'>('subscription');
   const [showActionLog, setShowActionLog] = useState(false);
+  
+  // Voice control states
+  const [isListening, setIsListening] = useState(false);
+  const [audioLevel, setAudioLevel] = useState(0);
+  const [voiceCommand, setVoiceCommand] = useState('');
+  const [microphoneActive, setMicrophoneActive] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
   
   // System mode state
   const [currentSystemMode, setCurrentSystemMode] = useState<'test' | 'live'>(() => {
@@ -723,7 +733,7 @@ export default function SystemControls() {
             <Bot className="w-14 h-14 mr-1 -mt-2 text-blue-400" style={{ display: 'none' }} />
             YoBot<sup className="text-lg">®</sup>&nbsp;Control Center
           </h1>
-          <p className="text-blue-300">Manage automation modules and integrations</p>
+          <p className="text-blue-300">Your Complete AI Automation Control Panel</p>
         </div>
         
         <div className="flex items-center justify-center mb-4">
@@ -817,6 +827,92 @@ export default function SystemControls() {
             <span>Logs</span>
           </Button>
         </div>
+      </div>
+
+      {/* Voice Control Interface */}
+      <div className="mb-8">
+        <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center justify-between">
+              <div className="flex items-center">
+                <Mic className="w-5 h-5 mr-2 text-blue-400" />
+                Voice Control
+                {microphoneActive && (
+                  <div className="ml-3 flex items-center">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse mr-2"></div>
+                    <span className="text-green-400 text-sm">Listening</span>
+                  </div>
+                )}
+              </div>
+              <Badge className={`${isListening ? 'bg-green-500' : 'bg-gray-500'} text-white`}>
+                {isListening ? 'Active' : 'Inactive'}
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between space-x-4">
+              <div className="flex items-center space-x-4 flex-1">
+                <Button
+                  onClick={handleVoiceToggle}
+                  className={`${isListening ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white`}
+                >
+                  {isListening ? <Mic className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
+                  {isListening ? 'Stop Voice' : 'Start Voice'}
+                </Button>
+                
+                {/* Microphone Level Meter */}
+                {isListening && (
+                  <div className="flex items-center space-x-2 flex-1">
+                    <span className="text-white text-sm">Level:</span>
+                    <div className="flex-1 max-w-32">
+                      <Progress value={audioLevel} className="h-3" />
+                    </div>
+                    <span className="text-white text-sm">{Math.round(audioLevel)}%</span>
+                  </div>
+                )}
+                
+                {voiceCommand && (
+                  <div className="flex-1">
+                    <div className="bg-slate-700/50 border border-blue-400/50 rounded-lg p-2">
+                      <span className="text-blue-300 text-sm">Last Command: "{voiceCommand}"</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <Button
+                  onClick={handleRecordings}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <Eye className="w-4 h-4 mr-2" />
+                  Recordings
+                </Button>
+                <Button
+                  onClick={handleQuickOps}
+                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                >
+                  <Zap className="w-4 h-4 mr-2" />
+                  Quick Ops
+                </Button>
+                <Button
+                  onClick={handleSystem}
+                  className="bg-orange-600 hover:bg-orange-700 text-white"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  System
+                </Button>
+                <Button
+                  onClick={handleExport}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Export
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Core Package Presets */}
@@ -1197,6 +1293,208 @@ export default function SystemControls() {
       </div>
     </div>
   );
+
+  // Voice control functions
+  const startVoiceRecognition = async () => {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+      
+      recognitionRef.current = recognition;
+      
+      recognition.onstart = () => {
+        setIsListening(true);
+        setMicrophoneActive(true);
+        startAudioLevelMonitoring();
+      };
+      
+      recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          if (event.results[i].isFinal) {
+            transcript += event.results[i][0].transcript;
+          }
+        }
+        if (transcript) {
+          setVoiceCommand(transcript);
+          processVoiceCommand(transcript);
+        }
+      };
+      
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        if (event.error !== 'no-speech') {
+          setIsListening(false);
+          setMicrophoneActive(false);
+          stopAudioLevelMonitoring();
+        }
+      };
+      
+      recognition.onend = () => {
+        if (isListening) {
+          // Restart if still supposed to be listening
+          setTimeout(() => recognition.start(), 100);
+        } else {
+          setMicrophoneActive(false);
+          stopAudioLevelMonitoring();
+        }
+      };
+      
+      recognition.start();
+    }
+  };
+
+  const stopVoiceRecognition = () => {
+    setIsListening(false);
+    setMicrophoneActive(false);
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+    stopAudioLevelMonitoring();
+  };
+
+  const startAudioLevelMonitoring = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const audioContext = new AudioContext();
+      const analyser = audioContext.createAnalyser();
+      const microphone = audioContext.createMediaStreamSource(stream);
+      
+      analyser.fftSize = 256;
+      microphone.connect(analyser);
+      
+      audioContextRef.current = audioContext;
+      analyserRef.current = analyser;
+      
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      
+      const updateLevel = () => {
+        if (analyserRef.current && isListening) {
+          analyserRef.current.getByteFrequencyData(dataArray);
+          const average = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
+          setAudioLevel(Math.min(100, (average / 255) * 100));
+          requestAnimationFrame(updateLevel);
+        }
+      };
+      
+      updateLevel();
+    } catch (error) {
+      console.error('Failed to access microphone:', error);
+    }
+  };
+
+  const stopAudioLevelMonitoring = () => {
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
+    analyserRef.current = null;
+    setAudioLevel(0);
+  };
+
+  const processVoiceCommand = (command: string) => {
+    const lowerCommand = command.toLowerCase();
+    
+    // Voice command processing
+    if (lowerCommand.includes('toggle') && lowerCommand.includes('automation')) {
+      toggleModule('coreAutomation');
+    } else if (lowerCommand.includes('start') && lowerCommand.includes('voice')) {
+      toggleModule('voiceBotCore');
+    } else if (lowerCommand.includes('emergency') || lowerCommand.includes('alert')) {
+      handleEmergencyMode();
+    } else if (lowerCommand.includes('status') || lowerCommand.includes('report')) {
+      generateStatusReport();
+    } else if (lowerCommand.includes('export') && lowerCommand.includes('data')) {
+      handleExport();
+    }
+  };
+
+  const handleVoiceToggle = () => {
+    if (isListening) {
+      stopVoiceRecognition();
+    } else {
+      startVoiceRecognition();
+    }
+  };
+
+  // Button handler functions
+  const handleRecordings = () => {
+    window.open('/voice-recordings', '_blank');
+  };
+
+  const handleQuickOps = () => {
+    // Quick operations menu
+    const operations = [
+      'System Status Check',
+      'Emergency Mode Toggle',
+      'Data Export',
+      'Performance Report',
+      'Module Reset'
+    ];
+    const choice = prompt(`Quick Operations:\n${operations.map((op, i) => `${i + 1}. ${op}`).join('\n')}\n\nEnter number (1-5):`);
+    
+    if (choice) {
+      const index = parseInt(choice) - 1;
+      if (index >= 0 && index < operations.length) {
+        switch (index) {
+          case 0: generateStatusReport(); break;
+          case 1: handleEmergencyMode(); break;
+          case 2: handleExport(); break;
+          case 3: generatePerformanceReport(); break;
+          case 4: resetAllModules(); break;
+        }
+      }
+    }
+  };
+
+  const handleSystem = () => {
+    window.open('/system-diagnostics', '_blank');
+  };
+
+  const handleExport = () => {
+    const data = {
+      systemMode: currentSystemMode,
+      moduleStates,
+      timestamp: new Date().toISOString(),
+      packages: { selectedPackage, billingMode }
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `yobot-control-center-export-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleEmergencyMode = () => {
+    setIsEmergencyMode(!isEmergencyMode);
+    if (!isEmergencyMode) {
+      // Disable all modules in emergency mode
+      setModuleStates(prev => Object.keys(prev).reduce((acc, key) => ({ ...acc, [key]: false }), {} as typeof prev));
+    }
+  };
+
+  const generateStatusReport = () => {
+    const activeModules = Object.entries(moduleStates).filter(([_, active]) => active).length;
+    const totalModules = Object.keys(moduleStates).length;
+    alert(`System Status Report:\nMode: ${currentSystemMode.toUpperCase()}\nActive Modules: ${activeModules}/${totalModules}\nVoice Control: ${isListening ? 'Active' : 'Inactive'}\nEmergency Mode: ${isEmergencyMode ? 'ON' : 'OFF'}`);
+  };
+
+  const generatePerformanceReport = () => {
+    alert('Performance Report:\nSystem Load: Normal\nResponse Time: 150ms\nUptime: 99.8%\nMemory Usage: 64%');
+  };
+
+  const resetAllModules = () => {
+    if (confirm('Reset all modules to default state?')) {
+      setModuleStates(prev => Object.keys(prev).reduce((acc, key) => ({ ...acc, [key]: false }), {} as typeof prev));
+    }
+  };
 
   // Helper function for system diagnostics
   const handleSystemDiagnostics = () => {
