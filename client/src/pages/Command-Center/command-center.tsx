@@ -3589,68 +3589,6 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          {/* Botalytics™ */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <BarChart3 className="w-5 h-5 mr-2 text-blue-400" />
-                Botalytics™
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '$24.50' : ''}</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
-                </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
-                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '8.7/10' : ''}</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: `${metrics?.data?.automationEfficiency || 0}%` }}></div>
-                  </div>
-                </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300" title="Percentage of leads that become paying customers">Close Rate</span>
-                    <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '12.3%' : ''}</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
-                </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-orange-400 shadow-lg shadow-orange-400/20">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300" title="Return on investment from automation">ROI</span>
-                    <span className="text-orange-400 font-bold">{currentSystemMode === 'test' ? '285%' : ''}</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-orange-400 h-1 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
-                </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-cyan-400 shadow-lg shadow-cyan-400/20">
-                  <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
-                  <div className="flex items-center justify-between">
-                    <div className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '$184' : ''}</div>
-                    <Badge className="bg-cyan-600 text-white">{currentSystemMode === 'test' ? '+15%' : ''}</Badge>
-                  </div>
-                  {currentSystemMode === 'test' && (
-                    <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                      <div className="bg-cyan-400 h-1 rounded-full" style={{ width: '0%' }}></div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
           {/* SmartSpend™ */}
           <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
             <CardHeader>
@@ -3709,6 +3647,68 @@ export default function CommandCenter() {
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
                     <div className="bg-cyan-400 h-1 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.budgetEfficiency || 94}%` }}></div>
                   </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Botalytics™ */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <BarChart3 className="w-5 h-5 mr-2 text-blue-400" />
+                Botalytics™
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '$24.50' : ''}</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
+                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '8.7/10' : ''}</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: `${metrics?.data?.automationEfficiency || 0}%` }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300" title="Percentage of leads that become paying customers">Close Rate</span>
+                    <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '12.3%' : ''}</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-orange-400 shadow-lg shadow-orange-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300" title="Return on investment from automation">ROI</span>
+                    <span className="text-orange-400 font-bold">{currentSystemMode === 'test' ? '285%' : ''}</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-orange-400 h-1 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-cyan-400 shadow-lg shadow-cyan-400/20">
+                  <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
+                  <div className="flex items-center justify-between">
+                    <div className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '$184' : ''}</div>
+                    <Badge className="bg-cyan-600 text-white">{currentSystemMode === 'test' ? '+15%' : ''}</Badge>
+                  </div>
+                  {currentSystemMode === 'test' && (
+                    <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                      <div className="bg-cyan-400 h-1 rounded-full" style={{ width: '0%' }}></div>
+                    </div>
+                  )}
                 </div>
               </div>
             </CardContent>

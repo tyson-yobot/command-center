@@ -4242,6 +4242,28 @@ New York, NY 10001`;
     }
   });
 
+  // Test Airtable connection endpoint
+  app.get('/api/test-airtable', async (req, res) => {
+    try {
+      const { testAirtableConnection, testBaseAccess } = await import('./testAirtableConnection');
+      const testResult = await testAirtableConnection();
+      
+      if (testResult.success) {
+        // Also test the Scraped Leads base access
+        const baseTest = await testBaseAccess('appb2f3D77Tc4DWAr', 'Scraped Leads (Universal)');
+        testResult.baseAccess = baseTest;
+      }
+      
+      res.json(testResult);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: 'Airtable connection test failed',
+        details: error.message
+      });
+    }
+  });
+
   // Lead scraper endpoint for Apollo, Apify, and PhantomBuster
   app.post('/api/lead-scraper/run', async (req, res) => {
     try {
