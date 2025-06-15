@@ -1514,15 +1514,17 @@ export default function SystemControls() {
                   className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1"
                   onClick={async () => {
                     try {
-                      const endpoint = currentSystemMode === 'test' ? 'https://YoBotAssistant.tyson44.repl.co/test' : 'https://YoBotAssistant.tyson44.repl.co/';
+                      const endpoint = currentSystemMode === 'test' 
+                        ? 'https://yobot-test.tyson44.repl.co/test' 
+                        : 'https://yobot.tyson44.repl.co/';
                       
                       setActionLog(prev => [...prev, {
                         id: Date.now(),
                         timestamp: new Date().toISOString(),
                         module: 'System Diagnostics',
-                        action: `${currentSystemMode.toUpperCase()} Mode Started`,
+                        action: `${currentSystemMode.toUpperCase()} Environment Started`,
                         status: 'Processing',
-                        details: `Triggering ${currentSystemMode} mode diagnostics...`
+                        details: `Connecting to ${currentSystemMode} environment: ${endpoint}`
                       }]);
 
                       const response = await fetch(endpoint, {
@@ -1534,9 +1536,9 @@ export default function SystemControls() {
                           id: Date.now() + 1,
                           timestamp: new Date().toISOString(),
                           module: 'System Diagnostics',
-                          action: `${currentSystemMode.toUpperCase()} Mode`,
+                          action: `${currentSystemMode.toUpperCase()} Environment`,
                           status: 'Success',
-                          details: `${currentSystemMode} mode diagnostics completed successfully`
+                          details: `${currentSystemMode} environment diagnostics completed successfully`
                         }]);
                       } else {
                         throw new Error(`HTTP ${response.status}`);
@@ -1546,9 +1548,9 @@ export default function SystemControls() {
                         id: Date.now() + 2,
                         timestamp: new Date().toISOString(),
                         module: 'System Diagnostics',
-                        action: 'Diagnostics',
+                        action: 'Environment Connection',
                         status: 'Failed',
-                        details: `Diagnostics failed: ${error.message}`
+                        details: `Failed to connect to ${currentSystemMode} environment: ${error.message}`
                       }]);
                     }
                   }}
@@ -1557,8 +1559,16 @@ export default function SystemControls() {
                 </Button>
               </div>
               <p className="text-slate-300 text-xs">
-                Executes {currentSystemMode === 'test' ? 'TEST' : 'LIVE'} mode diagnostics based on current system mode
+                Connects to {currentSystemMode === 'test' 
+                  ? 'TEST environment (yobot-test.tyson44.repl.co/test)' 
+                  : 'LIVE environment (yobot.tyson44.repl.co)'}
               </p>
+              <div className="mt-2 flex items-center space-x-2">
+                <div className={`w-2 h-2 rounded-full ${currentSystemMode === 'test' ? 'bg-blue-400' : 'bg-red-400'}`}></div>
+                <span className="text-xs text-slate-400">
+                  {currentSystemMode.toUpperCase()} Environment Selected
+                </span>
+              </div>
             </div>
 
             {/* Internal System Check */}
