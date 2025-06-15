@@ -2846,11 +2846,11 @@ export default function CommandCenter() {
                     <Button
                       onClick={handleCreateBooking}
                       className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
-                      title="Opens external Tally form to create a new booking appointment"
+                      title="Triggers booking_create Make scenario"
                     >
                       <div className="flex items-center">
                         <span className="text-xl mr-3">📅</span>
-                        <span>Create Booking</span>
+                        <span>Schedule Booking</span>
                       </div>
                       <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
                     </Button>
@@ -2858,11 +2858,11 @@ export default function CommandCenter() {
                     <Button
                       onClick={handleCreateSupportTicket}
                       className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
-                      title="Open live chat interface to create a new support ticket"
+                      title="Link to Airtable or auto-start Make → CRM ticketing"
                     >
                       <div className="flex items-center">
-                        <span className="text-xl mr-3">🎧</span>
-                        <span>Create Support Ticket</span>
+                        <span className="text-xl mr-3">🧾</span>
+                        <span>Submit Support Ticket</span>
                       </div>
                       <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
                     </Button>
@@ -2870,19 +2870,19 @@ export default function CommandCenter() {
                     <Button
                       onClick={handleManualFollowUp}
                       className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                      title="Create a manual follow-up task for customer engagement"
+                      title="Triggers email or task creation in CRM"
                     >
-                      <span className="text-xl mr-3">📞</span>
-                      <span>Create Follow-up</span>
+                      <span className="text-xl mr-3">🔁</span>
+                      <span>Follow-Up Trigger</span>
                     </Button>
                     
                     <Button
                       onClick={handleAutomateSalesOrder}
                       className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
-                      title="Automate Sales Order Flow - Launch integrated workflow to process sales orders with automated client communications and CRM updates"
+                      title="Runs Make Sales Order pipeline"
                     >
                       <div className="flex items-center">
-                        <span className="text-xl mr-3">💰</span>
+                        <Zap className="w-5 h-5 mr-3 text-green-400" />
                         <span>Automate Sales Order Flow</span>
                       </div>
                       <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
@@ -2891,13 +2891,13 @@ export default function CommandCenter() {
                     <Button
                       onClick={handleSendSMS}
                       className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                      title="Send SMS messages to customers or leads"
+                      title="Triggers Airtable - Twilio"
                       style={{ 
                         borderLeft: '8px solid #06b6d4'
                       }}
                     >
-                      <span className="text-xl mr-3">💬</span>
-                      <span>Send SMS</span>
+                      <span className="text-xl mr-3">📨</span>
+                      <span>Manual SMS Trigger</span>
                     </Button>
 
                   </div>
