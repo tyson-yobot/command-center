@@ -15,6 +15,10 @@ export function registerDashboardEndpoints(app: Express) {
         try {
           const smartSpendData = await airtableLive.getSmartSpendData();
           const revenueForecast = await airtableLive.getRevenueForecast();
+          const botalyticsData = await airtableLive.getBotalyticsData();
+          
+          // Get the latest Botalytics record
+          const latestBotalytics = botalyticsData.length > 0 ? botalyticsData[0] : null;
           
           const liveMetrics = {
             smartSpendData: smartSpendData ? {
@@ -34,6 +38,15 @@ export function registerDashboardEndpoints(app: Express) {
               yearlyProjection: revenueForecast[0]?.fields?.['Yearly Projection'] || 0,
               growthRate: revenueForecast[0]?.fields?.['Growth Rate'] || 0,
               lastUpdated: revenueForecast[0]?.fields?.['Last Updated'] || new Date().toISOString()
+            } : null,
+            botalyticsData: latestBotalytics ? {
+              closeRate: latestBotalytics.fields['Close Rate'] || 0,
+              roi: latestBotalytics.fields['ROI'] || 0,
+              interactions: latestBotalytics.fields['Interactions'] || 0,
+              accuracy: latestBotalytics.fields['Accuracy'] || 0,
+              learningRate: latestBotalytics.fields['Learning Rate'] || 0,
+              month: latestBotalytics.fields['Month'],
+              lastUpdated: latestBotalytics.fields['Last Updated']
             } : null
           };
           

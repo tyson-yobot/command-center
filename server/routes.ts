@@ -15177,6 +15177,44 @@ export function registerContentCreationEndpoints(app: Express) {
     }
   });
 
+  // Botalytics™ Dashboard - Get Analytics Data
+  app.get('/api/botalytics/data', async (req, res) => {
+    try {
+      const { month, clientId } = req.query;
+      
+      const botalyticsData = await airtableLive.getBotalyticsData(month as string, clientId as string);
+      
+      // Process and format data for dashboard
+      const analytics = botalyticsData.map(record => ({
+        month: record.fields['Month'],
+        closeRate: record.fields['Close Rate'] || 0,
+        roi: record.fields['ROI'] || 0,
+        interactions: record.fields['Interactions'] || 0,
+        accuracy: record.fields['Accuracy'] || 0,
+        learningRate: record.fields['Learning Rate'] || 0,
+        clientId: record.fields['Client ID'],
+        lastUpdated: record.fields['Last Updated']
+      }));
+      
+      logOperation('botalytics-data', { month, clientId }, 'success', `Retrieved ${analytics.length} Botalytics records`);
+      
+      res.json({
+        success: true,
+        data: analytics,
+        count: analytics.length,
+        message: 'Botalytics data retrieved successfully'
+      });
+    } catch (error: any) {
+      console.error('Botalytics data retrieval failed:', error);
+      logOperation('botalytics-data', req.query, 'error', `Botalytics data failed: ${error.message}`);
+      res.status(500).json({
+        success: false,
+        error: 'Botalytics data retrieval failed',
+        details: error.message
+      });
+    }
+  });
+
   // Airtable Health Check
   app.get('/api/airtable/health', async (req, res) => {
     try {

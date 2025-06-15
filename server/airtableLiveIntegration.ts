@@ -115,14 +115,14 @@ class AirtableLiveIntegration {
    * Table: SmartSpend Dashboard
    */
   async getSmartSpendData(clientId?: string): Promise<SmartSpendData | null> {
-    const baseId = 'appSmartSpendTracker'; // YoBot® SmartSpend Tracker base
-    const tableId = 'tblSmartSpendDashboard'; // SmartSpend Dashboard table
+    const baseId = 'appGtcRZU6QJngkQS'; // YoBot® SmartSpend Tracker base
+    const tableId = 'SmartSpend Dashboard'; // SmartSpend Dashboard table
     
     try {
       let url = `${this.baseUrl}/${baseId}/${tableId}`;
       
       if (clientId) {
-        url += `?filterByFormula={Client ID}="${clientId}"&sort[0][field]=Last Updated&sort[0][direction]=desc&maxRecords=1`;
+        url += `?filterByFormula=OR({Client ID}="${clientId}",{Client Email}="${clientId}")&sort[0][field]=Last Updated&sort[0][direction]=desc&maxRecords=1`;
       } else {
         url += `?sort[0][field]=Last Updated&sort[0][direction]=desc&maxRecords=1`;
       }
@@ -253,6 +253,50 @@ class AirtableLiveIntegration {
     } catch (error) {
       console.error('Revenue forecast fetch failed:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Botalytics™ Integration
+   * Base: YoBot® Sales & Automation
+   * Table: 🧮 Botalytics Monthly Log
+   */
+  async getBotalyticsData(month?: string, clientId?: string): Promise<any[]> {
+    const baseId = 'appe0OSJtB1In1kn5'; // YoBot® Sales & Automation base
+    const tableId = '🧮 Botalytics Monthly Log'; // Botalytics Monthly Log table
+    
+    try {
+      let url = `${this.baseUrl}/${baseId}/${tableId}`;
+      let filters = [];
+      
+      if (month) {
+        filters.push(`{Month}="${month}"`);
+      }
+      
+      if (clientId) {
+        filters.push(`OR({Client ID}="${clientId}",{Client Email}="${clientId}")`);
+      }
+      
+      if (filters.length > 0) {
+        url += `?filterByFormula=AND(${filters.join(',')})&sort[0][field]=Month&sort[0][direction]=desc`;
+      } else {
+        url += `?sort[0][field]=Month&sort[0][direction]=desc&maxRecords=12`;
+      }
+
+      const response = await fetch(url, {
+        headers: this.getHeaders()
+      });
+
+      if (!response.ok) {
+        console.error('Botalytics API Error:', response.status, await response.text());
+        return [];
+      }
+
+      const data = await response.json();
+      return data.records || [];
+    } catch (error) {
+      console.error('Botalytics data fetch failed:', error);
+      return [];
     }
   }
 
