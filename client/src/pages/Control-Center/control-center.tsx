@@ -1,5 +1,5 @@
 import { useState } from "react";
-import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750002410783.png';
+import robotHeadImage from '@/assets/images/A_flat_vector_illustration_features_a_robot_face_i_1749714890077.png';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
@@ -721,7 +721,7 @@ export default function SystemControls() {
               }}
             />
             <Bot className="w-14 h-14 mr-1 -mt-2 text-blue-400" style={{ display: 'none' }} />
-            YoBot<sup className="text-lg">®</sup> Control Center
+            YoBot<sup className="text-lg">®</sup>&nbsp;Control Center
           </h1>
           <p className="text-blue-300">Manage automation modules and integrations</p>
         </div>
@@ -821,18 +821,16 @@ export default function SystemControls() {
 
       {/* Core Package Presets */}
       <div className="mb-8">
-        <h2 className="text-xl font-bold text-white mb-4 flex items-center space-x-2 border border-cyan-400 p-3 rounded bg-cyan-400/10">
-          <Package className="w-5 h-5 text-cyan-400" />
+        <h2 className="text-xl font-bold text-white mb-4 flex items-center space-x-2 border border-blue-500 p-3 rounded bg-blue-500/10">
+          <Package className="w-5 h-5 text-blue-400" />
           <span>Core Packages - Preset Toggle Groups</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Starter Bot */}
-          <Card className="bg-white/5 backdrop-blur-sm border-2 border-cyan-400 hover:border-cyan-300 transition-colors cursor-pointer shadow-lg shadow-cyan-400/20"
+          <Card className="bg-white/5 backdrop-blur-sm border-2 border-blue-500 hover:border-blue-400 transition-colors cursor-pointer shadow-lg shadow-blue-500/20"
                 onClick={() => applyPackageSettings('starter')}>
             <CardContent className="p-4 text-center">
-              <div className="w-8 h-8 bg-cyan-400 rounded-full flex items-center justify-center mx-auto mb-2">
-                <Bot className="w-5 h-5 text-slate-900" />
-              </div>
+              <Settings className="w-8 h-8 text-blue-400 mx-auto mb-2" />
               <h3 className="text-white font-semibold mb-1">Starter Bot</h3>
               <p className="text-white/60 text-xs">Basic AI & Dashboard</p>
             </CardContent>
