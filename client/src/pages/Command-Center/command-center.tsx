@@ -217,7 +217,12 @@ export default function CommandCenter() {
   const [showSupportTicketModal, setShowSupportTicketModal] = useState(false);
   const [showFollowUpModal, setShowFollowUpModal] = useState(false);
   const [showSMSModal, setShowSMSModal] = useState(false);
-
+  const [exportConfig, setExportConfig] = useState({
+    format: 'json',
+    sections: ['smartspend', 'voice_analytics', 'botalytics'],
+    reportType: 'comprehensive',
+    dateRange: 'last_30_days'
+  });
   const [showCreateVoiceCallModal, setShowCreateVoiceCallModal] = useState(false);
   const { toast } = useToast();
 
@@ -1208,37 +1213,46 @@ export default function CommandCenter() {
   };
 
   // Export Dashboard and Reset Demo Handlers
-  const handleExportDashboard = async () => {
+  const handleExportDashboard = () => {
+    setShowExportModal(true);
+  };
+
+  const handleGenerateExport = async () => {
     try {
-      const exportData = {
-        dashboardMetrics: await fetch('/api/dashboard-metrics').then(r => r.json()),
-        automationPerformance: await fetch('/api/automation-performance').then(r => r.json()),
-        liveActivity: await fetch('/api/live-activity').then(r => r.json()),
-        knowledgeStats: await fetch('/api/knowledge/stats').then(r => r.json()),
-        timestamp: new Date().toISOString(),
-        exportType: 'dashboard_snapshot'
-      };
-
-      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `yobot-dashboard-export-${new Date().toISOString().split('T')[0]}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      toast({
-        id: Date.now().toString(),
-        title: "Dashboard Exported",
-        description: "Dashboard data exported successfully as JSON file"
+      const response = await fetch('/api/export-dashboard', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-system-mode': currentSystemMode
+        },
+        body: JSON.stringify(exportConfig)
       });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `yobot-${exportConfig.reportType}-report.${exportConfig.format}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        setShowExportModal(false);
+        toast({
+          id: Date.now().toString(),
+          title: "Export Generated",
+          description: `${exportConfig.reportType} report exported as ${exportConfig.format.toUpperCase()}`
+        });
+      } else {
+        throw new Error('Export failed');
+      }
     } catch (error) {
       toast({
         id: Date.now().toString(),
         title: "Export Failed",
-        description: "Failed to export dashboard data",
+        description: "Unable to generate export. Please try again.",
         variant: "destructive"
       });
     }
@@ -8514,6 +8528,127 @@ export default function CommandCenter() {
           )}
         </Card>
       </div>
+
+      {/* Export Dashboard Modal */}
+      {showExportModal && (
+        <Dialog open={showExportModal} onOpenChange={setShowExportModal}>
+          <DialogContent className="bg-gray-900 border-gray-700 text-white max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="text-blue-300">Export Dashboard Report</DialogTitle>
+              <DialogDescription className="text-gray-300">
+                Configure your export settings and download dashboard data
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-blue-300 mb-2">Report Type</label>
+                <Select value={exportConfig.reportType} onValueChange={(value) => 
+                  setExportConfig({...exportConfig, reportType: value})
+                }>
+                  <SelectTrigger className="bg-gray-800 border-gray-600 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-800 border-gray-600">
+                    <SelectItem value="comprehensive">Comprehensive Report</SelectItem>
+                    <SelectItem value="weekly">Weekly Summary</SelectItem>
+                    <SelectItem value="monthly">Monthly Analysis</SelectItem>
+                    <SelectItem value="performance">Performance Metrics</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-blue-300 mb-2">Export Format</label>
+                <Select value={exportConfig.format} onValueChange={(value) => 
+                  setExportConfig({...exportConfig, format: value})
+                }>
+                  <SelectTrigger className="bg-gray-800 border-gray-600 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-800 border-gray-600">
+                    <SelectItem value="json">JSON Data</SelectItem>
+                    <SelectItem value="csv">CSV Spreadsheet</SelectItem>
+                    <SelectItem value="pdf">PDF Report</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-blue-300 mb-2">Include Sections</label>
+                <div className="space-y-2">
+                  {[
+                    { key: 'smartspend', label: 'SmartSpend Analytics' },
+                    { key: 'voice_analytics', label: 'Voice Call Analytics' },
+                    { key: 'botalytics', label: 'Bot Performance' },
+                    { key: 'automation_metrics', label: 'Automation Metrics' },
+                    { key: 'client_pulse', label: 'Client Pulse Data' }
+                  ].map(section => (
+                    <div key={section.key} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id={section.key}
+                        checked={exportConfig.sections.includes(section.key)}
+                        onChange={(e) => {
+                          const newSections = e.target.checked 
+                            ? [...exportConfig.sections, section.key]
+                            : exportConfig.sections.filter(s => s !== section.key);
+                          setExportConfig({...exportConfig, sections: newSections});
+                        }}
+                        className="w-4 h-4"
+                      />
+                      <label htmlFor={section.key} className="text-sm text-gray-300">
+                        {section.label}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-blue-300 mb-2">Date Range</label>
+                <Select value={exportConfig.dateRange} onValueChange={(value) => 
+                  setExportConfig({...exportConfig, dateRange: value})
+                }>
+                  <SelectTrigger className="bg-gray-800 border-gray-600 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-800 border-gray-600">
+                    <SelectItem value="last_7_days">Last 7 Days</SelectItem>
+                    <SelectItem value="last_30_days">Last 30 Days</SelectItem>
+                    <SelectItem value="last_90_days">Last 90 Days</SelectItem>
+                    <SelectItem value="year_to_date">Year to Date</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="bg-gray-800 p-3 rounded border border-gray-600">
+                <h4 className="text-sm font-medium text-blue-300 mb-2">Preview</h4>
+                <p className="text-xs text-gray-400">
+                  Report: {exportConfig.reportType} | Format: {exportConfig.format.toUpperCase()} | 
+                  Sections: {exportConfig.sections.length} | Range: {exportConfig.dateRange.replace(/_/g, ' ')}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-3 pt-4">
+              <Button
+                variant="outline"
+                onClick={() => setShowExportModal(false)}
+                className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleGenerateExport}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Generate Export
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
 
     </div>
   );
