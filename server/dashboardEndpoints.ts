@@ -95,28 +95,52 @@ export function registerDashboardEndpoints(app: Express) {
     try {
       const systemMode = getSystemMode();
       
-      if (systemMode === 'live') {
-        // LIVE MODE: Serve only empty states
-        const emptyPerformance = LiveDataCleaner.getEmptyAutomationPerformance();
-        LiveDataCleaner.logLiveModeAccess('automation-performance', '/api/automation-performance', systemMode);
-        
-        res.json({
-          success: true,
-          data: emptyPerformance,
-          mode: 'live',
-          message: 'Live mode - authentic automation metrics only'
+      // Get real automation data from Airtable in both modes
+      const { LiveDashboardData } = await import('./liveDashboardData');
+      const liveMetrics = await LiveDashboardData.getAutomationMetrics();
+      
+      // Enhance with real lead processing data
+      try {
+        const { AirtableLeadsService } = await import('./airtableLeadsService');
+        const airtableService = new AirtableLeadsService();
+        const leads = await airtableService.getScrapedLeads({
+          fields: ['🤖 Synced to YoBot Queue?', '📞 Call Status', '📅 Date Added']
         });
-      } else {
-        // TEST MODE: Serve hardcoded test data
-        const { LiveDashboardData } = await import('./liveDashboardData');
-        const liveMetrics = await LiveDashboardData.getAutomationMetrics();
-        res.json({
-          success: true,
-          data: liveMetrics,
-          mode: 'test',
-          message: 'Test mode - displaying sample data'
-        });
+
+        const today = new Date().toISOString().split('T')[0];
+        const todayLeads = leads.records.filter(r => 
+          r.fields['📅 Date Added']?.startsWith(today)
+        );
+
+        const queuedTasks = leads.records.filter(r => 
+          r.fields['🤖 Synced to YoBot Queue?'] === true && 
+          !r.fields['📞 Call Status']
+        ).length;
+
+        const activeTasks = leads.records.filter(r => 
+          r.fields['📞 Call Status'] === 'In Progress' ||
+          r.fields['📞 Call Status'] === 'Calling'
+        ).length;
+
+        // Merge real lead data with automation metrics
+        liveMetrics.executionsToday = Math.max(liveMetrics.executionsToday, todayLeads.length);
+        liveMetrics.queuedTasks = queuedTasks;
+        liveMetrics.activeTasks = activeTasks;
+        liveMetrics.processingCapacity = Math.min(100, (activeTasks / Math.max(1, queuedTasks)) * 100);
+      } catch (leadError) {
+        console.log('Lead data enhancement unavailable:', leadError.message);
       }
+
+      if (systemMode === 'live') {
+        LiveDataCleaner.logLiveModeAccess('automation-performance', '/api/automation-performance', systemMode);
+      }
+      
+      res.json({
+        success: true,
+        data: liveMetrics,
+        mode: systemMode,
+        message: `${systemMode} mode - automation performance metrics`
+      });
     } catch (error) {
       console.error("Automation performance error:", error);
       res.status(500).json({
