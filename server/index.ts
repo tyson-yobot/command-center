@@ -17,6 +17,11 @@ import { registerAirtableTestLogger } from "./airtableTestLogger";
 import { registerCallStatusEndpoint } from "./callStatusEndpoint";
 import { registerRealDashboardEndpoints } from "./realDashboardData";
 import { registerCalendarEndpoints } from "./calendarEndpoints";
+import { registerPDFGenerator } from "./pdfGenerator";
+import { registerVoiceSynthesis } from "./voiceSynthesis";
+import { registerMemoryKnowledge } from "./memoryKnowledge";
+import { registerAuditEscalation } from "./auditEscalation";
+import { registerCallMonitoring } from "./callMonitoring";
 
 import { initializeLiveDataWipe, secureAdminDataWipe } from "./dataWipe";
 
@@ -276,6 +281,12 @@ print(json.dumps(result))
   // Register real dashboard data endpoints (bypasses all filtering)
   registerRealDashboardEndpoints(app);
   registerCalendarEndpoints(app);
+
+  // Register new backend systems
+  registerPDFGenerator(app);
+  registerVoiceSynthesis(app);
+  registerMemoryKnowledge(app);
+  registerAuditEscalation(app);
 
   // Register document management routes
   app.use('/api/documents', documentRoutes);
