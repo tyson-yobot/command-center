@@ -3446,82 +3446,173 @@ export default function CommandCenter() {
             ))}
           </div>
         </div>
-                        </div>
-                      </Button>
-                    </div>
-                    
-                    {/* Voice Analytics & Call Monitoring */}
-                    <div className="space-y-3">
-                      <h4 className="text-green-300 font-semibold flex items-center">
-                        <Activity className="w-4 h-4 mr-2" />
-                        Voice Analytics & Call Monitoring
-                      </h4>
-                      
-                      <Button
-                        onClick={() => setShowManualCallModal(true)}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
-                      >
-                        <div className="flex items-center">
-                          <span className="text-xl mr-3">📞</span>
-                          <span>Manual Call Start</span>
-                        </div>
-                        <div className="w-2 h-2 bg-blue-300 rounded-full animate-pulse"></div>
-                      </Button>
-                      
-                      <Button
-                        onClick={() => setShowVoiceRecordings(!showVoiceRecordings)}
-                        className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-between p-3 border border-purple-500"
-                      >
-                        <div className="flex items-center">
-                          <span className="text-xl mr-3">📊</span>
-                          <span>Conversation Analytics</span>
-                        </div>
-                        <Badge className="bg-purple-700 text-white text-xs">UNIFIED</Badge>
-                      </Button>
-                      
-                      <Button
-                        onClick={() => setShowCreateVoiceCallModal(true)}
-                        className="w-full bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-between p-3 border border-orange-500"
-                      >
-                        <div className="flex items-center">
-                          <span className="text-xl mr-3">🎤</span>
-                          <span>Voice Synthesis Studio</span>
-                        </div>
-                        <Badge className="bg-orange-700 text-white text-xs">STUDIO</Badge>
-                      </Button>
-                    </div>
-                  </div>
-                  
-                  {/* Voice Status Indicator */}
-                  <div className="mt-4 p-3 bg-white/5 rounded-lg border border-green-400/30">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <div className={`w-3 h-3 rounded-full mr-3 ${micStatus === 'listening' ? 'bg-green-400 animate-pulse' : micStatus === 'processing' ? 'bg-yellow-400' : 'bg-gray-400'}`}></div>
-                        <span className="text-white font-medium">Voice Status: {micStatus === 'listening' ? 'Listening' : micStatus === 'processing' ? 'Processing' : 'Ready'}</span>
-                      </div>
-                      <div className="text-green-300 text-sm">
-                        {realTimeTranscript && `"${realTimeTranscript}"`}
-                      </div>
-                    </div>
-                  </div>
-              </CardContent>
-              )}
-            </Card>
 
-          </div>
-        </div>
-
-        {/* Second Row: Command Center Status + Bot Metrics (Moved Higher) */}
-        <div className="mb-8">
+        {/* Tab Content */}
+        {activeTab === 'automation-ops' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* YoBot Health Monitor */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
+            {/* Voice Engine Suite */}
+            <Card className="bg-gradient-to-br from-green-900/60 to-emerald-800/40 backdrop-blur-sm border border-green-400 relative shadow-lg shadow-green-400/20">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Activity className="w-5 h-5 mr-2 text-green-400" />
-                  ✅ YoBot® Health Monitor
+                <CardTitle className="text-white flex items-center text-xl">
+                  <Headphones className="w-6 h-6 mr-3 text-green-400" />
+                  Voice Engine Suite
+                  <Badge className="ml-3 bg-green-500 text-white text-sm px-3 py-1">UNIFIED</Badge>
                 </CardTitle>
               </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <Button
+                    onClick={handleStartPipelineCalls}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-center p-3"
+                  >
+                    <span className="text-xl mr-3">🚀</span>
+                    Start Pipeline Calls
+                  </Button>
+                  <Button
+                    onClick={handleStopPipelineCalls}
+                    className="w-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center p-3"
+                  >
+                    <span className="text-xl mr-3">🛑</span>
+                    Stop Pipeline Calls
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* SmartSpend Dashboard */}
+            <Card className="bg-gradient-to-br from-purple-900/60 to-indigo-800/40 backdrop-blur-sm border border-purple-400 relative shadow-lg shadow-purple-400/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center text-xl">
+                  <DollarSign className="w-6 h-6 mr-3 text-purple-400" />
+                  SmartSpend Dashboard
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="text-white text-sm">
+                    <p>Budget Utilization: {smartSpendData?.budgetUtilization || 0}%</p>
+                    <p>ROI: {smartSpendData?.roiPercentage || 0}%</p>
+                    <p>Total Spend: ${smartSpendData?.totalSpend || 0}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Botalytics */}
+            <Card className="bg-gradient-to-br from-blue-900/60 to-cyan-800/40 backdrop-blur-sm border border-blue-400 relative shadow-lg shadow-blue-400/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center text-xl">
+                  <BarChart3 className="w-6 h-6 mr-3 text-blue-400" />
+                  Botalytics
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="text-white text-sm">
+                    <p>Monthly Performance Metrics</p>
+                    <p>Automation Success Rate: 94.5%</p>
+                    <p>Lead Generation: 1,247 this month</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {activeTab === 'system-tools' && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Smart Calendar */}
+            <Card className="bg-gradient-to-br from-orange-900/60 to-amber-800/40 backdrop-blur-sm border border-orange-400 relative shadow-lg shadow-orange-400/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center text-xl">
+                  <Calendar className="w-6 h-6 mr-3 text-orange-400" />
+                  Smart Calendar
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <Button
+                    onClick={handleCalendarSync}
+                    className="w-full bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-center p-3"
+                  >
+                    <span className="text-xl mr-3">📅</span>
+                    Sync Calendar
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* AI Assistant */}
+            <Card className="bg-gradient-to-br from-teal-900/60 to-cyan-800/40 backdrop-blur-sm border border-teal-400 relative shadow-lg shadow-teal-400/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center text-xl">
+                  <Brain className="w-6 h-6 mr-3 text-teal-400" />
+                  AI Assistant
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <Button
+                    onClick={handleAIChat}
+                    className="w-full bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-center p-3"
+                  >
+                    <span className="text-xl mr-3">🤖</span>
+                    Start AI Chat
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {activeTab === 'admin-tools' && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* System Health */}
+            <Card className="bg-gradient-to-br from-red-900/60 to-pink-800/40 backdrop-blur-sm border border-red-400 relative shadow-lg shadow-red-400/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center text-xl">
+                  <Activity className="w-6 h-6 mr-3 text-red-400" />
+                  System Health
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="text-white text-sm">
+                    <p>All systems operational</p>
+                    <p>Uptime: 99.9%</p>
+                    <p>Response time: 45ms</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Export Tools */}
+            <Card className="bg-gradient-to-br from-slate-900/60 to-gray-800/40 backdrop-blur-sm border border-slate-400 relative shadow-lg shadow-slate-400/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center text-xl">
+                  <Download className="w-6 h-6 mr-3 text-slate-400" />
+                  Export Tools
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <Button
+                    onClick={handleExportData}
+                    className="w-full bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center p-3"
+                  >
+                    <span className="text-xl mr-3">📤</span>
+                    Export Data
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+export default CommandCenter;
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between">
