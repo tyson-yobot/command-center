@@ -4132,63 +4132,76 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          {/* SmartSpend™ */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
+          {/* SmartSpend™ - Updated Design */}
+          <Card className="bg-gradient-to-br from-blue-900/80 via-blue-800/60 to-indigo-900/40 backdrop-blur-sm border border-blue-400/60 shadow-2xl shadow-blue-500/30">
             <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <DollarSign className="w-5 h-5 mr-2 text-green-400" />
-                💰 SmartSpend™
+              <CardTitle className="text-white flex items-center justify-between">
+                <div className="flex items-center">
+                  <DollarSign className="w-5 h-5 mr-2 text-blue-300" />
+                  💰 SmartSpend™
+                </div>
+                <Badge className="bg-blue-500 text-white text-sm px-3 py-1">LIVE</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300">Monthly Ad Spend:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '$4,850' : (metrics?.data?.smartSpendData?.monthlyAdSpend || '')}</span>
+                {/* Monthly Ad Spend */}
+                <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
+                  <div className="text-slate-300 text-sm mb-1">Monthly Ad Spend:</div>
+                  <div className="text-white font-bold text-lg mb-2">
+                    {currentSystemMode === 'test' ? '$4,850' : (metrics?.data?.smartSpendData?.monthlyAdSpend || '--')}
                   </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-green-400 h-1 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.spendUtilization || 87}%` }}></div>
-                  </div>
-                </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-yellow-400 shadow-lg shadow-yellow-400/20">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300">Cost Per Lead:</span>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-yellow-400 font-bold">{currentSystemMode === 'test' ? '$24.50' : (metrics?.data?.smartSpendData?.costPerLead || '')}</span>
-                      <Badge className="bg-green-600 text-white text-xs">{currentSystemMode === 'test' ? '-12%' : (metrics?.data?.smartSpendData?.costPerLeadChange || '')}</Badge>
-                    </div>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-yellow-400 h-1 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.costEfficiency || 73}%` }}></div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-blue-400 to-blue-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.spendUtilization || 87}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300">ROI This Month:</span>
-                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '312%' : (metrics?.data?.smartSpendData?.monthlyROI || '')}</span>
+
+                {/* Cost Per Lead */}
+                <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
+                  <div className="text-slate-300 text-sm mb-1">Cost Per Lead:</div>
+                  <div className="text-white font-bold text-lg mb-2">
+                    {currentSystemMode === 'test' ? '$24.50' : (metrics?.data?.smartSpendData?.costPerLead || '--')}
                   </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.roiProgress || 78}%` }}></div>
-                  </div>
-                </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300">Conversion Rate:</span>
-                    <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '8.7%' : (metrics?.data?.smartSpendData?.conversionRate || '')}</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.conversionRate || 87}%` }}></div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-yellow-400 to-amber-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.costEfficiency || 73}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-cyan-400 shadow-lg shadow-cyan-400/20">
+
+                {/* ROI This Month */}
+                <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
+                  <div className="text-slate-300 text-sm mb-1">ROI This Month:</div>
+                  <div className="text-white font-bold text-lg mb-2">
+                    {currentSystemMode === 'test' ? '312%' : (metrics?.data?.smartSpendData?.monthlyROI || '--')}
+                  </div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-green-400 to-emerald-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.roiProgress || 78}%` }}></div>
+                  </div>
+                </div>
+
+                {/* Conversion Rate */}
+                <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
+                  <div className="text-slate-300 text-sm mb-1">Conversion Rate:</div>
+                  <div className="text-white font-bold text-lg mb-2">
+                    {currentSystemMode === 'test' ? '8.7%' : (metrics?.data?.smartSpendData?.conversionRate || '--')}
+                  </div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-purple-400 to-violet-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.conversionProgress || 87}%` }}></div>
+                  </div>
+                </div>
+
+                {/* Budget Efficiency Score */}
+                <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
                   <div className="text-slate-300 text-sm mb-1">Budget Efficiency Score:</div>
-                  <div className="flex items-center justify-between">
-                    <div className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '94.2/100' : (metrics?.data?.smartSpendData?.budgetEfficiency || '')}</div>
-                    <Badge className="bg-cyan-600 text-white">{currentSystemMode === 'test' ? 'Optimal' : (metrics?.data?.smartSpendData?.efficiencyStatus || '')}</Badge>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-white font-bold text-lg">
+                      {currentSystemMode === 'test' ? '94.2/100' : (metrics?.data?.smartSpendData?.budgetEfficiency || '--')}
+                    </div>
+                    <Badge className="bg-cyan-600 text-white text-xs">
+                      {currentSystemMode === 'test' ? 'Optimal' : (metrics?.data?.smartSpendData?.efficiencyStatus || 'Unknown')}
+                    </Badge>
                   </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-cyan-400 h-1 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.budgetEfficiency || 94}%` }}></div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-cyan-400 to-blue-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.budgetEfficiency || 94}%` }}></div>
                   </div>
                 </div>
               </div>
