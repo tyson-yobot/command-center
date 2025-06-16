@@ -3127,32 +3127,115 @@ export default function CommandCenter() {
               )}
             </Card>
 
-            {/* Data & Reports */}
-            <Card className="bg-white/10 backdrop-blur-sm border-2 border-purple-500 relative shadow-[0_0_20px_rgba(168,85,247,0.4)] animate-pulse"
-                  style={{
-                    background: 'linear-gradient(45deg, rgba(168,85,247,0.1), rgba(147,51,234,0.1))',
-                    boxShadow: '0 0 30px rgba(168,85,247,0.6), inset 0 0 20px rgba(168,85,247,0.1)'
-                  }}>
+          </div>
+        </div>
+
+        {/* Second Row: Command Center Status + Bot Metrics (Moved Higher) */}
+        <div className="mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* YoBot Health Monitor */}
+            <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
               <CardHeader>
-                <CardTitle className="text-white flex items-center justify-between">
-                  <div className="flex items-center">
-                    <BarChart3 className="w-5 h-5 mr-2 text-blue-400" />
-                    Data & Reports
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleSection('data-reports')}
-                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                    >
-                      {collapsedSections['data-reports'] ? 
-                        <ChevronDown className="w-4 h-4" /> : 
-                        <ChevronUp className="w-4 h-4" />
-                      }
-                    </Button>
-                  </div>
-                  <Badge className="bg-blue-600 text-white">Reports</Badge>
+                <CardTitle className="text-white flex items-center">
+                  <Activity className="w-5 h-5 mr-2 text-green-400" />
+                  ✅ YoBot® Health Monitor
                 </CardTitle>
               </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">System Uptime:</span>
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '99.8%' : ''}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Active Bots:</span>
+                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '5' : ''}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Last Check:</span>
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1m ago' : ''}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Live Automation Engine */}
+            <Card className="bg-white/10 backdrop-blur-sm border border-cyan-400">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Zap className="w-5 h-5 mr-2 text-cyan-400" />
+                  ⚙️ Live Automation Engine
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Active Workflows:</span>
+                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '15' : ''}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Executions Today:</span>
+                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '247' : ''}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Engine Status:</span>
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? 'LIVE' : ''}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* AI Assistant Insights */}
+            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Brain className="w-5 h-5 mr-2 text-blue-400" />
+                  🧠 AI Assistant Insights
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Accuracy Rate:</span>
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '94.2%' : ''}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Learning Rate:</span>
+                    <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '78%' : ''}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Interactions:</span>
+                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '1,247' : ''}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Reports + Export/Calendar Sync */}
+        <div className="mb-8">
+          <Card className="bg-white/10 backdrop-blur-sm border border-purple-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center justify-between">
+                <div className="flex items-center">
+                  <FileText className="w-5 h-5 mr-2 text-purple-400" />
+                  📊 Reports + Export
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => toggleSection('data-reports')}
+                    className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                  >
+                    {collapsedSections['data-reports'] ? 
+                      <ChevronDown className="w-4 h-4" /> : 
+                      <ChevronUp className="w-4 h-4" />
+                    }
+                  </Button>
+                </div>
+                <Badge className="bg-purple-600 text-white">Reports</Badge>
+              </CardTitle>
+            </CardHeader>
               {!collapsedSections['data-reports'] && (
                 <CardContent>
                   <div className="grid grid-cols-1 gap-3">
@@ -3957,31 +4040,7 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          {/* Bot Cloning Workflow */}
-          <Card className="bg-green-900/60 backdrop-blur-sm border border-green-400 shadow-lg shadow-green-400/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Settings className="w-5 h-5 mr-2 text-green-400" />
-                Bot Cloning Pipeline
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Active Clones:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '3' : ''}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Deployed Today:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '1' : ''}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '96.8%' : ''}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+
 
 
         </div>
@@ -7902,6 +7961,50 @@ export default function CommandCenter() {
         isOpen={showManualCallModal} 
         onClose={() => setShowManualCallModal(false)} 
       />
+
+      {/* Bot Cloning Pipeline - Moved to Bottom */}
+      <div className="mt-12 mb-8">
+        <Card className="bg-white/5 backdrop-blur-sm border border-green-400/50 relative">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center justify-between">
+              <div className="flex items-center">
+                <Settings className="w-5 h-5 mr-2 text-green-400" />
+                🤖 Bot Cloning Pipeline
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleSection('bot-cloning')}
+                  className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                >
+                  {collapsedSections['bot-cloning'] ? 
+                    <ChevronDown className="w-4 h-4" /> : 
+                    <ChevronUp className="w-4 h-4" />
+                  }
+                </Button>
+              </div>
+              <Badge className="bg-green-600 text-white">Pipeline</Badge>
+            </CardTitle>
+          </CardHeader>
+          {!collapsedSections['bot-cloning'] && (
+            <CardContent>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-green-400/30">
+                  <span className="text-slate-300 text-sm">Active Clones:</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '3' : liveSystemData?.activeBots || ''}</span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-blue-400/30">
+                  <span className="text-slate-300 text-sm">Deployed Today:</span>
+                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '1' : liveSystemData?.deploymentsToday || ''}</span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-purple-400/30">
+                  <span className="text-slate-300 text-sm">Success Rate:</span>
+                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '96.8%' : liveSystemData?.successRate || ''}</span>
+                </div>
+              </div>
+            </CardContent>
+          )}
+        </Card>
+      </div>
 
     </div>
     </div>
