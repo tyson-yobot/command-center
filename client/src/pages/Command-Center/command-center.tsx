@@ -174,6 +174,12 @@ export default function CommandCenter() {
   const [realTimeTranscript, setRealTimeTranscript] = React.useState('');
   const [showAnalyticsModal, setShowAnalyticsModal] = React.useState(false);
   const [showCalendarUpload, setShowCalendarUpload] = React.useState(false);
+  const [exportConfig, setExportConfig] = useState({
+    format: 'pdf',
+    sections: ['smartspend', 'voice_analytics', 'botalytics'],
+    reportType: 'weekly',
+    dateRange: 'last_7_days'
+  });
   const [activeCalls, setActiveCalls] = React.useState(0);
   const [dashboardPreset, setDashboardPreset] = React.useState('full');
   const [collapsedSections, setCollapsedSections] = React.useState<{[key: string]: boolean}>({});
@@ -2944,12 +2950,70 @@ export default function CommandCenter() {
             </div>
           </div>
           {isListening && (
-            <div className="mt-3 text-sm text-green-400 flex items-center">
-              <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
-              Voice commands ready. Say "YoBot" to activate commands.
+            <div className="mt-3 space-y-2">
+              <div className="text-sm text-green-400 flex items-center">
+                <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                🎙️ Speak Now... Voice commands ready. Say "YoBot" to activate commands.
+              </div>
+              
+              {/* Voice Waveform Animation */}
+              <div className="flex items-center space-x-1 ml-4">
+                <div className="w-1 h-3 bg-green-300 rounded animate-pulse"></div>
+                <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-75"></div>
+                <div className="w-1 h-4 bg-green-300 rounded animate-pulse delay-150"></div>
+                <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-300"></div>
+                <div className="w-1 h-3 bg-green-300 rounded animate-pulse delay-500"></div>
+                <div className="w-1 h-1 bg-green-300 rounded animate-pulse delay-700"></div>
+                <div className="w-1 h-3 bg-green-300 rounded animate-pulse delay-900"></div>
+              </div>
+              
+              {/* Cancel Button */}
+              <Button
+                onClick={toggleVoiceListening}
+                variant="outline"
+                size="sm"
+                className="ml-4 border-red-400 text-red-400 hover:bg-red-600/20"
+              >
+                ❌ Cancel
+              </Button>
+              
+              {/* Real-time Transcription */}
+              {realTimeTranscript && (
+                <div className="ml-4 p-2 bg-white/5 rounded border border-blue-400/30">
+                  <div className="text-xs text-blue-300">Transcribing:</div>
+                  <div className="text-white text-sm">"{realTimeTranscript}"</div>
+                </div>
+              )}
             </div>
           )}
         </div>
+
+        {/* Live Pipeline Banner */}
+        {(currentSystemMode === 'test' || (liveActivityData?.data?.callsInProgress > 0)) && (
+          <div className="mb-6 p-4 bg-green-900/30 border border-green-400 rounded-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                <span className="text-green-300 font-semibold">📞 Pipeline Active</span>
+                <span className="text-white">
+                  {currentSystemMode === 'test' ? '3 calls in progress' : `${liveActivityData?.data?.callsInProgress || 0} calls in progress`}
+                </span>
+                <span className="text-green-400">|</span>
+                <span className="text-white">
+                  {currentSystemMode === 'test' ? '18 completed today' : `${liveActivityData?.data?.callsCompleted || 0} completed today`}
+                </span>
+              </div>
+              <Button
+                onClick={handleStopPipelineCalls}
+                variant="outline"
+                size="sm"
+                className="border-red-400 text-red-400 hover:bg-red-600/20"
+              >
+                🛑 Emergency Stop
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Reorganized Top Sections - Voice Features Prominent */}
         <div className="mb-8">
