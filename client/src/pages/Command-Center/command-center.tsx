@@ -4385,11 +4385,11 @@ export default function CommandCenter() {
 
         {/* Smart Calendar & Live Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          <Card className="bg-gradient-to-br from-blue-900/40 via-indigo-900/30 to-purple-900/20 backdrop-blur-sm border border-blue-400/50 shadow-2xl shadow-blue-500/20">
             <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Calendar className="w-5 h-5 mr-2 text-purple-400" />
-                Smart Calendar
+              <CardTitle className="text-white flex items-center text-xl font-bold">
+                <Calendar className="w-6 h-6 mr-3 text-blue-400" />
+                🗓️ Smart Calendar
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -6634,9 +6634,12 @@ export default function CommandCenter() {
       {/* Support Ticket Modal */}
       {showSupportTicketModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[520px] bg-[#1a1a1a] rounded-xl border border-green-400/50 p-6 animate-in fade-in-0 duration-300">
+          <div className="w-[520px] bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 rounded-xl p-6 animate-in fade-in-0 duration-300">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-white">Create Support Ticket</h2>
+              <h2 className="text-xl font-bold text-blue-300 flex items-center">
+                <span className="text-2xl mr-3">🆘</span>
+                Create Support Ticket
+              </h2>
               <Button
                 onClick={() => setShowSupportTicketModal(false)}
                 variant="ghost"
@@ -6646,28 +6649,37 @@ export default function CommandCenter() {
               </Button>
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-5">
               <div>
-                <label className="block text-white text-sm font-medium mb-2">Client Email</label>
+                <label className="block text-blue-300 text-sm font-semibold mb-3 flex items-center">
+                  <span className="mr-2">✉️</span>
+                  Client Email
+                </label>
                 <input 
                   type="email"
-                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500"
+                  className="w-full p-4 bg-slate-800/60 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200"
                   placeholder="client@company.com"
                 />
               </div>
               
               <div>
-                <label className="block text-white text-sm font-medium mb-2">Subject</label>
+                <label className="block text-blue-300 text-sm font-semibold mb-3 flex items-center">
+                  <span className="mr-2">📝</span>
+                  Subject
+                </label>
                 <input 
                   type="text"
-                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500"
+                  className="w-full p-4 bg-slate-800/60 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200"
                   placeholder="Brief description of the issue"
                 />
               </div>
               
               <div>
-                <label className="block text-white text-sm font-medium mb-2">Urgency Level</label>
-                <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500">
+                <label className="block text-blue-300 text-sm font-semibold mb-3 flex items-center">
+                  <span className="mr-2">🚨</span>
+                  Urgency Level
+                </label>
+                <select className="w-full p-4 bg-slate-800/60 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200">
                   <option value="Low">Low</option>
                   <option value="Medium">Medium</option>
                   <option value="High">High</option>
@@ -6676,16 +6688,19 @@ export default function CommandCenter() {
               </div>
               
               <div>
-                <label className="block text-white text-sm font-medium mb-2">Issue Description</label>
+                <label className="block text-blue-300 text-sm font-semibold mb-3 flex items-center">
+                  <span className="mr-2">📋</span>
+                  Issue Description
+                </label>
                 <textarea 
-                  className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-green-500 h-32 resize-none"
+                  className="w-full p-4 bg-slate-800/60 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 h-32 resize-none"
                   placeholder="Detailed description of the issue..."
                 />
               </div>
               
-              <div className="flex items-center gap-3">
-                <input type="checkbox" id="urgent-escalation" className="rounded" />
-                <label htmlFor="urgent-escalation" className="text-white text-sm">Requires immediate escalation</label>
+              <div className="flex items-center gap-3 p-3 bg-red-900/20 border border-red-400/30 rounded-lg">
+                <input type="checkbox" id="urgent-escalation" className="w-4 h-4 text-red-500 rounded" />
+                <label htmlFor="urgent-escalation" className="text-red-300 text-sm font-medium">Requires immediate escalation</label>
               </div>
               
               <div className="flex gap-3 pt-4">
@@ -6711,7 +6726,7 @@ export default function CommandCenter() {
                       setToast({ title: "Error", description: "Failed to create ticket", variant: "destructive" });
                     }
                   }}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg"
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg shadow-blue-500/30 transition-all duration-200 hover:scale-105"
                 >
                   Submit Ticket
                 </Button>
@@ -6851,9 +6866,12 @@ export default function CommandCenter() {
       {/* Manual Call Modal */}
       {showCreateVoiceCallModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[500px] bg-[#1a1a1a] rounded-xl border border-orange-400/50 p-6 animate-in fade-in-0 duration-300">
+          <div className="w-[560px] bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 rounded-xl p-6 animate-in fade-in-0 duration-300">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-white">Start Manual Call</h2>
+              <h2 className="text-xl font-bold text-blue-300 flex items-center">
+                <span className="text-2xl mr-3">📞</span>
+                Manual Call Start
+              </h2>
               <Button
                 onClick={() => setShowCreateVoiceCallModal(false)}
                 variant="ghost"
