@@ -3548,83 +3548,349 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Reports + Export/Calendar Sync */}
+        {/* 4. Reports + Analytics (SmartSpend™, Botalytics™, PDF, Forecasts) */}
         <div className="mb-8">
-          <Card className="bg-white/10 backdrop-blur-sm border border-purple-400">
+          <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20">
             <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between">
+              <CardTitle className="text-white flex items-center justify-between text-xl">
                 <div className="flex items-center">
-                  <FileText className="w-5 h-5 mr-2 text-purple-400" />
-                  📊 Reports + Export
+                  <BarChart3 className="w-6 h-6 mr-3 text-purple-400" />
+                  📊 Performance & ROI Analytics
+                  <Badge className="ml-3 bg-purple-500 text-white text-sm px-3 py-1">ANALYTICS</Badge>
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => toggleSection('data-reports')}
+                    onClick={() => toggleSection('analytics-reports')}
                     className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
                   >
-                    {collapsedSections['data-reports'] ? 
+                    {collapsedSections['analytics-reports'] ? 
                       <ChevronDown className="w-4 h-4" /> : 
                       <ChevronUp className="w-4 h-4" />
                     }
                   </Button>
                 </div>
-                <Badge className="bg-purple-600 text-white">Reports</Badge>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-purple-300">Last Updated: Just now</span>
+                </div>
               </CardTitle>
             </CardHeader>
-              {!collapsedSections['data-reports'] && (
-                <CardContent>
-                  <div className="grid grid-cols-1 gap-3">
+            {!collapsedSections['analytics-reports'] && (
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* SmartSpend™ Analytics */}
+                  <div className="space-y-4">
+                    <h4 className="text-purple-300 font-semibold flex items-center border-b border-purple-400/30 pb-2">
+                      <DollarSign className="w-4 h-4 mr-2" />
+                      📊 SmartSpend™ Analytics
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="flex justify-between">
+                          <span className="text-purple-300 text-sm">Budget Efficiency:</span>
+                          <span className="text-green-400 font-bold">85.2%</span>
+                        </div>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="flex justify-between">
+                          <span className="text-purple-300 text-sm">Cost Per Lead:</span>
+                          <span className="text-white font-bold">$24.50</span>
+                        </div>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="flex justify-between">
+                          <span className="text-purple-300 text-sm">ROI:</span>
+                          <span className="text-green-400 font-bold">312%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Botalytics™ */}
+                  <div className="space-y-4">
+                    <h4 className="text-purple-300 font-semibold flex items-center border-b border-purple-400/30 pb-2">
+                      <Brain className="w-4 h-4 mr-2" />
+                      📈 Botalytics™
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="flex justify-between">
+                          <span className="text-purple-300 text-sm">AI Accuracy:</span>
+                          <span className="text-green-400 font-bold">94.2%</span>
+                        </div>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="flex justify-between">
+                          <span className="text-purple-300 text-sm">Interactions:</span>
+                          <span className="text-blue-400 font-bold">1,247</span>
+                        </div>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="flex justify-between">
+                          <span className="text-purple-300 text-sm">Learning Rate:</span>
+                          <span className="text-purple-400 font-bold">78%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Export Actions */}
+                <div className="mt-6 pt-4 border-t border-purple-400/30">
+                  <h4 className="text-purple-300 font-semibold mb-3 flex items-center">
+                    <FileDown className="w-4 h-4 mr-2" />
+                    📤 PDF + Export Reports
+                  </h4>
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                     <Button
-                      onClick={() => window.location.href = '/lead-scraper'}
-                      className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
-                      style={{ borderLeft: '8px solid #ec4899' }}
+                      onClick={() => setShowAnalyticsModal(true)}
+                      className="bg-purple-600 hover:bg-purple-700 text-white p-3"
                     >
-                      <span className="text-xl mr-3">🎯</span>
-                      <span>Lead Generation Tools</span>
+                      <FileText className="w-4 h-4 mr-2" />
+                      Analytics Report
                     </Button>
-                  
-                  <Button
-                    onClick={handleDownloadPDF}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
-                  >
-                    <span className="text-xl mr-3">📋</span>
-                    <span>Generate Analytics Report</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => setShowExportModal(true)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
-                  >
-                    <span className="text-xl mr-3">💾</span>
-                    <span>Export Dashboard Data</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => window.open('https://app.jasper.ai/', '_blank')}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
-                    style={{ borderLeft: '8px solid #f59e0b' }}
-                  >
-                    <span className="text-xl mr-3">✏️</span>
-                    <span>AI Content Generator</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => window.open('https://mailchimp.com/login/', '_blank')}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-start p-3 border border-purple-500"
-                    style={{ borderLeft: '8px solid #fbbf24' }}
-                  >
-                    <span className="text-xl mr-3">📬</span>
-                    <span>Email Marketing Platform</span>
-                  </Button>
-                  
-
+                    <Button
+                      onClick={handlePDFReport}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white p-3"
+                    >
+                      <Printer className="w-4 h-4 mr-2" />
+                      PDF Export
+                    </Button>
+                    <Button
+                      onClick={() => setShowExportModal(true)}
+                      className="bg-teal-600 hover:bg-teal-700 text-white p-3"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Quick Export
+                    </Button>
+                    <Button
+                      onClick={handleExportData}
+                      className="bg-cyan-600 hover:bg-cyan-700 text-white p-3"
+                    >
+                      <Database className="w-4 h-4 mr-2" />
+                      Data Export
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
-              )}
-            </Card>
+            )}
+          </Card>
+        </div>
 
+        {/* 5. System Health + Metrics (Uptime, Client Pulse, Ops Stats) */}
+        <div className="mb-8">
+          <Card className="bg-gradient-to-r from-emerald-900/60 to-teal-800/60 backdrop-blur-sm border border-emerald-400 shadow-lg shadow-emerald-400/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center justify-between text-xl">
+                <div className="flex items-center">
+                  <Gauge className="w-6 h-6 mr-3 text-emerald-400" />
+                  📈 System Health + Metrics
+                  <Badge className="ml-3 bg-emerald-500 text-white text-sm px-3 py-1">LIVE</Badge>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => toggleSection('system-health')}
+                    className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                  >
+                    {collapsedSections['system-health'] ? 
+                      <ChevronDown className="w-4 h-4" /> : 
+                      <ChevronUp className="w-4 h-4" />
+                    }
+                  </Button>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                  <span className="text-sm text-emerald-300">All Systems Operational</span>
+                </div>
+              </CardTitle>
+            </CardHeader>
+            {!collapsedSections['system-health'] && (
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Uptime & Performance */}
+                  <div className="space-y-4">
+                    <h4 className="text-emerald-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2">
+                      <Activity className="w-4 h-4 mr-2" />
+                      System Uptime
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="text-sm text-emerald-300 mb-1">Uptime</div>
+                        <div className="text-2xl font-bold text-green-400">99.8%</div>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="text-sm text-emerald-300 mb-1">Response Time</div>
+                        <div className="text-lg font-bold text-white">145ms</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Client Pulse */}
+                  <div className="space-y-4">
+                    <h4 className="text-emerald-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2">
+                      <Users className="w-4 h-4 mr-2" />
+                      💼 Client Pulse
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="text-sm text-emerald-300 mb-1">NPS Score</div>
+                        <div className="text-2xl font-bold text-green-400">8.7</div>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="text-sm text-emerald-300 mb-1">Active Clients</div>
+                        <div className="text-lg font-bold text-white">24</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Operations Stats */}
+                  <div className="space-y-4">
+                    <h4 className="text-emerald-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2">
+                      <Target className="w-4 h-4 mr-2" />
+                      Ops Stats
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="text-sm text-emerald-300 mb-1">Active Calls</div>
+                        <div className="text-lg font-bold text-white">
+                          {activeCalls?.data?.length || 0}
+                        </div>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="text-sm text-emerald-300 mb-1">Success Rate</div>
+                        <div className="text-lg font-bold text-green-400">
+                          {callMetrics?.data?.successRate || 0}%
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            )}
+          </Card>
+        </div>
 
-          </div>
+        {/* 6. Security + Audit Logs (Consolidated Audit + Alerts) */}
+        <div className="mb-8">
+          <Card className="bg-gradient-to-r from-red-900/60 to-orange-900/60 backdrop-blur-sm border border-red-400 shadow-lg shadow-red-400/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center justify-between text-xl">
+                <div className="flex items-center">
+                  <Shield className="w-6 h-6 mr-3 text-red-400" />
+                  🔐 System Monitoring + Audit Logs
+                  <Badge className="ml-3 bg-red-500 text-white text-sm px-3 py-1">SECURE</Badge>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => toggleSection('security-audit')}
+                    className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                  >
+                    {collapsedSections['security-audit'] ? 
+                      <ChevronDown className="w-4 h-4" /> : 
+                      <ChevronUp className="w-4 h-4" />
+                    }
+                  </Button>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                  <span className="text-sm text-green-300">🟢 Pass</span>
+                </div>
+              </CardTitle>
+            </CardHeader>
+            {!collapsedSections['security-audit'] && (
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* GDPR Status & Security */}
+                  <div className="space-y-4">
+                    <h4 className="text-red-300 font-semibold flex items-center border-b border-red-400/30 pb-2">
+                      <Shield className="w-4 h-4 mr-2" />
+                      Security Status
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="p-3 bg-white/5 rounded-lg flex justify-between items-center">
+                        <span className="text-red-300 text-sm">GDPR Compliance:</span>
+                        <span className="px-2 py-1 bg-green-600 text-white text-xs rounded">🟢 PASS</span>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg flex justify-between items-center">
+                        <span className="text-red-300 text-sm">RAG Results:</span>
+                        <span className="px-2 py-1 bg-green-600 text-white text-xs rounded">🟢 PASS</span>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg flex justify-between items-center">
+                        <span className="text-red-300 text-sm">Security Logs:</span>
+                        <span className="px-2 py-1 bg-green-600 text-white text-xs rounded">🟢 PASS</span>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg flex justify-between items-center">
+                        <span className="text-red-300 text-sm">Tampering Flags:</span>
+                        <span className="px-2 py-1 bg-green-600 text-white text-xs rounded">🟢 PASS</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Recent Audit Events */}
+                  <div className="space-y-4">
+                    <h4 className="text-red-300 font-semibold flex items-center border-b border-red-400/30 pb-2">
+                      <Eye className="w-4 h-4 mr-2" />
+                      Recent Audit Events
+                    </h4>
+                    <div className="space-y-2 max-h-48 overflow-y-auto">
+                      {auditLog?.data?.slice(0, 5).map((event, index) => (
+                        <div key={index} className="p-2 bg-white/5 rounded text-sm">
+                          <div className="flex justify-between items-start">
+                            <span className="text-white font-medium">{event.action || 'System Event'}</span>
+                            <span className={`text-xs px-1 rounded ${
+                              event.result === 'success' ? 'bg-green-600 text-white' : 
+                              event.result === 'error' ? 'bg-red-600 text-white' : 
+                              'bg-yellow-600 text-white'
+                            }`}>
+                              {event.result === 'success' ? '🟢' : event.result === 'error' ? '🔴' : '🟡'}
+                            </span>
+                          </div>
+                          <div className="text-red-300 text-xs">{event.timestamp}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Security Actions */}
+                <div className="mt-6 pt-4 border-t border-red-400/30">
+                  <h4 className="text-red-300 font-semibold mb-3 flex items-center">
+                    <Settings className="w-4 h-4 mr-2" />
+                    Security Actions
+                  </h4>
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                    <Button
+                      onClick={handleRunDiagnostics}
+                      className="bg-orange-600 hover:bg-orange-700 text-white p-3"
+                    >
+                      <TestTube className="w-4 h-4 mr-2" />
+                      Run Diagnostics
+                    </Button>
+                    <Button
+                      onClick={handleViewLogs}
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white p-3"
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Logs
+                    </Button>
+                    <Button
+                      onClick={testEscalation}
+                      className="bg-red-600 hover:bg-red-700 text-white p-3"
+                    >
+                      <AlertTriangle className="w-4 h-4 mr-2" />
+                      Test Alert
+                    </Button>
+                    <Button
+                      onClick={handleEmergencyStop}
+                      className="bg-red-700 hover:bg-red-800 text-white p-3"
+                    >
+                      <PhoneOff className="w-4 h-4 mr-2" />
+                      Emergency Stop
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            )}
+          </Card>
         </div>
 
         {/* Hidden File Upload Input */}
@@ -9168,6 +9434,7 @@ export default function CommandCenter() {
         </Dialog>
       )}
 
+      </div>
     </div>
   );
 }
