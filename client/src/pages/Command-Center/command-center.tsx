@@ -1839,21 +1839,54 @@ export default function CommandCenter() {
     }
   };
 
-  const handleCriticalEscalation = async () => {
+  const handleCallSimulation = async () => {
     try {
-      setVoiceStatus('Triggering critical system alert...');
-      const response = await fetch('/api/system-alert', {
+      setVoiceStatus('Starting call simulation...');
+      const response = await fetch('/api/calls/simulate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scenario: 'system-alert' })
+        body: JSON.stringify({
+          phoneNumber: '+1-555-0199',
+          clientName: 'Demo Client',
+          duration: 120
+        })
       });
       
       if (response.ok) {
-        setVoiceStatus('Critical alert sent - Slack notification + visual banner');
+        const result = await response.json();
+        setVoiceStatus(`Call simulation started - ID: ${result.data.id}`);
+        setToast({ 
+          title: "Call Simulation Started", 
+          description: "Monitoring call progress and metrics"
+        });
+      } else {
+        setVoiceStatus('Call simulation failed');
+      }
+    } catch (error) {
+      setVoiceStatus('Call simulation error');
+    }
+  };
+
+  const handleCriticalEscalation = async () => {
+    try {
+      setVoiceStatus('Triggering critical system alert...');
+      const response = await fetch('/api/audit/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          event: 'Critical System Alert',
+          source: 'manual-trigger',
+          severity: 'critical',
+          details: 'User-initiated critical escalation from command center'
+        })
+      });
+      
+      if (response.ok) {
+        setVoiceStatus('Critical alert logged in audit system');
         setToast({ 
           id: Date.now().toString(),
           title: "Critical Alert", 
-          description: "System alert triggered for failures or hot leads", 
+          description: "System alert logged for audit tracking", 
           variant: "destructive" 
         });
       } else {
