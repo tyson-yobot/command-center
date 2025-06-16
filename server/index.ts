@@ -22,6 +22,8 @@ import { registerVoiceSynthesis } from "./voiceSynthesis";
 import { registerMemoryKnowledge } from "./memoryKnowledge";
 import { registerAuditEscalation } from "./auditEscalation";
 import { registerCallMonitoring } from "./callMonitoring";
+import { registerKnowledgeRoutes } from "./knowledgeRoutes";
+import { registerCallLogRoutes } from "./callLogRoutes";
 
 import { initializeLiveDataWipe, secureAdminDataWipe } from "./dataWipe";
 
