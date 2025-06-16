@@ -189,7 +189,7 @@ export function PersistentChatWidget() {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-96 h-[500px] flex flex-col">
+        <div className="fixed bottom-6 right-6 z-50 w-[450px] h-[500px] flex flex-col">
           <Card className="h-full bg-slate-900/95 backdrop-blur-sm border border-blue-500/30 shadow-2xl">
             {/* Header */}
             <CardHeader className="pb-3 bg-blue-600 text-white rounded-t-lg">
