@@ -2942,23 +2942,23 @@ export default function CommandCenter() {
           )}
         </div>
 
-        {/* Live Command Center Buttons */}
+        {/* Reorganized Top Sections - Voice Features Prominent */}
         <div className="mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Core Automation */}
+            {/* Top-Left: AI Command Center */}
             <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 relative">
               <CardHeader>
                 <CardTitle className="text-white flex items-center justify-between">
                   <div className="flex items-center">
-                    <Zap className="w-5 h-5 mr-2 text-blue-400" />
-                    Core Automation
+                    <Brain className="w-5 h-5 mr-2 text-blue-400" />
+                    🧠 AI Command Center
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => toggleSection('core-automation')}
+                      onClick={() => toggleSection('ai-command')}
                       className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
                     >
-                      {collapsedSections['core-automation'] ? 
+                      {collapsedSections['ai-command'] ? 
                         <ChevronDown className="w-4 h-4" /> : 
                         <ChevronUp className="w-4 h-4" />
                       }
@@ -2967,7 +2967,7 @@ export default function CommandCenter() {
                   <Badge className="bg-green-600 text-white">{currentSystemMode === 'test' ? '🟢 Active' : ''}</Badge>
                 </CardTitle>
               </CardHeader>
-              {!collapsedSections['core-automation'] && (
+              {!collapsedSections['ai-command'] && (
                 <CardContent>
                   <div className="grid grid-cols-1 gap-3">
                     <Button
@@ -3032,13 +3032,14 @@ export default function CommandCenter() {
               )}
             </Card>
 
-            {/* Voice & Communication */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-green-400 relative">
+            {/* Top-Center: Voice & Communication (Dominant) */}
+            <Card className="lg:col-span-2 bg-gradient-to-br from-green-900/60 to-emerald-800/40 backdrop-blur-sm border border-green-400 relative shadow-lg shadow-green-400/20">
               <CardHeader>
-                <CardTitle className="text-white flex items-center justify-between">
+                <CardTitle className="text-white flex items-center justify-between text-xl">
                   <div className="flex items-center">
-                    <Headphones className="w-5 h-5 mr-2 text-green-400" />
-                    Voice & Communication
+                    <Mic className="w-6 h-6 mr-3 text-green-400" />
+                    📞 Voice & Communication Center
+                    <Badge className="ml-3 bg-green-500 text-white text-sm px-3 py-1">DOMINANT</Badge>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -3051,7 +3052,7 @@ export default function CommandCenter() {
                       }
                     </Button>
                   </div>
-                  <Badge className="bg-green-600 text-white">{currentSystemMode === 'test' ? '🟢 Active' : ''}</Badge>
+                  <Badge className="bg-red-600 text-white">{currentSystemMode === 'test' ? '🔴 Live' : ''}</Badge>
                 </CardTitle>
               </CardHeader>
               {!collapsedSections['voice-communication'] && (

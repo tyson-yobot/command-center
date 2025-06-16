@@ -1,0 +1,31 @@
+Dashboard View,Section / Tile,Category
+Full Ops View,Voice Command Center,voice
+Full Ops View,Core Automation,core
+Full Ops View,Voice & Communication,voice
+Full Ops View,Data & Reports,data
+Full Ops View,Live Automation Engine,automation
+Full Ops View,Ops Metrics,ops
+Full Ops View,YoBot Health Monitor,system
+Full Ops View,Revenue Forecast,revenue
+Full Ops View,Client Pulse,clients
+Full Ops View,SmartSpend™,smartspend
+Full Ops View,Botalytics™,smartspend
+Full Ops View,Workflow Performance,automation
+Full Ops View,AI Assistant Insights,ai
+Full Ops View,Voice Commands,voice
+Full Ops View,Smart Calendar,calendar
+Full Ops View,Conversation Analytics,voice
+Full Ops View,Live Activity,logs
+Full Ops View,Bot Cloning Pipeline,bots
+Voice Ops Only,Voice Command Center,voice
+Voice Ops Only,Voice & Communication,voice
+Voice Ops Only,Voice Analytics,voice
+Voice Ops Only,Conversation Analytics,voice
+Voice Ops Only,Live Activity,logs
+Voice Ops Only,Manual Call Start,voice
+SmartSpend Only,SmartSpend™,smartspend
+SmartSpend Only,Botalytics™,smartspend
+SmartSpend Only,Revenue Forecast,revenue
+SmartSpend Only,Client Pulse,clients
+SmartSpend Only,Workflow Performance,automation
+SmartSpend Only,Export Dashboard Data,data
