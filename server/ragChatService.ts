@@ -32,9 +32,14 @@ class RAGChatService {
   private knowledgeBase: KnowledgeDocument[] = [];
 
   constructor() {
-    this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY
-    });
+    // Only initialize OpenAI if we have a valid API key
+    if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.startsWith('sk-')) {
+      this.openai = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY
+      });
+    } else {
+      console.log('OpenAI API key not configured or invalid, using rule-based responses only');
+    }
     this.loadKnowledgeBase();
   }
 
@@ -188,63 +193,59 @@ class RAGChatService {
   }
 
   /**
-   * Generate AI response using OpenAI with RAG context
+   * Generate AI response using knowledge base with fallback to rule-based responses
    */
   async processQuery(ragQuery: RAGQuery): Promise<RAGResponse> {
     try {
       const relevantDocs = this.searchKnowledge(ragQuery.query);
       
-      // Build context from relevant documents
-      const context = relevantDocs
-        .map(doc => `${doc.title}: ${doc.content}`)
-        .join('\n\n');
-      
-      const systemPrompt = `You are YoBot Support Assistant, an expert on the YoBot automation platform. 
-      
-      Use the following knowledge base to answer user questions accurately and helpfully:
-      
-      ${context}
-      
-      Guidelines:
-      - Provide specific, actionable answers based on the knowledge base
-      - If the answer isn't in the knowledge base, say so and suggest creating a support ticket
-      - Be concise but thorough
-      - Include relevant steps or troubleshooting when applicable
-      - If the issue requires human intervention, recommend escalation
-      
-      Escalation triggers:
-      - Complex technical issues requiring code changes
-      - Account-specific problems requiring access to user data
-      - Billing or subscription issues
-      - Issues not covered in the knowledge base`;
+      // Try OpenAI first if available, then fallback to rule-based
+      if (this.openai && relevantDocs.length > 0) {
+        try {
+          // Build context from relevant documents
+          const context = relevantDocs
+            .map(doc => `${doc.title}: ${doc.content}`)
+            .join('\n\n');
+          
+          const systemPrompt = `You are YoBot Support Assistant, an expert on the YoBot automation platform. 
+          
+          Use the following knowledge base to answer user questions accurately and helpfully:
+          
+          ${context}
+          
+          Guidelines:
+          - Provide specific, actionable answers based on the knowledge base
+          - If the answer isn't in the knowledge base, say so and suggest creating a support ticket
+          - Be concise but thorough
+          - Include relevant steps or troubleshooting when applicable
+          - If the issue requires human intervention, recommend escalation`;
 
-      const completion = await this.openai.chat.completions.create({
-        model: 'gpt-4',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: ragQuery.query }
-        ],
-        temperature: 0.3,
-        max_tokens: 500
-      });
+          const completion = await this.openai.chat.completions.create({
+            model: 'gpt-4',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: ragQuery.query }
+            ],
+            temperature: 0.3,
+            max_tokens: 500
+          });
 
-      const reply = completion.choices[0]?.message?.content || 
-        "I'm unable to process your request right now. Let me create a support ticket for you.";
+          const reply = completion.choices[0]?.message?.content || '';
+          
+          if (reply) {
+            const confidence = this.calculateConfidence(ragQuery.query, relevantDocs, reply);
+            const escalationNeeded = this.shouldEscalate(ragQuery.query, reply, confidence);
+            const sources = relevantDocs.map(doc => doc.title);
 
-      // Calculate confidence based on knowledge match and response quality
-      const confidence = this.calculateConfidence(ragQuery.query, relevantDocs, reply);
-      
-      // Determine if escalation is needed
-      const escalationNeeded = this.shouldEscalate(ragQuery.query, reply, confidence);
-      
-      const sources = relevantDocs.map(doc => doc.title);
+            return { reply, confidence, sources, escalationNeeded };
+          }
+        } catch (openaiError) {
+          console.warn('OpenAI unavailable, using rule-based responses:', openaiError.message);
+        }
+      }
 
-      return {
-        reply,
-        confidence,
-        sources,
-        escalationNeeded
-      };
+      // Fallback to rule-based responses using knowledge base
+      return this.generateRuleBasedResponse(ragQuery.query, relevantDocs);
 
     } catch (error) {
       console.error('RAG processing error:', error);
@@ -256,6 +257,60 @@ class RAGChatService {
         escalationNeeded: true
       };
     }
+  }
+
+  /**
+   * Generate rule-based responses using knowledge base matching
+   */
+  private generateRuleBasedResponse(query: string, relevantDocs: KnowledgeDocument[]): RAGResponse {
+    const queryLower = query.toLowerCase();
+    
+    // If we have relevant documents, extract key information
+    if (relevantDocs.length > 0) {
+      const topDoc = relevantDocs[0];
+      const sources = relevantDocs.map(doc => doc.title);
+      
+      // Generate response based on document content and query type
+      let reply = '';
+      let confidence = 0.7;
+      
+      if (queryLower.includes('what is yobot') || queryLower.includes('what does yobot')) {
+        reply = "YoBot is an advanced automation platform that includes Smart Calendar Integration, Voice Command Interface, Lead Scraping with Phantom Buster and Apollo, Airtable CRM sync, SMS/Email automation, Call monitoring, Revenue forecasting, and SmartSpend tracking. It operates in both Test and Live environments for comprehensive automation management.";
+        confidence = 0.9;
+      } else if (queryLower.includes('voice') || queryLower.includes('command')) {
+        reply = "For Voice Commands: Check microphone permissions, ensure Voice Interface is enabled, and verify ElevenLabs API key configuration. Voice commands use real-time processing with multiple personas available.";
+        confidence = 0.8;
+      } else if (queryLower.includes('calendar') || queryLower.includes('sync')) {
+        reply = "For Calendar Sync: Verify Google Calendar API credentials, check file format (ICS or CSV only), ensure proper date formatting, and confirm team member schedules are uploaded correctly.";
+        confidence = 0.8;
+      } else if (queryLower.includes('lead') || queryLower.includes('scraping')) {
+        reply = "For Lead Scraping: Confirm Phantom Buster and Apollo API keys, check Airtable write permissions, verify field mapping configuration, and ensure leads are syncing to the Scraped Leads (Universal) table.";
+        confidence = 0.8;
+      } else if (queryLower.includes('airtable') || queryLower.includes('connection')) {
+        reply = "For Airtable Issues: Validate API key and base IDs, check field mapping configuration, ensure proper table permissions, and verify the connection to your CRM bases.";
+        confidence = 0.8;
+      } else if (queryLower.includes('smartspend') || queryLower.includes('budget')) {
+        reply = "SmartSpend tracks budget utilization, cost per lead, ROI percentage, and budget efficiency scores. Set budget parameters, configure ROI tracking, and monitor cost per lead metrics through the dashboard.";
+        confidence = 0.8;
+      } else {
+        // Generic response using top matching document
+        const docContent = topDoc.content.substring(0, 300);
+        reply = `Based on your question about "${query}", here's what I found: ${docContent}... Would you like me to create a support ticket for more detailed assistance?`;
+        confidence = 0.6;
+      }
+      
+      const escalationNeeded = confidence < 0.7 || queryLower.includes('error') || queryLower.includes('not working');
+      
+      return { reply, confidence, sources, escalationNeeded };
+    }
+    
+    // No relevant documents found
+    return {
+      reply: "I don't have specific information about your question in my knowledge base. Let me create a support ticket so our team can provide detailed assistance with your YoBot setup.",
+      confidence: 0.3,
+      sources: [],
+      escalationNeeded: true
+    };
   }
 
   /**
