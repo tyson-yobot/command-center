@@ -1,0 +1,119 @@
+🔧 Suggested Fixes & Improvements
+1. Reorganize the Top Sections for Clarity
+Current Issues:
+
+Top row (Core Automation, Voice, Reports) feels crowded and equal-weighted — Voice features should be more prominent.
+
+"Quick Actions" & toggle buttons are scattered in visual hierarchy.
+
+Suggested Layout:
+
+Top-Left: 🧠 AI Command Center (Voice + Automation Buttons)
+
+Top-Center: 📞 Voice & Communication Cards (should dominate row)
+
+Top-Right: 📊 Reports + Export/Calendar Sync Buttons
+
+2. Move “Command Center Status” + Bot Metrics Higher
+Why: These are central to uptime confidence and debugging. Currently buried in the lower middle.
+
+Move up:
+
+✅ YoBot® Health Monitor
+
+⚙️ Live Automation Engine
+
+🧠 AI Assistant Insights
+
+3. Split Data Reporting vs Bot Performance
+Current Issue: SmartSpend™, Botalytics™, Revenue Forecast, and Workflow cards are fragmented.
+
+New Sections:
+
+📈 Bot Business Performance
+
+Revenue Forecast
+
+Botalytics™
+
+SmartSpend™
+
+Conversation Analytics
+
+📊 Bot System Health
+
+Bot Health Monitor
+
+Ops Metrics
+
+Workflow Performance
+
+Voice Analytics
+
+4. Merge Duplicate Features / Unify Voice Tools
+Current Duplicates / Spread Out:
+
+"Voice Commands" and "Voice Command Center"
+
+“Call Monitoring Panel” is disconnected from Voice/AI context
+
+Solution: Create a unified "🎙️ Voice Engine Suite" that includes:
+
+Voice Command Center
+
+Voice Synthesis Studio
+
+Voice Analytics
+
+Voice Persona Settings
+
+Call Monitoring
+
+Conversation Analytics
+
+Smart Calendar
+
+5. RAG Section Optimization
+Improvements:
+
+RAG Knowledge Base should be collapsible or toggle-enabled.
+
+Add AI suggestions under the “Ask the Knowledge Base” bar when typing (like autocomplete).
+
+“Insert Memory” panel should clarify if user is feeding bot memory vs RAG ingestion.
+
+6. Fix Typos / Labels
+“Autotomate Your Business” → “Automate Your Business”
+
+“Mobl Capp” → “Mobile App”
+
+“Cets teads” → “Gets leads”
+
+“100% 1000%yper day” → should say: “Calls 100–1,000+ per day”
+
+➕ Features to Add
+Section	Recommendation
+📲 Mobile Companion Panel	Add iOS/Android device status, last app sync, and push alerts.
+🧾 PDF & Export Panel	Show last generated PDF / export timestamp and quick access to recent exports.
+📅 Smart Calendar	Add "Next 3 Tasks" view with time labels from the roadmap (if synced).
+🛡️ Audit/Integrity Panel	Show last automation tamper flag, logger activity, fallback triggers.
+
+🔄 Fix Panel Positioning
+Move These to Bottom:
+
+🧾 PDF Reports & Analytics
+
+🧠 Memory Text Insertion
+
+🎛️ Document Manager
+
+Move These to Top-Mid:
+
+📞 Live Automation Engine
+
+🎯 Client Pulse
+
+📊 Ops Metrics
+
+🎙️ Voice Command Status (Listening state + last action)
+

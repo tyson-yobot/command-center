@@ -3149,7 +3149,7 @@ export default function CommandCenter() {
               )}
             </Card>
 
-            {/* Top-Center: Voice Engine Suite (Unified) */}
+            {/* Top-Center: Voice Engine Suite (Unified) - Enhanced */}
             <Card className="lg:col-span-2 bg-gradient-to-br from-green-900/60 to-emerald-800/40 backdrop-blur-sm border border-green-400 relative shadow-lg shadow-green-400/20">
               <CardHeader>
                 <CardTitle className="text-white flex items-center justify-between text-xl">
@@ -3174,10 +3174,10 @@ export default function CommandCenter() {
               </CardHeader>
               {!collapsedSections['voice-engine'] && (
                 <CardContent>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Voice Command Center */}
-                    <div className="space-y-3">
-                      <h4 className="text-green-300 font-semibold flex items-center">
+                    <div className="space-y-4">
+                      <h4 className="text-green-300 font-semibold flex items-center border-b border-green-400/30 pb-2">
                         <Mic className="w-4 h-4 mr-2" />
                         Voice Command Center
                       </h4>
@@ -3484,7 +3484,7 @@ export default function CommandCenter() {
                     <span className="text-white font-bold">{currentSystemMode === 'test' ? '15' : automationPerformance?.data?.activeWorkflows || ''}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Calls 100–1,000+ per day:</span>
+                    <span className="text-slate-300 text-sm">Calls 100-1,000+ per day:</span>
                     <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '842' : liveActivityData?.data?.callsToday || ''}</span>
                   </div>
                   <div className="flex justify-between">
@@ -5613,6 +5613,128 @@ export default function CommandCenter() {
                 
                 <div className="text-slate-400 text-xs">
                   Memory entries are stored with high priority and can be retrieved during conversations.
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* New Features Section - Mobile Companion & PDF Export */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          {/* Mobile Companion Panel */}
+          <Card className="bg-gradient-to-br from-indigo-900/40 via-purple-900/30 to-pink-900/20 backdrop-blur-sm border border-indigo-400/50 shadow-2xl shadow-indigo-500/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Smartphone className="w-5 h-5 mr-2 text-indigo-400" />
+                📲 Mobile Companion Panel
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="bg-slate-800/60 rounded-lg p-3 border border-indigo-400/30">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-slate-300 text-sm">iOS App Status:</span>
+                    <Badge className="bg-green-600 text-white text-xs">
+                      {currentSystemMode === 'test' ? 'Connected' : 'Offline'}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300 text-sm">Last Sync:</span>
+                    <span className="text-white font-bold text-sm">
+                      {currentSystemMode === 'test' ? '2 min ago' : '--'}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="bg-slate-800/60 rounded-lg p-3 border border-indigo-400/30">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-slate-300 text-sm">Android App Status:</span>
+                    <Badge className="bg-green-600 text-white text-xs">
+                      {currentSystemMode === 'test' ? 'Connected' : 'Offline'}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300 text-sm">Push Alerts:</span>
+                    <span className="text-green-400 font-bold text-sm">
+                      {currentSystemMode === 'test' ? 'Enabled' : 'Disabled'}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="bg-slate-800/60 rounded-lg p-3 border border-indigo-400/30">
+                  <div className="text-slate-300 text-sm mb-2">Recent Mobile Activity:</div>
+                  <div className="space-y-1 text-xs text-slate-400">
+                    {currentSystemMode === 'test' ? (
+                      <>
+                        <div>• Voice command received (iPhone)</div>
+                        <div>• Dashboard sync completed</div>
+                        <div>• Push notification sent</div>
+                      </>
+                    ) : (
+                      <div>No mobile activity</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* PDF & Export Panel */}
+          <Card className="bg-gradient-to-br from-purple-900/40 via-pink-900/30 to-red-900/20 backdrop-blur-sm border border-purple-400/50 shadow-2xl shadow-purple-500/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <FileText className="w-5 h-5 mr-2 text-purple-400" />
+                🧾 PDF & Export Panel
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/30">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-slate-300 text-sm">Last PDF Generated:</span>
+                    <span className="text-white font-bold text-sm">
+                      {currentSystemMode === 'test' ? '15 min ago' : 'Never'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300 text-sm">Export Timestamp:</span>
+                    <span className="text-purple-400 font-bold text-sm">
+                      {currentSystemMode === 'test' ? '2:45 PM' : '--'}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Button
+                    onClick={() => setShowExportModal(true)}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center p-3 border border-purple-500"
+                  >
+                    <span className="text-xl mr-3">📊</span>
+                    <span>Quick Export Dashboard</span>
+                  </Button>
+                  
+                  <Button
+                    onClick={handleDownloadPDF}
+                    className="w-full bg-pink-600 hover:bg-pink-700 text-white flex items-center justify-center p-3 border border-pink-500"
+                  >
+                    <span className="text-xl mr-3">📋</span>
+                    <span>Generate PDF Report</span>
+                  </Button>
+                </div>
+                
+                <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/30">
+                  <div className="text-slate-300 text-sm mb-2">Recent Exports:</div>
+                  <div className="space-y-1 text-xs text-slate-400">
+                    {currentSystemMode === 'test' ? (
+                      <>
+                        <div>• analytics_report_2024.pdf</div>
+                        <div>• dashboard_export.json</div>
+                        <div>• performance_metrics.csv</div>
+                      </>
+                    ) : (
+                      <div>No recent exports</div>
+                    )}
+                  </div>
                 </div>
               </div>
             </CardContent>
