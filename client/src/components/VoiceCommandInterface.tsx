@@ -395,6 +395,37 @@ export function VoiceCommandInterface({
               </div>
             )}
 
+            {/* Voice Synthesis Controls */}
+            {realTimeTranscript && micStatus === 'idle' && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-center space-x-3">
+                  <Button
+                    onClick={() => generateVoice.mutate(realTimeTranscript)}
+                    disabled={generateVoice.isPending}
+                    size="sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    <Volume2 className="h-4 w-4 mr-2" />
+                    {generateVoice.isPending ? 'Generating...' : 'Speak Response'}
+                  </Button>
+                  
+                  {voices && voices.length > 0 && (
+                    <select
+                      value={selectedVoice}
+                      onChange={(e) => setSelectedVoice(e.target.value)}
+                      className="bg-slate-800 text-blue-300 border border-blue-400/50 rounded px-3 py-1 text-sm"
+                    >
+                      {voices.map((voice: any) => (
+                        <option key={voice.id} value={voice.id}>
+                          {voice.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Enhanced Real-time Transcript Display */}
             {(realTimeTranscript || micStatus === 'listening') && (
               <div className={`rounded-lg p-4 border-2 transition-all duration-300 ${

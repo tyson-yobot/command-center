@@ -153,6 +153,51 @@ export default function CommandCenter() {
     staleTime: 60000,
   });
 
+  // Call monitoring data
+  const { data: callMetrics } = useQuery({
+    queryKey: ['/api/calls/metrics'],
+    queryFn: () => fetch('/api/calls/metrics').then(res => res.json()),
+    refetchInterval: 30000,
+    staleTime: 15000,
+  });
+
+  const { data: activeCalls } = useQuery({
+    queryKey: ['/api/calls/active'],
+    queryFn: () => fetch('/api/calls/active').then(res => res.json()),
+    refetchInterval: 10000,
+    staleTime: 5000,
+  });
+
+  // Audit and system health data
+  const { data: auditLog } = useQuery({
+    queryKey: ['/api/audit/log'],
+    queryFn: () => fetch('/api/audit/log?limit=20').then(res => res.json()),
+    refetchInterval: 60000,
+    staleTime: 30000,
+  });
+
+  const { data: systemHealth } = useQuery({
+    queryKey: ['/api/audit/health'],
+    queryFn: () => fetch('/api/audit/health').then(res => res.json()),
+    refetchInterval: 30000,
+    staleTime: 15000,
+  });
+
+  // Voice synthesis data
+  const { data: voicePersonas } = useQuery({
+    queryKey: ['/api/voice/personas'],
+    queryFn: () => fetch('/api/voice/personas').then(res => res.json()),
+    refetchInterval: 300000,
+    staleTime: 240000,
+  });
+
+  const { data: memoryActivity } = useQuery({
+    queryKey: ['/api/memory/activity'],
+    queryFn: () => fetch('/api/memory/activity').then(res => res.json()),
+    refetchInterval: 60000,
+    staleTime: 30000,
+  });
+
   const { data: liveSystemData } = useQuery({ 
     queryKey: ['/api/system-health', currentSystemMode],
     queryFn: () => fetch('/api/system-health', {
@@ -175,7 +220,7 @@ export default function CommandCenter() {
   const [showAnalyticsModal, setShowAnalyticsModal] = React.useState(false);
   const [showCalendarUpload, setShowCalendarUpload] = React.useState(false);
 
-  const [activeCalls, setActiveCalls] = React.useState(0);
+  const [activeCallsCount, setActiveCallsCount] = React.useState(0);
   const [dashboardPreset, setDashboardPreset] = React.useState('full');
   const [collapsedSections, setCollapsedSections] = React.useState<{[key: string]: boolean}>({});
   const [demoMode, setDemoMode] = React.useState(false);
@@ -1568,21 +1613,47 @@ export default function CommandCenter() {
 
   const handlePDFReport = async () => {
     try {
-      setVoiceStatus('Generating PDF report of current stats...');
-      const response = await fetch('/api/pdf-report', {
+      setVoiceStatus('Generating comprehensive PDF analytics report...');
+      const response = await fetch('/api/pdf/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scenario: 'pdf-report' })
+        body: JSON.stringify({ 
+          reportType: 'analytics',
+          includeMetrics: true,
+          includeCharts: true,
+          timeRange: '30d'
+        })
       });
       
       if (response.ok) {
-        setVoiceStatus('PDF report generated - auto-download started');
-        setToast({ title: "PDF Generated", description: "Report ready for download" });
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `YoBot_Analytics_Report_${new Date().toISOString().split('T')[0]}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        setVoiceStatus('PDF analytics report downloaded successfully');
+        setToast({ title: "PDF Generated", description: "Analytics report downloaded to your device" });
       } else {
-        setVoiceStatus('PDF generation failed');
+        const error = await response.json();
+        setVoiceStatus(`PDF generation failed: ${error.error || 'Unknown error'}`);
+        setToast({ 
+          title: "PDF Generation Failed", 
+          description: error.error || "Unable to generate report",
+          variant: "destructive" 
+        });
       }
     } catch (error) {
-      setVoiceStatus('PDF report error');
+      setVoiceStatus('PDF report generation error - check network connection');
+      setToast({ 
+        title: "Network Error", 
+        description: "Unable to connect to PDF service",
+        variant: "destructive" 
+      });
     }
   };
 
