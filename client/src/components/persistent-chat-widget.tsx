@@ -75,11 +75,11 @@ export function PersistentChatWidget() {
 
     try {
       // Query RAG knowledge system first
-      const ragResponse = await fetch('/api/chat/rag-query', {
+      const ragResponse = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          query: inputMessage,
+          message: inputMessage,
           context: 'yobot_support'
         })
       });

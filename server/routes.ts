@@ -3330,10 +3330,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Main chat endpoint using database-driven RAG service
+  app.post('/api/chat', async (req, res) => {
+    try {
+      const { message, context = '' } = req.body;
+      
+      if (!message || typeof message !== 'string') {
+        return res.status(400).json({
+          success: false,
+          error: 'Valid message is required'
+        });
+      }
+
+      // Process query through RAG service
+      const ragResponse = await ragChatService.processQuery({
+        query: message,
+        context: context
+      });
+
+      // Auto-escalate to Zendesk if needed
+      if (ragResponse.escalationNeeded) {
+        try {
+          await zendeskService.createTicket({
+            subject: `Chat Support: ${message.substring(0, 50)}...`,
+            description: `User query: ${message}\n\nContext: ${context}\n\nBot response: ${ragResponse.reply}`,
+            priority: 'normal',
+            tags: ['chat_widget', 'auto_escalation']
+          });
+        } catch (zendeskError) {
+          console.warn('Zendesk escalation failed:', zendeskError);
+        }
+      }
+
+      res.json({
+        success: true,
+        reply: ragResponse.reply,
+        confidence: ragResponse.confidence,
+        sources: ragResponse.sources,
+        escalationNeeded: ragResponse.escalationNeeded,
+        timestamp: new Date().toISOString()
+      });
+
+    } catch (error) {
+      console.error('Chat endpoint error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Chat service temporarily unavailable',
+        fallbackMessage: "I'm experiencing technical difficulties. I'll create a support ticket for you so our team can assist directly."
+      });
+    }
+  });
+
   // Knowledge base stats endpoint
   app.get('/api/chat/knowledge-stats', async (req, res) => {
     try {
-      const stats = ragChatService.getKnowledgeStats();
+      const stats = await ragChatService.getKnowledgeStats();
       res.json({
         success: true,
         data: stats

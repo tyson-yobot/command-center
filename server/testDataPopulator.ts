@@ -4,6 +4,7 @@ import { isLiveMode, safeLiveData, blockTestData } from './liveMode';
 import LiveDataWiper from './liveDataWiper';
 import { airtableLogger } from './airtableLogger';
 import HardcodeDetector from './hardcodeDetector';
+import { ragChatService } from './ragChatService';
 
 // Realistic test data for demo - believable business metrics
 const testModeMetrics = {
