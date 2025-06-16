@@ -314,17 +314,26 @@ export function registerTestDataRoutes(app: Express) {
     });
   });
 
-  // Knowledge stats with strict compliance
+  // Knowledge stats - using database-driven RAG service
   app.get('/api/knowledge/stats', async (req, res) => {
     const systemMode = getSystemMode();
     
-    // Always return empty data - no hardcoded values
-    res.json({
-      success: true,
-      data: null,
-      mode: systemMode,
-      message: systemMode === 'live' ? 'LIVE mode - authentic data only' : 'TEST mode - no data'
-    });
+    try {
+      const stats = await ragChatService.getKnowledgeStats();
+      res.json({
+        success: true,
+        data: stats,
+        mode: systemMode,
+        message: systemMode === 'live' ? 'LIVE mode - database-driven knowledge stats' : 'TEST mode - database-driven knowledge stats'
+      });
+    } catch (error) {
+      console.error('Knowledge stats error:', error);
+      res.json({
+        success: false,
+        error: 'Failed to fetch knowledge statistics',
+        mode: systemMode
+      });
+    }
   });
 
 

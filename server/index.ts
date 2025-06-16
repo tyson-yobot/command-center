@@ -291,6 +291,10 @@ print(json.dumps(result))
   registerAuditEscalation(app);
   registerCallMonitoring(app);
 
+  // Register database-driven routes for persistent storage
+  registerKnowledgeRoutes(app);
+  registerCallLogRoutes(app);
+
   // Register document management routes
   app.use('/api/documents', documentRoutes);
   

@@ -6,6 +6,8 @@
 import OpenAI from 'openai';
 import fs from 'fs';
 import path from 'path';
+import { knowledgeStorage } from "./storage";
+import type { KnowledgeItem } from "@shared/schema";
 
 interface RAGQuery {
   query: string;
@@ -29,7 +31,9 @@ interface KnowledgeDocument {
 
 class RAGChatService {
   private openai: OpenAI;
-  private knowledgeBase: KnowledgeDocument[] = [];
+  private knowledgeCache: KnowledgeDocument[] = [];
+  private lastCacheUpdate: number = 0;
+  private CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
   constructor() {
     // Only initialize OpenAI if we have a valid API key
@@ -44,114 +48,158 @@ class RAGChatService {
   }
 
   /**
-   * Load knowledge base from files and documents
+   * Load knowledge base from database with caching
    */
   private async loadKnowledgeBase() {
     try {
-      // Load from knowledge_data directory
-      const knowledgeDir = path.join(process.cwd(), 'knowledge_data');
-      if (fs.existsSync(knowledgeDir)) {
-        const files = fs.readdirSync(knowledgeDir);
-        
-        for (const file of files) {
-          if (file.endsWith('.json') || file.endsWith('.txt')) {
-            const filePath = path.join(knowledgeDir, file);
-            const content = fs.readFileSync(filePath, 'utf-8');
-            
-            this.knowledgeBase.push({
-              id: file,
-              content: content,
-              title: file.replace(/\.[^/.]+$/, ""),
-              category: 'documentation'
-            });
+      // Check if cache is still valid
+      const now = Date.now();
+      if (this.knowledgeCache.length > 0 && (now - this.lastCacheUpdate) < this.CACHE_DURATION) {
+        return;
+      }
+
+      // Load from database
+      const knowledgeItems = await knowledgeStorage.getKnowledgeItems();
+      
+      // Convert database items to knowledge documents
+      this.knowledgeCache = knowledgeItems.map(item => ({
+        id: item.id.toString(),
+        content: item.content,
+        title: item.title,
+        category: item.category
+      }));
+
+      // Load from knowledge_data directory if no database items
+      if (this.knowledgeCache.length === 0) {
+        const knowledgeDir = path.join(process.cwd(), 'knowledge_data');
+        if (fs.existsSync(knowledgeDir)) {
+          const files = fs.readdirSync(knowledgeDir);
+          
+          for (const file of files) {
+            if (file.endsWith('.json') || file.endsWith('.txt')) {
+              const filePath = path.join(knowledgeDir, file);
+              const content = fs.readFileSync(filePath, 'utf-8');
+              
+              // Create knowledge item in database
+              const item = await knowledgeStorage.createKnowledgeItem({
+                title: file.replace(/\.[^/.]+$/, ""),
+                content: content,
+                category: 'documentation',
+                type: 'document',
+                tags: ['imported', 'documentation']
+              });
+              
+              this.knowledgeCache.push({
+                id: item.id.toString(),
+                content: item.content,
+                title: item.title,
+                category: item.category
+              });
+            }
           }
         }
       }
 
-      // Add YoBot-specific knowledge
-      this.knowledgeBase.push(
-        {
-          id: 'yobot_features',
-          title: 'YoBot Core Features',
-          category: 'features',
-          content: `YoBot is an advanced automation platform that includes:
-          
-          - Smart Calendar Integration with Google Calendar sync
-          - Voice Command Interface with real-time processing
-          - Lead Scraping with Phantom Buster and Apollo integration
-          - Airtable CRM sync for lead management
-          - SMS and Email automation
-          - Call monitoring and sentiment analysis
-          - Revenue forecasting and SmartSpend tracking
-          - Multi-mode operation (Test/Live environments)
-          - Knowledge base management with RAG capabilities
-          - Zendesk integration for support ticketing`
-        },
-        {
-          id: 'troubleshooting',
-          title: 'Common Troubleshooting',
-          category: 'support',
-          content: `Common YoBot issues and solutions:
-          
-          1. Voice Commands Not Working:
-             - Check microphone permissions
-             - Ensure Voice Interface is enabled
-             - Verify ElevenLabs API key is configured
-          
-          2. Calendar Sync Issues:
-             - Verify Google Calendar API credentials
-             - Check file format (ICS or CSV only)
-             - Ensure proper date formatting
-          
-          3. Lead Scraping Problems:
-             - Confirm Phantom Buster API key
-             - Check Apollo integration settings
-             - Verify Airtable write permissions
-          
-          4. Airtable Connection Errors:
-             - Validate API key and base IDs
-             - Check field mapping configuration
-             - Ensure proper table permissions
-          
-          5. System Mode Issues:
-             - Toggle between Test/Live modes
-             - Clear browser cache if needed
-             - Check system health indicators`
-        },
-        {
-          id: 'automation_setup',
-          title: 'Automation Setup Guide',
-          category: 'setup',
-          content: `Setting up YoBot automations:
-          
-          1. Pipeline Configuration:
-             - Configure lead sources (Apollo, Phantom Buster)
-             - Set up Airtable base connections
-             - Define automation triggers and actions
-          
-          2. Voice Bot Setup:
-             - Configure ElevenLabs voice personas
-             - Set up call monitoring preferences
-             - Define escalation rules
-          
-          3. Smart Calendar:
-             - Connect Google Calendar account
-             - Upload team member schedules
-             - Configure booking preferences
-          
-          4. SmartSpend Tracking:
-             - Set budget parameters
-             - Configure ROI tracking
-             - Set up cost per lead monitoring
-          
-          5. Notification Setup:
-             - Configure Slack alerts
-             - Set up email notifications
-             - Define escalation pathways`
-        }
-      );
+      // If still no items, create essential YoBot knowledge in database
+      if (this.knowledgeCache.length === 0) {
+        const essentialKnowledge = [
+          {
+            title: 'YoBot Core Features',
+            category: 'features',
+            type: 'document' as const,
+            content: `YoBot is an advanced automation platform that includes:
+            
+            - Smart Calendar Integration with Google Calendar sync
+            - Voice Command Interface with real-time processing
+            - Lead Scraping with Phantom Buster and Apollo integration
+            - Airtable CRM sync for lead management
+            - SMS and Email automation
+            - Call monitoring and sentiment analysis
+            - Revenue forecasting and SmartSpend tracking
+            - Multi-mode operation (Test/Live environments)
+            - Knowledge base management with RAG capabilities
+            - Zendesk integration for support ticketing`,
+            tags: ['features', 'overview']
+          },
+          {
+            title: 'Common Troubleshooting',
+            category: 'support',
+            type: 'document' as const,
+            content: `Common YoBot issues and solutions:
+            
+            1. Voice Commands Not Working:
+               - Check microphone permissions
+               - Ensure Voice Interface is enabled
+               - Verify ElevenLabs API key is configured
+            
+            2. Calendar Sync Issues:
+               - Verify Google Calendar API credentials
+               - Check file format (ICS or CSV only)
+               - Ensure proper date formatting
+            
+            3. Lead Scraping Problems:
+               - Confirm Phantom Buster API key
+               - Check Apollo integration settings
+               - Verify Airtable write permissions
+            
+            4. Airtable Connection Errors:
+               - Validate API key and base IDs
+               - Check field mapping configuration
+               - Ensure proper table permissions
+            
+            5. System Mode Issues:
+               - Toggle between Test/Live modes
+               - Clear browser cache if needed
+               - Check system health indicators`,
+            tags: ['troubleshooting', 'support']
+          },
+          {
+            title: 'Automation Setup Guide',
+            category: 'setup',
+            type: 'document' as const,
+            content: `Setting up YoBot automations:
+            
+            1. Pipeline Configuration:
+               - Configure lead sources (Apollo, Phantom Buster)
+               - Set up Airtable base connections
+               - Define automation triggers and actions
+            
+            2. Voice Bot Setup:
+               - Configure ElevenLabs voice personas
+               - Set up call monitoring preferences
+               - Define escalation rules
+            
+            3. Smart Calendar:
+               - Connect Google Calendar account
+               - Upload team member schedules
+               - Configure booking preferences
+            
+            4. SmartSpend Tracking:
+               - Set budget parameters
+               - Configure ROI tracking
+               - Set up cost per lead monitoring
+            
+            5. Notification Setup:
+               - Configure Slack alerts
+               - Set up email notifications
+               - Define escalation pathways`,
+            tags: ['setup', 'automation']
+          }
+        ];
 
-      console.log(`Loaded ${this.knowledgeBase.length} knowledge documents`);
+        for (const knowledge of essentialKnowledge) {
+          const item = await knowledgeStorage.createKnowledgeItem(knowledge);
+          this.knowledgeCache.push({
+            id: item.id.toString(),
+            content: item.content,
+            title: item.title,
+            category: item.category
+          });
+        }
+      }
+
+      this.lastCacheUpdate = now;
+      console.log(`Loaded ${this.knowledgeCache.length} knowledge documents from database`);
     } catch (error) {
       console.error('Failed to load knowledge base:', error);
     }
@@ -160,11 +208,14 @@ class RAGChatService {
   /**
    * Search knowledge base for relevant documents
    */
-  private searchKnowledge(query: string): KnowledgeDocument[] {
+  private async searchKnowledge(query: string): Promise<KnowledgeDocument[]> {
+    // Ensure knowledge cache is up to date
+    await this.loadKnowledgeBase();
+    
     const queryLower = query.toLowerCase();
     const keywords = queryLower.split(' ').filter(word => word.length > 2);
     
-    const scoredDocs = this.knowledgeBase.map(doc => {
+    const scoredDocs = this.knowledgeCache.map(doc => {
       let score = 0;
       const docContent = doc.content.toLowerCase();
       const docTitle = doc.title.toLowerCase();
@@ -197,7 +248,7 @@ class RAGChatService {
    */
   async processQuery(ragQuery: RAGQuery): Promise<RAGResponse> {
     try {
-      const relevantDocs = this.searchKnowledge(ragQuery.query);
+      const relevantDocs = await this.searchKnowledge(ragQuery.query);
       
       // Try OpenAI first if available, then fallback to rule-based
       if (this.openai && relevantDocs.length > 0) {
@@ -367,13 +418,14 @@ class RAGChatService {
   /**
    * Get knowledge base statistics
    */
-  getKnowledgeStats() {
-    const categories = [...new Set(this.knowledgeBase.map(doc => doc.category))];
+  async getKnowledgeStats() {
+    await this.loadKnowledgeBase();
+    const categories = [...new Set(this.knowledgeCache.map(doc => doc.category))];
     return {
-      totalDocuments: this.knowledgeBase.length,
+      totalDocuments: this.knowledgeCache.length,
       categories: categories.map(cat => ({
         name: cat,
-        count: this.knowledgeBase.filter(doc => doc.category === cat).length
+        count: this.knowledgeCache.filter(doc => doc.category === cat).length
       }))
     };
   }
