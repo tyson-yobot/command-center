@@ -3163,69 +3163,268 @@ export default function CommandCenter() {
           </div>
         )}
 
-        {/* Reorganized Top Sections - Voice Features Prominent */}
+        {/* Reorganized Top Sections - Enhanced Structure */}
         <div className="mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Top-Left: AI Command Center */}
+            {/* SmartSpend Analytics - Priority Position */}
+            <Card className="bg-white/10 backdrop-blur-sm border border-green-400 relative">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between">
+                  <div className="flex items-center">
+                    <DollarSign className="w-5 h-5 mr-2 text-green-400" />
+                    💰 SmartSpend Analytics
+                    <div className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full ml-2">LIVE</div>
+                  </div>
+                  <Badge className="bg-green-600 text-white">
+                    {currentSystemMode === 'test' ? '$4,850' : smartSpendData?.totalSpend || '$0'}
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Budget Utilization:</span>
+                    <span className="text-green-400 font-bold">
+                      {currentSystemMode === 'test' ? '78%' : smartSpendData?.budgetUtilization || '0%'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Cost Per Lead:</span>
+                    <span className="text-blue-400 font-bold">
+                      {currentSystemMode === 'test' ? '$24.50' : smartSpendData?.costPerLead || '$0'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">ROI:</span>
+                    <span className="text-purple-400 font-bold">
+                      {currentSystemMode === 'test' ? '312%' : smartSpendData?.roi || '0%'}
+                    </span>
+                  </div>
+                  <Button 
+                    onClick={() => setShowAnalyticsModal(true)}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    View Full Analytics
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Botalytics Monthly Performance */}
+            <Card className="bg-white/10 backdrop-blur-sm border border-purple-400 relative">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Bot className="w-5 h-5 mr-2 text-purple-400" />
+                    🧮 Botalytics Monthly
+                  </div>
+                  <Badge className="bg-purple-600 text-white">
+                    {currentSystemMode === 'test' ? '47 Calls' : botalyticsData?.totalCalls || '0'}
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Accuracy Score:</span>
+                    <span className="text-green-400 font-bold">
+                      {currentSystemMode === 'test' ? '94.2%' : botalyticsData?.accuracy || '0%'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Escalations:</span>
+                    <span className="text-orange-400 font-bold">
+                      {currentSystemMode === 'test' ? '3' : botalyticsData?.escalations || '0'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Efficiency:</span>
+                    <span className="text-blue-400 font-bold">
+                      {currentSystemMode === 'test' ? '96.8%' : botalyticsData?.efficiency || '0%'}
+                    </span>
+                  </div>
+                  <Button 
+                    onClick={() => setShowCallReports(true)}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                  >
+                    View Bot Reports
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Voice Operations Center */}
             <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 relative">
               <CardHeader>
                 <CardTitle className="text-white flex items-center justify-between">
                   <div className="flex items-center">
-                    <Brain className="w-5 h-5 mr-2 text-blue-400" />
-                    🧠 AI Command Center
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleSection('ai-command')}
-                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                    >
-                      {collapsedSections['ai-command'] ? 
-                        <ChevronDown className="w-4 h-4" /> : 
-                        <ChevronUp className="w-4 h-4" />
-                      }
-                    </Button>
+                    <Mic className="w-5 h-5 mr-2 text-blue-400" />
+                    📞 Voice Operations
                   </div>
-                  <Badge className="bg-green-600 text-white">{currentSystemMode === 'test' ? '🟢 Active' : ''}</Badge>
+                  <Badge className="bg-blue-600 text-white">
+                    {currentSystemMode === 'test' ? 'Active' : callMetrics?.status || 'Ready'}
+                  </Badge>
                 </CardTitle>
               </CardHeader>
-              {!collapsedSections['ai-command'] && (
-                <CardContent>
-                  <div className="grid grid-cols-1 gap-3">
-                    <Button
-                      onClick={handleCreateBooking}
-                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
-                      title="Triggers booking_create Make scenario"
-                    >
-                      <div className="flex items-center">
-                        <span className="text-xl mr-3">📅</span>
-                        <span>Schedule Booking</span>
-                      </div>
-                      <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
-                    </Button>
-                    
-                    <Button
-                      onClick={handleCreateSupportTicket}
-                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
-                      title="Link to Airtable or auto-start Make → CRM ticketing"
-                    >
-                      <div className="flex items-center">
-                        <span className="text-xl mr-3">🧾</span>
-                        <span>Submit Support Ticket</span>
-                      </div>
-                      <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
-                    </Button>
-                    
-                    <Button
-                      onClick={handleManualFollowUp}
-                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                      title="Triggers email or task creation in CRM"
-                    >
-                      <span className="text-xl mr-3">🔁</span>
-                      <span>Follow-Up Trigger</span>
-                    </Button>
-                    
-                    <Button
-                      onClick={handleAutomateSalesOrder}
+              <CardContent>
+                <div className="space-y-3">
+                  <Button
+                    onClick={() => setShowCreateVoiceCallModal(true)}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center p-3"
+                  >
+                    <Phone className="w-4 h-4 mr-2" />
+                    Start Voice Call
+                  </Button>
+                  
+                  <Button
+                    onClick={() => setShowVoiceRecordings(true)}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-center p-3"
+                  >
+                    <Play className="w-4 h-4 mr-2" />
+                    Review Recordings
+                  </Button>
+                  
+                  <div className="text-center">
+                    <div className="text-sm text-slate-300">Today's Calls:</div>
+                    <div className="text-2xl font-bold text-white">
+                      {currentSystemMode === 'test' ? '23' : callMetrics?.totalCalls || '0'}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Secondary Row - Revenue Forecast & Client Pulse */}
+        <div className="mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Revenue Forecast Panel */}
+            <Card className="bg-white/10 backdrop-blur-sm border border-cyan-400">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between">
+                  <div className="flex items-center">
+                    <TrendingUp className="w-5 h-5 mr-2 text-cyan-400" />
+                    📈 Revenue Forecast
+                  </div>
+                  <Badge className="bg-cyan-600 text-white">
+                    {currentSystemMode === 'test' ? '$125K' : revenueForecastData?.projectedRevenue || '$0'}
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">MRR:</span>
+                    <span className="text-green-400 font-bold">
+                      {currentSystemMode === 'test' ? '$15,800' : revenueForecastData?.mrr || '$0'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Pipeline Value:</span>
+                    <span className="text-blue-400 font-bold">
+                      {currentSystemMode === 'test' ? '$47,200' : revenueForecastData?.pipelineValue || '$0'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Close Rate:</span>
+                    <span className="text-purple-400 font-bold">
+                      {currentSystemMode === 'test' ? '28.5%' : revenueForecastData?.closeRate || '0%'}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Client Pulse & Metrics */}
+            <Card className="bg-white/10 backdrop-blur-sm border border-orange-400">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Heart className="w-5 h-5 mr-2 text-orange-400" />
+                    🎯 Client Pulse + Metrics
+                  </div>
+                  <Badge className="bg-orange-600 text-white">
+                    {currentSystemMode === 'test' ? 'NPS 8.2' : clientPulseData?.npsScore || 'N/A'}
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Active Clients:</span>
+                    <span className="text-green-400 font-bold">
+                      {currentSystemMode === 'test' ? '47' : clientPulseData?.activeClients || '0'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Satisfaction:</span>
+                    <span className="text-blue-400 font-bold">
+                      {currentSystemMode === 'test' ? '94%' : clientPulseData?.satisfaction || '0%'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-300 text-sm">Alerts:</span>
+                    <span className="text-orange-400 font-bold">
+                      {currentSystemMode === 'test' ? '2 pending' : clientPulseData?.alerts || '0'}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Action Grid - Quick Access Buttons */}
+        <div className="mb-8">
+          <Card className="bg-white/10 backdrop-blur-sm border border-slate-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Zap className="w-5 h-5 mr-2 text-yellow-400" />
+                ⚡ Quick Actions Center
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <Button
+                  onClick={handleCreateBooking}
+                  className="bg-blue-600 hover:bg-blue-700 text-white flex flex-col items-center justify-center p-4 h-20"
+                  title="Create new booking via integrated calendar system"
+                >
+                  <Calendar className="w-6 h-6 mb-2" />
+                  <span className="text-sm">New Booking</span>
+                </Button>
+                
+                <Button
+                  onClick={handleCreateSupportTicket}
+                  className="bg-green-600 hover:bg-green-700 text-white flex flex-col items-center justify-center p-4 h-20"
+                  title="Create support ticket for client assistance"
+                >
+                  <Headphones className="w-6 h-6 mb-2" />
+                  <span className="text-sm">Support Ticket</span>
+                </Button>
+                
+                <Button
+                  onClick={handleCreateFollowUp}
+                  className="bg-orange-600 hover:bg-orange-700 text-white flex flex-col items-center justify-center p-4 h-20"
+                  title="Schedule follow-up for lead nurturing"
+                >
+                  <Clock className="w-6 h-6 mb-2" />
+                  <span className="text-sm">Follow-up</span>
+                </Button>
+                
+                <Button
+                  onClick={() => setShowExportModal(true)}
+                  className="bg-purple-600 hover:bg-purple-700 text-white flex flex-col items-center justify-center p-4 h-20"
+                  title="Export dashboard data and analytics"
+                >
+                  <FileDown className="w-6 h-6 mb-2" />
+                  <span className="text-sm">Export Data</span>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
                       className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
                       title="Runs Make Sales Order pipeline"
                     >
@@ -8905,50 +9104,6 @@ export default function CommandCenter() {
         isOpen={showManualCallModal} 
         onClose={() => setShowManualCallModal(false)} 
       />
-
-      {/* Bot Cloning Pipeline - Moved to Bottom */}
-      <div className="mt-12 mb-8">
-        <Card className="bg-white/5 backdrop-blur-sm border border-green-400/50 relative">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center justify-between">
-              <div className="flex items-center">
-                <Settings className="w-5 h-5 mr-2 text-green-400" />
-                🤖 Bot Cloning Pipeline
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => toggleSection('bot-cloning')}
-                  className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                >
-                  {collapsedSections['bot-cloning'] ? 
-                    <ChevronDown className="w-4 h-4" /> : 
-                    <ChevronUp className="w-4 h-4" />
-                  }
-                </Button>
-              </div>
-              <Badge className="bg-green-600 text-white">Pipeline</Badge>
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections['bot-cloning'] && (
-            <CardContent>
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-green-400/30">
-                  <span className="text-slate-300 text-sm">Active Clones:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '3' : liveSystemData?.activeBots || ''}</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-blue-400/30">
-                  <span className="text-slate-300 text-sm">Deployed Today:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '1' : liveSystemData?.deploymentsToday || ''}</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-purple-400/30">
-                  <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '96.8%' : liveSystemData?.successRate || ''}</span>
-                </div>
-              </div>
-            </CardContent>
-          )}
-        </Card>
-      </div>
 
       {/* Export Dashboard Modal */}
       {showExportModal && (
