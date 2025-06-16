@@ -3425,92 +3425,27 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
         </div>
-                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
-                      title="Runs Make Sales Order pipeline"
-                    >
-                      <div className="flex items-center">
-                        <Zap className="w-5 h-5 mr-3 text-green-400" />
-                        <span>Automate Sales Order Flow</span>
-                      </div>
-                      <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
-                    </Button>
-                    
-                    <Button
-                      onClick={handleSendSMS}
-                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                      title="Triggers Airtable - Twilio"
-                      style={{ 
-                        borderLeft: '8px solid #06b6d4'
-                      }}
-                    >
-                      <span className="text-xl mr-3">📨</span>
-                      <span>Manual SMS Trigger</span>
-                    </Button>
 
-                  </div>
-                </CardContent>
-              )}
-            </Card>
-
-            {/* Top-Center: Voice Engine Suite (Unified) - Enhanced */}
-            <Card className="lg:col-span-2 bg-gradient-to-br from-green-900/60 to-emerald-800/40 backdrop-blur-sm border border-green-400 relative shadow-lg shadow-green-400/20">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center justify-between text-xl">
-                  <div className="flex items-center">
-                    <Headphones className="w-6 h-6 mr-3 text-green-400" />
-                    🎙️ Voice Engine Suite
-                    <Badge className="ml-3 bg-green-500 text-white text-sm px-3 py-1">UNIFIED</Badge>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleSection('voice-engine')}
-                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                    >
-                      {collapsedSections['voice-engine'] ? 
-                        <ChevronDown className="w-4 h-4" /> : 
-                        <ChevronUp className="w-4 h-4" />
-                      }
-                    </Button>
-                  </div>
-                  <Badge className="bg-red-600 text-white">{currentSystemMode === 'test' ? '🔴 Live' : ''}</Badge>
-                </CardTitle>
-              </CardHeader>
-              {!collapsedSections['voice-engine'] && (
-                <CardContent>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Voice Command Center */}
-                    <div className="space-y-4">
-                      <h4 className="text-green-300 font-semibold flex items-center border-b border-green-400/30 pb-2">
-                        <Mic className="w-4 h-4 mr-2" />
-                        Voice Command Center
-                      </h4>
-                      <Button
-                        onClick={handleStartPipelineCalls}
-                        className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-between p-3 border border-green-500"
-                      >
-                        <div className="flex items-center">
-                          <span className="text-xl mr-3">🚀</span>
-                          <span>Start Pipeline Calls</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <div className="w-1 h-3 bg-green-300 rounded animate-pulse"></div>
-                          <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-75"></div>
-                          <div className="w-1 h-4 bg-green-300 rounded animate-pulse delay-150"></div>
-                          <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-300"></div>
-                        </div>
-                      </Button>
-                    
-                      <Button
-                        onClick={handleStopPipelineCalls}
-                        className="w-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-between p-3 border border-red-500"
-                      >
-                        <div className="flex items-center">
-                          <span className="text-xl mr-3">🛑</span>
-                          <span>End Pipeline Calls</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <div className="w-2 h-2 bg-red-300 rounded-full animate-pulse"></div>
-                          <span className="text-red-200 text-xs">EMERGENCY</span>
+        {/* System Status Tabs and Content */}
+        <div className="mb-8">
+          <div className="flex items-center justify-center space-x-4 mb-6">
+            {['automation-ops', 'system-tools', 'admin-tools'].map((tab) => (
+              <Button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-6 py-3 ${
+                  activeTab === tab 
+                    ? 'bg-blue-600 text-white' 
+                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                }`}
+              >
+                {tab === 'automation-ops' && 'Automation Operations'}
+                {tab === 'system-tools' && 'System Tools'}
+                {tab === 'admin-tools' && 'Admin Tools'}
+              </Button>
+            ))}
+          </div>
+        </div>
                         </div>
                       </Button>
                     </div>
