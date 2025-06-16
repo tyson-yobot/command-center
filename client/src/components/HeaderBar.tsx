@@ -47,13 +47,19 @@ export default function HeaderBar({
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-3">
             <span className="text-white text-sm">System Mode:</span>
-            <span className="text-white text-sm font-medium">Test</span>
+            <span className="text-white text-sm font-medium flex items-center gap-2">
+              Test
+              {!isLiveMode && <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>}
+            </span>
             <Switch 
               checked={isLiveMode}
               onCheckedChange={onModeToggle}
               className="data-[state=checked]:bg-green-500"
             />
-            <span className="text-white text-sm font-medium">Live</span>
+            <span className="text-white text-sm font-medium flex items-center gap-2">
+              Live
+              {isLiveMode && <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>}
+            </span>
             <span className={`px-2 py-1 rounded text-xs font-medium ${
               isLiveMode ? 'bg-green-600 text-white' : 'bg-yellow-600 text-white'
             }`}>
