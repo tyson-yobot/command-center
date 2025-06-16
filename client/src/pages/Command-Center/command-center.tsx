@@ -5152,8 +5152,7 @@ export default function CommandCenter() {
                 </div>
 
                 {!collapsedSections['knowledge-mgmt'] && (
-                <div>
-                
+                <>
                 {/* Voice Recording Management */}
                 <div className="bg-slate-700/40 rounded-lg p-4 mb-6 border border-blue-400/30">
                   <h4 className="text-white text-md font-medium mb-3 flex items-center">
@@ -5311,6 +5310,7 @@ export default function CommandCenter() {
                     </div>
                   </div>
                 </div>
+                </>
                 )}
               </div>
             </CardContent>
