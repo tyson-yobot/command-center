@@ -151,10 +151,10 @@ export function CalendarUploadModal({ isOpen, onClose, onCalendarSync }: Calenda
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-slate-900 border border-blue-400">
+      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 rounded-xl">
         <DialogHeader>
-          <DialogTitle className="text-white flex items-center">
-            <Calendar className="w-5 h-5 mr-2 text-blue-400" />
+          <DialogTitle className="text-blue-300 text-xl font-bold flex items-center">
+            <span className="text-2xl mr-3">📅</span>
             Smart Calendar Integration
           </DialogTitle>
         </DialogHeader>
@@ -388,11 +388,11 @@ export function CalendarUploadModal({ isOpen, onClose, onCalendarSync }: Calenda
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-between pt-4 border-t border-slate-600">
+        <div className="flex justify-between pt-6 border-t border-blue-400/30">
           <Button
             onClick={onClose}
             variant="outline"
-            className="border-slate-600 text-slate-300 hover:bg-slate-700"
+            className="border-slate-600 text-slate-300 hover:bg-slate-700/50 px-6 py-3 rounded-lg transition-all duration-200"
           >
             Close
           </Button>
@@ -409,7 +409,7 @@ export function CalendarUploadModal({ isOpen, onClose, onCalendarSync }: Calenda
                 });
                 onClose();
               }}
-              className="bg-green-600 hover:bg-green-700 text-white"
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg shadow-blue-500/30 transition-all duration-200 hover:scale-105"
             >
               <CheckCircle className="w-4 h-4 mr-2" />
               Apply Calendar Integration

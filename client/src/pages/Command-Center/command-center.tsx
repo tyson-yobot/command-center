@@ -8550,24 +8550,30 @@ export default function CommandCenter() {
       {/* Export Dashboard Modal */}
       {showExportModal && (
         <Dialog open={showExportModal} onOpenChange={setShowExportModal}>
-          <DialogContent className="bg-gray-900 border-gray-700 text-white max-w-lg">
+          <DialogContent className="bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 text-white max-w-lg rounded-xl">
             <DialogHeader>
-              <DialogTitle className="text-blue-300">Export Dashboard Report</DialogTitle>
-              <DialogDescription className="text-gray-300">
+              <DialogTitle className="text-blue-300 text-xl font-bold flex items-center">
+                <span className="text-2xl mr-3">📊</span>
+                Export Dashboard Report
+              </DialogTitle>
+              <DialogDescription className="text-slate-300">
                 Configure your export settings and download dashboard data
               </DialogDescription>
             </DialogHeader>
             
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-blue-300 mb-2">Report Type</label>
+                <label className="block text-sm font-semibold text-blue-300 mb-3 flex items-center">
+                  <span className="mr-2">📋</span>
+                  Report Type
+                </label>
                 <Select value={exportConfig.reportType} onValueChange={(value) => 
                   setExportConfig({...exportConfig, reportType: value})
                 }>
-                  <SelectTrigger className="bg-gray-800 border-gray-600 text-white">
+                  <SelectTrigger className="bg-slate-800/60 border border-slate-600 text-white p-4 rounded-lg focus:ring-2 focus:ring-blue-400 transition-all duration-200">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-gray-800 border-gray-600">
+                  <SelectContent className="bg-slate-800 border-slate-600 rounded-lg">
                     <SelectItem value="comprehensive">Comprehensive Report</SelectItem>
                     <SelectItem value="weekly">Weekly Summary</SelectItem>
                     <SelectItem value="monthly">Monthly Analysis</SelectItem>
@@ -8577,14 +8583,17 @@ export default function CommandCenter() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-blue-300 mb-2">Export Format</label>
+                <label className="block text-sm font-semibold text-blue-300 mb-3 flex items-center">
+                  <span className="mr-2">📄</span>
+                  Export Format
+                </label>
                 <Select value={exportConfig.format} onValueChange={(value) => 
                   setExportConfig({...exportConfig, format: value})
                 }>
-                  <SelectTrigger className="bg-gray-800 border-gray-600 text-white">
+                  <SelectTrigger className="bg-slate-800/60 border border-slate-600 text-white p-4 rounded-lg focus:ring-2 focus:ring-blue-400 transition-all duration-200">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-gray-800 border-gray-600">
+                  <SelectContent className="bg-slate-800 border-slate-600 rounded-lg">
                     <SelectItem value="json">JSON Data</SelectItem>
                     <SelectItem value="csv">CSV Spreadsheet</SelectItem>
                     <SelectItem value="pdf">PDF Report</SelectItem>

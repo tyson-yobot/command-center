@@ -289,14 +289,14 @@ export function VoiceCommandInterface({
   };
 
   return (
-    <Card className="bg-slate-800/90 backdrop-blur-sm border border-green-400 shadow-lg shadow-green-400/20">
+    <Card className="bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20">
       <CardContent className="p-6">
         <div className="space-y-4">
           {/* Status Header */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Volume2 className="w-5 h-5 text-green-400" />
-              <span className="text-white font-medium">Voice Command Center</span>
+            <div className="flex items-center space-x-3">
+              <span className="text-2xl">🎤</span>
+              <span className="text-blue-300 font-semibold text-lg">Voice Command Center</span>
             </div>
             <Badge 
               className={`${
