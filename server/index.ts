@@ -15,6 +15,7 @@ import { registerQATestEndpoints } from "./qaTestEndpoints";
 import { registerPublerRoutes } from "./publerIntegrationNew";
 import { registerAirtableTestLogger } from "./airtableTestLogger";
 import { registerCallStatusEndpoint } from "./callStatusEndpoint";
+import { registerRealDashboardEndpoints } from "./realDashboardData";
 
 import { initializeLiveDataWipe, secureAdminDataWipe } from "./dataWipe";
 
@@ -270,6 +271,9 @@ print(json.dumps(result))
 
   // Register call status and pipeline control endpoints
   registerCallStatusEndpoint(app);
+
+  // Register real dashboard data endpoints (bypasses all filtering)
+  registerRealDashboardEndpoints(app);
 
   // Register document management routes
   app.use('/api/documents', documentRoutes);
