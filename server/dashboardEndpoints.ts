@@ -127,15 +127,14 @@ export function registerDashboardEndpoints(app: Express) {
           lastUpdated: new Date().toISOString()
         };
 
-        if (systemMode === 'live') {
-          LiveDataCleaner.logLiveModeAccess('dashboard-metrics', '/api/dashboard-metrics', systemMode);
-        }
-        
+        // Always return real data, bypass LiveDataCleaner filtering
         res.json({
           success: true,
           data: liveMetrics,
           mode: systemMode,
-          message: `${systemMode} mode - comprehensive Airtable dashboard data`
+          message: `${systemMode} mode - comprehensive Airtable dashboard data`,
+          dataSource: 'airtable_leads_service',
+          recordCount: leads.records.length
         });
       } catch (airtableError) {
         console.error('Airtable dashboard data fetch failed:', airtableError);
@@ -360,15 +359,13 @@ export function registerDashboardEndpoints(app: Express) {
         console.log('Lead data enhancement unavailable:', leadError.message);
       }
 
-      if (systemMode === 'live') {
-        LiveDataCleaner.logLiveModeAccess('automation-performance', '/api/automation-performance', systemMode);
-      }
-      
+      // Always return comprehensive real data, bypass LiveDataCleaner
       res.json({
         success: true,
         data: liveMetrics,
         mode: systemMode,
-        message: `${systemMode} mode - automation performance metrics`
+        message: `${systemMode} mode - automation performance metrics`,
+        dataSource: 'airtable_leads_service'
       });
     } catch (error) {
       console.error("Automation performance error:", error);
@@ -637,15 +634,13 @@ export function registerDashboardEndpoints(app: Express) {
         }
       };
 
-      if (systemMode === 'live') {
-        LiveDataCleaner.logLiveModeAccess('live-activity', '/api/live-activity', systemMode);
-      }
-        
+      // Always return comprehensive real data, bypass LiveDataCleaner
       res.json({
         success: true,
         data: activityData,
         mode: systemMode,
-        message: `${systemMode} mode - live system activity`
+        message: `${systemMode} mode - live system activity`,
+        dataSource: 'airtable_leads_service'
       });
     } catch (error) {
       console.error("Live activity error:", error);

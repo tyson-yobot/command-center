@@ -134,27 +134,12 @@ export class LiveDataWiper {
   }
 
   /**
-   * Filters any data object to remove test values in LIVE mode
+   * DISABLED: Preserves real Airtable data in LIVE mode
+   * Returns data as-is without filtering to allow authentic statistics
    */
   static sanitizeLiveData(data: any): any {
-    if (!this.isLiveMode()) {
-      return data; // Return data as-is in test mode
-    }
-
-    // In LIVE mode, return null for all values
-    if (typeof data === 'object' && data !== null) {
-      const sanitized: any = {};
-      for (const key in data) {
-        if (Array.isArray(data[key])) {
-          sanitized[key] = [];
-        } else if (typeof data[key] === 'object' && data[key] !== null) {
-          sanitized[key] = this.sanitizeLiveData(data[key]);
-        } else {
-          sanitized[key] = null;
-        }
-      }
-      return sanitized;
-    }
+    // Always return real data to enable authentic dashboard statistics
+    return data;
 
     return null;
   }
