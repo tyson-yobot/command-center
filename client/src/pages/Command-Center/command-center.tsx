@@ -5112,8 +5112,47 @@ export default function CommandCenter() {
               <div className="bg-slate-800/60 rounded-lg p-6 border border-purple-400/50">
                 <h3 className="text-white text-lg font-semibold mb-4 flex items-center">
                   <Database className="w-5 h-5 mr-2 text-purple-400" />
-                  Knowledge Management
+                  Knowledge Management (Collapsible)
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => toggleSection('knowledge-mgmt')}
+                    className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                  >
+                    {collapsedSections['knowledge-mgmt'] ? 
+                      <ChevronDown className="w-4 h-4" /> : 
+                      <ChevronUp className="w-4 h-4" />
+                    }
+                  </Button>
                 </h3>
+                
+                {/* AI Autocomplete Suggestions */}
+                <div className="mb-4 p-3 bg-slate-700/40 rounded-lg border border-green-400/30">
+                  <h4 className="text-green-300 font-semibold mb-2 flex items-center">
+                    <Brain className="w-4 h-4 mr-2" />
+                    AI Autocomplete Suggestions
+                  </h4>
+                  <div className="space-y-2">
+                    {currentSystemMode === 'test' ? (
+                      <>
+                        <div className="text-xs text-green-300 bg-green-900/30 p-2 rounded border border-green-500/30">
+                          "Create a new sales order for..." → Auto-completes client name and package
+                        </div>
+                        <div className="text-xs text-blue-300 bg-blue-900/30 p-2 rounded border border-blue-500/30">
+                          "Schedule a follow-up call..." → Auto-suggests optimal timing based on client timezone
+                        </div>
+                        <div className="text-xs text-purple-300 bg-purple-900/30 p-2 rounded border border-purple-500/30">
+                          "Insert memory about client..." → Smart categorization and tagging suggestions
+                        </div>
+                      </>
+                    ) : (
+                      <div className="text-xs text-slate-400">AI suggestions will appear during voice commands</div>
+                    )}
+                  </div>
+                </div>
+
+                {!collapsedSections['knowledge-mgmt'] && (
+                <div>
                 
                 {/* Voice Recording Management */}
                 <div className="bg-slate-700/40 rounded-lg p-4 mb-6 border border-blue-400/30">
@@ -5272,8 +5311,7 @@ export default function CommandCenter() {
                     </div>
                   </div>
                 </div>
-                
-
+                )}
               </div>
             </CardContent>
           </Card>
