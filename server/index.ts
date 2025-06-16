@@ -287,6 +287,7 @@ print(json.dumps(result))
   registerVoiceSynthesis(app);
   registerMemoryKnowledge(app);
   registerAuditEscalation(app);
+  registerCallMonitoring(app);
 
   // Register document management routes
   app.use('/api/documents', documentRoutes);

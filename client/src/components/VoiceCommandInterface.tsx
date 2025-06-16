@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Mic, MicOff, X, Volume2 } from 'lucide-react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { queryClient } from '@/lib/queryClient';
 
 interface VoiceCommandInterfaceProps {
   micStatus: 'idle' | 'listening' | 'processing';
@@ -21,8 +23,43 @@ export function VoiceCommandInterface({
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const [dataArray, setDataArray] = useState<Uint8Array | null>(null);
+  const [selectedVoice, setSelectedVoice] = useState<string>('adam');
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
+
+  // Fetch available voices from backend
+  const { data: voices } = useQuery({
+    queryKey: ['/api/voice/personas'],
+    enabled: true
+  });
+
+  // Voice generation mutation
+  const generateVoice = useMutation({
+    mutationFn: async (text: string) => {
+      const response = await fetch('/api/voice/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text,
+          voiceId: selectedVoice,
+          stability: 0.5,
+          similarity_boost: 0.75
+        })
+      });
+      
+      if (!response.ok) throw new Error('Voice generation failed');
+      return response.blob();
+    },
+    onSuccess: (audioBlob) => {
+      // Play generated audio
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      audio.play().catch(console.error);
+      
+      // Cleanup URL after playing
+      audio.onended = () => URL.revokeObjectURL(audioUrl);
+    }
+  });
 
   // Initialize Web Speech API
   useEffect(() => {
