@@ -64,7 +64,8 @@ import {
   Play,
   ChevronDown,
   ChevronUp,
-  Shield
+  Shield,
+  Smartphone
 } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -3163,301 +3164,388 @@ export default function CommandCenter() {
           </div>
         )}
 
-        {/* Reorganized Top Sections - Voice Features Prominent */}
+        {/* 1. Quick Action Launchpad - All Manual Triggers Consolidated at Top */}
         <div className="mb-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Top-Left: AI Command Center */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400 relative">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Brain className="w-5 h-5 mr-2 text-blue-400" />
-                    🧠 AI Command Center
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleSection('ai-command')}
-                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                    >
-                      {collapsedSections['ai-command'] ? 
-                        <ChevronDown className="w-4 h-4" /> : 
-                        <ChevronUp className="w-4 h-4" />
-                      }
-                    </Button>
-                  </div>
-                  <Badge className="bg-green-600 text-white">{currentSystemMode === 'test' ? '🟢 Active' : ''}</Badge>
-                </CardTitle>
-              </CardHeader>
-              {!collapsedSections['ai-command'] && (
-                <CardContent>
-                  <div className="grid grid-cols-1 gap-3">
-                    <Button
-                      onClick={handleCreateBooking}
-                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
-                      title="Triggers booking_create Make scenario"
-                    >
-                      <div className="flex items-center">
-                        <span className="text-xl mr-3">📅</span>
-                        <span>Schedule Booking</span>
-                      </div>
-                      <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
-                    </Button>
-                    
-                    <Button
-                      onClick={handleCreateSupportTicket}
-                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
-                      title="Link to Airtable or auto-start Make → CRM ticketing"
-                    >
-                      <div className="flex items-center">
-                        <span className="text-xl mr-3">🧾</span>
-                        <span>Submit Support Ticket</span>
-                      </div>
-                      <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
-                    </Button>
-                    
-                    <Button
-                      onClick={handleManualFollowUp}
-                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                      title="Triggers email or task creation in CRM"
-                    >
-                      <span className="text-xl mr-3">🔁</span>
-                      <span>Follow-Up Trigger</span>
-                    </Button>
-                    
-                    <Button
-                      onClick={handleAutomateSalesOrder}
-                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
-                      title="Runs Make Sales Order pipeline"
-                    >
-                      <div className="flex items-center">
-                        <Zap className="w-5 h-5 mr-3 text-green-400" />
-                        <span>Automate Sales Order Flow</span>
-                      </div>
-                      <HelpCircle className="w-4 h-4 text-blue-300 opacity-70" />
-                    </Button>
-                    
-                    <Button
-                      onClick={handleSendSMS}
-                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                      title="Triggers Airtable - Twilio"
-                      style={{ 
-                        borderLeft: '8px solid #06b6d4'
-                      }}
-                    >
-                      <span className="text-xl mr-3">📨</span>
-                      <span>Manual SMS Trigger</span>
-                    </Button>
-
-                  </div>
-                </CardContent>
-              )}
-            </Card>
-
-            {/* Top-Center: Voice Engine Suite (Unified) - Enhanced */}
-            <Card className="lg:col-span-2 bg-gradient-to-br from-green-900/60 to-emerald-800/40 backdrop-blur-sm border border-green-400 relative shadow-lg shadow-green-400/20">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center justify-between text-xl">
-                  <div className="flex items-center">
-                    <Headphones className="w-6 h-6 mr-3 text-green-400" />
-                    🎙️ Voice Engine Suite
-                    <Badge className="ml-3 bg-green-500 text-white text-sm px-3 py-1">UNIFIED</Badge>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleSection('voice-engine')}
-                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                    >
-                      {collapsedSections['voice-engine'] ? 
-                        <ChevronDown className="w-4 h-4" /> : 
-                        <ChevronUp className="w-4 h-4" />
-                      }
-                    </Button>
-                  </div>
-                  <Badge className="bg-red-600 text-white">{currentSystemMode === 'test' ? '🔴 Live' : ''}</Badge>
-                </CardTitle>
-              </CardHeader>
-              {!collapsedSections['voice-engine'] && (
-                <CardContent>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Voice Command Center */}
-                    <div className="space-y-4">
-                      <h4 className="text-green-300 font-semibold flex items-center border-b border-green-400/30 pb-2">
-                        <Mic className="w-4 h-4 mr-2" />
-                        Voice Command Center
-                      </h4>
+          <Card className="bg-gradient-to-r from-blue-900/60 to-purple-900/60 backdrop-blur-sm border border-blue-400 shadow-lg shadow-blue-400/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center justify-between text-2xl">
+                <div className="flex items-center">
+                  <Zap className="w-6 h-6 mr-3 text-blue-400" />
+                  🚀 Quick Action Launchpad
+                  <Badge className="ml-3 bg-blue-500 text-white text-sm px-3 py-1">ALL TRIGGERS</Badge>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => toggleSection('quick-actions')}
+                    className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                  >
+                    {collapsedSections['quick-actions'] ? 
+                      <ChevronDown className="w-4 h-4" /> : 
+                      <ChevronUp className="w-4 h-4" />
+                    }
+                  </Button>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-white/60">Show Advanced Tools</span>
+                  <Switch 
+                    checked={collapsedSections['advanced-tools'] !== true}
+                    onCheckedChange={(checked) => setCollapsedSections(prev => ({...prev, 'advanced-tools': !checked}))}
+                  />
+                </div>
+              </CardTitle>
+            </CardHeader>
+            {!collapsedSections['quick-actions'] && (
+              <CardContent>
+                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {/* Primary Action Buttons */}
+                  <Button
+                    onClick={handleCreateBooking}
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center p-4 h-20 border border-blue-500"
+                    title="Schedule Booking"
+                  >
+                    <div className="text-center">
+                      <Calendar className="w-6 h-6 mx-auto mb-1" />
+                      <span className="text-sm font-medium">Schedule Booking</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
+                    onClick={handleCreateSupportTicket}
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center p-4 h-20 border border-purple-500"
+                    title="Submit Ticket"
+                  >
+                    <div className="text-center">
+                      <Ticket className="w-6 h-6 mx-auto mb-1" />
+                      <span className="text-sm font-medium">Submit Ticket</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
+                    onClick={handleManualFollowUp}
+                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-center p-4 h-20 border border-orange-500"
+                    title="Follow-up Trigger"
+                  >
+                    <div className="text-center">
+                      <RefreshCw className="w-6 h-6 mx-auto mb-1" />
+                      <span className="text-sm font-medium">Follow-up Trigger</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
+                    onClick={handleStartPipelineCalls}
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-center p-4 h-20 border border-green-500"
+                    title="Start/End Pipeline Calls"
+                  >
+                    <div className="text-center">
+                      <Phone className="w-6 h-6 mx-auto mb-1" />
+                      <span className="text-sm font-medium">Start Pipeline</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => setShowManualCallModal(true)}
+                    className="bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-center p-4 h-20 border border-teal-500"
+                    title="Manual Call Start"
+                  >
+                    <div className="text-center">
+                      <PhoneOff className="w-6 h-6 mx-auto mb-1" />
+                      <span className="text-sm font-medium">Manual Call Start</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
+                    onClick={handleVoiceInput}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center p-4 h-20 border border-indigo-500"
+                    title="Start Voice"
+                  >
+                    <div className="text-center">
+                      <Mic className="w-6 h-6 mx-auto mb-1" />
+                      <span className="text-sm font-medium">Start Voice</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => setShowCalendarUpload(true)}
+                    className="bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-center p-4 h-20 border border-cyan-500"
+                    title="Upload Calendar"
+                  >
+                    <div className="text-center">
+                      <Upload className="w-6 h-6 mx-auto mb-1" />
+                      <span className="text-sm font-medium">Upload Calendar</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => setShowExportModal(true)}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center p-4 h-20 border border-emerald-500"
+                    title="Quick Export"
+                  >
+                    <div className="text-center">
+                      <Download className="w-6 h-6 mx-auto mb-1" />
+                      <span className="text-sm font-medium">Quick Export</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => setShowAnalyticsModal(true)}
+                    className="bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-center p-4 h-20 border border-violet-500"
+                    title="Generate Analytics Report"
+                  >
+                    <div className="text-center">
+                      <BarChart3 className="w-6 h-6 mx-auto mb-1" />
+                      <span className="text-sm font-medium">Analytics Report</span>
+                    </div>
+                  </Button>
+                </div>
+                
+                {/* Advanced Tools Section */}
+                {!collapsedSections['advanced-tools'] && (
+                  <div className="mt-6 pt-4 border-t border-white/20">
+                    <h4 className="text-white/80 text-sm font-medium mb-3">Advanced Tools</h4>
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                       <Button
-                        onClick={handleStartPipelineCalls}
-                        className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-between p-3 border border-green-500"
+                        onClick={handleUploadDocs}
+                        className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center p-3 border border-slate-500"
+                        title="PDF & Knowledge Upload"
                       >
-                        <div className="flex items-center">
-                          <span className="text-xl mr-3">🚀</span>
-                          <span>Start Pipeline Calls</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <div className="w-1 h-3 bg-green-300 rounded animate-pulse"></div>
-                          <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-75"></div>
-                          <div className="w-1 h-4 bg-green-300 rounded animate-pulse delay-150"></div>
-                          <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-300"></div>
+                        <div className="text-center">
+                          <FileText className="w-5 h-5 mx-auto mb-1" />
+                          <span className="text-xs">PDF Upload</span>
                         </div>
                       </Button>
-                    
+                      
                       <Button
-                        onClick={handleStopPipelineCalls}
-                        className="w-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-between p-3 border border-red-500"
+                        onClick={handleViewKnowledge}
+                        className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center p-3 border border-slate-500"
+                        title="Knowledge Areas"
                       >
-                        <div className="flex items-center">
-                          <span className="text-xl mr-3">🛑</span>
-                          <span>End Pipeline Calls</span>
+                        <div className="text-center">
+                          <Brain className="w-5 h-5 mx-auto mb-1" />
+                          <span className="text-xs">Knowledge</span>
                         </div>
-                        <div className="flex items-center space-x-1">
-                          <div className="w-2 h-2 bg-red-300 rounded-full animate-pulse"></div>
-                          <span className="text-red-200 text-xs">EMERGENCY</span>
+                      </Button>
+                      
+                      <Button
+                        onClick={handleRunDiagnostics}
+                        className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center p-3 border border-slate-500"
+                        title="System Diagnostics"
+                      >
+                        <div className="text-center">
+                          <Settings className="w-5 h-5 mx-auto mb-1" />
+                          <span className="text-xs">Diagnostics</span>
+                        </div>
+                      </Button>
+                      
+                      <Button
+                        onClick={handleEmergencyStop}
+                        className="bg-red-600 hover:bg-red-700 text-white flex items-center justify-center p-3 border border-red-500"
+                        title="Emergency Stop"
+                      >
+                        <div className="text-center">
+                          <AlertTriangle className="w-5 h-5 mx-auto mb-1" />
+                          <span className="text-xs">Emergency</span>
                         </div>
                       </Button>
                     </div>
-                    
-                    {/* Voice Analytics & Call Monitoring */}
-                    <div className="space-y-3">
-                      <h4 className="text-green-300 font-semibold flex items-center">
-                        <Activity className="w-4 h-4 mr-2" />
-                        Voice Analytics & Call Monitoring
-                      </h4>
-                      
-                      <Button
-                        onClick={() => setShowManualCallModal(true)}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
-                      >
-                        <div className="flex items-center">
-                          <span className="text-xl mr-3">📞</span>
-                          <span>Manual Call Start</span>
-                        </div>
-                        <div className="w-2 h-2 bg-blue-300 rounded-full animate-pulse"></div>
-                      </Button>
-                      
-                      <Button
-                        onClick={() => setShowVoiceRecordings(!showVoiceRecordings)}
-                        className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-between p-3 border border-purple-500"
-                      >
-                        <div className="flex items-center">
-                          <span className="text-xl mr-3">📊</span>
-                          <span>Conversation Analytics</span>
-                        </div>
-                        <Badge className="bg-purple-700 text-white text-xs">UNIFIED</Badge>
-                      </Button>
-                      
-                      <Button
-                        onClick={() => setShowCreateVoiceCallModal(true)}
-                        className="w-full bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-between p-3 border border-orange-500"
-                      >
-                        <div className="flex items-center">
-                          <span className="text-xl mr-3">🎤</span>
-                          <span>Voice Synthesis Studio</span>
-                        </div>
-                        <Badge className="bg-orange-700 text-white text-xs">STUDIO</Badge>
-                      </Button>
+                  </div>
+                )}
+              </CardContent>
+            )}
+          </Card>
+        </div>
+
+        {/* 2. Voice Engine + Command Center (Consolidated Voice Section) */}
+        <div className="mb-8">
+          <Card className="bg-gradient-to-br from-green-900/60 to-emerald-800/40 backdrop-blur-sm border border-green-400 shadow-lg shadow-green-400/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center justify-between text-xl">
+                <div className="flex items-center">
+                  <Headphones className="w-6 h-6 mr-3 text-green-400" />
+                  🎙️ Voice Engine + Command Center
+                  <Badge className="ml-3 bg-green-500 text-white text-sm px-3 py-1">UNIFIED</Badge>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => toggleSection('voice-engine')}
+                    className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                  >
+                    {collapsedSections['voice-engine'] ? 
+                      <ChevronDown className="w-4 h-4" /> : 
+                      <ChevronUp className="w-4 h-4" />
+                    }
+                  </Button>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className={`w-3 h-3 rounded-full ${micStatus === 'listening' ? 'bg-green-400 animate-pulse' : 'bg-gray-400'}`}></div>
+                  <span className="text-sm text-green-300">{micStatus === 'listening' ? 'Active' : 'Ready'}</span>
+                </div>
+              </CardTitle>
+            </CardHeader>
+            {!collapsedSections['voice-engine'] && (
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Pipeline Controls */}
+                  <div className="space-y-4">
+                    <h4 className="text-green-300 font-semibold flex items-center border-b border-green-400/30 pb-2">
+                      <Phone className="w-4 h-4 mr-2" />
+                      Pipeline Start/End
+                    </h4>
+                    <Button
+                      onClick={handleStartPipelineCalls}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white p-3"
+                    >
+                      <Play className="w-4 h-4 mr-2" />
+                      Start Pipeline
+                    </Button>
+                    <Button
+                      onClick={handleStopPipelineCalls}
+                      className="w-full bg-red-600 hover:bg-red-700 text-white p-3"
+                    >
+                      <PhoneOff className="w-4 h-4 mr-2" />
+                      End Pipeline
+                    </Button>
+                  </div>
+                  
+                  {/* Active Commands & Status */}
+                  <div className="space-y-4">
+                    <h4 className="text-green-300 font-semibold flex items-center border-b border-green-400/30 pb-2">
+                      <Activity className="w-4 h-4 mr-2" />
+                      Active Commands & Status
+                    </h4>
+                    <div className="p-3 bg-white/5 rounded-lg">
+                      <div className="text-sm text-green-300 mb-2">Voice Status:</div>
+                      <div className="text-white">{voiceStatus}</div>
+                      {realTimeTranscript && (
+                        <div className="mt-2 text-blue-300 text-sm">"{realTimeTranscript}"</div>
+                      )}
                     </div>
                   </div>
                   
-                  {/* Voice Status Indicator */}
-                  <div className="mt-4 p-3 bg-white/5 rounded-lg border border-green-400/30">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <div className={`w-3 h-3 rounded-full mr-3 ${micStatus === 'listening' ? 'bg-green-400 animate-pulse' : micStatus === 'processing' ? 'bg-yellow-400' : 'bg-gray-400'}`}></div>
-                        <span className="text-white font-medium">Voice Status: {micStatus === 'listening' ? 'Listening' : micStatus === 'processing' ? 'Processing' : 'Ready'}</span>
-                      </div>
-                      <div className="text-green-300 text-sm">
-                        {realTimeTranscript && `"${realTimeTranscript}"`}
+                  {/* Voice Recognition & Synthesis Studio */}
+                  <div className="space-y-4">
+                    <h4 className="text-green-300 font-semibold flex items-center border-b border-green-400/30 pb-2">
+                      <Mic className="w-4 h-4 mr-2" />
+                      Voice Recognition & Synthesis
+                    </h4>
+                    <Button
+                      onClick={() => setShowCreateVoiceCallModal(true)}
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white p-3"
+                    >
+                      <Headphones className="w-4 h-4 mr-2" />
+                      Voice Studio
+                    </Button>
+                    <Button
+                      onClick={testVoicePersona}
+                      className="w-full bg-orange-600 hover:bg-orange-700 text-white p-3"
+                    >
+                      <TestTube className="w-4 h-4 mr-2" />
+                      Test Persona
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            )}
+          </Card>
+        </div>
+
+        {/* 3. Core Automation & Manual Triggers (Core, Follow-ups, Sales Orders) */}
+        <div className="mb-8">
+          <Card className="bg-gradient-to-r from-slate-900/60 to-gray-800/60 backdrop-blur-sm border border-slate-400 shadow-lg shadow-slate-400/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center justify-between text-xl">
+                <div className="flex items-center">
+                  <Zap className="w-6 h-6 mr-3 text-slate-400" />
+                  📦 Core Automation & Manual Triggers
+                  <Badge className="ml-3 bg-slate-500 text-white text-sm px-3 py-1">CORE</Badge>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => toggleSection('core-automation')}
+                    className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                  >
+                    {collapsedSections['core-automation'] ? 
+                      <ChevronDown className="w-4 h-4" /> : 
+                      <ChevronUp className="w-4 h-4" />
+                    }
+                  </Button>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse"></div>
+                  <span className="text-sm text-green-300">Active</span>
+                </div>
+              </CardTitle>
+            </CardHeader>
+            {!collapsedSections['core-automation'] && (
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Core Follow-ups */}
+                  <div className="space-y-4">
+                    <h4 className="text-slate-300 font-semibold flex items-center border-b border-slate-400/30 pb-2">
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      Core Follow-ups
+                    </h4>
+                    <Button
+                      onClick={handleManualFollowUp}
+                      className="w-full bg-orange-600 hover:bg-orange-700 text-white p-3"
+                    >
+                      <Mail className="w-4 h-4 mr-2" />
+                      Manual Follow-up
+                    </Button>
+                    <Button
+                      onClick={handleSendSMS}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3"
+                    >
+                      <MessageSquare className="w-4 h-4 mr-2" />
+                      SMS Trigger
+                    </Button>
+                  </div>
+                  
+                  {/* Sales Orders */}
+                  <div className="space-y-4">
+                    <h4 className="text-slate-300 font-semibold flex items-center border-b border-slate-400/30 pb-2">
+                      <DollarSign className="w-4 h-4 mr-2" />
+                      Sales Orders
+                    </h4>
+                    <Button
+                      onClick={handleAutomateSalesOrder}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white p-3"
+                    >
+                      <Zap className="w-4 h-4 mr-2" />
+                      Automate Sales Flow
+                    </Button>
+                    <div className="p-3 bg-white/5 rounded-lg">
+                      <div className="text-sm text-slate-300">Success Rate:</div>
+                      <div className="text-lg font-bold text-green-400">
+                        {automationPerformance?.data?.successRate || '0'}%
                       </div>
                     </div>
                   </div>
-              </CardContent>
-              )}
-            </Card>
-
-          </div>
-        </div>
-
-        {/* Second Row: Command Center Status + Bot Metrics (Moved Higher) */}
-        <div className="mb-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* YoBot Health Monitor */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Activity className="w-5 h-5 mr-2 text-green-400" />
-                  ✅ YoBot® Health Monitor
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">System Uptime:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '99.8%' : ''}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Active Bots:</span>
-                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '5' : ''}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Last Check:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '1m ago' : ''}</span>
+                  
+                  {/* System Status */}
+                  <div className="space-y-4">
+                    <h4 className="text-slate-300 font-semibold flex items-center border-b border-slate-400/30 pb-2">
+                      <Activity className="w-4 h-4 mr-2" />
+                      System Status
+                    </h4>
+                    <div className="space-y-2">
+                      <div className="flex justify-between p-2 bg-white/5 rounded">
+                        <span className="text-slate-300 text-sm">Workflows:</span>
+                        <span className="text-white font-medium">
+                          {liveSystemData?.data?.activeWorkflows || '0'}
+                        </span>
+                      </div>
+                      <div className="flex justify-between p-2 bg-white/5 rounded">
+                        <span className="text-slate-300 text-sm">Uptime:</span>
+                        <span className="text-green-400 font-medium">
+                          {liveSystemData?.data?.uptime || '99.8%'}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </CardContent>
-            </Card>
-
-            {/* Live Automation Engine */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-cyan-400">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Zap className="w-5 h-5 mr-2 text-cyan-400" />
-                  ⚙️ Live Automation Engine
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Active Workflows:</span>
-                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '15' : ''}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Executions Today:</span>
-                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '247' : ''}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Engine Status:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? 'LIVE' : ''}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* AI Assistant Insights */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Brain className="w-5 h-5 mr-2 text-blue-400" />
-                  🧠 AI Assistant Insights
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Accuracy Rate:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '94.2%' : ''}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Learning Rate:</span>
-                    <span className="text-purple-400 font-bold">{currentSystemMode === 'test' ? '78%' : ''}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Interactions:</span>
-                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '1,247' : ''}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+            )}
+          </Card>
         </div>
 
         {/* Reports + Export/Calendar Sync */}
