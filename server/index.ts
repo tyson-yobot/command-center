@@ -16,6 +16,7 @@ import { registerPublerRoutes } from "./publerIntegrationNew";
 import { registerAirtableTestLogger } from "./airtableTestLogger";
 import { registerCallStatusEndpoint } from "./callStatusEndpoint";
 import { registerRealDashboardEndpoints } from "./realDashboardData";
+import { registerCalendarEndpoints } from "./calendarEndpoints";
 
 import { initializeLiveDataWipe, secureAdminDataWipe } from "./dataWipe";
 

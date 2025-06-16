@@ -1785,6 +1785,40 @@ export default function CommandCenter() {
 
 
 
+  const handleCalendarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setVoiceStatus('Uploading calendar...');
+      const formData = new FormData();
+      formData.append('calendar', file);
+
+      const response = await fetch('/api/calendar/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setVoiceStatus(`Calendar uploaded: ${result.eventsCount} events added`);
+        setToast({
+          title: "Calendar Uploaded",
+          description: `Successfully imported ${result.eventsCount} events`,
+        });
+      } else {
+        throw new Error('Upload failed');
+      }
+    } catch (error) {
+      setVoiceStatus('Calendar upload failed');
+      setToast({
+        title: "Upload Failed",
+        description: "Unable to upload calendar file. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
@@ -3401,6 +3435,25 @@ export default function CommandCenter() {
           onChange={handleFileUpload}
         />
 
+        {/* Hidden Calendar Upload Input */}
+        <input
+          id="calendar-upload"
+          type="file"
+          style={{ display: 'none' }}
+          accept=".ics,.csv"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              setVoiceStatus('Uploading calendar...');
+              // Calendar upload implementation here
+              setToast({
+                title: "Calendar Upload",
+                description: "Calendar upload feature will be implemented",
+              });
+            }
+          }}
+        />
+
         {/* Live Mode - No test controls */}
 
         {/* Top-Mid: Live Automation Engine + Client Pulse + Ops Metrics */}
@@ -3614,7 +3667,7 @@ export default function CommandCenter() {
                   <div className="space-y-3">
                     <h4 className="text-blue-300 font-semibold">Calendar Actions</h4>
                     <Button
-                      onClick={() => setShowCalendarUpload(true)}
+                      onClick={() => document.getElementById('calendar-upload')?.click()}
                       className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                     >
                       <Upload className="w-4 h-4 mr-2" />
