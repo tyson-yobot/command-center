@@ -14,6 +14,7 @@ import { officialQATracker } from "./officialQATracker";
 import { registerQATestEndpoints } from "./qaTestEndpoints";
 import { registerPublerRoutes } from "./publerIntegrationNew";
 import { registerAirtableTestLogger } from "./airtableTestLogger";
+import { registerCallStatusEndpoint } from "./callStatusEndpoint";
 
 import { initializeLiveDataWipe, secureAdminDataWipe } from "./dataWipe";
 
@@ -266,6 +267,9 @@ print(json.dumps(result))
   
   // Register AI-powered content creation endpoints
   registerContentCreationEndpoints(app);
+
+  // Register call status and pipeline control endpoints
+  registerCallStatusEndpoint(app);
 
   // Register document management routes
   app.use('/api/documents', documentRoutes);
