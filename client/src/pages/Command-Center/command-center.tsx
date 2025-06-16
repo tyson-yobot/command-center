@@ -9260,49 +9260,7 @@ export default function CommandCenter() {
         onClose={() => setShowManualCallModal(false)} 
       />
 
-      {/* Bot Cloning Pipeline - Moved to Bottom */}
-      <div className="mt-12 mb-8">
-        <Card className="bg-white/5 backdrop-blur-sm border border-green-400/50 relative">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center justify-between">
-              <div className="flex items-center">
-                <Settings className="w-5 h-5 mr-2 text-green-400" />
-                🤖 Bot Cloning Pipeline
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => toggleSection('bot-cloning')}
-                  className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                >
-                  {collapsedSections['bot-cloning'] ? 
-                    <ChevronDown className="w-4 h-4" /> : 
-                    <ChevronUp className="w-4 h-4" />
-                  }
-                </Button>
-              </div>
-              <Badge className="bg-green-600 text-white">Pipeline</Badge>
-            </CardTitle>
-          </CardHeader>
-          {!collapsedSections['bot-cloning'] && (
-            <CardContent>
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-green-400/30">
-                  <span className="text-slate-300 text-sm">Active Clones:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '3' : liveSystemData?.activeBots || ''}</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-blue-400/30">
-                  <span className="text-slate-300 text-sm">Deployed Today:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '1' : liveSystemData?.deploymentsToday || ''}</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-purple-400/30">
-                  <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '96.8%' : liveSystemData?.successRate || ''}</span>
-                </div>
-              </div>
-            </CardContent>
-          )}
-        </Card>
-      </div>
+
 
       {/* Export Dashboard Modal */}
       {showExportModal && (
