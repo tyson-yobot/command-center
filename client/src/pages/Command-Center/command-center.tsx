@@ -3041,21 +3041,21 @@ export default function CommandCenter() {
               )}
             </Card>
 
-            {/* Top-Center: Voice & Communication (Dominant) */}
+            {/* Top-Center: Voice Engine Suite (Unified) */}
             <Card className="lg:col-span-2 bg-gradient-to-br from-green-900/60 to-emerald-800/40 backdrop-blur-sm border border-green-400 relative shadow-lg shadow-green-400/20">
               <CardHeader>
                 <CardTitle className="text-white flex items-center justify-between text-xl">
                   <div className="flex items-center">
-                    <Mic className="w-6 h-6 mr-3 text-green-400" />
-                    📞 Voice & Communication Center
-                    <Badge className="ml-3 bg-green-500 text-white text-sm px-3 py-1">DOMINANT</Badge>
+                    <Headphones className="w-6 h-6 mr-3 text-green-400" />
+                    🎙️ Voice Engine Suite
+                    <Badge className="ml-3 bg-green-500 text-white text-sm px-3 py-1">UNIFIED</Badge>
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => toggleSection('voice-communication')}
+                      onClick={() => toggleSection('voice-engine')}
                       className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
                     >
-                      {collapsedSections['voice-communication'] ? 
+                      {collapsedSections['voice-engine'] ? 
                         <ChevronDown className="w-4 h-4" /> : 
                         <ChevronUp className="w-4 h-4" />
                       }
@@ -3064,74 +3064,100 @@ export default function CommandCenter() {
                   <Badge className="bg-red-600 text-white">{currentSystemMode === 'test' ? '🔴 Live' : ''}</Badge>
                 </CardTitle>
               </CardHeader>
-              {!collapsedSections['voice-communication'] && (
+              {!collapsedSections['voice-engine'] && (
                 <CardContent>
-                  <div className="grid grid-cols-1 gap-3">
-                    <Button
-                      onClick={handleStartPipelineCalls}
-                      className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-between p-3 border border-green-500"
-                    >
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {/* Voice Command Center */}
+                    <div className="space-y-3">
+                      <h4 className="text-green-300 font-semibold flex items-center">
+                        <Mic className="w-4 h-4 mr-2" />
+                        Voice Command Center
+                      </h4>
+                      <Button
+                        onClick={handleStartPipelineCalls}
+                        className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-between p-3 border border-green-500"
+                      >
+                        <div className="flex items-center">
+                          <span className="text-xl mr-3">🚀</span>
+                          <span>Start Pipeline Calls</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <div className="w-1 h-3 bg-green-300 rounded animate-pulse"></div>
+                          <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-75"></div>
+                          <div className="w-1 h-4 bg-green-300 rounded animate-pulse delay-150"></div>
+                          <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-300"></div>
+                        </div>
+                      </Button>
+                    
+                      <Button
+                        onClick={handleStopPipelineCalls}
+                        className="w-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-between p-3 border border-red-500"
+                      >
+                        <div className="flex items-center">
+                          <span className="text-xl mr-3">🛑</span>
+                          <span>End Pipeline Calls</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <div className="w-2 h-2 bg-red-300 rounded-full animate-pulse"></div>
+                          <span className="text-red-200 text-xs">EMERGENCY</span>
+                        </div>
+                      </Button>
+                    </div>
+                    
+                    {/* Voice Analytics & Call Monitoring */}
+                    <div className="space-y-3">
+                      <h4 className="text-green-300 font-semibold flex items-center">
+                        <Activity className="w-4 h-4 mr-2" />
+                        Voice Analytics & Call Monitoring
+                      </h4>
+                      
+                      <Button
+                        onClick={() => setShowManualCallModal(true)}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-between p-3 border border-blue-500"
+                      >
+                        <div className="flex items-center">
+                          <span className="text-xl mr-3">📞</span>
+                          <span>Manual Call Start</span>
+                        </div>
+                        <div className="w-2 h-2 bg-blue-300 rounded-full animate-pulse"></div>
+                      </Button>
+                      
+                      <Button
+                        onClick={() => setShowVoiceRecordings(!showVoiceRecordings)}
+                        className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-between p-3 border border-purple-500"
+                      >
+                        <div className="flex items-center">
+                          <span className="text-xl mr-3">📊</span>
+                          <span>Conversation Analytics</span>
+                        </div>
+                        <Badge className="bg-purple-700 text-white text-xs">UNIFIED</Badge>
+                      </Button>
+                      
+                      <Button
+                        onClick={() => setShowCreateVoiceCallModal(true)}
+                        className="w-full bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-between p-3 border border-orange-500"
+                      >
+                        <div className="flex items-center">
+                          <span className="text-xl mr-3">🎤</span>
+                          <span>Voice Synthesis Studio</span>
+                        </div>
+                        <Badge className="bg-orange-700 text-white text-xs">STUDIO</Badge>
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  {/* Voice Status Indicator */}
+                  <div className="mt-4 p-3 bg-white/5 rounded-lg border border-green-400/30">
+                    <div className="flex items-center justify-between">
                       <div className="flex items-center">
-                        <span className="text-xl mr-3">🚀</span>
-                        <span>Start Pipeline Calls</span>
+                        <div className={`w-3 h-3 rounded-full mr-3 ${micStatus === 'listening' ? 'bg-green-400 animate-pulse' : micStatus === 'processing' ? 'bg-yellow-400' : 'bg-gray-400'}`}></div>
+                        <span className="text-white font-medium">Voice Status: {micStatus === 'listening' ? 'Listening' : micStatus === 'processing' ? 'Processing' : 'Ready'}</span>
                       </div>
-                      {/* Voice waveform meter for Start Pipeline Calls */}
-                      <div className="flex items-center space-x-1">
-                        <div className="w-1 h-3 bg-green-300 rounded animate-pulse"></div>
-                        <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-75"></div>
-                        <div className="w-1 h-4 bg-green-300 rounded animate-pulse delay-150"></div>
-                        <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-300"></div>
+                      <div className="text-green-300 text-sm">
+                        {realTimeTranscript && `"${realTimeTranscript}"`}
                       </div>
-                    </Button>
-                  
-                  <Button
-                    onClick={handleStopPipelineCalls}
-                    className="bg-red-600 hover:bg-red-700 text-white flex items-center justify-between p-3 border border-red-500"
-                  >
-                    <div className="flex items-center">
-                      <span className="text-xl mr-3">🛑</span>
-                      <span>End Pipeline Calls</span>
                     </div>
-                    {/* Emergency indicator for terminate action */}
-                    <div className="flex items-center space-x-1">
-                      <div className="w-2 h-2 bg-red-300 rounded-full animate-pulse"></div>
-                      <span className="text-red-200 text-xs">EMERGENCY</span>
-                    </div>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => setShowManualCallModal(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-start p-3 border border-blue-500"
-                  >
-                    <span className="text-xl mr-3">📞</span>
-                    <span>Manual Call Start</span>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleVoiceToggle}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-between p-3 border border-green-500"
-                  >
-                    <div className="flex items-center">
-                      <span className="text-xl mr-3">🎙️</span>
-                      <span>Live Voice Command</span>
-                    </div>
-                    {/* Voice waveform meter for Live Voice Command */}
-                    <div className="flex items-center space-x-1">
-                      <div className="w-1 h-2 bg-green-300 rounded animate-pulse"></div>
-                      <div className="w-1 h-4 bg-green-300 rounded animate-pulse delay-100"></div>
-                      <div className="w-1 h-3 bg-green-300 rounded animate-pulse delay-200"></div>
-                      <div className="w-1 h-5 bg-green-300 rounded animate-pulse delay-300"></div>
-                    </div>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => window.open('https://app-na2.hubspot.com/contacts/242375511/objects/0-1/views/all/list', '_blank')}
-                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-start p-3 border border-orange-500"
-                  >
-                    <span className="text-xl mr-3">🔗</span>
-                    <span>Sync HubSpot Contacts</span>
-                  </Button>
-                </div>
+                  </div>
               </CardContent>
               )}
             </Card>
