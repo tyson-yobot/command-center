@@ -152,6 +152,15 @@ export default function CommandCenter() {
     refetchInterval: 120000,
     staleTime: 60000,
   });
+
+  const { data: liveSystemData } = useQuery({ 
+    queryKey: ['/api/system-health', currentSystemMode],
+    queryFn: () => fetch('/api/system-health', {
+      headers: { 'x-system-mode': currentSystemMode }
+    }).then(res => res.json()),
+    refetchInterval: 30000,
+    staleTime: 15000,
+  });
   
   const [isListening, setIsListening] = React.useState(false);
   const [userInitiatedVoice, setUserInitiatedVoice] = React.useState(false);
@@ -8006,7 +8015,6 @@ export default function CommandCenter() {
         </Card>
       </div>
 
-    </div>
     </div>
   );
 }
