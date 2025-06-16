@@ -5,6 +5,7 @@ import CommandCenter from "./pages/Command-Center/command-center";
 import LeadScraper from "./pages/Lead-Scraper/lead-scraper";
 import ControlCenter from "./pages/Control-Center/control-center";
 import Mobile from "./pages/Mobile/mobile";
+import { PersistentChatWidget } from "./components/persistent-chat-widget";
 
 
 
@@ -39,6 +40,9 @@ function Router() {
           </div>
         </Route>
       </Switch>
+      
+      {/* Persistent Chat Widget - Available on all pages */}
+      <PersistentChatWidget />
     </div>
   );
 }

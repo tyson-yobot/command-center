@@ -46,6 +46,8 @@ import OpenAI from "openai";
 import { generateSocialMediaPost, generateEmailCampaign, postToSocialMedia, sendEmailCampaign } from './contentCreator';
 import * as ElevenLabs from './elevenlabs';
 import { airtableLive } from './airtableLiveIntegration';
+import { ragChatService } from './ragChatService';
+import { zendeskService } from './zendeskService';
 
 // Initialize OpenAI
 const openai = new OpenAI({
@@ -3217,6 +3219,133 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
 
+
+  // Chat Widget & RAG Integration Routes
+  app.post('/api/chat/rag-query', async (req, res) => {
+    try {
+      const { query, context } = req.body;
+      
+      if (!query) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Query is required' 
+        });
+      }
+
+      const response = await ragChatService.processQuery({ query, context: context || 'yobot_support' });
+      
+      res.json({
+        success: true,
+        ...response
+      });
+    } catch (error) {
+      console.error('RAG query error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to process query',
+        reply: "I'm experiencing technical difficulties. Let me create a support ticket for you so our team can assist directly.",
+        confidence: 0,
+        sources: [],
+        escalationNeeded: true
+      });
+    }
+  });
+
+  // Zendesk Integration Routes
+  app.post('/api/zendesk/create-ticket', async (req, res) => {
+    try {
+      const { subject, description, priority, tags } = req.body;
+      
+      if (!subject || !description) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Subject and description are required' 
+        });
+      }
+
+      const ticket = await zendeskService.createTicket({
+        subject,
+        description,
+        priority: priority || 'normal',
+        tags: tags || ['chat_widget', 'yobot']
+      });
+      
+      res.json({
+        success: true,
+        ticket
+      });
+    } catch (error) {
+      console.error('Zendesk ticket creation error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to create support ticket' 
+      });
+    }
+  });
+
+  app.get('/api/zendesk/tickets', async (req, res) => {
+    try {
+      const { status } = req.query;
+      const tickets = await zendeskService.getTickets({ 
+        status: status as string 
+      });
+      
+      const stats = await zendeskService.getTicketStats();
+      
+      res.json({
+        success: true,
+        tickets,
+        ...stats
+      });
+    } catch (error) {
+      console.error('Zendesk tickets fetch error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to fetch tickets' 
+      });
+    }
+  });
+
+  app.post('/api/zendesk/open-chat', async (req, res) => {
+    try {
+      // For now, this creates a ticket for chat session
+      const ticket = await zendeskService.createTicket({
+        subject: 'Live Chat Session Request',
+        description: 'User requested live chat support from YoBot Command Center',
+        priority: 'normal',
+        tags: ['live_chat', 'chat_widget']
+      });
+      
+      res.json({
+        success: true,
+        message: 'Chat session initiated',
+        ticket
+      });
+    } catch (error) {
+      console.error('Zendesk chat open error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to open chat session' 
+      });
+    }
+  });
+
+  // Knowledge base stats endpoint
+  app.get('/api/chat/knowledge-stats', async (req, res) => {
+    try {
+      const stats = ragChatService.getKnowledgeStats();
+      res.json({
+        success: true,
+        data: stats
+      });
+    } catch (error) {
+      console.error('Knowledge stats error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to get knowledge stats' 
+      });
+    }
+  });
 
   // Register production sales order webhook
   registerProductionSalesOrder(app);
