@@ -24,6 +24,7 @@ import { registerAuditEscalation } from "./auditEscalation";
 import { registerCallMonitoring } from "./callMonitoring";
 import { registerKnowledgeRoutes } from "./knowledgeRoutes";
 import { registerCallLogRoutes } from "./callLogRoutes";
+import { registerCommandCenterMetrics } from "./commandCenterMetrics";
 
 import { initializeLiveDataWipe, secureAdminDataWipe } from "./dataWipe";
 
@@ -294,6 +295,9 @@ print(json.dumps(result))
   // Register database-driven routes for persistent storage
   registerKnowledgeRoutes(app);
   registerCallLogRoutes(app);
+
+  // Register Command Center Metrics for all button actions
+  registerCommandCenterMetrics(app);
 
   // Register document management routes
   app.use('/api/documents', documentRoutes);
