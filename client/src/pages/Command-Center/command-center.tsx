@@ -174,12 +174,7 @@ export default function CommandCenter() {
   const [realTimeTranscript, setRealTimeTranscript] = React.useState('');
   const [showAnalyticsModal, setShowAnalyticsModal] = React.useState(false);
   const [showCalendarUpload, setShowCalendarUpload] = React.useState(false);
-  const [exportConfig, setExportConfig] = useState({
-    format: 'pdf',
-    sections: ['smartspend', 'voice_analytics', 'botalytics'],
-    reportType: 'weekly',
-    dateRange: 'last_7_days'
-  });
+
   const [activeCalls, setActiveCalls] = React.useState(0);
   const [dashboardPreset, setDashboardPreset] = React.useState('full');
   const [collapsedSections, setCollapsedSections] = React.useState<{[key: string]: boolean}>({});
@@ -222,6 +217,7 @@ export default function CommandCenter() {
   const [showSupportTicketModal, setShowSupportTicketModal] = useState(false);
   const [showFollowUpModal, setShowFollowUpModal] = useState(false);
   const [showSMSModal, setShowSMSModal] = useState(false);
+
   const [showCreateVoiceCallModal, setShowCreateVoiceCallModal] = useState(false);
   const { toast } = useToast();
 

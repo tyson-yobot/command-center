@@ -275,6 +275,7 @@ print(json.dumps(result))
 
   // Register real dashboard data endpoints (bypasses all filtering)
   registerRealDashboardEndpoints(app);
+  registerCalendarEndpoints(app);
 
   // Register document management routes
   app.use('/api/documents', documentRoutes);
