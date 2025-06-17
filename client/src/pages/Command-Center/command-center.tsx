@@ -3735,19 +3735,19 @@ export default function CommandCenter() {
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="flex justify-between">
                           <span className="text-purple-300 text-sm">Budget Efficiency:</span>
-                          <span className="text-green-400 font-bold">85.2%</span>
+                          <span className="text-slate-400 font-bold">--</span>
                         </div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="flex justify-between">
                           <span className="text-purple-300 text-sm">Cost Per Lead:</span>
-                          <span className="text-white font-bold">$24.50</span>
+                          <span className="text-slate-400 font-bold">--</span>
                         </div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="flex justify-between">
                           <span className="text-purple-300 text-sm">ROI:</span>
-                          <span className="text-green-400 font-bold">312%</span>
+                          <span className="text-slate-400 font-bold">--</span>
                         </div>
                       </div>
                     </div>
@@ -3763,19 +3763,19 @@ export default function CommandCenter() {
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="flex justify-between">
                           <span className="text-purple-300 text-sm">AI Accuracy:</span>
-                          <span className="text-green-400 font-bold">94.2%</span>
+                          <span className="text-slate-400 font-bold">--</span>
                         </div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="flex justify-between">
                           <span className="text-purple-300 text-sm">Interactions:</span>
-                          <span className="text-blue-400 font-bold">1,247</span>
+                          <span className="text-slate-400 font-bold">--</span>
                         </div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="flex justify-between">
                           <span className="text-purple-300 text-sm">Learning Rate:</span>
-                          <span className="text-purple-400 font-bold">78%</span>
+                          <span className="text-slate-400 font-bold">--</span>
                         </div>
                       </div>
                     </div>
@@ -3863,11 +3863,11 @@ export default function CommandCenter() {
                     <div className="space-y-3">
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-sm text-red-300 mb-1">Uptime</div>
-                        <div className="text-2xl font-bold text-green-400">99.8%</div>
+                        <div className="text-2xl font-bold text-slate-400">--</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-sm text-red-300 mb-1">Response Time</div>
-                        <div className="text-lg font-bold text-white">145ms</div>
+                        <div className="text-lg font-bold text-slate-400">--</div>
                       </div>
                     </div>
                   </div>
@@ -3881,11 +3881,11 @@ export default function CommandCenter() {
                     <div className="space-y-3">
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-sm text-red-300 mb-1">NPS Score</div>
-                        <div className="text-2xl font-bold text-green-400">8.7</div>
+                        <div className="text-2xl font-bold text-slate-400">--</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-sm text-red-300 mb-1">Active Clients</div>
-                        <div className="text-lg font-bold text-white">24</div>
+                        <div className="text-lg font-bold text-slate-400">--</div>
                       </div>
                     </div>
                   </div>
@@ -8385,19 +8385,19 @@ export default function CommandCenter() {
                     <div className="space-y-3">
                       <div className="flex justify-between">
                         <span className="text-slate-300">Total Subscribers:</span>
-                        <span className="text-white font-bold">2,847</span>
+                        <span className="text-slate-400 font-bold">--</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Open Rate:</span>
-                        <span className="text-green-400 font-bold">24.8%</span>
+                        <span className="text-slate-400 font-bold">--</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Click Rate:</span>
-                        <span className="text-blue-400 font-bold">6.2%</span>
+                        <span className="text-slate-400 font-bold">--</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Growth This Month:</span>
-                        <span className="text-green-400 font-bold">+156</span>
+                        <span className="text-slate-400 font-bold">--</span>
                       </div>
                     </div>
                   </CardContent>
@@ -8468,11 +8468,10 @@ export default function CommandCenter() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {[
-                      { name: "YoBot Feature Update Newsletter", sent: "2,847", opens: "706", clicks: "176", status: "Sent" },
-                      { name: "Weekly Automation Tips", sent: "2,821", opens: "692", clicks: "203", status: "Sent" },
-                      { name: "Holiday Promotion 2024", sent: "0", opens: "0", clicks: "0", status: "Draft" }
-                    ].map((campaign, index) => (
+                    <div className="text-center py-4 text-slate-400">
+                      No campaign data available
+                    </div>
+                    {[].map((campaign, index) => (
                       <div key={index} className="flex items-center justify-between p-3 bg-slate-700/40 rounded border border-green-400/30">
                         <div>
                           <div className="text-white font-medium">{campaign.name}</div>
