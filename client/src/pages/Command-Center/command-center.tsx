@@ -1499,8 +1499,10 @@ export default function CommandCenter() {
       });
       
       if (response.ok) {
-        setVoiceStatus('Voice input active - speech-to-text ready for RAG');
-        setToast({ title: "Voice Input Active", description: "Microphone ready with ElevenLabs support" });
+        if (currentSystemMode === 'test') {
+          setVoiceStatus('Voice input active - speech-to-text ready for RAG');
+          setToast({ title: "Voice Input Active", description: "Microphone ready with ElevenLabs support" });
+        }
       } else {
         setVoiceStatus('Voice input failed');
       }
@@ -1631,7 +1633,9 @@ export default function CommandCenter() {
       });
       
       if (response.ok) {
-        setVoiceStatus('Lead scraper active - Apollo/Apify/Phantom routing ready');
+        if (currentSystemMode === 'test') {
+          setVoiceStatus('Lead scraper active - Apollo/Apify/Phantom routing ready');
+        }
         setToast({ title: "Lead Scraper", description: "Module launched with proper tool routing" });
       } else {
         setVoiceStatus('Lead scraper failed');
@@ -2149,7 +2153,9 @@ export default function CommandCenter() {
         });
       }
     } catch (error) {
-      setVoiceStatus('Support system ready');
+      if (currentSystemMode === 'test') {
+        setVoiceStatus('Support system ready');
+      }
       setToast({
         title: "Support Available",
         description: "Use the chat widget for immediate assistance or try again",
