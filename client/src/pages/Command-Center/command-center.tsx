@@ -1974,7 +1974,7 @@ export default function CommandCenter() {
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (!files || files.length === --) return;
+    if (!files || files.length === 0) return;
 
     setVoiceStatus('Uploading documents to RAG system...');
     setDocumentsLoading(true);
@@ -2015,7 +2015,7 @@ export default function CommandCenter() {
           timestamp: new Date().toLocaleTimeString(),
           type: 'File',
           category: 'document',
-          result: successCount > -- ? 'Success' : 'Error'
+          result: successCount > 0 ? 'Success' : 'Error'
         };
         setMemoryActivityLog(prev => [...prev, logEntry]);
         
@@ -2380,7 +2380,7 @@ export default function CommandCenter() {
   };
 
   const deleteSelectedDocuments = async () => {
-    if (selectedDocuments.length === --) {
+    if (selectedDocuments.length === 0) {
       setToast({
         title: "No Selection",
         description: "Please select documents to delete",
@@ -2576,7 +2576,7 @@ export default function CommandCenter() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `yobot-report-${new Date().toISOString().split('T')[--]}.pdf`;
+        a.download = `yobot-report-${new Date().toISOString().split('T')[0]}.pdf`;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
@@ -2690,7 +2690,7 @@ export default function CommandCenter() {
             requestData = {
               clientName: 'Manual Booking',
               email: 'booking@client.com',
-              date: new Date().toISOString().split('T')[--],
+              date: new Date().toISOString().split('T')[0],
               time: '10:00',
               service: 'Consultation'
             };
@@ -2985,7 +2985,7 @@ export default function CommandCenter() {
                 </div>
                 <p className="text-slate-300 mb-4">
                   Step {demoStep + 1} of 5: {
-                    demoStep === -- ? "Core Automation Overview" :
+                    demoStep === 0 ? "Core Automation Overview" :
                     demoStep === 1 ? "Voice Operations Demo" :
                     demoStep === 2 ? "AI Intelligence Features" :
                     demoStep === 3 ? "SmartSpend Integration" :
@@ -3286,7 +3286,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Live Pipeline Banner */}
-        {(currentSystemMode === 'test' || (liveActivityData?.data?.callsInProgress > --)) && (
+        {(currentSystemMode === 'test' || (liveActivityData?.data?.callsInProgress > 0)) && (
           <div className="mb-6 p-4 bg-green-900/30 border border-green-400 rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -4058,7 +4058,7 @@ export default function CommandCenter() {
           style={{ display: 'none' }}
           accept=".ics,.csv"
           onChange={(e) => {
-            const file = e.target.files?.[--];
+            const file = e.target.files?.[0];
             if (file) {
               setVoiceStatus('Uploading calendar...');
               // Calendar upload implementation here
@@ -4520,7 +4520,7 @@ export default function CommandCenter() {
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Last Execution:</span>
                   <div className="flex items-center space-x-1">
-                    {liveActivityData?.data?.recentExecutions?.length > -- && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
+                    {liveActivityData?.data?.recentExecutions?.length > 0 && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
                     <span className="text-green-400 font-bold">{liveActivityData?.data?.lastExecution ? new Date(liveActivityData.data.lastExecution).toLocaleTimeString() : ''}</span>
                   </div>
                 </div>
@@ -5070,7 +5070,7 @@ export default function CommandCenter() {
                     </div>
                   </>
                 ) : (
-                  liveActivityData && Array.isArray(liveActivityData) && liveActivityData.length > -- ? (
+                  liveActivityData && Array.isArray(liveActivityData) && liveActivityData.length > 0 ? (
                     liveActivityData.map((item: any, index: number) => (
                       <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                         <div>
@@ -5749,10 +5749,10 @@ export default function CommandCenter() {
                           >
                             {voicesLoading ? (
                               <option>Loading voices...</option>
-                            ) : availableVoices.length > -- ? (
+                            ) : availableVoices.length > 0 ? (
                               <>
                                 {/* Custom Voices First */}
-                                {availableVoices.filter(voice => voice.category !== 'premade').length > -- && (
+                                {availableVoices.filter(voice => voice.category !== 'premade').length > 0 && (
                                   <>
                                     <option disabled style={{fontWeight: 'bold', color: '#10B981'}}>Your Custom Voices</option>
                                     {availableVoices
@@ -5768,7 +5768,7 @@ export default function CommandCenter() {
                                 )}
                                 
                                 {/* Premade Voices */}
-                                {availableVoices.filter(voice => voice.category === 'premade').length > -- && (
+                                {availableVoices.filter(voice => voice.category === 'premade').length > 0 && (
                                   <>
                                     <option disabled style={{fontWeight: 'bold', color: '#6366F1'}}>ElevenLabs Premade</option>
                                     {availableVoices
@@ -5797,7 +5797,7 @@ export default function CommandCenter() {
                         <div className="bg-purple-900/40 rounded p-2 border border-purple-400/30 text-xs">
                           <div className="flex items-center justify-between">
                             <span className="text-purple-200">
-                              {availableVoices.length > -- 
+                              {availableVoices.length > 0 
                                 ? `${availableVoices.length} voices loaded`
                                 : 'API key required'
                               }
@@ -5930,7 +5930,7 @@ export default function CommandCenter() {
                     </Button>
                     <Button 
                       onClick={async () => {
-                        if (selectedRecordings.length === --) {
+                        if (selectedRecordings.length === 0) {
                           alert('Please select recordings to edit');
                           return;
                         }
@@ -5946,7 +5946,7 @@ export default function CommandCenter() {
                           console.error('Failed to delete selected recordings:', error);
                         }
                       }}
-                      disabled={selectedRecordings.length === --}
+                      disabled={selectedRecordings.length === 0}
                       className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm disabled:opacity-50"
                     >
                       <Edit className="w-4 h-4 mr-2" />
@@ -5956,7 +5956,7 @@ export default function CommandCenter() {
                   
                   {/* Recording List */}
                   <div className="space-y-2 max-h-40 overflow-y-auto">
-                    {showRecordingList && voiceRecordings.length > -- ? (
+                    {showRecordingList && voiceRecordings.length > 0 ? (
                       voiceRecordings.map((recording) => (
                         <div 
                           key={recording.id}
@@ -5991,7 +5991,7 @@ export default function CommandCenter() {
                           </div>
                         </div>
                       ))
-                    ) : showRecordingList && voiceRecordings.length === -- ? (
+                    ) : showRecordingList && voiceRecordings.length === 0 ? (
                       <div className="text-slate-400 text-sm text-center py-4">
                         No voice recordings found
                       </div>
@@ -6078,7 +6078,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button 
                     onClick={deleteSelectedDocuments}
-                    disabled={selectedDocuments.length === --}
+                    disabled={selectedDocuments.length === 0}
                     className="bg-red-600 hover:bg-red-700 text-white border border-red-400"
                   >
                     Delete Selected ({selectedDocuments.length})
@@ -6089,7 +6089,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-700/40 rounded-lg p-4 border border-blue-400">
                   <h4 className="text-white font-medium mb-3">📄 Uploaded Documents</h4>
                   <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {uploadedDocuments.length > -- ? uploadedDocuments.map((doc) => (
+                    {uploadedDocuments.length > 0 ? uploadedDocuments.map((doc) => (
                       <div 
                         key={doc.id}
                         className="flex items-center justify-between p-3 bg-slate-800/60 rounded border border-blue-400"
@@ -6201,7 +6201,7 @@ export default function CommandCenter() {
                     🧠 Latest Memory Activity Log
                   </h4>
                   <div className="space-y-2 max-h-40 overflow-y-auto">
-                    {memoryActivityLog.length > -- ? memoryActivityLog.slice(-5).reverse().map((entry, index) => (
+                    {memoryActivityLog.length > 0 ? memoryActivityLog.slice(-5).reverse().map((entry, index) => (
                       <div key={index} className="flex items-center justify-between p-2 bg-slate-800/60 rounded border border-purple-400">
                         <div className="flex items-center space-x-3">
                           <span className="text-xs text-slate-400">{entry.timestamp}</span>
@@ -6800,7 +6800,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-700/40 rounded-lg p-3 border border-purple-400">
                   <h4 className="text-white font-medium mb-2 text-sm">Recent Activity</h4>
                   <div className="space-y-2 max-h-32 overflow-y-auto">
-                    {recentActivity.length > -- ? recentActivity.map((activity) => (
+                    {recentActivity.length > 0 ? recentActivity.map((activity) => (
                       <div key={activity.id} className="flex items-center justify-between text-xs">
                         <div className="flex items-center space-x-2">
                           <span className={`w-2 h-2 rounded-full ${
@@ -8553,7 +8553,7 @@ export default function CommandCenter() {
           );
         }}
         onDeleteSelected={async () => {
-          if (selectedKnowledgeItems.length === --) {
+          if (selectedKnowledgeItems.length === 0) {
             setToast({
               title: "No Selection",
               description: "Please select items to delete",
@@ -8614,7 +8614,7 @@ export default function CommandCenter() {
             </div>
             
             <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-[400px]">
-              {chatMessages.length === -- ? (
+              {chatMessages.length === 0 ? (
                 <div className="text-center py-8">
                   <div className="bg-blue-900/60 rounded-lg p-4 border border-blue-400/50">
                     <MessageCircle className="w-8 h-8 mx-auto mb-2 text-blue-400" />
@@ -8830,7 +8830,7 @@ export default function CommandCenter() {
                       >
                         <span className="text-xs font-medium">{dayName}</span>
                         <span className="text-lg font-bold">{dayNumber}</span>
-                        {i === -- && <span className="text-xs text-blue-400">Today</span>}
+                        {i === 0 && <span className="text-xs text-blue-400">Today</span>}
                       </Button>
                     );
                   })}
@@ -9114,13 +9114,13 @@ export default function CommandCenter() {
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Client Calls:</span>
                     <span className="text-green-400 font-medium">
-                      {currentSystemMode === 'test' ? (selectedDay === -- ? '6' : selectedDay === 1 ? '4' : selectedDay === 2 ? '3' : selectedDay === 3 ? '4' : selectedDay === 4 ? '3' : selectedDay === 5 ? '3' : '2') : ''}
+                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '6' : selectedDay === 1 ? '4' : selectedDay === 2 ? '3' : selectedDay === 3 ? '4' : selectedDay === 4 ? '3' : selectedDay === 5 ? '3' : '2') : ''}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Internal Meetings:</span>
                     <span className="text-blue-400 font-medium">
-                      {currentSystemMode === 'test' ? (selectedDay === -- ? '9' : selectedDay === 1 ? '8' : selectedDay === 2 ? '7' : selectedDay === 3 ? '7' : selectedDay === 4 ? '6' : selectedDay === 5 ? '5' : '3') : ''}
+                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '9' : selectedDay === 1 ? '8' : selectedDay === 2 ? '7' : selectedDay === 3 ? '7' : selectedDay === 4 ? '6' : selectedDay === 5 ? '5' : '3') : ''}
                     </span>
                   </div>
                 </div>
