@@ -4117,11 +4117,11 @@ export default function CommandCenter() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">NPS Score:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '8.2' : ''}</span>
+                    <span className="text-green-400 font-bold">0</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Satisfaction:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '94%' : ''}</span>
+                    <span className="text-green-400 font-bold">0%</span>
                   </div>
                 </div>
               </CardContent>
@@ -4147,7 +4147,7 @@ export default function CommandCenter() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Uptime:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '99.9%' : ''}</span>
+                    <span className="text-green-400 font-bold">0%</span>
                   </div>
                 </div>
               </CardContent>
@@ -4173,19 +4173,19 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">iOS App Status:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? 'Synced' : ''}</span>
+                    <span className="text-green-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Android App Status:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? 'Synced' : ''}</span>
+                    <span className="text-green-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Last Sync:</span>
-                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '2m ago' : ''}</span>
+                    <span className="text-white font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Push Alerts:</span>
-                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '3 pending' : ''}</span>
+                    <span className="text-blue-400 font-bold">0</span>
                   </div>
                 </div>
               </CardContent>
@@ -4206,7 +4206,7 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Last PDF Generated:</span>
-                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '15m ago' : ''}</span>
+                    <span className="text-white font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Export Status:</span>
@@ -4672,7 +4672,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Usage %:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '87.4%' : (automationPerformance?.data?.usagePercentage || '')}</span>
+                  <span className="text-green-400 font-bold">0%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">System Load:</span>
