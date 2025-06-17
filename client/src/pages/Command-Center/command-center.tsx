@@ -3082,6 +3082,26 @@ export default function CommandCenter() {
                         {preset.label}
                       </Button>
                     ))}
+                    <Button
+                      onClick={async () => {
+                        try {
+                          await CommandCenterActions.systemMonitoring('Quick Ops Access', {
+                            triggeredBy: 'Command Center User',
+                            additionalData: { tabSwitch: 'automation-ops' }
+                          });
+                          setActiveTab('automation-ops');
+                        } catch (error) {
+                          console.error('Quick Ops error:', error);
+                          setActiveTab('automation-ops');
+                        }
+                      }}
+                      size="sm"
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                      title="Quick access to automation operations"
+                    >
+                      <Zap className="w-4 h-4 mr-1" />
+                      Quick Ops
+                    </Button>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
@@ -3107,21 +3127,21 @@ export default function CommandCenter() {
                   <Button
                     onClick={async () => {
                       try {
-                        await CommandCenterActions.uploadCalendar({
+                        await CommandCenterActions.systemMonitoring('Admin Tools Access', {
                           triggeredBy: 'Command Center User',
-                          additionalData: { action: 'Calendar Upload/Sync' }
+                          additionalData: { tabSwitch: 'admin-tools', accessLevel: 'administrative' }
                         });
-                        setShowCalendarUpload(true);
+                        setActiveTab('admin-tools');
                       } catch (error) {
-                        console.error('Calendar Sync error:', error);
-                        setShowCalendarUpload(true);
+                        console.error('Admin Tools error:', error);
+                        setActiveTab('admin-tools');
                       }
                     }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                    title="Upload calendar files or sync with Google Calendar"
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                    title="Admin Tools - Administrative controls and system management"
                   >
-                    <Calendar className="w-4 h-4 mr-2" />
-                    Calendar Sync
+                    <Shield className="w-4 h-4 mr-2" />
+                    Admin Tools
                   </Button>
                 </div>
               </div>
@@ -3129,152 +3149,7 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Original Voice Control Buttons */}
-        <div className="mb-8 bg-white/10 backdrop-blur-sm border border-blue-400 rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <span className="text-white font-medium">Quick Actions</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Button
-                onClick={handleVoiceToggle}
-                className={`${isListening ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white`}
-              >
-                {isListening ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
-                {isListening ? 'Stop Voice' : 'Start Voice'}
-              </Button>
-              <Button
-                onClick={async () => {
-                  try {
-                    await CommandCenterActions.systemMonitoring('Voice Recordings View', {
-                      triggeredBy: 'Command Center User',
-                      additionalData: { action: showVoiceRecordings ? 'hide' : 'show' }
-                    });
-                    setShowVoiceRecordings(!showVoiceRecordings);
-                  } catch (error) {
-                    console.error('Voice Recordings error:', error);
-                    setShowVoiceRecordings(!showVoiceRecordings);
-                  }
-                }}
-                variant="outline"
-                className="border-blue-400 text-blue-400 hover:bg-blue-600/20"
-                title="View and manage voice recordings"
-              >
-                <Headphones className="w-4 h-4 mr-2" />
-                Recordings
-              </Button>
-              <Button
-                onClick={async () => {
-                  try {
-                    await CommandCenterActions.systemMonitoring('Quick Ops Access', {
-                      triggeredBy: 'Command Center User',
-                      additionalData: { tabSwitch: 'automation-ops' }
-                    });
-                    setActiveTab('automation-ops');
-                  } catch (error) {
-                    console.error('Quick Ops error:', error);
-                    setActiveTab('automation-ops');
-                  }
-                }}
-                variant="outline"
-                className="border-green-400 text-green-400 hover:bg-green-600/20"
-                title="Quick access to automation operations"
-              >
-                <Zap className="w-4 h-4 mr-2" />
-                Quick Ops
-              </Button>
-              <Button
-                onClick={async () => {
-                  try {
-                    await CommandCenterActions.systemMonitoring('System Tools Access', {
-                      triggeredBy: 'Command Center User',
-                      additionalData: { tabSwitch: 'system-tools' }
-                    });
-                    setActiveTab('system-tools');
-                  } catch (error) {
-                    console.error('System Tools error:', error);
-                    setActiveTab('system-tools');
-                  }
-                }}
-                variant="outline"
-                className="border-amber-400 text-amber-400 hover:bg-amber-600/20 flex items-center"
-                title="System - Access advanced monitoring, diagnostics, and administrative tools for platform management"
-              >
-                <Settings className="w-4 h-4 mr-2" />
-                System
-                <HelpCircle className="w-3 h-3 ml-1 text-amber-300 opacity-70" />
-              </Button>
-              <Button
-                onClick={handleExportDashboard}
-                variant="outline"
-                className="border-green-400 text-green-400 hover:bg-green-600/20 flex items-center"
-                title="Export Data - Download dashboard metrics and analytics as JSON file for client presentations"
-              >
-                <FileDown className="w-4 h-4 mr-2" />
-                Export
-                <HelpCircle className="w-3 h-3 ml-1 text-green-300 opacity-70" />
-              </Button>
-              <Button
-                onClick={async () => {
-                  try {
-                    await CommandCenterActions.systemMonitoring('Admin Tools Access', {
-                      triggeredBy: 'Command Center User',
-                      additionalData: { tabSwitch: 'admin-tools', accessLevel: 'administrative' }
-                    });
-                    setActiveTab('admin-tools');
-                  } catch (error) {
-                    console.error('Admin Tools error:', error);
-                    setActiveTab('admin-tools');
-                  }
-                }}
-                variant="outline"
-                className="border-red-400 text-red-400 hover:bg-red-600/20 flex items-center"
-                title="Admin Tools - Administrative controls and system management"
-              >
-                <Shield className="w-4 h-4 mr-2" />
-                Admin Tools
-              </Button>
 
-            </div>
-          </div>
-          {isListening && (
-            <div className="mt-3 space-y-2">
-              <div className="text-sm text-green-400 flex items-center">
-                <div className="w-2 h-2 bg-red-400 rounded-full mr-2 animate-pulse"></div>
-                🎙️ Speak Now... Voice commands ready. Say "YoBot" to activate commands.
-              </div>
-              
-              {/* Voice Waveform Animation */}
-              <div className="flex items-center space-x-1 ml-4">
-                <div className="w-1 h-3 bg-green-300 rounded animate-pulse"></div>
-                <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-75"></div>
-                <div className="w-1 h-4 bg-green-300 rounded animate-pulse delay-150"></div>
-                <div className="w-1 h-2 bg-green-300 rounded animate-pulse delay-300"></div>
-                <div className="w-1 h-3 bg-green-300 rounded animate-pulse delay-500"></div>
-                <div className="w-1 h-1 bg-green-300 rounded animate-pulse delay-700"></div>
-                <div className="w-1 h-3 bg-green-300 rounded animate-pulse delay-900"></div>
-              </div>
-              
-              {/* Cancel Button */}
-              <Button
-                onClick={toggleVoiceListening}
-                variant="outline"
-                size="sm"
-                className="ml-4 border-red-400 text-red-400 hover:bg-red-600/20"
-              >
-                ❌ Cancel
-              </Button>
-              
-              {/* Real-time Transcription */}
-              {realTimeTranscript && (
-                <div className="ml-4 p-2 bg-white/5 rounded border border-blue-400/30">
-                  <div className="text-xs text-blue-300">Transcribing:</div>
-                  <div className="text-white text-sm">"{realTimeTranscript}"</div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
 
         {/* Live Pipeline Banner */}
         {(currentSystemMode === 'test' || (liveActivityData?.data?.callsInProgress > 0)) && (
