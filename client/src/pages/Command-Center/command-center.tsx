@@ -3453,7 +3453,7 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                       <Button
                         onClick={handleUploadDocs}
-                        className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center p-4 h-20 border border-slate-500"
+                        className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center p-4 h-20 border border-blue-500"
                         title="PDF & Knowledge Upload"
                       >
                         <div className="text-center">
@@ -3464,7 +3464,7 @@ export default function CommandCenter() {
                       
                       <Button
                         onClick={handleViewKnowledge}
-                        className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center p-4 h-20 border border-slate-500"
+                        className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center p-4 h-20 border border-purple-500"
                         title="Knowledge Areas"
                       >
                         <div className="text-center">
@@ -3475,7 +3475,7 @@ export default function CommandCenter() {
                       
                       <Button
                         onClick={handleRunDiagnostics}
-                        className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center p-4 h-20 border border-slate-500"
+                        className="bg-amber-600 hover:bg-amber-700 text-white flex items-center justify-center p-4 h-20 border border-amber-500"
                         title="System Diagnostics"
                       >
                         <div className="text-center">
@@ -6788,7 +6788,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button 
                     onClick={() => setShowTicketHistory(true)}
-                    className="w-full bg-slate-600 hover:bg-slate-700 text-white border border-slate-400"
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white border border-indigo-400"
                     title="View all previous support tickets with status filtering"
                   >
                     <FileText className="w-4 h-4 mr-2" />
@@ -7170,7 +7170,7 @@ export default function CommandCenter() {
                   setShowClearConfirm(false);
                   setDeleteConfirmText('');
                 }}
-                className="flex-1 bg-slate-600 hover:bg-slate-700 text-white"
+                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white"
               >
                 Cancel
               </Button>
@@ -7180,7 +7180,7 @@ export default function CommandCenter() {
                 className={`flex-1 ${
                   deleteConfirmText.toLowerCase() === 'delete'
                     ? 'bg-red-600 hover:bg-red-700 text-white'
-                    : 'bg-slate-600 text-slate-400 cursor-not-allowed'
+                    : 'bg-gray-600 text-gray-400 cursor-not-allowed'
                 }`}
               >
                 Delete Knowledge
