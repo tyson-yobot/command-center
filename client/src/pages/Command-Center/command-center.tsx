@@ -211,12 +211,12 @@ export default function CommandCenter() {
   const [userInitiatedVoice, setUserInitiatedVoice] = React.useState(false);
   const [showEscalation, setShowEscalation] = React.useState(false);
   const [selectedTier, setSelectedTier] = React.useState('All');
-  const [voiceCommand, setVoiceCommand] = React.useState('');
+  const [voiceCommand, setVoiceCommand] = React.useState(null);
   const [automationMode, setAutomationMode] = React.useState(true);
   
   // Enhanced voice command states
   const [micStatus, setMicStatus] = React.useState<'idle' | 'listening' | 'processing'>('idle');
-  const [realTimeTranscript, setRealTimeTranscript] = React.useState('');
+  const [realTimeTranscript, setRealTimeTranscript] = React.useState(null);
   const [showAnalyticsModal, setShowAnalyticsModal] = React.useState(false);
   const [showCalendarUpload, setShowCalendarUpload] = React.useState(false);
 
@@ -228,8 +228,8 @@ export default function CommandCenter() {
   const [currentRecognition, setCurrentRecognition] = React.useState<any>(null);
   
   // Voice recognition states for RAG programming
-  const [queryText, setQueryText] = useState('');
-  const [programmingText, setProgrammingText] = useState('');
+  const [queryText, setQueryText] = useState(null);
+  const [programmingText, setProgrammingText] = useState(null);
   const [voiceStatus, setVoiceStatus] = useState('Ready');
   const recognitionRef = useRef<any>(null);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = React.useState(false);
@@ -237,10 +237,10 @@ export default function CommandCenter() {
   const [availableVoices, setAvailableVoices] = useState<any[]>([]);
   const [voicesLoading, setVoicesLoading] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
-  const [deleteConfirmText, setDeleteConfirmText] = useState('');
-  const [memoryText, setMemoryText] = useState('');
+  const [deleteConfirmText, setDeleteConfirmText] = useState(null);
+  const [memoryText, setMemoryText] = useState(null);
   const [memoryCategory, setMemoryCategory] = useState('general');
-  const [voiceGenerationText, setVoiceGenerationText] = useState('');
+  const [voiceGenerationText, setVoiceGenerationText] = useState(null);
   const [showPublyDashboard, setShowPublyDashboard] = useState(false);
   const [showMailchimpDashboard, setShowMailchimpDashboard] = useState(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
@@ -250,8 +250,8 @@ export default function CommandCenter() {
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
   const [showKnowledgeViewer, setShowKnowledgeViewer] = useState(false);
   const [showDocumentPreview, setShowDocumentPreview] = useState(false);
-  const [previewDocumentId, setPreviewDocumentId] = useState('');
-  const [previewDocumentName, setPreviewDocumentName] = useState('');
+  const [previewDocumentId, setPreviewDocumentId] = useState(null);
+  const [previewDocumentName, setPreviewDocumentName] = useState(null);
   const [selectedKnowledgeItems, setSelectedKnowledgeItems] = useState<string[]>([]);
   const [knowledgeItems, setKnowledgeItems] = useState([]);
   const [memoryActivityLog, setMemoryActivityLog] = useState([]);
@@ -373,45 +373,45 @@ export default function CommandCenter() {
   // Core Automation Modal States
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showTicketHistory, setShowTicketHistory] = useState(false);
-  const [newTicketSubject, setNewTicketSubject] = useState('');
-  const [newTicketDescription, setNewTicketDescription] = useState('');
-  const [newTicketCategory, setNewTicketCategory] = useState('');
+  const [newTicketSubject, setNewTicketSubject] = useState(null);
+  const [newTicketDescription, setNewTicketDescription] = useState(null);
+  const [newTicketCategory, setNewTicketCategory] = useState(null);
   const [newTicketPriority, setNewTicketPriority] = useState('medium');
   
   // Core Automation Form States
   const [bookingForm, setBookingForm] = useState({
-    clientName: '',
+    clientName: null,
     bookingType: 'Demo',
-    dateTime: '',
-    assignedRep: '',
-    notes: ''
+    dateTime: null,
+    assignedRep: null,
+    notes: null
   });
   
   const [supportForm, setSupportForm] = useState({
-    clientName: '',
+    clientName: null,
     priority: 'Normal',
     issueType: 'Tech',
-    description: '',
-    attachments: ''
+    description: null,
+    attachments: null
   });
   
   const [followUpForm, setFollowUpForm] = useState({
-    contactName: '',
+    contactName: null,
     followUpType: 'Call',
-    followUpDate: '',
-    notes: ''
+    followUpDate: null,
+    notes: null
   });
   
   const [smsForm, setSmsForm] = useState({
-    recipient: '',
-    message: '',
-    template: '',
+    recipient: null,
+    message: null,
+    template: null,
     sendNow: true
   });
-  const [newTicketName, setNewTicketName] = useState('');
-  const [newTicketEmail, setNewTicketEmail] = useState('');
+  const [newTicketName, setNewTicketName] = useState(null);
+  const [newTicketEmail, setNewTicketEmail] = useState(null);
   const [chatMessages, setChatMessages] = useState<any[]>([]);
-  const [currentMessage, setCurrentMessage] = useState('');
+  const [currentMessage, setCurrentMessage] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
   const [callDetails, setCallDetails] = useState<any[]>([]);
   
@@ -612,7 +612,7 @@ export default function CommandCenter() {
       if (response.ok) {
         showToastMessage('Booking created and logged to Command Center!', 'success');
         setShowBookingModal(false);
-        setBookingForm({ clientName: '', bookingType: 'Demo', dateTime: '', assignedRep: '', notes: '' });
+        setBookingForm({ clientName: null, bookingType: 'Demo', dateTime: null, assignedRep: null, notes: null });
       }
     } catch (error) {
       showToastMessage('Failed to create booking', 'error');
@@ -636,7 +636,7 @@ export default function CommandCenter() {
       if (response.ok) {
         showToastMessage('Support ticket created and logged to Command Center!', 'success');
         setShowSupportTicketModal(false);
-        setSupportForm({ clientName: '', priority: 'Normal', issueType: 'Tech', description: '', attachments: '' });
+        setSupportForm({ clientName: null, priority: 'Normal', issueType: 'Tech', description: null, attachments: null });
       }
     } catch (error) {
       showToastMessage('Failed to create support ticket', 'error');
@@ -660,7 +660,7 @@ export default function CommandCenter() {
       if (response.ok) {
         showToastMessage('Follow-up scheduled and logged to Command Center!', 'success');
         setShowFollowUpModal(false);
-        setFollowUpForm({ contactName: '', followUpType: 'Call', followUpDate: '', notes: '' });
+        setFollowUpForm({ contactName: null, followUpType: 'Call', followUpDate: null, notes: null });
       }
     } catch (error) {
       showToastMessage('Failed to schedule follow-up', 'error');
@@ -678,7 +678,7 @@ export default function CommandCenter() {
       if (response.ok) {
         showToastMessage('SMS sent successfully!', 'success');
         setShowSMSModal(false);
-        setSmsForm({ recipient: '', message: '', template: '', sendNow: true });
+        setSmsForm({ recipient: null, message: null, template: null, sendNow: true });
       }
     } catch (error) {
       showToastMessage('Failed to send SMS', 'error');
@@ -771,7 +771,7 @@ export default function CommandCenter() {
         });
         
         setVoiceStatus('Programming processed successfully');
-        setProgrammingText('');
+        setProgrammingText(null);
       } catch (error) {
         setVoiceStatus('Error processing programming');
       }
@@ -788,7 +788,7 @@ export default function CommandCenter() {
         });
         
         setVoiceStatus('Query processed successfully');
-        setQueryText('');
+        setQueryText(null);
       } catch (error) {
         setVoiceStatus('Error processing query');
       }
@@ -895,7 +895,7 @@ export default function CommandCenter() {
   // Handle clear knowledge with confirmation
   const handleClearKnowledge = () => {
     setShowClearConfirm(true);
-    setDeleteConfirmText('');
+    setDeleteConfirmText(null);
   };
 
   const confirmClearKnowledge = async () => {
@@ -939,7 +939,7 @@ export default function CommandCenter() {
       }
       
       setShowClearConfirm(false);
-      setDeleteConfirmText('');
+      setDeleteConfirmText(null);
     }
   };
 
@@ -977,7 +977,7 @@ export default function CommandCenter() {
     }
     
     // Reset the input
-    event.target.value = '';
+    event.target.value = null;
   };
 
   // Button handlers for all dashboard functionality
@@ -1009,7 +1009,7 @@ export default function CommandCenter() {
             
             setVoiceStatus(
               `RAG Integration Complete: ${processedCount} documents processed` + 
-              (errorCount > 0 ? `, ${errorCount} failed` : '')
+              (errorCount > 0 ? `, ${errorCount} failed` : null)
             );
             
             // Update document list
@@ -1209,7 +1209,7 @@ export default function CommandCenter() {
     };
 
     setChatMessages(prev => [...prev, userMessage]);
-    setCurrentMessage('');
+    setCurrentMessage(null);
     setIsTyping(true);
 
     // Simulate agent response
@@ -1262,7 +1262,7 @@ export default function CommandCenter() {
           title: "Ticket Created",
           description: `Ticket "${newTicketSubject}" has been created successfully`
         });
-        setNewTicketSubject('');
+        setNewTicketSubject(null);
         setShowCreateTicket(false);
       }
     } catch (error) {
@@ -2006,7 +2006,7 @@ export default function CommandCenter() {
         const result = await response.json();
         const successCount = result.files?.filter(f => f.status === 'processed').length || 0;
         const errorCount = result.files?.filter(f => f.status === 'error').length || 0;
-        const fileNames = result.files?.map(f => f.filename).join(', ') || '';
+        const fileNames = result.files?.map(f => f.filename).join(', ') || null;
         
         setVoiceStatus(`Documents Processed: ${fileNames}`);
         
@@ -2075,7 +2075,7 @@ export default function CommandCenter() {
 
     setDocumentsLoading(false);
     // Reset input
-    event.target.value = '';
+    event.target.value = null;
   };
 
   const handleGenerateReport = async () => {
@@ -2454,7 +2454,7 @@ export default function CommandCenter() {
         };
         setMemoryActivityLog(prev => [...prev, logEntry]);
         
-        setMemoryText('');
+        setMemoryText(null);
         
         // Refresh knowledge stats and documents list
         refetchKnowledge();
@@ -2509,7 +2509,7 @@ export default function CommandCenter() {
       const data = await res.json();
       if (res.ok) {
         alert('✅ Command sent to VoiceBot');
-        setVoiceCommand('');
+        setVoiceCommand(null);
       } else {
         alert('❌ Error: ' + data.error);
       }
@@ -2533,7 +2533,7 @@ export default function CommandCenter() {
           name: 'Command Center User',
           email: 'user@company.com',
           subject,
-          description: description || '',
+          description: description || null,
           priority: 'Medium'
         })
       });
@@ -2679,7 +2679,7 @@ export default function CommandCenter() {
     console.log('Executing command:', category);
     
     try {
-      let endpoint = '';
+      let endpoint = null;
       let requestData = data || getLiveCommandPayload(category);
 
       // Map commands to specific endpoints
@@ -2993,7 +2993,7 @@ export default function CommandCenter() {
                   }
                 </p>
                 <div className="flex space-x-3">
-                  <Button onClick={nextDemoStep} className="bg-blue-600 hover:bg-blue-700 text-white">
+                  <Button onClick={nextDemoStep} className="bg-slate-600 text-white">
                     {demoStep === 4 ? "Finish Demo" : "Next Step"}
                   </Button>
                   <Button variant="outline" onClick={() => setDemoMode(false)} className="border-blue-400 text-blue-400">
@@ -3126,7 +3126,7 @@ export default function CommandCenter() {
                         setShowCalendarUpload(true);
                       }
                     }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                    className="bg-slate-600 text-white"
                     title="Upload calendar files or sync with Google Calendar"
                   >
                     <Calendar className="w-4 h-4 mr-2" />
@@ -3348,7 +3348,7 @@ export default function CommandCenter() {
                   {/* Primary Action Buttons */}
                   <Button
                     onClick={handleCreateBooking}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center p-4 h-20 border border-blue-500"
+                    className="bg-slate-600 text-white"
                     title="Schedule Booking"
                   >
                     <div className="text-center">
@@ -3381,7 +3381,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleStartPipelineCalls}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-center p-4 h-20 border border-green-500"
+                    className="bg-slate-600 text-white"
                     title="Start/End Pipeline Calls"
                   >
                     <div className="text-center">
@@ -3414,7 +3414,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={() => setShowCalendarUpload(true)}
-                    className="bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-center p-4 h-20 border border-cyan-500"
+                    className="bg-slate-600 text-white"
                     title="Upload Calendar"
                   >
                     <div className="text-center">
@@ -3685,7 +3685,7 @@ export default function CommandCenter() {
                       <div className="flex justify-between p-2 bg-white/5 rounded">
                         <span className="text-slate-300 text-sm">Uptime:</span>
                         <span className="text-green-400 font-medium">
-                          {liveSystemData?.data?.uptime || ''}
+                          {liveSystemData?.data?.uptime || null}
                         </span>
                       </div>
                     </div>
@@ -3812,7 +3812,7 @@ export default function CommandCenter() {
                     </Button>
                     <Button
                       onClick={handleExportData}
-                      className="bg-cyan-600 hover:bg-cyan-700 text-white p-3"
+                      className="bg-slate-600 text-white"
                     >
                       <Database className="w-4 h-4 mr-2" />
                       Data Export
@@ -4166,7 +4166,7 @@ export default function CommandCenter() {
                     <MessageSquare className="w-5 h-5 mr-2 text-green-400" />
                     📲 Mobile Companion
                   </div>
-                  <Badge className="bg-green-600 text-white">Connected</Badge>
+                  <Badge className="bg-slate-600 text-white">Connected</Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -4210,7 +4210,7 @@ export default function CommandCenter() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Export Status:</span>
-                    <span className="text-green-400 font-bold">{"--"}</span>
+                    <span className="text-green-400 font-bold">{null}</span>
                   </div>
                   <Button
                     onClick={handleDownloadPDF}
@@ -4245,7 +4245,7 @@ export default function CommandCenter() {
                     }
                   </Button>
                 </div>
-                <Badge className="bg-blue-600 text-white">Synced</Badge>
+                <Badge className="bg-slate-600 text-white">Synced</Badge>
               </CardTitle>
             </CardHeader>
             {!collapsedSections['smart-calendar'] && (
@@ -4327,7 +4327,7 @@ export default function CommandCenter() {
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-slate-300 text-sm">Database Status:</span>
-                        <span className="text-green-400 font-bold">{"--"}</span>
+                        <span className="text-green-400 font-bold">{null}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300 text-sm">API Integrity:</span>
@@ -4335,7 +4335,7 @@ export default function CommandCenter() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300 text-sm">Data Quality:</span>
-                        <span className="text-blue-400 font-bold">{"--"}</span>
+                        <span className="text-blue-400 font-bold">{null}</span>
                       </div>
                     </div>
                   </div>
@@ -4345,15 +4345,15 @@ export default function CommandCenter() {
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-slate-300 text-sm">Last Scan:</span>
-                        <span className="text-white font-bold">{"--"}</span>
+                        <span className="text-white font-bold">{null}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300 text-sm">Vulnerabilities:</span>
-                        <span className="text-green-400 font-bold">{"--"}</span>
+                        <span className="text-green-400 font-bold">{null}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300 text-sm">Access Logs:</span>
-                        <span className="text-blue-400 font-bold">{"--"}</span>
+                        <span className="text-blue-400 font-bold">{null}</span>
                       </div>
                     </div>
                   </div>
@@ -4363,15 +4363,15 @@ export default function CommandCenter() {
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-slate-300 text-sm">GDPR Status:</span>
-                        <span className="text-green-400 font-bold">{"--"}</span>
+                        <span className="text-green-400 font-bold">{null}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300 text-sm">Data Retention:</span>
-                        <span className="text-blue-400 font-bold">{"--"}</span>
+                        <span className="text-blue-400 font-bold">{null}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300 text-sm">Audit Score:</span>
-                        <span className="text-green-400 font-bold">{"--"}</span>
+                        <span className="text-green-400 font-bold">{null}</span>
                       </div>
                     </div>
                   </div>
@@ -4404,10 +4404,10 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {"--"}
+                {null}
               </div>
               <p className="text-xs text-green-400">
-                {currentSystemMode === 'test' ? (metrics?.activeCalls ? 'Live voice sessions' : 'No active sessions') : ''}
+                {currentSystemMode === 'test' ? (metrics?.activeCalls ? 'Live voice sessions' : 'No active sessions') : null}
               </p>
             </CardContent>
           </Card>
@@ -4422,7 +4422,7 @@ export default function CommandCenter() {
                 0
               </div>
               <p className="text-xs text-blue-400">
-                {"--"}
+                {null}
               </p>
             </CardContent>
           </Card>
@@ -4434,11 +4434,11 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {"--"}
+                {null}
               </div>
               <p className="text-xs text-emerald-400 flex items-center">
                 {automationPerformance?.successRate && <div className="w-1 h-1 bg-emerald-400 rounded-full mr-1"></div>}
-                {currentSystemMode === 'test' ? (automationPerformance?.successRate ? 'Live automation rate' : 'No automation data') : ''}
+                {currentSystemMode === 'test' ? (automationPerformance?.successRate ? 'Live automation rate' : 'No automation data') : null}
               </p>
             </CardContent>
           </Card>
@@ -4454,7 +4454,7 @@ export default function CommandCenter() {
               </div>
               <p className="text-xs text-green-400 flex items-center">
                 {metrics?.data?.systemUptime && <div className="w-1 h-1 bg-red-400 rounded-full mr-1 animate-pulse"></div>}
-                {"--"}
+                {null}
               </p>
             </CardContent>
           </Card>
@@ -4474,29 +4474,29 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Active Workflows:</span>
-                  <span className="text-white font-bold">{ (automationPerformance?.data?.activeWorkflows || '')}</span>
+                  <span className="text-white font-bold">{ (automationPerformance?.data?.activeWorkflows || null)}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Make Logs Status:</span>
                   <div className="flex items-center space-x-1">
                     {automationPerformance?.data?.makeLogs && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{ (automationPerformance?.data?.makeLogs ? 'Live' : '')}</span>
+                    <span className="text-green-400 font-bold">{ (automationPerformance?.data?.makeLogs ? 'Live' : null)}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Executions Today:</span>
                   <div className="flex items-center space-x-1">
                     {liveActivityData?.data?.executionsToday && <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse"></div>}
-                    <span className="text-blue-400 font-bold">{ (liveActivityData?.data?.executionsToday || '')}</span>
+                    <span className="text-blue-400 font-bold">{ (liveActivityData?.data?.executionsToday || null)}</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Engine Status:</span>
-                  <span className="text-green-400 font-bold">{ (automationPerformance?.status === 'active' ? 'LIVE' : '')}</span>
+                  <span className="text-green-400 font-bold">{ (automationPerformance?.status === 'active' ? 'LIVE' : null)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Processing Queue:</span>
-                  <span className="text-cyan-400 font-bold">{ (automationPerformance?.data?.queueSize ? automationPerformance.data.queueSize + ' pending' : '')}</span>
+                  <span className="text-cyan-400 font-bold">{ (automationPerformance?.data?.queueSize ? automationPerformance.data.queueSize + ' pending' : null)}</span>
                 </div>
               </div>
             </CardContent>
@@ -4515,31 +4515,31 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Total Bots:</span>
-                  <span className="text-white font-bold">{metrics?.totalBots || ''}</span>
+                  <span className="text-white font-bold">{metrics?.totalBots || null}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Last Execution:</span>
                   <div className="flex items-center space-x-1">
                     {liveActivityData?.data?.recentExecutions?.length > 0 && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{liveActivityData?.data?.lastExecution ? new Date(liveActivityData.data.lastExecution).toLocaleTimeString() : ''}</span>
+                    <span className="text-green-400 font-bold">{liveActivityData?.data?.lastExecution ? new Date(liveActivityData.data.lastExecution).toLocaleTimeString() : null}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Error Count:</span>
                   <div className="flex items-center space-x-2">
-                    <span className="text-red-400 font-bold">{automationPerformance?.errorCount || ''}</span>
+                    <span className="text-red-400 font-bold">{automationPerformance?.errorCount || null}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Bot Status:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.dailyActiveUsers && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{metrics?.data?.dailyActiveUsers ? 'Active' : ''}</span>
+                    <span className="text-green-400 font-bold">{metrics?.data?.dailyActiveUsers ? 'Active' : null}</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">System Uptime:</span>
-                  <span className="text-green-400 font-bold">{metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : ''}</span>
+                  <span className="text-green-400 font-bold">{metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : null}</span>
                 </div>
               </div>
             </CardContent>
@@ -4560,7 +4560,7 @@ export default function CommandCenter() {
                   <div className="text-right flex items-center space-x-1">
                     {metrics?.data?.monthlyRecurringRevenue && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
                     <span className="text-green-400 font-bold">
-                      {metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : ''}
+                      {metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : null}
                     </span>
                   </div>
                 </div>
@@ -4569,26 +4569,26 @@ export default function CommandCenter() {
                   <div className="text-right flex items-center space-x-1">
                     {metrics?.data?.revenueGrowth && <div className="w-1 h-1 bg-emerald-400 rounded-full animate-pulse"></div>}
                     <span className="text-emerald-400 font-bold">
-                      {metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : ''}
+                      {metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : null}
                     </span>
                   </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Pipeline Value:</span>
                   <span className="text-blue-400 font-bold">
-                    {metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(0) + 'K' : ''}
+                    {metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(0) + 'K' : null}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Close Rate:</span>
                   <span className="text-cyan-400 font-bold">
-                    {metrics?.data?.conversionRate ? metrics.data.conversionRate + '%' : ''}
+                    {metrics?.data?.conversionRate ? metrics.data.conversionRate + '%' : null}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Sales Velocity:</span>
                   <span className="text-purple-400 font-bold">
-                    {metrics?.data?.customerSatisfaction ? metrics.data.customerSatisfaction + '/5' : ''}
+                    {metrics?.data?.customerSatisfaction ? metrics.data.customerSatisfaction + '/5' : null}
                   </span>
                 </div>
               </div>
@@ -4616,21 +4616,21 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">Client NPS:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.customerSatisfaction && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{"--"}</span>
+                    <span className="text-green-400 font-bold">{null}</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Churn Risk Flags:</span>
-                  <span className="text-red-400 font-bold">{"--"} { ''}</span>
+                  <span className="text-red-400 font-bold">{null} { null}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Last Login:</span>
-                  <span className="text-green-400 font-bold">{"--"}</span>
+                  <span className="text-green-400 font-bold">{null}</span>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Bot Utilization Rate:</span>
-                    <span className="text-cyan-400 font-bold">{"--"}</span>
+                    <span className="text-cyan-400 font-bold">{null}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
                     <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300" style={{width: `${ '0'}%`}}></div>
@@ -4654,14 +4654,14 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">API Errors:</span>
                   <div className="flex items-center space-x-1">
                     {automationPerformance?.data?.apiErrors && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-red-400 font-bold">{automationPerformance?.data?.apiErrors || ''}</span>
+                    <span className="text-red-400 font-bold">{automationPerformance?.data?.apiErrors || null}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Slack Alert Rate:</span>
                   <div className="flex items-center space-x-1">
                     {automationPerformance?.data?.slackAlertRate && <div className="w-1 h-1 bg-yellow-400 rounded-full animate-pulse"></div>}
-                    <span className="text-yellow-400 font-bold">{automationPerformance?.data?.slackAlertRate || ''}</span>
+                    <span className="text-yellow-400 font-bold">{automationPerformance?.data?.slackAlertRate || null}</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
@@ -4670,11 +4670,11 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">System Load:</span>
-                  <span className="text-blue-400 font-bold">{metrics?.data?.systemLoad || ''}</span>
+                  <span className="text-blue-400 font-bold">{metrics?.data?.systemLoad || null}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Uptime Today:</span>
-                  <span className="text-green-400 font-bold">{metrics?.data?.dailyUptime || ''}</span>
+                  <span className="text-green-400 font-bold">{metrics?.data?.dailyUptime || null}</span>
                 </div>
               </div>
             </CardContent>
@@ -4697,28 +4697,28 @@ export default function CommandCenter() {
                   <span className="text-slate-300">Automation Success:</span>
                   <div className="flex items-center space-x-1">
                     {automationPerformance?.data?.automationSuccess && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{automationPerformance?.data?.automationSuccess ? automationPerformance.data.automationSuccess + '%' : ''}</span>
+                    <span className="text-green-400 font-bold">{automationPerformance?.data?.automationSuccess ? automationPerformance.data.automationSuccess + '%' : null}</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Total Executions:</span>
                   <div className="flex items-center space-x-1">
                     {automationPerformance?.data?.totalExecutions && <div className="w-1 h-1 bg-cyan-400 rounded-full animate-pulse"></div>}
-                    <span className="text-cyan-400 font-bold">{automationPerformance?.data?.totalExecutions || ''}</span>
+                    <span className="text-cyan-400 font-bold">{automationPerformance?.data?.totalExecutions || null}</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Make Workflows:</span>
                   <div className="flex items-center space-x-2">
                     {automationPerformance?.data?.makeWorkflows && <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>}
-                    <Badge className="bg-slate-600 text-slate-400">{automationPerformance?.data?.makeWorkflows ? automationPerformance.data.makeWorkflows + ' Active' : ''}</Badge>
+                    <Badge className="bg-slate-600 text-slate-400">{automationPerformance?.data?.makeWorkflows ? automationPerformance.data.makeWorkflows + ' Active' : null}</Badge>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Avg Runtime:</span>
                   <div className="flex items-center space-x-1">
                     
-                    <span className="text-purple-400 font-bold">{ (automationPerformance?.data?.avgRuntime ? automationPerformance.data.avgRuntime + 's' : '')}</span>
+                    <span className="text-purple-400 font-bold">{ (automationPerformance?.data?.avgRuntime ? automationPerformance.data.avgRuntime + 's' : null)}</span>
                   </div>
                 </div>
                 <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
@@ -4726,7 +4726,7 @@ export default function CommandCenter() {
                     <div className="text-slate-300 text-sm">Make Status:</div>
                     
                   </div>
-                  <div className="text-green-400 font-medium">{ (automationPerformance?.data?.makeStatus || '')}</div>
+                  <div className="text-green-400 font-medium">{ (automationPerformance?.data?.makeStatus || null)}</div>
                 </div>
               </div>
             </CardContent>
@@ -4749,7 +4749,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
                   <div className="text-slate-300 text-sm mb-1">Monthly Ad Spend:</div>
                   <div className="text-white font-bold text-lg mb-2">
-                    { (metrics?.data?.smartSpendData?.monthlyAdSpend || '--')}
+                    { (metrics?.data?.smartSpendData?.monthlyAdSpend || null)}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
                     <div className="bg-gradient-to-r from-blue-400 to-blue-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.spendUtilization || 0}%` }}></div>
@@ -4760,7 +4760,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
                   <div className="text-slate-300 text-sm mb-1">Cost Per Lead:</div>
                   <div className="text-white font-bold text-lg mb-2">
-                    { (metrics?.data?.smartSpendData?.costPerLead || '--')}
+                    { (metrics?.data?.smartSpendData?.costPerLead || null)}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
                     <div className="bg-gradient-to-r from-yellow-400 to-amber-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.costEfficiency || 0}%` }}></div>
@@ -4771,7 +4771,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
                   <div className="text-slate-300 text-sm mb-1">ROI This Month:</div>
                   <div className="text-white font-bold text-lg mb-2">
-                    { (metrics?.data?.smartSpendData?.monthlyROI || '--')}
+                    { (metrics?.data?.smartSpendData?.monthlyROI || null)}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
                     <div className="bg-gradient-to-r from-green-400 to-emerald-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.roiProgress || 0}%` }}></div>
@@ -4782,7 +4782,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
                   <div className="text-slate-300 text-sm mb-1">Conversion Rate:</div>
                   <div className="text-white font-bold text-lg mb-2">
-                    { (metrics?.data?.smartSpendData?.conversionRate || '--')}
+                    { (metrics?.data?.smartSpendData?.conversionRate || null)}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
                     <div className="bg-gradient-to-r from-purple-400 to-violet-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.conversionProgress || 0}%` }}></div>
@@ -4794,9 +4794,9 @@ export default function CommandCenter() {
                   <div className="text-slate-300 text-sm mb-1">Budget Efficiency Score:</div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="text-white font-bold text-lg">
-                      { (metrics?.data?.smartSpendData?.budgetEfficiency || '--')}
+                      { (metrics?.data?.smartSpendData?.budgetEfficiency || null)}
                     </div>
-                    <Badge className="bg-cyan-600 text-white text-xs">
+                    <Badge className="bg-slate-600 text-white">
                       { (metrics?.data?.smartSpendData?.efficiencyStatus || 'Unknown')}
                     </Badge>
                   </div>
@@ -4821,7 +4821,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
-                    <span className="text-green-400 font-bold">{metrics?.data?.costPerLead || '--'}</span>
+                    <span className="text-green-400 font-bold">{metrics?.data?.costPerLead || null}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
                     <div className="bg-red-400 h-1 rounded-full" style={{ width: `${metrics?.data?.costPerLeadProgress || 0}%` }}></div>
@@ -4830,7 +4830,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
-                    <span className="text-blue-400 font-bold">{metrics?.data?.leadQualityScore || '--'}</span>
+                    <span className="text-blue-400 font-bold">{metrics?.data?.leadQualityScore || null}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
                     <div className="bg-blue-400 h-1 rounded-full" style={{ width: `${metrics?.data?.leadQualityProgress || 0}%` }}></div>
@@ -4839,7 +4839,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Percentage of leads that become paying customers">Close Rate</span>
-                    <span className="text-purple-400 font-bold">{"--"}</span>
+                    <span className="text-purple-400 font-bold">{null}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
                     <div className="bg-purple-400 h-1 rounded-full" style={{ width: '0%' }}></div>
@@ -4848,7 +4848,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-orange-400 shadow-lg shadow-orange-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Return on investment from automation">ROI</span>
-                    <span className="text-orange-400 font-bold">{"--"}</span>
+                    <span className="text-orange-400 font-bold">{null}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
                     <div className="bg-orange-400 h-1 rounded-full" style={{ width: '0%' }}></div>
@@ -4857,8 +4857,8 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-cyan-400 shadow-lg shadow-cyan-400/20">
                   <div className="text-slate-300 text-sm mb-1">Revenue Per Lead</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-cyan-400 font-bold">{"--"}</div>
-                    <Badge className="bg-cyan-600 text-white">{"--"}</Badge>
+                    <div className="text-cyan-400 font-bold">{null}</div>
+                    <Badge className="bg-slate-600 text-white">{null}</Badge>
                   </div>
 
                 </div>
@@ -4881,23 +4881,23 @@ export default function CommandCenter() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Confidence Score</span>
-                  <span className="text-purple-400 font-bold">{"--"}</span>
+                  <span className="text-purple-400 font-bold">{null}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Learning Status</span>
-                  <Badge className="bg-slate-600 text-white">{"--"}</Badge>
+                  <Badge className="bg-slate-600 text-white">{null}</Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Percentage of conversations that needed human assistance">Escalation Rate</span>
-                  <span className="text-yellow-400 font-bold">{"--"}</span>
+                  <span className="text-yellow-400 font-bold">{null}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Response Accuracy</span>
-                  <span className="text-cyan-400 font-bold">{"--"}</span>
+                  <span className="text-cyan-400 font-bold">{null}</span>
                 </div>
                 <div className="bg-purple-900/60 rounded-lg p-3 border border-purple-400 shadow-lg shadow-purple-400/20">
                   <div className="text-slate-300 text-sm mb-1">Latest Learning</div>
-                  <div className="text-purple-400 font-medium">{"--"}</div>
+                  <div className="text-purple-400 font-medium">{null}</div>
                 </div>
               </div>
             </CardContent>
@@ -4932,15 +4932,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <span className="text-slate-300">"Show me today's leads"</span>
-                  <Badge variant="outline" className="text-green-400 border-green-400">{"--"}</Badge>
+                  <Badge variant="outline" className="text-green-400 border-green-400">{null}</Badge>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <span className="text-slate-300">"Call my top prospect"</span>
-                  <Badge variant="outline" className="text-green-400 border-green-400">{"--"}</Badge>
+                  <Badge variant="outline" className="text-green-400 border-green-400">{null}</Badge>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <span className="text-slate-300">"Schedule follow-up"</span>
-                  <Badge variant="outline" className="text-green-400 border-green-400">{"--"}</Badge>
+                  <Badge variant="outline" className="text-green-400 border-green-400">{null}</Badge>
                 </div>
                 {isListening && (
                   <div className="mt-4 p-3 bg-green-500/20 border border-green-400 rounded-lg">
@@ -4965,23 +4965,23 @@ export default function CommandCenter() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Sentiment Analysis:</span>
-                  <span className="text-green-400 font-bold">{"--"}</span>
+                  <span className="text-green-400 font-bold">{null}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Emotion Detection:</span>
-                  <span className="text-blue-400 font-bold">{"--"}</span>
+                  <span className="text-blue-400 font-bold">{null}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Avg Call Duration:</span>
-                  <span className="text-purple-400 font-bold">{"--"}</span>
+                  <span className="text-purple-400 font-bold">{null}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Resolution Rate:</span>
-                  <span className="text-green-400 font-bold">{"--"}</span>
+                  <span className="text-green-400 font-bold">{null}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Satisfaction Score:</span>
-                  <span className="text-cyan-400 font-bold">{"--"}</span>
+                  <span className="text-cyan-400 font-bold">{null}</span>
                 </div>
                 <div className="bg-purple-900/60 rounded-lg p-3 border border-purple-400 shadow-lg shadow-purple-400/20">
                   <div className="text-slate-300 text-sm mb-1">Top Intent Detected:</div>
@@ -5116,15 +5116,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Commands Today:</span>
-                  <span className="text-green-400 font-bold">{"--"}</span>
+                  <span className="text-green-400 font-bold">{null}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-green-400 font-bold">{"--"}</span>
+                  <span className="text-green-400 font-bold">{null}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Currently Processing:</span>
-                  <span className="text-green-400 font-bold">{"--"}</span>
+                  <span className="text-green-400 font-bold">{null}</span>
                 </div>
                 <div className="bg-green-900/60 rounded-lg p-3 border border-green-400 shadow-lg shadow-green-400/20">
                   <div className="text-slate-300 text-sm mb-1">Latest Command:</div>
@@ -5153,13 +5153,13 @@ export default function CommandCenter() {
               {/* Cost Per Lead */}
               <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-green-400 mb-1">{"--"}</div>
+                  <div className="text-2xl font-black text-green-400 mb-1">{null}</div>
                   <div className="text-slate-300 text-sm">Cost Per Lead</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Last Month</span>
-                    <span className="text-cyan-400">{"--"}</span>
+                    <span className="text-cyan-400">{null}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
                     <div className={`bg-red-400 h-2 rounded-full ${ 'w-0'}`}></div>
@@ -5170,13 +5170,13 @@ export default function CommandCenter() {
               {/* Interaction Quality */}
               <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-blue-400 mb-1">{"--"}</div>
+                  <div className="text-2xl font-black text-blue-400 mb-1">{null}</div>
                   <div className="text-slate-300 text-sm">Accuracy Rate</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Target</span>
-                    <span className="text-green-400">{"--"}</span>
+                    <span className="text-green-400">{null}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
                     <div className={`bg-blue-400 h-2 rounded-full ${ 'w-0'}`}></div>
@@ -5193,7 +5193,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Weekly</span>
-                    <span className="text-yellow-400">{"--"}</span>
+                    <span className="text-yellow-400">{null}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
                     <div className={`bg-purple-400 h-2 rounded-full ${ 'w-0'}`}></div>
@@ -5204,13 +5204,13 @@ export default function CommandCenter() {
               {/* Total Interactions */}
               <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-cyan-400 mb-1">{"--"}</div>
+                  <div className="text-2xl font-black text-cyan-400 mb-1">{null}</div>
                   <div className="text-slate-300 text-sm">Interactions</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Today</span>
-                    <span className="text-emerald-400">{"--"}</span>
+                    <span className="text-emerald-400">{null}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
                     <div className={`bg-cyan-400 h-2 rounded-full ${ 'w-0'}`}></div>
@@ -5221,13 +5221,13 @@ export default function CommandCenter() {
               {/* Conversion Rate */}
               <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-emerald-400 mb-1">{"--"}</div>
+                  <div className="text-2xl font-black text-emerald-400 mb-1">{null}</div>
                   <div className="text-slate-300 text-sm">Close Rate</div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-400">Industry Avg</span>
-                    <span className="text-orange-400">{"--"}</span>
+                    <span className="text-orange-400">{null}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
                     <div className={`bg-emerald-400 h-2 rounded-full ${ 'w-0'}`}></div>
@@ -5251,7 +5251,7 @@ export default function CommandCenter() {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
               <div className="bg-gradient-to-br from-green-600/20 to-green-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-green-400 mb-2">{"--"}</div>
+                  <div className="text-3xl font-black text-green-400 mb-2">{null}</div>
                   <div className="text-slate-300 text-sm">Monthly Savings</div>
                   <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
                     <div className={`bg-red-400 h-2 rounded-full ${ 'w-0'}`}></div>
@@ -5261,7 +5261,7 @@ export default function CommandCenter() {
               
               <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-blue-400 mb-2">{"--"}</div>
+                  <div className="text-3xl font-black text-blue-400 mb-2">{null}</div>
                   <div className="text-blue-300 text-sm">Cost Reduction</div>
                   <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
                     <div className={`bg-blue-400 h-2 rounded-full ${ 'w-0'}`}></div>
@@ -5271,7 +5271,7 @@ export default function CommandCenter() {
               
               <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-purple-400 mb-2">{"--"}</div>
+                  <div className="text-3xl font-black text-purple-400 mb-2">{null}</div>
                   <div className="text-slate-300 text-sm">ROI</div>
                   <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
                     <div className={`bg-purple-400 h-2 rounded-full ${ 'w-0'}`}></div>
@@ -5281,7 +5281,7 @@ export default function CommandCenter() {
               
               <div className="bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-yellow-400 mb-2">{"--"}</div>
+                  <div className="text-3xl font-black text-yellow-400 mb-2">{null}</div>
                   <div className="text-slate-300 text-sm">Payback Days</div>
                   <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
                     <div className={`bg-yellow-400 h-2 rounded-full ${ 'w-0'}`}></div>
@@ -5342,15 +5342,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Calls Today:</span>
-                  <span className="text-white font-bold">{ (metrics?.activeCalls || '')}</span>
+                  <span className="text-white font-bold">{ (metrics?.activeCalls || null)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Avg Duration:</span>
-                  <span className="text-cyan-400 font-bold">{"--"}</span>
+                  <span className="text-cyan-400 font-bold">{null}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Conversion Rate:</span>
-                  <span className="text-green-400 font-bold">{"--"}</span>
+                  <span className="text-green-400 font-bold">{null}</span>
                 </div>
               </div>
             </CardContent>
@@ -5392,15 +5392,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">New Leads:</span>
-                  <span className="text-green-400 font-bold">{"--"}</span>
+                  <span className="text-green-400 font-bold">{null}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Conversions:</span>
-                  <span className="text-blue-400 font-bold">{"--"}</span>
+                  <span className="text-blue-400 font-bold">{null}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Escalations:</span>
-                  <span className="text-yellow-400 font-bold">{"--"}</span>
+                  <span className="text-yellow-400 font-bold">{null}</span>
                 </div>
               </div>
             </CardContent>
@@ -5422,15 +5422,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Tasks Automated:</span>
-                  <span className="text-cyan-400 font-bold">{"--"}</span>
+                  <span className="text-cyan-400 font-bold">{null}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Hours Saved:</span>
-                  <span className="text-green-400 font-bold">{"--"}</span>
+                  <span className="text-green-400 font-bold">{null}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Efficiency:</span>
-                  <span className="text-purple-400 font-bold">{"--"}</span>
+                  <span className="text-purple-400 font-bold">{null}</span>
                 </div>
               </div>
             </CardContent>
@@ -5482,15 +5482,15 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Total Tests:</span>
-                  <span className="text-white font-bold">{testStats.totalTests ?? ''}</span>
+                  <span className="text-white font-bold">{testStats.totalTests ?? null}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Passed:</span>
-                  <span className="text-green-400 font-bold">{testStats.passedTests ?? ''}</span>
+                  <span className="text-green-400 font-bold">{testStats.passedTests ?? null}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-cyan-400 font-bold">{testStats.successRate ? testStats.successRate + '%' : ''}</span>
+                  <span className="text-cyan-400 font-bold">{testStats.successRate ? testStats.successRate + '%' : null}</span>
                 </div>
               </div>
             </CardContent>
@@ -5504,7 +5504,7 @@ export default function CommandCenter() {
               <CardTitle className="text-white flex items-center text-2xl font-bold">
                 <Brain className="w-7 h-7 mr-3 text-purple-400" />
                 🧠 RAG Knowledge Base
-                <Badge className="ml-3 bg-green-600 text-white">{"--"}</Badge>
+                <Badge className="ml-3 bg-green-600 text-white">{null}</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8">
@@ -5562,7 +5562,7 @@ export default function CommandCenter() {
                     </Button>
                     <Button 
                       onClick={smartSearch}
-                      className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+                      className="bg-slate-600 text-white"
                     >
                       <Brain className="w-4 h-4 mr-2" />
                       Smart Search
@@ -5576,7 +5576,7 @@ export default function CommandCenter() {
                     </Button>
                     <Button 
                       onClick={() => document.getElementById('file-upload')?.click()}
-                      className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
+                      className="bg-slate-600 text-white"
                     >
                       <Upload className="w-4 h-4 mr-2" />
                       Upload Documents
@@ -5634,7 +5634,7 @@ export default function CommandCenter() {
                         <Button 
                           size="sm" 
                           onClick={stopVoiceRecognition}
-                          className="bg-blue-600 hover:bg-blue-700"
+                          className="bg-slate-600 text-white"
                         >
                           <MicOff className="w-3 h-3" />
                         </Button>
@@ -5651,7 +5651,7 @@ export default function CommandCenter() {
                       </Button>
                       <Button 
                         onClick={processVoiceProgramming}
-                        className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+                        className="bg-slate-600 text-white"
                         disabled={!programmingText.trim()}
                       >
                         <Brain className="w-4 h-4 mr-2" />
@@ -5715,7 +5715,7 @@ export default function CommandCenter() {
                         <div className="grid grid-cols-2 gap-2">
                           <Button 
                             onClick={generateVoice}
-                            className="bg-cyan-600 hover:bg-cyan-700 text-white border border-cyan-500"
+                            className="bg-slate-600 text-white"
                             disabled={!voiceGenerationText.trim()}
                           >
                             <Headphones className="w-4 h-4 mr-2" />
@@ -5816,14 +5816,14 @@ export default function CommandCenter() {
                         <div className="grid grid-cols-2 gap-2">
                           <Button 
                             onClick={testVoicePersona}
-                            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 text-sm"
+                            className="bg-slate-600 text-white"
                           >
                             <Headphones className="w-3 h-3 mr-1" />
                             Test Voice
                           </Button>
                           <Button 
                             onClick={handleApplyPersona}
-                            className="bg-green-600 hover:bg-green-700 text-white border border-green-500 text-sm"
+                            className="bg-slate-600 text-white"
                           >
                             <Settings className="w-3 h-3 mr-1" />
                             Apply Persona
@@ -5906,7 +5906,7 @@ export default function CommandCenter() {
                           console.error('Failed to load voice recordings:', error);
                         }
                       }}
-                      className="bg-blue-600 hover:bg-blue-700 text-white text-sm"
+                      className="bg-slate-600 text-white"
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       View Recordings
@@ -6071,7 +6071,7 @@ export default function CommandCenter() {
                 <div className="flex gap-3">
                   <Button 
                     onClick={() => document.getElementById('file-upload')?.click()}
-                    className="bg-green-600 hover:bg-green-700 text-white border border-green-400"
+                    className="bg-slate-600 text-white"
                   >
                     <Upload className="w-4 h-4 mr-2" />
                     Upload & Program Documents
@@ -6120,7 +6120,7 @@ export default function CommandCenter() {
                               setPreviewDocumentName(doc.fileName || doc.filename || doc.name);
                               setShowDocumentPreview(true);
                             }}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1"
+                            className="bg-slate-600 text-white"
                           >
                             🔍 Preview
                           </Button>
@@ -6243,14 +6243,12 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/60 rounded-lg p-3 border border-indigo-400/30">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-slate-300 text-sm">iOS App Status:</span>
-                    <Badge className="bg-green-600 text-white text-xs">
-                      { 'Offline'}
-                    </Badge>
+                    <Badge className="bg-slate-600 text-white">--</Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300 text-sm">Last Sync:</span>
                     <span className="text-white font-bold text-sm">
-                      { '--'}
+                      { null}
                     </span>
                   </div>
                 </div>
@@ -6258,15 +6256,11 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/60 rounded-lg p-3 border border-indigo-400/30">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-slate-300 text-sm">Android App Status:</span>
-                    <Badge className="bg-green-600 text-white text-xs">
-                      { 'Offline'}
-                    </Badge>
+                    <Badge className="bg-slate-600 text-white">--</Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300 text-sm">Push Alerts:</span>
-                    <span className="text-green-400 font-bold text-sm">
-                      { 'Disabled'}
-                    </span>
+                    <span className="text-slate-400">--</span>
                   </div>
                 </div>
                 
@@ -6301,14 +6295,12 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/30">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-slate-300 text-sm">Last PDF Generated:</span>
-                    <span className="text-white font-bold text-sm">
-                      { 'Never'}
-                    </span>
+                    <span className="text-slate-400">--</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300 text-sm">Export Timestamp:</span>
                     <span className="text-purple-400 font-bold text-sm">
-                      { '--'}
+                      { null}
                     </span>
                   </div>
                 </div>
@@ -6386,14 +6378,12 @@ export default function CommandCenter() {
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-slate-300 text-sm">Last Tamper Check:</span>
                         <span className="text-white font-bold text-sm">
-                          { '--'}
+                          { null}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-slate-300 text-sm">Integrity Status:</span>
-                        <Badge className={currentSystemMode === 'test' ? "bg-green-600 text-white text-xs" : "bg-slate-600 text-slate-400 text-xs"}>
-                          { 'UNKNOWN'}
-                        </Badge>
+                        <Badge className="bg-slate-600 text-white">--</Badge>
                       </div>
                     </div>
                     
@@ -6431,15 +6421,11 @@ export default function CommandCenter() {
                     <div className="bg-slate-800/60 rounded-lg p-3 border border-orange-400/30">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-slate-300 text-sm">Active Loggers:</span>
-                        <span className="text-white font-bold text-sm">
-                          { '0'}
-                        </span>
+                        <span className="text-slate-400">--</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-slate-300 text-sm">Log Rate:</span>
-                        <span className="text-orange-400 font-bold text-sm">
-                          { '0/min'}
-                        </span>
+                        <span className="text-slate-400">--</span>
                       </div>
                     </div>
                     
@@ -6468,15 +6454,11 @@ export default function CommandCenter() {
                     <div className="bg-slate-800/60 rounded-lg p-3 border border-orange-400/30">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-slate-300 text-sm">Fallbacks Active:</span>
-                        <span className="text-white font-bold text-sm">
-                          { '0'}
-                        </span>
+                        <span className="text-slate-400">--</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-slate-300 text-sm">Last Triggered:</span>
-                        <span className="text-orange-400 font-bold text-sm">
-                          { 'Never'}
-                        </span>
+                        <span className="text-slate-400">--</span>
                       </div>
                     </div>
                     
@@ -6545,14 +6527,14 @@ export default function CommandCenter() {
                             'text-yellow-400'
                           }`}>
                             {currentSystemMode === 'test' ? (serviceStates.monitoring.status === 'ACTIVE' ? '🟢 ACTIVE' :
-                             serviceStates.monitoring.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
+                             serviceStates.monitoring.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : null}
                           </span>
                         </div>
                         <div className="flex space-x-1">
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('monitoring', 'start')}
-                            className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400"
+                            className="bg-slate-600 text-white"
                             title="Start monitoring service"
                           >
                             Start
@@ -6568,7 +6550,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('monitoring', 'ping')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400"
+                            className="bg-slate-600 text-white"
                             title="Ping monitoring service"
                           >
                             Ping
@@ -6594,14 +6576,14 @@ export default function CommandCenter() {
                             'text-yellow-400'
                           }`}>
                             {currentSystemMode === 'test' ? (serviceStates.recording.status === 'ACTIVE' ? '🟢 ACTIVE' :
-                             serviceStates.recording.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
+                             serviceStates.recording.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : null}
                           </span>
                         </div>
                         <div className="flex space-x-1">
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('recording', 'start')}
-                            className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400"
+                            className="bg-slate-600 text-white"
                             title="Start recording service"
                           >
                             Start
@@ -6617,7 +6599,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('recording', 'ping')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400"
+                            className="bg-slate-600 text-white"
                             title="Ping recording service"
                           >
                             Ping
@@ -6643,14 +6625,14 @@ export default function CommandCenter() {
                             'text-yellow-400'
                           }`}>
                             {currentSystemMode === 'test' ? (serviceStates.analytics.status === 'ACTIVE' ? '🟢 ACTIVE' :
-                             serviceStates.analytics.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
+                             serviceStates.analytics.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : null}
                           </span>
                         </div>
                         <div className="flex space-x-1">
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('analytics', 'start')}
-                            className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400"
+                            className="bg-slate-600 text-white"
                             title="Start analytics service"
                           >
                             Start
@@ -6666,7 +6648,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('analytics', 'ping')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400"
+                            className="bg-slate-600 text-white"
                             title="Ping analytics service"
                           >
                             Ping
@@ -6686,19 +6668,19 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-4 gap-3">
                   <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
                     <div className="text-slate-300 text-xs mb-1">Active Calls</div>
-                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.activeCalls : ''}</div>
+                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.activeCalls : null}</div>
                   </div>
                   <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
                     <div className="text-slate-300 text-xs mb-1">Avg Duration</div>
-                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.avgDuration : ''}</div>
+                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.avgDuration : null}</div>
                   </div>
                   <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
                     <div className="text-slate-300 text-xs mb-1">Success Rate</div>
-                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.successRate : ''}</div>
+                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.successRate : null}</div>
                   </div>
                   <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
                     <div className="text-slate-300 text-xs mb-1">Total Today</div>
-                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.totalToday : ''}</div>
+                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.totalToday : null}</div>
                   </div>
                 </div>
 
@@ -6714,7 +6696,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button 
                     onClick={() => setShowCallReports(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs border border-blue-400"
+                    className="bg-slate-600 text-white"
                     title="View call reports and analytics"
                   >
                     <FileText className="w-3 h-3 mr-1" />
@@ -6722,7 +6704,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button 
                     onClick={() => setShowCallLogs(true)}
-                    className="bg-green-600 hover:bg-green-700 text-white text-xs border border-green-400"
+                    className="bg-slate-600 text-white"
                     title="View detailed call log history"
                   >
                     <Clock className="w-3 h-3 mr-1" />
@@ -6747,11 +6729,11 @@ export default function CommandCenter() {
                 <div className="bg-slate-700/40 rounded-lg p-4 border border-purple-400">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-slate-300 text-sm">Support Status</span>
-                    <span className="text-green-400 font-bold text-sm">{"--"}</span>
+                    <span className="text-green-400 font-bold text-sm">{null}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300 text-sm">Open Tickets</span>
-                    <span className="text-white font-bold">{"--"}</span>
+                    <span className="text-white font-bold">{null}</span>
                   </div>
                 </div>
 
@@ -6813,7 +6795,7 @@ export default function CommandCenter() {
                       </div>
                     )) : (
                       <div className="text-slate-400 text-xs text-center py-2">
-                        {"--"}
+                        {null}
                       </div>
                     )}
                   </div>
@@ -6884,7 +6866,7 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <Button
                     onClick={() => setShowCreateVoiceCallModal(true)}
-                    className="bg-green-600 hover:bg-green-700 text-white h-20 text-lg font-semibold"
+                    className="bg-slate-600 text-white"
                     title="Start a new voice call with advanced options"
                   >
                     <Phone className="w-6 h-6 mr-3" />
@@ -6892,7 +6874,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button
                     onClick={() => setShowVoiceRecordings(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white h-20 text-lg font-semibold"
+                    className="bg-slate-600 text-white"
                     title="Review and analyze voice call recordings"
                   >
                     <Play className="w-6 h-6 mr-3" />
@@ -7042,7 +7024,7 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <Button
                     onClick={() => setShowCreateVoiceCallModal(true)}
-                    className="bg-green-600 hover:bg-green-700 text-white h-20 text-lg font-semibold"
+                    className="bg-slate-600 text-white"
                     title="Start a new voice call with advanced options"
                   >
                     <Phone className="w-6 h-6 mr-3" />
@@ -7050,7 +7032,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button
                     onClick={() => setShowVoiceRecordings(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white h-20 text-lg font-semibold"
+                    className="bg-slate-600 text-white"
                     title="Review and analyze voice call recordings"
                   >
                     <Play className="w-6 h-6 mr-3" />
@@ -7168,7 +7150,7 @@ export default function CommandCenter() {
               <Button
                 onClick={() => {
                   setShowClearConfirm(false);
-                  setDeleteConfirmText('');
+                  setDeleteConfirmText(null);
                 }}
                 className="flex-1 bg-slate-600 hover:bg-slate-700 text-white"
               >
@@ -7259,7 +7241,7 @@ export default function CommandCenter() {
               <div>
                 <label className="block text-white text-sm font-medium mb-2">Client Name</label>
                 <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500">
-                  <option value="--">Select client...</option>
+                  <option value=null>Select client...</option>
                   <option value="acme-corp">Acme Corporation</option>
                   <option value="tech-solutions">Tech Solutions Inc</option>
                   <option value="global-systems">Global Systems Ltd</option>
@@ -7477,7 +7459,7 @@ export default function CommandCenter() {
               <div>
                 <label className="block text-white text-sm font-medium mb-2">Pre-built Templates</label>
                 <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500">
-                  <option value="--">Select template...</option>
+                  <option value=null>Select template...</option>
                   <option value="follow-up">Follow-up reminder</option>
                   <option value="appointment">Appointment confirmation</option>
                   <option value="welcome">Welcome message</option>
@@ -7928,11 +7910,11 @@ export default function CommandCenter() {
               <Button
                 onClick={() => {
                   setShowCreateTicketModal(false);
-                  setNewTicketSubject('');
-                  setNewTicketDescription('');
-                  setNewTicketCategory('');
-                  setNewTicketName('');
-                  setNewTicketEmail('');
+                  setNewTicketSubject(null);
+                  setNewTicketDescription(null);
+                  setNewTicketCategory(null);
+                  setNewTicketName(null);
+                  setNewTicketEmail(null);
                   setNewTicketPriority('medium');
                 }}
                 variant="ghost"
@@ -7975,7 +7957,7 @@ export default function CommandCenter() {
                     onChange={(e) => setNewTicketCategory(e.target.value)}
                     className="w-full p-3 bg-slate-700/60 border border-purple-400 rounded-lg text-white focus:border-purple-400 focus:outline-none"
                   >
-                    <option value="--">Select ticket type...</option>
+                    <option value=null>Select ticket type...</option>
                     <option value="bug-report">🐛 Bug Report</option>
                     <option value="feature-request">✨ Feature Request</option>
                     <option value="help-needed">❓ Help Needed</option>
@@ -8066,11 +8048,11 @@ export default function CommandCenter() {
                     
                     // Reset form and close modal
                     setShowCreateTicketModal(false);
-                    setNewTicketSubject('');
-                    setNewTicketDescription('');
-                    setNewTicketCategory('');
-                    setNewTicketName('');
-                    setNewTicketEmail('');
+                    setNewTicketSubject(null);
+                    setNewTicketDescription(null);
+                    setNewTicketCategory(null);
+                    setNewTicketName(null);
+                    setNewTicketEmail(null);
                     setNewTicketPriority('medium');
                   }}
                   disabled={!newTicketName.trim() || !newTicketEmail.trim() || !newTicketCategory || !newTicketSubject.trim() || !newTicketDescription.trim()}
@@ -8081,11 +8063,11 @@ export default function CommandCenter() {
                 <Button
                   onClick={() => {
                     setShowCreateTicketModal(false);
-                    setNewTicketSubject('');
-                    setNewTicketDescription('');
-                    setNewTicketCategory('');
-                    setNewTicketName('');
-                    setNewTicketEmail('');
+                    setNewTicketSubject(null);
+                    setNewTicketDescription(null);
+                    setNewTicketCategory(null);
+                    setNewTicketName(null);
+                    setNewTicketEmail(null);
                     setNewTicketPriority('medium');
                   }}
                   variant="outline"
@@ -8519,7 +8501,7 @@ export default function CommandCenter() {
                     </div>
                   </div>
                   <div className="mt-4 flex gap-3">
-                    <Button className="bg-green-600 hover:bg-green-700 text-white border border-green-500">
+                    <Button className="bg-slate-600 text-white">
                       Start Sync
                     </Button>
                     <Button variant="outline" className="border-green-400 text-green-400">
@@ -8668,7 +8650,7 @@ export default function CommandCenter() {
                 <Button
                   onClick={handleSendMessage}
                   disabled={!currentMessage.trim()}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4"
+                  className="bg-slate-600 text-white"
                 >
                   <Send className="w-4 h-4" />
                 </Button>
@@ -9115,13 +9097,13 @@ export default function CommandCenter() {
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Client Calls:</span>
                     <span className="text-green-400 font-medium">
-                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '6' : selectedDay === 1 ? '4' : selectedDay === 2 ? '3' : selectedDay === 3 ? '4' : selectedDay === 4 ? '3' : selectedDay === 5 ? '3' : '2') : ''}
+                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '6' : selectedDay === 1 ? '4' : selectedDay === 2 ? '3' : selectedDay === 3 ? '4' : selectedDay === 4 ? '3' : selectedDay === 5 ? '3' : '2') : null}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Internal Meetings:</span>
                     <span className="text-blue-400 font-medium">
-                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '9' : selectedDay === 1 ? '8' : selectedDay === 2 ? '7' : selectedDay === 3 ? '7' : selectedDay === 4 ? '6' : selectedDay === 5 ? '5' : '3') : ''}
+                      {currentSystemMode === 'test' ? (selectedDay === 0 ? '9' : selectedDay === 1 ? '8' : selectedDay === 2 ? '7' : selectedDay === 3 ? '7' : selectedDay === 4 ? '6' : selectedDay === 5 ? '5' : '3') : null}
                     </span>
                   </div>
                 </div>
@@ -9129,7 +9111,7 @@ export default function CommandCenter() {
 
               {/* Quick Actions */}
               <div className="mt-6 flex items-center justify-center space-x-4">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button className="bg-slate-600 text-white">
                   <Calendar className="w-4 h-4 mr-2" />
                   Add Meeting
                 </Button>
@@ -9163,7 +9145,7 @@ export default function CommandCenter() {
               <Bell className="w-5 h-5 text-blue-400" />
               <span className="text-white font-medium">Next Scheduled Voice Test: Today @ 2:00 PM</span>
             </div>
-            <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button size="sm" className="bg-slate-600 text-white">
               View Details
             </Button>
           </div>
@@ -9177,7 +9159,7 @@ export default function CommandCenter() {
           <p className="text-slate-300 mb-4">Our team is here to help optimize your automation</p>
           <Button 
             onClick={handleContactSupport}
-            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+            className="bg-slate-600 text-white"
           >
             <Headphones className="w-4 h-4 mr-2" />
             Contact Support
@@ -9241,11 +9223,11 @@ export default function CommandCenter() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Success Rate:</span>
-                      <span className="text-green-400 font-bold">{"--"}</span>
+                      <span className="text-green-400 font-bold">{null}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Avg Duration:</span>
-                      <span className="text-blue-400 font-bold">{"--"}</span>
+                      <span className="text-blue-400 font-bold">{null}</span>
                     </div>
                   </div>
                 </div>
@@ -9254,15 +9236,15 @@ export default function CommandCenter() {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Leads Generated:</span>
-                      <span className="text-white font-bold">{"--"}</span>
+                      <span className="text-white font-bold">{null}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Conversions:</span>
-                      <span className="text-green-400 font-bold">{"--"}</span>
+                      <span className="text-green-400 font-bold">{null}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Est. Revenue:</span>
-                      <span className="text-green-400 font-bold">{"--"}</span>
+                      <span className="text-green-400 font-bold">{null}</span>
                     </div>
                   </div>
                 </div>
@@ -9361,7 +9343,7 @@ export default function CommandCenter() {
                       <span>Call ID: {call.id}</span>
                       <span>Duration: {call.duration}</span>
                       <span>Time: {call.timestamp}</span>
-                      <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs">
+                      <Button size="sm" className="bg-slate-600 text-white">
                         Listen
                       </Button>
                     </div>
@@ -9532,7 +9514,7 @@ export default function CommandCenter() {
               </Button>
               <Button
                 onClick={handleGenerateExport}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                className="bg-slate-600 text-white"
               >
                 Generate Export
               </Button>
