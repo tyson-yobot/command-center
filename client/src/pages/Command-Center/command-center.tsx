@@ -3507,41 +3507,58 @@ export default function CommandCenter() {
               </CardHeader>
               <CardContent className="p-6">
                 <div className="space-y-4">
-                  <div className="text-sm text-blue-300 mb-3">
-                    Last PDF Generated:
+                  <div className="bg-blue-900/30 rounded-lg p-4 border border-blue-400/30">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-blue-300 text-sm">Last PDF Generated:</span>
+                      <span className="text-blue-200 font-medium">Never</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-blue-300 text-sm">Export Technology:</span>
+                      <span className="text-slate-400 text-sm">Ready</span>
+                    </div>
                   </div>
-                  <div className="text-blue-200 font-medium">
-                    Never
+                  
+                  <div className="space-y-3">
+                    <h4 className="text-blue-300 font-semibold text-sm border-b border-blue-400/30 pb-1">
+                      Export Options
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button
+                        onClick={() => setShowAnalyticsModal(true)}
+                        className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 h-10 text-xs"
+                      >
+                        <FileText className="w-3 h-3 mr-1" />
+                        Analytics Report
+                      </Button>
+                      <Button
+                        onClick={handlePDFReport}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 h-10 text-xs"
+                      >
+                        <Printer className="w-3 h-3 mr-1" />
+                        PDF Export
+                      </Button>
+                      <Button
+                        onClick={() => setShowExportModal(true)}
+                        className="bg-teal-600 hover:bg-teal-700 text-white px-3 py-2 h-10 text-xs"
+                      >
+                        <Download className="w-3 h-3 mr-1" />
+                        Quick Export
+                      </Button>
+                      <Button
+                        onClick={handleExportData}
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-2 h-10 text-xs"
+                      >
+                        <Database className="w-3 h-3 mr-1" />
+                        Data Export
+                      </Button>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <Button
-                      onClick={() => setShowAnalyticsModal(true)}
-                      className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-4 h-12"
-                    >
-                      <FileText className="w-4 h-4 mr-2" />
-                      Analytics Report
-                    </Button>
-                    <Button
-                      onClick={handlePDFReport}
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-4 h-12"
-                    >
-                      <Printer className="w-4 h-4 mr-2" />
-                      PDF Export
-                    </Button>
-                    <Button
-                      onClick={() => setShowExportModal(true)}
-                      className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-4 h-12"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Quick Export
-                    </Button>
-                    <Button
-                      onClick={handleExportData}
-                      className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-4 h-12"
-                    >
-                      <Database className="w-4 h-4 mr-2" />
-                      Data Export
-                    </Button>
+                  
+                  <div className="bg-slate-800/40 rounded-lg p-3 border border-blue-400/20">
+                    <div className="text-blue-300 text-xs mb-2">Recent Exports:</div>
+                    <div className="text-slate-400 text-xs text-center py-2">
+                      {currentSystemMode === 'live' ? 'No exports in live mode' : 'No recent exports'}
+                    </div>
                   </div>
                 </div>
               </CardContent>
