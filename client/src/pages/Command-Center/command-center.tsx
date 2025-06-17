@@ -3569,10 +3569,50 @@ export default function CommandCenter() {
                       <div className="text-purple-300 text-sm mb-2">Last PDF Generated:</div>
                       <div className="text-white font-bold">Never</div>
                     </div>
-                    <div className="p-3 bg-white/5 rounded-lg">
-                      <div className="text-purple-300 text-sm mb-2">Export Technology:</div>
-                      <div className="text-white font-bold">No recent exports</div>
+
+                  </div>
+                </CardContent>
+              )}
+            </Card>
+
+            {/* PDF & Export Panel */}
+            <Card className="bg-gradient-to-br from-blue-900/60 to-indigo-900/60 backdrop-blur-sm border border-blue-400 shadow-lg shadow-blue-400/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FileText className="w-5 h-5 mr-2 text-blue-400" />
+                    📄 PDF & Export Panel
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => toggleSection('pdf-export')}
+                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                    >
+                      {collapsedSections['pdf-export'] ? 
+                        <ChevronDown className="w-4 h-4" /> : 
+                        <ChevronUp className="w-4 h-4" />
+                      }
+                    </Button>
+                  </div>
+                  <Badge className="bg-blue-600 text-white">EXPORT</Badge>
+                </CardTitle>
+              </CardHeader>
+              {!collapsedSections['pdf-export'] && (
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    <div className="space-y-3">
+                      <h4 className="text-blue-300 font-semibold flex items-center border-b border-blue-400/30 pb-2">
+                        <Printer className="w-4 h-4 mr-2" />
+                        📊 Last PDF Generated
+                      </h4>
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="flex justify-between">
+                          <span className="text-blue-300 text-sm">Export Technology:</span>
+                          <span className="text-slate-400 font-bold">Never</span>
+                        </div>
+                      </div>
                     </div>
+                    
                     <div className="grid grid-cols-2 gap-3">
                       <Button
                         onClick={() => setShowAnalyticsModal(true)}
@@ -3607,101 +3647,22 @@ export default function CommandCenter() {
                 </CardContent>
               )}
             </Card>
+          </div>
 
-            {/* Audit/Integrity Panel */}
-            <Card className="bg-gradient-to-br from-orange-900/60 to-red-900/60 backdrop-blur-sm border border-orange-400 shadow-lg shadow-orange-400/20">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Shield className="w-5 h-5 mr-2 text-orange-400" />
-                    🛡️ Audit/Integrity Panel
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleSection('audit-integrity')}
-                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                    >
-                      {collapsedSections['audit-integrity'] ? 
-                        <ChevronDown className="w-4 h-4" /> : 
-                        <ChevronUp className="w-4 h-4" />
-                      }
-                    </Button>
-                  </div>
-                  <Badge className="bg-orange-600 text-white">MONITORING</Badge>
-                </CardTitle>
-              </CardHeader>
-              {!collapsedSections['audit-integrity'] && (
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-3">
-                      <h4 className="text-orange-300 font-semibold">🔒 Tamper Detection</h4>
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-slate-300 text-sm">Last Tamper Check:</span>
-                          <span className="text-green-400 font-bold">0/min</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-300 text-sm">Integrity Status:</span>
-                          <span className="text-blue-400 font-bold">UNKNOWN</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-3">
-                      <h4 className="text-yellow-300 font-semibold">⚡ Logger Activity</h4>
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-slate-300 text-sm">Active Loggers:</span>
-                          <span className="text-green-400 font-bold">0/min</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-300 text-sm">Log Rate:</span>
-                          <span className="text-blue-400 font-bold">0/min</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-3">
-                      <h4 className="text-red-300 font-semibold">🔥 Failback Triggers</h4>
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-slate-300 text-sm">Last Triggered:</span>
-                          <span className="text-white font-bold">Never</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-300 text-sm">Latest Entries:</span>
-                          <span className="text-red-400 font-bold">No recent activity</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-4 grid grid-cols-2 lg:grid-cols-3 gap-3">
-                    <Button
-                      onClick={() => {}} 
-                      className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-4 h-12"
-                    >
-                      <AlertTriangle className="w-4 h-4 mr-2" />
-                      Run Integrity Check
-                    </Button>
-                    <Button
-                      onClick={() => {}} 
-                      className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-4 h-12"
-                    >
-                      <Eye className="w-4 h-4 mr-2" />
-                      Check Logger Status
-                    </Button>
-                    <Button
-                      onClick={() => {}} 
-                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-4 h-12"
-                    >
-                      <Zap className="w-4 h-4 mr-2" />
-                      Test Integrity Check
-                    </Button>
-                  </div>
-                </CardContent>
-              )}
-            </Card>
+          {/* Light Purple Fill Areas */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-6">
+            <div className="bg-purple-400/20 rounded-lg p-8 border border-purple-300/30 backdrop-blur-sm">
+              <div className="text-center space-y-4">
+                <div className="text-purple-200 text-lg font-medium">Additional Analytics Space</div>
+                <div className="text-purple-300 text-sm">Reserved for future dashboard components</div>
+              </div>
+            </div>
+            <div className="bg-purple-400/20 rounded-lg p-8 border border-purple-300/30 backdrop-blur-sm">
+              <div className="text-center space-y-4">
+                <div className="text-purple-200 text-lg font-medium">Extended Export Tools</div>
+                <div className="text-purple-300 text-sm">Additional export functionality coming soon</div>
+              </div>
+            </div>
           </div>
         </div>
 
