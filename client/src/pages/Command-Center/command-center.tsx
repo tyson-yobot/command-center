@@ -3286,7 +3286,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Live Pipeline Banner */}
-        {(currentSystemMode === 'test' || (liveActivityData?.data?.callsInProgress > --)) && (
+        {(currentSystemMode === 'test' || (liveActivityData?.data?.callsInProgress > 0)) && (
           <div className="mb-6 p-4 bg-green-900/30 border border-green-400 rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -4560,7 +4560,7 @@ export default function CommandCenter() {
                   <div className="text-right flex items-center space-x-1">
                     {metrics?.data?.monthlyRecurringRevenue && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
                     <span className="text-green-400 font-bold">
-                      {metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(--) + 'K' : ''}
+                      {metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : ''}
                     </span>
                   </div>
                 </div>
@@ -4576,7 +4576,7 @@ export default function CommandCenter() {
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Pipeline Value:</span>
                   <span className="text-blue-400 font-bold">
-                    {metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(--) + 'K' : ''}
+                    {metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(0) + 'K' : ''}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -5010,10 +5010,10 @@ export default function CommandCenter() {
                 >
                   <div className="text-slate-300 text-sm mb-1">Today's Schedule</div>
                   <div className="text-white font-bold">
-                    { (metrics?.activeCampaigns || --) + ' total meetings'}
+                    { (metrics?.activeCampaigns || 0) + ' total meetings'}
                   </div>
                   <div className="text-cyan-400 text-xs">
-                    { (metrics?.remainingTasks || --) + ' remaining today'}
+                    { (metrics?.remainingTasks || 0) + ' remaining today'}
                   </div>
                   <div className="text-blue-300 text-xs mt-1">Click to view details →</div>
                 </div>
@@ -5930,7 +5930,7 @@ export default function CommandCenter() {
                     </Button>
                     <Button 
                       onClick={async () => {
-                        if (selectedRecordings.length === --) {
+                        if (selectedRecordings.length === 0) {
                           alert('Please select recordings to edit');
                           return;
                         }
@@ -8553,7 +8553,7 @@ export default function CommandCenter() {
           );
         }}
         onDeleteSelected={async () => {
-          if (selectedKnowledgeItems.length === --) {
+          if (selectedKnowledgeItems.length === 0) {
             setToast({
               title: "No Selection",
               description: "Please select items to delete",
