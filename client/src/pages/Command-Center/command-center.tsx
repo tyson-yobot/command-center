@@ -4261,20 +4261,20 @@ export default function CommandCenter() {
                       <>
                         <div className="p-3 bg-white/5 rounded-lg border border-blue-400/30">
                           <div className="flex justify-between items-center">
-                            <span className="text-white font-medium">Client Review Call</span>
-                            <span className="text-blue-400 text-sm">2:30 PM</span>
+                            <span className="text-white font-medium">{liveActivity?.nextTasks?.[0]?.name || ''}</span>
+                            <span className="text-blue-400 text-sm">{liveActivity?.nextTasks?.[0]?.time || ''}</span>
                           </div>
                         </div>
                         <div className="p-3 bg-white/5 rounded-lg border border-green-400/30">
                           <div className="flex justify-between items-center">
                             <span className="text-white font-medium">Pipeline Optimization</span>
-                            <span className="text-green-400 text-sm">4:00 PM</span>
+                            <span className="text-green-400 text-sm">{liveActivity?.nextTasks?.[1]?.time || ''}</span>
                           </div>
                         </div>
                         <div className="p-3 bg-white/5 rounded-lg border border-orange-400/30">
                           <div className="flex justify-between items-center">
                             <span className="text-white font-medium">Weekly Sync</span>
-                            <span className="text-orange-400 text-sm">5:15 PM</span>
+                            <span className="text-orange-400 text-sm">{liveActivity?.nextTasks?.[2]?.time || ''}</span>
                           </div>
                         </div>
                       </>
@@ -8313,8 +8313,8 @@ export default function CommandCenter() {
                       </div>
                       <div className="bg-slate-700/40 rounded p-3">
                         <div className="text-sm text-slate-300 mb-2">Top Performing Content:</div>
-                        <div className="text-white text-sm">"YoBot AI automation increases productivity by 340"</div>
-                        <div className="text-green-400 text-xs">2.3K likes • 156 shares</div>
+                        <div className="text-white text-sm">{liveActivity?.topContent || ''}</div>
+                        <div className="text-green-400 text-xs">{liveActivity?.topContentStats || ''}</div>
                       </div>
                     </div>
                   </CardContent>
@@ -8331,11 +8331,7 @@ export default function CommandCenter() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {[
-                      { platform: "LinkedIn", content: "Transform your business with YoBot AI automation", status: "Published", engagement: "94 likes" },
-                      { platform: "Twitter", content: "New features in YoBot Command Center...", status: "Scheduled", engagement: "Schedule: 2PM" },
-                      { platform: "Facebook", content: "Client success story: No data available", status: "Draft", engagement: "Needs review" }
-                    ].map((item, index) => (
+                    {(liveActivity?.socialPosts || []).map((item, index) => (
                       <div key={index} className="flex items-center justify-between p-3 bg-slate-700/40 rounded border border-orange-400/30">
                         <div>
                           <div className="text-white font-medium">{item.platform}</div>
@@ -8447,7 +8443,7 @@ export default function CommandCenter() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Top Location:</span>
-                        <span className="text-white font-bold">New York</span>
+                        <span className="text-white font-bold">{liveActivity?.primaryLocation || ''}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Best Send Time:</span>
