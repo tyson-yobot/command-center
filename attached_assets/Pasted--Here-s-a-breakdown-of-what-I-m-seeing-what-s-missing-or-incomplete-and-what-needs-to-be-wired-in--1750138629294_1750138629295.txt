@@ -1,0 +1,101 @@
+ Here’s a breakdown of what I’m seeing, what’s missing or incomplete, and what needs to be wired in, cleaned up, or finalized for go-live or demo.
+
+✅ WHAT’S PRESENT + CORRECTLY STRUCTURED
+1. SmartSpend™ & Botalytics™
+✅ Metrics are present and styled correctly (Cost Per Lead, ROI, Payback Days, Interactions, Accuracy)
+
+🟢 Suggestion: Add trend arrows or % change indicators (e.g. +12% this week) for clarity
+
+2. PDF Reports & Analytics
+✅ Card exists, properly labeled
+
+❌ NOT WIRED: Reports Generated = 0, Success Rate = 0%
+
+🛠️ Action: Needs POST /generate-pdf trigger and Airtable log of completed PDFs
+
+🟢 Add: Last Generated timestamp field
+
+3. Live Engine
+✅ Status, Uptime, Processes showing
+
+🟢 Suggestion: Link this directly to Live Pipeline (show count of queued jobs)
+
+4. Core Automation + Sales Orders
+✅ Buttons + process logic appear visually consistent
+
+❌ Sales Order Process Orders button is likely not wired yet (recheck backend hook)
+
+5. AI Automation Engine
+✅ Labeled well
+
+❌ Shows all zeroes — Needs wiring to real task execution count (via Airtable or Make migration to Replit if staying native)
+
+6. System Audit Log / Escalation Alerts
+✅ Clean structure
+
+❌ Empty — needs backend data feed
+
+✅ Should pull from: 📄 Slack Alerts, 📣 Escalation Tracker, 🛠️ Error Logs
+
+7. Voice Programming Interface + Knowledge Base
+✅ Tabs: Query Knowledge, Smart Search, Content Search, Upload Documents
+
+❌ Buttons like Process Voice, Start Recording, Refresh Voices have no effect
+
+🛠️ Action: Voice programming → RAG ingestion path must be finalized
+
+✅ UI is polished but backend is not fully connected
+
+8. Voice Synthesis Studio
+✅ Voice generation + persona selection UI looks complete
+
+❌ Buttons not triggering ElevenLabs API (no voice preview/playback active)
+
+🟢 Suggestion: Add voice meter while generating
+
+9. Memory Text Insertion + Knowledge Management
+✅ Interface clean
+
+❌ Buttons like “Insert into Memory” don’t show any response
+
+✅ Latest Memory Activity Log placeholder is in place but empty
+
+10. Document Manager
+✅ Upload & Program Documents button is working visually
+
+❌ “Test Only” tag implies backend not connected
+
+🟢 Needs: Route to Airtable indexer or your document parsing module
+
+11. Call Monitoring Panel
+✅ Simulation button, metrics (Calls, Duration, Success), and service controls (Start, Reset, Ping)
+
+❌ Backend likely missing: simulate test call has no visual result
+
+🟢 Suggestion: Add a blinking meter or animation during active monitoring
+
+12. YoBot Support
+✅ Ticket interface styled well
+
+❌ Likely not connected to live support system
+
+🟢 Needs: Airtable Support Ticket Summary table sync or external Zendesk integration
+
+🔁 CONSISTENCY FIXES
+Issue	Fix
+SmartSpend / Botalytics tile order flips between views	Lock SmartSpend to right of Botalytics
+“Reports Generated” stuck at 0	Needs PDF Generator → Airtable Logging
+Blank sections (Audit, Escalation, Memory)	Add simulated or seeded data if needed for demo
+Voice Synthesis buttons inactive	Hook to ElevenLabs API or mock endpoint
+Export Dashboard still broken	Replace local explorer call with modal selection and proper file download routing
+
+✅ NEXT ACTIONS FOR REPLIT
+I'll generate a full QA wiring checklist by tile based on this updated screenshot set. But from what you’ve shared:
+
+You’re 85% structurally done
+
+Most backend functions are missing or unresponsive
+
+Key panels like Voice, PDF Reports, and Knowledge Upload need real routes
+
+You’ve got a killer visual layout — the last step is clean wiring and flow logic

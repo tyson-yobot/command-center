@@ -211,12 +211,12 @@ export default function CommandCenter() {
   const [userInitiatedVoice, setUserInitiatedVoice] = React.useState(false);
   const [showEscalation, setShowEscalation] = React.useState(false);
   const [selectedTier, setSelectedTier] = React.useState('All');
-  const [voiceCommand, setVoiceCommand] = React.useState(null);
+  const [voiceCommand, setVoiceCommand] = React.useState('');
   const [automationMode, setAutomationMode] = React.useState(true);
   
   // Enhanced voice command states
   const [micStatus, setMicStatus] = React.useState<'idle' | 'listening' | 'processing'>('idle');
-  const [realTimeTranscript, setRealTimeTranscript] = React.useState(null);
+  const [realTimeTranscript, setRealTimeTranscript] = React.useState('');
   const [showAnalyticsModal, setShowAnalyticsModal] = React.useState(false);
   const [showCalendarUpload, setShowCalendarUpload] = React.useState(false);
 
@@ -228,8 +228,8 @@ export default function CommandCenter() {
   const [currentRecognition, setCurrentRecognition] = React.useState<any>(null);
   
   // Voice recognition states for RAG programming
-  const [queryText, setQueryText] = useState(null);
-  const [programmingText, setProgrammingText] = useState(null);
+  const [queryText, setQueryText] = useState('');
+  const [programmingText, setProgrammingText] = useState('');
   const [voiceStatus, setVoiceStatus] = useState('Ready');
   const recognitionRef = useRef<any>(null);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = React.useState(false);
@@ -237,10 +237,10 @@ export default function CommandCenter() {
   const [availableVoices, setAvailableVoices] = useState<any[]>([]);
   const [voicesLoading, setVoicesLoading] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
-  const [deleteConfirmText, setDeleteConfirmText] = useState(null);
-  const [memoryText, setMemoryText] = useState(null);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [memoryText, setMemoryText] = useState('');
   const [memoryCategory, setMemoryCategory] = useState('general');
-  const [voiceGenerationText, setVoiceGenerationText] = useState(null);
+  const [voiceGenerationText, setVoiceGenerationText] = useState('');
   const [showPublyDashboard, setShowPublyDashboard] = useState(false);
   const [showMailchimpDashboard, setShowMailchimpDashboard] = useState(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
@@ -250,8 +250,8 @@ export default function CommandCenter() {
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
   const [showKnowledgeViewer, setShowKnowledgeViewer] = useState(false);
   const [showDocumentPreview, setShowDocumentPreview] = useState(false);
-  const [previewDocumentId, setPreviewDocumentId] = useState(null);
-  const [previewDocumentName, setPreviewDocumentName] = useState(null);
+  const [previewDocumentId, setPreviewDocumentId] = useState('');
+  const [previewDocumentName, setPreviewDocumentName] = useState('');
   const [selectedKnowledgeItems, setSelectedKnowledgeItems] = useState<string[]>([]);
   const [knowledgeItems, setKnowledgeItems] = useState([]);
   const [memoryActivityLog, setMemoryActivityLog] = useState([]);
@@ -895,11 +895,11 @@ export default function CommandCenter() {
   // Handle clear knowledge with confirmation
   const handleClearKnowledge = () => {
     setShowClearConfirm(true);
-    setDeleteConfirmText(null);
+    setDeleteConfirmText('');
   };
 
   const confirmClearKnowledge = async () => {
-    if (deleteConfirmText.toLowerCase() === 'delete') {
+    if (deleteConfirmText && deleteConfirmText.toLowerCase() === 'delete') {
       try {
         setVoiceStatus('Clearing knowledge base...');
         
