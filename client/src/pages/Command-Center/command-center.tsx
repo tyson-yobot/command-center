@@ -1570,93 +1570,9 @@ export default function CommandCenter() {
     }
   };
 
-  const handleContentCreatorSync = async () => {
-    try {
-      setVoiceStatus('Creating content and syncing to Airtable...');
-      
-      const response = await fetch('/api/airtable/content-creation', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'x-system-mode': currentSystemMode
-        },
-        body: JSON.stringify({ 
-          contentType: 'social',
-          platform: 'linkedin',
-          industry: 'Business Automation',
-          topic: 'AI-powered automation and workflow optimization',
-          status: 'generated'
-        })
-      });
-      
-      if (response.ok) {
-        const result = await response.json();
-        setVoiceStatus('Content created and synced to Airtable successfully');
-        setToast({ 
-          title: "Content Synced", 
-          description: "Content created and logged to Airtable CRM" 
-        });
-      } else {
-        const error = await response.json();
-        setVoiceStatus('Content sync failed - check Airtable connection');
-        setToast({ 
-          title: "Sync Failed", 
-          description: error.error || "Unable to sync content to Airtable",
-          variant: "destructive" 
-        });
-      }
-    } catch (error) {
-      setVoiceStatus('Content creation sync error');
-      setToast({ 
-        title: "Network Error", 
-        description: "Unable to connect to content sync service",
-        variant: "destructive" 
-      });
-    }
-  };
 
-  const handleMailchimpSync = async () => {
-    try {
-      setVoiceStatus('Syncing contacts and campaigns to Airtable...');
-      
-      const response = await fetch('/api/airtable/mailchimp-sync', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'x-system-mode': currentSystemMode
-        },
-        body: JSON.stringify({ 
-          syncType: 'contacts_and_campaigns',
-          includeMetrics: true,
-          dateRange: '30d'
-        })
-      });
-      
-      if (response.ok) {
-        const result = await response.json();
-        setVoiceStatus('Contacts and campaigns synced to Airtable successfully');
-        setToast({ 
-          title: "MailChimp Synced", 
-          description: "Contacts and campaigns logged to Airtable CRM" 
-        });
-      } else {
-        const error = await response.json();
-        setVoiceStatus('MailChimp sync failed - check Airtable connection');
-        setToast({ 
-          title: "Sync Failed", 
-          description: error.error || "Unable to sync MailChimp to Airtable",
-          variant: "destructive" 
-        });
-      }
-    } catch (error) {
-      setVoiceStatus('MailChimp sync error');
-      setToast({ 
-        title: "Network Error", 
-        description: "Unable to connect to MailChimp sync service",
-        variant: "destructive" 
-      });
-    }
-  };
+
+
 
   const handleRunLeadScrape = async () => {
     try {
