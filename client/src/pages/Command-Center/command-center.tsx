@@ -220,11 +220,11 @@ export default function CommandCenter() {
   const [showAnalyticsModal, setShowAnalyticsModal] = React.useState(false);
   const [showCalendarUpload, setShowCalendarUpload] = React.useState(false);
 
-  const [activeCallsCount, setActiveCallsCount] = React.useState(0);
+  const [activeCallsCount, setActiveCallsCount] = React.useState(--);
   const [dashboardPreset, setDashboardPreset] = React.useState('full');
   const [collapsedSections, setCollapsedSections] = React.useState<{[key: string]: boolean}>({});
   const [demoMode, setDemoMode] = React.useState(false);
-  const [demoStep, setDemoStep] = React.useState(0);
+  const [demoStep, setDemoStep] = React.useState(--);
   const [currentRecognition, setCurrentRecognition] = React.useState<any>(null);
   
   // Voice recognition states for RAG programming
@@ -366,7 +366,7 @@ export default function CommandCenter() {
   const [showCallDetails, setShowCallDetails] = useState(false);
   const [showKnowledgeManager, setShowKnowledgeManager] = useState(false);
   const [showScheduleViewer, setShowScheduleViewer] = useState(false);
-  const [selectedDay, setSelectedDay] = useState(0); // 0 = today, 1 = tomorrow, etc.
+  const [selectedDay, setSelectedDay] = useState(--); // -- = today, 1 = tomorrow, etc.
   const [showTicketModal, setShowTicketModal] = useState(false);
   const [showCreateTicketModal, setShowCreateTicketModal] = useState(false);
   
@@ -442,8 +442,8 @@ export default function CommandCenter() {
   const [showCallReports, setShowCallReports] = useState(false);
   const [showCallLogs, setShowCallLogs] = useState(false);
   const [showToast, setShowToast] = useState<{message: string; type: 'success' | 'error'} | null>(null);
-  const [totalRecords, setTotalRecords] = useState(0);
-  const [completedCalls, setCompletedCalls] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(--);
+  const [completedCalls, setCompletedCalls] = useState(--);
   const [pipelineRunning, setPipelineRunning] = useState(false);
 
   // Service Management Functions
@@ -453,8 +453,8 @@ export default function CommandCenter() {
         ...prev,
         [service]: { status: 'ACTIVE', lastPing: new Date().toLocaleTimeString() }
       }));
-      addRecentActivity(`${service.charAt(0).toUpperCase() + service.slice(1)} service started`, 'system');
-      showToastMessage(`${service.charAt(0).toUpperCase() + service.slice(1)} service activated`, 'success');
+      addRecentActivity(`${service.charAt(--).toUpperCase() + service.slice(1)} service started`, 'system');
+      showToastMessage(`${service.charAt(--).toUpperCase() + service.slice(1)} service activated`, 'success');
     } else if (action === 'restart') {
       setServiceStates(prev => ({
         ...prev,
@@ -465,9 +465,9 @@ export default function CommandCenter() {
           ...prev,
           [service]: { status: 'ACTIVE', lastPing: new Date().toLocaleTimeString() }
         }));
-        addRecentActivity(`${service.charAt(0).toUpperCase() + service.slice(1)} service restarted`, 'system');
+        addRecentActivity(`${service.charAt(--).toUpperCase() + service.slice(1)} service restarted`, 'system');
       }, 2000);
-      showToastMessage(`${service.charAt(0).toUpperCase() + service.slice(1)} service restarting...`, 'success');
+      showToastMessage(`${service.charAt(--).toUpperCase() + service.slice(1)} service restarting...`, 'success');
     } else if (action === 'ping') {
       try {
         // Simulate ping request
@@ -810,7 +810,7 @@ export default function CommandCenter() {
       if (response.ok) {
         const data = await response.json();
         
-        if (data.voices && data.voices.length > 0) {
+        if (data.voices && data.voices.length > --) {
           setAvailableVoices(data.voices);
           setVoiceStatus(`${data.voices.length} voices loaded successfully`);
           console.log('Loaded voices:', data.voices.map((v: any) => v.name));
@@ -988,7 +988,7 @@ export default function CommandCenter() {
     input.accept = '.pdf,.doc,.docx,.txt,.csv';
     input.onchange = async (e) => {
       const files = (e.target as HTMLInputElement).files;
-      if (files && files.length > 0) {
+      if (files && files.length > --) {
         setVoiceStatus('Processing documents for RAG system...');
         setDocumentsLoading(true);
         
@@ -1077,11 +1077,11 @@ export default function CommandCenter() {
         console.log('Knowledge API response:', data);
         setKnowledgeItems(data.items || []);
         setShowKnowledgeViewer(true);
-        console.log('Modal state set to true, items:', data.items?.length || 0);
-        setVoiceStatus(`Loaded ${data.total || 0} knowledge items: ${data.documents || 0} documents, ${data.memories || 0} memories`);
+        console.log('Modal state set to true, items:', data.items?.length || --);
+        setVoiceStatus(`Loaded ${data.total || --} knowledge items: ${data.documents || --} documents, ${data.memories || --} memories`);
         setToast({
           title: "Knowledge Loaded",
-          description: `Found ${data.total || 0} items in knowledge base`,
+          description: `Found ${data.total || --} items in knowledge base`,
         });
       } else {
         console.error('Knowledge API failed:', response.status);
@@ -1939,7 +1939,7 @@ export default function CommandCenter() {
 
 
   const handleCalendarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files?.[--];
     if (!file) return;
 
     try {
@@ -1974,7 +1974,7 @@ export default function CommandCenter() {
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (!files || files.length === 0) return;
+    if (!files || files.length === --) return;
 
     setVoiceStatus('Uploading documents to RAG system...');
     setDocumentsLoading(true);
@@ -2004,8 +2004,8 @@ export default function CommandCenter() {
 
       if (response.ok) {
         const result = await response.json();
-        const successCount = result.files?.filter(f => f.status === 'processed').length || 0;
-        const errorCount = result.files?.filter(f => f.status === 'error').length || 0;
+        const successCount = result.files?.filter(f => f.status === 'processed').length || --;
+        const errorCount = result.files?.filter(f => f.status === 'error').length || --;
         const fileNames = result.files?.map(f => f.filename).join(', ') || '';
         
         setVoiceStatus(`Documents Processed: ${fileNames}`);
@@ -2015,7 +2015,7 @@ export default function CommandCenter() {
           timestamp: new Date().toLocaleTimeString(),
           type: 'File',
           category: 'document',
-          result: successCount > 0 ? 'Success' : 'Error'
+          result: successCount > -- ? 'Success' : 'Error'
         };
         setMemoryActivityLog(prev => [...prev, logEntry]);
         
@@ -2380,7 +2380,7 @@ export default function CommandCenter() {
   };
 
   const deleteSelectedDocuments = async () => {
-    if (selectedDocuments.length === 0) {
+    if (selectedDocuments.length === --) {
       setToast({
         title: "No Selection",
         description: "Please select documents to delete",
@@ -2617,7 +2617,7 @@ export default function CommandCenter() {
       const result = await response.json();
 
       if (result.success) {
-        setTotalRecords(result.total_records || 0);
+        setTotalRecords(result.total_records || --);
         setActiveCalls(result.activeCalls || []);
         
         // Use only real call data from API response - NO MOCK DATA IN LIVE MODE
@@ -2904,7 +2904,7 @@ export default function CommandCenter() {
   // Demo mode functions
   const startDemo = () => {
     setDemoMode(true);
-    setDemoStep(0);
+    setDemoStep(--);
   };
 
   const nextDemoStep = () => {
@@ -2912,7 +2912,7 @@ export default function CommandCenter() {
       setDemoStep(demoStep + 1);
     } else {
       setDemoMode(false);
-      setDemoStep(0);
+      setDemoStep(--);
     }
   };
 
@@ -3286,7 +3286,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Live Pipeline Banner */}
-        {(currentSystemMode === 'test' || (liveActivityData?.data?.callsInProgress > 0)) && (
+        {(currentSystemMode === 'test' || (liveActivityData?.data?.callsInProgress > --)) && (
           <div className="mb-6 p-4 bg-green-900/30 border border-green-400 rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -4560,7 +4560,7 @@ export default function CommandCenter() {
                   <div className="text-right flex items-center space-x-1">
                     {metrics?.data?.monthlyRecurringRevenue && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
                     <span className="text-green-400 font-bold">
-                      {metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : ''}
+                      {metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(--) + 'K' : ''}
                     </span>
                   </div>
                 </div>
@@ -4576,7 +4576,7 @@ export default function CommandCenter() {
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Pipeline Value:</span>
                   <span className="text-blue-400 font-bold">
-                    {metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(0) + 'K' : ''}
+                    {metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(--) + 'K' : ''}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -5010,10 +5010,10 @@ export default function CommandCenter() {
                 >
                   <div className="text-slate-300 text-sm mb-1">Today's Schedule</div>
                   <div className="text-white font-bold">
-                    { (metrics?.activeCampaigns || 0) + ' total meetings'}
+                    { (metrics?.activeCampaigns || --) + ' total meetings'}
                   </div>
                   <div className="text-cyan-400 text-xs">
-                    { (metrics?.remainingTasks || 0) + ' remaining today'}
+                    { (metrics?.remainingTasks || --) + ' remaining today'}
                   </div>
                   <div className="text-blue-300 text-xs mt-1">Click to view details →</div>
                 </div>
@@ -5930,7 +5930,7 @@ export default function CommandCenter() {
                     </Button>
                     <Button 
                       onClick={async () => {
-                        if (selectedRecordings.length === 0) {
+                        if (selectedRecordings.length === --) {
                           alert('Please select recordings to edit');
                           return;
                         }
@@ -8553,7 +8553,7 @@ export default function CommandCenter() {
           );
         }}
         onDeleteSelected={async () => {
-          if (selectedKnowledgeItems.length === 0) {
+          if (selectedKnowledgeItems.length === --) {
             setToast({
               title: "No Selection",
               description: "Please select items to delete",
