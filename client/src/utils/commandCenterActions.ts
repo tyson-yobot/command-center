@@ -14,7 +14,181 @@ interface ButtonActionParams {
 export class CommandCenterActions {
   private static defaultUser = 'Command Center User';
 
-  // SECTION 1: Quick Action Launchpad
+  // Voice Command: "Show dashboard" -> Toggle to 'Full Ops View'
+  static async showDashboard(params: ButtonActionParams = {}) {
+    try {
+      const response = await fetch('/api/dashboard/toggle/view?mode=full_ops', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'toggle_dashboard_view',
+          mode: 'full_ops',
+          triggeredBy: params.triggeredBy || this.defaultUser,
+          voiceTriggered: params.voiceTriggered || false
+        })
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('Dashboard toggle failed:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  // Voice Command: "Generate report" -> Open 'Generate Analytics Report' modal
+  static async generateReport(params: ButtonActionParams = {}) {
+    try {
+      const response = await fetch('/api/open/modal/analyticsReport', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'open_analytics_modal',
+          triggeredBy: params.triggeredBy || this.defaultUser,
+          voiceTriggered: params.voiceTriggered || false
+        })
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('Analytics report modal failed:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  // Voice Command: "Start automation" -> Start automation engine (Live mode only)
+  static async startAutomation(params: ButtonActionParams = {}) {
+    try {
+      const response = await fetch('/api/automation/run/full?mode=current', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'start_automation_engine',
+          triggeredBy: params.triggeredBy || this.defaultUser,
+          voiceTriggered: params.voiceTriggered || false,
+          requiresLiveMode: true
+        })
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('Automation start failed:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  // Voice Command: "Check system status" -> Ping all modules and return health summary
+  static async checkSystemStatus(params: ButtonActionParams = {}) {
+    try {
+      const response = await fetch('/api/system/status/summary', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('System status check failed:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  // Voice Command: "Call my top prospect" -> Trigger voice call to highest-rated lead
+  static async callTopProspect(params: ButtonActionParams = {}) {
+    try {
+      const response = await fetch('/api/voice/call/topRated', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'call_top_prospect',
+          triggeredBy: params.triggeredBy || this.defaultUser,
+          voiceTriggered: params.voiceTriggered || false,
+          crmScoringRequired: true
+        })
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('Top prospect call failed:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  // Voice Command: "Schedule follow-up" -> Trigger Follow-Up Automation
+  static async scheduleFollowUp(params: ButtonActionParams = {}) {
+    try {
+      const response = await fetch('/api/followup/trigger/now', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'schedule_followup',
+          triggeredBy: params.triggeredBy || this.defaultUser,
+          voiceTriggered: params.voiceTriggered || false,
+          logToAirtable: true,
+          logToHubSpot: true
+        })
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('Follow-up scheduling failed:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  // Voice Command: "Start voice" -> Start Voice Listening
+  static async startVoiceListening(params: ButtonActionParams = {}) {
+    try {
+      const response = await fetch('/api/voice/listen/activate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'activate_voice_listening',
+          triggeredBy: params.triggeredBy || this.defaultUser,
+          showIndicator: true
+        })
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('Voice listening activation failed:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  // Voice Command: "End pipeline calls" -> Stop all pipeline calls in progress
+  static async endPipelineCalls(params: ButtonActionParams = {}) {
+    try {
+      const response = await fetch('/api/voice/pipeline/stopAll', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'stop_pipeline_calls',
+          triggeredBy: params.triggeredBy || this.defaultUser,
+          voiceTriggered: params.voiceTriggered || false,
+          resetCallQueue: true,
+          markStatusIdle: true
+        })
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('Pipeline calls stop failed:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  // Voice Command: "Export dashboard" -> Generate and download PDF report
+  static async exportDashboard(params: ButtonActionParams = {}) {
+    try {
+      const response = await fetch('/api/report/dashboard/export?type=pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'export_dashboard_pdf',
+          triggeredBy: params.triggeredBy || this.defaultUser,
+          voiceTriggered: params.voiceTriggered || false,
+          confirmationRequired: true
+        })
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('Dashboard export failed:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  // LEGACY: Quick Action Launchpad
   static async scheduleBooking(params: ButtonActionParams = {}) {
     try {
       const response = await fetch('/api/command-center/schedule-booking', {

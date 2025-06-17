@@ -69,6 +69,7 @@ import {
 } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
+import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Bar } from 'recharts';
 
 
 import { SalesOrderProcessor } from '@/components/sales-order-processor';
@@ -3381,42 +3382,42 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={handleManualFollowUp}
+                    onClick={() => CommandCenterActions.scheduleFollowUp({ voiceTriggered: false })}
                     className="!bg-amber-600 hover:!bg-amber-700 !text-white flex items-center justify-center p-4 h-24 border border-amber-500"
-                    title="Follow-up Trigger"
+                    title="Schedule Follow-up"
                   >
                     <div className="text-center">
                       <RefreshCw className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Follow-up Trigger</span>
+                      <span className="text-sm font-medium">Schedule Follow-up</span>
                     </div>
                   </Button>
                   
                   <Button
-                    onClick={handleStartPipelineCalls}
+                    onClick={() => CommandCenterActions.startAutomation({ voiceTriggered: false })}
                     className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500"
-                    title="Start/End Pipeline Calls"
+                    title="Start Automation"
                   >
                     <div className="text-center">
                       <Phone className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Start Pipeline</span>
+                      <span className="text-sm font-medium">Start Automation</span>
                     </div>
                   </Button>
                   
                   <Button
-                    onClick={() => setShowManualCallModal(true)}
+                    onClick={() => CommandCenterActions.callTopProspect({ voiceTriggered: false })}
                     className="!bg-teal-600 hover:!bg-teal-700 !text-white flex items-center justify-center p-4 h-24 border border-teal-500"
-                    title="Manual Call Start"
+                    title="Call Top Prospect"
                   >
                     <div className="text-center">
                       <PhoneOff className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Manual Call Start</span>
+                      <span className="text-sm font-medium">Call Top Prospect</span>
                     </div>
                   </Button>
                   
                   <Button
-                    onClick={handleVoiceInput}
+                    onClick={() => CommandCenterActions.startVoiceListening({ voiceTriggered: false })}
                     className="!bg-indigo-600 hover:!bg-indigo-700 !text-white flex items-center justify-center p-4 h-24 border border-indigo-500"
-                    title="Start Voice"
+                    title="Start Voice Listening"
                   >
                     <div className="text-center">
                       <Mic className="w-6 h-6 mx-auto mb-2" />
