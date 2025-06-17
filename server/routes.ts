@@ -3,6 +3,7 @@ import { db } from "./db";
 import { storage } from "./storage";
 import { registerAirtableRoutes } from "./modules/airtable/airtableRoutes";
 import { registerScraperRoutes } from "./modules/scraper/scraperRoutes";
+import { generateVoiceReply, testElevenLabsConnection, getAvailableVoices } from "./modules/voice/voiceGeneration";
 
 let systemMode = 'live';
 
@@ -77,14 +78,54 @@ export function registerRoutes(app: Express): void {
   });
 
   // Voice personas
-  app.get('/api/voice/personas', (req, res) => {
-    res.json({
-      success: true,
-      data: [
-        { id: "ErXwobaYiN", name: "Sarah", language: "en" },
-        { id: "21m00Tcm4TlvDq8ikWAM", name: "Rachel", language: "en" }
-      ]
-    });
+  app.get('/api/voice/personas', async (req, res) => {
+    try {
+      const voices = await getAvailableVoices();
+      res.json({
+        success: true,
+        data: voices
+      });
+    } catch (error) {
+      console.error('Failed to fetch voices:', error);
+      res.json({
+        success: true,
+        data: []
+      });
+    }
+  });
+
+  // Voice generation endpoints
+  app.post('/api/voice/generate', async (req, res) => {
+    try {
+      const { text, voiceId } = req.body;
+      if (!text) {
+        return res.status(400).json({ success: false, error: 'Text is required' });
+      }
+      
+      const filename = `voice_${Date.now()}.mp3`;
+      const result = await generateVoiceReply(text, filename);
+      
+      res.json(result);
+    } catch (error) {
+      console.error('Voice generation error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Voice generation failed' 
+      });
+    }
+  });
+
+  app.get('/api/voice/test-connection', async (req, res) => {
+    try {
+      const result = await testElevenLabsConnection();
+      res.json(result);
+    } catch (error) {
+      console.error('Voice connection test error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Connection test failed' 
+      });
+    }
   });
 
   // Calls endpoints
