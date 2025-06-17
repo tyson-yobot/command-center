@@ -87,11 +87,11 @@ import { KnowledgeBaseManager } from '@/components/knowledge-base-manager';
 import { TabContentRenderer } from '@/components/TabContentRenderer';
 import { CreateVoiceCallModal } from '@/components/create-voice-call-modal';
 import { AnalyticsReportModal } from '@/components/AnalyticsReportModal';
-import { VoiceCommandInterface } from '@/components/VoiceCommandInterface';
+import { VoiceCommandInterface } from './components/VoiceCommandInterface';
 import { CalendarUploadModal } from '@/components/CalendarUploadModal';
 import { ExportDashboardModal } from '@/components/ExportDashboardModal';
 import { ManualCallStartModal } from '@/components/ManualCallStartModal';
-import { LiveCallBanner } from '@/components/LiveCallBanner';
+import { LiveCallBanner } from './components/LiveCallBanner';
 import { EnhancedTooltip, QuickTooltip } from '@/components/EnhancedTooltip';
 import { CommandCenterActions } from '@/utils/commandCenterActions';
 
