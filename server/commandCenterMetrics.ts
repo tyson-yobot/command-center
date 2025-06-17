@@ -350,7 +350,7 @@ export function registerCommandCenterMetrics(app: Express) {
       const { triggeredBy = 'System', calendarName = 'Default Calendar' } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': 'Calendar Upload',
+        '🛠️ Triggered Action': 'Calendar Upload',
         'Status': 'Synced',
         'Calendar Name': calendarName,
         'Triggered By': triggeredBy,
@@ -374,7 +374,7 @@ export function registerCommandCenterMetrics(app: Express) {
       const { triggeredBy = 'System', fileType = 'PDF' } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': 'Quick Export',
+        '🛠️ Triggered Action': 'Quick Export',
         'File Type': fileType,
         'Status': 'Queued',
         'Triggered By': triggeredBy,
@@ -399,8 +399,8 @@ export function registerCommandCenterMetrics(app: Express) {
       const severity = action === 'Emergency Stop' ? 'Critical' : undefined;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': action,
-        'Status': 'Awaiting',
+        '🛠️ Triggered Action': action,
+        'System Status': 'Awaiting',
         'Triggered By': triggeredBy,
         'Severity': severity,
         'Timestamp': new Date().toISOString()
@@ -425,8 +425,9 @@ export function registerCommandCenterMetrics(app: Express) {
       const { action, triggeredBy = 'Voice', sessionId } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': action === 'start' ? 'Start Pipeline' : 'End Pipeline',
-        'Voice Source': 'Voice',
+        '🛠️ Triggered Action': action === 'start' ? 'Start Pipeline' : 'End Pipeline',
+        'Voice Action': action === 'start' ? 'Start Pipeline' : 'End Pipeline',
+        '🎙️ Voice Source': 'Voice',
         'Triggered By': triggeredBy,
         'Session ID': sessionId,
         'Timestamp': new Date().toISOString()
@@ -449,7 +450,7 @@ export function registerCommandCenterMetrics(app: Express) {
       const { selectedVoice, triggeredBy = 'System', triggeredFrom = 'Voice Studio' } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': 'Voice Persona Test',
+        '🛠️ Triggered Action': 'Voice Persona Test',
         'Voice Persona Test': true,
         'Selected Voice': selectedVoice,
         'Triggered By': triggeredBy,
@@ -477,7 +478,7 @@ export function registerCommandCenterMetrics(app: Express) {
       const { triggeredBy = 'System', clientId } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': 'Manual Follow-Up',
+        '🛠️ Triggered Action': 'Manual Follow-Up',
         'Trigger Type': 'Manual Follow-Up',
         'Channel': 'SMS',
         'Triggered By': triggeredBy,
@@ -502,7 +503,7 @@ export function registerCommandCenterMetrics(app: Express) {
       const { triggeredBy = 'System', workflowId } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': 'Sales Order',
+        '🛠️ Triggered Action': 'Sales Order',
         'Trigger Type': 'Sales Order',
         'Sales Status': 'Triggered',
         'Workflow ID': workflowId,
@@ -529,9 +530,9 @@ export function registerCommandCenterMetrics(app: Express) {
       const { exportType, triggeredBy = 'System', clientContext } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': 'Data Export',
+        '🛠️ Triggered Action': 'Data Export',
         'Export Type': exportType,
-        'Triggered By': triggeredBy,
+        'Initiator': triggeredBy,
         'Export Status': 'In Progress',
         'Client Context': clientContext,
         'Timestamp': new Date().toISOString()
