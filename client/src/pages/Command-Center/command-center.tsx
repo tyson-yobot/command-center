@@ -1276,8 +1276,18 @@ export default function CommandCenter() {
   };
 
   // Export Dashboard and Reset Demo Handlers
-  const handleExportDashboard = () => {
-    setShowExportModal(true);
+  const handleExportDashboard = async () => {
+    try {
+      // Log to Command Center Metrics
+      await CommandCenterActions.exportData({
+        triggeredBy: 'Command Center User',
+        additionalData: { exportType: 'Dashboard Export', format: 'JSON' }
+      });
+      
+      setShowExportModal(true);
+    } catch (error) {
+      console.error('Export dashboard error:', error);
+    }
   };
 
   const handleGenerateExport = async () => {
@@ -2150,29 +2160,40 @@ export default function CommandCenter() {
 
   // Removed test sales order automation - only live webhook data processed
 
-  const handleVoiceToggle = () => {
-    if (!isListening) {
-      // Start voice recording
-      setUserInitiatedVoice(true);
-      setIsListening(true);
-      console.log('Voice recognition started by user');
-    } else {
-      // Stop voice recording
-      setUserInitiatedVoice(false);
-      setIsListening(false);
-      if (currentRecognition) {
-        try {
-          currentRecognition.stop();
-          setCurrentRecognition(null);
-        } catch (error) {
-          console.error('Error stopping recognition:', error);
+  const handleVoiceToggle = async () => {
+    try {
+      // Log to Command Center Metrics
+      const action = isListening ? 'Stop Voice' : 'Start Voice';
+      await CommandCenterActions.startVoice({
+        triggeredBy: 'Command Center User',
+        additionalData: { action, voiceStatus: isListening ? 'stopped' : 'started' }
+      });
+
+      if (!isListening) {
+        // Start voice recording
+        setUserInitiatedVoice(true);
+        setIsListening(true);
+        console.log('Voice recognition started by user');
+      } else {
+        // Stop voice recording
+        setUserInitiatedVoice(false);
+        setIsListening(false);
+        if (currentRecognition) {
+          try {
+            currentRecognition.stop();
+            setCurrentRecognition(null);
+          } catch (error) {
+            console.error('Error stopping recognition:', error);
+          }
         }
+        if (recognitionRef.current) {
+          recognitionRef.current.stop();
+          recognitionRef.current = null;
+        }
+        console.log('Voice recognition stopped by user');
       }
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-        recognitionRef.current = null;
-      }
-      console.log('Voice recognition stopped by user');
+    } catch (error) {
+      console.error('Voice toggle error:', error);
     }
   };
 
@@ -3042,7 +3063,22 @@ export default function CommandCenter() {
                     ].map(preset => (
                       <Button
                         key={preset.id}
-                        onClick={() => setDashboardPreset(preset.id)}
+                        onClick={async () => {
+                          try {
+                            await CommandCenterActions.systemMonitoring('Dashboard View Change', {
+                              triggeredBy: 'Command Center User',
+                              additionalData: { 
+                                previousView: dashboardPreset,
+                                newView: preset.id,
+                                viewLabel: preset.label
+                              }
+                            });
+                            setDashboardPreset(preset.id);
+                          } catch (error) {
+                            console.error('Dashboard preset change error:', error);
+                            setDashboardPreset(preset.id);
+                          }
+                        }}
                         size="sm"
                         className={`${
                           dashboardPreset === preset.id 
@@ -3059,7 +3095,18 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <Button
-                    onClick={() => setShowAnalyticsModal(true)}
+                    onClick={async () => {
+                      try {
+                        await CommandCenterActions.generateAnalyticsReport({
+                          triggeredBy: 'Command Center User',
+                          additionalData: { reportType: 'Enhanced Analytics Report' }
+                        });
+                        setShowAnalyticsModal(true);
+                      } catch (error) {
+                        console.error('Enhanced Reports error:', error);
+                        setShowAnalyticsModal(true);
+                      }
+                    }}
                     className="bg-purple-600 hover:bg-purple-700 text-white"
                     title="Generate Analytics Report with customizable options"
                   >
@@ -3067,7 +3114,18 @@ export default function CommandCenter() {
                     Enhanced Reports
                   </Button>
                   <Button
-                    onClick={() => setShowCalendarUpload(true)}
+                    onClick={async () => {
+                      try {
+                        await CommandCenterActions.uploadCalendar({
+                          triggeredBy: 'Command Center User',
+                          additionalData: { action: 'Calendar Upload/Sync' }
+                        });
+                        setShowCalendarUpload(true);
+                      } catch (error) {
+                        console.error('Calendar Sync error:', error);
+                        setShowCalendarUpload(true);
+                      }
+                    }}
                     className="bg-blue-600 hover:bg-blue-700 text-white"
                     title="Upload calendar files or sync with Google Calendar"
                   >
@@ -3095,7 +3153,18 @@ export default function CommandCenter() {
                 {isListening ? 'Stop Voice' : 'Start Voice'}
               </Button>
               <Button
-                onClick={() => setShowVoiceRecordings(!showVoiceRecordings)}
+                onClick={async () => {
+                  try {
+                    await CommandCenterActions.systemMonitoring('Voice Recordings View', {
+                      triggeredBy: 'Command Center User',
+                      additionalData: { action: showVoiceRecordings ? 'hide' : 'show' }
+                    });
+                    setShowVoiceRecordings(!showVoiceRecordings);
+                  } catch (error) {
+                    console.error('Voice Recordings error:', error);
+                    setShowVoiceRecordings(!showVoiceRecordings);
+                  }
+                }}
                 variant="outline"
                 className="border-blue-400 text-blue-400 hover:bg-blue-600/20"
                 title="View and manage voice recordings"
@@ -3104,7 +3173,18 @@ export default function CommandCenter() {
                 Recordings
               </Button>
               <Button
-                onClick={() => setActiveTab('automation-ops')}
+                onClick={async () => {
+                  try {
+                    await CommandCenterActions.systemMonitoring('Quick Ops Access', {
+                      triggeredBy: 'Command Center User',
+                      additionalData: { tabSwitch: 'automation-ops' }
+                    });
+                    setActiveTab('automation-ops');
+                  } catch (error) {
+                    console.error('Quick Ops error:', error);
+                    setActiveTab('automation-ops');
+                  }
+                }}
                 variant="outline"
                 className="border-green-400 text-green-400 hover:bg-green-600/20"
                 title="Quick access to automation operations"
@@ -3113,7 +3193,18 @@ export default function CommandCenter() {
                 Quick Ops
               </Button>
               <Button
-                onClick={() => setActiveTab('system-tools')}
+                onClick={async () => {
+                  try {
+                    await CommandCenterActions.systemMonitoring('System Tools Access', {
+                      triggeredBy: 'Command Center User',
+                      additionalData: { tabSwitch: 'system-tools' }
+                    });
+                    setActiveTab('system-tools');
+                  } catch (error) {
+                    console.error('System Tools error:', error);
+                    setActiveTab('system-tools');
+                  }
+                }}
                 variant="outline"
                 className="border-amber-400 text-amber-400 hover:bg-amber-600/20 flex items-center"
                 title="System - Access advanced monitoring, diagnostics, and administrative tools for platform management"
@@ -3133,7 +3224,18 @@ export default function CommandCenter() {
                 <HelpCircle className="w-3 h-3 ml-1 text-green-300 opacity-70" />
               </Button>
               <Button
-                onClick={() => setActiveTab('admin-tools')}
+                onClick={async () => {
+                  try {
+                    await CommandCenterActions.systemMonitoring('Admin Tools Access', {
+                      triggeredBy: 'Command Center User',
+                      additionalData: { tabSwitch: 'admin-tools', accessLevel: 'administrative' }
+                    });
+                    setActiveTab('admin-tools');
+                  } catch (error) {
+                    console.error('Admin Tools error:', error);
+                    setActiveTab('admin-tools');
+                  }
+                }}
                 variant="outline"
                 className="border-red-400 text-red-400 hover:bg-red-600/20 flex items-center"
                 title="Admin Tools - Administrative controls and system management"
@@ -7310,6 +7412,17 @@ export default function CommandCenter() {
                 <Button
                   onClick={async () => {
                     try {
+                      // Log to Command Center Metrics
+                      await CommandCenterActions.scheduleFollowUp({
+                        triggeredBy: 'Command Center User',
+                        additionalData: { 
+                          contactName: 'test-contact',
+                          followUpType: 'call',
+                          followUpDate: new Date().toISOString(),
+                          notes: 'Test follow-up'
+                        }
+                      });
+
                       const response = await fetch('/api/follow-up-caller', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
