@@ -15,7 +15,7 @@ import { registerQATestEndpoints } from "./qaTestEndpoints";
 import { registerPublerRoutes } from "./publerIntegrationNew";
 import { registerAirtableTestLogger } from "./airtableTestLogger";
 import { registerCallStatusEndpoint } from "./callStatusEndpoint";
-import { registerRealDashboardEndpoints } from "./realDashboardData";
+import { registerRealDashboardEndpoints } from "./modules/command-center/realDashboardData";
 import { registerCalendarEndpoints } from "./calendarEndpoints";
 import { registerPDFGenerator } from "./pdfGenerator";
 import { registerVoiceSynthesis } from "./voiceSynthesis";
@@ -24,7 +24,7 @@ import { registerAuditEscalation } from "./auditEscalation";
 import { registerCallMonitoring } from "./callMonitoring";
 import { registerKnowledgeRoutes } from "./knowledgeRoutes";
 import { registerCallLogRoutes } from "./callLogRoutes";
-import { registerCommandCenterMetrics } from "./commandCenterMetrics";
+import { registerCommandCenterMetrics } from "./modules/command-center/commandCenterMetrics";
 
 import { initializeLiveDataWipe, secureAdminDataWipe } from "./dataWipe";
 

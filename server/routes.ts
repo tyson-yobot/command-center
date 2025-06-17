@@ -21,7 +21,7 @@ import { registerDashboardEndpoints } from "./dashboardEndpoints";
 import { registerCoreAutomationEndpoints } from "./coreAutomationEndpoints";
 import { registerAutomationEndpoints, executeAutomationFunction } from "./automationHandler";
 import { registerCentralAutomationDispatcher } from "./centralAutomationDispatcher";
-import { registerCommandCenterRoutes } from "./commandCenterRoutes";
+import { registerCommandCenterRoutes } from "./modules/command-center/commandCenterRoutes";
 import { registerQAValidationRoutes } from "./qaValidationSystem";
 import { registerContentCreatorRoutes } from "./contentCreatorRoutes";
 import { registerMailchimpRoutes } from "./mailchimpRoutes";
