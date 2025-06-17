@@ -3446,15 +3446,95 @@ export default function CommandCenter() {
 
 
 
-        {/* 4. Reports + Analytics (SmartSpend™, Botalytics™, PDF, Forecasts) */}
+        {/* 4. Performance & ROI Analytics and PDF Export Panel - Side by Side */}
+        <div className="mb-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Performance & ROI Analytics - Half Width */}
+            <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center text-xl">
+                  <BarChart3 className="w-6 h-6 mr-3 text-purple-400" />
+                  Performance & ROI Analytics
+                  <Badge className="ml-3 bg-purple-500 text-white text-sm px-3 py-1">ANALYTICS</Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
+                    <div className="text-2xl font-bold text-orange-400">
+                      {metrics?.roi || '0%'}
+                    </div>
+                    <div className="text-sm text-slate-300">ROI</div>
+                  </div>
+                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
+                    <div className="text-2xl font-bold text-green-400">
+                      {metrics?.conversionRate || '0%'}
+                    </div>
+                    <div className="text-sm text-slate-300">Conversion Rate</div>
+                  </div>
+                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
+                    <div className="text-2xl font-bold text-blue-400">
+                      ${metrics?.revenue || '0'}
+                    </div>
+                    <div className="text-sm text-slate-300">Revenue</div>
+                  </div>
+                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
+                    <div className="text-2xl font-bold text-purple-400">
+                      {metrics?.efficiency || '0%'}
+                    </div>
+                    <div className="text-sm text-slate-300">Efficiency</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* PDF & Export Panel - Half Width */}
+            <Card className="bg-slate-800/60 border border-blue-400/50">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FileText className="w-5 h-5 mr-2 text-blue-400" />
+                    PDF & Export Panel
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="bg-blue-600 text-white border-blue-400 hover:bg-blue-700 h-12"
+                  >
+                    Export
+                  </Button>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <div className="text-sm text-blue-300 mb-3">
+                    Last PDF Generated:
+                  </div>
+                  <div className="text-blue-200 font-medium">
+                    Never
+                  </div>
+                  <div className="bg-blue-900/30 rounded-lg p-4 border border-blue-400/30 text-center h-32 flex flex-col justify-center">
+                    <div className="text-blue-300 text-sm mb-2">
+                      No export data available
+                    </div>
+                    <div className="text-slate-400 text-xs">
+                      Generate reports to enable PDF export
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Additional Analytics Section */}
         <div className="mb-4">
           <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between text-xl">
                 <div className="flex items-center">
                   <BarChart3 className="w-6 h-6 mr-3 text-purple-400" />
-                  📊 Performance & ROI Analytics
-                  <Badge className="ml-3 bg-purple-500 text-white text-sm px-3 py-1">ANALYTICS</Badge>
+                  📊 Detailed Analytics & Reports
                   <Button
                     variant="ghost"
                     size="sm"
@@ -7338,30 +7418,7 @@ export default function CommandCenter() {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-slate-800/60 border border-green-400/50">
-                  <CardHeader>
-                    <CardTitle className="text-white flex items-center">
-                      <span className="text-xl mr-2">✉️</span>
-                      Quick Actions
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="space-y-3">
-                      <Button className="w-full bg-green-600 hover:bg-green-700 text-white h-12">
-                        Create Campaign
-                      </Button>
-                      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white h-12">
-                        Sync Contacts
-                      </Button>
-                      <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white h-12">
-                        View Analytics
-                      </Button>
-                      <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white h-12">
-                        Manage Lists
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+
 
                 <Card className="bg-slate-800/60 border border-green-400/50">
                   <CardHeader>
