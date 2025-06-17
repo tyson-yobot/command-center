@@ -4087,11 +4087,11 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Active Workflows:</span>
-                    <span className="text-white font-bold>"--"</span>
+                    <span className="text-white font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Calls 100-1,000+ per day:</span>
-                    <span className="text-blue-400 font-bold>"--"</span>
+                    <span className="text-blue-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Engine Status:</span>
@@ -4113,11 +4113,11 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Active Clients:</span>
-                    <span className="text-white font-bold>"--"</span>
+                    <span className="text-white font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">NPS Score:</span>
-                    <span className="text-green-400 font-bold>"--"</span>
+                    <span className="text-green-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Satisfaction:</span>
@@ -4185,7 +4185,7 @@ export default function CommandCenter() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Push Alerts:</span>
-                    <span className="text-blue-400 font-bold>"--"</span>
+                    <span className="text-blue-400 font-bold">--</span>
                   </div>
                 </div>
               </CardContent>
@@ -4609,7 +4609,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">Active Clients:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.activeClients && <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>}
-                    <span className="text-white font-bold>"--"</span>
+                    <span className="text-white font-bold">--</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
@@ -7259,7 +7259,7 @@ export default function CommandCenter() {
               <div>
                 <label className="block text-white text-sm font-medium mb-2">Client Name</label>
                 <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500">
-                  <option value="--">Select client...</option>
+                  <option value=-->Select client...</option>
                   <option value="acme-corp">Acme Corporation</option>
                   <option value="tech-solutions">Tech Solutions Inc</option>
                   <option value="global-systems">Global Systems Ltd</option>
@@ -7477,7 +7477,7 @@ export default function CommandCenter() {
               <div>
                 <label className="block text-white text-sm font-medium mb-2">Pre-built Templates</label>
                 <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-blue-500">
-                  <option value="--">Select template...</option>
+                  <option value=-->Select template...</option>
                   <option value="follow-up">Follow-up reminder</option>
                   <option value="appointment">Appointment confirmation</option>
                   <option value="welcome">Welcome message</option>
@@ -7975,7 +7975,7 @@ export default function CommandCenter() {
                     onChange={(e) => setNewTicketCategory(e.target.value)}
                     className="w-full p-3 bg-slate-700/60 border border-purple-400 rounded-lg text-white focus:border-purple-400 focus:outline-none"
                   >
-                    <option value="--">Select ticket type...</option>
+                    <option value=-->Select ticket type...</option>
                     <option value="bug-report">🐛 Bug Report</option>
                     <option value="feature-request">✨ Feature Request</option>
                     <option value="help-needed">❓ Help Needed</option>
@@ -9236,7 +9236,7 @@ export default function CommandCenter() {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Total Calls:</span>
-                      <span className="text-white font-bold>"--"</span>
+                      <span className="text-white font-bold">--</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Success Rate:</span>
