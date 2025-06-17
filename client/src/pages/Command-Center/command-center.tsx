@@ -499,7 +499,7 @@ export default function CommandCenter() {
     setTimeout(() => {
       setCallStats(prev => ({
         ...prev,
-        activeCalls: Math.max(--, prev.activeCalls - 1),
+        activeCalls: Math.max(0, prev.activeCalls - 1),
         avgDuration: `${duration}m`,
         successRate: '94%'
       }));
@@ -520,7 +520,7 @@ export default function CommandCenter() {
       timestamp: new Date().toLocaleTimeString(),
       type
     };
-    setRecentActivity(prev => [newActivity, ...prev.slice(--, 4)]); // Keep last 5 items
+    setRecentActivity(prev => [newActivity, ...prev.slice(0, 4)]); // Keep last 5 items
   };
 
   // Core Automation Button Handlers
@@ -859,7 +859,7 @@ export default function CommandCenter() {
           // Convert base64 to audio blob
           const audioBytes = atob(result.audioData);
           const audioArray = new Uint8Array(audioBytes.length);
-          for (let i = --; i < audioBytes.length; i++) {
+          for (let i = 0; i < audioBytes.length; i++) {
             audioArray[i] = audioBytes.charCodeAt(i);
           }
           
@@ -1014,7 +1014,7 @@ export default function CommandCenter() {
             
             setVoiceStatus(
               `RAG Integration Complete: ${processedCount} documents processed` + 
-              (errorCount > -- ? `, ${errorCount} failed` : '')
+              (errorCount > 0 ? `, ${errorCount} failed` : '')
             );
             
             // Update document list
@@ -1669,7 +1669,7 @@ export default function CommandCenter() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `YoBot_Analytics_Report_${new Date().toISOString().split('T')[--]}.pdf`;
+        a.download = `YoBot_Analytics_Report_${new Date().toISOString().split('T')[0]}.pdf`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -1944,7 +1944,7 @@ export default function CommandCenter() {
 
 
   const handleCalendarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[--];
+    const file = event.target.files?.[0];
     if (!file) return;
 
     try {
@@ -2020,7 +2020,7 @@ export default function CommandCenter() {
           timestamp: new Date().toLocaleTimeString(),
           type: 'File',
           category: 'document',
-          result: successCount > -- ? 'Success' : 'Error'
+          result: successCount > 0 ? 'Success' : 'Error'
         };
         setMemoryActivityLog(prev => [...prev, logEntry]);
         
@@ -2581,7 +2581,7 @@ export default function CommandCenter() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `yobot-report-${new Date().toISOString().split('T')[--]}.pdf`;
+        a.download = `yobot-report-${new Date().toISOString().split('T')[0]}.pdf`;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
@@ -2695,7 +2695,7 @@ export default function CommandCenter() {
             requestData = {
               clientName: 'Manual Booking',
               email: 'booking@client.com',
-              date: new Date().toISOString().split('T')[--],
+              date: new Date().toISOString().split('T')[0],
               time: '10:00',
               service: 'Consultation'
             };
@@ -2990,7 +2990,7 @@ export default function CommandCenter() {
                 </div>
                 <p className="text-slate-300 mb-4">
                   Step {demoStep + 1} of 5: {
-                    demoStep === -- ? "Core Automation Overview" :
+                    demoStep === 0 ? "Core Automation Overview" :
                     demoStep === 1 ? "Voice Operations Demo" :
                     demoStep === 2 ? "AI Intelligence Features" :
                     demoStep === 3 ? "SmartSpend Integration" :
@@ -3985,7 +3985,7 @@ export default function CommandCenter() {
                       Recent Audit Events
                     </h4>
                     <div className="space-y-2 max-h-48 overflow-y-auto">
-                      {auditLog?.data?.slice(--, 5).map((event, index) => (
+                      {auditLog?.data?.slice(0, 5).map((event, index) => (
                         <div key={index} className="p-2 bg-white/5 rounded text-sm">
                           <div className="flex justify-between items-start">
                             <span className="text-white font-medium">{event.action || 'System Event'}</span>
@@ -4063,7 +4063,7 @@ export default function CommandCenter() {
           style={{ display: 'none' }}
           accept=".ics,.csv"
           onChange={(e) => {
-            const file = e.target.files?.[--];
+            const file = e.target.files?.[0];
             if (file) {
               setVoiceStatus('Uploading calendar...');
               // Calendar upload implementation here

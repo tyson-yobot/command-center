@@ -42,7 +42,7 @@ export class DatabaseKnowledgeStorage implements IKnowledgeStorage {
     const result = await db.update(knowledgeItems)
       .set({ isActive: false, updatedAt: new Date() })
       .where(eq(knowledgeItems.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   async getKnowledgeStats(): Promise<{ totalDocuments: number; totalMemories: number; categories: string[] }> {
