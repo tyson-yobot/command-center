@@ -5632,49 +5632,49 @@ export default function CommandCenter() {
                 </div>
 
                 {/* Call Statistics */}
-                <div className="grid grid-cols-4 gap-3">
-                  <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
-                    <div className="text-slate-300 text-xs mb-1">Active Calls</div>
-                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.activeCalls : ''}</div>
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="bg-slate-700/40 rounded-lg p-4 text-center border border-blue-400">
+                    <div className="text-slate-300 text-sm mb-2">Active Calls</div>
+                    <div className="text-white font-bold text-xl">{currentSystemMode === 'test' ? callStats.activeCalls : ''}</div>
                   </div>
-                  <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
-                    <div className="text-slate-300 text-xs mb-1">Avg Duration</div>
-                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.avgDuration : ''}</div>
+                  <div className="bg-slate-700/40 rounded-lg p-4 text-center border border-blue-400">
+                    <div className="text-slate-300 text-sm mb-2">Avg Duration</div>
+                    <div className="text-white font-bold text-xl">{currentSystemMode === 'test' ? callStats.avgDuration : ''}</div>
                   </div>
-                  <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
-                    <div className="text-slate-300 text-xs mb-1">Success Rate</div>
-                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.successRate : ''}</div>
+                  <div className="bg-slate-700/40 rounded-lg p-4 text-center border border-blue-400">
+                    <div className="text-slate-300 text-sm mb-2">Success Rate</div>
+                    <div className="text-white font-bold text-xl">{currentSystemMode === 'test' ? callStats.successRate : ''}</div>
                   </div>
-                  <div className="bg-slate-700/40 rounded-lg p-3 text-center border border-blue-400">
-                    <div className="text-slate-300 text-xs mb-1">Total Today</div>
-                    <div className="text-white font-bold text-lg">{currentSystemMode === 'test' ? callStats.totalToday : ''}</div>
+                  <div className="bg-slate-700/40 rounded-lg p-4 text-center border border-blue-400">
+                    <div className="text-slate-300 text-sm mb-2">Total Today</div>
+                    <div className="text-white font-bold text-xl">{currentSystemMode === 'test' ? callStats.totalToday : ''}</div>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-4">
                   <Button 
                     onClick={handleSimulateTestCall}
-                    className="bg-purple-600 hover:bg-purple-700 text-white text-xs border border-purple-400"
+                    className="bg-purple-600 hover:bg-purple-700 text-white text-sm px-4 py-3 border border-purple-400"
                     title="Triggers a mock call event in the system"
                   >
-                    <Phone className="w-3 h-3 mr-1" />
+                    <Phone className="w-5 h-5 mr-2" />
                     Simulate Test Call
                   </Button>
                   <Button 
                     onClick={() => setShowCallReports(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs border border-blue-400"
+                    className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-3 border border-blue-400"
                     title="View call reports and analytics"
                   >
-                    <FileText className="w-3 h-3 mr-1" />
+                    <FileText className="w-5 h-5 mr-2" />
                     View Call Reports
                   </Button>
                   <Button 
                     onClick={() => setShowCallLogs(true)}
-                    className="bg-green-600 hover:bg-green-700 text-white text-xs border border-green-400"
+                    className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-3 border border-green-400"
                     title="View detailed call log history"
                   >
-                    <Clock className="w-3 h-3 mr-1" />
+                    <Clock className="w-5 h-5 mr-2" />
                     Call Log History
                   </Button>
                 </div>
