@@ -172,11 +172,17 @@ export class CommandCenterActions {
 
   static async leadScraper(params: ButtonActionParams = {}) {
     try {
-      // Navigate to Lead Scraper page
-      window.location.href = '/lead-scraper';
-      return { success: true, data: { message: 'Navigating to Lead Scraper...' } };
+      // Trigger popup modal instead of navigation
+      const event = new CustomEvent('openLeadScraperPopup', { 
+        detail: { 
+          defaultTab: params.additionalData?.defaultTab || 'apollo',
+          triggeredBy: params.triggeredBy || this.defaultUser
+        } 
+      });
+      window.dispatchEvent(event);
+      return { success: true, data: { message: 'Opening Lead Scraper popup...' } };
     } catch (error) {
-      console.error('Lead scraper navigation error:', error);
+      console.error('Lead scraper popup error:', error);
       return { success: false, error: error.message };
     }
   }
