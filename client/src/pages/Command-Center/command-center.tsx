@@ -4087,15 +4087,15 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Active Workflows:</span>
-                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '15' : automationPerformance?.data?.activeWorkflows || ''}</span>
+                    <span className="text-white font-bold">0</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Calls 100-1,000+ per day:</span>
-                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '842' : liveActivityData?.data?.callsToday || ''}</span>
+                    <span className="text-blue-400 font-bold">0</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Engine Status:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? 'LIVE' : automationPerformance?.status === 'active' ? 'LIVE' : ''}</span>
+                    <span className="text-green-400 font-bold">OFFLINE</span>
                   </div>
                 </div>
               </CardContent>
@@ -4113,7 +4113,7 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Active Clients:</span>
-                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '47' : ''}</span>
+                    <span className="text-white font-bold">0</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">NPS Score:</span>
@@ -4139,11 +4139,11 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Success Rate:</span>
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '96.8%' : ''}</span>
+                    <span className="text-green-400 font-bold">0%</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Response Time:</span>
-                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '1.2s' : ''}</span>
+                    <span className="text-blue-400 font-bold">0s</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Uptime:</span>
@@ -4419,7 +4419,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">
-                {currentSystemMode === 'test' ? '47' : ''}
+                0
               </div>
               <p className="text-xs text-blue-400">
                 {currentSystemMode === 'test' ? 'AI operations active' : ''}
@@ -4615,7 +4615,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">Active Clients:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.activeClients && <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>}
-                    <span className="text-white font-bold">{currentSystemMode === 'test' ? '47' : ''}</span>
+                    <span className="text-white font-bold">0</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
@@ -9247,7 +9247,7 @@ export default function CommandCenter() {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Total Calls:</span>
-                      <span className="text-white font-bold">{currentSystemMode === 'test' ? '47' : ''}</span>
+                      <span className="text-white font-bold">0</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Success Rate:</span>
