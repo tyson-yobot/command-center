@@ -3378,7 +3378,7 @@ export default function CommandCenter() {
               </CardTitle>
             </CardHeader>
             {!collapsedSections['voice-engine'] && (
-              <CardContent>
+              <CardContent className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {/* Pipeline Controls */}
                   <div className="space-y-4">
@@ -3388,14 +3388,14 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={handleStartPipelineCalls}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3"
+                      className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-4 h-12"
                     >
                       <Play className="w-4 h-4 mr-2" />
                       Start Pipeline
                     </Button>
                     <Button
                       onClick={handleStopPipelineCalls}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3"
+                      className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-4 h-12"
                     >
                       <PhoneOff className="w-4 h-4 mr-2" />
                       End Pipeline
@@ -3473,7 +3473,7 @@ export default function CommandCenter() {
               </CardTitle>
             </CardHeader>
             {!collapsedSections['analytics-reports'] && (
-              <CardContent>
+              <CardContent className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* SmartSpend™ Analytics */}
                   <div className="space-y-4">
@@ -3576,28 +3576,28 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-2 gap-3">
                       <Button
                         onClick={() => setShowAnalyticsModal(true)}
-                        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3"
+                        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-4 h-12"
                       >
                         <FileText className="w-4 h-4 mr-2" />
                         Analytics Report
                       </Button>
                       <Button
                         onClick={handlePDFReport}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-3"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-4 h-12"
                       >
                         <Printer className="w-4 h-4 mr-2" />
                         PDF Export
                       </Button>
                       <Button
                         onClick={() => setShowExportModal(true)}
-                        className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-3"
+                        className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-4 h-12"
                       >
                         <Download className="w-4 h-4 mr-2" />
                         Quick Export
                       </Button>
                       <Button
                         onClick={handleExportData}
-                        className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-3"
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-4 h-12"
                       >
                         <Database className="w-4 h-4 mr-2" />
                         Data Export
@@ -3679,21 +3679,21 @@ export default function CommandCenter() {
                   <div className="mt-4 grid grid-cols-2 lg:grid-cols-3 gap-3">
                     <Button
                       onClick={() => {}} 
-                      className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-3"
+                      className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-4 h-12"
                     >
                       <AlertTriangle className="w-4 h-4 mr-2" />
                       Run Integrity Check
                     </Button>
                     <Button
                       onClick={() => {}} 
-                      className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-3"
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-4 h-12"
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       Check Logger Status
                     </Button>
                     <Button
                       onClick={() => {}} 
-                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-3"
+                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-4 h-12"
                     >
                       <Zap className="w-4 h-4 mr-2" />
                       Test Integrity Check
@@ -5316,7 +5316,7 @@ export default function CommandCenter() {
               </CardTitle>
             </CardHeader>
             {!collapsedSections['audit-integrity'] && (
-              <CardContent>
+              <CardContent className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {/* Automation Tamper Detection */}
                   <div className="space-y-4">
