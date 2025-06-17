@@ -7350,13 +7350,13 @@ export default function CommandCenter() {
                       <Button className="w-full bg-green-600 hover:bg-green-700 text-white h-12">
                         Create Campaign
                       </Button>
-                      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white h-12">
                         Sync Contacts
                       </Button>
-                      <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
+                      <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white h-12">
                         View Analytics
                       </Button>
-                      <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
+                      <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white h-12">
                         Manage Lists
                       </Button>
                     </div>
