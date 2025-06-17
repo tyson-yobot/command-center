@@ -690,7 +690,8 @@ export default function CommandCenter() {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     
     if (SpeechRecognition) {
-      const recognition = new SpeechRecognition();
+      try {
+        const recognition = new SpeechRecognition();
       recognition.continuous = true;
       recognition.interimResults = true;
       recognition.lang = 'en-US';
@@ -718,8 +719,12 @@ export default function CommandCenter() {
         }
       };
       
-      recognitionRef.current = recognition;
-      return recognition;
+        recognitionRef.current = recognition;
+        return recognition;
+      } catch (error) {
+        console.error('SpeechRecognition initialization failed:', error);
+        return null;
+      }
     }
     return null;
   };
