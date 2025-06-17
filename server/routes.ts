@@ -4146,7 +4146,7 @@ Report generated in Live Mode
       
       // Synchronize mode with all modules
       try {
-        const { updateSystemMode } = await import('./commandCenterRoutes');
+        const { updateSystemMode } = await import('./modules/command-center/commandCenterRoutes');
         updateSystemMode(newMode);
       } catch (importError) {
         console.log('Command center sync skipped - module not available');

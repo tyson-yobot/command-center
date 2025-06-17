@@ -3,30 +3,9 @@ process.env.BROWSERSLIST_IGNORE_OLD_DATA = 'true';
 
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes, registerContentCreationEndpoints } from "./routes";
-import orchestrator from "./systemAutomationOrchestrator";
-import completeAutomation from "./completeSystemAutomation";
-import documentRoutes from "./documentManager";
 import { setupVite, serveStatic, log } from "./vite";
-import { sendSlackAlert } from "./alerts";
-import { generatePDFReport } from "./pdfReport";
-import { registerQATracker } from "./qaTracker";
-import { officialQATracker } from "./officialQATracker";
-import { registerQATestEndpoints } from "./qaTestEndpoints";
-import { registerPublerRoutes } from "./publerIntegrationNew";
-import { registerAirtableTestLogger } from "./airtableTestLogger";
-import { registerCallStatusEndpoint } from "./callStatusEndpoint";
 import { registerRealDashboardEndpoints } from "./modules/command-center/realDashboardData";
-import { registerCalendarEndpoints } from "./calendarEndpoints";
-import { registerPDFGenerator } from "./pdfGenerator";
-import { registerVoiceSynthesis } from "./voiceSynthesis";
-import { registerMemoryKnowledge } from "./memoryKnowledge";
-import { registerAuditEscalation } from "./auditEscalation";
-import { registerCallMonitoring } from "./callMonitoring";
-import { registerKnowledgeRoutes } from "./knowledgeRoutes";
-import { registerCallLogRoutes } from "./callLogRoutes";
 import { registerCommandCenterMetrics } from "./modules/command-center/commandCenterMetrics";
-
-import { initializeLiveDataWipe, secureAdminDataWipe } from "./dataWipe";
 
 const app = express();
 app.use(express.json());
