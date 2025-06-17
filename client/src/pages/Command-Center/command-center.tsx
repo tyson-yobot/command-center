@@ -93,12 +93,11 @@ import { ExportDashboardModal } from '@/components/ExportDashboardModal';
 import { ManualCallStartModal } from '@/components/ManualCallStartModal';
 import { LiveCallBanner } from '@/components/LiveCallBanner';
 import { EnhancedTooltip, QuickTooltip } from '@/components/EnhancedTooltip';
-
+import { CommandCenterActions } from '@/utils/commandCenterActions';
 
 export default function CommandCenter() {
   const queryClient = useQueryClient();
-  
-
+  const { toast } = useToast();
   
   // System mode state
   const [currentSystemMode, setCurrentSystemMode] = useState(() => {
@@ -270,7 +269,6 @@ export default function CommandCenter() {
     dateRange: 'last_30_days'
   });
   const [showCreateVoiceCallModal, setShowCreateVoiceCallModal] = useState(false);
-  const { toast } = useToast();
 
   // Test statistics for Live Integration Test Results
   const testStats = {
