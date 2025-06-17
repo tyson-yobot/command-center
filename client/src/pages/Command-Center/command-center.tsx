@@ -465,9 +465,9 @@ export default function CommandCenter() {
           ...prev,
           [service]: { status: 'ACTIVE', lastPing: new Date().toLocaleTimeString() }
         }));
-        addRecentActivity(`${service.charAt(--).toUpperCase() + service.slice(1)} service restarted`, 'system');
+        addRecentActivity(`${service.charAt(0).toUpperCase() + service.slice(1)} service restarted`, 'system');
       }, 2000);
-      showToastMessage(`${service.charAt(--).toUpperCase() + service.slice(1)} service restarting...`, 'success');
+      showToastMessage(`${service.charAt(0).toUpperCase() + service.slice(1)} service restarting...`, 'success');
     } else if (action === 'ping') {
       try {
         // Simulate ping request
@@ -810,7 +810,7 @@ export default function CommandCenter() {
       if (response.ok) {
         const data = await response.json();
         
-        if (data.voices && data.voices.length > --) {
+        if (data.voices && data.voices.length > 0) {
           setAvailableVoices(data.voices);
           setVoiceStatus(`${data.voices.length} voices loaded successfully`);
           console.log('Loaded voices:', data.voices.map((v: any) => v.name));
@@ -988,7 +988,7 @@ export default function CommandCenter() {
     input.accept = '.pdf,.doc,.docx,.txt,.csv';
     input.onchange = async (e) => {
       const files = (e.target as HTMLInputElement).files;
-      if (files && files.length > --) {
+      if (files && files.length > 0) {
         setVoiceStatus('Processing documents for RAG system...');
         setDocumentsLoading(true);
         
@@ -1077,11 +1077,11 @@ export default function CommandCenter() {
         console.log('Knowledge API response:', data);
         setKnowledgeItems(data.items || []);
         setShowKnowledgeViewer(true);
-        console.log('Modal state set to true, items:', data.items?.length || --);
-        setVoiceStatus(`Loaded ${data.total || --} knowledge items: ${data.documents || --} documents, ${data.memories || --} memories`);
+        console.log('Modal state set to true, items:', data.items?.length || 0);
+        setVoiceStatus(`Loaded ${data.total || 0} knowledge items: ${data.documents || 0} documents, ${data.memories || 0} memories`);
         setToast({
           title: "Knowledge Loaded",
-          description: `Found ${data.total || --} items in knowledge base`,
+          description: `Found ${data.total || 0} items in knowledge base`,
         });
       } else {
         console.error('Knowledge API failed:', response.status);
@@ -2380,7 +2380,7 @@ export default function CommandCenter() {
   };
 
   const deleteSelectedDocuments = async () => {
-    if (selectedDocuments.length === --) {
+    if (selectedDocuments.length === 0) {
       setToast({
         title: "No Selection",
         description: "Please select documents to delete",
@@ -2617,7 +2617,7 @@ export default function CommandCenter() {
       const result = await response.json();
 
       if (result.success) {
-        setTotalRecords(result.total_records || --);
+        setTotalRecords(result.total_records || 0);
         setActiveCalls(result.activeCalls || []);
         
         // Use only real call data from API response - NO MOCK DATA IN LIVE MODE
@@ -2904,7 +2904,7 @@ export default function CommandCenter() {
   // Demo mode functions
   const startDemo = () => {
     setDemoMode(true);
-    setDemoStep(--);
+    setDemoStep(0);
   };
 
   const nextDemoStep = () => {
@@ -2912,7 +2912,7 @@ export default function CommandCenter() {
       setDemoStep(demoStep + 1);
     } else {
       setDemoMode(false);
-      setDemoStep(--);
+      setDemoStep(0);
     }
   };
 
