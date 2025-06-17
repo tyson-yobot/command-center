@@ -8,14 +8,14 @@
 import type { Express } from "express";
 
 interface MetricsRecord {
-  'Triggered Action': string;
+  '🛠️ Triggered Action': string;
   'Status'?: string;
   'Triggered By': string;
   'Timestamp': string;
   'Source'?: string;
   'Pipeline'?: string;
   'Voice Trigger'?: boolean;
-  'Voice Source'?: string;
+  '🎙️ Voice Source'?: string;
   'Call Type'?: string;
   'Pipeline Stage'?: string;
   'Calendar Name'?: string;
@@ -36,6 +36,11 @@ interface MetricsRecord {
   'Triggered From'?: string;
   'Method'?: string;
   'Result'?: string;
+  'Voice Action'?: string;
+  'Voice Status'?: string;
+  'Caller'?: string;
+  'System Status'?: string;
+  'Initiator'?: string;
 }
 
 interface IntegrationTestRecord {
@@ -126,7 +131,7 @@ class CommandCenterMetrics {
       data: record
     };
     
-    console.log(`📊 Command Center Action: ${record['Triggered Action']} by ${record['Triggered By']} at ${timestamp}`);
+    console.log(`📊 Command Center Action: ${record['🛠️ Triggered Action']} by ${record['Triggered By']} at ${timestamp}`);
     
     // Attempt Airtable logging
     const result = await this.makeAirtableRequest('POST', this.metricsTableId, data);
@@ -178,7 +183,7 @@ export function registerCommandCenterMetrics(app: Express) {
       const { triggeredBy = 'System' } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': 'Booking',
+        '🛠️ Triggered Action': 'Booking',
         'Status': 'Scheduled',
         'Triggered By': triggeredBy,
         'Timestamp': new Date().toISOString()
@@ -201,7 +206,7 @@ export function registerCommandCenterMetrics(app: Express) {
       const { triggeredBy = 'System' } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': 'Ticket Submission',
+        '🛠️ Triggered Action': 'Ticket Submission',
         'Source': 'Manual',
         'Triggered By': triggeredBy,
         'Timestamp': new Date().toISOString()
@@ -224,7 +229,7 @@ export function registerCommandCenterMetrics(app: Express) {
       const { triggeredBy = 'System' } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': 'Follow-Up',
+        '🛠️ Triggered Action': 'Follow-Up',
         'Result': 'Triggered',
         'Voice Trigger': false,
         'Triggered By': triggeredBy,

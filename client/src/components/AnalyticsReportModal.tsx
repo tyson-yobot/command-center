@@ -60,6 +60,18 @@ export function AnalyticsReportModal({ isOpen, onClose }: AnalyticsReportModalPr
     setIsGenerating(true);
     
     try {
+      // Log to Command Center Metrics first
+      await fetch('/api/command-center/analytics-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          triggeredBy: 'User',
+          reportType,
+          timeRange,
+          format: 'pdf'
+        })
+      });
+
       const response = await fetch('/api/analytics/generate-report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

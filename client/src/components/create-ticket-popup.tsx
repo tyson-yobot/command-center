@@ -38,8 +38,23 @@ const CreateTicketPopup: React.FC<CreateTicketPopupProps> = ({ isOpen, onClose, 
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Log to Command Center Metrics first
+      await fetch('/api/command-center/submit-ticket', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          triggeredBy: 'User',
+          ticketData: {
+            subject,
+            description,
+            priority,
+            category,
+            attachmentCount: attachments.length
+          }
+        })
+      });
       
       const ticketId = `TKT-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
       

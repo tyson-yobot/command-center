@@ -1,0 +1,117 @@
+🔧 Global Notes
+Airtable Base: YoBot® Command Center (Live Ops)
+Base ID: appRt8V3tH4g5Z51f
+
+Use Airtable API (or SDK wrapper) to Create, Update, or Append records as noted below.
+
+If a table is not yet present but obviously required, stub it or log error state.
+
+Include timestamp + user info with each log action.
+
+If voice-triggered, also log 🎙 Voice Source = Voice to differentiate.
+
+🚀 SECTION 1: 🔴 Quick Action Launchpad
+1. Schedule Booking
+Action: Create record in 📑 Command Center - Metrics Tracker Table
+
+Fields: 🛠️ Triggered Action = Booking, Status = Scheduled, Triggered By, Timestamp
+
+2. Submit Ticket
+Action: Create record in 📑 Command Center - Metrics Tracker Table
+
+Fields: 🛠️ Triggered Action = Ticket Submission, Source = Manual, Triggered By, Timestamp
+
+3. Follow-up Trigger
+Action: Append record to 📑 Command Center - Metrics Tracker Table
+
+Fields: 🛠️ Triggered Action = Follow-Up, Result = Triggered, Voice Trigger = false, Triggered By
+
+4. Start Voice
+Action: Update 🎙️ Voice Status field in 📑 Command Center - Metrics Tracker Table
+
+Fields: Voice Status = Active, Triggered By = System, Method = Button
+
+5. Manual Call Start
+Action: Create record in 📑 Command Center - Metrics Tracker Table
+
+Fields: 🛠️ Triggered Action = Manual Call, Call Type = Outbound, Pipeline = N/A, Source = UI
+
+6. Analytics Report
+Action: Create record in 📑 Command Center - Metrics Tracker Table
+
+Fields: 🛠️ Triggered Action = Analytics Report Generation, Status = In Progress, Triggered By
+
+7. Start Pipeline
+Action: Create record in 📑 Command Center - Metrics Tracker Table
+
+Fields: 🛠️ Triggered Action = Pipeline Start, Pipeline Stage = Init, Caller = System, Triggered By
+
+8. Upload Calendar
+Action: Append to 📑 Command Center - Metrics Tracker Table
+
+Fields: 🛠️ Triggered Action = Calendar Upload, Status = Synced, Calendar Name, Triggered By
+
+9. Quick Export
+Action: Create record in 📑 Command Center - Metrics Tracker Table
+
+Fields: 🛠️ Triggered Action = Quick Export, File Type = PDF, Status = Queued, Triggered By
+
+10. PDF Upload / Knowledge / Diagnostics / Emergency
+Action: Log to 📑 Command Center - Metrics Tracker Table
+
+Fields:
+
+Triggered Action: (PDF Upload / Knowledge Upload / Diagnostics Run / Emergency Stop)
+
+System Status = Awaiting, Triggered By, Severity = Critical (for Emergency)
+
+🧠 SECTION 2: 🟢 Voice Engine + Command Center
+11. Pipeline Start / End
+Action: Append to 📑 Command Center - Metrics Tracker Table
+
+Fields: Voice Action = Start Pipeline or End Pipeline, Triggered By = Voice or Button, Session ID, Timestamp
+
+12. Voice Studio / Test Persona
+Action: Append to 📑 Command Center - Metrics Tracker Table
+
+Fields: Voice Persona Test = True, Selected Voice, Triggered From, Status
+
+🧩 SECTION 3: ⚙️ Core Automation + Manual Triggers
+13. Manual Follow-Up / SMS Trigger
+Action: Create record in 📑 Command Center - Metrics Tracker Table
+
+Fields: Trigger Type = Manual Follow-Up, Channel = SMS, Triggered By, Client ID (if known)
+
+14. Automate Sales Flow
+Action: Update record in 📑 Command Center - Metrics Tracker Table
+
+Fields: Trigger Type = Sales Order, Sales Status = Triggered, Workflow ID, Triggered By
+
+📊 SECTION 4: 📈 Performance / Exports / System Metrics
+15. Analytics Report / PDF Export / Data Export
+Action: Append to 📑 Command Center - Metrics Tracker Table
+
+Fields: Export Type, Initiator, Export Status = In Progress, Export File, Client Context (if set)
+
+🔐 SECTION 5: 🔴 System Monitoring + Audit Logs
+16. Run Diagnostics / Test Alert / Emergency Stop
+Action: Create record in 🛡️ Integration Test Log Table
+(If tampering suspected, flag in 🚨 Logger Integrity Tracker)
+
+Fields:
+
+Triggered Action = Diagnostics / Alert / Emergency
+
+Triggered From = Command Center
+
+Timestamp
+
+Tampering Flag = FALSE (unless triggered from external webhook)
+
+✅ Integration Notes for Replit
+🔄 All records should log into 📑 Command Center - Metrics Tracker Table by default unless otherwise specified.
+
+🧠 If a record should also be mirrored in another table (like test logs or alerts), use a dual write via webhook or batched sync.
+
+🛑 Emergency actions must include a 2-step confirmation or override flag to prevent accidental misuse.
+
