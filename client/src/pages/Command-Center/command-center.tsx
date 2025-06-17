@@ -1664,7 +1664,7 @@ export default function CommandCenter() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `YoBot_Analytics_Report_${new Date().toISOString().split('T')[--]}.pdf`;
+        a.download = `YoBot_Analytics_Report_${new Date().toISOString().split('T')[0]}.pdf`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -1939,7 +1939,7 @@ export default function CommandCenter() {
 
 
   const handleCalendarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[--];
+    const file = event.target.files?.[0];
     if (!file) return;
 
     try {
