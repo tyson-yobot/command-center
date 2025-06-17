@@ -33,27 +33,17 @@ interface AirtableResponse {
 }
 
 class AirtableLeadsService {
-  private baseId: string;
-  private tableId: string;
+  private baseId = 'appb2f3D77Tc4DWAr';
+  private tableId = 'tbluqrDSomu5UVhDw';
   private tableName = 'Scraped Leads (Universal)';
   private apiKey: string;
 
   constructor() {
     const apiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY;
-    const baseId = process.env.AIRTABLE_BASE_ID;
-    const tableId = process.env.AIRTABLE_TABLE_ID;
-    
-    if (!apiKey || !baseId || !tableId) {
-      throw new Error('Airtable credentials not configured');
+    if (!apiKey) {
+      throw new Error('Airtable API key not found in environment variables');
     }
-    
-    // Comprehensive token cleaning: remove all non-ASCII characters and normalize
-    this.apiKey = apiKey
-      .replace(/[^\x20-\x7E]/g, '') // Remove non-printable ASCII
-      .replace(/[\r\n\t\s]/g, '')   // Remove whitespace and line breaks
-      .trim();
-    this.baseId = baseId.trim();
-    this.tableId = tableId.trim();
+    this.apiKey = apiKey.trim();
   }
 
   private getHeaders() {

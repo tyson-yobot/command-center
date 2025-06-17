@@ -1,7 +1,7 @@
 import { Server } from 'socket.io';
 import { Server as HttpServer } from 'http';
 
-const AIRTABLE_API_KEY = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_VALID_TOKEN || process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_COMMAND_CENTER_BASE_TOKEN;
+const AIRTABLE_API_KEY = process.env.AIRTABLE_VALID_TOKEN || process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_COMMAND_CENTER_BASE_TOKEN;
 const COMMAND_CENTER_BASE = "appRt8V3tH4g5Z51f";
 
 let metrics = {

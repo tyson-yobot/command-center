@@ -50,11 +50,8 @@ class AirtableLiveIntegration {
 
   constructor() {
     const rawApiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
-    // Comprehensive token cleaning: remove all non-ASCII characters and normalize
-    this.apiKey = rawApiKey
-      .replace(/[^\x20-\x7E]/g, '') // Remove non-printable ASCII
-      .replace(/[\r\n\t\s]/g, '')   // Remove whitespace and line breaks
-      .trim();
+    // Clean any non-ASCII characters and whitespace
+    this.apiKey = rawApiKey.replace(/[^\x20-\x7E]/g, '').trim();
     
     if (!this.apiKey) {
       console.error('No Airtable API key found in environment variables');

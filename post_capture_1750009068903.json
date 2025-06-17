@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-06-15T17:37:48.903Z",
+  "url": "/api/sales-order/create",
+  "method": "POST",
+  "headers": {
+    "host": "localhost:5000",
+    "user-agent": "curl/8.11.1",
+    "accept": "*/*",
+    "content-type": "application/json",
+    "content-length": "178"
+  },
+  "body": {
+    "botPackage": "Basic Bot Package",
+    "addOns": [
+      "SMS Integration",
+      "Voice Calling"
+    ],
+    "clientEmail": "test@example.com",
+    "clientName": "Test Client",
+    "total": 2500,
+    "paymentStatus": "Pending"
+  },
+  "query": {}
+}
