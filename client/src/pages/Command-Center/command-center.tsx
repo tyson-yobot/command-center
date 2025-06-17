@@ -3449,6 +3449,17 @@ export default function CommandCenter() {
                       <span className="text-sm font-medium">Analytics Report</span>
                     </div>
                   </Button>
+                  
+                  <Button
+                    onClick={handleRunLeadScrape}
+                    className="!bg-orange-600 hover:!bg-orange-700 !text-white flex items-center justify-center p-4 h-24 border border-orange-500"
+                    title="Lead Scraper"
+                  >
+                    <div className="text-center">
+                      <Users className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">Lead Scraper</span>
+                    </div>
+                  </Button>
                 </div>
                 
                 {/* Advanced Tools Section */}
