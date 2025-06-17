@@ -7400,8 +7400,6 @@ export default function CommandCenter() {
                   </CardContent>
                 </Card>
 
-
-
                 <Card className="bg-slate-800/60 border border-green-400/50">
                   <CardHeader>
                     <CardTitle className="text-white flex items-center">
@@ -7472,7 +7470,7 @@ export default function CommandCenter() {
                     Contact Synchronization
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="text-white text-sm font-medium mb-2 block">Sync Source</label>
