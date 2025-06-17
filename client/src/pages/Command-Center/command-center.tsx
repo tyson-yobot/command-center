@@ -1509,113 +1509,89 @@ export default function CommandCenter() {
     }
   };
 
-  const handleContentCreator = async () => {
+  const handleContentCreatorSync = async () => {
     try {
-      setVoiceStatus('Creating and posting AI-powered social media content...');
+      setVoiceStatus('Creating content and syncing to Airtable...');
       
-      const response = await fetch('/api/content/create-and-post', {
+      const response = await fetch('/api/airtable/content-creation', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-system-mode': currentSystemMode
+        },
         body: JSON.stringify({ 
-          type: 'social',
+          contentType: 'social',
           platform: 'linkedin',
           industry: 'Business Automation',
-          topic: 'AI-powered automation and workflow optimization'
+          topic: 'AI-powered automation and workflow optimization',
+          status: 'generated'
         })
       });
       
       if (response.ok) {
         const result = await response.json();
-        const content = result.content;
-        const postResult = result.postResult;
-        
-        if (postResult?.success) {
-          setVoiceStatus(`✅ AI content posted to LinkedIn: ${content?.metadata?.wordCount || 0} words`);
-          setToast({ 
-            title: "Content Created & Posted", 
-            description: `AI-generated LinkedIn post published with ${content?.hashtags?.length || 0} hashtags` 
-          });
-        } else {
-          setVoiceStatus(`❌ Content generated but posting failed: ${postResult?.error || 'Unknown error'}`);
-          setToast({ 
-            title: "Posting Failed", 
-            description: content?.content ? `Content created but couldn't post to LinkedIn` : 'Content generation failed',
-            variant: "destructive"
-          });
-        }
-        
-        // Log the generated content for review
-        console.log('Generated content:', result.content);
+        setVoiceStatus('Content created and synced to Airtable successfully');
+        setToast({ 
+          title: "Content Synced", 
+          description: "Content created and logged to Airtable CRM" 
+        });
       } else {
         const error = await response.json();
-        setVoiceStatus('Content creation failed - check API configuration');
+        setVoiceStatus('Content sync failed - check Airtable connection');
         setToast({ 
-          title: "Content Creation Failed", 
-          description: error.error || "Unable to generate content",
+          title: "Sync Failed", 
+          description: error.error || "Unable to sync content to Airtable",
           variant: "destructive" 
         });
       }
     } catch (error) {
-      setVoiceStatus('Content creation error');
+      setVoiceStatus('Content creation sync error');
       setToast({ 
         title: "Network Error", 
-        description: "Unable to connect to content generation service",
+        description: "Unable to connect to content sync service",
         variant: "destructive" 
       });
     }
   };
 
-  const handleMailChimpCampaign = async () => {
+  const handleMailchimpSync = async () => {
     try {
-      setVoiceStatus('Generating AI-powered email campaign content...');
+      setVoiceStatus('Syncing contacts and campaigns to Airtable...');
       
-      const response = await fetch('/api/content/create-and-send', {
+      const response = await fetch('/api/airtable/mailchimp-sync', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-system-mode': currentSystemMode
+        },
         body: JSON.stringify({ 
-          type: 'email',
-          industry: 'Business Automation',
-          audience: 'business_owners',
-          topic: 'AI automation ROI and productivity insights',
-          tone: 'professional'
+          syncType: 'contacts_and_campaigns',
+          includeMetrics: true,
+          dateRange: '30d'
         })
       });
       
       if (response.ok) {
         const result = await response.json();
-        const content = result.content;
-        const sendResult = result.sendResult;
-        
-        if (sendResult?.success) {
-          setVoiceStatus(`✅ AI email campaign sent: ${sendResult.recipients || 0} recipients`);
-          setToast({ 
-            title: "Email Campaign Sent", 
-            description: `Subject: "${content?.subject}" sent to ${sendResult.recipients || 0} contacts` 
-          });
-        } else {
-          setVoiceStatus(`❌ Email content generated but sending failed: ${sendResult?.error || 'Unknown error'}`);
-          setToast({ 
-            title: "Email Sending Failed", 
-            description: content?.subject ? `Content created but couldn't send email campaign` : 'Email generation failed',
-            variant: "destructive"
-          });
-        }
-        
-        console.log('Generated email campaign:', result.content);
+        setVoiceStatus('Contacts and campaigns synced to Airtable successfully');
+        setToast({ 
+          title: "MailChimp Synced", 
+          description: "Contacts and campaigns logged to Airtable CRM" 
+        });
       } else {
         const error = await response.json();
-        setVoiceStatus('Email campaign creation failed - check API configuration');
+        setVoiceStatus('MailChimp sync failed - check Airtable connection');
         setToast({ 
-          title: "Campaign Creation Failed", 
-          description: error.error || "Unable to generate email campaign",
+          title: "Sync Failed", 
+          description: error.error || "Unable to sync MailChimp to Airtable",
           variant: "destructive" 
         });
       }
     } catch (error) {
-      setVoiceStatus('MailChimp campaign error');
+      setVoiceStatus('MailChimp sync error');
       setToast({ 
         title: "Network Error", 
-        description: "Unable to connect to MailChimp service",
+        description: "Unable to connect to MailChimp sync service",
         variant: "destructive" 
       });
     }
@@ -1700,23 +1676,35 @@ export default function CommandCenter() {
 
 
 
-  const handleMailchimpSync = async () => {
+  const handleSocialContentSync = async () => {
     try {
-      setVoiceStatus('Syncing contacts to Mailchimp...');
-      const response = await fetch('/api/mailchimp-sync', {
+      setVoiceStatus('Syncing social content to Airtable...');
+      const response = await fetch('/api/airtable/social-content', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scenario: 'mailchimp-sync' })
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-system-mode': currentSystemMode
+        },
+        body: JSON.stringify({ 
+          platform: 'multi-platform',
+          contentType: 'automation_content',
+          status: 'published'
+        })
       });
       
       if (response.ok) {
-        setVoiceStatus('Mailchimp sync completed successfully');
-        setToast({ title: "Mailchimp Synced", description: "Latest contacts pushed to Mailchimp" });
+        setVoiceStatus('Social content synced to Airtable successfully');
+        setToast({ title: "Content Synced", description: "Social content logged to Airtable CRM" });
       } else {
-        setVoiceStatus('Mailchimp sync failed');
+        setVoiceStatus('Social content sync failed - check Airtable connection');
+        setToast({ 
+          title: "Sync Failed", 
+          description: "Unable to sync social content to Airtable",
+          variant: "destructive" 
+        });
       }
     } catch (error) {
-      setVoiceStatus('Mailchimp sync error');
+      setVoiceStatus('Social content sync error');
     }
   };
 
