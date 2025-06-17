@@ -4752,7 +4752,7 @@ export default function CommandCenter() {
                     { (metrics?.data?.smartSpendData?.monthlyAdSpend || '--')}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-blue-400 to-blue-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.spendUtilization || 87}%` }}></div>
+                    <div className="bg-gradient-to-r from-blue-400 to-blue-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.spendUtilization || 0}%` }}></div>
                   </div>
                 </div>
 
@@ -4763,7 +4763,7 @@ export default function CommandCenter() {
                     { (metrics?.data?.smartSpendData?.costPerLead || '--')}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-yellow-400 to-amber-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.costEfficiency || 73}%` }}></div>
+                    <div className="bg-gradient-to-r from-yellow-400 to-amber-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.costEfficiency || 0}%` }}></div>
                   </div>
                 </div>
 
@@ -4774,7 +4774,7 @@ export default function CommandCenter() {
                     { (metrics?.data?.smartSpendData?.monthlyROI || '--')}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-green-400 to-emerald-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.roiProgress || 78}%` }}></div>
+                    <div className="bg-gradient-to-r from-green-400 to-emerald-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.roiProgress || 0}%` }}></div>
                   </div>
                 </div>
 
@@ -4785,7 +4785,7 @@ export default function CommandCenter() {
                     { (metrics?.data?.smartSpendData?.conversionRate || '--')}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-purple-400 to-violet-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.conversionProgress || 87}%` }}></div>
+                    <div className="bg-gradient-to-r from-purple-400 to-violet-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.conversionProgress || 0}%` }}></div>
                   </div>
                 </div>
 
@@ -4801,7 +4801,7 @@ export default function CommandCenter() {
                     </Badge>
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-cyan-400 to-blue-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.budgetEfficiency || 94}%` }}></div>
+                    <div className="bg-gradient-to-r from-cyan-400 to-blue-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.budgetEfficiency || 0}%` }}></div>
                   </div>
                 </div>
               </div>
@@ -4860,11 +4860,7 @@ export default function CommandCenter() {
                     <div className="text-cyan-400 font-bold">{ ''}</div>
                     <Badge className="bg-cyan-600 text-white">{ ''}</Badge>
                   </div>
-                  {currentSystemMode === 'test' && (
-                    <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                      <div className="bg-cyan-400 h-1 rounded-full" style={{ width: '0%' }}></div>
-                    </div>
-                  )}
+
                 </div>
               </div>
             </CardContent>
@@ -4889,7 +4885,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Learning Status</span>
-                  <Badge className={currentSystemMode === 'test' ? "bg-green-600 text-white" : "bg-slate-600 text-white"}>{ ''}</Badge>
+                  <Badge className="bg-slate-600 text-white">{ ''}</Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Percentage of conversations that needed human assistance">Escalation Rate</span>
