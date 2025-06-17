@@ -247,7 +247,7 @@ export default function CommandCenter() {
   const [showLiveChat, setShowLiveChat] = useState(false);
   const [showTicketsList, setShowTicketsList] = useState(false);
   const [showCreateTicket, setShowCreateTicket] = useState(false);
-  const [buttonPosition, setButtonPosition] = useState({ x: --, y: -- });
+  const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
   const [showKnowledgeViewer, setShowKnowledgeViewer] = useState(false);
   const [showDocumentPreview, setShowDocumentPreview] = useState(false);
   const [previewDocumentId, setPreviewDocumentId] = useState('');
@@ -424,10 +424,10 @@ export default function CommandCenter() {
   
   // Call Statistics
   const [callStats, setCallStats] = useState({
-    activeCalls: --,
+    activeCalls: 0,
     avgDuration: '0m',
-    successRate: '--',
-    totalToday: --
+    successRate: '0%',
+    totalToday: 0
   });
   
   // Support Activity
