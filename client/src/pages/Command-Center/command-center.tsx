@@ -220,11 +220,11 @@ export default function CommandCenter() {
   const [showAnalyticsModal, setShowAnalyticsModal] = React.useState(false);
   const [showCalendarUpload, setShowCalendarUpload] = React.useState(false);
 
-  const [activeCallsCount, setActiveCallsCount] = React.useState(--);
+  const [activeCallsCount, setActiveCallsCount] = React.useState(0);
   const [dashboardPreset, setDashboardPreset] = React.useState('full');
   const [collapsedSections, setCollapsedSections] = React.useState<{[key: string]: boolean}>({});
   const [demoMode, setDemoMode] = React.useState(false);
-  const [demoStep, setDemoStep] = React.useState(--);
+  const [demoStep, setDemoStep] = React.useState(0);
   const [currentRecognition, setCurrentRecognition] = React.useState<any>(null);
   
   // Voice recognition states for RAG programming
@@ -247,7 +247,7 @@ export default function CommandCenter() {
   const [showLiveChat, setShowLiveChat] = useState(false);
   const [showTicketsList, setShowTicketsList] = useState(false);
   const [showCreateTicket, setShowCreateTicket] = useState(false);
-  const [buttonPosition, setButtonPosition] = useState({ x: --, y: -- });
+  const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
   const [showKnowledgeViewer, setShowKnowledgeViewer] = useState(false);
   const [showDocumentPreview, setShowDocumentPreview] = useState(false);
   const [previewDocumentId, setPreviewDocumentId] = useState('');
@@ -366,7 +366,7 @@ export default function CommandCenter() {
   const [showCallDetails, setShowCallDetails] = useState(false);
   const [showKnowledgeManager, setShowKnowledgeManager] = useState(false);
   const [showScheduleViewer, setShowScheduleViewer] = useState(false);
-  const [selectedDay, setSelectedDay] = useState(--); // -- = today, 1 = tomorrow, etc.
+  const [selectedDay, setSelectedDay] = useState(0); // 0 = today, 1 = tomorrow, etc.
   const [showTicketModal, setShowTicketModal] = useState(false);
   const [showCreateTicketModal, setShowCreateTicketModal] = useState(false);
   
@@ -424,10 +424,10 @@ export default function CommandCenter() {
   
   // Call Statistics
   const [callStats, setCallStats] = useState({
-    activeCalls: --,
+    activeCalls: 0,
     avgDuration: '0m',
     successRate: '--',
-    totalToday: --
+    totalToday: 0
   });
   
   // Support Activity
@@ -442,8 +442,8 @@ export default function CommandCenter() {
   const [showCallReports, setShowCallReports] = useState(false);
   const [showCallLogs, setShowCallLogs] = useState(false);
   const [showToast, setShowToast] = useState<{message: string; type: 'success' | 'error'} | null>(null);
-  const [totalRecords, setTotalRecords] = useState(--);
-  const [completedCalls, setCompletedCalls] = useState(--);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [completedCalls, setCompletedCalls] = useState(0);
   const [pipelineRunning, setPipelineRunning] = useState(false);
 
   // Service Management Functions
