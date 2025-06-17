@@ -802,7 +802,7 @@ export default function CommandCenter() {
   const fetchAvailableVoices = async () => {
     setVoicesLoading(true);
     try {
-      const response = await fetch('/api/elevenlabs/voices', {
+      const response = await fetch('/api/voice/personas', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -813,16 +813,15 @@ export default function CommandCenter() {
       if (response.ok) {
         const data = await response.json();
         
-        if (data.voices && data.voices.length > 0) {
-          setAvailableVoices(data.voices);
-          setVoiceStatus(`${data.voices.length} voices loaded successfully`);
-          console.log('Loaded voices:', data.voices.map((v: any) => v.name));
+        if (data.success && data.data && data.data.length > 0) {
+          setAvailableVoices(data.data);
+          setVoiceStatus(`${data.data.length} voices loaded successfully`);
+          console.log('Loaded voices:', data.data.map((v: any) => v.name));
         } else {
           setAvailableVoices([]);
-          setVoiceStatus(data.message || 'No voices available');
+          setVoiceStatus('No voices available');
         }
       } else {
-        const errorData = await response.json().catch(() => ({}));
         setAvailableVoices([]);
         setVoiceStatus(`Failed to load voices: ${response.status}`);
       }
@@ -837,61 +836,51 @@ export default function CommandCenter() {
   // Test voice persona with proper error handling
   const testVoicePersona = async () => {
     try {
-      setVoiceStatus('Testing voice...');
+      setVoiceStatus('Testing voice connection...');
       
-      const response = await fetch('/api/elevenlabs/test-voice', {
+      const response = await fetch('/api/voice/test', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          voice_id: selectedPersona,
-          text: 'Hello, this is a test of the voice persona system powered by YoBot.'
-        })
+        }
       });
 
       if (response.ok) {
         const result = await response.json();
         
-        if (result.success && result.audioData) {
-          // Convert base64 to audio blob
-          const audioBytes = atob(result.audioData);
-          const audioArray = new Uint8Array(audioBytes.length);
-          for (let i = 0; i < audioBytes.length; i++) {
-            audioArray[i] = audioBytes.charCodeAt(i);
-          }
-          
-          const audioBlob = new Blob([audioArray], { type: 'audio/mpeg' });
-          const audioUrl = URL.createObjectURL(audioBlob);
-          const audio = new Audio(audioUrl);
-          
-          audio.onloadeddata = () => {
-            setVoiceStatus('Playing voice test...');
-          };
-          
-          audio.onended = () => {
-            setVoiceStatus('Voice test completed successfully');
-            URL.revokeObjectURL(audioUrl);
-          };
-          
-          audio.onerror = (e) => {
-            setVoiceStatus('Audio playback error');
-            console.error('Audio playback error:', e);
-            URL.revokeObjectURL(audioUrl);
-          };
-          
-          await audio.play();
+        if (result.success) {
+          setVoiceStatus('Voice connection test successful');
+          toast({
+            id: Date.now().toString(),
+            title: 'Voice Test Success',
+            description: result.message || 'ElevenLabs API connection is working'
+          });
         } else {
-          setVoiceStatus(`Voice test failed: ${result.error || 'Unknown error'}`);
+          setVoiceStatus(`Voice test failed: ${result.message || 'Unknown error'}`);
+          toast({
+            id: Date.now().toString(),
+            title: 'Voice Test Failed',
+            description: result.message || 'Unable to connect to voice service',
+            variant: 'destructive'
+          });
         }
       } else {
-        const errorData = await response.text();
         setVoiceStatus(`Voice test failed: ${response.status}`);
-        console.error('Voice test error:', errorData);
+        toast({
+          id: Date.now().toString(),
+          title: 'Connection Error',
+          description: 'Unable to test voice connection',
+          variant: 'destructive'
+        });
       }
-    } catch (error) {
+    } catch (error: any) {
       setVoiceStatus(`Voice test error: ${error.message}`);
-      console.error('Voice test exception:', error);
+      toast({
+        id: Date.now().toString(),
+        title: 'Test Error',
+        description: 'Network error during voice test',
+        variant: 'destructive'
+      });
     }
   };
 
@@ -1804,40 +1793,33 @@ export default function CommandCenter() {
     try {
       setVoiceStatus('Generating voice audio...');
       
-      const response = await fetch('/api/elevenlabs/text-to-speech', {
+      const response = await fetch('/api/voice/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           text: voiceGenerationText,
-          voiceId: selectedPersona || 'default',
-          model: 'eleven_multilingual_v2'
+          voiceId: selectedPersona || 'nPczCjzI2devNBz1zQrb'
         })
       });
 
-      if (response.ok) {
-        const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-        
-        // Play the generated audio
-        const audio = new Audio(audioUrl);
-        audio.play();
-        
-        setVoiceStatus('Voice generated and playing');
+      const result = await response.json();
+
+      if (result.success && result.filename) {
+        setVoiceStatus('Voice generated successfully');
         toast({
           id: Date.now().toString(),
           title: 'Voice Generated',
-          description: 'Audio generated successfully and now playing.'
+          description: 'Audio generated successfully. Use Download Audio to save.'
         });
         
-        // Store the audio URL for download
-        (window as any).lastGeneratedAudio = audioUrl;
+        // Store the filename for download
+        (window as any).lastGeneratedAudioFile = result.filename;
       } else {
-        const error = await response.json();
         setVoiceStatus('Voice generation failed');
         toast({
           id: Date.now().toString(),
           title: 'Generation Failed',
-          description: error.message || 'Failed to generate voice audio.',
+          description: result.error || 'Failed to generate voice audio.',
           variant: 'destructive'
         });
       }
@@ -1853,12 +1835,17 @@ export default function CommandCenter() {
   };
 
   const downloadAudio = () => {
-    const audioUrl = (window as any).lastGeneratedAudio;
-    if (audioUrl) {
+    const audioFilename = (window as any).lastGeneratedAudioFile;
+    if (audioFilename) {
       const a = document.createElement('a');
-      a.href = audioUrl;
-      a.download = 'generated_voice.mp3';
+      a.href = `/generated_audio/${audioFilename}`;
+      a.download = audioFilename;
       a.click();
+      toast({
+        id: Date.now().toString(),
+        title: 'Audio Downloaded',
+        description: 'Voice audio file downloaded successfully'
+      });
     } else {
       toast({
         id: Date.now().toString(),
