@@ -2904,7 +2904,7 @@ export default function CommandCenter() {
   // Demo mode functions
   const startDemo = () => {
     setDemoMode(true);
-    setDemoStep(--);
+    setDemoStep(0);
   };
 
   const nextDemoStep = () => {
@@ -2912,7 +2912,7 @@ export default function CommandCenter() {
       setDemoStep(demoStep + 1);
     } else {
       setDemoMode(false);
-      setDemoStep(--);
+      setDemoStep(0);
     }
   };
 
@@ -4087,11 +4087,11 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Active Workflows:</span>
-                    <span className="text-white font-bold>--</span>
+                    <span className="text-white font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Calls 100-1,000+ per day:</span>
-                    <span className="text-blue-400 font-bold>--</span>
+                    <span className="text-blue-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Engine Status:</span>
@@ -4113,11 +4113,11 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Active Clients:</span>
-                    <span className="text-white font-bold>--</span>
+                    <span className="text-white font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">NPS Score:</span>
-                    <span className="text-green-400 font-bold>--</span>
+                    <span className="text-green-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Satisfaction:</span>
@@ -4185,7 +4185,7 @@ export default function CommandCenter() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Push Alerts:</span>
-                    <span className="text-blue-400 font-bold>--</span>
+                    <span className="text-blue-400 font-bold">--</span>
                   </div>
                 </div>
               </CardContent>
@@ -4609,7 +4609,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">Active Clients:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.activeClients && <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>}
-                    <span className="text-white font-bold>--</span>
+                    <span className="text-white font-bold">--</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
@@ -9236,7 +9236,7 @@ export default function CommandCenter() {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Total Calls:</span>
-                      <span className="text-white font-bold>--</span>
+                      <span className="text-white font-bold">--</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Success Rate:</span>
