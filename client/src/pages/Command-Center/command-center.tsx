@@ -3969,18 +3969,18 @@ export default function CommandCenter() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
 
 
-          {/* SmartSpend™ - Updated Design */}
-          <Card className="bg-gradient-to-br from-blue-900/80 via-blue-800/60 to-indigo-900/40 backdrop-blur-sm border border-blue-400/60 shadow-2xl shadow-blue-500/30">
+          {/* SmartSpend™ - Orange Theme */}
+          <Card className="bg-gradient-to-br from-orange-900/80 via-orange-800/60 to-amber-900/40 backdrop-blur-sm border border-orange-400/60 shadow-2xl shadow-orange-500/30">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between">
                 <div className="flex items-center">
-                  <DollarSign className="w-5 h-5 mr-2 text-blue-300" />
+                  <DollarSign className="w-5 h-5 mr-2 text-orange-300" />
                   💰 SmartSpend™
                 </div>
-                <Badge className="bg-blue-500 text-white text-sm px-3 py-1">LIVE</Badge>
+                <Badge className="bg-orange-500 text-white text-sm px-3 py-1">LIVE</Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-6">
               <div className="space-y-4">
                 {/* Monthly Ad Spend */}
                 <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
@@ -4045,15 +4045,15 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          {/* Botalytics™ */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
+          {/* Botalytics™ - Lime Green Theme */}
+          <Card className="bg-gradient-to-br from-lime-900/80 via-lime-800/60 to-green-900/40 backdrop-blur-sm border border-lime-400/60 shadow-2xl shadow-lime-500/30">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
-                <BarChart3 className="w-5 h-5 mr-2 text-blue-400" />
+                <BarChart3 className="w-5 h-5 mr-2 text-lime-300" />
                 Botalytics™
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-6">
               <div className="space-y-4">
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <div className="flex items-center justify-between">
@@ -4111,7 +4111,7 @@ export default function CommandCenter() {
                 AI Assistant Insights
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-6">
               <div className="space-y-4">
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
                   <div className="flex items-center justify-between">
@@ -4175,7 +4175,7 @@ export default function CommandCenter() {
                 Voice Commands
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-6">
               <div className="mb-3 pb-2 border-b border-slate-600">
                 <h4 className="text-slate-200 font-medium text-sm">Voice Commands Active</h4>
                 <div className="flex items-center space-x-2 mt-1">
@@ -4219,7 +4219,7 @@ export default function CommandCenter() {
                 Conversation Analytics
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Sentiment Analysis:</span>
