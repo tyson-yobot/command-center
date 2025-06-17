@@ -4868,25 +4868,7 @@ export default function CommandCenter() {
                           </div>
                         </div>
                         
-                        {/* Test Voice and Apply Persona Buttons */}
-                        <div className="grid grid-cols-2 gap-3 mt-4">
-                          <Button 
-                            onClick={testVoicePersona}
-                            className="bg-orange-600 hover:bg-orange-700 text-white border border-orange-500 px-4 py-3 h-12"
-                            disabled={!selectedPersona}
-                          >
-                            <TestTube className="w-4 h-4 mr-2" />
-                            Test Voice
-                          </Button>
-                          <Button 
-                            onClick={() => applyPersona(selectedPersona)}
-                            className="bg-green-600 hover:bg-green-700 text-white border border-green-500 px-4 py-3 h-12"
-                            disabled={!selectedPersona}
-                          >
-                            <Play className="w-4 h-4 mr-2" />
-                            Apply Persona
-                          </Button>
-                        </div>
+
 
                       </div>
                     </div>
@@ -7396,7 +7378,7 @@ export default function CommandCenter() {
                       Campaign Stats
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-6">
                     <div className="space-y-3">
                       <div className="flex justify-between">
                         <span className="text-slate-300">Total Subscribers:</span>
@@ -7427,7 +7409,7 @@ export default function CommandCenter() {
                       Audience Insights
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-6">
                     <div className="space-y-3">
                       <div className="flex justify-between">
                         <span className="text-slate-300">Engaged Users:</span>
@@ -7458,7 +7440,7 @@ export default function CommandCenter() {
                     Recent Campaigns
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-6">
                   <div className="space-y-3">
                     <div className="text-center py-4 text-slate-400">
                       No campaign data available
