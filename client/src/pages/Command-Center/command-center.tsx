@@ -3969,88 +3969,88 @@ export default function CommandCenter() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
 
 
-          {/* SmartSpend™ - Neon Orange Theme */}
-          <Card className="bg-gradient-to-br from-orange-600/90 via-orange-500/70 to-red-500/50 backdrop-blur-sm border border-orange-400 shadow-2xl shadow-orange-400/40">
-            <CardHeader>
+          {/* SmartSpend™ - Sleek Orange Design */}
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-orange-500 shadow-2xl shadow-orange-500/30">
+            <CardHeader className="bg-gradient-to-r from-orange-600/20 to-orange-500/20 border-b border-orange-500/30">
               <CardTitle className="text-white flex items-center justify-between">
                 <div className="flex items-center">
-                  <DollarSign className="w-5 h-5 mr-2 text-orange-200" />
-                  💰 SmartSpend™
+                  <DollarSign className="w-6 h-6 mr-3 text-orange-400" />
+                  <span className="text-xl font-bold">💰 SmartSpend™</span>
                 </div>
-                <Badge className="bg-orange-400 text-black text-sm px-3 py-1 font-bold">LIVE</Badge>
+                <Badge className="bg-orange-500 text-white text-sm px-3 py-1 font-bold shadow-lg">LIVE</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
                 {/* Monthly Ad Spend */}
-                <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
-                  <div className="text-slate-300 text-sm mb-1">Monthly Ad Spend:</div>
-                  <div className="text-white font-bold text-lg mb-2">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
+                  <div className="text-orange-300 text-sm mb-1 font-medium">Monthly Ad Spend:</div>
+                  <div className="text-white font-bold text-xl mb-2">
                     { (metrics?.data?.smartSpendData?.monthlyAdSpend || '0')}
                   </div>
-                  <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-blue-400 to-blue-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.spendUtilization || 0}%` }}></div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.spendUtilization || 0}%` }}></div>
                   </div>
                 </div>
 
                 {/* Cost Per Lead */}
-                <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
-                  <div className="text-slate-300 text-sm mb-1">Cost Per Lead:</div>
-                  <div className="text-white font-bold text-lg mb-2">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
+                  <div className="text-orange-300 text-sm mb-1 font-medium">Cost Per Lead:</div>
+                  <div className="text-white font-bold text-xl mb-2">
                     { (metrics?.data?.smartSpendData?.costPerLead || '0')}
                   </div>
-                  <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-yellow-400 to-amber-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.costEfficiency || 0}%` }}></div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.costEfficiency || 0}%` }}></div>
                   </div>
                 </div>
 
                 {/* ROI This Month */}
-                <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
-                  <div className="text-slate-300 text-sm mb-1">ROI This Month:</div>
-                  <div className="text-white font-bold text-lg mb-2">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
+                  <div className="text-orange-300 text-sm mb-1 font-medium">ROI This Month:</div>
+                  <div className="text-white font-bold text-xl mb-2">
                     { (metrics?.data?.smartSpendData?.monthlyROI || '0')}
                   </div>
-                  <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-green-400 to-emerald-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.roiProgress || 0}%` }}></div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.roiProgress || 0}%` }}></div>
                   </div>
                 </div>
 
                 {/* Conversion Rate */}
-                <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
-                  <div className="text-slate-300 text-sm mb-1">Conversion Rate:</div>
-                  <div className="text-white font-bold text-lg mb-2">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
+                  <div className="text-orange-300 text-sm mb-1 font-medium">Conversion Rate:</div>
+                  <div className="text-white font-bold text-xl mb-2">
                     { (metrics?.data?.smartSpendData?.conversionRate || '0')}
                   </div>
-                  <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-purple-400 to-violet-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.conversionProgress || 0}%` }}></div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.conversionProgress || 0}%` }}></div>
                   </div>
                 </div>
 
                 {/* Budget Efficiency Score */}
-                <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400/30">
-                  <div className="text-slate-300 text-sm mb-1">Budget Efficiency Score:</div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
+                  <div className="text-orange-300 text-sm mb-1 font-medium">Budget Efficiency Score:</div>
                   <div className="flex items-center justify-between mb-2">
-                    <div className="text-white font-bold text-lg">
+                    <div className="text-white font-bold text-xl">
                       { (metrics?.data?.smartSpendData?.budgetEfficiency || '0')}
                     </div>
-                    <Badge className="bg-cyan-600 text-white text-xs">
+                    <Badge className="bg-orange-500 text-white text-xs font-bold shadow-md">
                       { (metrics?.data?.smartSpendData?.efficiencyStatus || 'Unknown')}
                     </Badge>
                   </div>
-                  <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-cyan-400 to-blue-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.budgetEfficiency || 0}%` }}></div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.budgetEfficiency || 0}%` }}></div>
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Botalytics™ - Neon Lime Green Theme */}
-          <Card className="bg-gradient-to-br from-lime-500/90 via-lime-400/70 to-green-400/50 backdrop-blur-sm border border-lime-300 shadow-2xl shadow-lime-400/40">
-            <CardHeader>
-              <CardTitle className="text-black flex items-center">
-                <BarChart3 className="w-5 h-5 mr-2 text-lime-800" />
-                Botalytics™
+          {/* Botalytics™ - Sleek Lime Design */}
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-lime-400 shadow-2xl shadow-lime-400/30">
+            <CardHeader className="bg-gradient-to-r from-lime-500/20 to-lime-400/20 border-b border-lime-400/30">
+              <CardTitle className="text-white flex items-center">
+                <BarChart3 className="w-6 h-6 mr-3 text-lime-400" />
+                <span className="text-xl font-bold">📊 Botalytics™</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
