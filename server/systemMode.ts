@@ -1,7 +1,7 @@
 // Centralized system mode management
 import { isLiveMode } from './liveMode';
 
-let currentSystemMode: 'test' | 'live' = 'live';
+let currentSystemMode: 'test' | 'live' = 'test';
 
 export function getSystemMode(): 'test' | 'live' {
   // Global environment gate ALWAYS overrides manual mode - zero tolerance

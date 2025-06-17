@@ -1,0 +1,15 @@
+{
+  "BOT_MODE": "maintenance",
+  "IS_PRODUCTION": false,
+  "ENVIRONMENT": "rollback",
+  "DEBUG_MODE": true,
+  "TESTING_MODE": false,
+  "FALLBACK_MODE": true,
+  "AUTO_RECOVERY": false,
+  "MONITORING_ENABLED": false,
+  "ALERT_LEVEL": "none",
+  "LOG_LEVEL": "error",
+  "CHARGING_DISABLED": true,
+  "LIVE_OPERATIONS": false,
+  "API_CALLS_DISABLED": true
+}
