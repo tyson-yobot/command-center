@@ -4141,45 +4141,7 @@ export default function CommandCenter() {
 
         {/* Essential Business Modules */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
-          {/* Live Automation Engine */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-cyan-400">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Zap className="w-5 h-5 mr-2 text-cyan-400" />
-                ⚡ Live Automation Engine
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Active Workflows:</span>
-                  <span className="text-white font-bold">{ (automationPerformance?.data?.activeWorkflows || '')}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">Make Logs Status:</span>
-                  <div className="flex items-center space-x-1">
-                    {automationPerformance?.data?.makeLogs && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{ (automationPerformance?.data?.makeLogs ? 'Live' : '')}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">Executions Today:</span>
-                  <div className="flex items-center space-x-1">
-                    {liveActivityData?.data?.executionsToday && <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse"></div>}
-                    <span className="text-blue-400 font-bold">{ (liveActivityData?.data?.executionsToday || '')}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Engine Status:</span>
-                  <span className="text-green-400 font-bold">{ (automationPerformance?.status === 'active' ? 'LIVE' : '')}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Processing Queue:</span>
-                  <span className="text-cyan-400 font-bold">{ (automationPerformance?.data?.queueSize ? automationPerformance.data.queueSize + ' pending' : '')}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+
 
 
 
@@ -4190,54 +4152,7 @@ export default function CommandCenter() {
 
         {/* Main Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {/* Workflow Performance */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Zap className="w-5 h-5 mr-2 text-yellow-400" />
-                🔄 Workflow Performance
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Automation Success:</span>
-                  <div className="flex items-center space-x-1">
-                    {automationPerformance?.data?.automationSuccess && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{automationPerformance?.data?.automationSuccess ? automationPerformance.data.automationSuccess + '%' : ''}</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Total Executions:</span>
-                  <div className="flex items-center space-x-1">
-                    {automationPerformance?.data?.totalExecutions && <div className="w-1 h-1 bg-cyan-400 rounded-full animate-pulse"></div>}
-                    <span className="text-cyan-400 font-bold">{automationPerformance?.data?.totalExecutions || ''}</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Make Workflows:</span>
-                  <div className="flex items-center space-x-2">
-                    {automationPerformance?.data?.makeWorkflows && <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>}
-                    <Badge className="bg-blue-600 text-white">{automationPerformance?.data?.makeWorkflows ? automationPerformance.data.makeWorkflows + ' Active' : ''}</Badge>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Avg Runtime:</span>
-                  <div className="flex items-center space-x-1">
-                    
-                    <span className="text-purple-400 font-bold">{ (automationPerformance?.data?.avgRuntime ? automationPerformance.data.avgRuntime + 's' : '')}</span>
-                  </div>
-                </div>
-                <div className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="text-slate-300 text-sm">Make Status:</div>
-                    
-                  </div>
-                  <div className="text-green-400 font-medium">{ (automationPerformance?.data?.makeStatus || '')}</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+
 
           {/* SmartSpend™ - Updated Design */}
           <Card className="bg-gradient-to-br from-blue-900/80 via-blue-800/60 to-indigo-900/40 backdrop-blur-sm border border-blue-400/60 shadow-2xl shadow-blue-500/30">
