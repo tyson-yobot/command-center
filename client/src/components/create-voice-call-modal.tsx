@@ -47,6 +47,22 @@ export function CreateVoiceCallModal({ isOpen, onClose }: CreateVoiceCallModalPr
 
     setIsSubmitting(true);
     try {
+      // Log to Command Center Metrics first
+      await fetch('/api/command-center/manual-call-start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          triggeredBy: 'User',
+          callData: {
+            phoneNumber: formData.phoneNumber,
+            contactName: formData.contactName,
+            company: formData.company,
+            callType: formData.callType,
+            priority: formData.priority
+          }
+        })
+      });
+
       const response = await apiRequest('/api/voice-call/create', {
         method: 'POST',
         body: JSON.stringify({
