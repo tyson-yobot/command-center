@@ -48,6 +48,7 @@ import {
   Edit,
   Edit3,
   Share2,
+  PenTool,
   FileDown,
   Printer,
   RotateCcw,
@@ -3335,40 +3336,7 @@ export default function CommandCenter() {
             {!collapsedSections['quick-actions'] && (
               <CardContent>
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {/* Primary Action Buttons */}
-                  <Button
-                    onClick={handleCreateBooking}
-                    className="!bg-emerald-600 hover:!bg-emerald-700 !text-white flex items-center justify-center p-4 h-24 border border-emerald-500"
-                    title="Schedule Booking"
-                  >
-                    <div className="text-center">
-                      <Calendar className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Schedule Booking</span>
-                    </div>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleCreateSupportTicket}
-                    className="!bg-violet-600 hover:!bg-violet-700 !text-white flex items-center justify-center p-4 h-24 border border-violet-500"
-                    title="Submit Ticket"
-                  >
-                    <div className="text-center">
-                      <Ticket className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Submit Ticket</span>
-                    </div>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleManualFollowUp}
-                    className="!bg-amber-600 hover:!bg-amber-700 !text-white flex items-center justify-center p-4 h-24 border border-amber-500"
-                    title="Follow-up Trigger"
-                  >
-                    <div className="text-center">
-                      <RefreshCw className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Follow-up Trigger</span>
-                    </div>
-                  </Button>
-                  
+                  {/* Pipeline Group - Same Color (Green) */}
                   <Button
                     onClick={handleStartPipelineCalls}
                     className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500"
@@ -3381,8 +3349,19 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
+                    onClick={() => setShowManualCallModal(true)}
+                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500"
+                    title="Manual Call Start"
+                  >
+                    <div className="text-center">
+                      <PhoneOff className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">Manual Call Start</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
                     onClick={() => setActiveTab('lead-scraper')}
-                    className="!bg-cyan-600 hover:!bg-cyan-700 !text-white flex items-center justify-center p-4 h-24 border border-cyan-500"
+                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500"
                     title="Lead Scraper Tool"
                   >
                     <div className="text-center">
@@ -3391,14 +3370,61 @@ export default function CommandCenter() {
                     </div>
                   </Button>
                   
+                  {/* Analytics Group - Same Color (Orange) */}
                   <Button
-                    onClick={() => setShowManualCallModal(true)}
-                    className="!bg-teal-600 hover:!bg-teal-700 !text-white flex items-center justify-center p-4 h-24 border border-teal-500"
-                    title="Manual Call Start"
+                    onClick={() => setShowAnalyticsModal(true)}
+                    className="!bg-orange-600 hover:!bg-orange-700 !text-white flex items-center justify-center p-4 h-24 border border-orange-500"
+                    title="Analytics Report"
                   >
                     <div className="text-center">
-                      <PhoneOff className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Manual Call Start</span>
+                      <BarChart3 className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">Analytics Report</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
+                    onClick={handleDownloadPDF}
+                    className="!bg-orange-600 hover:!bg-orange-700 !text-white flex items-center justify-center p-4 h-24 border border-orange-500"
+                    title="Quick Export"
+                  >
+                    <div className="text-center">
+                      <FileText className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">Quick Export</span>
+                    </div>
+                  </Button>
+                  
+                  {/* Content & Marketing Group */}
+                  <Button
+                    onClick={handleMailchimpSync}
+                    className="!bg-blue-600 hover:!bg-blue-700 !text-white flex items-center justify-center p-4 h-24 border border-blue-500"
+                    title="MailChimp Sync"
+                  >
+                    <div className="text-center">
+                      <Mail className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">MailChimp</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
+                    onClick={handleContentCreatorSync}
+                    className="!bg-purple-600 hover:!bg-purple-700 !text-white flex items-center justify-center p-4 h-24 border border-purple-500"
+                    title="Content Creator"
+                  >
+                    <div className="text-center">
+                      <PenTool className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">Content Creator</span>
+                    </div>
+                  </Button>
+                  
+                  {/* Support & Admin */}
+                  <Button
+                    onClick={handleCreateSupportTicket}
+                    className="!bg-violet-600 hover:!bg-violet-700 !text-white flex items-center justify-center p-4 h-24 border border-violet-500"
+                    title="Submit Ticket"
+                  >
+                    <div className="text-center">
+                      <Ticket className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">Submit Ticket</span>
                     </div>
                   </Button>
                   
@@ -3412,39 +3438,7 @@ export default function CommandCenter() {
                       <span className="text-sm font-medium">Start Voice</span>
                     </div>
                   </Button>
-                  
-                  <Button
-                    onClick={() => setShowCalendarUpload(true)}
-                    className="!bg-cyan-600 hover:!bg-cyan-700 !text-white flex items-center justify-center p-4 h-24 border border-cyan-500"
-                    title="Upload Calendar"
-                  >
-                    <div className="text-center">
-                      <Upload className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Upload Calendar</span>
-                    </div>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => setShowExportModal(true)}
-                    className="!bg-emerald-600 hover:!bg-emerald-700 !text-white flex items-center justify-center p-4 h-24 border border-emerald-500"
-                    title="Quick Export"
-                  >
-                    <div className="text-center">
-                      <Download className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Quick Export</span>
-                    </div>
-                  </Button>
-                  
-                  <Button
-                    onClick={() => setShowAnalyticsModal(true)}
-                    className="!bg-violet-600 hover:!bg-violet-700 !text-white flex items-center justify-center p-4 h-24 border border-violet-500"
-                    title="Generate Analytics Report"
-                  >
-                    <div className="text-center">
-                      <BarChart3 className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Analytics Report</span>
-                    </div>
-                  </Button>
+
                 </div>
                 
                 {/* Advanced Tools Section */}
