@@ -48,6 +48,7 @@ import * as ElevenLabs from './elevenlabs';
 import { airtableLive } from './airtableLiveIntegration';
 import { ragChatService } from './ragChatService';
 import { zendeskService } from './zendeskService';
+import { automationMetrics } from './automationMetrics';
 
 // Initialize OpenAI
 const openai = new OpenAI({
@@ -418,11 +419,11 @@ async function wipeTestData() {
 
 
 
-// Live automation tracking - initialized clean for production
+// Live automation tracking - NO DEFAULT DATA in live mode
 let liveAutomationMetrics = {
-  activeFunctions: 1040,
+  activeFunctions: 0,
   executionsToday: 0,
-  successRate: 100,
+  successRate: 0,
   lastExecution: null,
   recentExecutions: [],
   functionStats: {}

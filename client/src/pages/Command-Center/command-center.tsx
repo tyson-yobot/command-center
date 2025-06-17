@@ -762,7 +762,7 @@ export default function CommandCenter() {
 
   // Process voice commands for RAG programming
   const processVoiceProgramming = async () => {
-    if (programmingText && programmingText.trim()) {
+    if (programmingText && typeof programmingText === 'string' && programmingText.trim()) {
       try {
         const response = await apiRequest('POST', '/api/rag/voice-programming', {
           command: programmingText,
@@ -771,7 +771,7 @@ export default function CommandCenter() {
         });
         
         setVoiceStatus('Programming processed successfully');
-        setProgrammingText(null);
+        setProgrammingText('');
       } catch (error) {
         setVoiceStatus('Error processing programming');
       }
@@ -780,7 +780,7 @@ export default function CommandCenter() {
 
   // Process knowledge queries
   const processKnowledgeQuery = async () => {
-    if (queryText.trim()) {
+    if (queryText && queryText.trim()) {
       try {
         const response = await apiRequest('POST', '/api/rag/query', {
           query: queryText,
@@ -788,7 +788,7 @@ export default function CommandCenter() {
         });
         
         setVoiceStatus('Query processed successfully');
-        setQueryText(null);
+        setQueryText('');
       } catch (error) {
         setVoiceStatus('Error processing query');
       }
