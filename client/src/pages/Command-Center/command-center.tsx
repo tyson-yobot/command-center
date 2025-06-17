@@ -4711,7 +4711,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300">Make Workflows:</span>
                   <div className="flex items-center space-x-2">
                     {automationPerformance?.data?.makeWorkflows && <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>}
-                    <Badge className="bg-slate-600 text-slate-400">{automationPerformance?.data?.makeWorkflows ? automationPerformance.data.makeWorkflows + ' Active' : ''}</Badge>
+                    <Badge className="bg-blue-600 text-white">{automationPerformance?.data?.makeWorkflows ? automationPerformance.data.makeWorkflows + ' Active' : ''}</Badge>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -4885,7 +4885,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Learning Status</span>
-                  <Badge className="bg-slate-600 text-white">0</Badge>
+                  <Badge className="bg-purple-600 text-white">0</Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300" title="Percentage of conversations that needed human assistance">Escalation Rate</span>
@@ -6391,7 +6391,7 @@ export default function CommandCenter() {
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-slate-300 text-sm">Integrity Status:</span>
-                        <Badge className={currentSystemMode === 'test' ? "bg-green-600 text-white text-xs" : "bg-slate-600 text-slate-400 text-xs"}>
+                        <Badge className={currentSystemMode === 'test' ? "bg-green-600 text-white text-xs" : "bg-blue-600 text-white text-xs"}>
                           { 'UNKNOWN'}
                         </Badge>
                       </div>
@@ -7170,7 +7170,7 @@ export default function CommandCenter() {
                   setShowClearConfirm(false);
                   setDeleteConfirmText('');
                 }}
-                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white"
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
               >
                 Cancel
               </Button>
@@ -7180,7 +7180,7 @@ export default function CommandCenter() {
                 className={`flex-1 ${
                   deleteConfirmText.toLowerCase() === 'delete'
                     ? 'bg-red-600 hover:bg-red-700 text-white'
-                    : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                    : 'bg-slate-600 text-slate-400 cursor-not-allowed'
                 }`}
               >
                 Delete Knowledge
@@ -9500,10 +9500,10 @@ export default function CommandCenter() {
                 <Select value={exportConfig.dateRange} onValueChange={(value) => 
                   setExportConfig({...exportConfig, dateRange: value})
                 }>
-                  <SelectTrigger className="bg-gray-800 border-gray-600 text-white">
+                  <SelectTrigger className="bg-slate-800 border-slate-600 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-gray-800 border-gray-600">
+                  <SelectContent className="bg-slate-800 border-slate-600">
                     <SelectItem value="last_7_days">Last 7 Days</SelectItem>
                     <SelectItem value="last_30_days">Last 30 Days</SelectItem>
                     <SelectItem value="last_90_days">Last 90 Days</SelectItem>
@@ -9512,7 +9512,7 @@ export default function CommandCenter() {
                 </Select>
               </div>
 
-              <div className="bg-gray-800 p-3 rounded border border-gray-600">
+              <div className="bg-slate-800 p-3 rounded border border-slate-600">
                 <h4 className="text-sm font-medium text-blue-300 mb-2">Preview</h4>
                 <p className="text-xs text-gray-400">
                   Report: {exportConfig.reportType} | Format: {exportConfig.format.toUpperCase()} | 
@@ -9525,7 +9525,7 @@ export default function CommandCenter() {
               <Button
                 variant="outline"
                 onClick={() => setShowExportModal(false)}
-                className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
+                className="bg-slate-700 border-slate-600 text-white hover:bg-slate-600"
               >
                 Cancel
               </Button>
