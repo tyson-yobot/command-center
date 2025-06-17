@@ -501,7 +501,7 @@ export default function CommandCenter() {
         ...prev,
         activeCalls: Math.max(0, prev.activeCalls - 1),
         avgDuration: `${duration}m`,
-        successRate: '94%'
+        successRate: '--'
       }));
       addRecentActivity(`Test call completed (${duration}m duration)`, 'system');
     }, 10000); // Reset after 10 seconds
@@ -4166,7 +4166,7 @@ export default function CommandCenter() {
                     <MessageSquare className="w-5 h-5 mr-2 text-green-400" />
                     📲 Mobile Companion
                   </div>
-                  <Badge className="bg-green-600 text-white">Connected</Badge>
+                  <Badge className="bg-slate-600 text-slate-400">Offline</Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -6865,7 +6865,7 @@ export default function CommandCenter() {
                     <div className="text-center">
                       <div className="text-2xl font-black text-cyan-400 mb-1">{ '0'}</div>
                       <div className="text-slate-300 text-sm">Conversion Rate</div>
-                      <div className="text-xs text-slate-400 mt-2">+2.1% this week</div>
+                      <div className="text-xs text-slate-400 mt-2">No data available</div>
                     </div>
                   </div>
                 </div>
@@ -6931,7 +6931,7 @@ export default function CommandCenter() {
                     <div className="text-center">
                       <div className="text-2xl font-black text-blue-400 mb-1">$0</div>
                       <div className="text-slate-300 text-sm">Cost Per Lead</div>
-                      <div className="text-xs text-slate-400 mt-2">-15% vs last month</div>
+                      <div className="text-xs text-slate-400 mt-2">No data available</div>
                     </div>
                   </div>
                   <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
@@ -7023,7 +7023,7 @@ export default function CommandCenter() {
                     <div className="text-center">
                       <div className="text-2xl font-black text-cyan-400 mb-1">{ '0'}</div>
                       <div className="text-slate-300 text-sm">Conversion Rate</div>
-                      <div className="text-xs text-slate-400 mt-2">+2.1% this week</div>
+                      <div className="text-xs text-slate-400 mt-2">No data available</div>
                     </div>
                   </div>
                 </div>
@@ -7089,7 +7089,7 @@ export default function CommandCenter() {
                     <div className="text-center">
                       <div className="text-2xl font-black text-blue-400 mb-1">$0</div>
                       <div className="text-slate-300 text-sm">Cost Per Lead</div>
-                      <div className="text-xs text-slate-400 mt-2">-15% vs last month</div>
+                      <div className="text-xs text-slate-400 mt-2">No data available</div>
                     </div>
                   </div>
                   <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
@@ -8297,7 +8297,7 @@ export default function CommandCenter() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Avg Engagement:</span>
-                        <span className="text-green-400 font-bold">8.4%</span>
+                        <span className="text-green-400 font-bold">--</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Total Reach:</span>
@@ -8330,7 +8330,7 @@ export default function CommandCenter() {
                     {[
                       { platform: "LinkedIn", content: "Transform your business with YoBot AI automation", status: "Published", engagement: "94 likes" },
                       { platform: "Twitter", content: "New features in YoBot Command Center...", status: "Scheduled", engagement: "Schedule: 2PM" },
-                      { platform: "Facebook", content: "Client success story: 47% cost reduction", status: "Draft", engagement: "Needs review" }
+                      { platform: "Facebook", content: "Client success story: No data available", status: "Draft", engagement: "Needs review" }
                     ].map((item, index) => (
                       <div key={index} className="flex items-center justify-between p-3 bg-slate-700/40 rounded border border-orange-400/30">
                         <div>
@@ -8439,7 +8439,7 @@ export default function CommandCenter() {
                     <div className="space-y-3">
                       <div className="flex justify-between">
                         <span className="text-slate-300">Engaged Users:</span>
-                        <span className="text-green-400 font-bold">73%</span>
+                        <span className="text-green-400 font-bold">--</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Top Location:</span>
@@ -8451,7 +8451,7 @@ export default function CommandCenter() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Mobile Opens:</span>
-                        <span className="text-purple-400 font-bold">68%</span>
+                        <span className="text-purple-400 font-bold">--</span>
                       </div>
                     </div>
                   </CardContent>
