@@ -4515,34 +4515,31 @@ export default function CommandCenter() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Total Bots:</span>
-                  <span className="text-white font-bold">{currentSystemMode === 'test' ? '5' : (metrics?.totalBots || '')}</span>
+                  <span className="text-white font-bold">{metrics?.totalBots || ''}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Last Execution:</span>
                   <div className="flex items-center space-x-1">
                     {liveActivityData?.data?.recentExecutions?.length > 0 && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '2m ago' : (liveActivityData?.data?.lastExecution ? new Date(liveActivityData.data.lastExecution).toLocaleTimeString() : '')}</span>
+                    <span className="text-green-400 font-bold">{liveActivityData?.data?.lastExecution ? new Date(liveActivityData.data.lastExecution).toLocaleTimeString() : ''}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Error Count:</span>
                   <div className="flex items-center space-x-2">
-                    <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '3' : (automationPerformance?.errorCount || '')}</span>
-                    <Button size="sm" variant="ghost" className="text-cyan-400 hover:text-cyan-300 text-xs p-1">
-                      {currentSystemMode === 'test' ? '👁 View Details' : ''}
-                    </Button>
+                    <span className="text-red-400 font-bold">{automationPerformance?.errorCount || ''}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Bot Status:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.dailyActiveUsers && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? 'All Online' : (metrics?.data?.dailyActiveUsers ? 'Active' : '')}</span>
+                    <span className="text-green-400 font-bold">{metrics?.data?.dailyActiveUsers ? 'Active' : ''}</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">System Uptime:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '99.8%' : (metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : '')}</span>
+                  <span className="text-green-400 font-bold">{metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : ''}</span>
                 </div>
               </div>
             </CardContent>
@@ -4563,8 +4560,7 @@ export default function CommandCenter() {
                   <div className="text-right flex items-center space-x-1">
                     {metrics?.data?.monthlyRecurringRevenue && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
                     <span className="text-green-400 font-bold">
-                      {currentSystemMode === 'test' ? '$12.5K' : 
-                       (metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : '')}
+                      {metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : ''}
                     </span>
                   </div>
                 </div>
@@ -4573,28 +4569,26 @@ export default function CommandCenter() {
                   <div className="text-right flex items-center space-x-1">
                     {metrics?.data?.revenueGrowth && <div className="w-1 h-1 bg-emerald-400 rounded-full animate-pulse"></div>}
                     <span className="text-emerald-400 font-bold">
-                      {currentSystemMode === 'test' ? '247%' : ''}
+                      {metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : ''}
                     </span>
                   </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Pipeline Value:</span>
                   <span className="text-blue-400 font-bold">
-                    {currentSystemMode === 'test' ? '$85K' : 
-                     (metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(0) + 'K' : '')}
+                    {metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(0) + 'K' : ''}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Close Rate:</span>
                   <span className="text-cyan-400 font-bold">
-                    {currentSystemMode === 'test' ? '8.5%' : ''}
+                    {metrics?.data?.conversionRate ? metrics.data.conversionRate + '%' : ''}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Sales Velocity:</span>
                   <span className="text-purple-400 font-bold">
-                    {currentSystemMode === 'test' ? '4.7/5' : 
-                     (metrics?.data?.customerSatisfaction ? metrics.data.customerSatisfaction + '/5' : '')}
+                    {metrics?.data?.customerSatisfaction ? metrics.data.customerSatisfaction + '/5' : ''}
                   </span>
                 </div>
               </div>
@@ -4660,14 +4654,14 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">API Errors:</span>
                   <div className="flex items-center space-x-1">
                     {automationPerformance?.data?.apiErrors && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-red-400 font-bold">{currentSystemMode === 'test' ? '12' : (automationPerformance?.data?.apiErrors || '')}</span>
+                    <span className="text-red-400 font-bold">{automationPerformance?.data?.apiErrors || ''}</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Slack Alert Rate:</span>
                   <div className="flex items-center space-x-1">
                     {automationPerformance?.data?.slackAlertRate && <div className="w-1 h-1 bg-yellow-400 rounded-full animate-pulse"></div>}
-                    <span className="text-yellow-400 font-bold">{currentSystemMode === 'test' ? '5.2%' : (automationPerformance?.data?.slackAlertRate || '')}</span>
+                    <span className="text-yellow-400 font-bold">{automationPerformance?.data?.slackAlertRate || ''}</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
@@ -4676,11 +4670,11 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">System Load:</span>
-                  <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '68.3%' : (metrics?.data?.systemLoad || '')}</span>
+                  <span className="text-blue-400 font-bold">{metrics?.data?.systemLoad || ''}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Uptime Today:</span>
-                  <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '99.9%' : (metrics?.data?.dailyUptime || '')}</span>
+                  <span className="text-green-400 font-bold">{metrics?.data?.dailyUptime || ''}</span>
                 </div>
               </div>
             </CardContent>
@@ -4703,14 +4697,14 @@ export default function CommandCenter() {
                   <span className="text-slate-300">Automation Success:</span>
                   <div className="flex items-center space-x-1">
                     {automationPerformance?.data?.automationSuccess && <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '94.7%' : (automationPerformance?.data?.automationSuccess ? automationPerformance.data.automationSuccess + '%' : '')}</span>
+                    <span className="text-green-400 font-bold">{automationPerformance?.data?.automationSuccess ? automationPerformance.data.automationSuccess + '%' : ''}</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">Total Executions:</span>
                   <div className="flex items-center space-x-1">
                     {automationPerformance?.data?.totalExecutions && <div className="w-1 h-1 bg-cyan-400 rounded-full animate-pulse"></div>}
-                    <span className="text-cyan-400 font-bold">{currentSystemMode === 'test' ? '2,847' : (automationPerformance?.data?.totalExecutions || '')}</span>
+                    <span className="text-cyan-400 font-bold">{automationPerformance?.data?.totalExecutions || ''}</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
