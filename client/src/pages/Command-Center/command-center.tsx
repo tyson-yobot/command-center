@@ -5308,20 +5308,20 @@ export default function CommandCenter() {
               knowledgeStats={knowledgeStats}
               callStats={testStats}
               handlers={{
-                handleNewBookingSync: handleCreateBooking,
-                handleNewSupportTicket: handleCreateSupportTicket,
+                handleNewBookingSync: handleNewBookingSync,
+                handleNewSupportTicket: handleNewSupportTicket,
                 handleManualFollowUp: handleManualFollowUp,
-                handleSalesOrderSync: handleAutomateSalesOrder,
-                handleContentCreatorSync: () => console.log('Content creator sync'),
-                handleMailchimpSync: () => console.log('Mailchimp sync'),
-                handleSocialContentSync: () => console.log('Social content sync'),
-                handleSimulateTestCall: () => console.log('Simulate test call'),
-                handleUploadDocument: () => console.log('Upload document'),
-                handleReindexKnowledge: () => console.log('Reindex knowledge'),
-                handleClearKnowledge: () => console.log('Clear knowledge'),
-                handleViewKnowledge: () => setShowKnowledgeViewer(true),
-                setShowCallReports: (show: boolean) => console.log('Show call reports:', show),
-                setShowCallLogs: (show: boolean) => console.log('Show call logs:', show),
+                handleSalesOrderSync: handleSalesOrder,
+                handleContentCreatorSync: handleContentCreatorSync,
+                handleMailchimpSync: handleMailchimpSync,
+                handleSocialContentSync: handleSocialContentSync,
+                handleSimulateTestCall: handleCallSimulation,
+                handleUploadDocument: handleUploadDocuments,
+                handleReindexKnowledge: handleReindexKnowledge,
+                handleClearKnowledge: handleClearKnowledge,
+                handleViewKnowledge: handleViewKnowledge,
+                setShowCallReports: (show: boolean) => setShowCallReports(show),
+                setShowCallLogs: (show: boolean) => setShowCallLogs(show),
               }}
             />
             
