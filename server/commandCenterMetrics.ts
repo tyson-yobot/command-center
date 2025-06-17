@@ -566,7 +566,7 @@ export function registerCommandCenterMetrics(app: Express) {
 
       // Also log to main metrics tracker
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': action,
+        '🛠️ Triggered Action': action,
         'Triggered From': 'Command Center',
         'Triggered By': triggeredBy,
         'Timestamp': new Date().toISOString()
