@@ -4287,11 +4287,8 @@ export default function CommandCenter() {
               </div>
             </CardContent>
           </Card>
-        </div>
 
-        {/* Second Row - Bot Intelligence & System Monitor */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          {/* Bot Intelligence */}
+          {/* AI Assistant Insights */}
           <Card className="bg-white/10 backdrop-blur-sm border border-purple-400">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
@@ -4324,6 +4321,10 @@ export default function CommandCenter() {
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Second Row - Empty for now */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
 
 
         </div>
