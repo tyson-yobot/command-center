@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { logIntegrationTest } from "./airtableIntegrationLogger";
+import { storeLeadsInAirtable, logScrapingCampaign } from "./airtableLeadStorage";
 
 // Real API integration for lead scraping with proper test/live mode separation
 export function registerRealScrapingRoutes(app: Express) {
@@ -137,16 +138,23 @@ export function registerRealScrapingRoutes(app: Express) {
         }
       }
 
+      // Store leads in Airtable Scraped Leads (Universal) table
+      let airtableStored = false;
+      if (leads.length > 0) {
+        airtableStored = await storeLeadsInAirtable(leads, 'Apollo');
+        await logScrapingCampaign('Apollo', filters, leads.length, mode);
+      }
+
       console.log('Apollo Scraping Log:', logEntry);
 
       // Log to Airtable Integration Test Log per specification
       await logIntegrationTest({
         integrationName: "Apollo Lead Scraper",
-        passOrFail: logEntry.status === 'SUCCESS',
-        notes: `Validated Airtable + Slack delivery. Mode: ${mode}, Leads: ${leads.length}, Live Data: ${isLiveData}`,
+        passOrFail: logEntry.status === 'SUCCESS' && airtableStored,
+        notes: `Leads stored in Scraped Leads (Universal) table. Mode: ${mode}, Leads: ${leads.length}, Stored: ${airtableStored}`,
         qaOwner: "YoBot System",
         outputDataPopulated: leads.length > 0,
-        recordCreated: true,
+        recordCreated: airtableStored,
         retryAttempted: false,
         moduleType: "Scraper",
         relatedScenarioLink: "https://replit.com/@YoBot/lead-scraper"

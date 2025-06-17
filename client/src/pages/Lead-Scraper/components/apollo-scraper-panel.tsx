@@ -106,6 +106,7 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
   const [newLocation, setNewLocation] = useState("");
   const [newIndustry, setNewIndustry] = useState("");
   const [newTechnology, setNewTechnology] = useState("");
+  const [isTestMode, setIsTestMode] = useState(false);
 
   const addTag = (field: keyof Pick<ApolloFilters, 'jobTitles' | 'location' | 'industry' | 'technologies'>, value: string, setter: (value: string) => void) => {
     if (value.trim()) {
@@ -585,38 +586,6 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
                     </Badge>
                   ))}
                 </div>
-              </div>
-            </div>
-
-            {/* Technologies Used */}
-            <div className="space-y-2">
-              <Label className="text-slate-200">Technologies Used</Label>
-              <div className="flex gap-2">
-                <Input
-                  placeholder="e.g., Salesforce, HubSpot, AWS, React"
-                  value={newTechnology}
-                  onChange={(e) => setNewTechnology(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && addTag('technologies', newTechnology, setNewTechnology)}
-                  className="bg-slate-700/50 border-slate-600 text-slate-200"
-                />
-                <Button
-                  size="sm"
-                  onClick={() => addTag('technologies', newTechnology, setNewTechnology)}
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                {filters.technologies.map((tech, index) => (
-                  <Badge key={index} variant="secondary" className="bg-blue-600/20 text-blue-200">
-                    {tech}
-                    <X
-                      className="h-3 w-3 ml-1 cursor-pointer"
-                      onClick={() => removeTag('technologies', index)}
-                    />
-                  </Badge>
-                ))}
               </div>
             </div>
 
