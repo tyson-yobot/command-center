@@ -3,6 +3,7 @@ import { db } from "./db";
 import { storage } from "./storage";
 import { registerAirtableRoutes } from "./modules/airtable/airtableRoutes";
 import { registerScraperRoutes } from "./modules/scraper/scraperRoutes";
+import { registerRealScrapingRoutes } from "./modules/lead-scraper/realScrapingRoutes";
 import { generateVoiceReply, testElevenLabsConnection, getAvailableVoices } from "./modules/voice/voiceGeneration";
 
 let systemMode = 'live';
@@ -163,6 +164,9 @@ export function registerRoutes(app: Express): void {
 
   // Register scraper routes for lead generation
   registerScraperRoutes(app);
+
+  // Register real lead scraping routes with Airtable integration
+  registerRealScrapingRoutes(app);
 
   console.log("✅ Command Center routes registered successfully");
 }

@@ -301,16 +301,23 @@ export function registerRealScrapingRoutes(app: Express) {
         }
       }
 
+      // Store leads in Airtable Scraped Leads (Universal) table
+      let airtableStored = false;
+      if (leads.length > 0) {
+        airtableStored = await storeLeadsInAirtable(leads, 'Apify');
+        await logScrapingCampaign('Apify', filters, leads.length, mode);
+      }
+
       console.log('Apify Scraping Log:', logEntry);
 
       // Log to Airtable Integration Test Log per specification
       await logIntegrationTest({
         integrationName: "Apify Business Scraper",
-        passOrFail: logEntry.status === 'SUCCESS',
-        notes: `Google Maps business scraping completed. Mode: ${mode}, Leads: ${leads.length}, Live Data: ${isLiveData}`,
+        passOrFail: logEntry.status === 'SUCCESS' && airtableStored,
+        notes: `Leads stored in Scraped Leads (Universal) table. Mode: ${mode}, Leads: ${leads.length}, Stored: ${airtableStored}`,
         qaOwner: "YoBot System",
         outputDataPopulated: leads.length > 0,
-        recordCreated: true,
+        recordCreated: airtableStored,
         retryAttempted: false,
         moduleType: "Scraper",
         relatedScenarioLink: "https://replit.com/@YoBot/lead-scraper"
@@ -460,16 +467,23 @@ export function registerRealScrapingRoutes(app: Express) {
         }
       }
 
+      // Store leads in Airtable Scraped Leads (Universal) table
+      let airtableStored = false;
+      if (leads.length > 0) {
+        airtableStored = await storeLeadsInAirtable(leads, 'PhantomBuster');
+        await logScrapingCampaign('PhantomBuster', filters, leads.length, mode);
+      }
+
       console.log('PhantomBuster Scraping Log:', logEntry);
 
       // Log to Airtable Integration Test Log per specification
       await logIntegrationTest({
         integrationName: "PhantomBuster LinkedIn Scraper",
-        passOrFail: logEntry.status === 'SUCCESS',
-        notes: `LinkedIn professional network scraping completed. Mode: ${mode}, Leads: ${leads.length}, Live Data: ${isLiveData}`,
+        passOrFail: logEntry.status === 'SUCCESS' && airtableStored,
+        notes: `Leads stored in Scraped Leads (Universal) table. Mode: ${mode}, Leads: ${leads.length}, Stored: ${airtableStored}`,
         qaOwner: "YoBot System",
         outputDataPopulated: leads.length > 0,
-        recordCreated: true,
+        recordCreated: airtableStored,
         retryAttempted: false,
         moduleType: "Scraper",
         relatedScenarioLink: "https://replit.com/@YoBot/lead-scraper"
@@ -488,6 +502,113 @@ export function registerRealScrapingRoutes(app: Express) {
     } catch (error) {
       console.error('PhantomBuster scraping error:', error);
       res.status(500).json({ success: false, error: error.message, timestamp: new Date().toISOString() });
+    }
+  });
+
+  // Main launch endpoint that the frontend uses
+  app.post("/api/launch-scrape", async (req, res) => {
+    try {
+      const { tool, filters } = req.body;
+      const timestamp = new Date().toISOString();
+      
+      console.log(`Launching ${tool} scraper with filters:`, filters);
+      
+      // Route to appropriate scraper based on tool
+      let scrapingResponse;
+      switch (tool.toLowerCase()) {
+        case 'apollo':
+          scrapingResponse = await fetch(`${req.protocol}://${req.get('host')}/api/scraping/apollo`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filters })
+          });
+          break;
+        case 'apify':
+          scrapingResponse = await fetch(`${req.protocol}://${req.get('host')}/api/scraping/apify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filters })
+          });
+          break;
+        case 'phantombuster':
+          scrapingResponse = await fetch(`${req.protocol}://${req.get('host')}/api/scraping/phantombuster`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filters })
+          });
+          break;
+        default:
+          return res.status(400).json({ success: false, error: 'Invalid scraping tool specified' });
+      }
+      
+      if (scrapingResponse?.ok) {
+        const scrapingData = await scrapingResponse.json();
+        res.json({
+          success: true,
+          tool,
+          timestamp,
+          leads: scrapingData.leads || [],
+          count: scrapingData.count || 0,
+          message: `${tool} scraper launched successfully - ${scrapingData.count || 0} leads found`,
+          airtableStored: scrapingData.count > 0
+        });
+      } else {
+        const errorText = scrapingResponse ? await scrapingResponse.text() : 'No response';
+        res.status(500).json({ 
+          success: false, 
+          error: `${tool} scraping failed: ${errorText}`,
+          timestamp 
+        });
+      }
+    } catch (error) {
+      console.error('Launch scrape error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message, 
+        timestamp: new Date().toISOString() 
+      });
+    }
+  });
+
+  // Get stored leads from Airtable
+  app.get("/api/scraped-leads", async (req, res) => {
+    try {
+      if (!process.env.AIRTABLE_API_KEY) {
+        return res.status(400).json({ success: false, error: 'Airtable API key required' });
+      }
+
+      const response = await fetch(`https://api.airtable.com/v0/appb2F3D77tC4DWla/Scraped%20Leads%20(Universal)%20Table`, {
+        headers: {
+          'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const leads = data.records?.map(record => ({
+          id: record.id,
+          fullName: record.fields['Full Name'],
+          email: record.fields['Email'],
+          company: record.fields['Company'],
+          title: record.fields['Job Title'],
+          location: record.fields['Location'],
+          phone: record.fields['Phone'],
+          industry: record.fields['Industry'],
+          sourceTag: record.fields['Source Tag'],
+          sourceTool: record.fields['Source Tool'],
+          dateAdded: record.fields['Date Added'],
+          status: record.fields['Status'],
+          leadQualityScore: record.fields['Lead Quality Score']
+        })) || [];
+
+        res.json({ success: true, leads, count: leads.length });
+      } else {
+        const errorText = await response.text();
+        res.status(500).json({ success: false, error: `Airtable fetch failed: ${errorText}` });
+      }
+    } catch (error) {
+      console.error('Error fetching scraped leads:', error);
+      res.status(500).json({ success: false, error: error.message });
     }
   });
 }

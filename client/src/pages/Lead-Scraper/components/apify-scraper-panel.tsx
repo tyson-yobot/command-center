@@ -185,9 +185,31 @@ export default function ApifyScraperPanel({ onLaunch, isLoading = false }: Apify
               {/* Search Terms */}
               <div className="space-y-2">
                 <Label className="text-slate-200">Search Terms</Label>
+                <Select onValueChange={(value) => addTag('searchTerms', value, () => {})}>
+                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
+                    <SelectValue placeholder="Select business types" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-700 border-slate-600 max-h-60">
+                    {[
+                      "restaurants", "cafes", "bars", "hotels", "gyms", "spas", "salons", 
+                      "dentists", "doctors", "lawyers", "accountants", "real estate agents",
+                      "auto repair", "plumbers", "electricians", "contractors", "landscaping",
+                      "retail stores", "boutiques", "pharmacies", "grocery stores", "banks",
+                      "insurance agencies", "marketing agencies", "consulting firms", "startups"
+                    ].map((term) => (
+                      <SelectItem 
+                        key={term} 
+                        value={term}
+                        className="text-slate-200 hover:bg-slate-600"
+                      >
+                        {term}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <div className="flex gap-2">
                   <Input
-                    placeholder="e.g., restaurants, hotels, gyms"
+                    placeholder="Or enter custom search term"
                     value={newSearchTerm}
                     onChange={(e) => setNewSearchTerm(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && addTag('searchTerms', newSearchTerm, setNewSearchTerm)}

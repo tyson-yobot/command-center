@@ -93,10 +93,6 @@ export default function PhantomBusterScraperPanel({ onLaunch, isLoading = false 
   };
 
   const calculateEstimatedProfiles = () => {
-    if (isTestMode) {
-      return Math.floor(Math.random() * 400) + 50;
-    }
-    
     let baseCount = 8000;
     
     if (filters.platform === "linkedin") baseCount *= 1.2;
@@ -221,9 +217,30 @@ export default function PhantomBusterScraperPanel({ onLaunch, isLoading = false 
               {/* Keywords */}
               <div className="space-y-2">
                 <Label className="text-slate-200">Keywords (title-style search)</Label>
+                <Select onValueChange={(value) => addTag('keywords', value, () => {})}>
+                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
+                    <SelectValue placeholder="Select common job titles" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-700 border-slate-600 max-h-60">
+                    {[
+                      "CEO", "CTO", "CFO", "VP Sales", "VP Marketing", "Sales Manager", "Account Executive",
+                      "Business Development", "Marketing Manager", "Product Manager", "Software Engineer",
+                      "Data Scientist", "UX Designer", "Operations Manager", "HR Manager", "Recruiter",
+                      "Financial Analyst", "Consultant", "Founder", "Director", "Team Lead", "Engineer"
+                    ].map((keyword) => (
+                      <SelectItem 
+                        key={keyword} 
+                        value={keyword}
+                        className="text-slate-200 hover:bg-slate-600"
+                      >
+                        {keyword}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <div className="flex gap-2">
                   <Input
-                    placeholder="e.g., CEO, Software Engineer, Marketing"
+                    placeholder="Or enter custom keyword"
                     value={newKeyword}
                     onChange={(e) => setNewKeyword(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && addTag('keywords', newKeyword, setNewKeyword)}
@@ -274,13 +291,16 @@ export default function PhantomBusterScraperPanel({ onLaunch, isLoading = false 
                   <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
                     <SelectValue placeholder="Select seniority level" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="entry">Entry Level</SelectItem>
-                    <SelectItem value="mid">Mid Level</SelectItem>
-                    <SelectItem value="senior">Senior Level</SelectItem>
-                    <SelectItem value="director">Director</SelectItem>
-                    <SelectItem value="vp">VP Level</SelectItem>
-                    <SelectItem value="c-level">C-Level</SelectItem>
+                  <SelectContent className="bg-slate-700 border-slate-600">
+                    {["Unpaid", "Training", "Intern", "Entry level", "Associate", "Mid-Senior level", "Director", "Executive"].map((level) => (
+                      <SelectItem 
+                        key={level} 
+                        value={level}
+                        className="text-slate-200 hover:bg-slate-600"
+                      >
+                        {level}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -292,15 +312,22 @@ export default function PhantomBusterScraperPanel({ onLaunch, isLoading = false 
                   <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="sales">Sales</SelectItem>
-                    <SelectItem value="marketing">Marketing</SelectItem>
-                    <SelectItem value="engineering">Engineering</SelectItem>
-                    <SelectItem value="operations">Operations</SelectItem>
-                    <SelectItem value="finance">Finance</SelectItem>
-                    <SelectItem value="hr">Human Resources</SelectItem>
-                    <SelectItem value="legal">Legal</SelectItem>
-                    <SelectItem value="product">Product</SelectItem>
+                  <SelectContent className="bg-slate-700 border-slate-600">
+                    {[
+                      "Administrative", "Arts and Design", "Business Development", "Community & Social Services",
+                      "Consulting", "Education", "Engineering", "Entrepreneurship", "Finance", "Healthcare Services",
+                      "Human Resources", "Information Technology", "Legal", "Marketing", "Media & Communications",
+                      "Military & Protective Services", "Operations", "Product Management", "Program and Project Management",
+                      "Purchasing", "Quality Assurance", "Real Estate", "Research", "Sales", "Support"
+                    ].map((dept) => (
+                      <SelectItem 
+                        key={dept} 
+                        value={dept}
+                        className="text-slate-200 hover:bg-slate-600"
+                      >
+                        {dept}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
