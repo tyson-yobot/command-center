@@ -220,11 +220,11 @@ export default function CommandCenter() {
   const [showAnalyticsModal, setShowAnalyticsModal] = React.useState(false);
   const [showCalendarUpload, setShowCalendarUpload] = React.useState(false);
 
-  const [activeCallsCount, setActiveCallsCount] = React.useState(--);
+  const [activeCallsCount, setActiveCallsCount] = React.useState(0);
   const [dashboardPreset, setDashboardPreset] = React.useState('full');
   const [collapsedSections, setCollapsedSections] = React.useState<{[key: string]: boolean}>({});
   const [demoMode, setDemoMode] = React.useState(false);
-  const [demoStep, setDemoStep] = React.useState(--);
+  const [demoStep, setDemoStep] = React.useState(0);
   const [currentRecognition, setCurrentRecognition] = React.useState<any>(null);
   
   // Voice recognition states for RAG programming
@@ -2943,7 +2943,7 @@ export default function CommandCenter() {
 
         {/* Escalation Alert Overlay */}
         {showEscalation && (
-          <div className="fixed inset--- bg-red-900/90 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="fixed inset-0 bg-red-900/90 backdrop-blur-sm z-50 flex items-center justify-center">
             <div className="bg-white rounded-lg p-6 max-w-md mx-4 shadow-2xl">
               <div className="flex items-center space-x-3 mb-4">
                 <AlertTriangle className="w-8 h-8 text-red-600" />
@@ -2976,7 +2976,7 @@ export default function CommandCenter() {
 
         {/* Demo Mode Overlay */}
         {demoMode && (
-          <div className="fixed inset--- bg-black/60 backdrop-blur-sm z-40 flex items-center justify-center">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 flex items-center justify-center">
             <div className="bg-white/10 backdrop-blur-md border border-blue-400/50 rounded-lg p-6 max-w-md mx-4">
               <div className="text-center">
                 <div className="text-blue-400 mb-4">
@@ -7144,7 +7144,7 @@ export default function CommandCenter() {
       </div>
 
     {showClearConfirm && (
-      <div className="fixed inset--- bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
         <div className="bg-slate-800 border border-red-500/50 rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-xl font-semibold text-red-400 mb-4 flex items-center">
               <Trash2 className="w-5 h-5 mr-2" />
@@ -7192,9 +7192,9 @@ export default function CommandCenter() {
 
       {/* Sales Order Form Modal */}
       {showSalesOrderProcessor && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-green-400/50">
-            <div className="sticky top--- bg-slate-900 border-b border-green-400/30 p-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-slate-900 border-b border-green-400/30 p-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white">Create Sales Order</h2>
               <Button
                 onClick={() => setShowSalesOrderProcessor(false)}
@@ -7217,9 +7217,9 @@ export default function CommandCenter() {
 
       {/* Booking Form Modal */}
       {showBookingModal && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-blue-400/50">
-            <div className="sticky top--- bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white">Create New Booking</h2>
               <Button
                 onClick={() => setShowBookingModal(false)}
@@ -7242,7 +7242,7 @@ export default function CommandCenter() {
 
       {/* Support Ticket Form Modal */}
       {showSupportTicketModal && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-blue-400/50 p-6 animate-in fade-in--- duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Create Support Ticket</h2>
@@ -7345,7 +7345,7 @@ export default function CommandCenter() {
 
       {/* Follow-up Form Modal */}
       {showFollowUpModal && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-red-400/50 p-6 animate-in fade-in--- duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Create Follow-up</h2>
@@ -7451,7 +7451,7 @@ export default function CommandCenter() {
 
       {/* SMS Modal */}
       {showSMSModal && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-blue-400/50 p-6 animate-in fade-in--- duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Send SMS</h2>
@@ -7539,7 +7539,7 @@ export default function CommandCenter() {
 
       {/* Support Ticket Modal */}
       {showSupportTicketModal && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-[520px] bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 rounded-xl p-6 animate-in fade-in--- duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-blue-300 flex items-center">
@@ -7651,7 +7651,7 @@ export default function CommandCenter() {
 
       {/* Sales Order Automation Modal */}
       {showSalesOrderProcessor && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-[600px] bg-[#1a1a1a] rounded-xl border border-purple-400/50 p-6 animate-in fade-in--- duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Automate Sales Order</h2>
@@ -7771,7 +7771,7 @@ export default function CommandCenter() {
 
       {/* Manual Call Modal */}
       {showCreateVoiceCallModal && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-[560px] bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 rounded-xl p-6 animate-in fade-in--- duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-blue-300 flex items-center">
@@ -7873,9 +7873,9 @@ export default function CommandCenter() {
 
       {/* Lead Scraping Interface Modal */}
       {showLeadScraping && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-blue-400/50">
-            <div className="sticky top--- bg-slate-900 border-b border-cyan-400/30 p-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-slate-900 border-b border-cyan-400/30 p-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white">Lead Scraping Interface</h2>
               <Button
                 onClick={() => setShowLeadScraping(false)}
@@ -7918,7 +7918,7 @@ export default function CommandCenter() {
 
       {/* Create New Ticket Modal */}
       {showCreateTicketModal && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-3xl bg-slate-900 rounded-lg border border-purple-500 shadow-2xl">
             <div className="bg-slate-900 border-b border-purple-400/30 p-6 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-white flex items-center">
@@ -8101,9 +8101,9 @@ export default function CommandCenter() {
 
       {/* Ticket History Modal */}
       {showTicketHistory && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-purple-500">
-            <div className="sticky top--- bg-slate-900 border-b border-purple-400/30 p-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-slate-900 border-b border-purple-400/30 p-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white flex items-center">
                 <FileText className="w-5 h-5 mr-2 text-purple-400" />
                 Support Ticket History
@@ -8214,9 +8214,9 @@ export default function CommandCenter() {
 
       {/* Publy Dashboard Modal */}
       {showPublyDashboard && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-orange-400/50">
-            <div className="sticky top--- bg-slate-900 border-b border-orange-400/30 p-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-slate-900 border-b border-orange-400/30 p-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white flex items-center">
                 <span className="text-2xl mr-3">📢</span>
                 Publy Content Creation Dashboard
@@ -8356,9 +8356,9 @@ export default function CommandCenter() {
 
       {/* Mailchimp Dashboard Modal */}
       {showMailchimpDashboard && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-green-400/50">
-            <div className="sticky top--- bg-slate-900 border-b border-green-400/30 p-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-slate-900 border-b border-green-400/30 p-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white flex items-center">
                 <span className="text-2xl mr-3">📧</span>
                 Mailchimp Email Marketing Dashboard
@@ -8597,7 +8597,7 @@ export default function CommandCenter() {
 
       {/* Live Chat Modal */}
       {showLiveChat && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-2xl max-h-[80vh] bg-slate-900 rounded-lg border border-blue-400/50 flex flex-col">
             <div className="flex items-center justify-between p-4 border-b border-blue-400/30">
               <h2 className="text-xl font-bold text-white flex items-center">
@@ -8679,9 +8679,9 @@ export default function CommandCenter() {
 
       {/* View All Tickets Modal */}
       {showTicketModal && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-blue-400/50">
-            <div className="sticky top--- bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white flex items-center">
                 <Ticket className="w-5 h-5 mr-2 text-blue-400" />
                 Support Tickets
@@ -8782,9 +8782,9 @@ export default function CommandCenter() {
 
       {/* Enhanced Schedule Viewer Modal */}
       {showScheduleViewer && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-7xl max-h-[95vh] overflow-y-auto bg-slate-900 rounded-lg border border-blue-400/50">
-            <div className="sticky top--- bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white flex items-center">
                 <Calendar className="w-5 h-5 mr-2 text-blue-400" />
                 Team Calendar - {(() => {
@@ -9214,9 +9214,9 @@ export default function CommandCenter() {
 
       {/* Call Reports Modal */}
       {showCallReports && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-blue-400/50">
-            <div className="sticky top--- bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-slate-900 border-b border-blue-400/30 p-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white flex items-center">
                 <FileText className="w-5 h-5 mr-2 text-blue-400" />
                 Call Reports & Analytics
@@ -9294,9 +9294,9 @@ export default function CommandCenter() {
 
       {/* Call Logs Modal */}
       {showCallLogs && (
-        <div className="fixed inset--- bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-slate-900 rounded-lg border border-green-400/50">
-            <div className="sticky top--- bg-slate-900 border-b border-green-400/30 p-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-slate-900 border-b border-green-400/30 p-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white flex items-center">
                 <Clock className="w-5 h-5 mr-2 text-green-400" />
                 Call Log History
