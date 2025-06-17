@@ -3391,6 +3391,17 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
+                    onClick={() => setActiveTab('lead-scraper')}
+                    className="!bg-cyan-600 hover:!bg-cyan-700 !text-white flex items-center justify-center p-4 h-24 border border-cyan-500"
+                    title="Lead Scraper Tool"
+                  >
+                    <div className="text-center">
+                      <Search className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">Lead Scraper</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
                     onClick={() => setShowManualCallModal(true)}
                     className="!bg-teal-600 hover:!bg-teal-700 !text-white flex items-center justify-center p-4 h-24 border border-teal-500"
                     title="Manual Call Start"
