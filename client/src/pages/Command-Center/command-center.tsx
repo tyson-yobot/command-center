@@ -3082,8 +3082,12 @@ export default function CommandCenter() {
                         size="sm"
                         className={`${
                           dashboardPreset === preset.id 
-                            ? 'bg-cyan-600 text-white' 
-                            : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                            ? (preset.id === 'voice' ? 'bg-blue-600 text-white border-blue-400' :
+                               preset.id === 'smartspend' ? 'bg-green-600 text-white border-green-400' :
+                               'bg-cyan-600 text-white border-cyan-400')
+                            : (preset.id === 'voice' ? 'border-blue-400 text-blue-400 hover:bg-blue-600/20' :
+                               preset.id === 'smartspend' ? 'border-green-400 text-green-400 hover:bg-green-600/20' :
+                               'border-cyan-400 text-cyan-400 hover:bg-cyan-600/20')
                         }`}
                         title={`Switch to ${preset.label}`}
                       >
@@ -3453,7 +3457,7 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                       <Button
                         onClick={handleUploadDocs}
-                        className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center p-4 h-20 border border-slate-500"
+                        className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center p-4 h-20 border border-blue-400"
                         title="PDF & Knowledge Upload"
                       >
                         <div className="text-center">
