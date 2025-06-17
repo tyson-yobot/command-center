@@ -3476,7 +3476,7 @@ export default function CommandCenter() {
                       
                       <Button
                         onClick={handleViewKnowledge}
-                        className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center p-4 h-20 border border-slate-500"
+                        className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center p-4 h-20 border border-purple-400"
                         title="Knowledge Areas"
                       >
                         <div className="text-center">
@@ -3487,7 +3487,7 @@ export default function CommandCenter() {
                       
                       <Button
                         onClick={handleRunDiagnostics}
-                        className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center p-4 h-20 border border-slate-500"
+                        className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-center p-4 h-20 border border-orange-400"
                         title="System Diagnostics"
                       >
                         <div className="text-center">
