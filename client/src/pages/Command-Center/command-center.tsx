@@ -3513,13 +3513,35 @@ export default function CommandCenter() {
                   <div className="text-blue-200 font-medium">
                     Never
                   </div>
-                  <div className="bg-blue-900/30 rounded-lg p-4 border border-blue-400/30 text-center h-32 flex flex-col justify-center">
-                    <div className="text-blue-300 text-sm mb-2">
-                      No export data available
-                    </div>
-                    <div className="text-slate-400 text-xs">
-                      Generate reports to enable PDF export
-                    </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <Button
+                      onClick={() => setShowAnalyticsModal(true)}
+                      className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-4 h-12"
+                    >
+                      <FileText className="w-4 h-4 mr-2" />
+                      Analytics Report
+                    </Button>
+                    <Button
+                      onClick={handlePDFReport}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-4 h-12"
+                    >
+                      <Printer className="w-4 h-4 mr-2" />
+                      PDF Export
+                    </Button>
+                    <Button
+                      onClick={() => setShowExportModal(true)}
+                      className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-4 h-12"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Quick Export
+                    </Button>
+                    <Button
+                      onClick={handleExportData}
+                      className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-4 h-12"
+                    >
+                      <Database className="w-4 h-4 mr-2" />
+                      Data Export
+                    </Button>
                   </div>
                 </div>
               </CardContent>
