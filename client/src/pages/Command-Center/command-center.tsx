@@ -4719,7 +4719,7 @@ export default function CommandCenter() {
                         <div className="text-xs text-blue-300 mb-2">
                           Uses selected voice persona below. Premium quality synthesis with natural intonation.
                         </div>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-4 gap-2">
                           <Button 
                             onClick={generateVoice}
                             className="bg-cyan-600 hover:bg-cyan-700 text-white border border-cyan-500"
@@ -4734,6 +4734,20 @@ export default function CommandCenter() {
                           >
                             <Download className="w-4 h-4 mr-2" />
                             Download Audio
+                          </Button>
+                          <Button 
+                            onClick={testVoicePersona}
+                            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 text-sm"
+                          >
+                            <Headphones className="w-3 h-3 mr-1" />
+                            Test Voice
+                          </Button>
+                          <Button 
+                            onClick={handleApplyPersona}
+                            className="bg-green-600 hover:bg-green-700 text-white border border-green-500 text-sm"
+                          >
+                            <Settings className="w-3 h-3 mr-1" />
+                            Apply Persona
                           </Button>
                         </div>
                       </div>
@@ -4820,22 +4834,7 @@ export default function CommandCenter() {
                           </div>
                         </div>
                         
-                        <div className="grid grid-cols-2 gap-2">
-                          <Button 
-                            onClick={testVoicePersona}
-                            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 text-sm"
-                          >
-                            <Headphones className="w-3 h-3 mr-1" />
-                            Test Voice
-                          </Button>
-                          <Button 
-                            onClick={handleApplyPersona}
-                            className="bg-green-600 hover:bg-green-700 text-white border border-green-500 text-sm"
-                          >
-                            <Settings className="w-3 h-3 mr-1" />
-                            Apply Persona
-                          </Button>
-                        </div>
+
                       </div>
                     </div>
                   </div>
