@@ -3686,7 +3686,7 @@ export default function CommandCenter() {
               </CardTitle>
             </CardHeader>
             {!collapsedSections['system-health'] && (
-              <CardContent>
+              <CardContent className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {/* Uptime & Performance */}
                   <div className="space-y-4">
@@ -3814,7 +3814,7 @@ export default function CommandCenter() {
               </CardTitle>
             </CardHeader>
             {!collapsedSections['audit-panel'] && (
-              <CardContent>
+              <CardContent className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                   <div className="space-y-3">
                     <h4 className="text-red-300 font-semibold">System Integrity</h4>
