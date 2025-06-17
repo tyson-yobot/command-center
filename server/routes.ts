@@ -4425,20 +4425,56 @@ New York, NY 10001`;
   // Test Airtable connection endpoint
   app.get('/api/test-airtable', async (req, res) => {
     try {
-      const { testAirtableConnection, testBaseAccess } = await import('./testAirtableConnection');
-      const testResult = await testAirtableConnection();
-      
-      if (testResult.success) {
-        // Also test the Scraped Leads base access
-        const baseTest = await testBaseAccess('appb2f3D77Tc4DWAr', 'Scraped Leads (Universal)');
-        testResult.baseAccess = baseTest;
-      }
-      
-      res.json(testResult);
+      const { airtableAuth } = await import('./airtableAuthFix');
+      const result = await airtableAuth.testConnection();
+      res.json(result);
     } catch (error: any) {
       res.status(500).json({
         success: false,
         error: 'Airtable connection test failed',
+        details: error.message
+      });
+    }
+  });
+
+  // Live Airtable data endpoints for dashboard
+  app.get('/api/airtable/live-metrics', async (req, res) => {
+    try {
+      const { getLiveMetrics } = await import('./airtableAuthFix');
+      const result = await getLiveMetrics();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch live metrics',
+        details: error.message
+      });
+    }
+  });
+
+  app.get('/api/airtable/smartspend', async (req, res) => {
+    try {
+      const { getSmartSpendData } = await import('./airtableAuthFix');
+      const result = await getSmartSpendData();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch SmartSpend data',
+        details: error.message
+      });
+    }
+  });
+
+  app.get('/api/airtable/client-pulse', async (req, res) => {
+    try {
+      const { getClientPulseData } = await import('./airtableAuthFix');
+      const result = await getClientPulseData();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch client pulse data',
         details: error.message
       });
     }
