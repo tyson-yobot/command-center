@@ -69,12 +69,10 @@ export class LiveDataWiper {
   }
 
   /**
-   * Returns completely empty data structure for any field in LIVE mode
+   * DISABLED - Returns null to allow real Airtable data through
    */
   static getEmptyLiveData(dataType: string): any {
-    if (!this.isLiveMode()) {
-      return null; // Let test data through in non-live modes
-    }
+    return null; // Always allow real data from Airtable
 
     switch (dataType) {
       case 'dashboard-metrics':

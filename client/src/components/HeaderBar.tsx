@@ -49,16 +49,16 @@ export default function HeaderBar({
             <span className="text-white text-sm">System Mode:</span>
             <span className="text-white text-sm font-medium flex items-center gap-2">
               Test
-              {!isLiveMode && <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>}
+              {!isLiveMode && <span className="w-2 h-2 bg-green-400 rounded-full"></span>}
             </span>
             <Switch 
               checked={isLiveMode}
               onCheckedChange={onModeToggle}
-              className="data-[state=checked]:bg-green-500"
+              className={`${isLiveMode ? 'bg-green-500 data-[state=checked]:bg-green-500' : 'bg-black data-[state=unchecked]:bg-black'}`}
             />
             <span className="text-white text-sm font-medium flex items-center gap-2">
               Live
-              {isLiveMode && <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>}
+              {isLiveMode && <span className="w-2 h-2 bg-black rounded-full"></span>}
             </span>
             <span className={`px-2 py-1 rounded text-xs font-medium ${
               isLiveMode ? 'bg-green-600 text-white' : 'bg-yellow-600 text-white'

@@ -67,24 +67,10 @@ export class LiveDataCleaner {
   }
 
   /**
-   * Returns empty automation performance for LIVE mode
+   * DISABLED - Returns null to allow real Airtable data through
    */
   static getEmptyAutomationPerformance() {
-    return {
-      totalTests: 0,
-      passedTests: 0,
-      failedTests: 0,
-      successRate: 0,
-      avgExecutionTime: 0,
-      totalExecutions: 0,
-      recentTests: [],
-      performanceTrend: [],
-      automationHealth: {
-        healthy: 0,
-        warning: 0,
-        critical: 0
-      }
-    };
+    return null; // Allow real data from Airtable
   }
 
   /**
