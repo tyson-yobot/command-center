@@ -499,7 +499,7 @@ export default function CommandCenter() {
     setTimeout(() => {
       setCallStats(prev => ({
         ...prev,
-        activeCalls: Math.max(--, prev.activeCalls - 1),
+        activeCalls: Math.max(0, prev.activeCalls - 1),
         avgDuration: `${duration}m`,
         successRate: '94%'
       }));
