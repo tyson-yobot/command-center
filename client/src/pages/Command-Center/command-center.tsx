@@ -4715,7 +4715,7 @@ export default function CommandCenter() {
                         <div className="grid grid-cols-4 gap-2">
                           <Button 
                             onClick={generateVoice}
-                            className="bg-cyan-600 hover:bg-cyan-700 text-white border border-cyan-500"
+                            className="bg-cyan-600 hover:bg-cyan-700 text-white border border-cyan-500 px-4 py-3"
                             disabled={!voiceGenerationText.trim()}
                           >
                             <Headphones className="w-4 h-4 mr-2" />
@@ -4723,21 +4723,21 @@ export default function CommandCenter() {
                           </Button>
                           <Button 
                             onClick={downloadAudio}
-                            className="bg-teal-600 hover:bg-teal-700 text-white border border-teal-500"
+                            className="bg-teal-600 hover:bg-teal-700 text-white border border-teal-500 px-4 py-3"
                           >
                             <Download className="w-4 h-4 mr-2" />
                             Download Audio
                           </Button>
                           <Button 
                             onClick={testVoicePersona}
-                            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 text-sm"
+                            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 text-sm px-4 py-3"
                           >
                             <Headphones className="w-3 h-3 mr-1" />
                             Test Voice
                           </Button>
                           <Button 
                             onClick={handleApplyPersona}
-                            className="bg-green-600 hover:bg-green-700 text-white border border-green-500 text-sm"
+                            className="bg-green-600 hover:bg-green-700 text-white border border-green-500 text-sm px-4 py-3"
                           >
                             <Settings className="w-3 h-3 mr-1" />
                             Apply Persona
@@ -5070,7 +5070,7 @@ export default function CommandCenter() {
                 <div className="flex gap-3">
                   <Button 
                     onClick={() => document.getElementById('file-upload')?.click()}
-                    className="bg-green-600 hover:bg-green-700 text-white border border-green-400"
+                    className="bg-green-600 hover:bg-green-700 text-white border border-green-400 px-4 py-3"
                   >
                     <Upload className="w-4 h-4 mr-2" />
                     Upload & Program Documents
@@ -5078,7 +5078,7 @@ export default function CommandCenter() {
                   <Button 
                     onClick={deleteSelectedDocuments}
                     disabled={selectedDocuments.length === 0}
-                    className="bg-red-600 hover:bg-red-700 text-white border border-red-400"
+                    className="bg-red-600 hover:bg-red-700 text-white border border-red-400 px-4 py-3"
                   >
                     Delete Selected ({selectedDocuments.length})
                   </Button>
@@ -5258,7 +5258,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <Button
                     onClick={() => setShowExportModal(true)}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center p-3 border border-purple-500"
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center px-4 py-3 border border-purple-500"
                   >
                     <span className="text-xl mr-3">📊</span>
                     <span>Quick Export Dashboard</span>
@@ -5266,7 +5266,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleDownloadPDF}
-                    className="w-full bg-pink-600 hover:bg-pink-700 text-white flex items-center justify-center p-3 border border-pink-500"
+                    className="w-full bg-pink-600 hover:bg-pink-700 text-white flex items-center justify-center px-4 py-3 border border-pink-500"
                   >
                     <span className="text-xl mr-3">📋</span>
                     <span>Generate PDF Report</span>
