@@ -4331,7 +4331,7 @@ export default function CommandCenter() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300 text-sm">API Integrity:</span>
-                        <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '99.8%' : ''}</span>
+                        <span className="text-green-400 font-bold">0%</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300 text-sm">Data Quality:</span>
@@ -4450,7 +4450,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-400">
-                {currentSystemMode === 'test' ? '99.8%' : ''}
+                0%
               </div>
               <p className="text-xs text-green-400 flex items-center">
                 {metrics?.data?.systemUptime && <div className="w-1 h-1 bg-green-400 rounded-full mr-1 animate-pulse"></div>}
@@ -5197,7 +5197,7 @@ export default function CommandCenter() {
               {/* Learning Rate */}
               <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-purple-400 mb-1">{currentSystemMode === 'test' ? '78%' : ''}</div>
+                  <div className="text-2xl font-black text-purple-400 mb-1">0%</div>
                   <div className="text-slate-300 text-sm">Learning Rate</div>
                 </div>
                 <div className="space-y-2">
