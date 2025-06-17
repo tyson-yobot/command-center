@@ -48,6 +48,7 @@ import {
   Edit,
   Edit3,
   Share2,
+  FileDown,
   PenTool,
   FileDown,
   Printer,
@@ -3532,46 +3533,177 @@ export default function CommandCenter() {
                   </div>
                 </div>
                 
-                {/* Export Actions */}
-                <div className="mt-6 pt-4 border-t border-purple-400/30">
-                  <h4 className="text-purple-300 font-semibold mb-3 flex items-center">
-                    <FileDown className="w-4 h-4 mr-2" />
-                    📤 PDF + Export Reports
-                  </h4>
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                    <Button
-                      onClick={() => setShowAnalyticsModal(true)}
-                      className="bg-purple-600 hover:bg-purple-700 text-white p-3"
-                    >
-                      <FileText className="w-4 h-4 mr-2" />
-                      Analytics Report
-                    </Button>
-                    <Button
-                      onClick={handlePDFReport}
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white p-3"
-                    >
-                      <Printer className="w-4 h-4 mr-2" />
-                      PDF Export
-                    </Button>
-                    <Button
-                      onClick={() => setShowExportModal(true)}
-                      className="bg-teal-600 hover:bg-teal-700 text-white p-3"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Quick Export
-                    </Button>
-                    <Button
-                      onClick={handleExportData}
-                      className="bg-cyan-600 hover:bg-cyan-700 text-white p-3"
-                    >
-                      <Database className="w-4 h-4 mr-2" />
-                      Data Export
-                    </Button>
-                  </div>
-                </div>
               </CardContent>
             )}
           </Card>
+        </div>
+
+        {/* 6. PDF & Export + Audit/Integrity Panel - Side by Side */}
+        <div className="mb-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* PDF & Export Panel */}
+            <Card className="bg-gradient-to-br from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FileDown className="w-5 h-5 mr-2 text-purple-400" />
+                    📤 PDF & Export Panel
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => toggleSection('pdf-export')}
+                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                    >
+                      {collapsedSections['pdf-export'] ? 
+                        <ChevronDown className="w-4 h-4" /> : 
+                        <ChevronUp className="w-4 h-4" />
+                      }
+                    </Button>
+                  </div>
+                  <Badge className="bg-purple-600 text-white">EXPORT</Badge>
+                </CardTitle>
+              </CardHeader>
+              {!collapsedSections['pdf-export'] && (
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="p-3 bg-white/5 rounded-lg">
+                      <div className="text-purple-300 text-sm mb-2">Last PDF Generated:</div>
+                      <div className="text-white font-bold">Never</div>
+                    </div>
+                    <div className="p-3 bg-white/5 rounded-lg">
+                      <div className="text-purple-300 text-sm mb-2">Export Technology:</div>
+                      <div className="text-white font-bold">No recent exports</div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button
+                        onClick={() => setShowAnalyticsModal(true)}
+                        className="bg-purple-600 hover:bg-purple-700 text-white p-3"
+                      >
+                        <FileText className="w-4 h-4 mr-2" />
+                        Analytics Report
+                      </Button>
+                      <Button
+                        onClick={handlePDFReport}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white p-3"
+                      >
+                        <Printer className="w-4 h-4 mr-2" />
+                        PDF Export
+                      </Button>
+                      <Button
+                        onClick={() => setShowExportModal(true)}
+                        className="bg-teal-600 hover:bg-teal-700 text-white p-3"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Quick Export
+                      </Button>
+                      <Button
+                        onClick={handleExportData}
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white p-3"
+                      >
+                        <Database className="w-4 h-4 mr-2" />
+                        Data Export
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              )}
+            </Card>
+
+            {/* Audit/Integrity Panel */}
+            <Card className="bg-gradient-to-br from-orange-900/60 to-red-900/60 backdrop-blur-sm border border-orange-400 shadow-lg shadow-orange-400/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Shield className="w-5 h-5 mr-2 text-orange-400" />
+                    🛡️ Audit/Integrity Panel
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => toggleSection('audit-integrity')}
+                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                    >
+                      {collapsedSections['audit-integrity'] ? 
+                        <ChevronDown className="w-4 h-4" /> : 
+                        <ChevronUp className="w-4 h-4" />
+                      }
+                    </Button>
+                  </div>
+                  <Badge className="bg-orange-600 text-white">MONITORING</Badge>
+                </CardTitle>
+              </CardHeader>
+              {!collapsedSections['audit-integrity'] && (
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-3">
+                      <h4 className="text-orange-300 font-semibold">🔒 Tamper Detection</h4>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-slate-300 text-sm">Last Tamper Check:</span>
+                          <span className="text-green-400 font-bold">0/min</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-slate-300 text-sm">Integrity Status:</span>
+                          <span className="text-blue-400 font-bold">UNKNOWN</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <h4 className="text-yellow-300 font-semibold">⚡ Logger Activity</h4>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-slate-300 text-sm">Active Loggers:</span>
+                          <span className="text-green-400 font-bold">0/min</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-slate-300 text-sm">Log Rate:</span>
+                          <span className="text-blue-400 font-bold">0/min</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <h4 className="text-red-300 font-semibold">🔥 Failback Triggers</h4>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-slate-300 text-sm">Last Triggered:</span>
+                          <span className="text-white font-bold">Never</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-slate-300 text-sm">Latest Entries:</span>
+                          <span className="text-red-400 font-bold">No recent activity</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 grid grid-cols-2 lg:grid-cols-3 gap-3">
+                    <Button
+                      onClick={() => {}} 
+                      className="bg-orange-600 hover:bg-orange-700 text-white p-3"
+                    >
+                      <AlertTriangle className="w-4 h-4 mr-2" />
+                      Run Integrity Check
+                    </Button>
+                    <Button
+                      onClick={() => {}} 
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white p-3"
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
+                      Check Logger Status
+                    </Button>
+                    <Button
+                      onClick={() => {}} 
+                      className="bg-red-600 hover:bg-red-700 text-white p-3"
+                    >
+                      <Zap className="w-4 h-4 mr-2" />
+                      Test Integrity Check
+                    </Button>
+                  </div>
+                </CardContent>
+              )}
+            </Card>
+          </div>
         </div>
 
         {/* 5. System Health + Metrics (Uptime, Client Pulse, Ops Stats) */}
