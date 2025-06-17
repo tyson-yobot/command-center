@@ -3027,7 +3027,7 @@ export default function CommandCenter() {
         />
 
         {/* Enhanced Voice Command Interface */}
-        <div className="mb-6">
+        <div className="mb-8">
           <VoiceCommandInterface
             micStatus={micStatus}
             onMicStatusChange={setMicStatus}
@@ -3037,7 +3037,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Dashboard Preset Selector */}
-        <div className="mb-6">
+        <div className="mb-8">
           <Card className="bg-slate-800/40 backdrop-blur-sm border border-cyan-400">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
@@ -3130,7 +3130,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Original Voice Control Buttons */}
-        <div className="mb-6 bg-white/10 backdrop-blur-sm border border-blue-400 rounded-lg p-4">
+        <div className="mb-8 bg-white/10 backdrop-blur-sm border border-blue-400 rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <span className="text-white font-medium">Quick Actions</span>
@@ -3278,7 +3278,7 @@ export default function CommandCenter() {
 
         {/* Live Pipeline Banner */}
         {(currentSystemMode === 'test' || (liveActivityData?.data?.callsInProgress > 0)) && (
-          <div className="mb-6 p-4 bg-green-900/30 border border-green-400 rounded-lg">
+          <div className="mb-8 p-4 bg-green-900/30 border border-green-400 rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-3 h-3 bg-red-400 rounded-full animate-pulse"></div>
@@ -4505,7 +4505,7 @@ export default function CommandCenter() {
 
 
         {/* RAG Knowledge Base System - Positioned at bottom as requested */}
-        <div className="mb-12">
+        <div className="mb-8">
           <Card className="bg-gradient-to-br from-purple-900/80 via-blue-900/80 to-indigo-900/80 backdrop-blur-sm border border-purple-400/50 shadow-2xl shadow-purple-500/30">
             <CardHeader className="border-b border-purple-400/30">
               <CardTitle className="text-white flex items-center text-2xl font-bold">
@@ -5464,7 +5464,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Call Monitoring & YoBot Support - Positioned Under Document Manager */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Call Monitoring Panel - Under Document Manager */}
           <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500">
             <CardHeader>
