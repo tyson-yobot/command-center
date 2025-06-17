@@ -593,9 +593,16 @@ export default function CommandCenter() {
     setShowSMSModal(true);
   };
 
-  // Form submission handlers
+  // Form submission handlers with Airtable logging
   const submitBookingForm = async () => {
     try {
+      // Log to Command Center Metrics
+      const metricsResult = await CommandCenterActions.scheduleBooking({
+        triggeredBy: 'Command Center User',
+        additionalData: bookingForm
+      });
+
+      // Create actual booking
       const response = await fetch('/api/webhooks/booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -603,7 +610,7 @@ export default function CommandCenter() {
       });
       
       if (response.ok) {
-        showToastMessage('Booking created successfully!', 'success');
+        showToastMessage('Booking created and logged to Command Center!', 'success');
         setShowBookingModal(false);
         setBookingForm({ clientName: '', bookingType: 'Demo', dateTime: '', assignedRep: '', notes: '' });
       }
@@ -614,6 +621,12 @@ export default function CommandCenter() {
 
   const submitSupportTicket = async () => {
     try {
+      // Log to Command Center Metrics
+      const metricsResult = await CommandCenterActions.submitTicket({
+        triggeredBy: 'Command Center User',
+        additionalData: supportForm
+      });
+
       const response = await fetch('/api/webhooks/support-ticket', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -621,7 +634,7 @@ export default function CommandCenter() {
       });
       
       if (response.ok) {
-        showToastMessage('Support ticket created successfully!', 'success');
+        showToastMessage('Support ticket created and logged to Command Center!', 'success');
         setShowSupportTicketModal(false);
         setSupportForm({ clientName: '', priority: 'Normal', issueType: 'Tech', description: '', attachments: '' });
       }
@@ -632,6 +645,12 @@ export default function CommandCenter() {
 
   const submitFollowUp = async () => {
     try {
+      // Log to Command Center Metrics
+      const metricsResult = await CommandCenterActions.followUpTrigger({
+        triggeredBy: 'Command Center User',
+        additionalData: followUpForm
+      });
+
       const response = await fetch('/api/webhooks/follow-up', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -639,7 +658,7 @@ export default function CommandCenter() {
       });
       
       if (response.ok) {
-        showToastMessage('Follow-up scheduled successfully!', 'success');
+        showToastMessage('Follow-up scheduled and logged to Command Center!', 'success');
         setShowFollowUpModal(false);
         setFollowUpForm({ contactName: '', followUpType: 'Call', followUpDate: '', notes: '' });
       }
@@ -1612,6 +1631,12 @@ export default function CommandCenter() {
 
   const handlePDFReport = async () => {
     try {
+      // Log to Command Center Metrics
+      const metricsResult = await CommandCenterActions.analyticsReport({
+        triggeredBy: 'Command Center User',
+        additionalData: { reportType: 'PDF Analytics', includeCharts: true }
+      });
+
       setVoiceStatus('Generating comprehensive PDF analytics report...');
       const response = await fetch('/api/pdf/generate', {
         method: 'POST',
@@ -1636,11 +1661,16 @@ export default function CommandCenter() {
         window.URL.revokeObjectURL(url);
         
         setVoiceStatus('PDF analytics report downloaded successfully');
-        setToast({ title: "PDF Generated", description: "Analytics report downloaded to your device" });
+        toast({ 
+          id: Date.now().toString(),
+          title: "PDF Generated", 
+          description: "Analytics report downloaded and logged to Command Center"
+        });
       } else {
         const error = await response.json();
         setVoiceStatus(`PDF generation failed: ${error.error || 'Unknown error'}`);
-        setToast({ 
+        toast({ 
+          id: Date.now().toString(),
           title: "PDF Generation Failed", 
           description: error.error || "Unable to generate report",
           variant: "destructive" 
@@ -2505,6 +2535,12 @@ export default function CommandCenter() {
   // PDF Download Handler - generates comprehensive system report
   const handleDownloadPDF = async () => {
     try {
+      // Log to Command Center Metrics
+      const metricsResult = await CommandCenterActions.quickExport({
+        triggeredBy: 'Command Center User',
+        additionalData: { fileType: 'PDF', exportType: 'Command Center Report' }
+      });
+
       const response = await fetch('/api/pdf/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -2524,9 +2560,21 @@ export default function CommandCenter() {
         a.click();
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
+        
+        toast({
+          id: Date.now().toString(),
+          title: "PDF Downloaded",
+          description: "Report generated and logged to Command Center"
+        });
       }
     } catch (error) {
       console.error('PDF generation failed:', error);
+      toast({
+        id: Date.now().toString(),
+        title: "PDF Generation Failed",
+        description: "Unable to generate report",
+        variant: "destructive"
+      });
     }
   };
 
