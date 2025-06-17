@@ -4155,41 +4155,9 @@ export default function CommandCenter() {
           </div>
         </div>
 
-        {/* Mobile Companion Panel + PDF Export Panel */}
+        {/* PDF Export Panel */}
         <div className="mb-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* 📲 Mobile Companion Panel */}
-            <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center justify-between">
-                  <div className="flex items-center">
-                    <MessageSquare className="w-5 h-5 mr-2 text-green-400" />
-                    📲 Mobile Companion
-                  </div>
-                  <Badge className="bg-green-600 text-white">Connected</Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">iOS App Status:</span>
-                    <span className="text-green-400 font-bold">--</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Android App Status:</span>
-                    <span className="text-green-400 font-bold">--</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Last Sync:</span>
-                    <span className="text-white font-bold">--</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Push Alerts:</span>
-                    <span className="text-blue-400 font-bold">0</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
 
             {/* 🧾 PDF & Export Panel */}
             <Card className="bg-white/10 backdrop-blur-sm border border-orange-400">
@@ -4992,152 +4960,9 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Smart Calendar & Live Activity */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <Card className="bg-gradient-to-br from-blue-900/40 via-indigo-900/30 to-purple-900/20 backdrop-blur-sm border border-blue-400/50 shadow-2xl shadow-blue-500/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center text-xl font-bold">
-                <Calendar className="w-6 h-6 mr-3 text-blue-400" />
-                🗓️ Smart Calendar
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {/* Calendar events populated by live webhook data only */}
-                <div 
-                  className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20 cursor-pointer hover:bg-blue-800/70 transition-colors"
-                  onClick={() => setShowScheduleViewer(!showScheduleViewer)}
-                >
-                  <div className="text-slate-300 text-sm mb-1">Today's Schedule</div>
-                  <div className="text-white font-bold">
-                    { (metrics?.activeCampaigns || 0) + ' total meetings'}
-                  </div>
-                  <div className="text-cyan-400 text-xs">
-                    { (metrics?.remainingTasks || 0) + ' remaining today'}
-                  </div>
-                  <div className="text-blue-300 text-xs mt-1">Click to view details →</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Activity className="w-5 h-5 mr-2 text-orange-400" />
-                Live Activity
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {/* Live activity feed - test mode has demo data, live mode only shows webhook data */}
-                {currentSystemMode === 'test' ? (
-                  <>
-                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-blue-400/30">
-                      <div>
-                        <p className="text-white font-medium">New lead qualified</p>
-                        <p className="text-slate-300 text-sm">TechCorp Solutions • 2 min ago</p>
-                      </div>
-                      <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-green-400/30">
-                      <div>
-                        <p className="text-white font-medium">Quote generated</p>
-                        <p className="text-slate-300 text-sm">BuildRight Industries • 5 min ago</p>
-                      </div>
-                      <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-purple-400/30">
-                      <div>
-                        <p className="text-white font-medium">Follow-up scheduled</p>
-                        <p className="text-slate-300 text-sm">Apex Manufacturing • 8 min ago</p>
-                      </div>
-                      <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-orange-400/30">
-                      <div>
-                        <p className="text-white font-medium">Call completed</p>
-                        <p className="text-slate-300 text-sm">Summit Enterprises • 12 min ago</p>
-                      </div>
-                      <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-cyan-400/30">
-                      <div>
-                        <p className="text-white font-medium">Email automation sent</p>
-                        <p className="text-slate-300 text-sm">Premier Contractors • 15 min ago</p>
-                      </div>
-                      <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                    </div>
-                  </>
-                ) : (
-                  liveActivityData && Array.isArray(liveActivityData) && liveActivityData.length > 0 ? (
-                    liveActivityData.map((item: any, index: number) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                        <div>
-                          <p className="text-white font-medium">{item.action}</p>
-                          <p className="text-slate-300 text-sm">{item.company} • {item.time}</p>
-                        </div>
-                        <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-center py-8">
-                      <p className="text-slate-400 text-sm">Monitoring live activity...</p>
-                    </div>
-                  )
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Insight Panels Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          {/* Voice Command Center */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Headphones className="w-5 h-5 mr-2 text-green-400" />
-                Voice Command Center
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-3 pb-2 border-b border-slate-600">
-                <h4 className="text-slate-200 font-medium text-sm">Voice Commands Active</h4>
-                <div className="flex items-center space-x-2 mt-1">
-                  <div className="flex space-x-1">
-                    {[1,2,3,4,5].map(i => (
-                      <div key={i} className="w-1 bg-red-400 rounded animate-pulse" style={{height: `${Math.random() * 8 + 4}px`, animationDelay: `${i * 100}ms`}}></div>
-                    ))}
-                  </div>
-                  <span className="text-green-400 text-xs">🎤 Processing Commands</span>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Commands Today:</span>
-                  <span className="text-green-400 font-bold">{"--"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Success Rate:</span>
-                  <span className="text-green-400 font-bold">{"--"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Currently Processing:</span>
-                  <span className="text-green-400 font-bold">{"--"}</span>
-                </div>
-                <div className="bg-green-900/60 rounded-lg p-3 border border-green-400 shadow-lg shadow-green-400/20">
-                  <div className="text-slate-300 text-sm mb-1">Latest Command:</div>
-                  <div className="text-green-400 font-medium">{ 'No recent commands'}</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
 
 
 
-
-        </div>
 
         {/* Botalytics™ Performance Dashboard */}
         <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
