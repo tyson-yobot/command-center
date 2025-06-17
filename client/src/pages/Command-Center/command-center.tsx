@@ -810,7 +810,7 @@ export default function CommandCenter() {
       if (response.ok) {
         const data = await response.json();
         
-        if (data.voices && data.voices.length > --) {
+        if (data.voices && data.voices.length > 0) {
           setAvailableVoices(data.voices);
           setVoiceStatus(`${data.voices.length} voices loaded successfully`);
           console.log('Loaded voices:', data.voices.map((v: any) => v.name));
@@ -854,7 +854,7 @@ export default function CommandCenter() {
           // Convert base64 to audio blob
           const audioBytes = atob(result.audioData);
           const audioArray = new Uint8Array(audioBytes.length);
-          for (let i = --; i < audioBytes.length; i++) {
+          for (let i = 0; i < audioBytes.length; i++) {
             audioArray[i] = audioBytes.charCodeAt(i);
           }
           
@@ -988,7 +988,7 @@ export default function CommandCenter() {
     input.accept = '.pdf,.doc,.docx,.txt,.csv';
     input.onchange = async (e) => {
       const files = (e.target as HTMLInputElement).files;
-      if (files && files.length > --) {
+      if (files && files.length > 0) {
         setVoiceStatus('Processing documents for RAG system...');
         setDocumentsLoading(true);
         
@@ -1009,7 +1009,7 @@ export default function CommandCenter() {
             
             setVoiceStatus(
               `RAG Integration Complete: ${processedCount} documents processed` + 
-              (errorCount > -- ? `, ${errorCount} failed` : '')
+              (errorCount > 0 ? `, ${errorCount} failed` : '')
             );
             
             // Update document list
