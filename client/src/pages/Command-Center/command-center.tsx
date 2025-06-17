@@ -520,7 +520,7 @@ export default function CommandCenter() {
       timestamp: new Date().toLocaleTimeString(),
       type
     };
-    setRecentActivity(prev => [newActivity, ...prev.slice(--, 4)]); // Keep last 5 items
+    setRecentActivity(prev => [newActivity, ...prev.slice(0, 4)]); // Keep last 5 items
   };
 
   // Core Automation Button Handlers
@@ -854,7 +854,7 @@ export default function CommandCenter() {
           // Convert base64 to audio blob
           const audioBytes = atob(result.audioData);
           const audioArray = new Uint8Array(audioBytes.length);
-          for (let i = --; i < audioBytes.length; i++) {
+          for (let i = 0; i < audioBytes.length; i++) {
             audioArray[i] = audioBytes.charCodeAt(i);
           }
           
@@ -1004,12 +1004,12 @@ export default function CommandCenter() {
           const result = await response.json();
           
           if (response.ok && result.success) {
-            const processedCount = result.files?.filter(f => f.status === 'processed').length || --;
-            const errorCount = result.files?.filter(f => f.status === 'error').length || --;
+            const processedCount = result.files?.filter(f => f.status === 'processed').length || 0;
+            const errorCount = result.files?.filter(f => f.status === 'error').length || 0;
             
             setVoiceStatus(
               `RAG Integration Complete: ${processedCount} documents processed` + 
-              (errorCount > -- ? `, ${errorCount} failed` : '')
+              (errorCount > 0 ? `, ${errorCount} failed` : '')
             );
             
             // Update document list
@@ -1160,7 +1160,7 @@ export default function CommandCenter() {
     try {
       const response = await fetch('/api/system/logs');
       const data = await response.json();
-      setVoiceStatus(`Latest logs: ${data.count || --} entries`);
+      setVoiceStatus(`Latest logs: ${data.count || 0} entries`);
     } catch (error) {
       setVoiceStatus('Failed to load logs');
     }
@@ -1439,10 +1439,10 @@ export default function CommandCenter() {
       
       if (response.ok) {
         const result = await response.json();
-        setVoiceStatus(`Pipeline started with ${result.leadCount || --} leads loaded`);
+        setVoiceStatus(`Pipeline started with ${result.leadCount || 0} leads loaded`);
         setToast({ 
           title: "Pipeline Started", 
-          description: `${result.leadCount || --} leads loaded from Airtable - calls initiated` 
+          description: `${result.leadCount || 0} leads loaded from Airtable - calls initiated` 
         });
       } else {
         const error = await response.json();
@@ -1528,10 +1528,10 @@ export default function CommandCenter() {
         const postResult = result.postResult;
         
         if (postResult?.success) {
-          setVoiceStatus(`✅ AI content posted to LinkedIn: ${content?.metadata?.wordCount || --} words`);
+          setVoiceStatus(`✅ AI content posted to LinkedIn: ${content?.metadata?.wordCount || 0} words`);
           setToast({ 
             title: "Content Created & Posted", 
-            description: `AI-generated LinkedIn post published with ${content?.hashtags?.length || --} hashtags` 
+            description: `AI-generated LinkedIn post published with ${content?.hashtags?.length || 0} hashtags` 
           });
         } else {
           setVoiceStatus(`❌ Content generated but posting failed: ${postResult?.error || 'Unknown error'}`);
@@ -1585,7 +1585,7 @@ export default function CommandCenter() {
         const sendResult = result.sendResult;
         
         if (sendResult?.success) {
-          setVoiceStatus(`✅ AI email campaign sent: ${sendResult.recipients || --} recipients`);
+          setVoiceStatus(`✅ AI email campaign sent: ${sendResult.recipients || 0} recipients`);
           setToast({ 
             title: "Email Campaign Sent", 
             description: `Subject: "${content?.subject}" sent to ${sendResult.recipients || --} contacts` 
