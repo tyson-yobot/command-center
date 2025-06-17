@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import LeadScraper from '@/pages/Lead-Scraper/lead-scraper';
 import { 
   Zap, Mic, Brain, DollarSign, Settings, Phone, Users, 
   TrendingUp, BarChart3, FileText, Database, Upload, 
@@ -612,6 +613,13 @@ export function TabContentRenderer({
     </div>
   );
 
+  // Lead Scraper Content Component
+  const LeadScraperContent = () => (
+    <div className="space-y-6">
+      <LeadScraper />
+    </div>
+  );
+
   // Render content based on active tab
   switch (activeTab) {
     case 'automation-ops':
@@ -622,6 +630,8 @@ export function TabContentRenderer({
       return <AIIntelligenceContent />;
     case 'smartspend':
       return <SmartSpendContent />;
+    case 'lead-scraper':
+      return <LeadScraperContent />;
     case 'system-tools':
       return <SystemToolsContent />;
     default:

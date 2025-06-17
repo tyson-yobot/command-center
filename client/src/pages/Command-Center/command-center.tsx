@@ -94,6 +94,7 @@ import { ManualCallStartModal } from '@/components/ManualCallStartModal';
 import { LiveCallBanner } from './components/LiveCallBanner';
 import { EnhancedTooltip, QuickTooltip } from '@/components/EnhancedTooltip';
 import { CommandCenterActions } from '@/utils/commandCenterActions';
+import LeadScraper from '@/pages/Lead-Scraper/lead-scraper';
 
 export default function CommandCenter() {
   const queryClient = useQueryClient();
@@ -113,6 +114,7 @@ export default function CommandCenter() {
     { id: 'voiceops', label: 'VoiceOps™', icon: Mic },
     { id: 'ai-intelligence', label: 'AI Intelligence', icon: Brain },
     { id: 'smartspend', label: 'SmartSpend™', icon: DollarSign },
+    { id: 'lead-scraper', label: 'Lead Scraper', icon: Search },
     { id: 'system-tools', label: 'System Tools', icon: Settings }
   ];
   
