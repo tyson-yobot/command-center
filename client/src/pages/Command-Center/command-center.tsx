@@ -4279,183 +4279,11 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          {/* Bot Health Monitor */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Activity className="w-5 h-5 mr-2 text-green-400" />
-                <Bot className="w-5 h-5 mr-2 text-blue-400" />
-                YoBot® Health Monitor
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Total Bots:</span>
-                  <span className="text-white font-bold">{metrics?.totalBots || ''}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">Last Execution:</span>
-                  <div className="flex items-center space-x-1">
-                    {liveActivityData?.data?.recentExecutions?.length > 0 && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{liveActivityData?.data?.lastExecution ? new Date(liveActivityData.data.lastExecution).toLocaleTimeString() : ''}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">Error Count:</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-red-400 font-bold">{automationPerformance?.errorCount || ''}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">Bot Status:</span>
-                  <div className="flex items-center space-x-1">
-                    {metrics?.data?.dailyActiveUsers && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">{metrics?.data?.dailyActiveUsers ? 'Active' : ''}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">System Uptime:</span>
-                  <span className="text-green-400 font-bold">{metrics?.data?.systemUptime ? metrics.data.systemUptime + '%' : ''}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
 
-          {/* Revenue Forecast */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <TrendingUp className="w-5 h-5 mr-2 text-blue-400" />
-                📈 Revenue Forecast
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">MRR:</span>
-                  <div className="text-right flex items-center space-x-1">
-                    {metrics?.data?.monthlyRecurringRevenue && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">
-                      {metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(1) + 'K' : ''}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">ROI This Quarter:</span>
-                  <div className="text-right flex items-center space-x-1">
-                    {metrics?.data?.revenueGrowth && <div className="w-1 h-1 bg-emerald-400 rounded-full animate-pulse"></div>}
-                    <span className="text-emerald-400 font-bold">
-                      {metrics?.data?.revenueGrowth ? metrics.data.revenueGrowth + '%' : ''}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Pipeline Value:</span>
-                  <span className="text-blue-400 font-bold">
-                    {metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(1) + 'K' : ''}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Close Rate:</span>
-                  <span className="text-cyan-400 font-bold">
-                    {metrics?.data?.conversionRate ? metrics.data.conversionRate + '%' : ''}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Sales Velocity:</span>
-                  <span className="text-purple-400 font-bold">
-                    {metrics?.data?.customerSatisfaction ? metrics.data.customerSatisfaction + '/5' : ''}
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
 
-          {/* Client Pulse Summary */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-purple-400">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Users className="w-5 h-5 mr-2 text-purple-400" />
-                🧭 Client Pulse
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">Active Clients:</span>
-                  <div className="flex items-center space-x-1">
-                    {metrics?.data?.activeClients && <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>}
-                    <span className="text-white font-bold">0</span>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">Client NPS:</span>
-                  <div className="flex items-center space-x-1">
-                    {metrics?.data?.customerSatisfaction && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-green-400 font-bold">0</span>
-                  </div>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Churn Risk Flags:</span>
-                  <span className="text-red-400 font-bold">0 { ''}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Last Login:</span>
-                  <span className="text-green-400 font-bold">0</span>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-slate-300 text-sm">Bot Utilization Rate:</span>
-                    <span className="text-cyan-400 font-bold">0</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300" style={{width: `0%`}}></div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
 
-          {/* Ops Metrics */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-orange-400">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Gauge className="w-5 h-5 mr-2 text-orange-400" />
-                📊 Ops Metrics
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">API Errors:</span>
-                  <div className="flex items-center space-x-1">
-                    {automationPerformance?.data?.apiErrors && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
-                    <span className="text-red-400 font-bold">{automationPerformance?.data?.apiErrors || ''}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-300 text-sm">Slack Alert Rate:</span>
-                  <div className="flex items-center space-x-1">
-                    {automationPerformance?.data?.slackAlertRate && <div className="w-1 h-1 bg-yellow-400 rounded-full animate-pulse"></div>}
-                    <span className="text-yellow-400 font-bold">{automationPerformance?.data?.slackAlertRate || ''}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Usage %:</span>
-                  <span className="text-green-400 font-bold">0</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">System Load:</span>
-                  <span className="text-blue-400 font-bold">{metrics?.data?.systemLoad || ''}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Uptime Today:</span>
-                  <span className="text-green-400 font-bold">{metrics?.data?.dailyUptime || ''}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+
+
         </div>
 
         {/* Main Dashboard Grid */}
@@ -4769,34 +4597,8 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Smart Calendar & Live Activity */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <Card className="bg-gradient-to-br from-blue-900/40 via-indigo-900/30 to-purple-900/20 backdrop-blur-sm border border-blue-400/50 shadow-2xl shadow-blue-500/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center text-xl font-bold">
-                <Calendar className="w-6 h-6 mr-3 text-blue-400" />
-                🗓️ Smart Calendar
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {/* Calendar events populated by live webhook data only */}
-                <div 
-                  className="bg-blue-900/60 rounded-lg p-3 border border-blue-400 shadow-lg shadow-blue-400/20 cursor-pointer hover:bg-blue-800/70 transition-colors"
-                  onClick={() => setShowScheduleViewer(!showScheduleViewer)}
-                >
-                  <div className="text-slate-300 text-sm mb-1">Today's Schedule</div>
-                  <div className="text-white font-bold">
-                    { (metrics?.activeCampaigns || 0) + ' total meetings'}
-                  </div>
-                  <div className="text-cyan-400 text-xs">
-                    { (metrics?.remainingTasks || 0) + ' remaining today'}
-                  </div>
-                  <div className="text-blue-300 text-xs mt-1">Click to view details →</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Live Activity */}
+        <div className="grid grid-cols-1 gap-8 mb-12">
 
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
             <CardHeader>
@@ -6005,65 +5807,8 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* New Features Section - Mobile Companion & PDF Export */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          {/* Mobile Companion Panel */}
-          <Card className="bg-gradient-to-br from-indigo-900/40 via-purple-900/30 to-pink-900/20 backdrop-blur-sm border border-indigo-400/50 shadow-2xl shadow-indigo-500/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Phone className="w-5 h-5 mr-2 text-indigo-400" />
-                📲 Mobile Companion Panel
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="bg-slate-800/60 rounded-lg p-3 border border-indigo-400/30">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-slate-300 text-sm">iOS App Status:</span>
-                    <Badge className="bg-green-600 text-white text-xs">
-                      { 'Offline'}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300 text-sm">Last Sync:</span>
-                    <span className="text-white font-bold text-sm">
-                      { '0'}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="bg-slate-800/60 rounded-lg p-3 border border-indigo-400/30">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-slate-300 text-sm">Android App Status:</span>
-                    <Badge className="bg-green-600 text-white text-xs">
-                      { 'Offline'}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300 text-sm">Push Alerts:</span>
-                    <span className="text-green-400 font-bold text-sm">
-                      { 'Disabled'}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="bg-slate-800/60 rounded-lg p-3 border border-indigo-400/30">
-                  <div className="text-slate-300 text-sm mb-2">Recent Mobile Activity:</div>
-                  <div className="space-y-1 text-xs text-slate-400">
-                    {currentSystemMode === 'test' ? (
-                      <>
-                        <div>• Voice command received (iPhone)</div>
-                        <div>• Dashboard sync completed</div>
-                        <div>• Push notification sent</div>
-                      </>
-                    ) : (
-                      <div>No mobile activity</div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        {/* PDF Export Section */}
+        <div className="grid grid-cols-1 gap-8 mb-12">
 
           {/* PDF & Export Panel */}
           <Card className="bg-gradient-to-br from-purple-900/40 via-pink-900/30 to-red-900/20 backdrop-blur-sm border border-purple-400/50 shadow-2xl shadow-purple-500/20">
