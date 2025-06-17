@@ -2912,7 +2912,7 @@ export default function CommandCenter() {
         onModeToggle={toggleSystemMode}
       />
       
-      <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-8 p-8">
+      <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-4 px-4">
 
       
       <div className="w-full">
@@ -3166,7 +3166,7 @@ export default function CommandCenter() {
         )}
 
         {/* 1. Quick Action Launchpad - All Manual Triggers Consolidated at Top */}
-        <div className="mb-8">
+        <div className="mb-4">
           <Card className="bg-gradient-to-r from-blue-900/60 to-purple-900/60 backdrop-blur-sm border border-blue-400 shadow-lg shadow-blue-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between text-2xl">
@@ -3351,7 +3351,7 @@ export default function CommandCenter() {
         </div>
 
         {/* 2. Voice Engine + Command Center (Consolidated Voice Section) */}
-        <div className="mb-8">
+        <div className="mb-4">
           <Card className="bg-gradient-to-br from-green-900/60 to-emerald-800/40 backdrop-blur-sm border border-green-400 shadow-lg shadow-green-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between text-xl">
@@ -3447,7 +3447,7 @@ export default function CommandCenter() {
 
 
         {/* 4. Reports + Analytics (SmartSpend™, Botalytics™, PDF, Forecasts) */}
-        <div className="mb-8">
+        <div className="mb-4">
           <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between text-xl">
@@ -3575,7 +3575,7 @@ export default function CommandCenter() {
         </div>
 
         {/* 5. System Health + Metrics (Uptime, Client Pulse, Ops Stats) */}
-        <div className="mb-8">
+        <div className="mb-4">
           <Card className="bg-gradient-to-r from-emerald-900/60 to-teal-800/60 backdrop-blur-sm border border-emerald-400 shadow-lg shadow-emerald-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between text-xl">
