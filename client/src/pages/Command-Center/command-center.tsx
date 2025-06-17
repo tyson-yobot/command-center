@@ -4095,7 +4095,7 @@ export default function CommandCenter() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Engine Status:</span>
-                    <span className="text-green-400 font-bold">OFFLINE</span>
+                    <span className="text-red-400 font-bold">OFFLINE</span>
                   </div>
                 </div>
               </CardContent>
