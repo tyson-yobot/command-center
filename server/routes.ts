@@ -49,6 +49,7 @@ import { airtableLive } from './airtableLiveIntegration';
 import { ragChatService } from './ragChatService';
 import { zendeskService } from './zendeskService';
 import { automationMetrics } from './automationMetrics';
+import { uptimeTracker } from './uptimeTracker';
 
 // Initialize OpenAI
 const openai = new OpenAI({
@@ -2909,6 +2910,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('System logs error:', error);
       res.status(500).json({ success: false, error: 'Logs retrieval failed' });
+    }
+  });
+
+  // Uptime metrics endpoint
+  app.get('/api/uptime-metrics', async (req, res) => {
+    try {
+      const systemMode = getSystemModeLocal();
+      
+      if (systemMode === 'test') {
+        return res.json({
+          success: true,
+          data: {
+            voiceCommandCenter: { uptime: 0, status: 'OFFLINE' },
+            liveEngine: { uptime: 0, status: 'OFFLINE' },
+            systemUptime: 0
+          },
+          mode: 'test'
+        });
+      }
+
+      // In live mode, return actual uptime metrics
+      const metrics = uptimeTracker.getUptimeMetrics();
+      
+      res.json({
+        success: true,
+        data: {
+          voiceCommandCenter: {
+            uptime: metrics.voiceCommandCenter.uptime,
+            status: metrics.voiceCommandCenter.status,
+            lastPing: metrics.voiceCommandCenter.lastPing,
+            formatted: uptimeTracker.getFormattedUptime('voice')
+          },
+          liveEngine: {
+            uptime: metrics.liveEngine.uptime,
+            status: metrics.liveEngine.status,
+            lastPing: metrics.liveEngine.lastPing,
+            formatted: uptimeTracker.getFormattedUptime('engine')
+          },
+          systemUptime: metrics.systemUptime,
+          startTime: metrics.startTime
+        },
+        mode: 'live',
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Uptime metrics failed:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to get uptime metrics',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
   });
 
