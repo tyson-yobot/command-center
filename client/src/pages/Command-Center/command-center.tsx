@@ -4261,20 +4261,20 @@ export default function CommandCenter() {
                       <>
                         <div className="p-3 bg-white/5 rounded-lg border border-blue-400/30">
                           <div className="flex justify-between items-center">
-                            <span className="text-white font-medium">{liveActivity?.nextTasks?.[0]?.name || ''}</span>
-                            <span className="text-blue-400 text-sm">{liveActivity?.nextTasks?.[0]?.time || ''}</span>
+                            <span className="text-white font-medium">{liveActivityData?.data?.nextTasks?.[0]?.name || ''}</span>
+                            <span className="text-blue-400 text-sm">{liveActivityData?.data?.nextTasks?.[0]?.time || ''}</span>
                           </div>
                         </div>
                         <div className="p-3 bg-white/5 rounded-lg border border-green-400/30">
                           <div className="flex justify-between items-center">
-                            <span className="text-white font-medium">{liveActivity?.nextTasks?.[1]?.name || ''}</span>
-                            <span className="text-green-400 text-sm">{liveActivity?.nextTasks?.[1]?.time || ''}</span>
+                            <span className="text-white font-medium">{liveActivityData?.data?.nextTasks?.[1]?.name || ''}</span>
+                            <span className="text-green-400 text-sm">{liveActivityData?.data?.nextTasks?.[1]?.time || ''}</span>
                           </div>
                         </div>
                         <div className="p-3 bg-white/5 rounded-lg border border-orange-400/30">
                           <div className="flex justify-between items-center">
-                            <span className="text-white font-medium">{liveActivity?.nextTasks?.[2]?.name || ''}</span>
-                            <span className="text-orange-400 text-sm">{liveActivity?.nextTasks?.[2]?.time || ''}</span>
+                            <span className="text-white font-medium">{liveActivityData?.data?.nextTasks?.[2]?.name || ''}</span>
+                            <span className="text-orange-400 text-sm">{liveActivityData?.data?.nextTasks?.[2]?.time || ''}</span>
                           </div>
                         </div>
                       </>
@@ -4899,10 +4899,12 @@ export default function CommandCenter() {
                   <span className="text-slate-300">Response Accuracy</span>
                   <span className="text-cyan-400 font-bold">{""}</span>
                 </div>
-                <div className="bg-purple-900/60 rounded-lg p-3 border border-purple-400 shadow-lg shadow-purple-400/20">
-                  <div className="text-slate-300 text-sm mb-1">Latest Learning</div>
-                  <div className="text-purple-400 font-medium">{""}</div>
-                </div>
+                {currentSystemMode === 'test' && (
+                  <div className="bg-purple-900/60 rounded-lg p-3 border border-purple-400 shadow-lg shadow-purple-400/20">
+                    <div className="text-slate-300 text-sm mb-1">Latest Learning</div>
+                    <div className="text-purple-400 font-medium">Sentiment analysis improved</div>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -8309,7 +8311,7 @@ export default function CommandCenter() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Best Time to Post:</span>
-                        <span className="text-slate-400 font-bold">{liveActivity?.bestPostTime || ''}</span>
+                        <span className="text-slate-400 font-bold">{liveActivityData?.data?.bestPostTime || ''}</span>
                       </div>
                       <div className="bg-slate-700/40 rounded p-3">
                         <div className="text-sm text-slate-300 mb-2">Top Performing Content:</div>
