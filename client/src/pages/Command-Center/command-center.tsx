@@ -4298,25 +4298,45 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Confidence Score</span>
-                  <span className="text-purple-400 font-bold">0</span>
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300">Confidence Score</span>
+                    <span className="text-purple-400 font-bold">{metrics?.data?.aiInsights?.confidenceScore || '0%'}</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.confidenceProgress || 0}%` }}></div>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Learning Status</span>
-                  <Badge className="bg-purple-600 text-white">0</Badge>
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300">Learning Status</span>
+                    <Badge className="bg-blue-600 text-white">{metrics?.data?.aiInsights?.learningStatus || 'Active'}</Badge>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.learningProgress || 0}%` }}></div>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300" title="Percentage of conversations that needed human assistance">Escalation Rate</span>
-                  <span className="text-yellow-400 font-bold">0</span>
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-yellow-400 shadow-lg shadow-yellow-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300" title="Percentage of conversations that needed human assistance">Escalation Rate</span>
+                    <span className="text-yellow-400 font-bold">{metrics?.data?.aiInsights?.escalationRate || '0%'}</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-yellow-400 h-1 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.escalationProgress || 0}%` }}></div>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Response Accuracy</span>
-                  <span className="text-cyan-400 font-bold">0</span>
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-cyan-400 shadow-lg shadow-cyan-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300">Response Accuracy</span>
+                    <span className="text-cyan-400 font-bold">{metrics?.data?.aiInsights?.responseAccuracy || '0%'}</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-cyan-400 h-1 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.accuracyProgress || 0}%` }}></div>
+                  </div>
                 </div>
-                <div className="bg-purple-900/60 rounded-lg p-3 border border-purple-400 shadow-lg shadow-purple-400/20">
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <div className="text-slate-300 text-sm mb-1">Latest Learning</div>
-                  <div className="text-purple-400 font-medium">0</div>
+                  <div className="text-green-400 font-medium">{metrics?.data?.aiInsights?.latestLearning || 'No recent activity'}</div>
                 </div>
               </div>
             </CardContent>
