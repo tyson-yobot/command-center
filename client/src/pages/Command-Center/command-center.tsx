@@ -200,6 +200,42 @@ export default function CommandCenter() {
     staleTime: 30000,
   });
 
+  // Live Airtable data queries
+  const { data: airtableSalesData } = useQuery({ 
+    queryKey: ['/api/airtable/sales-data'],
+    queryFn: () => fetch('/api/airtable/sales-data').then(res => res.json()),
+    refetchInterval: 30000,
+    staleTime: 15000,
+  });
+
+  const { data: airtableBotalyticsData } = useQuery({ 
+    queryKey: ['/api/airtable/botalytics-live'],
+    queryFn: () => fetch('/api/airtable/botalytics-live').then(res => res.json()),
+    refetchInterval: 30000,
+    staleTime: 15000,
+  });
+
+  const { data: airtableSmartSpendData } = useQuery({ 
+    queryKey: ['/api/airtable/smartspend-live'],
+    queryFn: () => fetch('/api/airtable/smartspend-live').then(res => res.json()),
+    refetchInterval: 30000,
+    staleTime: 15000,
+  });
+
+  const { data: airtableLeadsData } = useQuery({ 
+    queryKey: ['/api/airtable/leads-live'],
+    queryFn: () => fetch('/api/airtable/leads-live').then(res => res.json()),
+    refetchInterval: 30000,
+    staleTime: 15000,
+  });
+
+  const { data: airtableVoiceCallsData } = useQuery({ 
+    queryKey: ['/api/airtable/voice-calls-live'],
+    queryFn: () => fetch('/api/airtable/voice-calls-live').then(res => res.json()),
+    refetchInterval: 30000,
+    staleTime: 15000,
+  });
+
   const { data: liveSystemData } = useQuery({ 
     queryKey: ['/api/system-health', currentSystemMode],
     queryFn: () => fetch('/api/system-health', {
@@ -528,20 +564,56 @@ export default function CommandCenter() {
     setRecentActivity(prev => [newActivity, ...prev.slice(0, 4)]); // Keep last 5 items
   };
 
-  // Core Automation Button Handlers
-  const handleCreateBooking = () => {
-    // Open Tally form in new tab for booking
-    window.open('https://tally.so/r/w7jep6', '_blank');
-    setVoiceStatus('Opening booking form...');
-    toast({
-      id: Date.now().toString(),
-      title: "Create Booking",
-      description: "Opening booking form in new tab"
-    });
+  // Core Automation Button Handlers with Live Airtable Logging
+  const handleCreateBooking = async () => {
+    try {
+      // Log to Airtable Command Center Metrics
+      await fetch('/api/airtable/log-button-action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          triggeredAction: 'Booking',
+          status: 'Scheduled',
+          triggeredBy: 'Command Center User',
+          timestamp: new Date().toISOString()
+        })
+      });
+
+      // Open Tally form in new tab for booking
+      window.open('https://tally.so/r/w7jep6', '_blank');
+      setVoiceStatus('Opening booking form...');
+      toast({
+        id: Date.now().toString(),
+        title: "Create Booking",
+        description: "Opening booking form in new tab"
+      });
+    } catch (error) {
+      console.error('Booking action logging failed:', error);
+      // Still open the form even if logging fails
+      window.open('https://tally.so/r/w7jep6', '_blank');
+      setVoiceStatus('Opening booking form...');
+    }
   };
 
-  const handleCreateSupportTicket = () => {
-    setShowSupportTicketModal(true);
+  const handleCreateSupportTicket = async () => {
+    try {
+      // Log to Airtable Command Center Metrics
+      await fetch('/api/airtable/log-button-action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          triggeredAction: 'Ticket Submission',
+          status: 'Created',
+          triggeredBy: 'Command Center User',
+          timestamp: new Date().toISOString()
+        })
+      });
+
+      setShowSupportTicketModal(true);
+    } catch (error) {
+      console.error('Support ticket action logging failed:', error);
+      setShowSupportTicketModal(true);
+    }
   };
 
   const handleCreateFollowUp = () => {
@@ -4458,25 +4530,25 @@ export default function CommandCenter() {
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Sales Today:</span>
                   <span className="text-emerald-400 font-bold">
-                    {currentSystemMode === 'live' ? (metrics?.data?.salesToday || '--') : '--'}
+                    {currentSystemMode === 'live' ? (airtableSalesData?.count || 0) : '--'}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Open Invoices:</span>
                   <span className="text-yellow-400 font-bold">
-                    {currentSystemMode === 'live' ? (metrics?.data?.openInvoices || '--') : '--'}
+                    {currentSystemMode === 'live' ? (airtableSalesData?.data?.filter(order => order.fields?.['Status'] === 'Pending')?.length || 0) : '--'}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Avg Quote Value:</span>
+                  <span className="text-slate-300 text-sm">Total Orders:</span>
                   <span className="text-blue-400 font-bold">
-                    {currentSystemMode === 'live' ? (metrics?.data?.avgQuoteValue || '--') : '--'}
+                    {currentSystemMode === 'live' ? (airtableSalesData?.data?.length || 0) : '--'}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Monthly MRR:</span>
+                  <span className="text-slate-300 text-sm">Active Campaigns:</span>
                   <span className="text-purple-400 font-bold">
-                    {currentSystemMode === 'live' ? (metrics?.data?.monthlyMRR || '--') : '--'}
+                    {currentSystemMode === 'live' ? (airtableLeadsData?.count || 0) : '--'}
                   </span>
                 </div>
               </div>
@@ -4494,27 +4566,29 @@ export default function CommandCenter() {
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Failed Calls %:</span>
-                  <span className="text-red-400 font-bold">
-                    {currentSystemMode === 'live' ? (metrics?.data?.failedCallsPercent || '--') : '--'}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Bot Accuracy:</span>
+                  <span className="text-slate-300 text-sm">Total Calls:</span>
                   <span className="text-green-400 font-bold">
-                    {currentSystemMode === 'live' ? (metrics?.data?.botAccuracy || '--') : '--'}
+                    {currentSystemMode === 'live' ? (airtableVoiceCallsData?.totalCalls || 0) : '--'}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Calls Scheduled:</span>
+                  <span className="text-slate-300 text-sm">Success Rate:</span>
                   <span className="text-blue-400 font-bold">
-                    {currentSystemMode === 'live' ? (metrics?.data?.callsScheduled || '--') : '--'}
+                    {currentSystemMode === 'live' ? 
+                      (airtableVoiceCallsData?.voiceCalls?.filter(call => call.fields?.['Status'] === 'Completed')?.length || 0) + '/' + (airtableVoiceCallsData?.totalCalls || 0) : '--'}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-300 text-sm">Qualification Score:</span>
+                  <span className="text-slate-300 text-sm">Sentiment Score:</span>
                   <span className="text-cyan-400 font-bold">
-                    {currentSystemMode === 'live' ? (metrics?.data?.qualificationScore || '--') : '--'}
+                    {currentSystemMode === 'live' ? (airtableVoiceCallsData?.totalSentiment || 0) : '--'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Active Queue:</span>
+                  <span className="text-yellow-400 font-bold">
+                    {currentSystemMode === 'live' ? 
+                      (airtableVoiceCallsData?.voiceCalls?.filter(call => call.fields?.['Status'] === 'Queued')?.length || 0) : '--'}
                   </span>
                 </div>
               </div>
