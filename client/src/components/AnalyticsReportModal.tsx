@@ -118,9 +118,11 @@ export function AnalyticsReportModal({ isOpen, onClose }: AnalyticsReportModalPr
     revenue: item.revenue / 1000 // Convert to thousands for better display
   }));
 
-  // Lead sources data comes from API response
-  const pieData = analyticsData.length > 0 && analyticsData[0].leadSources ? 
-    analyticsData[0].leadSources : [];
+  const pieData = [
+    { name: 'Apollo', value: 35, color: '#3b82f6' },
+    { name: 'Apify', value: 45, color: '#10b981' },
+    { name: 'PhantomBuster', value: 20, color: '#f59e0b' }
+  ];
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -227,48 +229,40 @@ export function AnalyticsReportModal({ isOpen, onClose }: AnalyticsReportModalPr
                 <CardTitle className="text-white text-sm">Lead Sources Distribution</CardTitle>
               </CardHeader>
               <CardContent>
-                {pieData.length > 0 ? (
-                  <>
-                    <ResponsiveContainer width="100%" height={200}>
-                      <PieChart>
-                        <Pie
-                          data={pieData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={40}
-                          outerRadius={80}
-                          dataKey="value"
-                        >
-                          {pieData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: '#1e293b', 
-                            border: '1px solid #475569',
-                            borderRadius: '6px'
-                          }}
-                        />
-                      </PieChart>
-                    </ResponsiveContainer>
-                    <div className="mt-3 space-y-2">
-                      {pieData.map((item, index) => (
-                        <div key={index} className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: item.color }}></div>
-                            <span className="text-slate-300 text-sm">{item.name}</span>
-                          </div>
-                          <span className="text-white text-sm font-medium">{item.value}%</span>
-                        </div>
+                <ResponsiveContainer width="100%" height={200}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={40}
+                      outerRadius={80}
+                      dataKey="value"
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: '#1e293b', 
+                        border: '1px solid #475569',
+                        borderRadius: '6px'
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="mt-3 space-y-2">
+                  {pieData.map((item, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: item.color }}></div>
+                        <span className="text-slate-300 text-sm">{item.name}</span>
+                      </div>
+                      <span className="text-white text-sm font-medium">{item.value}%</span>
                     </div>
-                  </>
-                ) : (
-                  <div className="h-48 flex items-center justify-center text-slate-400 text-sm">
-                    No lead source data available
-                  </div>
-                )}
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </div>

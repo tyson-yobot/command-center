@@ -1,7 +1,6 @@
-// Global Live Mode Environment Gate - EMERGENCY OVERRIDE ACTIVE
+// Global Live Mode Environment Gate
 export const isLiveMode = (): boolean => {
-  // EMERGENCY ROLLBACK: Force disable live mode regardless of environment
-  return false;
+  return process.env.MODE === 'LIVE';
 };
 
 export const display = (value: any, demoValue?: any): any => {
