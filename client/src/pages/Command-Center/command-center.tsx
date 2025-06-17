@@ -220,11 +220,11 @@ export default function CommandCenter() {
   const [showAnalyticsModal, setShowAnalyticsModal] = React.useState(false);
   const [showCalendarUpload, setShowCalendarUpload] = React.useState(false);
 
-  const [activeCallsCount, setActiveCallsCount] = React.useState(--);
+  const [activeCallsCount, setActiveCallsCount] = React.useState(0);
   const [dashboardPreset, setDashboardPreset] = React.useState('full');
   const [collapsedSections, setCollapsedSections] = React.useState<{[key: string]: boolean}>({});
   const [demoMode, setDemoMode] = React.useState(false);
-  const [demoStep, setDemoStep] = React.useState(--);
+  const [demoStep, setDemoStep] = React.useState(0);
   const [currentRecognition, setCurrentRecognition] = React.useState<any>(null);
   
   // Voice recognition states for RAG programming
@@ -366,7 +366,7 @@ export default function CommandCenter() {
   const [showCallDetails, setShowCallDetails] = useState(false);
   const [showKnowledgeManager, setShowKnowledgeManager] = useState(false);
   const [showScheduleViewer, setShowScheduleViewer] = useState(false);
-  const [selectedDay, setSelectedDay] = useState(--); // -- = today, 1 = tomorrow, etc.
+  const [selectedDay, setSelectedDay] = useState(0); // 0 = today, 1 = tomorrow, etc.
   const [showTicketModal, setShowTicketModal] = useState(false);
   const [showCreateTicketModal, setShowCreateTicketModal] = useState(false);
   
@@ -442,8 +442,8 @@ export default function CommandCenter() {
   const [showCallReports, setShowCallReports] = useState(false);
   const [showCallLogs, setShowCallLogs] = useState(false);
   const [showToast, setShowToast] = useState<{message: string; type: 'success' | 'error'} | null>(null);
-  const [totalRecords, setTotalRecords] = useState(--);
-  const [completedCalls, setCompletedCalls] = useState(--);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [completedCalls, setCompletedCalls] = useState(0);
   const [pipelineRunning, setPipelineRunning] = useState(false);
 
   // Service Management Functions
@@ -453,8 +453,8 @@ export default function CommandCenter() {
         ...prev,
         [service]: { status: 'ACTIVE', lastPing: new Date().toLocaleTimeString() }
       }));
-      addRecentActivity(`${service.charAt(--).toUpperCase() + service.slice(1)} service started`, 'system');
-      showToastMessage(`${service.charAt(--).toUpperCase() + service.slice(1)} service activated`, 'success');
+      addRecentActivity(`${service.charAt(0).toUpperCase() + service.slice(1)} service started`, 'system');
+      showToastMessage(`${service.charAt(0).toUpperCase() + service.slice(1)} service activated`, 'success');
     } else if (action === 'restart') {
       setServiceStates(prev => ({
         ...prev,
@@ -1939,7 +1939,7 @@ export default function CommandCenter() {
 
 
   const handleCalendarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[--];
+    const file = event.target.files?.[0];
     if (!file) return;
 
     try {
@@ -1974,7 +1974,7 @@ export default function CommandCenter() {
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (!files || files.length === --) return;
+    if (!files || files.length === 0) return;
 
     setVoiceStatus('Uploading documents to RAG system...');
     setDocumentsLoading(true);
@@ -2004,8 +2004,8 @@ export default function CommandCenter() {
 
       if (response.ok) {
         const result = await response.json();
-        const successCount = result.files?.filter(f => f.status === 'processed').length || --;
-        const errorCount = result.files?.filter(f => f.status === 'error').length || --;
+        const successCount = result.files?.filter(f => f.status === 'processed').length || 0;
+        const errorCount = result.files?.filter(f => f.status === 'error').length || 0;
         const fileNames = result.files?.map(f => f.filename).join(', ') || '';
         
         setVoiceStatus(`Documents Processed: ${fileNames}`);
@@ -2015,7 +2015,7 @@ export default function CommandCenter() {
           timestamp: new Date().toLocaleTimeString(),
           type: 'File',
           category: 'document',
-          result: successCount > -- ? 'Success' : 'Error'
+          result: successCount > 0 ? 'Success' : 'Error'
         };
         setMemoryActivityLog(prev => [...prev, logEntry]);
         
