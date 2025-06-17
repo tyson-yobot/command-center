@@ -58,14 +58,14 @@ export class AirtableService {
 
   constructor() {
     this.config = {
-      baseId: process.env.AIRTABLE_BASE_ID || 'appb2f3D77Tc4DWAr',
+      baseId: process.env.AIRTABLE_BASE_ID || 'appb2F3D77tC4DWla', // YoBot Lead Engine
       apiKey: process.env.AIRTABLE_API_KEY || '',
       tables: {
-        scrapedLeads: 'tbluqrDSomu5UVhDw', // Scraped Leads (Universal)
+        scrapedLeads: 'Scraped Leads (Universal) Table', // Scraped Leads (Universal)
         bookings: 'tblBookings',
         supportTickets: 'tblSupportTickets', 
         followUps: 'tblFollowUps',
-        pipelineCalls: 'tblPipelineCalls'
+        pipelineCalls: 'Call Queue Table'
       }
     };
   }
@@ -111,6 +111,54 @@ export class AirtableService {
     });
 
     return this.formatLead(result.records[0]);
+  }
+
+  async createLeadsBulk(leads: Lead[]): Promise<{ success: boolean; leadsCreated: number; errors: any[] }> {
+    const records = leads.map(lead => ({
+      fields: {
+        'First Name': lead.firstName,
+        'Last Name': lead.lastName,
+        'Email': lead.email,
+        'Phone': lead.phone,
+        'Company': lead.company || '',
+        'Status': lead.status || 'New',
+        'Source': lead.source,
+        'Notes': lead.notes || '',
+        'Title': (lead as any).title || '',
+        'Location': (lead as any).location || '',
+        'Created Date': new Date().toISOString()
+      }
+    }));
+
+    const errors: any[] = [];
+    let leadsCreated = 0;
+
+    // Airtable allows max 10 records per request
+    const chunks = [];
+    for (let i = 0; i < records.length; i += 10) {
+      chunks.push(records.slice(i, i + 10));
+    }
+
+    for (const chunk of chunks) {
+      try {
+        const result = await this.makeRequest(this.config.tables.scrapedLeads, {
+          method: 'POST',
+          body: JSON.stringify({ records: chunk })
+        });
+        leadsCreated += result.records.length;
+      } catch (error) {
+        errors.push({
+          chunk: chunk.length,
+          error: error.message
+        });
+      }
+    }
+
+    return {
+      success: errors.length === 0,
+      leadsCreated,
+      errors
+    };
   }
 
   async getLeads(filterStatus?: string): Promise<Lead[]> {

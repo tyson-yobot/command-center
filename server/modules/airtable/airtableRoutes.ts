@@ -84,22 +84,27 @@ export function registerAirtableRoutes(app: Express): void {
   app.post('/api/airtable/scrape-leads', async (req: Request, res: Response) => {
     try {
       const { source, leads } = req.body;
-      const scrapedLeads = [];
+      
+      const formattedLeads = leads.map((leadData: any) => ({
+        firstName: leadData.firstName || '',
+        lastName: leadData.lastName || '',
+        email: leadData.email || '',
+        phone: leadData.phone || '',
+        company: leadData.company || '',
+        status: 'New',
+        source: source || 'Lead Scraper Tool',
+        notes: `Title: ${leadData.title || ''}, Location: ${leadData.location || ''}`,
+        title: leadData.title || '',
+        location: leadData.location || ''
+      }));
 
-      for (const leadData of leads) {
-        const lead = await airtableService.createLead({
-          ...leadData,
-          source: source || 'Lead Scraper',
-          status: 'New'
-        });
-        scrapedLeads.push(lead);
-      }
-
+      const result = await airtableService.createLeadsBulk(formattedLeads);
+      
       res.json({ 
-        success: true, 
+        success: result.success, 
         data: { 
-          leadsCreated: scrapedLeads.length, 
-          leads: scrapedLeads 
+          leadsCreated: result.leadsCreated,
+          errors: result.errors
         } 
       });
     } catch (error) {

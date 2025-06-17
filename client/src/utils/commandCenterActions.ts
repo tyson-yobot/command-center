@@ -137,10 +137,25 @@ export class CommandCenterActions {
 
   static async startPipeline(params: ButtonActionParams = {}) {
     try {
-      const response = await fetch('/api/command-center/start-pipeline', {
+      // First get qualified leads from Scraped Leads (Universal) table
+      const leadsResponse = await fetch('/api/airtable/leads?status=New');
+      const leadsData = await leadsResponse.json();
+      
+      if (!leadsData.success || leadsData.data.length === 0) {
+        return { 
+          success: false, 
+          error: 'No leads available in Scraped Leads (Universal) table. Please run Lead Scraper first.' 
+        };
+      }
+      
+      // Start pipeline with available leads
+      const leadIds = leadsData.data.slice(0, 10).map((lead: any) => lead.id); // Take first 10 leads
+      
+      const response = await fetch('/api/airtable/start-pipeline', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          leadIds,
           triggeredBy: params.triggeredBy || this.defaultUser,
           voiceTriggered: params.voiceTriggered || false,
           ...params.additionalData
@@ -151,6 +166,17 @@ export class CommandCenterActions {
       return { success: response.ok, data: result };
     } catch (error) {
       console.error('Start pipeline error:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  static async leadScraper(params: ButtonActionParams = {}) {
+    try {
+      // Navigate to Lead Scraper page
+      window.location.href = '/lead-scraper';
+      return { success: true, data: { message: 'Navigating to Lead Scraper...' } };
+    } catch (error) {
+      console.error('Lead scraper navigation error:', error);
       return { success: false, error: error.message };
     }
   }
