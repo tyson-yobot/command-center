@@ -3388,14 +3388,14 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={handleStartPipelineCalls}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-6"
+                      className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3"
                     >
                       <Play className="w-4 h-4 mr-2" />
                       Start Pipeline
                     </Button>
                     <Button
                       onClick={handleStopPipelineCalls}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white px-6 py-6"
+                      className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3"
                     >
                       <PhoneOff className="w-4 h-4 mr-2" />
                       End Pipeline
@@ -3425,14 +3425,14 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={() => setShowCreateVoiceCallModal(true)}
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-6"
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3"
                     >
                       <Headphones className="w-4 h-4 mr-2" />
                       Voice Studio
                     </Button>
                     <Button
                       onClick={testVoicePersona}
-                      className="w-full bg-orange-600 hover:bg-orange-700 text-white px-6 py-6"
+                      className="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-3"
                     >
                       <TestTube className="w-4 h-4 mr-2" />
                       Test Persona
@@ -3576,28 +3576,28 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-2 gap-3">
                       <Button
                         onClick={() => setShowAnalyticsModal(true)}
-                        className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-6"
+                        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3"
                       >
                         <FileText className="w-4 h-4 mr-2" />
                         Analytics Report
                       </Button>
                       <Button
                         onClick={handlePDFReport}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-6"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-3"
                       >
                         <Printer className="w-4 h-4 mr-2" />
                         PDF Export
                       </Button>
                       <Button
                         onClick={() => setShowExportModal(true)}
-                        className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-6"
+                        className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-3"
                       >
                         <Download className="w-4 h-4 mr-2" />
                         Quick Export
                       </Button>
                       <Button
                         onClick={handleExportData}
-                        className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-6"
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-3"
                       >
                         <Database className="w-4 h-4 mr-2" />
                         Data Export
@@ -3679,21 +3679,21 @@ export default function CommandCenter() {
                   <div className="mt-4 grid grid-cols-2 lg:grid-cols-3 gap-3">
                     <Button
                       onClick={() => {}} 
-                      className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-6"
+                      className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-3"
                     >
                       <AlertTriangle className="w-4 h-4 mr-2" />
                       Run Integrity Check
                     </Button>
                     <Button
                       onClick={() => {}} 
-                      className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-6"
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-3"
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       Check Logger Status
                     </Button>
                     <Button
                       onClick={() => {}} 
-                      className="bg-red-600 hover:bg-red-700 text-white px-6 py-6"
+                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-3"
                     >
                       <Zap className="w-4 h-4 mr-2" />
                       Test Integrity Check
@@ -4644,14 +4644,14 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <Button 
                         onClick={isListening ? stopVoiceRecognition : startProgrammingVoiceRecognition}
-                        className={`${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} text-white px-6 py-6`}
+                        className={`${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} text-white px-4 py-3`}
                       >
                         <Mic className="w-4 h-4 mr-2" />
                         {isListening ? 'Stop Recording' : 'Start Recording'}
                       </Button>
                       <Button 
                         onClick={processVoiceProgramming}
-                        className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-6 py-6"
+                        className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-3"
                         disabled={!programmingText.trim()}
                       >
                         <Brain className="w-4 h-4 mr-2" />
@@ -4659,7 +4659,7 @@ export default function CommandCenter() {
                       </Button>
                       <Button 
                         onClick={fetchAvailableVoices}
-                        className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-6"
+                        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3"
                       >
                         <RefreshCw className="w-4 h-4 mr-2" />
                         Refresh Voices
@@ -4905,7 +4905,7 @@ export default function CommandCenter() {
                           console.error('Failed to load voice recordings:', error);
                         }
                       }}
-                      className="bg-blue-600 hover:bg-blue-700 text-white text-sm"
+                      className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-3"
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       View Recordings
@@ -4922,7 +4922,7 @@ export default function CommandCenter() {
                           }
                         }
                       }}
-                      className="bg-red-600 hover:bg-red-700 text-white text-sm"
+                      className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-3"
                     >
                       <Trash2 className="w-4 h-4 mr-2" />
                       Clear All Recordings
@@ -4946,7 +4946,7 @@ export default function CommandCenter() {
                         }
                       }}
                       disabled={selectedRecordings.length === 0}
-                      className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm disabled:opacity-50"
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm disabled:opacity-50 px-4 py-3"
                     >
                       <Edit className="w-4 h-4 mr-2" />
                       Delete Selected ({selectedRecordings.length})
@@ -5178,7 +5178,7 @@ export default function CommandCenter() {
                 <Button 
                   onClick={insertMemoryText}
                   disabled={!memoryText.trim()}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3"
                 >
                   <Brain className="w-4 h-4 mr-2" />
                   Insert into Memory
@@ -5187,7 +5187,7 @@ export default function CommandCenter() {
                 {/* View Knowledge Library Button */}
                 <Button 
                   onClick={handleViewKnowledge}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-3"
                 >
                   <FileText className="w-4 h-4 mr-2" />
                   🗂 View Knowledge Library
