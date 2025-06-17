@@ -50,12 +50,25 @@ class CommandCenterMetrics {
   private metricsTableId = 'tbl7K5RthCtD69BE1'; // Command Center - Metrics Tracker Table
   private integrationTestTableId = 'tblIntegrationTest'; // Integration Test Log Table
   private apiKey: string;
+  private localBackupLog: any[] = [];
 
   constructor() {
     this.apiKey = process.env.AIRTABLE_API_KEY || '';
     if (!this.apiKey) {
       console.warn('AIRTABLE_API_KEY not configured for Command Center Metrics');
     }
+  }
+
+  private storeLocalBackup(logEntry: any): void {
+    this.localBackupLog.push(logEntry);
+    // Keep only last 1000 entries to prevent memory issues
+    if (this.localBackupLog.length > 1000) {
+      this.localBackupLog = this.localBackupLog.slice(-1000);
+    }
+  }
+
+  getLocalBackupLog(): any[] {
+    return this.localBackupLog;
   }
 
   private async makeAirtableRequest(method: string, endpoint: string, data?: any) {
@@ -65,20 +78,29 @@ class CommandCenterMetrics {
     }
 
     try {
+      // Ensure proper API key format
+      const authHeader = this.apiKey.startsWith('pat') ? 
+        `Bearer ${this.apiKey}` : 
+        `Bearer ${this.apiKey}`;
+
       const response = await fetch(`https://api.airtable.com/v0/${this.baseId}/${endpoint}`, {
         method,
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
+          'Authorization': authHeader,
+          'Content-Type': 'application/json',
+          'User-Agent': 'YoBot-CommandCenter/1.0'
         },
         body: data ? JSON.stringify(data) : undefined
       });
 
+      const responseText = await response.text();
+      
       if (!response.ok) {
-        throw new Error(`Airtable API error: ${response.status}`);
+        console.error(`Airtable API Error ${response.status}:`, responseText);
+        throw new Error(`Airtable API error: ${response.status} - ${responseText}`);
       }
 
-      return await response.json();
+      return JSON.parse(responseText);
     } catch (error) {
       console.error('Airtable request failed:', error);
       return { success: false, error: error.message };
@@ -86,17 +108,34 @@ class CommandCenterMetrics {
   }
 
   async logMetricsAction(record: MetricsRecord): Promise<any> {
+    const timestamp = new Date().toISOString();
     const data = {
       records: [{
         fields: {
           ...record,
-          'Timestamp': new Date().toISOString()
+          'Timestamp': timestamp
         }
       }]
     };
 
+    // Always log locally for immediate tracking
+    const localLog = {
+      action: record['Triggered Action'],
+      user: record['Triggered By'],
+      timestamp,
+      data: record
+    };
+    
+    console.log(`📊 Command Center Action: ${record['Triggered Action']} by ${record['Triggered By']} at ${timestamp}`);
+    
+    // Attempt Airtable logging
     const result = await this.makeAirtableRequest('POST', this.metricsTableId, data);
-    console.log(`📊 Logged to Command Center Metrics: ${record['Triggered Action']}`);
+    
+    if (result.success === false) {
+      // Store in local backup for later sync
+      this.storeLocalBackup(localLog);
+    }
+    
     return result;
   }
 
@@ -540,16 +579,39 @@ export function registerCommandCenterMetrics(app: Express) {
   // Health check endpoint
   app.get('/api/command-center/metrics-health', async (req, res) => {
     try {
+      const backupLog = commandCenterMetrics.getLocalBackupLog();
       res.json({
         success: true,
         service: 'Command Center Metrics',
         baseId: commandCenterMetrics.baseId,
         timestamp: new Date().toISOString(),
-        status: 'operational'
+        status: 'operational',
+        localBackupEntries: backupLog.length,
+        recentActions: backupLog.slice(-5).map(entry => ({
+          action: entry.action,
+          user: entry.user,
+          timestamp: entry.timestamp
+        }))
       });
     } catch (error) {
       console.error('Metrics health check error:', error);
       res.status(500).json({ success: false, error: 'Metrics service unavailable' });
+    }
+  });
+
+  // Local backup log endpoint for real-time monitoring
+  app.get('/api/command-center/backup-log', async (req, res) => {
+    try {
+      const backupLog = commandCenterMetrics.getLocalBackupLog();
+      res.json({
+        success: true,
+        totalEntries: backupLog.length,
+        entries: backupLog.slice(-50), // Return last 50 entries
+        message: 'Real-time action log retrieved successfully'
+      });
+    } catch (error) {
+      console.error('Backup log retrieval error:', error);
+      res.status(500).json({ success: false, error: 'Failed to retrieve backup log' });
     }
   });
 }
