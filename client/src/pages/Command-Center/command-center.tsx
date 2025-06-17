@@ -247,7 +247,7 @@ export default function CommandCenter() {
   const [showLiveChat, setShowLiveChat] = useState(false);
   const [showTicketsList, setShowTicketsList] = useState(false);
   const [showCreateTicket, setShowCreateTicket] = useState(false);
-  const [buttonPosition, setButtonPosition] = useState({ x: --, y: -- });
+  const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
   const [showKnowledgeViewer, setShowKnowledgeViewer] = useState(false);
   const [showDocumentPreview, setShowDocumentPreview] = useState(false);
   const [previewDocumentId, setPreviewDocumentId] = useState('');
@@ -366,7 +366,7 @@ export default function CommandCenter() {
   const [showCallDetails, setShowCallDetails] = useState(false);
   const [showKnowledgeManager, setShowKnowledgeManager] = useState(false);
   const [showScheduleViewer, setShowScheduleViewer] = useState(false);
-  const [selectedDay, setSelectedDay] = useState(--); // -- = today, 1 = tomorrow, etc.
+  const [selectedDay, setSelectedDay] = useState(0); // -- = today, 1 = tomorrow, etc.
   const [showTicketModal, setShowTicketModal] = useState(false);
   const [showCreateTicketModal, setShowCreateTicketModal] = useState(false);
   
@@ -424,10 +424,10 @@ export default function CommandCenter() {
   
   // Call Statistics
   const [callStats, setCallStats] = useState({
-    activeCalls: --,
+    activeCalls: 0,
     avgDuration: '0m',
-    successRate: '--',
-    totalToday: --
+    successRate: '0%',
+    totalToday: 0
   });
   
   // Support Activity
@@ -442,8 +442,8 @@ export default function CommandCenter() {
   const [showCallReports, setShowCallReports] = useState(false);
   const [showCallLogs, setShowCallLogs] = useState(false);
   const [showToast, setShowToast] = useState<{message: string; type: 'success' | 'error'} | null>(null);
-  const [totalRecords, setTotalRecords] = useState(--);
-  const [completedCalls, setCompletedCalls] = useState(--);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [completedCalls, setCompletedCalls] = useState(0);
   const [pipelineRunning, setPipelineRunning] = useState(false);
 
   // Service Management Functions
@@ -453,8 +453,8 @@ export default function CommandCenter() {
         ...prev,
         [service]: { status: 'ACTIVE', lastPing: new Date().toLocaleTimeString() }
       }));
-      addRecentActivity(`${service.charAt(--).toUpperCase() + service.slice(1)} service started`, 'system');
-      showToastMessage(`${service.charAt(--).toUpperCase() + service.slice(1)} service activated`, 'success');
+      addRecentActivity(`${service.charAt(0).toUpperCase() + service.slice(1)} service started`, 'system');
+      showToastMessage(`${service.charAt(0).toUpperCase() + service.slice(1)} service activated`, 'success');
     } else if (action === 'restart') {
       setServiceStates(prev => ({
         ...prev,
@@ -465,9 +465,9 @@ export default function CommandCenter() {
           ...prev,
           [service]: { status: 'ACTIVE', lastPing: new Date().toLocaleTimeString() }
         }));
-        addRecentActivity(`${service.charAt(--).toUpperCase() + service.slice(1)} service restarted`, 'system');
+        addRecentActivity(`${service.charAt(0).toUpperCase() + service.slice(1)} service restarted`, 'system');
       }, 2000);
-      showToastMessage(`${service.charAt(--).toUpperCase() + service.slice(1)} service restarting...`, 'success');
+      showToastMessage(`${service.charAt(0).toUpperCase() + service.slice(1)} service restarting...`, 'success');
     } else if (action === 'ping') {
       try {
         // Simulate ping request
@@ -692,33 +692,33 @@ export default function CommandCenter() {
     if (SpeechRecognition) {
       try {
         const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
-      recognition.maxAlternatives = 1;
-      
-      // Set 60-second timeout for extended voice input
-      let voiceTimeout: NodeJS.Timeout;
-      
-      recognition.onstart = () => {
-        voiceTimeout = setTimeout(() => {
-          recognition.stop();
-        }, 60000); // 60 seconds
-      };
-      
-      recognition.onend = () => {
-        if (voiceTimeout) {
-          clearTimeout(voiceTimeout);
-        }
-      };
-      
-      recognition.onerror = (event: any) => {
-        console.log('Speech recognition error:', event.error);
-        if (voiceTimeout) {
-          clearTimeout(voiceTimeout);
-        }
-      };
-      
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+        recognition.maxAlternatives = 1;
+        
+        // Set 60-second timeout for extended voice input
+        let voiceTimeout: NodeJS.Timeout;
+        
+        recognition.onstart = () => {
+          voiceTimeout = setTimeout(() => {
+            recognition.stop();
+          }, 60000); // 60 seconds
+        };
+        
+        recognition.onend = () => {
+          if (voiceTimeout) {
+            clearTimeout(voiceTimeout);
+          }
+        };
+        
+        recognition.onerror = (event: any) => {
+          console.log('Speech recognition error:', event.error);
+          if (voiceTimeout) {
+            clearTimeout(voiceTimeout);
+          }
+        };
+        
         recognitionRef.current = recognition;
         return recognition;
       } catch (error) {
@@ -815,7 +815,7 @@ export default function CommandCenter() {
       if (response.ok) {
         const data = await response.json();
         
-        if (data.voices && data.voices.length > --) {
+        if (data.voices && data.voices.length > 0) {
           setAvailableVoices(data.voices);
           setVoiceStatus(`${data.voices.length} voices loaded successfully`);
           console.log('Loaded voices:', data.voices.map((v: any) => v.name));
@@ -993,7 +993,7 @@ export default function CommandCenter() {
     input.accept = '.pdf,.doc,.docx,.txt,.csv';
     input.onchange = async (e) => {
       const files = (e.target as HTMLInputElement).files;
-      if (files && files.length > --) {
+      if (files && files.length > 0) {
         setVoiceStatus('Processing documents for RAG system...');
         setDocumentsLoading(true);
         
@@ -1009,8 +1009,8 @@ export default function CommandCenter() {
           const result = await response.json();
           
           if (response.ok && result.success) {
-            const processedCount = result.files?.filter(f => f.status === 'processed').length || --;
-            const errorCount = result.files?.filter(f => f.status === 'error').length || --;
+            const processedCount = result.files?.filter(f => f.status === 'processed').length || 0;
+            const errorCount = result.files?.filter(f => f.status === 'error').length || 0;
             
             setVoiceStatus(
               `RAG Integration Complete: ${processedCount} documents processed` + 
@@ -1082,11 +1082,11 @@ export default function CommandCenter() {
         console.log('Knowledge API response:', data);
         setKnowledgeItems(data.items || []);
         setShowKnowledgeViewer(true);
-        console.log('Modal state set to true, items:', data.items?.length || --);
-        setVoiceStatus(`Loaded ${data.total || --} knowledge items: ${data.documents || --} documents, ${data.memories || --} memories`);
+        console.log('Modal state set to true, items:', data.items?.length || 0);
+        setVoiceStatus(`Loaded ${data.total || 0} knowledge items: ${data.documents || 0} documents, ${data.memories || 0} memories`);
         setToast({
           title: "Knowledge Loaded",
-          description: `Found ${data.total || --} items in knowledge base`,
+          description: `Found ${data.total || 0} items in knowledge base`,
         });
       } else {
         console.error('Knowledge API failed:', response.status);
@@ -1165,7 +1165,7 @@ export default function CommandCenter() {
     try {
       const response = await fetch('/api/system/logs');
       const data = await response.json();
-      setVoiceStatus(`Latest logs: ${data.count || --} entries`);
+      setVoiceStatus(`Latest logs: ${data.count || 0} entries`);
     } catch (error) {
       setVoiceStatus('Failed to load logs');
     }
@@ -1444,10 +1444,10 @@ export default function CommandCenter() {
       
       if (response.ok) {
         const result = await response.json();
-        setVoiceStatus(`Pipeline started with ${result.leadCount || --} leads loaded`);
+        setVoiceStatus(`Pipeline started with ${result.leadCount || 0} leads loaded`);
         setToast({ 
           title: "Pipeline Started", 
-          description: `${result.leadCount || --} leads loaded from Airtable - calls initiated` 
+          description: `${result.leadCount || 0} leads loaded from Airtable - calls initiated` 
         });
       } else {
         const error = await response.json();
@@ -1533,10 +1533,10 @@ export default function CommandCenter() {
         const postResult = result.postResult;
         
         if (postResult?.success) {
-          setVoiceStatus(`✅ AI content posted to LinkedIn: ${content?.metadata?.wordCount || --} words`);
+          setVoiceStatus(`✅ AI content posted to LinkedIn: ${content?.metadata?.wordCount || 0} words`);
           setToast({ 
             title: "Content Created & Posted", 
-            description: `AI-generated LinkedIn post published with ${content?.hashtags?.length || --} hashtags` 
+            description: `AI-generated LinkedIn post published with ${content?.hashtags?.length || 0} hashtags` 
           });
         } else {
           setVoiceStatus(`❌ Content generated but posting failed: ${postResult?.error || 'Unknown error'}`);
@@ -1590,10 +1590,10 @@ export default function CommandCenter() {
         const sendResult = result.sendResult;
         
         if (sendResult?.success) {
-          setVoiceStatus(`✅ AI email campaign sent: ${sendResult.recipients || --} recipients`);
+          setVoiceStatus(`✅ AI email campaign sent: ${sendResult.recipients || 0} recipients`);
           setToast({ 
             title: "Email Campaign Sent", 
-            description: `Subject: "${content?.subject}" sent to ${sendResult.recipients || --} contacts` 
+            description: `Subject: "${content?.subject}" sent to ${sendResult.recipients || 0} contacts` 
           });
         } else {
           setVoiceStatus(`❌ Email content generated but sending failed: ${sendResult?.error || 'Unknown error'}`);
@@ -1979,7 +1979,7 @@ export default function CommandCenter() {
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (!files || files.length === --) return;
+    if (!files || files.length === 0) return;
 
     setVoiceStatus('Uploading documents to RAG system...');
     setDocumentsLoading(true);
@@ -2009,8 +2009,8 @@ export default function CommandCenter() {
 
       if (response.ok) {
         const result = await response.json();
-        const successCount = result.files?.filter(f => f.status === 'processed').length || --;
-        const errorCount = result.files?.filter(f => f.status === 'error').length || --;
+        const successCount = result.files?.filter(f => f.status === 'processed').length || 0;
+        const errorCount = result.files?.filter(f => f.status === 'error').length || 0;
         const fileNames = result.files?.map(f => f.filename).join(', ') || '';
         
         setVoiceStatus(`Documents Processed: ${fileNames}`);
@@ -2103,7 +2103,7 @@ export default function CommandCenter() {
     try {
       const response = await fetch('/api/analytics/summary');
       const data = await response.json();
-      setVoiceStatus(`Analytics: ${data.totalCalls || --} calls, ${data.successRate || --}% success`);
+      setVoiceStatus(`Analytics: ${data.totalCalls || 0} calls, ${data.successRate || 0}% success`);
     } catch (error) {
       setVoiceStatus('Failed to load analytics');
     }
@@ -2231,7 +2231,7 @@ export default function CommandCenter() {
         const result = await response.json();
         setToast({
           title: "Knowledge Query Complete",
-          description: `Found ${result.results?.length || --} relevant documents`,
+          description: `Found ${result.results?.length || 0} relevant documents`,
         });
       } else {
         setToast({
@@ -2270,7 +2270,7 @@ export default function CommandCenter() {
         const result = await response.json();
         setToast({
           title: "Smart Search Complete",
-          description: `AI-powered search found ${result.matches || --} relevant items`,
+          description: `AI-powered search found ${result.matches || 0} relevant items`,
         });
       } else {
         setToast({
@@ -2311,7 +2311,7 @@ export default function CommandCenter() {
         setToast({
           id: Date.now().toString(),
           title: "Context Search Complete",
-          description: `Context analysis found ${result.contextMatches || --} relevant sections`,
+          description: `Context analysis found ${result.contextMatches || 0} relevant sections`,
         });
       } else {
         setToast({
@@ -2355,7 +2355,7 @@ export default function CommandCenter() {
         setUploadedDocuments(data.documents || []);
         setToast({
           title: "Documents Loaded",
-          description: `Found ${data.documents?.length || --} documents in knowledge base`,
+          description: `Found ${data.documents?.length || 0} documents in knowledge base`,
         });
       } else {
         setToast({
@@ -2385,7 +2385,7 @@ export default function CommandCenter() {
   };
 
   const deleteSelectedDocuments = async () => {
-    if (selectedDocuments.length === --) {
+    if (selectedDocuments.length === 0) {
       setToast({
         title: "No Selection",
         description: "Please select documents to delete",
@@ -2622,7 +2622,7 @@ export default function CommandCenter() {
       const result = await response.json();
 
       if (result.success) {
-        setTotalRecords(result.total_records || --);
+        setTotalRecords(result.total_records || 0);
         setActiveCalls(result.activeCalls || []);
         
         // Use only real call data from API response - NO MOCK DATA IN LIVE MODE
@@ -2909,7 +2909,7 @@ export default function CommandCenter() {
   // Demo mode functions
   const startDemo = () => {
     setDemoMode(true);
-    setDemoStep(--);
+    setDemoStep(0);
   };
 
   const nextDemoStep = () => {
@@ -2917,7 +2917,7 @@ export default function CommandCenter() {
       setDemoStep(demoStep + 1);
     } else {
       setDemoMode(false);
-      setDemoStep(--);
+      setDemoStep(0);
     }
   };
 
@@ -3291,18 +3291,18 @@ export default function CommandCenter() {
         </div>
 
         {/* Live Pipeline Banner */}
-        {(currentSystemMode === 'test' || (liveActivityData?.data?.callsInProgress > --)) && (
+        {(currentSystemMode === 'test' || (liveActivityData?.data?.callsInProgress > 0)) && (
           <div className="mb-6 p-4 bg-green-900/30 border border-green-400 rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-3 h-3 bg-red-400 rounded-full animate-pulse"></div>
                 <span className="text-green-300 font-semibold">📞 Pipeline Active</span>
                 <span className="text-white">
-                  { `${liveActivityData?.data?.callsInProgress || --} calls in progress`}
+                  { `${liveActivityData?.data?.callsInProgress || 0} calls in progress`}
                 </span>
                 <span className="text-green-400">|</span>
                 <span className="text-white">
-                  { `${liveActivityData?.data?.callsCompleted || --} completed today`}
+                  { `${liveActivityData?.data?.callsCompleted || 0} completed today`}
                 </span>
               </div>
               <Button
@@ -3905,13 +3905,13 @@ export default function CommandCenter() {
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-sm text-red-300 mb-1">Active Calls</div>
                         <div className="text-lg font-bold text-white">
-                          {activeCalls?.data?.length || --}
+                          {activeCalls?.data?.length || 0}
                         </div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-sm text-red-300 mb-1">Success Rate</div>
                         <div className="text-lg font-bold text-green-400">
-                          {callMetrics?.data?.successRate || --}%
+                          {callMetrics?.data?.successRate || 0}%
                         </div>
                       </div>
                     </div>
@@ -4525,7 +4525,7 @@ export default function CommandCenter() {
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Last Execution:</span>
                   <div className="flex items-center space-x-1">
-                    {liveActivityData?.data?.recentExecutions?.length > -- && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
+                    {liveActivityData?.data?.recentExecutions?.length > 0 && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
                     <span className="text-green-400 font-bold">{liveActivityData?.data?.lastExecution ? new Date(liveActivityData.data.lastExecution).toLocaleTimeString() : ''}</span>
                   </div>
                 </div>
@@ -4565,7 +4565,7 @@ export default function CommandCenter() {
                   <div className="text-right flex items-center space-x-1">
                     {metrics?.data?.monthlyRecurringRevenue && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
                     <span className="text-green-400 font-bold">
-                      {metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(--) + 'K' : ''}
+                      {metrics?.data?.monthlyRecurringRevenue ? '$' + (metrics.data.monthlyRecurringRevenue / 1000).toFixed(0) + 'K' : ''}
                     </span>
                   </div>
                 </div>
@@ -4581,7 +4581,7 @@ export default function CommandCenter() {
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Pipeline Value:</span>
                   <span className="text-blue-400 font-bold">
-                    {metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(--) + 'K' : ''}
+                    {metrics?.data?.totalRevenue ? '$' + (metrics.data.totalRevenue / 1000).toFixed(0) + 'K' : ''}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -4757,7 +4757,7 @@ export default function CommandCenter() {
                     { (metrics?.data?.smartSpendData?.monthlyAdSpend || '--')}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-blue-400 to-blue-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.spendUtilization || --}%` }}></div>
+                    <div className="bg-gradient-to-r from-blue-400 to-blue-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.spendUtilization || 0}%` }}></div>
                   </div>
                 </div>
 
@@ -4768,7 +4768,7 @@ export default function CommandCenter() {
                     { (metrics?.data?.smartSpendData?.costPerLead || '--')}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-yellow-400 to-amber-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.costEfficiency || --}%` }}></div>
+                    <div className="bg-gradient-to-r from-yellow-400 to-amber-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.costEfficiency || 0}%` }}></div>
                   </div>
                 </div>
 
@@ -4779,7 +4779,7 @@ export default function CommandCenter() {
                     { (metrics?.data?.smartSpendData?.monthlyROI || '--')}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-green-400 to-emerald-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.roiProgress || --}%` }}></div>
+                    <div className="bg-gradient-to-r from-green-400 to-emerald-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.roiProgress || 0}%` }}></div>
                   </div>
                 </div>
 
@@ -4790,7 +4790,7 @@ export default function CommandCenter() {
                     { (metrics?.data?.smartSpendData?.conversionRate || '--')}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-purple-400 to-violet-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.conversionProgress || --}%` }}></div>
+                    <div className="bg-gradient-to-r from-purple-400 to-violet-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.conversionProgress || 0}%` }}></div>
                   </div>
                 </div>
 
@@ -4806,7 +4806,7 @@ export default function CommandCenter() {
                     </Badge>
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-cyan-400 to-blue-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.budgetEfficiency || --}%` }}></div>
+                    <div className="bg-gradient-to-r from-cyan-400 to-blue-300 h-2 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.budgetEfficiency || 0}%` }}></div>
                   </div>
                 </div>
               </div>
@@ -4829,7 +4829,7 @@ export default function CommandCenter() {
                     <span className="text-green-400 font-bold">{metrics?.data?.costPerLead || '--'}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-red-400 h-1 rounded-full" style={{ width: `${metrics?.data?.costPerLeadProgress || --}%` }}></div>
+                    <div className="bg-red-400 h-1 rounded-full" style={{ width: `${metrics?.data?.costPerLeadProgress || 0}%` }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
@@ -4838,7 +4838,7 @@ export default function CommandCenter() {
                     <span className="text-blue-400 font-bold">{metrics?.data?.leadQualityScore || '--'}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: `${metrics?.data?.leadQualityProgress || --}%` }}></div>
+                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: `${metrics?.data?.leadQualityProgress || 0}%` }}></div>
                   </div>
                 </div>
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
@@ -5015,10 +5015,10 @@ export default function CommandCenter() {
                 >
                   <div className="text-slate-300 text-sm mb-1">Today's Schedule</div>
                   <div className="text-white font-bold">
-                    { (metrics?.activeCampaigns || --) + ' total meetings'}
+                    { (metrics?.activeCampaigns || 0) + ' total meetings'}
                   </div>
                   <div className="text-cyan-400 text-xs">
-                    { (metrics?.remainingTasks || --) + ' remaining today'}
+                    { (metrics?.remainingTasks || 0) + ' remaining today'}
                   </div>
                   <div className="text-blue-300 text-xs mt-1">Click to view details →</div>
                 </div>
@@ -5075,7 +5075,7 @@ export default function CommandCenter() {
                     </div>
                   </>
                 ) : (
-                  liveActivityData && Array.isArray(liveActivityData) && liveActivityData.length > -- ? (
+                  liveActivityData && Array.isArray(liveActivityData) && liveActivityData.length > 0 ? (
                     liveActivityData.map((item: any, index: number) => (
                       <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                         <div>
@@ -5754,10 +5754,10 @@ export default function CommandCenter() {
                           >
                             {voicesLoading ? (
                               <option>Loading voices...</option>
-                            ) : availableVoices.length > -- ? (
+                            ) : availableVoices.length > 0 ? (
                               <>
                                 {/* Custom Voices First */}
-                                {availableVoices.filter(voice => voice.category !== 'premade').length > -- && (
+                                {availableVoices.filter(voice => voice.category !== 'premade').length > 0 && (
                                   <>
                                     <option disabled style={{fontWeight: 'bold', color: '#10B981'}}>Your Custom Voices</option>
                                     {availableVoices
@@ -5773,7 +5773,7 @@ export default function CommandCenter() {
                                 )}
                                 
                                 {/* Premade Voices */}
-                                {availableVoices.filter(voice => voice.category === 'premade').length > -- && (
+                                {availableVoices.filter(voice => voice.category === 'premade').length > 0 && (
                                   <>
                                     <option disabled style={{fontWeight: 'bold', color: '#6366F1'}}>ElevenLabs Premade</option>
                                     {availableVoices
@@ -5802,7 +5802,7 @@ export default function CommandCenter() {
                         <div className="bg-purple-900/40 rounded p-2 border border-purple-400/30 text-xs">
                           <div className="flex items-center justify-between">
                             <span className="text-purple-200">
-                              {availableVoices.length > -- 
+                              {availableVoices.length > 0 
                                 ? `${availableVoices.length} voices loaded`
                                 : 'API key required'
                               }
@@ -5935,7 +5935,7 @@ export default function CommandCenter() {
                     </Button>
                     <Button 
                       onClick={async () => {
-                        if (selectedRecordings.length === --) {
+                        if (selectedRecordings.length === 0) {
                           alert('Please select recordings to edit');
                           return;
                         }
@@ -5951,7 +5951,7 @@ export default function CommandCenter() {
                           console.error('Failed to delete selected recordings:', error);
                         }
                       }}
-                      disabled={selectedRecordings.length === --}
+                      disabled={selectedRecordings.length === 0}
                       className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm disabled:opacity-50"
                     >
                       <Edit className="w-4 h-4 mr-2" />
@@ -5961,7 +5961,7 @@ export default function CommandCenter() {
                   
                   {/* Recording List */}
                   <div className="space-y-2 max-h-40 overflow-y-auto">
-                    {showRecordingList && voiceRecordings.length > -- ? (
+                    {showRecordingList && voiceRecordings.length > 0 ? (
                       voiceRecordings.map((recording) => (
                         <div 
                           key={recording.id}
@@ -5996,7 +5996,7 @@ export default function CommandCenter() {
                           </div>
                         </div>
                       ))
-                    ) : showRecordingList && voiceRecordings.length === -- ? (
+                    ) : showRecordingList && voiceRecordings.length === 0 ? (
                       <div className="text-slate-400 text-sm text-center py-4">
                         No voice recordings found
                       </div>
@@ -6043,11 +6043,11 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                   <div className="text-center bg-blue-900/40 rounded-lg p-4 border border-purple-400 shadow-lg shadow-purple-400/20">
                     <div className="text-2xl font-bold text-blue-400">
-                      {knowledgeStats?.documents?.total || --}
+                      {knowledgeStats?.documents?.total || 0}
                     </div>
                     <div className="text-white text-sm">Documents Indexed</div>
                     <div className="text-xs text-slate-400 mt-1">
-                      {knowledgeStats?.memory?.total || --} memory entries
+                      {knowledgeStats?.memory?.total || 0} memory entries
                     </div>
                   </div>
                 </div>
@@ -6083,7 +6083,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button 
                     onClick={deleteSelectedDocuments}
-                    disabled={selectedDocuments.length === --}
+                    disabled={selectedDocuments.length === 0}
                     className="bg-red-600 hover:bg-red-700 text-white border border-red-400"
                   >
                     Delete Selected ({selectedDocuments.length})
@@ -6094,7 +6094,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-700/40 rounded-lg p-4 border border-blue-400">
                   <h4 className="text-white font-medium mb-3">📄 Uploaded Documents</h4>
                   <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {uploadedDocuments.length > -- ? uploadedDocuments.map((doc) => (
+                    {uploadedDocuments.length > 0 ? uploadedDocuments.map((doc) => (
                       <div 
                         key={doc.id}
                         className="flex items-center justify-between p-3 bg-slate-800/60 rounded border border-blue-400"
@@ -6206,7 +6206,7 @@ export default function CommandCenter() {
                     🧠 Latest Memory Activity Log
                   </h4>
                   <div className="space-y-2 max-h-40 overflow-y-auto">
-                    {memoryActivityLog.length > -- ? memoryActivityLog.slice(-5).reverse().map((entry, index) => (
+                    {memoryActivityLog.length > 0 ? memoryActivityLog.slice(-5).reverse().map((entry, index) => (
                       <div key={index} className="flex items-center justify-between p-2 bg-slate-800/60 rounded border border-purple-400">
                         <div className="flex items-center space-x-3">
                           <span className="text-xs text-slate-400">{entry.timestamp}</span>
@@ -6805,7 +6805,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-700/40 rounded-lg p-3 border border-purple-400">
                   <h4 className="text-white font-medium mb-2 text-sm">Recent Activity</h4>
                   <div className="space-y-2 max-h-32 overflow-y-auto">
-                    {recentActivity.length > -- ? recentActivity.map((activity) => (
+                    {recentActivity.length > 0 ? recentActivity.map((activity) => (
                       <div key={activity.id} className="flex items-center justify-between text-xs">
                         <div className="flex items-center space-x-2">
                           <span className={`w-2 h-2 rounded-full ${
@@ -8558,7 +8558,7 @@ export default function CommandCenter() {
           );
         }}
         onDeleteSelected={async () => {
-          if (selectedKnowledgeItems.length === --) {
+          if (selectedKnowledgeItems.length === 0) {
             setToast({
               title: "No Selection",
               description: "Please select items to delete",
@@ -8619,7 +8619,7 @@ export default function CommandCenter() {
             </div>
             
             <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-[400px]">
-              {chatMessages.length === -- ? (
+              {chatMessages.length === 0 ? (
                 <div className="text-center py-8">
                   <div className="bg-blue-900/60 rounded-lg p-4 border border-blue-400/50">
                     <MessageCircle className="w-8 h-8 mx-auto mb-2 text-blue-400" />
