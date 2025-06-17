@@ -7688,8 +7688,8 @@ export default function CommandCenter() {
                 <label className="block text-white text-sm font-medium mb-2">Bot Package</label>
                 <select className="w-full p-3 bg-[#2c2c2c] text-white border-none rounded-md focus:ring-2 focus:ring-purple-500">
                   <option value="starter">Starter Bot Package - $997/month</option>
-                  <option value="professional">Professional Bot Package - $1,997/month</option>
-                  <option value="enterprise">Enterprise Bot Package - $4,997/month</option>
+                  <option value="professional">Professional Bot Package - --/month</option>
+                  <option value="enterprise">Enterprise Bot Package - --/month</option>
                   <option value="custom">Custom Enterprise Solution</option>
                 </select>
               </div>
