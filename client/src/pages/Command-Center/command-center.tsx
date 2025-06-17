@@ -3428,16 +3428,7 @@ export default function CommandCenter() {
                     </div>
                   </Button>
                   
-                  <Button
-                    onClick={handleVoiceInput}
-                    className="!bg-indigo-600 hover:!bg-indigo-700 !text-white flex items-center justify-center p-4 h-24 border border-indigo-500"
-                    title="Start Voice"
-                  >
-                    <div className="text-center">
-                      <Mic className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Start Voice</span>
-                    </div>
-                  </Button>
+
 
                 </div>
                 
