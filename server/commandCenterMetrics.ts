@@ -614,4 +614,33 @@ export function registerCommandCenterMetrics(app: Express) {
       res.status(500).json({ success: false, error: 'Failed to retrieve backup log' });
     }
   });
+
+  // Test Airtable connection directly
+  app.get('/api/command-center/test-airtable', async (req, res) => {
+    try {
+      const apiKey = process.env.AIRTABLE_API_KEY;
+      if (!apiKey) {
+        return res.status(400).json({ success: false, error: 'No API key configured' });
+      }
+
+      const response = await fetch(`https://api.airtable.com/v0/appRt8V3tH4g5Z51f/tbl7K5RthCtD69BE1?maxRecords=1`, {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.text();
+      
+      res.json({
+        success: response.ok,
+        status: response.status,
+        data: response.ok ? JSON.parse(data) : data,
+        apiKeyLength: apiKey.length,
+        apiKeyPrefix: apiKey.substring(0, 8) + '...'
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
 }
