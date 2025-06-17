@@ -3969,15 +3969,15 @@ export default function CommandCenter() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
 
 
-          {/* SmartSpend™ - Orange Theme */}
-          <Card className="bg-gradient-to-br from-orange-900/80 via-orange-800/60 to-amber-900/40 backdrop-blur-sm border border-orange-400/60 shadow-2xl shadow-orange-500/30">
+          {/* SmartSpend™ - Neon Orange Theme */}
+          <Card className="bg-gradient-to-br from-orange-600/90 via-orange-500/70 to-red-500/50 backdrop-blur-sm border border-orange-400 shadow-2xl shadow-orange-400/40">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between">
                 <div className="flex items-center">
-                  <DollarSign className="w-5 h-5 mr-2 text-orange-300" />
+                  <DollarSign className="w-5 h-5 mr-2 text-orange-200" />
                   💰 SmartSpend™
                 </div>
-                <Badge className="bg-orange-500 text-white text-sm px-3 py-1">LIVE</Badge>
+                <Badge className="bg-orange-400 text-black text-sm px-3 py-1 font-bold">LIVE</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
@@ -4045,11 +4045,11 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          {/* Botalytics™ - Lime Green Theme */}
-          <Card className="bg-gradient-to-br from-lime-900/80 via-lime-800/60 to-green-900/40 backdrop-blur-sm border border-lime-400/60 shadow-2xl shadow-lime-500/30">
+          {/* Botalytics™ - Neon Lime Green Theme */}
+          <Card className="bg-gradient-to-br from-lime-500/90 via-lime-400/70 to-green-400/50 backdrop-blur-sm border border-lime-300 shadow-2xl shadow-lime-400/40">
             <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <BarChart3 className="w-5 h-5 mr-2 text-lime-300" />
+              <CardTitle className="text-black flex items-center">
+                <BarChart3 className="w-5 h-5 mr-2 text-lime-800" />
                 Botalytics™
               </CardTitle>
             </CardHeader>
