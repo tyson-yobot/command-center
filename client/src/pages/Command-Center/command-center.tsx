@@ -4674,8 +4674,8 @@ export default function CommandCenter() {
                     </div>
 
                     <div className="bg-blue-900/40 rounded p-3 border border-blue-400 shadow-lg shadow-blue-400/20">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-white font-medium">Voice Status:</h4>
+                      <div className="text-center">
+                        <h4 className="text-white font-medium mb-2">Voice Status:</h4>
                         <span className={`px-2 py-1 rounded text-xs font-medium ${
                           isListening ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
                         }`}>
@@ -6099,6 +6099,8 @@ export default function CommandCenter() {
               </CardContent>
             </Card>
           </div>
+        )}
+          </>
         )}
 
       </div>
