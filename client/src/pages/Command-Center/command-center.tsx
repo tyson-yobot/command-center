@@ -1372,7 +1372,9 @@ export default function CommandCenter() {
       
       if (response.ok) {
         const result = await response.json();
-        setVoiceStatus('Booking synced to Airtable & Google Calendar');
+        if (currentSystemMode === 'test') {
+          setVoiceStatus('Booking synced to Airtable & Google Calendar');
+        }
         setToast({ title: "Booking Synced", description: "New booking added to calendar and database" });
       } else {
         setVoiceStatus('Booking sync failed');
@@ -3085,8 +3087,8 @@ export default function CommandCenter() {
                             ? (preset.id === 'voice' ? 'bg-blue-600 text-white border-blue-400' :
                                preset.id === 'smartspend' ? 'bg-green-600 text-white border-green-400' :
                                'bg-cyan-600 text-white border-cyan-400')
-                            : (preset.id === 'voice' ? 'border-blue-400 text-blue-400 hover:bg-blue-600/20' :
-                               preset.id === 'smartspend' ? 'border-green-400 text-green-400 hover:bg-green-600/20' :
+                            : (preset.id === 'voice' ? 'bg-blue-600 text-white border-blue-400 hover:bg-blue-700' :
+                               preset.id === 'smartspend' ? 'bg-green-600 text-white border-green-400 hover:bg-green-700' :
                                'border-cyan-400 text-cyan-400 hover:bg-cyan-600/20')
                         }`}
                         title={`Switch to ${preset.label}`}
@@ -6545,14 +6547,16 @@ export default function CommandCenter() {
                         <div className="flex items-center space-x-2">
                           <Activity className="w-4 h-4 text-yellow-400" />
                           <span className="text-white text-sm">Monitoring Service</span>
-                          <span className={`text-xs font-bold px-2 py-1 rounded ${
-                            serviceStates.monitoring.status === 'ACTIVE' ? 'bg-green-600/20 text-green-400' :
-                            serviceStates.monitoring.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
-                            'text-yellow-400'
-                          }`}>
-                            {currentSystemMode === 'test' ? (serviceStates.monitoring.status === 'ACTIVE' ? '🟢 ACTIVE' :
-                             serviceStates.monitoring.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
-                          </span>
+                          {currentSystemMode === 'test' && (
+                            <span className={`text-xs font-bold px-2 py-1 rounded ${
+                              serviceStates.monitoring.status === 'ACTIVE' ? 'bg-green-600/20 text-green-400' :
+                              serviceStates.monitoring.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
+                              'text-yellow-400'
+                            }`}>
+                              {serviceStates.monitoring.status === 'ACTIVE' ? '🟢 ACTIVE' :
+                               serviceStates.monitoring.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE'}
+                            </span>
+                          )}
                         </div>
                         <div className="flex space-x-1">
                           <Button 
@@ -6594,14 +6598,16 @@ export default function CommandCenter() {
                         <div className="flex items-center space-x-2">
                           <Headphones className="w-4 h-4 text-red-400" />
                           <span className="text-white text-sm">Recording Service</span>
-                          <span className={`text-xs font-bold px-2 py-1 rounded ${
-                            serviceStates.recording.status === 'ACTIVE' ? 'bg-green-600/20 text-green-400' :
-                            serviceStates.recording.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
-                            'text-yellow-400'
-                          }`}>
-                            {currentSystemMode === 'test' ? (serviceStates.recording.status === 'ACTIVE' ? '🟢 ACTIVE' :
-                             serviceStates.recording.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
-                          </span>
+                          {currentSystemMode === 'test' && (
+                            <span className={`text-xs font-bold px-2 py-1 rounded ${
+                              serviceStates.recording.status === 'ACTIVE' ? 'bg-green-600/20 text-green-400' :
+                              serviceStates.recording.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
+                              'text-yellow-400'
+                            }`}>
+                              {serviceStates.recording.status === 'ACTIVE' ? '🟢 ACTIVE' :
+                               serviceStates.recording.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE'}
+                            </span>
+                          )}
                         </div>
                         <div className="flex space-x-1">
                           <Button 
@@ -6643,14 +6649,16 @@ export default function CommandCenter() {
                         <div className="flex items-center space-x-2">
                           <Zap className="w-4 h-4 text-purple-400" />
                           <span className="text-white text-sm">Analytics Service</span>
-                          <span className={`text-xs font-bold px-2 py-1 rounded ${
-                            serviceStates.analytics.status === 'ACTIVE' ? 'bg-green-600/20 text-green-400' :
-                            serviceStates.analytics.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
-                            'text-yellow-400'
-                          }`}>
-                            {currentSystemMode === 'test' ? (serviceStates.analytics.status === 'ACTIVE' ? '🟢 ACTIVE' :
-                             serviceStates.analytics.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
-                          </span>
+                          {currentSystemMode === 'test' && (
+                            <span className={`text-xs font-bold px-2 py-1 rounded ${
+                              serviceStates.analytics.status === 'ACTIVE' ? 'bg-green-600/20 text-green-400' :
+                              serviceStates.analytics.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
+                              'text-yellow-400'
+                            }`}>
+                              {serviceStates.analytics.status === 'ACTIVE' ? '🟢 ACTIVE' :
+                               serviceStates.analytics.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE'}
+                            </span>
+                          )}
                         </div>
                         <div className="flex space-x-1">
                           <Button 
@@ -8315,8 +8323,8 @@ export default function CommandCenter() {
                       </div>
                       <div className="bg-slate-700/40 rounded p-3">
                         <div className="text-sm text-slate-300 mb-2">Top Performing Content:</div>
-                        <div className="text-white text-sm">{liveActivity?.topContent || ''}</div>
-                        <div className="text-green-400 text-xs">{liveActivity?.topContentStats || ''}</div>
+                        <div className="text-white text-sm">{liveActivityData?.data?.topContent || ''}</div>
+                        <div className="text-green-400 text-xs">{liveActivityData?.data?.topContentStats || ''}</div>
                       </div>
                     </div>
                   </CardContent>
