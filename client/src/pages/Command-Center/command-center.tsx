@@ -3106,8 +3106,10 @@ export default function CommandCenter() {
                         size="sm"
                         className={`${
                           dashboardPreset === preset.id 
-                            ? 'bg-cyan-600 text-white' 
-                            : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                            ? (preset.id === 'voice' ? 'bg-purple-600 hover:bg-purple-700 text-white border border-purple-500' :
+                               preset.id === 'smartspend' ? 'bg-blue-600 hover:bg-blue-700 text-white border border-blue-500' :
+                               'bg-indigo-600 hover:bg-indigo-700 text-white border border-indigo-500')
+                            : 'bg-slate-700 text-slate-300 hover:bg-slate-600 border border-slate-600'
                         }`}
                         title={`Switch to ${preset.label}`}
                       >
@@ -3368,12 +3370,23 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
+                    onClick={handleRunLeadScrape}
+                    className="!bg-orange-600 hover:!bg-orange-700 !text-white flex items-center justify-center p-4 h-24 border border-orange-500"
+                    title="Lead Scraper"
+                  >
+                    <div className="text-center">
+                      <Users className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">Lead Scraper</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
                     onClick={() => setShowManualCallModal(true)}
                     className="!bg-teal-600 hover:!bg-teal-700 !text-white flex items-center justify-center p-4 h-24 border border-teal-500"
                     title="Manual Call Start - Opens call script + manual option"
                   >
                     <div className="text-center">
-                      <PhoneOff className="w-6 h-6 mx-auto mb-2" />
+                      <Phone className="w-6 h-6 mx-auto mb-2" />
                       <span className="text-sm font-medium">Manual Call Start</span>
                     </div>
                   </Button>
@@ -3426,17 +3439,6 @@ export default function CommandCenter() {
                     <div className="text-center">
                       <Download className="w-6 h-6 mx-auto mb-2" />
                       <span className="text-sm font-medium">Export Dashboard</span>
-                    </div>
-                  </Button>
-
-                  <Button
-                    onClick={handleRunLeadScrape}
-                    className="!bg-orange-600 hover:!bg-orange-700 !text-white flex items-center justify-center p-4 h-24 border border-orange-500"
-                    title="Lead Scraper"
-                  >
-                    <div className="text-center">
-                      <Users className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Lead Scraper</span>
                     </div>
                   </Button>
                 </div>
