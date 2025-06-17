@@ -3458,7 +3458,7 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                       <Button
                         onClick={handleUploadDocs}
-                        className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center p-4 h-20 border border-slate-500"
+                        className="!bg-purple-600 hover:!bg-purple-700 !text-white flex items-center justify-center p-4 h-20 border border-purple-500"
                         title="PDF & Knowledge Upload"
                       >
                         <div className="text-center">
@@ -3469,7 +3469,7 @@ export default function CommandCenter() {
                       
                       <Button
                         onClick={handleViewKnowledge}
-                        className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center p-4 h-20 border border-slate-500"
+                        className="!bg-indigo-600 hover:!bg-indigo-700 !text-white flex items-center justify-center p-4 h-20 border border-indigo-500"
                         title="Knowledge Areas"
                       >
                         <div className="text-center">
@@ -3480,7 +3480,7 @@ export default function CommandCenter() {
                       
                       <Button
                         onClick={handleRunDiagnostics}
-                        className="bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center p-4 h-20 border border-slate-500"
+                        className="!bg-blue-600 hover:!bg-blue-700 !text-white flex items-center justify-center p-4 h-20 border border-blue-500"
                         title="System Diagnostics"
                       >
                         <div className="text-center">
