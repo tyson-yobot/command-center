@@ -65,7 +65,8 @@ import {
   ChevronDown,
   ChevronUp,
   Shield,
-  Smartphone
+  Smartphone,
+  History
 } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -270,6 +271,7 @@ export default function CommandCenter() {
     dateRange: 'last_30_days'
   });
   const [showCreateVoiceCallModal, setShowCreateVoiceCallModal] = useState(false);
+  const [showCommandHistory, setShowCommandHistory] = useState(false);
 
   // Test statistics for Live Integration Test Results
   const testStats = {
@@ -4408,67 +4410,290 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Key Performance Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Active Calls</CardTitle>
-              <Phone className="h-4 w-4 text-green-400" />
+        {/* New Consolidated Layout - Top Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* Call Controls */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Phone className="w-5 h-5 mr-2 text-green-400" />
+                Call Controls
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">
-                {""}
+              <div className="space-y-3">
+                <Button
+                  onClick={handleStartPipelineCalls}
+                  className="w-full bg-green-600 hover:bg-green-700 text-white"
+                >
+                  <Play className="w-4 h-4 mr-2" />
+                  Start Pipeline
+                </Button>
+                <Button
+                  onClick={handleStopPipelineCalls}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white"
+                >
+                  <PhoneOff className="w-4 h-4 mr-2" />
+                  End Pipeline
+                </Button>
+                <div className="text-sm text-slate-300 mt-2">
+                  Status: <span className="text-green-400">{voiceStatus}</span>
+                </div>
               </div>
-              <p className="text-xs text-green-400">
-                {currentSystemMode === 'test' ? (metrics?.activeCalls ? 'Live voice sessions' : 'No active sessions') : ''}
-              </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Bot Processing</CardTitle>
-              <Brain className="h-4 w-4 text-blue-400" />
+          {/* Revenue Snapshot */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-emerald-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <DollarSign className="w-5 h-5 mr-2 text-emerald-400" />
+                Revenue Snapshot
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">
-                0
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Sales Today:</span>
+                  <span className="text-emerald-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.salesToday || '--') : '--'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Open Invoices:</span>
+                  <span className="text-yellow-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.openInvoices || '--') : '--'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Avg Quote Value:</span>
+                  <span className="text-blue-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.avgQuoteValue || '--') : '--'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Monthly MRR:</span>
+                  <span className="text-purple-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.monthlyMRR || '--') : '--'}
+                  </span>
+                </div>
               </div>
-              <p className="text-xs text-blue-400">
-                {""}
-              </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">Success Rate</CardTitle>
-              <DollarSign className="h-4 w-4 text-emerald-400" />
+          {/* Voice Analytics (Enhanced) */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-purple-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Brain className="w-5 h-5 mr-2 text-purple-400" />
+                Voice Analytics
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">
-                {""}
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Failed Calls %:</span>
+                  <span className="text-red-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.failedCallsPercent || '--') : '--'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Bot Accuracy:</span>
+                  <span className="text-green-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.botAccuracy || '--') : '--'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Calls Scheduled:</span>
+                  <span className="text-blue-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.callsScheduled || '--') : '--'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Qualification Score:</span>
+                  <span className="text-cyan-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.qualificationScore || '--') : '--'}
+                  </span>
+                </div>
               </div>
-              <p className="text-xs text-emerald-400 flex items-center">
-                {automationPerformance?.successRate && <div className="w-1 h-1 bg-emerald-400 rounded-full mr-1"></div>}
-                {currentSystemMode === 'test' ? (automationPerformance?.successRate ? 'Live automation rate' : 'No automation data') : ''}
-              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Second Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* Smart Calendar (Compact) */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-orange-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Calendar className="w-5 h-5 mr-2 text-orange-400" />
+                Smart Calendar
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="text-sm text-slate-300">Today's Bookings:</div>
+                <div className="text-lg font-bold text-white">
+                  {currentSystemMode === 'live' ? (metrics?.data?.todayBookings || '0') : '0'}
+                </div>
+                <div className="text-xs text-orange-400">
+                  {currentSystemMode === 'live' ? 'Live calendar sync active' : 'Calendar sync disabled in live mode'}
+                </div>
+              </div>
             </CardContent>
           </Card>
 
+          {/* Call Pipeline (Consolidated) */}
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
-              <CardTitle className="text-sm font-medium text-slate-300">System Health</CardTitle>
-              <Gauge className="h-4 w-4 text-amber-400" />
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Phone className="w-5 h-5 mr-2 text-blue-400" />
+                Call Pipeline
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-400">
-                0
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300">• Active Calls:</span>
+                  <span className="text-green-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.activeCalls || '0') : '0'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300">• Pending:</span>
+                  <span className="text-yellow-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.pendingCalls || '0') : '0'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300">• Completed:</span>
+                  <span className="text-blue-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.completedCalls || '0') : '0'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300">• Conversions:</span>
+                  <span className="text-purple-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.conversions || '0') : '0'}
+                  </span>
+                </div>
               </div>
-              <p className="text-xs text-green-400 flex items-center">
-                {metrics?.data?.systemUptime && <div className="w-1 h-1 bg-red-400 rounded-full mr-1 animate-pulse"></div>}
-                {""}
-              </p>
+            </CardContent>
+          </Card>
+
+          {/* Command History (Compact) */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-cyan-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <History className="w-5 h-5 mr-2 text-cyan-400" />
+                Command History
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {currentSystemMode === 'live' ? (
+                  (metrics?.data?.recentCommands || []).slice(0, 3).map((cmd: any, index: number) => (
+                    <div key={index} className="text-xs text-slate-300 truncate">
+                      {cmd.timestamp}: {cmd.command}
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-xs text-slate-400">No recent commands</div>
+                )}
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="w-full mt-2 text-xs border-cyan-400 text-cyan-400"
+                  onClick={() => setShowCommandHistory(true)}
+                >
+                  View Details
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Third Row - System Health Panel */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          {/* System Health Panel (Consolidated) */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-amber-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Shield className="w-5 h-5 mr-2 text-amber-400" />
+                System Health Panel
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-slate-300">API:</span>
+                  <span className="text-green-400">✅</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300">VoiceBot:</span>
+                  <span className="text-yellow-400">🔄</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300">Slack Alerts:</span>
+                  <span className="text-green-400">✅</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300">Logger:</span>
+                  <span className="text-red-400">🛑</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* QA Summary */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-indigo-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <TestTube className="w-5 h-5 mr-2 text-indigo-400" />
+                QA Summary
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Tests Passed:</span>
+                  <span className="text-green-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.testsPassed || '--') : '--'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Quality Score:</span>
+                  <span className="text-blue-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.qualityScore || '--') : '--'}
+                  </span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Task Queue / Uptime */}
+          <Card className="bg-white/10 backdrop-blur-sm border border-violet-400">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Clock className="w-5 h-5 mr-2 text-violet-400" />
+                Task Queue / Uptime
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">Queue Tasks:</span>
+                  <span className="text-yellow-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.queueTasks || '0') : '0'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 text-sm">System Uptime:</span>
+                  <span className="text-green-400 font-bold">
+                    {currentSystemMode === 'live' ? (metrics?.data?.systemUptime || '--') : '--'}
+                  </span>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
