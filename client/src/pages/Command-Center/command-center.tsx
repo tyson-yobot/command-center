@@ -3739,19 +3739,19 @@ export default function CommandCenter() {
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="flex justify-between">
                           <span className="text-purple-300 text-sm">Budget Efficiency:</span>
-                          <span className="text-slate-400 font-bold">0</span>
+                          <span className="text-slate-400 font-bold">--</span>
                         </div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="flex justify-between">
                           <span className="text-purple-300 text-sm">Cost Per Lead:</span>
-                          <span className="text-slate-400 font-bold">0</span>
+                          <span className="text-slate-400 font-bold">--</span>
                         </div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="flex justify-between">
                           <span className="text-purple-300 text-sm">ROI:</span>
-                          <span className="text-slate-400 font-bold">0</span>
+                          <span className="text-slate-400 font-bold">--</span>
                         </div>
                       </div>
                     </div>
@@ -3767,19 +3767,19 @@ export default function CommandCenter() {
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="flex justify-between">
                           <span className="text-purple-300 text-sm">AI Accuracy:</span>
-                          <span className="text-slate-400 font-bold">0</span>
+                          <span className="text-slate-400 font-bold">--</span>
                         </div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="flex justify-between">
                           <span className="text-purple-300 text-sm">Interactions:</span>
-                          <span className="text-slate-400 font-bold">0</span>
+                          <span className="text-slate-400 font-bold">--</span>
                         </div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="flex justify-between">
                           <span className="text-purple-300 text-sm">Learning Rate:</span>
-                          <span className="text-slate-400 font-bold">0</span>
+                          <span className="text-slate-400 font-bold">--</span>
                         </div>
                       </div>
                     </div>
@@ -3867,11 +3867,11 @@ export default function CommandCenter() {
                     <div className="space-y-3">
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-sm text-red-300 mb-1">Uptime</div>
-                        <div className="text-2xl font-bold text-slate-400">0</div>
+                        <div className="text-2xl font-bold text-slate-400">--</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-sm text-red-300 mb-1">Response Time</div>
-                        <div className="text-lg font-bold text-slate-400">0</div>
+                        <div className="text-lg font-bold text-slate-400">--</div>
                       </div>
                     </div>
                   </div>
@@ -3885,11 +3885,11 @@ export default function CommandCenter() {
                     <div className="space-y-3">
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-sm text-red-300 mb-1">NPS Score</div>
-                        <div className="text-2xl font-bold text-slate-400">0</div>
+                        <div className="text-2xl font-bold text-slate-400">--</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-sm text-red-300 mb-1">Active Clients</div>
-                        <div className="text-lg font-bold text-slate-400">0</div>
+                        <div className="text-lg font-bold text-slate-400">--</div>
                       </div>
                     </div>
                   </div>
@@ -4091,11 +4091,11 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Active Workflows:</span>
-                    <span className="text-white font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Calls 100-1,000+ per day:</span>
-                    <span className="text-blue-400 font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Engine Status:</span>
@@ -4117,15 +4117,15 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Active Clients:</span>
-                    <span className="text-white font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">NPS Score:</span>
-                    <span className="text-green-400 font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Satisfaction:</span>
-                    <span className="text-slate-400 font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                 </div>
               </CardContent>
@@ -4143,15 +4143,15 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Success Rate:</span>
-                    <span className="text-slate-400 font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Response Time:</span>
-                    <span className="text-slate-400 font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Uptime:</span>
-                    <span className="text-slate-400 font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                 </div>
               </CardContent>
@@ -4177,19 +4177,19 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">iOS App Status:</span>
-                    <span className="text-green-400 font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Android App Status:</span>
-                    <span className="text-green-400 font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Last Sync:</span>
-                    <span className="text-white font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Push Alerts:</span>
-                    <span className="text-blue-400 font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                 </div>
               </CardContent>
@@ -4210,7 +4210,7 @@ export default function CommandCenter() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Last PDF Generated:</span>
-                    <span className="text-white font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300 text-sm">Export Status:</span>
@@ -4335,7 +4335,7 @@ export default function CommandCenter() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300 text-sm">API Integrity:</span>
-                        <span className="text-green-400 font-bold">0</span>
+                        <span className="text-slate-400 font-bold">--</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300 text-sm">Data Quality:</span>
@@ -4613,7 +4613,7 @@ export default function CommandCenter() {
                   <span className="text-slate-300 text-sm">Active Clients:</span>
                   <div className="flex items-center space-x-1">
                     {metrics?.data?.activeClients && <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>}
-                    <span className="text-white font-bold">0</span>
+                    <span className="text-slate-400 font-bold">--</span>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
@@ -4670,7 +4670,7 @@ export default function CommandCenter() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">Usage %:</span>
-                  <span className="text-green-400 font-bold">0</span>
+                  <span className="text-slate-400 font-bold">--</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300 text-sm">System Load:</span>
@@ -8305,11 +8305,11 @@ export default function CommandCenter() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Total Reach:</span>
-                        <span className="text-blue-400 font-bold">156K</span>
+                        <span className="text-slate-400 font-bold">--</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Best Time to Post:</span>
-                        <span className="text-orange-400 font-bold">2:00 PM EST</span>
+                        <span className="text-slate-400 font-bold">{liveActivity?.bestPostTime || ''}</span>
                       </div>
                       <div className="bg-slate-700/40 rounded p-3">
                         <div className="text-sm text-slate-300 mb-2">Top Performing Content:</div>
@@ -8389,19 +8389,19 @@ export default function CommandCenter() {
                     <div className="space-y-3">
                       <div className="flex justify-between">
                         <span className="text-slate-300">Total Subscribers:</span>
-                        <span className="text-slate-400 font-bold">0</span>
+                        <span className="text-slate-400 font-bold">--</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Open Rate:</span>
-                        <span className="text-slate-400 font-bold">0</span>
+                        <span className="text-slate-400 font-bold">--</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Click Rate:</span>
-                        <span className="text-slate-400 font-bold">0</span>
+                        <span className="text-slate-400 font-bold">--</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Growth This Month:</span>
-                        <span className="text-slate-400 font-bold">0</span>
+                        <span className="text-slate-400 font-bold">--</span>
                       </div>
                     </div>
                   </CardContent>
@@ -8451,7 +8451,7 @@ export default function CommandCenter() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Best Send Time:</span>
-                        <span className="text-blue-400 font-bold">Tue 10AM</span>
+                        <span className="text-slate-400 font-bold">{liveActivity?.nextScheduled || ''}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-300">Mobile Opens:</span>
@@ -9240,7 +9240,7 @@ export default function CommandCenter() {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Total Calls:</span>
-                      <span className="text-white font-bold">0</span>
+                      <span className="text-slate-400 font-bold">--</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-300 text-sm">Success Rate:</span>
