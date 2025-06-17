@@ -47,7 +47,9 @@ class AirtableLeadsService {
       throw new Error('Airtable credentials not configured');
     }
     
-    this.apiKey = apiKey.trim();
+    // Extract only the actual Airtable token (starts with 'pat' and is ~40 chars)
+    const tokenMatch = apiKey.match(/pat[a-zA-Z0-9.]{30,50}/);
+    this.apiKey = tokenMatch ? tokenMatch[0] : apiKey.trim();
     this.baseId = baseId.trim();
     this.tableId = tableId.trim();
   }

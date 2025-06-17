@@ -19,9 +19,11 @@ export async function testAirtableConnection() {
   }
   
   try {
-    // Clean token of any invalid characters
-    const cleanToken = token.replace(/[^\w.-]/g, '').trim();
-    console.log('Clean token length:', cleanToken.length);
+    // Extract only the actual Airtable token (starts with 'pat' and is ~40 chars)
+    const tokenMatch = token.match(/pat[a-zA-Z0-9.]{30,50}/);
+    const cleanToken = tokenMatch ? tokenMatch[0] : '';
+    console.log('Extracted token length:', cleanToken.length);
+    console.log('Token format valid:', /^pat[a-zA-Z0-9.]+$/.test(cleanToken));
     
     // Test 1: Basic API access
     const response = await fetch(`https://api.airtable.com/v0/meta/bases`, {
