@@ -8426,6 +8426,13 @@ export default function CommandCenter() {
         </Dialog>
       )}
 
+      {/* Lead Scraper Popup */}
+      <LeadScraperPopup 
+        isOpen={showLeadScraperPopup}
+        onClose={() => setShowLeadScraperPopup(false)}
+        defaultTab={leadScraperDefaultTab}
+      />
+
       </div>
     </div>
   );
