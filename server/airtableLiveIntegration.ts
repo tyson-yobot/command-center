@@ -49,7 +49,10 @@ class AirtableLiveIntegration {
   private baseUrl = 'https://api.airtable.com/v0';
 
   constructor() {
-    this.apiKey = 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa';
+    this.apiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
+    if (!this.apiKey) {
+      console.error('No Airtable API key found in environment variables');
+    }
   }
 
   private getHeaders() {

@@ -1199,7 +1199,7 @@ export default function CommandCenter() {
   };
 
   const handleSendMessage = async () => {
-    if (!currentMessage.trim()) return;
+    if (!currentMessage || !currentMessage.trim()) return;
 
     const userMessage = {
       id: Date.now().toString(),
@@ -1241,7 +1241,7 @@ export default function CommandCenter() {
   };
 
   const handleCreateTicket = async () => {
-    if (!newTicketSubject.trim()) return;
+    if (!newTicketSubject || !newTicketSubject.trim()) return;
     
     try {
       const response = await fetch('/api/zendesk/create-ticket', {
