@@ -1417,31 +1417,24 @@ export default function CommandCenter() {
 
   const handleStartPipelineCalls = async () => {
     try {
-      setVoiceStatus('Loading leads from Airtable and starting pipeline...');
-      const response = await fetch('/api/pipeline/start', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          action: 'start_pipeline',
-          leadSource: 'airtable',
-          baseId: 'appb2f3D77Tc4DWAr',
-          tableId: 'tbluqrDSomu5UVhDw'
-        })
+      setVoiceStatus('Starting pipeline with leads from Scraped Leads (Universal)...');
+      
+      const result = await CommandCenterActions.startPipeline({
+        triggeredBy: 'Command Center User',
+        additionalData: { source: 'Quick Action Launchpad' }
       });
       
-      if (response.ok) {
-        const result = await response.json();
-        setVoiceStatus(`Pipeline started with ${result.leadCount || 0} leads loaded`);
+      if (result.success) {
+        setVoiceStatus(`Pipeline started successfully with ${result.data?.callsStarted || 0} calls initiated`);
         setToast({ 
           title: "Pipeline Started", 
-          description: `${result.leadCount || 0} leads loaded from Airtable - calls initiated` 
+          description: `${result.data?.callsStarted || 0} calls initiated from Scraped Leads (Universal)` 
         });
       } else {
-        const error = await response.json();
-        setVoiceStatus('Pipeline start failed - check Airtable connection');
+        setVoiceStatus('Pipeline start failed - ' + (result.error || 'Unknown error'));
         setToast({ 
           title: "Pipeline Failed", 
-          description: error.error || "Unable to load leads from Airtable",
+          description: result.error || "Unable to start pipeline",
           variant: "destructive" 
         });
       }
@@ -1454,6 +1447,84 @@ export default function CommandCenter() {
       });
     }
   };
+
+  const handleLeadScraper = async () => {
+    try {
+      setVoiceStatus('Opening Lead Scraper tool...');
+      window.open('/lead-scraper', '_blank');
+      setVoiceStatus('Lead Scraper opened in new tab');
+      setToast({ 
+        title: "Lead Scraper", 
+        description: "Opening Lead Scraper tool"
+      });
+    } catch (error) {
+      setVoiceStatus('Lead Scraper navigation error');
+      setToast({ 
+        title: "Error", 
+        description: "Unable to navigate to Lead Scraper",
+        variant: "destructive" 
+      });
+    }
+  };
+
+  const handleMailchimpSync = async () => {
+    try {
+      setVoiceStatus('Opening MailChimp...');
+      window.open('https://mailchimp.com', '_blank');
+      setVoiceStatus('MailChimp opened in new tab');
+      setToast({ 
+        title: "MailChimp", 
+        description: "Opening MailChimp platform"
+      });
+    } catch (error) {
+      setVoiceStatus('MailChimp navigation error');
+      setToast({ 
+        title: "Error", 
+        description: "Unable to open MailChimp",
+        variant: "destructive" 
+      });
+    }
+  };
+
+  const handleContentCreatorSync = async () => {
+    try {
+      setVoiceStatus('Opening Jasper.ai...');
+      window.open('https://jasper.ai', '_blank');
+      setVoiceStatus('Jasper.ai opened in new tab');
+      setToast({ 
+        title: "Content Creator", 
+        description: "Opening Jasper.ai platform"
+      });
+    } catch (error) {
+      setVoiceStatus('Content Creator navigation error');
+      setToast({ 
+        title: "Error", 
+        description: "Unable to open Jasper.ai",
+        variant: "destructive" 
+      });
+    }
+  };
+
+  const handleHubSpotCRM = async () => {
+    try {
+      setVoiceStatus('Opening HubSpot CRM...');
+      window.open('https://app.hubspot.com', '_blank');
+      setVoiceStatus('HubSpot CRM opened in new tab');
+      setToast({ 
+        title: "HubSpot CRM", 
+        description: "Opening HubSpot CRM platform"
+      });
+    } catch (error) {
+      setVoiceStatus('HubSpot CRM navigation error');
+      setToast({ 
+        title: "Error", 
+        description: "Unable to open HubSpot CRM",
+        variant: "destructive" 
+      });
+    }
+  };
+
+
 
   const handleStopPipelineCalls = async () => {
     try {
@@ -3197,8 +3268,8 @@ export default function CommandCenter() {
             </CardHeader>
             {!collapsedSections['quick-actions'] && (
               <CardContent className="p-6">
-                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {/* Pipeline Group - Same Color (Green) */}
+                <div className="grid grid-cols-3 gap-4">
+                  {/* Top Row - Green Pipeline Controls */}
                   <Button
                     onClick={handleStartPipelineCalls}
                     className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500"
@@ -3222,7 +3293,7 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => setActiveTab('lead-scraper')}
+                    onClick={handleLeadScraper}
                     className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500"
                     title="Lead Scraper Tool"
                   >
@@ -3231,8 +3302,42 @@ export default function CommandCenter() {
                       <span className="text-sm font-medium">Lead Scraper</span>
                     </div>
                   </Button>
+
+                  {/* Middle Row - Purple Content & Marketing */}
+                  <Button
+                    onClick={handleContentCreatorSync}
+                    className="!bg-purple-600 hover:!bg-purple-700 !text-white flex items-center justify-center p-4 h-24 border border-purple-500"
+                    title="Content Creator - Jasper.ai"
+                  >
+                    <div className="text-center">
+                      <PenTool className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">Content Creator</span>
+                    </div>
+                  </Button>
+
+                  <Button
+                    onClick={handleCreateSupportTicket}
+                    className="!bg-purple-600 hover:!bg-purple-700 !text-white flex items-center justify-center p-4 h-24 border border-purple-500"
+                    title="Submit Ticket"
+                  >
+                    <div className="text-center">
+                      <Ticket className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">Submit Ticket</span>
+                    </div>
+                  </Button>
                   
-                  {/* Analytics Group - Same Color (Orange) */}
+                  <Button
+                    onClick={handleMailchimpSync}
+                    className="!bg-purple-600 hover:!bg-purple-700 !text-white flex items-center justify-center p-4 h-24 border border-purple-500"
+                    title="MailChimp Sync"
+                  >
+                    <div className="text-center">
+                      <Mail className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">MailChimp</span>
+                    </div>
+                  </Button>
+
+                  {/* Bottom Row - Orange Analytics & CRM */}
                   <Button
                     onClick={() => setShowAnalyticsModal(true)}
                     className="!bg-orange-600 hover:!bg-orange-700 !text-white flex items-center justify-center p-4 h-24 border border-orange-500"
@@ -3254,44 +3359,17 @@ export default function CommandCenter() {
                       <span className="text-sm font-medium">Quick Export</span>
                     </div>
                   </Button>
-                  
-                  {/* Content & Marketing Group */}
-                  <Button
-                    onClick={handleMailchimpSync}
-                    className="!bg-blue-600 hover:!bg-blue-700 !text-white flex items-center justify-center p-4 h-24 border border-blue-500"
-                    title="MailChimp Sync"
-                  >
-                    <div className="text-center">
-                      <Mail className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">MailChimp</span>
-                    </div>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleContentCreatorSync}
-                    className="!bg-purple-600 hover:!bg-purple-700 !text-white flex items-center justify-center p-4 h-24 border border-purple-500"
-                    title="Content Creator"
-                  >
-                    <div className="text-center">
-                      <PenTool className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Content Creator</span>
-                    </div>
-                  </Button>
-                  
-                  {/* Support & Admin */}
-                  <Button
-                    onClick={handleCreateSupportTicket}
-                    className="!bg-violet-600 hover:!bg-violet-700 !text-white flex items-center justify-center p-4 h-24 border border-violet-500"
-                    title="Submit Ticket"
-                  >
-                    <div className="text-center">
-                      <Ticket className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Submit Ticket</span>
-                    </div>
-                  </Button>
-                  
 
-
+                  <Button
+                    onClick={handleHubSpotCRM}
+                    className="!bg-orange-600 hover:!bg-orange-700 !text-white flex items-center justify-center p-4 h-24 border border-orange-500"
+                    title="HubSpot CRM"
+                  >
+                    <div className="text-center">
+                      <Building className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">HubSpot CRM</span>
+                    </div>
+                  </Button>
                 </div>
                 
                 {/* Advanced Tools Section */}

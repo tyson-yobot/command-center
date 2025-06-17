@@ -1,27 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  Search, 
-  Download, 
-  Users, 
-  Globe, 
-  Building, 
-  Mail, 
-  Phone, 
-  MapPin,
-  AlertCircle,
-  CheckCircle,
-  Loader2,
-  FileText,
-  Database
-} from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
+import { 
+  Search, Users, Building, MapPin, Loader2, 
+  CheckCircle, AlertCircle, ArrowLeft, Download,
+  Linkedin, Globe, Database, RefreshCw
+} from 'lucide-react';
+import { Link } from 'wouter';
 
 interface ScrapedLead {
   firstName: string;
@@ -34,65 +26,98 @@ interface ScrapedLead {
   source: string;
 }
 
-export default function LeadScraper() {
+interface ScrapeResult {
+  success: boolean;
+  data?: {
+    leads: ScrapedLead[];
+    total: number;
+    query: string;
+    source: string;
+  };
+  message?: string;
+  error?: string;
+}
+
+const LeadScraper: React.FC = () => {
+  const { toast } = useToast();
+  
+  // Form state
   const [searchQuery, setSearchQuery] = useState('');
   const [industry, setIndustry] = useState('');
   const [location, setLocation] = useState('');
   const [companySize, setCompanySize] = useState('');
+  const [maxResults, setMaxResults] = useState(50);
+  const [selectedPlatform, setSelectedPlatform] = useState<'linkedin' | 'google'>('linkedin');
+  
+  // Scraping state
   const [isScrapingLinkedIn, setIsScrapingLinkedIn] = useState(false);
   const [isScrapingGoogle, setIsScrapingGoogle] = useState(false);
-  const [isSavingToAirtable, setIsSavingToAirtable] = useState(false);
   const [scrapedLeads, setScrapedLeads] = useState<ScrapedLead[]>([]);
-  const [progress, setProgress] = useState(0);
-  const [totalFound, setTotalFound] = useState(0);
-  const { toast } = useToast();
+  const [isSavingToAirtable, setIsSavingToAirtable] = useState(false);
+  const [scrapeProgress, setScrapeProgress] = useState(0);
+  const [statusMessage, setStatusMessage] = useState('');
+  
+  // Results state
+  const [linkedInResults, setLinkedInResults] = useState<ScrapedLead[]>([]);
+  const [googleResults, setGoogleResults] = useState<ScrapedLead[]>([]);
+  const [totalLeadsFound, setTotalLeadsFound] = useState(0);
+  const [lastScrapeTime, setLastScrapeTime] = useState<string>('');
 
   const handleLinkedInScrape = async () => {
     if (!searchQuery.trim()) {
       toast({
         title: "Search Query Required",
-        description: "Please enter a search query to begin scraping",
+        description: "Please enter a search query to scrape LinkedIn leads",
         variant: "destructive"
       });
       return;
     }
 
     setIsScrapingLinkedIn(true);
-    setProgress(0);
-    setScrapedLeads([]);
+    setScrapeProgress(0);
+    setStatusMessage('Initializing LinkedIn scraper...');
 
     try {
       const response = await fetch('/api/scraper/linkedin', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           query: searchQuery,
           industry,
           location,
           companySize,
-          maxResults: 100
-        })
+          maxResults
+        }),
       });
 
-      const data = await response.json();
-      
-      if (data.success) {
-        setScrapedLeads(data.data.leads);
-        setTotalFound(data.data.leads.length);
-        setProgress(100);
+      if (response.ok) {
+        const result: ScrapeResult = await response.json();
         
-        toast({
-          title: "LinkedIn Scraping Complete",
-          description: `Found ${data.data.leads.length} potential leads`
-        });
+        if (result.success && result.data) {
+          setLinkedInResults(result.data.leads);
+          setScrapedLeads(prev => [...prev, ...result.data.leads]);
+          setTotalLeadsFound(prev => prev + result.data.total);
+          setLastScrapeTime(new Date().toLocaleString());
+          setScrapeProgress(100);
+          setStatusMessage(`Successfully scraped ${result.data.total} leads from LinkedIn`);
+          
+          toast({
+            title: "LinkedIn Scrape Complete",
+            description: `Found ${result.data.total} new leads`,
+          });
+        } else {
+          throw new Error(result.error || 'Unknown error');
+        }
       } else {
-        throw new Error(data.error || 'LinkedIn scraping failed');
+        throw new Error(`Server error: ${response.status}`);
       }
-    } catch (error) {
-      console.error('LinkedIn scraping error:', error);
+    } catch (error: any) {
+      setStatusMessage(`LinkedIn scrape failed: ${error.message}`);
       toast({
-        title: "LinkedIn Scraping Failed",
-        description: error.message || "Unable to complete LinkedIn search",
+        title: "LinkedIn Scrape Failed",
+        description: error.message,
         variant: "destructive"
       });
     } finally {
@@ -104,46 +129,55 @@ export default function LeadScraper() {
     if (!searchQuery.trim()) {
       toast({
         title: "Search Query Required",
-        description: "Please enter a search query to begin scraping",
+        description: "Please enter a search query to scrape Google leads",
         variant: "destructive"
       });
       return;
     }
 
     setIsScrapingGoogle(true);
-    setProgress(0);
+    setScrapeProgress(0);
+    setStatusMessage('Initializing Google scraper...');
 
     try {
       const response = await fetch('/api/scraper/google', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-          query: searchQuery + (location ? ` ${location}` : ''),
+          query: searchQuery,
           industry,
-          maxResults: 50
-        })
+          maxResults: Math.min(maxResults, 30) // Google has lower limits
+        }),
       });
 
-      const data = await response.json();
-      
-      if (data.success) {
-        const combinedLeads = [...scrapedLeads, ...data.data.leads];
-        setScrapedLeads(combinedLeads);
-        setTotalFound(combinedLeads.length);
-        setProgress(100);
+      if (response.ok) {
+        const result: ScrapeResult = await response.json();
         
-        toast({
-          title: "Google Scraping Complete",
-          description: `Added ${data.data.leads.length} more leads from Google`
-        });
+        if (result.success && result.data) {
+          setGoogleResults(result.data.leads);
+          setScrapedLeads(prev => [...prev, ...result.data.leads]);
+          setTotalLeadsFound(prev => prev + result.data.total);
+          setLastScrapeTime(new Date().toLocaleString());
+          setScrapeProgress(100);
+          setStatusMessage(`Successfully scraped ${result.data.total} leads from Google`);
+          
+          toast({
+            title: "Google Scrape Complete",
+            description: `Found ${result.data.total} new leads`,
+          });
+        } else {
+          throw new Error(result.error || 'Unknown error');
+        }
       } else {
-        throw new Error(data.error || 'Google scraping failed');
+        throw new Error(`Server error: ${response.status}`);
       }
-    } catch (error) {
-      console.error('Google scraping error:', error);
+    } catch (error: any) {
+      setStatusMessage(`Google scrape failed: ${error.message}`);
       toast({
-        title: "Google Scraping Failed",
-        description: error.message || "Unable to complete Google search",
+        title: "Google Scrape Failed",
+        description: error.message,
         variant: "destructive"
       });
     } finally {
@@ -162,37 +196,50 @@ export default function LeadScraper() {
     }
 
     setIsSavingToAirtable(true);
+    setStatusMessage('Saving leads to Airtable...');
 
     try {
-      const response = await fetch('/api/airtable/scrape-leads', {
+      // Transform leads to match Airtable schema
+      const airtableLeads = scrapedLeads.map(lead => ({
+        firstName: lead.firstName,
+        lastName: lead.lastName,
+        email: lead.email,
+        phone: lead.phone,
+        company: lead.company,
+        status: 'New',
+        source: lead.source,
+        notes: `Title: ${lead.title}, Location: ${lead.location}`
+      }));
+
+      const response = await fetch('/api/airtable/leads', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          source: 'Lead Scraper Tool',
-          leads: scrapedLeads
-        })
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ leads: airtableLeads }),
       });
 
-      const data = await response.json();
-      
-      if (data.success) {
-        toast({
-          title: "Leads Saved Successfully",
-          description: `${data.data.leadsCreated} leads saved to Scraped Leads (Universal) table`
-        });
+      if (response.ok) {
+        const result = await response.json();
+        setStatusMessage(`Successfully saved ${scrapedLeads.length} leads to Scraped Leads (Universal)`);
         
-        // Clear the scraped leads after successful save
+        toast({
+          title: "Leads Saved to Airtable",
+          description: `${scrapedLeads.length} leads saved to Scraped Leads (Universal) table`,
+        });
+
+        // Clear scraped leads after successful save
         setScrapedLeads([]);
-        setTotalFound(0);
-        setProgress(0);
+        setLinkedInResults([]);
+        setGoogleResults([]);
       } else {
-        throw new Error(data.error || 'Failed to save leads to Airtable');
+        throw new Error(`Failed to save to Airtable: ${response.status}`);
       }
-    } catch (error) {
-      console.error('Save to Airtable error:', error);
+    } catch (error: any) {
+      setStatusMessage(`Failed to save to Airtable: ${error.message}`);
       toast({
         title: "Save Failed",
-        description: error.message || "Unable to save leads to Airtable",
+        description: "Unable to save leads to Airtable",
         variant: "destructive"
       });
     } finally {
@@ -210,240 +257,331 @@ export default function LeadScraper() {
       return;
     }
 
-    const csvHeader = 'First Name,Last Name,Email,Phone,Company,Title,Location,Source\n';
-    const csvData = scrapedLeads.map(lead => 
-      `"${lead.firstName}","${lead.lastName}","${lead.email}","${lead.phone}","${lead.company}","${lead.title}","${lead.location}","${lead.source}"`
-    ).join('\n');
+    const headers = ['First Name', 'Last Name', 'Email', 'Phone', 'Company', 'Title', 'Location', 'Source'];
+    const csvContent = [
+      headers.join(','),
+      ...scrapedLeads.map(lead => [
+        lead.firstName,
+        lead.lastName,
+        lead.email,
+        lead.phone,
+        lead.company,
+        lead.title,
+        lead.location,
+        lead.source
+      ].map(field => `"${field}"`).join(','))
+    ].join('\n');
 
-    const blob = new Blob([csvHeader + csvData], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `scraped-leads-${new Date().toISOString().split('T')[0]}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `scraped_leads_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
     toast({
-      title: "CSV Export Complete",
-      description: `Exported ${scrapedLeads.length} leads to CSV file`
+      title: "Export Complete",
+      description: "Leads exported to CSV file",
     });
   };
 
+  // Simulate progress for better UX
+  useEffect(() => {
+    if (isScrapingLinkedIn || isScrapingGoogle) {
+      const interval = setInterval(() => {
+        setScrapeProgress(prev => {
+          if (prev >= 90) return prev;
+          return prev + Math.random() * 15;
+        });
+      }, 500);
+
+      return () => clearInterval(interval);
+    }
+  }, [isScrapingLinkedIn, isScrapingGoogle]);
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-white">Lead Scraper</h1>
-          <p className="text-slate-300 mt-2">Search and collect leads from LinkedIn, Google, and other sources</p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 p-4">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Link href="/command-center">
+              <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Command Center
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-white flex items-center">
+                <Search className="w-8 h-8 mr-3 text-green-400" />
+                Lead Scraper
+              </h1>
+              <p className="text-white/60 mt-1">
+                Scrape leads from LinkedIn and Google, then save to Scraped Leads (Universal)
+              </p>
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="text-green-400 font-semibold">{totalLeadsFound} Total Leads Found</div>
+            {lastScrapeTime && (
+              <div className="text-white/60 text-sm">Last scrape: {lastScrapeTime}</div>
+            )}
+          </div>
         </div>
-        <Badge className="bg-cyan-600 text-white px-4 py-2 text-sm">
-          <Database className="w-4 h-4 mr-2" />
-          Saves to Scraped Leads (Universal)
-        </Badge>
-      </div>
 
-      {/* Search Configuration */}
-      <Card className="bg-slate-800/50 border border-slate-600">
-        <CardHeader>
-          <CardTitle className="text-white flex items-center">
-            <Search className="w-5 h-5 mr-2" />
-            Search Configuration
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Search Query *</label>
-              <Input
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="e.g., Marketing Director, Software Engineer, CEO"
-                className="bg-slate-700 border-slate-600 text-white"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Industry</label>
-              <Select value={industry} onValueChange={setIndustry}>
-                <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
-                  <SelectValue placeholder="Select industry" />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-700 border-slate-600">
-                  <SelectItem value="technology">Technology</SelectItem>
-                  <SelectItem value="healthcare">Healthcare</SelectItem>
-                  <SelectItem value="finance">Finance</SelectItem>
-                  <SelectItem value="marketing">Marketing</SelectItem>
-                  <SelectItem value="consulting">Consulting</SelectItem>
-                  <SelectItem value="real-estate">Real Estate</SelectItem>
-                  <SelectItem value="education">Education</SelectItem>
-                  <SelectItem value="retail">Retail</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Location</label>
-              <Input
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="e.g., New York, California, Remote"
-                className="bg-slate-700 border-slate-600 text-white"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Company Size</label>
-              <Select value={companySize} onValueChange={setCompanySize}>
-                <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
-                  <SelectValue placeholder="Select company size" />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-700 border-slate-600">
-                  <SelectItem value="startup">Startup (1-10)</SelectItem>
-                  <SelectItem value="small">Small (11-50)</SelectItem>
-                  <SelectItem value="medium">Medium (51-200)</SelectItem>
-                  <SelectItem value="large">Large (201-1000)</SelectItem>
-                  <SelectItem value="enterprise">Enterprise (1000+)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Scraping Actions */}
-      <Card className="bg-slate-800/50 border border-slate-600">
-        <CardHeader>
-          <CardTitle className="text-white">Scraping Tools</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Button
-              onClick={handleLinkedInScrape}
-              disabled={isScrapingLinkedIn || !searchQuery.trim()}
-              className="bg-blue-600 hover:bg-blue-700 text-white h-16"
-            >
-              {isScrapingLinkedIn ? (
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              ) : (
-                <Globe className="w-5 h-5 mr-2" />
-              )}
-              {isScrapingLinkedIn ? 'Scraping LinkedIn...' : 'Scrape LinkedIn'}
-            </Button>
-            
-            <Button
-              onClick={handleGoogleScrape}
-              disabled={isScrapingGoogle || !searchQuery.trim()}
-              className="bg-green-600 hover:bg-green-700 text-white h-16"
-            >
-              {isScrapingGoogle ? (
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              ) : (
-                <Search className="w-5 h-5 mr-2" />
-              )}
-              {isScrapingGoogle ? 'Scraping Google...' : 'Scrape Google'}
-            </Button>
-          </div>
-
-          {(isScrapingLinkedIn || isScrapingGoogle) && (
-            <div className="mt-4 space-y-2">
-              <div className="flex justify-between text-sm text-slate-300">
-                <span>Scraping Progress</span>
-                <span>{progress}%</span>
-              </div>
-              <Progress value={progress} className="w-full" />
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Results */}
-      {scrapedLeads.length > 0 && (
-        <Card className="bg-slate-800/50 border border-slate-600">
+        {/* Search Configuration */}
+        <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-white flex items-center">
-                <Users className="w-5 h-5 mr-2" />
-                Scraped Leads ({totalFound})
-              </CardTitle>
-              <div className="flex space-x-2">
-                <Button
-                  onClick={handleExportCSV}
-                  variant="outline"
-                  className="border-slate-600 text-slate-300 hover:bg-slate-700"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Export CSV
-                </Button>
-                <Button
-                  onClick={handleSaveToAirtable}
-                  disabled={isSavingToAirtable}
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
-                >
-                  {isSavingToAirtable ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  ) : (
-                    <Database className="w-4 h-4 mr-2" />
-                  )}
-                  {isSavingToAirtable ? 'Saving...' : 'Save to Airtable'}
-                </Button>
-              </div>
-            </div>
+            <CardTitle className="text-white flex items-center">
+              <Building className="w-5 h-5 mr-2" />
+              Search Configuration
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3 max-h-96 overflow-y-auto">
-              {scrapedLeads.map((lead, index) => (
-                <div key={index} className="bg-slate-700/50 p-4 rounded-lg border border-slate-600">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <div className="font-medium text-white">
-                        {lead.firstName} {lead.lastName}
-                      </div>
-                      <div className="text-sm text-slate-300">{lead.title}</div>
-                    </div>
-                    <div>
-                      <div className="flex items-center text-sm text-slate-300 mb-1">
-                        <Building className="w-3 h-3 mr-1" />
-                        {lead.company}
-                      </div>
-                      <div className="flex items-center text-sm text-slate-300">
-                        <MapPin className="w-3 h-3 mr-1" />
-                        {lead.location}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex items-center text-sm text-slate-300 mb-1">
-                        <Mail className="w-3 h-3 mr-1" />
-                        {lead.email}
-                      </div>
-                      <div className="flex items-center text-sm text-slate-300">
-                        <Phone className="w-3 h-3 mr-1" />
-                        {lead.phone}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-white">Search Query *</Label>
+                <Input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="e.g., Marketing Manager, Software Engineer"
+                  className="bg-white/20 border-white/30 text-white placeholder:text-white/50"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-white">Industry</Label>
+                <Select value={industry} onValueChange={setIndustry}>
+                  <SelectTrigger className="bg-white/20 border-white/30 text-white">
+                    <SelectValue placeholder="Select industry" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="technology">Technology</SelectItem>
+                    <SelectItem value="finance">Finance</SelectItem>
+                    <SelectItem value="healthcare">Healthcare</SelectItem>
+                    <SelectItem value="retail">Retail</SelectItem>
+                    <SelectItem value="manufacturing">Manufacturing</SelectItem>
+                    <SelectItem value="education">Education</SelectItem>
+                    <SelectItem value="real-estate">Real Estate</SelectItem>
+                    <SelectItem value="consulting">Consulting</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-white">Location</Label>
+                <Input
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="e.g., New York, San Francisco"
+                  className="bg-white/20 border-white/30 text-white placeholder:text-white/50"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-white">Max Results</Label>
+                <Select value={maxResults.toString()} onValueChange={(value) => setMaxResults(parseInt(value))}>
+                  <SelectTrigger className="bg-white/20 border-white/30 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="25">25 leads</SelectItem>
+                    <SelectItem value="50">50 leads</SelectItem>
+                    <SelectItem value="100">100 leads</SelectItem>
+                    <SelectItem value="200">200 leads</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </CardContent>
         </Card>
-      )}
 
-      {/* Help Section */}
-      <Card className="bg-slate-800/50 border border-slate-600">
-        <CardHeader>
-          <CardTitle className="text-white flex items-center">
-            <AlertCircle className="w-5 h-5 mr-2" />
-            Usage Instructions
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="text-slate-300 space-y-2">
-          <p>• Enter a specific search query (job titles, industries, or keywords)</p>
-          <p>• Use filters to narrow down your search by industry, location, and company size</p>
-          <p>• Scrape from LinkedIn for professional profiles and Google for business contacts</p>
-          <p>• All scraped leads are automatically saved to the "Scraped Leads (Universal)" Airtable</p>
-          <p>• Pipeline calls will pull leads from this same Airtable for maximum efficiency</p>
-        </CardContent>
-      </Card>
+        {/* Scraping Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* LinkedIn Scraper */}
+          <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-400/30">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Linkedin className="w-5 h-5 mr-2 text-blue-400" />
+                LinkedIn Scraper
+                <Badge className="ml-2 bg-blue-500 text-white">Professional</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="text-white/80 text-sm">
+                Scrape professional profiles and contact information from LinkedIn based on job titles, industries, and locations.
+              </div>
+              
+              {isScrapingLinkedIn && (
+                <div className="space-y-2">
+                  <Progress value={scrapeProgress} className="w-full" />
+                  <div className="text-white/60 text-sm flex items-center">
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Scraping LinkedIn profiles...
+                  </div>
+                </div>
+              )}
+              
+              <Button
+                onClick={handleLinkedInScrape}
+                disabled={isScrapingLinkedIn || !searchQuery.trim()}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {isScrapingLinkedIn ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Scraping LinkedIn...
+                  </>
+                ) : (
+                  <>
+                    <Linkedin className="w-4 h-4 mr-2" />
+                    Start LinkedIn Scrape
+                  </>
+                )}
+              </Button>
+              
+              {linkedInResults.length > 0 && (
+                <div className="text-green-400 text-sm flex items-center">
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  {linkedInResults.length} leads found from LinkedIn
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Google Scraper */}
+          <Card className="bg-orange-900/40 backdrop-blur-sm border border-orange-400/30">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Globe className="w-5 h-5 mr-2 text-orange-400" />
+                Google Scraper
+                <Badge className="ml-2 bg-orange-500 text-white">Business</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="text-white/80 text-sm">
+                Scrape business listings and contact information from Google search results and business directories.
+              </div>
+              
+              {isScrapingGoogle && (
+                <div className="space-y-2">
+                  <Progress value={scrapeProgress} className="w-full" />
+                  <div className="text-white/60 text-sm flex items-center">
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Scraping Google results...
+                  </div>
+                </div>
+              )}
+              
+              <Button
+                onClick={handleGoogleScrape}
+                disabled={isScrapingGoogle || !searchQuery.trim()}
+                className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+              >
+                {isScrapingGoogle ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Scraping Google...
+                  </>
+                ) : (
+                  <>
+                    <Globe className="w-4 h-4 mr-2" />
+                    Start Google Scrape
+                  </>
+                )}
+              </Button>
+              
+              {googleResults.length > 0 && (
+                <div className="text-green-400 text-sm flex items-center">
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  {googleResults.length} leads found from Google
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Status and Actions */}
+        {(scrapedLeads.length > 0 || statusMessage) && (
+          <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Database className="w-5 h-5 mr-2" />
+                Results & Actions
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {statusMessage && (
+                <div className="text-white/80 text-sm p-3 bg-white/10 rounded-lg">
+                  {statusMessage}
+                </div>
+              )}
+              
+              {scrapedLeads.length > 0 && (
+                <>
+                  <div className="flex items-center justify-between">
+                    <div className="text-white">
+                      <span className="font-semibold">{scrapedLeads.length}</span> leads ready to save
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button
+                        onClick={handleExportCSV}
+                        variant="outline"
+                        className="border-white/30 text-white hover:bg-white/10"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Export CSV
+                      </Button>
+                      <Button
+                        onClick={handleSaveToAirtable}
+                        disabled={isSavingToAirtable}
+                        className="bg-green-600 hover:bg-green-700 text-white"
+                      >
+                        {isSavingToAirtable ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Saving...
+                          </>
+                        ) : (
+                          <>
+                            <Database className="w-4 h-4 mr-2" />
+                            Save to Airtable
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <Separator className="bg-white/20" />
+                  
+                  {/* Quick preview of leads */}
+                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                    <div className="text-white/60 text-sm font-medium">Preview:</div>
+                    {scrapedLeads.slice(0, 5).map((lead, index) => (
+                      <div key={index} className="flex items-center justify-between text-sm text-white/80 p-2 bg-white/5 rounded">
+                        <div>
+                          <span className="font-medium">{lead.firstName} {lead.lastName}</span>
+                          <span className="text-white/60 ml-2">• {lead.company}</span>
+                        </div>
+                        <Badge variant="outline" className="text-xs">
+                          {lead.source}
+                        </Badge>
+                      </div>
+                    ))}
+                    {scrapedLeads.length > 5 && (
+                      <div className="text-white/60 text-xs text-center">
+                        +{scrapedLeads.length - 5} more leads...
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </div>
   );
-}
+};
+
+export default LeadScraper;
