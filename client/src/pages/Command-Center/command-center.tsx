@@ -4104,54 +4104,49 @@ export default function CommandCenter() {
           </Card>
 
           {/* AI Assistant Insights */}
-          <Card className="bg-white/10 backdrop-blur-sm border border-purple-400">
-            <CardHeader>
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-purple-400 shadow-2xl shadow-purple-400/30">
+            <CardHeader className="bg-gradient-to-r from-purple-600/20 to-purple-500/20 border-b border-purple-400/30">
               <CardTitle className="text-white flex items-center">
-                <Brain className="w-5 h-5 mr-2 text-purple-400" />
-                AI Assistant Insights
+                <Brain className="w-6 h-6 mr-3 text-purple-400" />
+                <span className="text-xl font-bold">🧠 AI Assistant Insights</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300">Confidence Score</span>
-                    <span className="text-purple-400 font-bold">{metrics?.data?.aiInsights?.confidenceScore || '0%'}</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.confidenceProgress || 0}%` }}></div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                  <div className="text-purple-300 text-sm mb-1 font-medium">Confidence Score</div>
+                  <div className="text-white font-bold text-xl mb-2">{metrics?.data?.aiInsights?.confidenceScore || '0%'}</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.confidenceProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300">Learning Status</span>
-                    <Badge className="bg-blue-600 text-white">{metrics?.data?.aiInsights?.learningStatus || 'Active'}</Badge>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                  <div className="text-purple-300 text-sm mb-1 font-medium">Learning Status</div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-white font-bold text-xl">{metrics?.data?.aiInsights?.learningStatus || 'Active'}</div>
+                    <Badge className="bg-purple-500 text-white text-xs font-bold shadow-md">Active</Badge>
                   </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.learningProgress || 0}%` }}></div>
-                  </div>
-                </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-yellow-400 shadow-lg shadow-yellow-400/20">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300" title="Percentage of conversations that needed human assistance">Escalation Rate</span>
-                    <span className="text-yellow-400 font-bold">{metrics?.data?.aiInsights?.escalationRate || '0%'}</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-yellow-400 h-1 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.escalationProgress || 0}%` }}></div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.learningProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-cyan-400 shadow-lg shadow-cyan-400/20">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300">Response Accuracy</span>
-                    <span className="text-cyan-400 font-bold">{metrics?.data?.aiInsights?.responseAccuracy || '0%'}</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-cyan-400 h-1 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.accuracyProgress || 0}%` }}></div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                  <div className="text-purple-300 text-sm mb-1 font-medium" title="Percentage of conversations that needed human assistance">Escalation Rate</div>
+                  <div className="text-white font-bold text-xl mb-2">{metrics?.data?.aiInsights?.escalationRate || '0%'}</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.escalationProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
-                  <div className="text-slate-300 text-sm mb-1">Latest Learning</div>
-                  <div className="text-green-400 font-medium">{metrics?.data?.aiInsights?.latestLearning || 'No recent activity'}</div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                  <div className="text-purple-300 text-sm mb-1 font-medium">Response Accuracy</div>
+                  <div className="text-white font-bold text-xl mb-2">{metrics?.data?.aiInsights?.responseAccuracy || '0%'}</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.accuracyProgress || 0}%` }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                  <div className="text-purple-300 text-sm mb-1 font-medium">Latest Learning</div>
+                  <div className="text-white font-bold text-base">{metrics?.data?.aiInsights?.latestLearning || 'No recent activity'}</div>
                 </div>
               </div>
             </CardContent>
@@ -4168,11 +4163,11 @@ export default function CommandCenter() {
 
         {/* Voice & Conversation Analytics */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <Card className="bg-white/10 backdrop-blur-sm border border-green-400">
-            <CardHeader>
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-green-400 shadow-2xl shadow-green-400/30">
+            <CardHeader className="bg-gradient-to-r from-green-600/20 to-green-500/20 border-b border-green-400/30">
               <CardTitle className="text-white flex items-center">
-                <Mic className="w-5 h-5 mr-2 text-green-400" />
-                Voice Commands
+                <Mic className="w-6 h-6 mr-3 text-green-400" />
+                <span className="text-xl font-bold">🎤 Voice Commands</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
@@ -4212,38 +4207,38 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-sm border border-purple-400">
-            <CardHeader>
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-cyan-400 shadow-2xl shadow-cyan-400/30">
+            <CardHeader className="bg-gradient-to-r from-cyan-600/20 to-cyan-500/20 border-b border-cyan-400/30">
               <CardTitle className="text-white flex items-center">
-                <MessageSquare className="w-5 h-5 mr-2 text-purple-400" />
-                Conversation Analytics
+                <MessageSquare className="w-6 h-6 mr-3 text-cyan-400" />
+                <span className="text-xl font-bold">💬 Conversation Analytics</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Sentiment Analysis:</span>
-                  <span className="text-green-400 font-bold">0</span>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Sentiment Analysis</div>
+                  <div className="text-white font-bold text-xl">0</div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Emotion Detection:</span>
-                  <span className="text-blue-400 font-bold">0</span>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Emotion Detection</div>
+                  <div className="text-white font-bold text-xl">0</div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Avg Call Duration:</span>
-                  <span className="text-purple-400 font-bold">0</span>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Avg Call Duration</div>
+                  <div className="text-white font-bold text-xl">0</div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Resolution Rate:</span>
-                  <span className="text-green-400 font-bold">0</span>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Resolution Rate</div>
+                  <div className="text-white font-bold text-xl">0</div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Satisfaction Score:</span>
-                  <span className="text-cyan-400 font-bold">0</span>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Satisfaction Score</div>
+                  <div className="text-white font-bold text-xl">0</div>
                 </div>
-                <div className="bg-purple-900/60 rounded-lg p-3 border border-purple-400 shadow-lg shadow-purple-400/20">
-                  <div className="text-slate-300 text-sm mb-1">Top Intent Detected:</div>
-                  <div className="text-purple-400 font-medium">{ 'No data available'}</div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Top Intent Detected</div>
+                  <div className="text-white font-bold text-base">No data available</div>
                 </div>
               </div>
             </CardContent>
