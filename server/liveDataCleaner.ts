@@ -53,44 +53,17 @@ export class LiveDataCleaner {
   }
 
   /**
-   * Returns empty dashboard metrics for LIVE mode
+   * DISABLED - Returns null to allow real Airtable data through
    */
   static getEmptyDashboardMetrics() {
-    return {
-      totalRevenue: 0,
-      monthlyRecurring: 0,
-      activeClients: 0,
-      automationsSaved: 0,
-      conversionRate: 0,
-      customerSatisfaction: 0,
-      revenueGrowth: 0,
-      chartData: [],
-      recentTransactions: [],
-      topPerformers: [],
-      alerts: []
-    };
+    return null; // Allow real data from Airtable
   }
 
   /**
-   * Returns empty call monitoring data for LIVE mode
+   * DISABLED - Returns null to allow real Airtable data through
    */
   static getEmptyCallMonitoring() {
-    return {
-      activeCalls: 0,
-      totalCallsToday: 0,
-      avgSentiment: 0,
-      successRate: 0,
-      totalDuration: "0m",
-      avgDuration: "0m",
-      callDetails: [],
-      sentimentTrend: [],
-      performanceMetrics: {
-        answered: 0,
-        missed: 0,
-        escalated: 0,
-        resolved: 0
-      }
-    };
+    return null; // Allow real data from Airtable
   }
 
   /**
