@@ -3426,35 +3426,35 @@ export default function CommandCenter() {
                   </Button>
                   
                   <Button
-                    onClick={() => setShowCalendarUpload(true)}
-                    className="!bg-cyan-600 hover:!bg-cyan-700 !text-white flex items-center justify-center p-4 h-24 border border-cyan-500"
-                    title="Upload Calendar"
+                    onClick={() => CommandCenterActions.startAutomation({ voiceTriggered: false })}
+                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500"
+                    title="Start Pipeline Calls"
                   >
                     <div className="text-center">
-                      <Upload className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Upload Calendar</span>
+                      <Phone className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">Start Pipeline</span>
                     </div>
                   </Button>
                   
                   <Button
-                    onClick={() => setShowExportModal(true)}
+                    onClick={() => CommandCenterActions.exportDashboard({ voiceTriggered: false })}
                     className="!bg-emerald-600 hover:!bg-emerald-700 !text-white flex items-center justify-center p-4 h-24 border border-emerald-500"
-                    title="Quick Export"
+                    title="Export Dashboard"
                   >
                     <div className="text-center">
                       <Download className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Quick Export</span>
+                      <span className="text-sm font-medium">Export Dashboard</span>
                     </div>
                   </Button>
                   
                   <Button
-                    onClick={() => setShowAnalyticsModal(true)}
+                    onClick={() => CommandCenterActions.generateReport({ voiceTriggered: false })}
                     className="!bg-violet-600 hover:!bg-violet-700 !text-white flex items-center justify-center p-4 h-24 border border-violet-500"
                     title="Generate Analytics Report"
                   >
                     <div className="text-center">
                       <BarChart3 className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Analytics Report</span>
+                      <span className="text-sm font-medium">Generate Report</span>
                     </div>
                   </Button>
                 </div>
