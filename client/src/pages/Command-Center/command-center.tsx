@@ -3527,7 +3527,7 @@ export default function CommandCenter() {
           </div>
         </div>
 
-        {/* Additional Analytics Section */}
+        {/* Detailed Analytics Section */}
         <div className="mb-4">
           <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20">
             <CardHeader>
@@ -3617,134 +3617,7 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* 6. PDF & Export + Audit/Integrity Panel - Side by Side */}
-        <div className="mb-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* PDF & Export Panel */}
-            <Card className="bg-gradient-to-br from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center justify-between">
-                  <div className="flex items-center">
-                    <FileDown className="w-5 h-5 mr-2 text-purple-400" />
-                    📤 PDF & Export Panel
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleSection('pdf-export')}
-                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                    >
-                      {collapsedSections['pdf-export'] ? 
-                        <ChevronDown className="w-4 h-4" /> : 
-                        <ChevronUp className="w-4 h-4" />
-                      }
-                    </Button>
-                  </div>
-                  <Badge className="bg-purple-600 text-white">EXPORT</Badge>
-                </CardTitle>
-              </CardHeader>
-              {!collapsedSections['pdf-export'] && (
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="p-3 bg-white/5 rounded-lg">
-                      <div className="text-purple-300 text-sm mb-2">Last PDF Generated:</div>
-                      <div className="text-white font-bold">Never</div>
-                    </div>
 
-                  </div>
-                </CardContent>
-              )}
-            </Card>
-
-            {/* PDF & Export Panel */}
-            <Card className="bg-gradient-to-br from-blue-900/60 to-indigo-900/60 backdrop-blur-sm border border-blue-400 shadow-lg shadow-blue-400/20">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center justify-between">
-                  <div className="flex items-center">
-                    <FileText className="w-5 h-5 mr-2 text-blue-400" />
-                    📄 PDF & Export Panel
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleSection('pdf-export')}
-                      className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                    >
-                      {collapsedSections['pdf-export'] ? 
-                        <ChevronDown className="w-4 h-4" /> : 
-                        <ChevronUp className="w-4 h-4" />
-                      }
-                    </Button>
-                  </div>
-                  <Badge className="bg-blue-600 text-white">EXPORT</Badge>
-                </CardTitle>
-              </CardHeader>
-              {!collapsedSections['pdf-export'] && (
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <div className="space-y-3">
-                      <h4 className="text-blue-300 font-semibold flex items-center border-b border-blue-400/30 pb-2">
-                        <Printer className="w-4 h-4 mr-2" />
-                        📊 Last PDF Generated
-                      </h4>
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="flex justify-between">
-                          <span className="text-blue-300 text-sm">Export Technology:</span>
-                          <span className="text-slate-400 font-bold">Never</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-3">
-                      <Button
-                        onClick={() => setShowAnalyticsModal(true)}
-                        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-4 h-12"
-                      >
-                        <FileText className="w-4 h-4 mr-2" />
-                        Analytics Report
-                      </Button>
-                      <Button
-                        onClick={handlePDFReport}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-4 h-12"
-                      >
-                        <Printer className="w-4 h-4 mr-2" />
-                        PDF Export
-                      </Button>
-                      <Button
-                        onClick={() => setShowExportModal(true)}
-                        className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-4 h-12"
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        Quick Export
-                      </Button>
-                      <Button
-                        onClick={handleExportData}
-                        className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-4 h-12"
-                      >
-                        <Database className="w-4 h-4 mr-2" />
-                        Data Export
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              )}
-            </Card>
-          </div>
-
-          {/* Light Purple Fill Areas */}
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-6">
-            <div className="bg-purple-400/20 rounded-lg p-8 border border-purple-300/30 backdrop-blur-sm">
-              <div className="text-center space-y-4">
-                <div className="text-purple-200 text-lg font-medium">Additional Analytics Space</div>
-                <div className="text-purple-300 text-sm">Reserved for future dashboard components</div>
-              </div>
-            </div>
-            <div className="bg-purple-400/20 rounded-lg p-8 border border-purple-300/30 backdrop-blur-sm">
-              <div className="text-center space-y-4">
-                <div className="text-purple-200 text-lg font-medium">Extended Export Tools</div>
-                <div className="text-purple-300 text-sm">Additional export functionality coming soon</div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* 5. System Health + Metrics (Uptime, Client Pulse, Ops Stats) */}
         <div className="mb-4">
