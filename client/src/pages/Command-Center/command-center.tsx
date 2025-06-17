@@ -3846,8 +3846,8 @@ export default function CommandCenter() {
                   </Button>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                  <span className="text-sm text-emerald-300">All Systems Operational</span>
+                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                  <span className="text-sm text-red-300">Systems Offline</span>
                 </div>
               </CardTitle>
             </CardHeader>
