@@ -3388,14 +3388,14 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={handleStartPipelineCalls}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white p-3"
+                      className="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-6"
                     >
                       <Play className="w-4 h-4 mr-2" />
                       Start Pipeline
                     </Button>
                     <Button
                       onClick={handleStopPipelineCalls}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white p-3"
+                      className="w-full bg-red-600 hover:bg-red-700 text-white px-6 py-6"
                     >
                       <PhoneOff className="w-4 h-4 mr-2" />
                       End Pipeline
@@ -3425,14 +3425,14 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={() => setShowCreateVoiceCallModal(true)}
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white p-3"
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-6"
                     >
                       <Headphones className="w-4 h-4 mr-2" />
                       Voice Studio
                     </Button>
                     <Button
                       onClick={testVoicePersona}
-                      className="w-full bg-orange-600 hover:bg-orange-700 text-white p-3"
+                      className="w-full bg-orange-600 hover:bg-orange-700 text-white px-6 py-6"
                     >
                       <TestTube className="w-4 h-4 mr-2" />
                       Test Persona
@@ -4644,14 +4644,14 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <Button 
                         onClick={isListening ? stopVoiceRecognition : startProgrammingVoiceRecognition}
-                        className={`${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} text-white`}
+                        className={`${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} text-white px-6 py-6`}
                       >
                         <Mic className="w-4 h-4 mr-2" />
                         {isListening ? 'Stop Recording' : 'Start Recording'}
                       </Button>
                       <Button 
                         onClick={processVoiceProgramming}
-                        className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+                        className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-6 py-6"
                         disabled={!programmingText.trim()}
                       >
                         <Brain className="w-4 h-4 mr-2" />
@@ -4659,7 +4659,7 @@ export default function CommandCenter() {
                       </Button>
                       <Button 
                         onClick={fetchAvailableVoices}
-                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                        className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-6"
                       >
                         <RefreshCw className="w-4 h-4 mr-2" />
                         Refresh Voices
