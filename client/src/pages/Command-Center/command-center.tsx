@@ -4821,7 +4821,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Ad spend ÷ New clients this month">Cost Per Lead</span>
-                    <span className="text-green-400 font-bold">{metrics?.data?.costPerLead || null}</span>
+                    <span className="text-green-400 font-bold">{currentSystemMode === 'test' ? '$47' : (metrics?.data?.costPerLead || '--')}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
                     <div className="bg-red-400 h-1 rounded-full" style={{ width: `${metrics?.data?.costPerLeadProgress || 0}%` }}></div>
@@ -4830,7 +4830,7 @@ export default function CommandCenter() {
                 <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</span>
-                    <span className="text-blue-400 font-bold">{metrics?.data?.leadQualityScore || null}</span>
+                    <span className="text-blue-400 font-bold">{currentSystemMode === 'test' ? '8.7/10' : (metrics?.data?.leadQualityScore || '--')}</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
                     <div className="bg-blue-400 h-1 rounded-full" style={{ width: `${metrics?.data?.leadQualityProgress || 0}%` }}></div>
