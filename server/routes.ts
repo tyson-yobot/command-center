@@ -1,6 +1,8 @@
 import type { Express } from "express";
 import { db } from "./db";
 import { storage } from "./storage";
+import { registerAirtableRoutes } from "./modules/airtable/airtableRoutes";
+import { registerScraperRoutes } from "./modules/scraper/scraperRoutes";
 
 let systemMode = 'live';
 
@@ -114,6 +116,12 @@ export function registerRoutes(app: Express): void {
   app.get('/api/memory/activity', (req, res) => {
     res.json({ success: true, data: [] });
   });
+
+  // Register Airtable routes for lead management and pipeline functionality
+  registerAirtableRoutes(app);
+
+  // Register scraper routes for lead generation
+  registerScraperRoutes(app);
 
   console.log("✅ Command Center routes registered successfully");
 }
