@@ -19,21 +19,31 @@ export async function testAirtableConnection() {
   }
   
   try {
-    // Comprehensive token cleaning: remove all non-ASCII characters and normalize
+    // Ultra-strict token cleaning for header compatibility
     const cleanToken = token
-      .replace(/[^\x20-\x7E]/g, '') // Remove non-printable ASCII
-      .replace(/[\r\n\t\s]/g, '')   // Remove whitespace and line breaks
+      .split('').filter(char => /[a-zA-Z0-9.]/.test(char)).join('') // Keep only alphanumeric and dots
       .trim();
     
     console.log('Original token length:', token.length);
     console.log('Clean token length:', cleanToken.length);
-    console.log('Token format valid:', /^pat[a-zA-Z0-9.]+$/.test(cleanToken));
-    console.log('Clean token preview:', cleanToken.substring(0, 15) + '...');
+    console.log('Token starts with pat:', cleanToken.startsWith('pat'));
+    console.log('Clean token preview:', cleanToken.substring(0, 20) + '...');
     
-    // Test 1: Basic API access
+    // Validate token format
+    if (!cleanToken || !cleanToken.startsWith('pat') || cleanToken.length < 40) {
+      return { success: false, error: `Invalid token format: ${cleanToken.substring(0, 10)}...` };
+    }
+
+    // Create authorization value with manual string construction
+    const authValue = 'Bearer ' + cleanToken;
+    console.log('Authorization header length:', authValue.length);
+    console.log('Auth header ASCII check:', /^[\x20-\x7E]*$/.test(authValue));
+    
+    // Test 1: Direct object headers without Headers constructor
     const response = await fetch(`https://api.airtable.com/v0/meta/bases`, {
+      method: 'GET',
       headers: {
-        'Authorization': `Bearer ${cleanToken}`,
+        'Authorization': authValue,
         'Content-Type': 'application/json'
       }
     });
