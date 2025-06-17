@@ -1411,6 +1411,9 @@ export default function CommandCenter() {
 
 
 
+
+
+
   const handleManualFollowUp = () => {
     setShowFollowUpModal(true);
   };
@@ -3109,7 +3112,9 @@ export default function CommandCenter() {
                             ? (preset.id === 'voice' ? 'bg-purple-600 hover:bg-purple-700 text-white border border-purple-500' :
                                preset.id === 'smartspend' ? 'bg-blue-600 hover:bg-blue-700 text-white border border-blue-500' :
                                'bg-indigo-600 hover:bg-indigo-700 text-white border border-indigo-500')
-                            : 'bg-slate-700 text-slate-300 hover:bg-slate-600 border border-slate-600'
+                            : (preset.id === 'voice' ? 'bg-purple-500 hover:bg-purple-600 text-white border border-purple-400' :
+                               preset.id === 'smartspend' ? 'bg-blue-500 hover:bg-blue-600 text-white border border-blue-400' :
+                               'bg-indigo-500 hover:bg-indigo-600 text-white border border-indigo-400')
                         }`}
                         title={`Switch to ${preset.label}`}
                       >
