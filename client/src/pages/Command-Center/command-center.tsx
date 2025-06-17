@@ -6053,65 +6053,8 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* New Features Section - Mobile Companion & PDF Export */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          {/* Mobile Companion Panel */}
-          <Card className="bg-gradient-to-br from-indigo-900/40 via-purple-900/30 to-pink-900/20 backdrop-blur-sm border border-indigo-400/50 shadow-2xl shadow-indigo-500/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Phone className="w-5 h-5 mr-2 text-indigo-400" />
-                📲 Mobile Companion Panel
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="bg-slate-800/60 rounded-lg p-3 border border-indigo-400/30">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-slate-300 text-sm">iOS App Status:</span>
-                    <Badge className="bg-green-600 text-white text-xs">
-                      { 'Offline'}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300 text-sm">Last Sync:</span>
-                    <span className="text-white font-bold text-sm">
-                      { '--'}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="bg-slate-800/60 rounded-lg p-3 border border-indigo-400/30">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-slate-300 text-sm">Android App Status:</span>
-                    <Badge className="bg-green-600 text-white text-xs">
-                      { 'Offline'}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300 text-sm">Push Alerts:</span>
-                    <span className="text-green-400 font-bold text-sm">
-                      { 'Disabled'}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="bg-slate-800/60 rounded-lg p-3 border border-indigo-400/30">
-                  <div className="text-slate-300 text-sm mb-2">Recent Mobile Activity:</div>
-                  <div className="space-y-1 text-xs text-slate-400">
-                    {currentSystemMode === 'test' ? (
-                      <>
-                        <div>• Voice command received (iPhone)</div>
-                        <div>• Dashboard sync completed</div>
-                        <div>• Push notification sent</div>
-                      </>
-                    ) : (
-                      <div>No mobile activity</div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        {/* PDF Export Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8 mb-12">
 
           {/* PDF & Export Panel */}
           <Card className="bg-gradient-to-br from-purple-900/40 via-pink-900/30 to-red-900/20 backdrop-blur-sm border border-purple-400/50 shadow-2xl shadow-purple-500/20">
