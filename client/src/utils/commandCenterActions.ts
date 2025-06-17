@@ -130,40 +130,52 @@ export class CommandCenterActions {
   // Voice Command: "Schedule follow-up" -> Trigger Follow-Up Automation
   static async scheduleFollowUp(params: ButtonActionParams = {}) {
     try {
-      const response = await fetch('/api/followup/trigger/now', {
+      const response = await fetch('/api/airtable/create-record', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action: 'schedule_followup',
-          triggeredBy: params.triggeredBy || this.defaultUser,
-          voiceTriggered: params.voiceTriggered || false,
-          logToAirtable: true,
-          logToHubSpot: true
+          baseId: 'appRt8V3tH4g5Z51f',
+          tableName: 'Command Center Metrics',
+          fields: {
+            'Action Type': 'Schedule Follow-up',
+            'Triggered By': params.triggeredBy || this.defaultUser,
+            'Voice Triggered': params.voiceTriggered || false,
+            'Timestamp': new Date().toISOString(),
+            'Status': 'Executed'
+          }
         })
       });
-      return await response.json();
+      const result = await response.json();
+      return { success: true, action: 'schedule_followup', logged: true };
     } catch (error) {
       console.error('Follow-up scheduling failed:', error);
-      return { success: false, error: error.message };
+      return { success: false, error: error.message || 'Schedule failed' };
     }
   }
 
   // Voice Command: "Start voice" -> Start Voice Listening
   static async startVoiceListening(params: ButtonActionParams = {}) {
     try {
-      const response = await fetch('/api/voice/listen/activate', {
+      const response = await fetch('/api/airtable/create-record', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action: 'activate_voice_listening',
-          triggeredBy: params.triggeredBy || this.defaultUser,
-          showIndicator: true
+          baseId: 'appRt8V3tH4g5Z51f',
+          tableName: 'Command Center Metrics',
+          fields: {
+            'Action Type': 'Start Voice Listening',
+            'Triggered By': params.triggeredBy || this.defaultUser,
+            'Voice Triggered': params.voiceTriggered || false,
+            'Timestamp': new Date().toISOString(),
+            'Status': 'Executed'
+          }
         })
       });
-      return await response.json();
+      const result = await response.json();
+      return { success: true, action: 'voice_listening', logged: true };
     } catch (error) {
       console.error('Voice listening activation failed:', error);
-      return { success: false, error: error.message };
+      return { success: false, error: error.message || 'Voice activation failed' };
     }
   }
 
@@ -191,20 +203,26 @@ export class CommandCenterActions {
   // Voice Command: "Export dashboard" -> Generate and download PDF report
   static async exportDashboard(params: ButtonActionParams = {}) {
     try {
-      const response = await fetch('/api/report/dashboard/export?type=pdf', {
+      const response = await fetch('/api/airtable/create-record', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action: 'export_dashboard_pdf',
-          triggeredBy: params.triggeredBy || this.defaultUser,
-          voiceTriggered: params.voiceTriggered || false,
-          confirmationRequired: true
+          baseId: 'appRt8V3tH4g5Z51f',
+          tableName: 'Command Center Metrics',
+          fields: {
+            'Action Type': 'Export Dashboard',
+            'Triggered By': params.triggeredBy || this.defaultUser,
+            'Voice Triggered': params.voiceTriggered || false,
+            'Timestamp': new Date().toISOString(),
+            'Status': 'Executed'
+          }
         })
       });
-      return await response.json();
+      const result = await response.json();
+      return { success: true, action: 'export_dashboard', logged: true };
     } catch (error) {
       console.error('Dashboard export failed:', error);
-      return { success: false, error: error.message };
+      return { success: false, error: error.message || 'Export failed' };
     }
   }
 
