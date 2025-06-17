@@ -253,8 +253,8 @@ export function registerCommandCenterMetrics(app: Express) {
       const { triggeredBy = 'System' } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': 'Voice Start',
-        'Voice Source': 'Voice',
+        '🛠️ Triggered Action': 'Voice Start',
+        '🎙️ Voice Source': 'Voice',
         'Triggered By': triggeredBy,
         'Method': 'Button',
         'Timestamp': new Date().toISOString()
@@ -278,7 +278,7 @@ export function registerCommandCenterMetrics(app: Express) {
       const { triggeredBy = 'System' } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': 'Manual Call',
+        '🛠️ Triggered Action': 'Manual Call',
         'Call Type': 'Outbound',
         'Pipeline': 'N/A',
         'Source': 'UI',
@@ -303,7 +303,7 @@ export function registerCommandCenterMetrics(app: Express) {
       const { triggeredBy = 'System' } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': 'Analytics Report Generation',
+        '🛠️ Triggered Action': 'Analytics Report Generation',
         'Status': 'In Progress',
         'Triggered By': triggeredBy,
         'Timestamp': new Date().toISOString()
@@ -326,8 +326,9 @@ export function registerCommandCenterMetrics(app: Express) {
       const { triggeredBy = 'System' } = req.body;
       
       await commandCenterMetrics.logMetricsAction({
-        'Triggered Action': 'Pipeline Start',
+        '🛠️ Triggered Action': 'Pipeline Start',
         'Pipeline Stage': 'Init',
+        'Caller': 'System',
         'Triggered By': triggeredBy,
         'Timestamp': new Date().toISOString()
       });

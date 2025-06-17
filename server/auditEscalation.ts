@@ -165,7 +165,7 @@ async function getAuditLog(limit: number, severity?: string): Promise<AuditEntry
     return auditEntries;
   } catch (error) {
     console.error('Failed to fetch audit log from Airtable:', error);
-    return generateSampleAuditEntries();
+    return [];
   }
 }
 
@@ -299,37 +299,6 @@ async function getRecentErrors(): Promise<any[]> {
   return [];
 }
 
-function generateSampleAuditEntries(): AuditEntry[] {
-  const now = new Date();
-  return [
-    {
-      id: 'audit_sample_1',
-      timestamp: new Date(now.getTime() - 10 * 60 * 1000).toISOString(),
-      event: 'System Startup',
-      source: 'system',
-      severity: 'low',
-      details: 'Application server started successfully',
-      resolved: true
-    },
-    {
-      id: 'audit_sample_2',
-      timestamp: new Date(now.getTime() - 30 * 60 * 1000).toISOString(),
-      event: 'PDF Generation',
-      source: 'pdf-generator',
-      severity: 'low',
-      details: 'Analytics report generated successfully',
-      resolved: true
-    },
-    {
-      id: 'audit_sample_3',
-      timestamp: new Date(now.getTime() - 45 * 60 * 1000).toISOString(),
-      event: 'Voice Synthesis',
-      source: 'voice-engine',
-      severity: 'low',
-      details: 'Voice generation completed for customer service',
-      resolved: true
-    }
-  ];
-}
+// Function removed - no hardcoded data in LIVE MODE
 
 export { createAuditEntry, performSystemHealthCheck };
