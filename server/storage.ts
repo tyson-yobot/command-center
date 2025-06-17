@@ -201,10 +201,10 @@ const testCallLogs: CallLog[] = [
 ];
 
 export class TestKnowledgeStorage implements IKnowledgeStorage {
-  private items: KnowledgeItem[] = [...testKnowledgeItems];
+  private items: KnowledgeItem[] = [];
 
   async getKnowledgeItems(): Promise<KnowledgeItem[]> {
-    return this.items.filter(item => item.isActive);
+    return [];
   }
 
   async createKnowledgeItem(item: InsertKnowledgeItem): Promise<KnowledgeItem> {
