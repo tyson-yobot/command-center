@@ -247,7 +247,7 @@ export default function CommandCenter() {
   const [showLiveChat, setShowLiveChat] = useState(false);
   const [showTicketsList, setShowTicketsList] = useState(false);
   const [showCreateTicket, setShowCreateTicket] = useState(false);
-  const [buttonPosition, setButtonPosition] = useState({ x: --, y: -- });
+  const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
   const [showKnowledgeViewer, setShowKnowledgeViewer] = useState(false);
   const [showDocumentPreview, setShowDocumentPreview] = useState(false);
   const [previewDocumentId, setPreviewDocumentId] = useState('');
@@ -424,10 +424,10 @@ export default function CommandCenter() {
   
   // Call Statistics
   const [callStats, setCallStats] = useState({
-    activeCalls: --,
+    activeCalls: 0,
     avgDuration: '0m',
     successRate: '--',
-    totalToday: --
+    totalToday: 0
   });
   
   // Support Activity
@@ -442,8 +442,8 @@ export default function CommandCenter() {
   const [showCallReports, setShowCallReports] = useState(false);
   const [showCallLogs, setShowCallLogs] = useState(false);
   const [showToast, setShowToast] = useState<{message: string; type: 'success' | 'error'} | null>(null);
-  const [totalRecords, setTotalRecords] = useState(--);
-  const [completedCalls, setCompletedCalls] = useState(--);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [completedCalls, setCompletedCalls] = useState(0);
   const [pipelineRunning, setPipelineRunning] = useState(false);
 
   // Service Management Functions
@@ -453,8 +453,8 @@ export default function CommandCenter() {
         ...prev,
         [service]: { status: 'ACTIVE', lastPing: new Date().toLocaleTimeString() }
       }));
-      addRecentActivity(`${service.charAt(--).toUpperCase() + service.slice(1)} service started`, 'system');
-      showToastMessage(`${service.charAt(--).toUpperCase() + service.slice(1)} service activated`, 'success');
+      addRecentActivity(`${service.charAt(0).toUpperCase() + service.slice(1)} service started`, 'system');
+      showToastMessage(`${service.charAt(0).toUpperCase() + service.slice(1)} service activated`, 'success');
     } else if (action === 'restart') {
       setServiceStates(prev => ({
         ...prev,
@@ -465,9 +465,9 @@ export default function CommandCenter() {
           ...prev,
           [service]: { status: 'ACTIVE', lastPing: new Date().toLocaleTimeString() }
         }));
-        addRecentActivity(`${service.charAt(--).toUpperCase() + service.slice(1)} service restarted`, 'system');
+        addRecentActivity(`${service.charAt(0).toUpperCase() + service.slice(1)} service restarted`, 'system');
       }, 2000);
-      showToastMessage(`${service.charAt(--).toUpperCase() + service.slice(1)} service restarting...`, 'success');
+      showToastMessage(`${service.charAt(0).toUpperCase() + service.slice(1)} service restarting...`, 'success');
     } else if (action === 'ping') {
       try {
         // Simulate ping request
@@ -499,7 +499,7 @@ export default function CommandCenter() {
     setTimeout(() => {
       setCallStats(prev => ({
         ...prev,
-        activeCalls: Math.max(--, prev.activeCalls - 1),
+        activeCalls: Math.max(0, prev.activeCalls - 1),
         avgDuration: `${duration}m`,
         successRate: '94%'
       }));
@@ -520,7 +520,7 @@ export default function CommandCenter() {
       timestamp: new Date().toLocaleTimeString(),
       type
     };
-    setRecentActivity(prev => [newActivity, ...prev.slice(--, 4)]); // Keep last 5 items
+    setRecentActivity(prev => [newActivity, ...prev.slice(0, 4)]); // Keep last 5 items
   };
 
   // Core Automation Button Handlers
@@ -3980,7 +3980,7 @@ export default function CommandCenter() {
                       Recent Audit Events
                     </h4>
                     <div className="space-y-2 max-h-48 overflow-y-auto">
-                      {auditLog?.data?.slice(--, 5).map((event, index) => (
+                      {auditLog?.data?.slice(0, 5).map((event, index) => (
                         <div key={index} className="p-2 bg-white/5 rounded text-sm">
                           <div className="flex justify-between items-start">
                             <span className="text-white font-medium">{event.action || 'System Event'}</span>
