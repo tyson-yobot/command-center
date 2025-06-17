@@ -58,6 +58,50 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
     recordLimit: 1000
   });
 
+  // Comprehensive dropdown options
+  const seniorityLevels = [
+    "C-Level", "VP", "Director", "Manager", "Senior", "Mid-Level", "Junior", "Entry Level", "Intern"
+  ];
+
+  const departments = [
+    "Sales", "Marketing", "Engineering", "Product", "Design", "Operations", "Finance", 
+    "Human Resources", "Customer Success", "Business Development", "Legal", "IT", 
+    "Consulting", "Research", "Administrative", "Executive"
+  ];
+
+  const companySizes = [
+    "1-10", "11-50", "51-200", "201-500", "501-1000", "1001-5000", "5001-10000", "10000+"
+  ];
+
+  const fundingStages = [
+    "Bootstrapped", "Pre-Seed", "Seed", "Series A", "Series B", "Series C", "Series D+", 
+    "IPO", "Acquired", "Private Equity"
+  ];
+
+  const revenueRanges = [
+    "$0-1M", "$1M-10M", "$10M-50M", "$50M-100M", "$100M-500M", "$500M-1B", "$1B+"
+  ];
+
+  const commonTechnologies = [
+    "Salesforce", "HubSpot", "React", "JavaScript", "Python", "AWS", "Docker", "Kubernetes",
+    "Tableau", "Power BI", "Slack", "Microsoft Office", "Google Workspace", "Zoom",
+    "Shopify", "WordPress", "Adobe Creative Suite", "Figma", "Jira", "GitHub"
+  ];
+
+  const popularLocations = [
+    "United States", "New York, NY", "San Francisco, CA", "Los Angeles, CA", "Chicago, IL",
+    "Austin, TX", "Seattle, WA", "Boston, MA", "Denver, CO", "Atlanta, GA", "Miami, FL",
+    "United Kingdom", "London, UK", "Canada", "Toronto, ON", "Vancouver, BC", "Germany",
+    "Berlin, Germany", "France", "Paris, France", "Australia", "Sydney, Australia"
+  ];
+
+  const commonJobTitles = [
+    "CEO", "CTO", "VP Sales", "Sales Manager", "Account Executive", "Business Development",
+    "Marketing Manager", "Digital Marketing", "Content Manager", "Software Engineer",
+    "Product Manager", "Data Scientist", "UX Designer", "Customer Success Manager",
+    "Operations Manager", "HR Manager", "Financial Analyst", "Consultant"
+  ];
+
   const [newJobTitle, setNewJobTitle] = useState("");
   const [newLocation, setNewLocation] = useState("");
   const [newIndustry, setNewIndustry] = useState("");
@@ -212,9 +256,25 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
               {/* Job Titles */}
               <div className="space-y-2">
                 <Label className="text-slate-200">Job Titles</Label>
+                <Select onValueChange={(value) => addTag('jobTitles', value, () => {})}>
+                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
+                    <SelectValue placeholder="Select common job titles" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-700 border-slate-600 max-h-60">
+                    {commonJobTitles.map((title) => (
+                      <SelectItem 
+                        key={title} 
+                        value={title}
+                        className="text-slate-200 hover:bg-slate-600"
+                      >
+                        {title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <div className="flex gap-2">
                   <Input
-                    placeholder="e.g., CEO, VP Sales, Marketing Director"
+                    placeholder="Or enter custom job title"
                     value={newJobTitle}
                     onChange={(e) => setNewJobTitle(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && addTag('jobTitles', newJobTitle, setNewJobTitle)}
@@ -248,13 +308,16 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
                   <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
                     <SelectValue placeholder="Select seniority level" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="entry">Entry Level</SelectItem>
-                    <SelectItem value="mid">Mid Level</SelectItem>
-                    <SelectItem value="senior">Senior Level</SelectItem>
-                    <SelectItem value="director">Director</SelectItem>
-                    <SelectItem value="vp">VP Level</SelectItem>
-                    <SelectItem value="c-level">C-Level</SelectItem>
+                  <SelectContent className="bg-slate-700 border-slate-600">
+                    {seniorityLevels.map((level) => (
+                      <SelectItem 
+                        key={level} 
+                        value={level}
+                        className="text-slate-200 hover:bg-slate-600"
+                      >
+                        {level}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -266,14 +329,16 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
                   <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="sales">Sales</SelectItem>
-                    <SelectItem value="marketing">Marketing</SelectItem>
-                    <SelectItem value="engineering">Engineering</SelectItem>
-                    <SelectItem value="operations">Operations</SelectItem>
-                    <SelectItem value="finance">Finance</SelectItem>
-                    <SelectItem value="hr">Human Resources</SelectItem>
-                    <SelectItem value="legal">Legal</SelectItem>
+                  <SelectContent className="bg-slate-700 border-slate-600 max-h-60">
+                    {departments.map((dept) => (
+                      <SelectItem 
+                        key={dept} 
+                        value={dept}
+                        className="text-slate-200 hover:bg-slate-600"
+                      >
+                        {dept}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -281,9 +346,25 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
               {/* Location */}
               <div className="space-y-2">
                 <Label className="text-slate-200">Location</Label>
+                <Select onValueChange={(value) => addTag('location', value, () => {})}>
+                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
+                    <SelectValue placeholder="Select popular locations" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-700 border-slate-600 max-h-60">
+                    {popularLocations.map((location) => (
+                      <SelectItem 
+                        key={location} 
+                        value={location}
+                        className="text-slate-200 hover:bg-slate-600"
+                      >
+                        {location}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <div className="flex gap-2">
                   <Input
-                    placeholder="e.g., New York, San Francisco, Remote"
+                    placeholder="Or enter custom location"
                     value={newLocation}
                     onChange={(e) => setNewLocation(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && addTag('location', newLocation, setNewLocation)}
@@ -402,14 +483,16 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
                   <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
                     <SelectValue placeholder="Select company size" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1-10">1-10 employees</SelectItem>
-                    <SelectItem value="11-50">11-50 employees</SelectItem>
-                    <SelectItem value="51-200">51-200 employees</SelectItem>
-                    <SelectItem value="201-500">201-500 employees</SelectItem>
-                    <SelectItem value="501-1000">501-1000 employees</SelectItem>
-                    <SelectItem value="1001-5000">1001-5000 employees</SelectItem>
-                    <SelectItem value="5000+">5000+ employees</SelectItem>
+                  <SelectContent className="bg-slate-700 border-slate-600">
+                    {companySizes.map((size) => (
+                      <SelectItem 
+                        key={size} 
+                        value={size}
+                        className="text-slate-200 hover:bg-slate-600"
+                      >
+                        {size} employees
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -421,15 +504,16 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
                   <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
                     <SelectValue placeholder="Select funding stage" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pre-seed">Pre-Seed</SelectItem>
-                    <SelectItem value="seed">Seed</SelectItem>
-                    <SelectItem value="series-a">Series A</SelectItem>
-                    <SelectItem value="series-b">Series B</SelectItem>
-                    <SelectItem value="series-c">Series C</SelectItem>
-                    <SelectItem value="series-d+">Series D+</SelectItem>
-                    <SelectItem value="public">Public</SelectItem>
-                    <SelectItem value="private">Private</SelectItem>
+                  <SelectContent className="bg-slate-700 border-slate-600">
+                    {fundingStages.map((stage) => (
+                      <SelectItem 
+                        key={stage} 
+                        value={stage}
+                        className="text-slate-200 hover:bg-slate-600"
+                      >
+                        {stage}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -441,16 +525,66 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
                   <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
                     <SelectValue placeholder="Select revenue range" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0-1m">$0 - $1M</SelectItem>
-                    <SelectItem value="1m-10m">$1M - $10M</SelectItem>
-                    <SelectItem value="10m-50m">$10M - $50M</SelectItem>
-                    <SelectItem value="50m-100m">$50M - $100M</SelectItem>
-                    <SelectItem value="100m-500m">$100M - $500M</SelectItem>
-                    <SelectItem value="500m-1b">$500M - $1B</SelectItem>
-                    <SelectItem value="1b+">$1B+</SelectItem>
+                  <SelectContent className="bg-slate-700 border-slate-600">
+                    {revenueRanges.map((range) => (
+                      <SelectItem 
+                        key={range} 
+                        value={range}
+                        className="text-slate-200 hover:bg-slate-600"
+                      >
+                        {range}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
+              </div>
+
+              {/* Technologies */}
+              <div className="space-y-2">
+                <Label className="text-slate-200">Technologies Used</Label>
+                <Select onValueChange={(value) => addTag('technologies', value, () => {})}>
+                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
+                    <SelectValue placeholder="Select technologies" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-700 border-slate-600 max-h-60">
+                    {commonTechnologies.map((tech) => (
+                      <SelectItem 
+                        key={tech} 
+                        value={tech}
+                        className="text-slate-200 hover:bg-slate-600"
+                      >
+                        {tech}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Or enter custom technology"
+                    value={newTechnology}
+                    onChange={(e) => setNewTechnology(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && addTag('technologies', newTechnology, setNewTechnology)}
+                    className="bg-slate-700/50 border-slate-600 text-slate-200"
+                  />
+                  <Button
+                    size="sm"
+                    onClick={() => addTag('technologies', newTechnology, setNewTechnology)}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {filters.technologies.map((tech, index) => (
+                    <Badge key={index} variant="secondary" className="bg-blue-600/20 text-blue-200">
+                      {tech}
+                      <X
+                        className="h-3 w-3 ml-1 cursor-pointer"
+                        onClick={() => removeTag('technologies', index)}
+                      />
+                    </Badge>
+                  ))}
+                </div>
               </div>
             </div>
 
