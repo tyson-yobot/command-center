@@ -4788,6 +4788,25 @@ export default function CommandCenter() {
                           </div>
                         </div>
                         
+                        {/* Test Voice and Apply Persona Buttons */}
+                        <div className="grid grid-cols-2 gap-3 mt-4">
+                          <Button 
+                            onClick={testVoicePersona}
+                            className="bg-orange-600 hover:bg-orange-700 text-white border border-orange-500 px-4 py-3 h-12"
+                            disabled={!selectedPersona}
+                          >
+                            <TestTube className="w-4 h-4 mr-2" />
+                            Test Voice
+                          </Button>
+                          <Button 
+                            onClick={() => applyPersona(selectedPersona)}
+                            className="bg-green-600 hover:bg-green-700 text-white border border-green-500 px-4 py-3 h-12"
+                            disabled={!selectedPersona}
+                          >
+                            <Play className="w-4 h-4 mr-2" />
+                            Apply Persona
+                          </Button>
+                        </div>
 
                       </div>
                     </div>
@@ -7326,9 +7345,9 @@ export default function CommandCenter() {
                       Quick Actions
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-6">
                     <div className="space-y-3">
-                      <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                      <Button className="w-full bg-green-600 hover:bg-green-700 text-white h-12">
                         Create Campaign
                       </Button>
                       <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
