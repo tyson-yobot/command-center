@@ -3348,100 +3348,100 @@ export default function CommandCenter() {
                   {/* Primary Action Buttons */}
                   <Button
                     onClick={handleCreateBooking}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center p-4 h-24 border border-emerald-500"
+                    className="!bg-emerald-600 hover:!bg-emerald-700 !text-white flex items-center justify-center p-4 h-24 border border-emerald-500"
                     title="Schedule Booking"
                   >
                     <div className="text-center">
                       <Calendar className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">📅 Schedule Booking</span>
+                      <span className="text-sm font-medium">Schedule Booking</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={handleCreateSupportTicket}
-                    className="bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-center p-4 h-24 border border-violet-500"
+                    className="!bg-violet-600 hover:!bg-violet-700 !text-white flex items-center justify-center p-4 h-24 border border-violet-500"
                     title="Submit Ticket"
                   >
                     <div className="text-center">
                       <Ticket className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">🎫 Submit Ticket</span>
+                      <span className="text-sm font-medium">Submit Ticket</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={handleManualFollowUp}
-                    className="bg-amber-600 hover:bg-amber-700 text-white flex items-center justify-center p-4 h-24 border border-amber-500"
+                    className="!bg-amber-600 hover:!bg-amber-700 !text-white flex items-center justify-center p-4 h-24 border border-amber-500"
                     title="Follow-up Trigger"
                   >
                     <div className="text-center">
                       <RefreshCw className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">🔄 Follow-up Trigger</span>
+                      <span className="text-sm font-medium">Follow-up Trigger</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={handleStartPipelineCalls}
-                    className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-center p-4 h-24 border border-green-500"
+                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500"
                     title="Start/End Pipeline Calls"
                   >
                     <div className="text-center">
                       <Phone className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">📞 Start Pipeline</span>
+                      <span className="text-sm font-medium">Start Pipeline</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={() => setShowManualCallModal(true)}
-                    className="bg-teal-600 hover:bg-teal-700 text-white flex items-center justify-center p-4 h-24 border border-teal-500"
+                    className="!bg-teal-600 hover:!bg-teal-700 !text-white flex items-center justify-center p-4 h-24 border border-teal-500"
                     title="Manual Call Start"
                   >
                     <div className="text-center">
                       <PhoneOff className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">☎️ Manual Call Start</span>
+                      <span className="text-sm font-medium">Manual Call Start</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={handleVoiceInput}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center p-4 h-24 border border-indigo-500"
+                    className="!bg-indigo-600 hover:!bg-indigo-700 !text-white flex items-center justify-center p-4 h-24 border border-indigo-500"
                     title="Start Voice"
                   >
                     <div className="text-center">
                       <Mic className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">🎙️ Start Voice</span>
+                      <span className="text-sm font-medium">Start Voice</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={() => setShowCalendarUpload(true)}
-                    className="bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-center p-4 h-24 border border-cyan-500"
+                    className="!bg-cyan-600 hover:!bg-cyan-700 !text-white flex items-center justify-center p-4 h-24 border border-cyan-500"
                     title="Upload Calendar"
                   >
                     <div className="text-center">
                       <Upload className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">📤 Upload Calendar</span>
+                      <span className="text-sm font-medium">Upload Calendar</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={() => setShowExportModal(true)}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center p-4 h-24 border border-emerald-500"
+                    className="!bg-emerald-600 hover:!bg-emerald-700 !text-white flex items-center justify-center p-4 h-24 border border-emerald-500"
                     title="Quick Export"
                   >
                     <div className="text-center">
                       <Download className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">💾 Quick Export</span>
+                      <span className="text-sm font-medium">Quick Export</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={() => setShowAnalyticsModal(true)}
-                    className="bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-center p-4 h-24 border border-violet-500"
+                    className="!bg-violet-600 hover:!bg-violet-700 !text-white flex items-center justify-center p-4 h-24 border border-violet-500"
                     title="Generate Analytics Report"
                   >
                     <div className="text-center">
                       <BarChart3 className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">📊 Analytics Report</span>
+                      <span className="text-sm font-medium">Analytics Report</span>
                     </div>
                   </Button>
                 </div>
@@ -3458,7 +3458,7 @@ export default function CommandCenter() {
                       >
                         <div className="text-center">
                           <FileText className="w-5 h-5 mx-auto mb-2" />
-                          <span className="text-xs font-medium">📄 PDF Upload</span>
+                          <span className="text-xs font-medium">PDF Upload</span>
                         </div>
                       </Button>
                       
@@ -3469,7 +3469,7 @@ export default function CommandCenter() {
                       >
                         <div className="text-center">
                           <Brain className="w-5 h-5 mx-auto mb-2" />
-                          <span className="text-xs font-medium">🧠 Knowledge</span>
+                          <span className="text-xs font-medium">Knowledge</span>
                         </div>
                       </Button>
                       
@@ -3480,7 +3480,7 @@ export default function CommandCenter() {
                       >
                         <div className="text-center">
                           <Settings className="w-5 h-5 mx-auto mb-2" />
-                          <span className="text-xs font-medium">🔧 Diagnostics</span>
+                          <span className="text-xs font-medium">Diagnostics</span>
                         </div>
                       </Button>
                       
@@ -3491,7 +3491,7 @@ export default function CommandCenter() {
                       >
                         <div className="text-center">
                           <AlertTriangle className="w-5 h-5 mx-auto mb-2" />
-                          <span className="text-xs font-medium">🚨 Emergency</span>
+                          <span className="text-xs font-medium">Emergency</span>
                         </div>
                       </Button>
                     </div>
