@@ -8835,7 +8835,7 @@ export default function CommandCenter() {
                       >
                         <span className="text-xs font-medium">{dayName}</span>
                         <span className="text-lg font-bold">{dayNumber}</span>
-                        {i === 0 {i === -- &&{i === -- && <span className="text-xs text-blue-400">Today</span>}
+                        {i === 0 && <span className="text-xs text-blue-400">Today</span>}
                       </Button>
                     );
                   })}
