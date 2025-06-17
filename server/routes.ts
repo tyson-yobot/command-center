@@ -4425,8 +4425,8 @@ New York, NY 10001`;
   // Test Airtable connection endpoint
   app.get('/api/test-airtable', async (req, res) => {
     try {
-      const { airtableAuth } = await import('./airtableAuthFix');
-      const result = await airtableAuth.testConnection();
+      const { testSimpleAirtableAuth } = await import('./airtableSimpleTest');
+      const result = await testSimpleAirtableAuth();
       res.json(result);
     } catch (error: any) {
       res.status(500).json({

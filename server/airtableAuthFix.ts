@@ -81,11 +81,13 @@ export class AirtableAuth {
 
   async testConnection(): Promise<{ success: boolean; data?: any; error?: string }> {
     try {
-      const data = await this.makeRequest('/meta/bases');
+      // Test with YoBot Command Center base directly
+      const baseId = 'appRt8V3tH4g5Z51f';
+      const data = await this.makeRequest(`/${baseId}`);
       return {
         success: true,
         data,
-        message: 'Airtable connection successful'
+        message: 'Airtable connection successful - YoBot base accessible'
       };
     } catch (error: any) {
       return {
