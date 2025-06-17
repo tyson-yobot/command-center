@@ -453,8 +453,8 @@ export default function CommandCenter() {
         ...prev,
         [service]: { status: 'ACTIVE', lastPing: new Date().toLocaleTimeString() }
       }));
-      addRecentActivity(`${service.charAt(--).toUpperCase() + service.slice(1)} service started`, 'system');
-      showToastMessage(`${service.charAt(--).toUpperCase() + service.slice(1)} service activated`, 'success');
+      addRecentActivity(`${service.charAt(0).toUpperCase() + service.slice(1)} service started`, 'system');
+      showToastMessage(`${service.charAt(0).toUpperCase() + service.slice(1)} service activated`, 'success');
     } else if (action === 'restart') {
       setServiceStates(prev => ({
         ...prev,
@@ -465,9 +465,9 @@ export default function CommandCenter() {
           ...prev,
           [service]: { status: 'ACTIVE', lastPing: new Date().toLocaleTimeString() }
         }));
-        addRecentActivity(`${service.charAt(--).toUpperCase() + service.slice(1)} service restarted`, 'system');
+        addRecentActivity(`${service.charAt(0).toUpperCase() + service.slice(1)} service restarted`, 'system');
       }, 2000);
-      showToastMessage(`${service.charAt(--).toUpperCase() + service.slice(1)} service restarting...`, 'success');
+      showToastMessage(`${service.charAt(0).toUpperCase() + service.slice(1)} service restarting...`, 'success');
     } else if (action === 'ping') {
       try {
         // Simulate ping request
