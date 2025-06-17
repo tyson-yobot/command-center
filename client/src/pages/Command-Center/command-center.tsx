@@ -4520,7 +4520,7 @@ export default function CommandCenter() {
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300 text-sm">Last Execution:</span>
                   <div className="flex items-center space-x-1">
-                    {liveActivityData?.data?.recentExecutions?.length > -- && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
+                    {liveActivityData?.data?.recentExecutions?.length > 0 && <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>}
                     <span className="text-green-400 font-bold">{liveActivityData?.data?.lastExecution ? new Date(liveActivityData.data.lastExecution).toLocaleTimeString() : ''}</span>
                   </div>
                 </div>
