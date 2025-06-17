@@ -50,7 +50,6 @@ import {
   Share2,
   FileDown,
   PenTool,
-  FileDown,
   Printer,
   RotateCcw,
   HelpCircle,
@@ -3577,28 +3576,28 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-2 gap-3">
                       <Button
                         onClick={() => setShowAnalyticsModal(true)}
-                        className="bg-purple-600 hover:bg-purple-700 text-white p-3"
+                        className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-6"
                       >
                         <FileText className="w-4 h-4 mr-2" />
                         Analytics Report
                       </Button>
                       <Button
                         onClick={handlePDFReport}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white p-3"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-6"
                       >
                         <Printer className="w-4 h-4 mr-2" />
                         PDF Export
                       </Button>
                       <Button
                         onClick={() => setShowExportModal(true)}
-                        className="bg-teal-600 hover:bg-teal-700 text-white p-3"
+                        className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-6"
                       >
                         <Download className="w-4 h-4 mr-2" />
                         Quick Export
                       </Button>
                       <Button
                         onClick={handleExportData}
-                        className="bg-cyan-600 hover:bg-cyan-700 text-white p-3"
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-6"
                       >
                         <Database className="w-4 h-4 mr-2" />
                         Data Export
@@ -3680,21 +3679,21 @@ export default function CommandCenter() {
                   <div className="mt-4 grid grid-cols-2 lg:grid-cols-3 gap-3">
                     <Button
                       onClick={() => {}} 
-                      className="bg-orange-600 hover:bg-orange-700 text-white p-3"
+                      className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-6"
                     >
                       <AlertTriangle className="w-4 h-4 mr-2" />
                       Run Integrity Check
                     </Button>
                     <Button
                       onClick={() => {}} 
-                      className="bg-yellow-600 hover:bg-yellow-700 text-white p-3"
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-6"
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       Check Logger Status
                     </Button>
                     <Button
                       onClick={() => {}} 
-                      className="bg-red-600 hover:bg-red-700 text-white p-3"
+                      className="bg-red-600 hover:bg-red-700 text-white px-6 py-6"
                     >
                       <Zap className="w-4 h-4 mr-2" />
                       Test Integrity Check
@@ -4499,7 +4498,7 @@ export default function CommandCenter() {
 
 
         {/* RAG Knowledge Base System - Positioned at bottom as requested */}
-        <div className="mb-8">
+        <div className="mb-4">
           <Card className="bg-gradient-to-br from-purple-900/80 via-blue-900/80 to-indigo-900/80 backdrop-blur-sm border border-purple-400/50 shadow-2xl shadow-purple-500/30">
             <CardHeader className="border-b border-purple-400/30">
               <CardTitle className="text-white flex items-center text-2xl font-bold">
