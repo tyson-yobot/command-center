@@ -5467,27 +5467,27 @@ export default function CommandCenter() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Call Monitoring Panel - Under Document Manager */}
           <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Phone className="w-5 h-5 mr-2 text-blue-400" />
+            <CardHeader className="pb-6">
+              <CardTitle className="text-white flex items-center text-xl">
+                <Phone className="w-6 h-6 mr-3 text-blue-400" />
                 Call Monitoring Panel
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
+            <CardContent className="space-y-6">
+              <div className="space-y-6">
                 {/* System Services */}
-                <div className="bg-slate-700/40 rounded-lg p-4 border border-blue-400">
-                  <h4 className="text-white font-medium mb-3 flex items-center">
-                    <Settings className="w-4 h-4 mr-2 text-blue-400" />
+                <div className="bg-slate-700/40 rounded-lg p-6 border border-blue-400">
+                  <h4 className="text-white font-medium mb-5 flex items-center text-lg">
+                    <Settings className="w-5 h-5 mr-3 text-blue-400" />
                     System Services
                   </h4>
-                  <div className="space-y-2">
+                  <div className="space-y-4">
                     {/* Monitoring Service */}
-                    <div className="bg-slate-800/60 rounded-lg p-3 border border-blue-400">
+                    <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Activity className="w-4 h-4 text-yellow-400" />
-                          <span className="text-white text-sm">Monitoring Service</span>
+                        <div className="flex items-center space-x-3">
+                          <Activity className="w-5 h-5 text-yellow-400" />
+                          <span className="text-white text-base">Monitoring Service</span>
                           <span className={`text-xs font-bold px-2 py-1 rounded ${
                             serviceStates.monitoring.status === 'ACTIVE' ? 'bg-green-600/20 text-green-400' :
                             serviceStates.monitoring.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
@@ -5497,11 +5497,11 @@ export default function CommandCenter() {
                              serviceStates.monitoring.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
                           </span>
                         </div>
-                        <div className="flex space-x-1">
+                        <div className="flex space-x-2">
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('monitoring', 'start')}
-                            className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400"
+                            className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 border border-green-400"
                             title="Start monitoring service"
                           >
                             Start
@@ -5509,7 +5509,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('monitoring', 'restart')}
-                            className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400"
+                            className="bg-orange-600 hover:bg-orange-700 text-white text-sm px-4 py-2 border border-orange-400"
                             title="Restart monitoring service"
                           >
                             Restart
@@ -5517,7 +5517,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('monitoring', 'ping')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400"
+                            className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 border border-blue-400"
                             title="Ping monitoring service"
                           >
                             Ping
@@ -5532,11 +5532,11 @@ export default function CommandCenter() {
                     </div>
                     
                     {/* Recording Service */}
-                    <div className="bg-slate-800/60 rounded-lg p-3 border border-blue-400">
+                    <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Headphones className="w-4 h-4 text-red-400" />
-                          <span className="text-white text-sm">Recording Service</span>
+                        <div className="flex items-center space-x-3">
+                          <Headphones className="w-5 h-5 text-red-400" />
+                          <span className="text-white text-base">Recording Service</span>
                           <span className={`text-xs font-bold px-2 py-1 rounded ${
                             serviceStates.recording.status === 'ACTIVE' ? 'bg-green-600/20 text-green-400' :
                             serviceStates.recording.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
@@ -5546,11 +5546,11 @@ export default function CommandCenter() {
                              serviceStates.recording.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
                           </span>
                         </div>
-                        <div className="flex space-x-1">
+                        <div className="flex space-x-2">
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('recording', 'start')}
-                            className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400"
+                            className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 border border-green-400"
                             title="Start recording service"
                           >
                             Start
@@ -5558,7 +5558,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('recording', 'restart')}
-                            className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400"
+                            className="bg-orange-600 hover:bg-orange-700 text-white text-sm px-4 py-2 border border-orange-400"
                             title="Restart recording service"
                           >
                             Restart
@@ -5566,7 +5566,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('recording', 'ping')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400"
+                            className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 border border-blue-400"
                             title="Ping recording service"
                           >
                             Ping
@@ -5581,11 +5581,11 @@ export default function CommandCenter() {
                     </div>
                     
                     {/* Analytics Service */}
-                    <div className="bg-slate-800/60 rounded-lg p-3 border border-blue-400">
+                    <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Zap className="w-4 h-4 text-purple-400" />
-                          <span className="text-white text-sm">Analytics Service</span>
+                        <div className="flex items-center space-x-3">
+                          <Zap className="w-5 h-5 text-purple-400" />
+                          <span className="text-white text-base">Analytics Service</span>
                           <span className={`text-xs font-bold px-2 py-1 rounded ${
                             serviceStates.analytics.status === 'ACTIVE' ? 'bg-green-600/20 text-green-400' :
                             serviceStates.analytics.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
@@ -5595,11 +5595,11 @@ export default function CommandCenter() {
                              serviceStates.analytics.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
                           </span>
                         </div>
-                        <div className="flex space-x-1">
+                        <div className="flex space-x-2">
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('analytics', 'start')}
-                            className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 border border-green-400"
+                            className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 border border-green-400"
                             title="Start analytics service"
                           >
                             Start
@@ -5607,7 +5607,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('analytics', 'restart')}
-                            className="bg-orange-600 hover:bg-orange-700 text-white text-xs px-2 py-1 border border-orange-400"
+                            className="bg-orange-600 hover:bg-orange-700 text-white text-sm px-4 py-2 border border-orange-400"
                             title="Restart analytics service"
                           >
                             Restart
@@ -5615,7 +5615,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('analytics', 'ping')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 border border-blue-400"
+                            className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 border border-blue-400"
                             title="Ping analytics service"
                           >
                             Ping
