@@ -516,6 +516,8 @@ export default function CommandCenter() {
     setTimeout(() => setShowToast(null), 3000);
   };
 
+
+
   const addRecentActivity = (message: string, type: 'ticket' | 'chat' | 'system') => {
     const newActivity = {
       id: Date.now().toString(),
