@@ -3348,34 +3348,34 @@ export default function CommandCenter() {
                   {/* Primary Action Buttons */}
                   <Button
                     onClick={handleCreateBooking}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center p-4 h-20 border border-blue-500"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center p-4 h-24 border border-emerald-500"
                     title="Schedule Booking"
                   >
                     <div className="text-center">
-                      <Calendar className="w-6 h-6 mx-auto mb-1" />
-                      <span className="text-sm font-medium">Schedule Booking</span>
+                      <Calendar className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">📅 Schedule Booking</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={handleCreateSupportTicket}
-                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center p-4 h-20 border border-purple-500"
+                    className="bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-center p-4 h-24 border border-violet-500"
                     title="Submit Ticket"
                   >
                     <div className="text-center">
-                      <Ticket className="w-6 h-6 mx-auto mb-1" />
-                      <span className="text-sm font-medium">Submit Ticket</span>
+                      <Ticket className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">🎫 Submit Ticket</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={handleManualFollowUp}
-                    className="bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-center p-4 h-20 border border-orange-500"
+                    className="bg-amber-600 hover:bg-amber-700 text-white flex items-center justify-center p-4 h-24 border border-amber-500"
                     title="Follow-up Trigger"
                   >
                     <div className="text-center">
-                      <RefreshCw className="w-6 h-6 mx-auto mb-1" />
-                      <span className="text-sm font-medium">Follow-up Trigger</span>
+                      <RefreshCw className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">🔄 Follow-up Trigger</span>
                     </div>
                   </Button>
                   

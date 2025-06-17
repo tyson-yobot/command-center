@@ -49,16 +49,22 @@ class AirtableLiveIntegration {
   private baseUrl = 'https://api.airtable.com/v0';
 
   constructor() {
-    this.apiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
+    const rawApiKey = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_API_KEY || '';
+    // Clean any non-ASCII characters and whitespace
+    this.apiKey = rawApiKey.replace(/[^\x20-\x7E]/g, '').trim();
+    
     if (!this.apiKey) {
       console.error('No Airtable API key found in environment variables');
+    } else {
+      console.log('Airtable API key configured successfully');
     }
   }
 
   private getHeaders() {
     return {
       'Authorization': `Bearer ${this.apiKey}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'User-Agent': 'YoBot/1.0'
     };
   }
 
@@ -113,10 +119,18 @@ class AirtableLiveIntegration {
     const tableName = 'Sales%20Orders%20Table';
     
     try {
+      // Check if API key is available
+      if (!this.apiKey) {
+        console.warn('Airtable API key not configured, returning empty data');
+        return [];
+      }
+
       let url = `${this.baseUrl}/${baseId}/${tableName}`;
       
       if (filterByEmail) {
-        url += `?filterByFormula={Client Email}="${filterByEmail}"`;
+        // Properly encode the filter formula
+        const encodedFilter = encodeURIComponent(`{Client Email}="${filterByEmail}"`);
+        url += `?filterByFormula=${encodedFilter}`;
       }
 
       const response = await fetch(url, {
@@ -124,14 +138,16 @@ class AirtableLiveIntegration {
       });
 
       if (!response.ok) {
-        throw new Error(`Airtable API error: ${response.status}`);
+        const errorText = await response.text().catch(() => 'Unknown error');
+        console.error(`Airtable API error: ${response.status} - ${errorText}`);
+        return []; // Return empty array instead of throwing
       }
 
       const data = await response.json();
       return data.records || [];
     } catch (error) {
       console.error('Sales Orders fetch failed:', error);
-      throw error;
+      return []; // Return empty array instead of throwing
     }
   }
 
