@@ -3196,7 +3196,7 @@ export default function CommandCenter() {
               </CardTitle>
             </CardHeader>
             {!collapsedSections['quick-actions'] && (
-              <CardContent>
+              <CardContent className="p-6">
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {/* Pipeline Group - Same Color (Green) */}
                   <Button
@@ -3425,14 +3425,14 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={() => setShowCreateVoiceCallModal(true)}
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3"
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-4 h-12"
                     >
                       <Headphones className="w-4 h-4 mr-2" />
                       Voice Studio
                     </Button>
                     <Button
                       onClick={testVoicePersona}
-                      className="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-3"
+                      className="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-4 h-12"
                     >
                       <TestTube className="w-4 h-4 mr-2" />
                       Test Persona
