@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useLocation, useRouter } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750002410783.png';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import HeaderBar from '@/components/HeaderBar';
@@ -1486,19 +1486,18 @@ export default function CommandCenter() {
 
   const handleLeadScraper = async () => {
     try {
-      setVoiceStatus('Opening Lead Scraper popup...');
-      setShowLeadScraperPopup(true);
-      setLeadScraperDefaultTab('apollo');
-      setVoiceStatus('Lead Scraper popup opened');
+      setVoiceStatus('Opening Lead Scraper dashboard...');
+      window.location.href = '/lead-scraper';
+      setVoiceStatus('Lead Scraper dashboard opened');
       setToast({ 
         title: "Lead Scraper", 
-        description: "Opening Lead Scraper popup interface"
+        description: "Opening Enterprise Lead Intelligence Platform"
       });
     } catch (error) {
-      setVoiceStatus('Lead Scraper popup error');
+      setVoiceStatus('Lead Scraper navigation error');
       setToast({ 
         title: "Error", 
-        description: "Unable to open Lead Scraper popup",
+        description: "Unable to navigate to Lead Scraper",
         variant: "destructive" 
       });
     }
