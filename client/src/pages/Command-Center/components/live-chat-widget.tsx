@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1749714890077.png';
+import yobotLogo from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750002410783.png';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
