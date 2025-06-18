@@ -124,22 +124,16 @@ export default function LeadScraperDashboard() {
                   <CardDescription className="text-slate-300 mb-6 text-base leading-relaxed">
                     {platform.description}
                   </CardDescription>
-                  <div className="space-y-3">
+                  <div className="flex flex-wrap gap-2">
                     {platform.features.map((feature, index) => (
-                      <div key={index} className="flex items-center">
-                        <div className={`
-                          w-5 h-5 rounded-full mr-3 flex items-center justify-center
-                          ${platform.color === 'blue' ? 'bg-blue-500/20' : 
-                            platform.color === 'green' ? 'bg-green-500/20' : 'bg-purple-500/20'}
-                        `}>
-                          <CheckCircle className={`
-                            w-3 h-3
-                            ${platform.color === 'blue' ? 'text-blue-400' : 
-                              platform.color === 'green' ? 'text-green-400' : 'text-purple-400'}
-                          `} />
-                        </div>
-                        <span className="text-slate-400 text-sm">{feature}</span>
-                      </div>
+                      <Badge key={index} className={`
+                        px-3 py-1 text-xs flex items-center rounded-full border-0
+                        ${platform.color === 'blue' ? 'bg-blue-600/30 text-blue-200 border border-blue-500/40' : 
+                          platform.color === 'green' ? 'bg-green-600/30 text-green-200 border border-green-500/40' : 'bg-purple-600/30 text-purple-200 border border-purple-500/40'}
+                      `}>
+                        <CheckCircle className="w-3 h-3 mr-1" />
+                        {feature}
+                      </Badge>
                     ))}
                   </div>
                 </CardContent>
