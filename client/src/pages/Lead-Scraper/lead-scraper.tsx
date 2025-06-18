@@ -447,6 +447,8 @@ const LeadScraper: React.FC = () => {
       </div>
     </div>
   );
+
+  return currentView === 'overview' ? renderOverview() : renderScraper();
 };
 
 export default LeadScraper;

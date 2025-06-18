@@ -385,3 +385,5 @@ export const knowledgeStorage: IKnowledgeStorage = getSystemMode() === 'test'
 export const callLogStorage: ICallLogStorage = getSystemMode() === 'test'
   ? new TestCallLogStorage()
   : new DatabaseCallLogStorage();
+
+export const leadsStorage: ILeadsStorage = new AirtableLeadsStorage();

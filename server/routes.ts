@@ -5,6 +5,7 @@ import { registerAirtableRoutes } from "./modules/airtable/airtableRoutes";
 import { registerScraperRoutes } from "./modules/scraper/scraperRoutes";
 import { registerRealScrapingRoutes } from "./modules/lead-scraper/realScrapingRoutes";
 import { generateVoiceReply, testElevenLabsConnection, getAvailableVoices } from "./modules/voice/voiceGeneration";
+import { registerLeadsEndpoints } from "./leadsEndpoints";
 
 let systemMode = 'live';
 
@@ -129,20 +130,51 @@ export function registerRoutes(app: Express): void {
     }
   });
 
-  // Calls endpoints
-  app.get('/api/calls/active', (req, res) => {
-    res.json({ success: true, data: [] });
+  // Calls endpoints using real Airtable data
+  app.get('/api/calls/active', async (req, res) => {
+    try {
+      const activeCalls = await leadsStorage.getLeadsByStatus('Calling');
+      const formattedCalls = activeCalls.map(lead => ({
+        id: lead.id,
+        contact: lead.fullName || `${lead.firstName || ''} ${lead.lastName || ''}`.trim(),
+        phone: lead.phone,
+        company: lead.company,
+        status: 'active',
+        type: 'outbound',
+        duration: '00:00',
+        quality: 'good',
+        timestamp: new Date().toISOString()
+      }));
+      
+      res.json({ success: true, data: formattedCalls });
+    } catch (error) {
+      console.error('Failed to fetch active calls:', error);
+      res.json({ success: true, data: [] });
+    }
   });
 
-  app.get('/api/calls/metrics', (req, res) => {
-    res.json({
-      success: true,
-      data: {
-        totalCalls: 0,
-        completedCalls: 0,
-        avgDuration: 0
-      }
-    });
+  app.get('/api/calls/metrics', async (req, res) => {
+    try {
+      const stats = await callLogStorage.getCallLogStats();
+      res.json({
+        success: true,
+        data: {
+          totalCalls: stats.totalCalls,
+          completedCalls: stats.totalCalls - stats.activeCalls,
+          avgDuration: stats.avgDuration
+        }
+      });
+    } catch (error) {
+      console.error('Failed to fetch call metrics:', error);
+      res.json({
+        success: true,
+        data: {
+          totalCalls: 0,
+          completedCalls: 0,
+          avgDuration: '0m 0s'
+        }
+      });
+    }
   });
 
   // Audit endpoints
@@ -167,6 +199,9 @@ export function registerRoutes(app: Express): void {
 
   // Register real lead scraping routes with Airtable integration
   registerRealScrapingRoutes(app);
+
+  // Register universal leads endpoints
+  registerLeadsEndpoints(app);
 
   console.log("✅ Command Center routes registered successfully");
 }
