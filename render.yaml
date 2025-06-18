@@ -1,0 +1,18 @@
+services:
+- type: web
+  name: icloud-sync
+  env: python
+  plan: free
+  buildCommand: ""
+  startCommand: python3 app.py
+  envVars:
+    - key: ICLOUD_USERNAME
+      sync: false
+    - key: ICLOUD_PASSWORD
+      sync: false
+    - key: AIRTABLE_API_KEY
+      sync: false
+    - key: AIRTABLE_BASE_ID
+      sync: false
+    - key: AIRTABLE_TABLE_NAME
+      sync: false

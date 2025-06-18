@@ -1463,18 +1463,19 @@ export default function CommandCenter() {
 
   const handleLeadScraper = async () => {
     try {
-      setVoiceStatus('Opening Lead Scraper tool...');
-      window.open('/lead-scraper', '_blank');
-      setVoiceStatus('Lead Scraper opened in new tab');
+      setVoiceStatus('Opening Lead Scraper popup...');
+      setShowLeadScraperPopup(true);
+      setLeadScraperDefaultTab('apollo');
+      setVoiceStatus('Lead Scraper popup opened');
       setToast({ 
         title: "Lead Scraper", 
-        description: "Opening Lead Scraper tool"
+        description: "Opening Lead Scraper popup interface"
       });
     } catch (error) {
-      setVoiceStatus('Lead Scraper navigation error');
+      setVoiceStatus('Lead Scraper popup error');
       setToast({ 
         title: "Error", 
-        description: "Unable to navigate to Lead Scraper",
+        description: "Unable to open Lead Scraper popup",
         variant: "destructive" 
       });
     }
