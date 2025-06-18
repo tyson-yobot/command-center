@@ -95,127 +95,189 @@ export default function LeadScraperFinal() {
   };
 
   const renderOverview = () => (
-    <div className="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#1E3A8A] py-12 px-4 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-[#1a237e] via-[#283593] to-[#3949ab] py-16 px-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
+        {/* Header with Circular Logo */}
+        <div className="text-center mb-20">
+          <div className="w-24 h-24 mx-auto mb-8 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center shadow-2xl">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-blue-500 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                <div className="w-4 h-4 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+          
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-blue-500 mb-6">
             Enterprise Lead Intelligence Platform
           </h1>
-          <p className="text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
-            Advanced AI-powered lead generation with real-time data extraction from premium business databases
+          <p className="text-xl text-blue-200 max-w-3xl mx-auto leading-relaxed">
+            Advanced multi-platform lead generation with enterprise-grade targeting and real-time intelligence
           </p>
         </div>
 
-        {/* Platform Selection Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
-          {/* Apollo.io Professional */}
-          <Card 
-            className="bg-gradient-to-br from-blue-900/40 to-blue-700/20 border-blue-500/30 hover:border-blue-400/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20 cursor-pointer"
+        {/* Platform Selection Grid - Top Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {/* Apollo.io */}
+          <div 
+            className="bg-gradient-to-br from-[#111827] via-[#1f2937] to-[#1e3a8a] p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer group"
             onClick={() => setCurrentScreen('apollo')}
           >
-            <CardHeader className="text-center pb-4">
-              <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <span className="text-3xl font-bold text-white">A</span>
+            <div className="text-center">
+              <div className="w-16 h-16 mx-auto mb-6 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                  <div className="w-6 h-6 bg-blue-600 rounded-lg"></div>
+                </div>
               </div>
-              <CardTitle className="text-2xl text-white mb-2">Apollo.io Professional</CardTitle>
-              <CardDescription className="text-blue-200 text-lg">
-                Premium B2B contact database with 275M+ verified profiles
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="text-center">
+              
+              <h3 className="text-2xl font-bold text-white mb-4">Apollo.io</h3>
+              <p className="text-blue-200 text-base mb-6 leading-relaxed">
+                Professional B2B intelligence with 250M+ verified contacts and advanced enterprise filtering
+              </p>
+              
               <div className="space-y-3 mb-6">
-                <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30">275M+ Contacts</Badge>
-                <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30">Real-time Verification</Badge>
-                <Badge className="bg-blue-500/20 text-blue-300 border-blue-400/30">CRM Integration</Badge>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600/20 text-blue-300 rounded-full text-sm border border-blue-500/30">
+                  <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
+                  Verified Emails
+                </div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600/20 text-blue-300 rounded-full text-sm border border-blue-500/30 ml-2">
+                  <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
+                  Executive Targeting
+                </div>
               </div>
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                Configure Apollo Scraper
-              </Button>
-            </CardContent>
-          </Card>
+              
+              <div className="flex items-center text-blue-300 text-sm">
+                <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                Enterprise-grade accuracy
+              </div>
+            </div>
+          </div>
 
-          {/* Apify Web Scraper */}
-          <Card 
-            className="bg-gradient-to-br from-green-900/40 to-green-700/20 border-green-500/30 hover:border-green-400/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20 cursor-pointer"
+          {/* Apify */}
+          <div 
+            className="bg-gradient-to-br from-[#111827] via-[#1f2937] to-[#059669] p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer group"
             onClick={() => setCurrentScreen('apify')}
           >
-            <CardHeader className="text-center pb-4">
-              <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <span className="text-3xl font-bold text-white">A</span>
+            <div className="text-center">
+              <div className="w-16 h-16 mx-auto mb-6 bg-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                  <div className="w-6 h-6 bg-green-600 rounded-lg"></div>
+                </div>
               </div>
-              <CardTitle className="text-2xl text-white mb-2">Apify Web Scraper</CardTitle>
-              <CardDescription className="text-green-200 text-lg">
-                Advanced web scraping with AI-powered data extraction
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="text-center">
+              
+              <h3 className="text-2xl font-bold text-white mb-4">Apify</h3>
+              <p className="text-green-200 text-base mb-6 leading-relaxed">
+                Advanced web intelligence platform for LinkedIn profiles and comprehensive business listings
+              </p>
+              
               <div className="space-y-3 mb-6">
-                <Badge className="bg-green-500/20 text-green-300 border-green-400/30">Custom Crawling</Badge>
-                <Badge className="bg-green-500/20 text-green-300 border-green-400/30">JS Rendering</Badge>
-                <Badge className="bg-green-500/20 text-green-300 border-green-400/30">Scale Automation</Badge>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-600/20 text-green-300 rounded-full text-sm border border-green-500/30">
+                  <span className="w-2 h-2 bg-green-400 rounded-full"></span>
+                  Web Intelligence
+                </div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-600/20 text-green-300 rounded-full text-sm border border-green-500/30 ml-2">
+                  <span className="w-2 h-2 bg-green-400 rounded-full"></span>
+                  Business Listings
+                </div>
               </div>
-              <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
-                Configure Apify Scraper
-              </Button>
-            </CardContent>
-          </Card>
+              
+              <div className="flex items-center text-green-300 text-sm">
+                <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                Custom data extraction
+              </div>
+            </div>
+          </div>
 
           {/* PhantomBuster */}
-          <Card 
-            className="bg-gradient-to-br from-purple-900/40 to-purple-700/20 border-purple-500/30 hover:border-purple-400/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 cursor-pointer"
+          <div 
+            className="bg-gradient-to-br from-[#111827] via-[#1f2937] to-[#7c3aed] p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer group"
             onClick={() => setCurrentScreen('phantombuster')}
           >
-            <CardHeader className="text-center pb-4">
-              <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <span className="text-3xl font-bold text-white">P</span>
+            <div className="text-center">
+              <div className="w-16 h-16 mx-auto mb-6 bg-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                  <div className="w-6 h-6 bg-purple-600 rounded-lg"></div>
+                </div>
               </div>
-              <CardTitle className="text-2xl text-white mb-2">PhantomBuster</CardTitle>
-              <CardDescription className="text-purple-200 text-lg">
-                Social media automation and lead extraction platform
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="text-center">
+              
+              <h3 className="text-2xl font-bold text-white mb-4">PhantomBuster</h3>
+              <p className="text-purple-200 text-base mb-6 leading-relaxed">
+                Premium social media automation for LinkedIn, Twitter with intelligent connection management
+              </p>
+              
               <div className="space-y-3 mb-6">
-                <Badge className="bg-purple-500/20 text-purple-300 border-purple-400/30">LinkedIn Scraping</Badge>
-                <Badge className="bg-purple-500/20 text-purple-300 border-purple-400/30">Social Analytics</Badge>
-                <Badge className="bg-purple-500/20 text-purple-300 border-purple-400/30">API Integration</Badge>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600/20 text-purple-300 rounded-full text-sm border border-purple-500/30">
+                  <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
+                  Social Automation
+                </div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600/20 text-purple-300 rounded-full text-sm border border-purple-500/30 ml-2">
+                  <span className="w-2 h-2 bg-purple-400 rounded-full"></span>
+                  Safe Outreach
+                </div>
               </div>
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
-                Configure PhantomBuster
-              </Button>
-            </CardContent>
-          </Card>
+              
+              <div className="flex items-center text-purple-300 text-sm">
+                <span className="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
+                Multi-platform reach
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* System Features */}
-        <div className="grid md:grid-cols-3 gap-8">
-          <Card className="bg-slate-800/60 backdrop-blur-sm border-slate-600/50">
-            <CardHeader>
-              <CardTitle className="text-white text-xl">Real-time Processing</CardTitle>
-              <CardDescription className="text-slate-300">
-                Live data extraction with webhook confirmations
-              </CardDescription>
-            </CardHeader>
-          </Card>
+        {/* System Features - Bottom Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Real-time Processing */}
+          <div className="bg-gradient-to-br from-[#111827] via-[#1f2937] to-[#059669] p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
+            <div className="text-center">
+              <div className="w-16 h-16 mx-auto mb-6 bg-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                  <div className="w-6 h-6 bg-green-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white text-sm font-bold">✓</span>
+                  </div>
+                </div>
+              </div>
+              
+              <h3 className="text-2xl font-bold text-white mb-4">Real-time Processing</h3>
+              <p className="text-green-200 text-base leading-relaxed">
+                Instant lead extraction with live notifications
+              </p>
+            </div>
+          </div>
 
-          <Card className="bg-slate-800/60 backdrop-blur-sm border-slate-600/50">
-            <CardHeader>
-              <CardTitle className="text-white text-xl">Quality Assurance</CardTitle>
-              <CardDescription className="text-slate-300">
-                Email verification and data validation protocols
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          {/* Enterprise Security */}
+          <div className="bg-gradient-to-br from-[#111827] via-[#1f2937] to-[#1e3a8a] p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
+            <div className="text-center">
+              <div className="w-16 h-16 mx-auto mb-6 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                  <div className="w-6 h-6 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white text-sm font-bold">🛡</span>
+                  </div>
+                </div>
+              </div>
+              
+              <h3 className="text-2xl font-bold text-white mb-4">Enterprise Security</h3>
+              <p className="text-blue-200 text-base leading-relaxed">
+                Bank-grade encryption and compliance
+              </p>
+            </div>
+          </div>
 
-          <Card className="bg-slate-800/60 backdrop-blur-sm border-slate-600/50">
-            <CardHeader>
-              <CardTitle className="text-white text-xl">Export & Integration</CardTitle>
-              <CardDescription className="text-slate-300">
-                Direct Airtable sync, CSV export, and CRM integration
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          {/* Advanced Analytics */}
+          <div className="bg-gradient-to-br from-[#111827] via-[#1f2937] to-[#7c3aed] p-8 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
+            <div className="text-center">
+              <div className="w-16 h-16 mx-auto mb-6 bg-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                  <div className="w-6 h-6 bg-purple-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white text-sm font-bold">📊</span>
+                  </div>
+                </div>
+              </div>
+              
+              <h3 className="text-2xl font-bold text-white mb-4">Advanced Analytics</h3>
+              <p className="text-purple-200 text-base leading-relaxed">
+                Comprehensive reporting and insights
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
