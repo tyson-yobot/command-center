@@ -92,6 +92,61 @@ export default function PhantomBusterScraperPanel({ onLaunch, isLoading = false 
     return count;
   };
 
+  // Enhanced platform and option arrays
+  const platforms = [
+    { value: "linkedin", label: "LinkedIn Professional Network" },
+    { value: "x-twitter", label: "X (Twitter) Social Platform" },
+    { value: "instagram", label: "Instagram Business Profiles" },
+    { value: "facebook", label: "Facebook Business Pages" }
+  ];
+
+  const connectionDegrees = [
+    { value: "1st", label: "1st Connections (Direct)" },
+    { value: "2nd", label: "2nd Connections (Friends of Friends)" },
+    { value: "3rd", label: "3rd+ Connections (Extended Network)" },
+    { value: "all", label: "All Connection Levels" }
+  ];
+
+  const seniorityLevels = [
+    "C-Level (CEO, CTO, CFO, etc.)",
+    "VP (Vice President)", 
+    "Director",
+    "Manager",
+    "Senior Professional",
+    "Mid-Level Professional",
+    "Entry Level",
+    "Owner/Founder",
+    "Partner"
+  ];
+
+  const departments = [
+    "Sales & Business Development",
+    "Marketing & Communications", 
+    "Engineering & Technology",
+    "Product Management",
+    "Operations",
+    "Finance & Accounting",
+    "Human Resources",
+    "Customer Success",
+    "Legal & Compliance",
+    "Strategy & Consulting",
+    "Design & Creative",
+    "Data & Analytics"
+  ];
+
+  const companySizes = [
+    { value: "startup", label: "1-50 (Startup/Small)" },
+    { value: "medium", label: "51-500 (Medium)" },
+    { value: "large", label: "501-5000 (Large)" },
+    { value: "enterprise", label: "5000+ (Enterprise)" }
+  ];
+
+  const executionMethods = [
+    { value: "dashboard", label: "Use YoBot Dashboard" },
+    { value: "phantom", label: "Direct PhantomBuster" },
+    { value: "api", label: "API Integration" }
+  ];
+
   const calculateEstimatedProfiles = () => {
     let baseCount = 8000;
     
@@ -207,9 +262,16 @@ export default function PhantomBusterScraperPanel({ onLaunch, isLoading = false 
                   <SelectTrigger className="bg-slate-700/50 border-slate-600 text-slate-200">
                     <SelectValue placeholder="Select platform" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="linkedin">LinkedIn</SelectItem>
-                    <SelectItem value="x-twitter">X (formerly Twitter)</SelectItem>
+                  <SelectContent className="bg-slate-700 border-slate-600">
+                    {platforms.map((platform) => (
+                      <SelectItem 
+                        key={platform.value} 
+                        value={platform.value}
+                        className="text-slate-200 hover:bg-slate-600"
+                      >
+                        {platform.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

@@ -60,17 +60,41 @@ export default function ApolloScraperPanel({ onLaunch, isLoading = false }: Apol
 
   // Comprehensive dropdown options
   const seniorityLevels = [
-    "C-Level", "VP", "Director", "Manager", "Senior", "Mid-Level", "Junior", "Entry Level", "Intern"
+    "C-Level (CEO, CTO, CFO, CMO, etc.)", 
+    "VP (Vice President)", 
+    "SVP (Senior Vice President)",
+    "EVP (Executive Vice President)", 
+    "Director", 
+    "Senior Manager", 
+    "Manager", 
+    "Senior", 
+    "Mid-Level", 
+    "Junior", 
+    "Entry Level", 
+    "Intern",
+    "Owner",
+    "Partner",
+    "Head of",
+    "Lead"
   ];
 
   const departments = [
     "Sales", "Marketing", "Engineering", "Product", "Design", "Operations", "Finance", 
     "Human Resources", "Customer Success", "Business Development", "Legal", "IT", 
-    "Consulting", "Research", "Administrative", "Executive"
+    "Consulting", "Research", "Administrative", "Executive", "Strategy", "Analytics",
+    "Data Science", "Security", "Quality Assurance", "Project Management", "Procurement",
+    "Risk Management", "Compliance", "Training", "Facilities", "Communications"
   ];
 
   const companySizes = [
-    "1-10", "11-50", "51-200", "201-500", "501-1000", "1001-5000", "5001-10000", "10000+"
+    "1-10 (Startup)", 
+    "11-50 (Small Business)", 
+    "51-200 (Growing Company)", 
+    "201-500 (Mid-Size)", 
+    "501-1000 (Large)", 
+    "1001-5000 (Enterprise)", 
+    "5001-10000 (Large Enterprise)", 
+    "10000+ (Fortune 500)"
   ];
 
   const fundingStages = [
