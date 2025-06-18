@@ -3236,6 +3236,25 @@ export default function CommandCenter() {
                       <span className="text-sm font-medium">Lead Scraper</span>
                     </div>
                   </Button>
+
+                  <Button
+                    onClick={() => setShowScrapedLeads(true)}
+                    className="!bg-blue-600 hover:!bg-blue-700 !text-white flex items-center justify-center p-4 h-24 border border-blue-500 relative"
+                    title="View Recently Scraped Leads"
+                  >
+                    <div className="text-center">
+                      <Database className="w-6 h-6 mx-auto mb-1" />
+                      <span className="text-xs font-medium">Scraped Leads</span>
+                      <div className="text-xs text-blue-200 mt-1">
+                        Last 20: {scrapedLeadsCount || 0}
+                      </div>
+                    </div>
+                    {scrapedLeadsCount > 0 && (
+                      <Badge className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs px-1 min-w-[20px] h-5 flex items-center justify-center">
+                        {scrapedLeadsCount}
+                      </Badge>
+                    )}
+                  </Button>
                   
 
 

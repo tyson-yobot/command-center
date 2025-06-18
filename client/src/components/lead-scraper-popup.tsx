@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { X, Search, Target, Users, Building, MapPin, Briefcase, Globe, Phone, Mail, Linkedin, Facebook, Instagram, Twitter, Download, Settings, Play, Pause, RefreshCw } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { X, Target, Globe, Users, ArrowLeft, Settings, Play } from 'lucide-react';
 
 interface LeadScraperPopupProps {
   isOpen: boolean;
@@ -17,556 +16,794 @@ interface LeadScraperPopupProps {
 }
 
 export function LeadScraperPopup({ isOpen, onClose, defaultTab = 'apollo' }: LeadScraperPopupProps) {
-  const [activeTab, setActiveTab] = useState(defaultTab);
-  const [apolloConfig, setApolloConfig] = useState({
-    searchTerms: '',
-    location: '',
-    companySize: 'any',
-    industry: 'any',
-    jobTitles: '',
-    seniority: 'any',
-    departments: [],
-    excludeTerms: '',
-    includeEmails: true,
-    includePhones: true,
-    verifyContacts: true
-  });
-
-  const [apifyConfig, setApifyConfig] = useState({
-    searchQuery: '',
-    location: '',
-    radius: '25',
-    categories: [],
-    businessTypes: [],
-    minRating: '4.0',
-    includeWebsite: true,
-    includePhone: true,
-    includeAddress: true,
-    maxResults: '1000'
-  });
-
-  const [phantombusterConfig, setPhantombusterConfig] = useState({
-    platforms: [],
-    searchTerms: '',
-    connectionDegree: 'all',
-    location: '',
-    industry: 'any',
-    includeProfiles: true,
-    includeContacts: true,
-    followConnections: false,
-    messageTemplates: ''
-  });
+  const [selectedPlatform, setSelectedPlatform] = useState<'apollo' | 'apify' | 'phantombuster' | null>(null);
+  const [showConfig, setShowConfig] = useState(false);
 
   if (!isOpen) return null;
 
-  const apolloSeniorityLevels = [
-    'Entry Level', 'Mid Level', 'Senior Level', 'Director Level', 'VP Level', 'C-Level', 'Owner'
-  ];
+  const handlePlatformSelect = (platform: 'apollo' | 'apify' | 'phantombuster') => {
+    setSelectedPlatform(platform);
+    setShowConfig(true);
+  };
 
-  const apolloDepartments = [
-    'Sales', 'Marketing', 'Engineering', 'Operations', 'Finance', 'HR', 'Customer Success', 'Product', 'Legal', 'IT'
-  ];
+  const handleBackToPlatforms = () => {
+    setShowConfig(false);
+    setSelectedPlatform(null);
+  };
 
-  const apifyCategories = [
-    'Restaurants', 'Real Estate', 'Healthcare', 'Retail', 'Professional Services', 'Technology', 'Manufacturing', 'Education', 'Non-Profit', 'Government'
-  ];
-
-  const apifyBusinessTypes = [
-    'Small Business', 'Medium Business', 'Enterprise', 'Franchise', 'Startup', 'Non-Profit'
-  ];
-
-  const phantombusterPlatforms = [
-    'LinkedIn', 'Instagram', 'Facebook', 'Twitter', 'Sales Navigator', 'Google Maps', 'Yellow Pages'
-  ];
-
-  return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-6xl max-h-[90vh] bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 rounded-xl border border-blue-400/50 shadow-2xl overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-blue-400/30 bg-gradient-to-r from-blue-600/20 to-purple-600/20">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-500/20 rounded-lg">
-              <Search className="w-6 h-6 text-blue-400" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-white">Enterprise Lead Intelligence Platform</h2>
-              <p className="text-blue-200">Advanced lead generation and prospecting tools</p>
+  // Main platform selection screen
+  if (!showConfig) {
+    return (
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 rounded-lg w-full max-w-6xl h-[90vh] overflow-hidden">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-6 text-white relative">
+            <div className="flex items-center justify-between">
+              <div className="text-center flex-1">
+                <div className="w-16 h-16 bg-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <Target className="w-8 h-8 text-white" />
+                </div>
+                <h2 className="text-3xl font-bold mb-2">Enterprise Lead Intelligence Platform</h2>
+                <p className="text-blue-100">Advanced multi-platform lead generation with enterprise-grade targeting and real-time intelligence</p>
+              </div>
+              <Button 
+                onClick={onClose}
+                variant="ghost" 
+                size="sm"
+                className="absolute top-4 right-4 text-white hover:bg-white/20"
+              >
+                <X className="w-5 h-5" />
+              </Button>
             </div>
           </div>
-          <Button
-            onClick={onClose}
-            variant="ghost"
-            className="text-white hover:bg-white/10 p-2"
-          >
-            <X className="w-6 h-6" />
-          </Button>
+
+          {/* Platform Cards */}
+          <div className="p-8">
+            <div className="grid grid-cols-3 gap-8 mb-8">
+              {/* Apollo Card */}
+              <Card 
+                className="cursor-pointer transition-all hover:scale-105 bg-slate-800 border-slate-600 hover:border-blue-400"
+                onClick={() => handlePlatformSelect('apollo')}
+              >
+                <CardHeader className="text-center pb-4">
+                  <div className="w-16 h-16 bg-blue-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <Target className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle className="text-white text-2xl">Apollo.io</CardTitle>
+                  <p className="text-slate-400">Professional B2B intelligence with 250M+ verified contacts and advanced enterprise filtering</p>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Badge className="bg-blue-600/20 text-blue-400 border-blue-400">✓ Verified Emails</Badge>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Badge className="bg-blue-600/20 text-blue-400 border-blue-400">✓ Executive Targeting</Badge>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Badge className="bg-blue-600/20 text-blue-400 border-blue-400">✓ Enterprise-grade accuracy</Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Apify Card */}
+              <Card 
+                className="cursor-pointer transition-all hover:scale-105 bg-slate-800 border-slate-600 hover:border-green-400"
+                onClick={() => handlePlatformSelect('apify')}
+              >
+                <CardHeader className="text-center pb-4">
+                  <div className="w-16 h-16 bg-green-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <Globe className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle className="text-white text-2xl">Apify</CardTitle>
+                  <p className="text-slate-400">Advanced web intelligence platform for LinkedIn profiles and comprehensive business listings</p>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Badge className="bg-green-600/20 text-green-400 border-green-400">✓ Web Intelligence</Badge>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Badge className="bg-green-600/20 text-green-400 border-green-400">✓ Business Listings</Badge>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Badge className="bg-green-600/20 text-green-400 border-green-400">✓ Custom data extraction</Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* PhantomBuster Card */}
+              <Card 
+                className="cursor-pointer transition-all hover:scale-105 bg-slate-800 border-slate-600 hover:border-purple-400"
+                onClick={() => handlePlatformSelect('phantombuster')}
+              >
+                <CardHeader className="text-center pb-4">
+                  <div className="w-16 h-16 bg-purple-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <Users className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle className="text-white text-2xl">PhantomBuster</CardTitle>
+                  <p className="text-slate-400">Premium social media automation for LinkedIn, Twitter with intelligent connection management</p>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Badge className="bg-purple-600/20 text-purple-400 border-purple-400">✓ Social Automation</Badge>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Badge className="bg-purple-600/20 text-purple-400 border-purple-400">✓ Safe Outreach</Badge>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Badge className="bg-purple-600/20 text-purple-400 border-purple-400">✓ Multi-platform reach</Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Bottom Feature Cards */}
+            <div className="grid grid-cols-3 gap-6">
+              <Card className="bg-slate-800 border-slate-600">
+                <CardHeader className="text-center">
+                  <div className="w-12 h-12 bg-green-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                    <Settings className="w-6 h-6 text-white" />
+                  </div>
+                  <CardTitle className="text-white text-lg">Real-time Processing</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-400 text-sm text-center">Instant lead extraction with live notifications</p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-800 border-slate-600">
+                <CardHeader className="text-center">
+                  <div className="w-12 h-12 bg-blue-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                    <Target className="w-6 h-6 text-white" />
+                  </div>
+                  <CardTitle className="text-white text-lg">Enterprise Security</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-400 text-sm text-center">Bank-grade encryption and compliance</p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-800 border-slate-600">
+                <CardHeader className="text-center">
+                  <div className="w-12 h-12 bg-purple-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                    <Globe className="w-6 h-6 text-white" />
+                  </div>
+                  <CardTitle className="text-white text-lg">Advanced Analytics</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-400 text-sm text-center">Comprehensive reporting and insights</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Configuration screens
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 rounded-lg w-full max-w-6xl h-[90vh] overflow-hidden">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4 text-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Button 
+                onClick={handleBackToPlatforms}
+                variant="ghost" 
+                size="sm"
+                className="text-white hover:bg-white/20"
+              >
+                <ArrowLeft className="w-4 h-4 mr-1" />
+                Back to Platforms
+              </Button>
+              <div>
+                <h2 className="text-xl font-bold">
+                  {selectedPlatform === 'apollo' && 'Apollo.io Professional Configuration'}
+                  {selectedPlatform === 'apify' && 'Apify Advanced Configuration'}
+                  {selectedPlatform === 'phantombuster' && 'PhantomBuster Professional Setup'}
+                </h2>
+                <p className="text-blue-100 text-sm">Configure precision targeting parameters</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Button className="bg-slate-700 hover:bg-slate-600 text-white">
+                Save Preset
+              </Button>
+              <Button 
+                onClick={onClose}
+                variant="ghost" 
+                size="sm"
+                className="text-white hover:bg-white/20"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+          </div>
         </div>
 
-        {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
-          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'apollo' | 'apify' | 'phantombuster')}>
-            <TabsList className="grid w-full grid-cols-3 mb-6 bg-slate-800/50">
-              <TabsTrigger value="apollo" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+        {/* Configuration Content */}
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-100px)] space-y-6">
+          {/* Test Company Mode Toggle */}
+          <Card className="bg-slate-800/50 border-slate-600">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                  <span>Apollo.io</span>
+                  <Label className="text-white font-medium">Test Company Mode</Label>
+                  <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center text-xs text-white">?</div>
                 </div>
-              </TabsTrigger>
-              <TabsTrigger value="apify" className="data-[state=active]:bg-green-600 data-[state=active]:text-white">
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span>Apify</span>
-                </div>
-              </TabsTrigger>
-              <TabsTrigger value="phantombuster" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                  <span>PhantomBuster</span>
-                </div>
-              </TabsTrigger>
-            </TabsList>
+                <Switch />
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Apollo Tab */}
-            <TabsContent value="apollo">
-              <Card className="bg-gradient-to-br from-blue-900/40 to-blue-800/40 border border-blue-400/30">
+          {/* Apollo Configuration */}
+          {selectedPlatform === 'apollo' && (
+            <>
+              {/* Contact Filters */}
+              <Card className="bg-slate-800/50 border-slate-600">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center">
-                    <Target className="w-5 h-5 mr-2 text-blue-400" />
-                    Apollo.io Lead Generation
-                    <Badge className="ml-2 bg-blue-500 text-white">Premium</Badge>
+                  <CardTitle className="text-white flex items-center space-x-2">
+                    <Users className="w-5 h-5" />
+                    <span>Contact Filters</span>
                   </CardTitle>
+                  <p className="text-slate-400 text-sm">Target specific professionals and contact requirements</p>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Search Configuration */}
-                    <div className="space-y-4">
-                      <h3 className="text-white font-semibold">Search Parameters</h3>
-                      
-                      <div>
-                        <Label className="text-blue-200">Search Terms</Label>
-                        <Input
-                          value={apolloConfig.searchTerms}
-                          onChange={(e) => setApolloConfig({...apolloConfig, searchTerms: e.target.value})}
-                          placeholder="e.g., CEO, Marketing Director, Sales Manager"
-                          className="bg-blue-900/30 border-blue-400/50 text-white"
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Job Titles</Label>
+                      <div className="flex space-x-2">
+                        <Input 
+                          placeholder="e.g., CEO, VP Sales, Marketing Director"
+                          className="bg-slate-700 border-slate-600 text-white flex-1"
                         />
-                      </div>
-
-                      <div>
-                        <Label className="text-blue-200">Location</Label>
-                        <Input
-                          value={apolloConfig.location}
-                          onChange={(e) => setApolloConfig({...apolloConfig, location: e.target.value})}
-                          placeholder="e.g., New York, USA"
-                          className="bg-blue-900/30 border-blue-400/50 text-white"
-                        />
-                      </div>
-
-                      <div>
-                        <Label className="text-blue-200">Company Size</Label>
-                        <Select value={apolloConfig.companySize} onValueChange={(value) => setApolloConfig({...apolloConfig, companySize: value})}>
-                          <SelectTrigger className="bg-blue-900/30 border-blue-400/50 text-white">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="any">Any Size</SelectItem>
-                            <SelectItem value="1-10">1-10 employees</SelectItem>
-                            <SelectItem value="11-50">11-50 employees</SelectItem>
-                            <SelectItem value="51-200">51-200 employees</SelectItem>
-                            <SelectItem value="201-500">201-500 employees</SelectItem>
-                            <SelectItem value="501-1000">501-1000 employees</SelectItem>
-                            <SelectItem value="1001+">1001+ employees</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <div>
-                        <Label className="text-blue-200">Industry</Label>
-                        <Select value={apolloConfig.industry} onValueChange={(value) => setApolloConfig({...apolloConfig, industry: value})}>
-                          <SelectTrigger className="bg-blue-900/30 border-blue-400/50 text-white">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="any">Any Industry</SelectItem>
-                            <SelectItem value="technology">Technology</SelectItem>
-                            <SelectItem value="healthcare">Healthcare</SelectItem>
-                            <SelectItem value="finance">Finance</SelectItem>
-                            <SelectItem value="retail">Retail</SelectItem>
-                            <SelectItem value="manufacturing">Manufacturing</SelectItem>
-                            <SelectItem value="real-estate">Real Estate</SelectItem>
-                            <SelectItem value="education">Education</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <Button className="bg-blue-600 hover:bg-blue-700">+</Button>
                       </div>
                     </div>
-
-                    {/* Advanced Filters */}
-                    <div className="space-y-4">
-                      <h3 className="text-white font-semibold">Advanced Filters</h3>
-                      
-                      <div>
-                        <Label className="text-blue-200">Seniority Level</Label>
-                        <Select value={apolloConfig.seniority} onValueChange={(value) => setApolloConfig({...apolloConfig, seniority: value})}>
-                          <SelectTrigger className="bg-blue-900/30 border-blue-400/50 text-white">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="any">Any Level</SelectItem>
-                            {apolloSeniorityLevels.map(level => (
-                              <SelectItem key={level} value={level.toLowerCase().replace(' ', '_')}>{level}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <div>
-                        <Label className="text-blue-200">Departments</Label>
-                        <div className="grid grid-cols-2 gap-2 mt-2">
-                          {apolloDepartments.map(dept => (
-                            <div key={dept} className="flex items-center space-x-2">
-                              <Checkbox
-                                checked={apolloConfig.departments.includes(dept)}
-                                onCheckedChange={(checked) => {
-                                  if (checked) {
-                                    setApolloConfig({...apolloConfig, departments: [...apolloConfig.departments, dept]});
-                                  } else {
-                                    setApolloConfig({...apolloConfig, departments: apolloConfig.departments.filter(d => d !== dept)});
-                                  }
-                                }}
-                              />
-                              <Label className="text-blue-200 text-sm">{dept}</Label>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="space-y-3">
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={apolloConfig.includeEmails}
-                            onCheckedChange={(checked) => setApolloConfig({...apolloConfig, includeEmails: !!checked})}
-                          />
-                          <Label className="text-blue-200">Include Email Addresses</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={apolloConfig.includePhones}
-                            onCheckedChange={(checked) => setApolloConfig({...apolloConfig, includePhones: !!checked})}
-                          />
-                          <Label className="text-blue-200">Include Phone Numbers</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={apolloConfig.verifyContacts}
-                            onCheckedChange={(checked) => setApolloConfig({...apolloConfig, verifyContacts: !!checked})}
-                          />
-                          <Label className="text-blue-200">Verify Contact Information</Label>
-                        </div>
+                    <div>
+                      <Label className="text-white">Seniority Level</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Select seniority level" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="entry">Entry Level</SelectItem>
+                          <SelectItem value="mid">Mid Level</SelectItem>
+                          <SelectItem value="senior">Senior Level</SelectItem>
+                          <SelectItem value="director">Director Level</SelectItem>
+                          <SelectItem value="vp">VP Level</SelectItem>
+                          <SelectItem value="c-level">C-Level</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Department</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Select department" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="sales">Sales</SelectItem>
+                          <SelectItem value="marketing">Marketing</SelectItem>
+                          <SelectItem value="engineering">Engineering</SelectItem>
+                          <SelectItem value="finance">Finance</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="text-white">Location</Label>
+                      <div className="flex space-x-2">
+                        <Input 
+                          placeholder="e.g., New York, San Francisco, Remote"
+                          className="bg-slate-700 border-slate-600 text-white flex-1"
+                        />
+                        <Button className="bg-blue-600 hover:bg-blue-700">+</Button>
                       </div>
                     </div>
                   </div>
-
-                  <div className="flex justify-end space-x-3 pt-4 border-t border-blue-400/30">
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                      <Play className="w-4 h-4 mr-2" />
-                      Start Apollo Search
-                    </Button>
+                  <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox />
+                      <Label className="text-blue-400">Email Verified</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox />
+                      <Label className="text-slate-400">Phone Number Available</Label>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
-            </TabsContent>
 
-            {/* Apify Tab */}
-            <TabsContent value="apify">
-              <Card className="bg-gradient-to-br from-green-900/40 to-green-800/40 border border-green-400/30">
+              {/* Company Filters */}
+              <Card className="bg-slate-800/50 border-slate-600">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center">
-                    <MapPin className="w-5 h-5 mr-2 text-green-400" />
-                    Apify Local Business Scraper
-                    <Badge className="ml-2 bg-green-500 text-white">Premium</Badge>
+                  <CardTitle className="text-white flex items-center space-x-2">
+                    <Target className="w-5 h-5" />
+                    <span>Company Filters</span>
                   </CardTitle>
+                  <p className="text-slate-400 text-sm">Target companies by industry, size, and characteristics</p>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Search Configuration */}
-                    <div className="space-y-4">
-                      <h3 className="text-white font-semibold">Search Parameters</h3>
-                      
-                      <div>
-                        <Label className="text-green-200">Search Query</Label>
-                        <Input
-                          value={apifyConfig.searchQuery}
-                          onChange={(e) => setApifyConfig({...apifyConfig, searchQuery: e.target.value})}
-                          placeholder="e.g., restaurants, dentists, lawyers"
-                          className="bg-green-900/30 border-green-400/50 text-white"
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Industry</Label>
+                      <div className="flex space-x-2">
+                        <Input 
+                          placeholder="e.g., Technology, Healthcare, Finance"
+                          className="bg-slate-700 border-slate-600 text-white flex-1"
                         />
-                      </div>
-
-                      <div>
-                        <Label className="text-green-200">Location</Label>
-                        <Input
-                          value={apifyConfig.location}
-                          onChange={(e) => setApifyConfig({...apifyConfig, location: e.target.value})}
-                          placeholder="e.g., New York, NY"
-                          className="bg-green-900/30 border-green-400/50 text-white"
-                        />
-                      </div>
-
-                      <div>
-                        <Label className="text-green-200">Search Radius (miles)</Label>
-                        <Select value={apifyConfig.radius} onValueChange={(value) => setApifyConfig({...apifyConfig, radius: value})}>
-                          <SelectTrigger className="bg-green-900/30 border-green-400/50 text-white">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="5">5 miles</SelectItem>
-                            <SelectItem value="10">10 miles</SelectItem>
-                            <SelectItem value="25">25 miles</SelectItem>
-                            <SelectItem value="50">50 miles</SelectItem>
-                            <SelectItem value="100">100 miles</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <div>
-                        <Label className="text-green-200">Minimum Rating</Label>
-                        <Select value={apifyConfig.minRating} onValueChange={(value) => setApifyConfig({...apifyConfig, minRating: value})}>
-                          <SelectTrigger className="bg-green-900/30 border-green-400/50 text-white">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="3.0">3.0+ stars</SelectItem>
-                            <SelectItem value="3.5">3.5+ stars</SelectItem>
-                            <SelectItem value="4.0">4.0+ stars</SelectItem>
-                            <SelectItem value="4.5">4.5+ stars</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <Button className="bg-blue-600 hover:bg-blue-700">+</Button>
                       </div>
                     </div>
-
-                    {/* Advanced Options */}
-                    <div className="space-y-4">
-                      <h3 className="text-white font-semibold">Advanced Options</h3>
-                      
-                      <div>
-                        <Label className="text-green-200">Business Categories</Label>
-                        <div className="grid grid-cols-2 gap-2 mt-2">
-                          {apifyCategories.map(category => (
-                            <div key={category} className="flex items-center space-x-2">
-                              <Checkbox
-                                checked={apifyConfig.categories.includes(category)}
-                                onCheckedChange={(checked) => {
-                                  if (checked) {
-                                    setApifyConfig({...apifyConfig, categories: [...apifyConfig.categories, category]});
-                                  } else {
-                                    setApifyConfig({...apifyConfig, categories: apifyConfig.categories.filter(c => c !== category)});
-                                  }
-                                }}
-                              />
-                              <Label className="text-green-200 text-sm">{category}</Label>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <Label className="text-green-200">Business Types</Label>
-                        <div className="grid grid-cols-2 gap-2 mt-2">
-                          {apifyBusinessTypes.map(type => (
-                            <div key={type} className="flex items-center space-x-2">
-                              <Checkbox
-                                checked={apifyConfig.businessTypes.includes(type)}
-                                onCheckedChange={(checked) => {
-                                  if (checked) {
-                                    setApifyConfig({...apifyConfig, businessTypes: [...apifyConfig.businessTypes, type]});
-                                  } else {
-                                    setApifyConfig({...apifyConfig, businessTypes: apifyConfig.businessTypes.filter(t => t !== type)});
-                                  }
-                                }}
-                              />
-                              <Label className="text-green-200 text-sm">{type}</Label>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="space-y-3">
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={apifyConfig.includeWebsite}
-                            onCheckedChange={(checked) => setApifyConfig({...apifyConfig, includeWebsite: !!checked})}
-                          />
-                          <Label className="text-green-200">Include Website URLs</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={apifyConfig.includePhone}
-                            onCheckedChange={(checked) => setApifyConfig({...apifyConfig, includePhone: !!checked})}
-                          />
-                          <Label className="text-green-200">Include Phone Numbers</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={apifyConfig.includeAddress}
-                            onCheckedChange={(checked) => setApifyConfig({...apifyConfig, includeAddress: !!checked})}
-                          />
-                          <Label className="text-green-200">Include Full Addresses</Label>
-                        </div>
-                      </div>
+                    <div>
+                      <Label className="text-white">Company Size</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Select company size" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="startup">1-10 employees</SelectItem>
+                          <SelectItem value="small">11-50 employees</SelectItem>
+                          <SelectItem value="medium">51-200 employees</SelectItem>
+                          <SelectItem value="large">201-1000 employees</SelectItem>
+                          <SelectItem value="enterprise">1000+ employees</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
-
-                  <div className="flex justify-end space-x-3 pt-4 border-t border-green-400/30">
-                    <Button className="bg-green-600 hover:bg-green-700 text-white">
-                      <Play className="w-4 h-4 mr-2" />
-                      Start Apify Search
-                    </Button>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Funding Stage</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Select funding stage" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pre-seed">Pre-Seed</SelectItem>
+                          <SelectItem value="seed">Seed</SelectItem>
+                          <SelectItem value="series-a">Series A</SelectItem>
+                          <SelectItem value="series-b">Series B+</SelectItem>
+                          <SelectItem value="public">Public</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="text-white">Revenue Range</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Select revenue range" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1m-10m">$1M - $10M</SelectItem>
+                          <SelectItem value="10m-50m">$10M - $50M</SelectItem>
+                          <SelectItem value="50m-100m">$50M - $100M</SelectItem>
+                          <SelectItem value="100m+">$100M+</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-white">Technologies Used</Label>
+                    <div className="flex space-x-2">
+                      <Input 
+                        placeholder="e.g., Salesforce, HubSpot, AWS, React"
+                        className="bg-slate-700 border-slate-600 text-white flex-1"
+                      />
+                      <Button className="bg-blue-600 hover:bg-blue-700">+</Button>
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-white">Exclude Domains/Companies</Label>
+                    <Input 
+                      placeholder="e.g., competitor1.com, competitor2.com"
+                      className="bg-slate-700 border-slate-600 text-white"
+                    />
                   </div>
                 </CardContent>
               </Card>
-            </TabsContent>
 
-            {/* PhantomBuster Tab */}
-            <TabsContent value="phantombuster">
-              <Card className="bg-gradient-to-br from-purple-900/40 to-purple-800/40 border border-purple-400/30">
+              {/* Scraping Settings */}
+              <Card className="bg-slate-800/50 border-slate-600">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center">
-                    <Users className="w-5 h-5 mr-2 text-purple-400" />
-                    PhantomBuster Social Scraper
-                    <Badge className="ml-2 bg-purple-500 text-white">Premium</Badge>
+                  <CardTitle className="text-white flex items-center space-x-2">
+                    <Settings className="w-5 h-5" />
+                    <span>Scraping Settings</span>
                   </CardTitle>
+                  <p className="text-slate-400 text-sm">Configure scraping parameters and limits</p>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Platform Selection */}
-                    <div className="space-y-4">
-                      <h3 className="text-white font-semibold">Platform Selection</h3>
-                      
-                      <div>
-                        <Label className="text-purple-200">Target Platforms</Label>
-                        <div className="grid grid-cols-2 gap-2 mt-2">
-                          {phantombusterPlatforms.map(platform => (
-                            <div key={platform} className="flex items-center space-x-2">
-                              <Checkbox
-                                checked={phantombusterConfig.platforms.includes(platform)}
-                                onCheckedChange={(checked) => {
-                                  if (checked) {
-                                    setPhantombusterConfig({...phantombusterConfig, platforms: [...phantombusterConfig.platforms, platform]});
-                                  } else {
-                                    setPhantombusterConfig({...phantombusterConfig, platforms: phantombusterConfig.platforms.filter(p => p !== platform)});
-                                  }
-                                }}
-                              />
-                              <Label className="text-purple-200 text-sm">{platform}</Label>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <Label className="text-purple-200">Search Terms</Label>
-                        <Input
-                          value={phantombusterConfig.searchTerms}
-                          onChange={(e) => setPhantombusterConfig({...phantombusterConfig, searchTerms: e.target.value})}
-                          placeholder="e.g., marketing manager, software engineer"
-                          className="bg-purple-900/30 border-purple-400/50 text-white"
-                        />
-                      </div>
-
-                      <div>
-                        <Label className="text-purple-200">Connection Degree</Label>
-                        <Select value={phantombusterConfig.connectionDegree} onValueChange={(value) => setPhantombusterConfig({...phantombusterConfig, connectionDegree: value})}>
-                          <SelectTrigger className="bg-purple-900/30 border-purple-400/50 text-white">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Connections</SelectItem>
-                            <SelectItem value="1st">1st Degree</SelectItem>
-                            <SelectItem value="2nd">2nd Degree</SelectItem>
-                            <SelectItem value="3rd">3rd Degree</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Data Freshness (days)</Label>
+                      <Input 
+                        placeholder="30"
+                        className="bg-slate-700 border-slate-600 text-white"
+                      />
                     </div>
-
-                    {/* Advanced Configuration */}
-                    <div className="space-y-4">
-                      <h3 className="text-white font-semibold">Advanced Configuration</h3>
-                      
-                      <div>
-                        <Label className="text-purple-200">Location Filter</Label>
-                        <Input
-                          value={phantombusterConfig.location}
-                          onChange={(e) => setPhantombusterConfig({...phantombusterConfig, location: e.target.value})}
-                          placeholder="e.g., San Francisco, CA"
-                          className="bg-purple-900/30 border-purple-400/50 text-white"
-                        />
-                      </div>
-
-                      <div>
-                        <Label className="text-purple-200">Industry Filter</Label>
-                        <Select value={phantombusterConfig.industry} onValueChange={(value) => setPhantombusterConfig({...phantombusterConfig, industry: value})}>
-                          <SelectTrigger className="bg-purple-900/30 border-purple-400/50 text-white">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="any">Any Industry</SelectItem>
-                            <SelectItem value="technology">Technology</SelectItem>
-                            <SelectItem value="finance">Finance</SelectItem>
-                            <SelectItem value="healthcare">Healthcare</SelectItem>
-                            <SelectItem value="marketing">Marketing</SelectItem>
-                            <SelectItem value="sales">Sales</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <div>
-                        <Label className="text-purple-200">Message Templates</Label>
-                        <Textarea
-                          value={phantombusterConfig.messageTemplates}
-                          onChange={(e) => setPhantombusterConfig({...phantombusterConfig, messageTemplates: e.target.value})}
-                          placeholder="Enter personalized connection messages..."
-                          className="bg-purple-900/30 border-purple-400/50 text-white"
-                          rows={3}
-                        />
-                      </div>
-
-                      <div className="space-y-3">
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={phantombusterConfig.includeProfiles}
-                            onCheckedChange={(checked) => setPhantombusterConfig({...phantombusterConfig, includeProfiles: !!checked})}
-                          />
-                          <Label className="text-purple-200">Include Full Profiles</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={phantombusterConfig.includeContacts}
-                            onCheckedChange={(checked) => setPhantombusterConfig({...phantombusterConfig, includeContacts: !!checked})}
-                          />
-                          <Label className="text-purple-200">Extract Contact Information</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={phantombusterConfig.followConnections}
-                            onCheckedChange={(checked) => setPhantombusterConfig({...phantombusterConfig, followConnections: !!checked})}
-                          />
-                          <Label className="text-purple-200">Auto-Follow Connections</Label>
-                        </div>
-                      </div>
+                    <div>
+                      <Label className="text-white">Record Limit</Label>
+                      <Input 
+                        placeholder="1000"
+                        className="bg-slate-700 border-slate-600 text-white"
+                      />
                     </div>
-                  </div>
-
-                  <div className="flex justify-end space-x-3 pt-4 border-t border-purple-400/30">
-                    <Button className="bg-purple-600 hover:bg-purple-700 text-white">
-                      <Play className="w-4 h-4 mr-2" />
-                      Start PhantomBuster
-                    </Button>
                   </div>
                 </CardContent>
               </Card>
-            </TabsContent>
-          </Tabs>
+            </>
+          )}
+
+          {/* Apify Configuration */}
+          {selectedPlatform === 'apify' && (
+            <>
+              {/* Location Filters */}
+              <Card className="bg-slate-800/50 border-slate-600">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center space-x-2">
+                    <Globe className="w-5 h-5" />
+                    <span>Location Filters</span>
+                  </CardTitle>
+                  <p className="text-slate-400 text-sm">Target specific geographic areas and search parameters</p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Search Terms</Label>
+                      <div className="flex space-x-2">
+                        <Input 
+                          placeholder="e.g., restaurants, hotels, gyms"
+                          className="bg-slate-700 border-slate-600 text-white flex-1"
+                        />
+                        <Button className="bg-green-600 hover:bg-green-700">Add</Button>
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-white">Location (City/State/ZIP)</Label>
+                      <Input 
+                        placeholder="e.g., New York, NY or 10001"
+                        className="bg-slate-700 border-slate-600 text-white"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Search Radius (miles)</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="25 miles" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="5">5 miles</SelectItem>
+                          <SelectItem value="10">10 miles</SelectItem>
+                          <SelectItem value="25">25 miles</SelectItem>
+                          <SelectItem value="50">50 miles</SelectItem>
+                          <SelectItem value="100">100 miles</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="text-white">Industry Category</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Select industry" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="restaurants">Restaurants</SelectItem>
+                          <SelectItem value="retail">Retail</SelectItem>
+                          <SelectItem value="services">Professional Services</SelectItem>
+                          <SelectItem value="healthcare">Healthcare</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-white">Exclude Keywords</Label>
+                    <div className="flex space-x-2">
+                      <Input 
+                        placeholder="e.g., closed, temporary, franchise"
+                        className="bg-slate-700 border-slate-600 text-white flex-1"
+                      />
+                      <Button className="bg-green-600 hover:bg-green-700">Add</Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Quality Filters */}
+              <Card className="bg-slate-800/50 border-slate-600">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center space-x-2">
+                    <Target className="w-5 h-5" />
+                    <span>Quality Filters</span>
+                  </CardTitle>
+                  <p className="text-slate-400 text-sm">Set quality thresholds and data extraction preferences</p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Minimum Reviews Required</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="5+ reviews" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1">1+ reviews</SelectItem>
+                          <SelectItem value="5">5+ reviews</SelectItem>
+                          <SelectItem value="10">10+ reviews</SelectItem>
+                          <SelectItem value="25">25+ reviews</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="text-white">Minimum Rating</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Select rating" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="3">3.0+ stars</SelectItem>
+                          <SelectItem value="3.5">3.5+ stars</SelectItem>
+                          <SelectItem value="4">4.0+ stars</SelectItem>
+                          <SelectItem value="4.5">4.5+ stars</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Max Listings to Pull</Label>
+                      <Input 
+                        placeholder="1000"
+                        className="bg-slate-700 border-slate-600 text-white"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-white">Delay Between Requests (seconds)</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="2 seconds" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1">1 second</SelectItem>
+                          <SelectItem value="2">2 seconds</SelectItem>
+                          <SelectItem value="3">3 seconds</SelectItem>
+                          <SelectItem value="5">5 seconds</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox />
+                    <Label className="text-blue-400">Extract Contact Info (email, phone, website)</Label>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
+
+          {/* PhantomBuster Configuration */}
+          {selectedPlatform === 'phantombuster' && (
+            <>
+              {/* Contact Filters */}
+              <Card className="bg-slate-800/50 border-slate-600">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center space-x-2">
+                    <Users className="w-5 h-5" />
+                    <span>Contact Filters</span>
+                  </CardTitle>
+                  <p className="text-slate-400 text-sm">Target specific professionals and platform preferences</p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Platform</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Select platform" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="linkedin">LinkedIn</SelectItem>
+                          <SelectItem value="twitter">Twitter</SelectItem>
+                          <SelectItem value="instagram">Instagram</SelectItem>
+                          <SelectItem value="facebook">Facebook</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="text-white">Keywords (title-style search)</Label>
+                      <div className="flex space-x-2">
+                        <Input 
+                          placeholder="e.g., CEO, Software Engineer, Marketing"
+                          className="bg-slate-700 border-slate-600 text-white flex-1"
+                        />
+                        <Button className="bg-purple-600 hover:bg-purple-700">Add</Button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Connection Degree</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Select connection degree" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1st">1st connections</SelectItem>
+                          <SelectItem value="2nd">2nd connections</SelectItem>
+                          <SelectItem value="3rd">3rd+ connections</SelectItem>
+                          <SelectItem value="all">All connections</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="text-white">Seniority Level</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Select seniority level" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="entry">Entry Level</SelectItem>
+                          <SelectItem value="mid">Mid Level</SelectItem>
+                          <SelectItem value="senior">Senior Level</SelectItem>
+                          <SelectItem value="director">Director Level</SelectItem>
+                          <SelectItem value="vp">VP Level</SelectItem>
+                          <SelectItem value="c-level">C-Level</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-white">Department/Function</Label>
+                    <Select>
+                      <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                        <SelectValue placeholder="Select department" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="sales">Sales</SelectItem>
+                        <SelectItem value="marketing">Marketing</SelectItem>
+                        <SelectItem value="engineering">Engineering</SelectItem>
+                        <SelectItem value="finance">Finance</SelectItem>
+                        <SelectItem value="operations">Operations</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Company Filters */}
+              <Card className="bg-slate-800/50 border-slate-600">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center space-x-2">
+                    <Target className="w-5 h-5" />
+                    <span>Company Filters</span>
+                  </CardTitle>
+                  <p className="text-slate-400 text-sm">Target companies by industry, size, and location</p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Industry</Label>
+                      <div className="flex space-x-2">
+                        <Input 
+                          placeholder="e.g., Technology, Healthcare, Finance"
+                          className="bg-slate-700 border-slate-600 text-white flex-1"
+                        />
+                        <Button className="bg-purple-600 hover:bg-purple-700">Add</Button>
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-white">Company Size</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Select company size" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="startup">1-10 employees</SelectItem>
+                          <SelectItem value="small">11-50 employees</SelectItem>
+                          <SelectItem value="medium">51-200 employees</SelectItem>
+                          <SelectItem value="large">201-1000 employees</SelectItem>
+                          <SelectItem value="enterprise">1000+ employees</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-white">Location</Label>
+                    <div className="flex space-x-2">
+                      <Input 
+                        placeholder="e.g., San Francisco, New York, London"
+                        className="bg-slate-700 border-slate-600 text-white flex-1"
+                      />
+                      <Button className="bg-purple-600 hover:bg-purple-700">Add</Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Execution Settings */}
+              <Card className="bg-slate-800/50 border-slate-600">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center space-x-2">
+                    <Settings className="w-5 h-5" />
+                    <span>Execution Settings</span>
+                  </CardTitle>
+                  <p className="text-slate-400 text-sm">Configure scraping method, limits, and connection preferences</p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Execution Method</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="Use YoBot Dashboard" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="yobot">Use YoBot Dashboard</SelectItem>
+                          <SelectItem value="phantom">PhantomBuster Cloud</SelectItem>
+                          <SelectItem value="local">Local Browser</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="text-white">Daily Connection Limit</Label>
+                      <Input 
+                        placeholder="100"
+                        className="bg-slate-700 border-slate-600 text-white"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-white">Retry Attempts</Label>
+                      <Select>
+                        <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
+                          <SelectValue placeholder="3 attempts" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1">1 attempt</SelectItem>
+                          <SelectItem value="3">3 attempts</SelectItem>
+                          <SelectItem value="5">5 attempts</SelectItem>
+                          <SelectItem value="10">10 attempts</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
+
+          {/* Bottom Action Bar */}
+          <div className="flex items-center justify-between bg-slate-800/50 border border-slate-600 rounded-lg p-4">
+            <div className="flex items-center space-x-4">
+              <Badge className="bg-blue-600/20 text-blue-400">
+                {selectedPlatform === 'apollo' && '7 filters applied'}
+                {selectedPlatform === 'apify' && '3 filters applied'}
+                {selectedPlatform === 'phantombuster' && '0 filters applied'}
+              </Badge>
+              <span className="text-slate-400 text-sm">
+                Estimated {selectedPlatform === 'apollo' ? 'leads: 4,000' : selectedPlatform === 'apify' ? 'listings: 1,000' : 'profiles: 700'}
+              </span>
+            </div>
+            <div className="flex space-x-3">
+              <Button className="bg-slate-700 hover:bg-slate-600 text-white">
+                Save Preset
+              </Button>
+              <Button 
+                className={`${
+                  selectedPlatform === 'apollo' ? 'bg-blue-600 hover:bg-blue-700' :
+                  selectedPlatform === 'apify' ? 'bg-green-600 hover:bg-green-700' :
+                  'bg-purple-600 hover:bg-purple-700'
+                } text-white`}
+              >
+                <Play className="w-4 h-4 mr-2" />
+                Launch {selectedPlatform === 'apollo' ? 'Apollo' : selectedPlatform === 'apify' ? 'Apify' : 'Phantom'} Scraper
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
