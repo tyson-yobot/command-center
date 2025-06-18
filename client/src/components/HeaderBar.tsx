@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { User, Settings, LogOut, ChevronDown, LayoutDashboard, MessageSquare, BookOpen, Mic, FileText, Users, FileDown, Bot } from 'lucide-react';
-import robotHeadImage from '@/assets/images/A_flat_vector_illustration_features_a_robot_face_i_1749714890077.png';
+import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750232885253.png';
 
 interface HeaderBarProps {
   currentSystemMode?: string;
@@ -31,7 +31,7 @@ export default function HeaderBar({
           <img 
             src={robotHeadImage} 
             alt="YoBot Robot Head" 
-            className="w-10 h-10"
+            className="w-8 h-8"
             onError={(e) => {
               console.log('Image failed to load, showing Bot icon fallback');
               const target = e.target as HTMLImageElement;

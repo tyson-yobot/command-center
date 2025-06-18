@@ -3391,17 +3391,7 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={handleStartPipelineCalls}
-                      className="w-full text-white border transition-all duration-200 hover:shadow-[0_0_8px_rgba(13,130,218,0.5)] px-4 py-4 h-12"
-                      style={{ 
-                        backgroundColor: '#0d82da',
-                        borderColor: '#0d82da'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#0864b1';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#0d82da';
-                      }}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-4 h-12"
                     >
                       <Play className="w-4 h-4 mr-2" />
                       Start Pipeline
@@ -3438,34 +3428,14 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={() => setShowCreateVoiceCallModal(true)}
-                      className="w-full text-white border transition-all duration-200 hover:shadow-[0_0_8px_rgba(13,130,218,0.5)] px-4 py-4 h-12"
-                      style={{ 
-                        backgroundColor: '#0d82da',
-                        borderColor: '#0d82da'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#0864b1';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#0d82da';
-                      }}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white border border-green-500 px-4 py-4 h-12"
                     >
                       <Headphones className="w-4 h-4 mr-2" />
                       Voice Studio
                     </Button>
                     <Button
                       onClick={testVoicePersona}
-                      className="w-full text-white border transition-all duration-200 hover:shadow-[0_0_8px_rgba(13,130,218,0.5)] px-4 py-4 h-12"
-                      style={{ 
-                        backgroundColor: '#0d82da',
-                        borderColor: '#0d82da'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#0864b1';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#0d82da';
-                      }}
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white border border-purple-500 px-4 py-4 h-12"
                     >
                       <TestTube className="w-4 h-4 mr-2" />
                       Test Persona
