@@ -133,15 +133,21 @@ export function LeadScraperPopup({ isOpen, onClose, defaultTab = 'apollo' }: Lea
             </TabsList>
 
             <TabsContent value="apollo" className="mt-0">
-              <ApolloScraperPanel onLaunch={handleApolloLaunch} isLoading={isLoading} />
+              <div key={`apollo-${activeTab}`} className="animate-in fade-in-50 duration-200">
+                <ApolloScraperPanel onLaunch={handleApolloLaunch} isLoading={isLoading} />
+              </div>
             </TabsContent>
 
             <TabsContent value="apify" className="mt-0">
-              <ApifyScraperPanel onLaunch={handleApifyLaunch} isLoading={isLoading} />
+              <div key={`apify-${activeTab}`} className="animate-in fade-in-50 duration-200">
+                <ApifyScraperPanel onLaunch={handleApifyLaunch} isLoading={isLoading} />
+              </div>
             </TabsContent>
 
             <TabsContent value="phantombuster" className="mt-0">
-              <PhantomBusterScraperPanel onLaunch={handlePhantomBusterLaunch} isLoading={isLoading} />
+              <div key={`phantombuster-${activeTab}`} className="animate-in fade-in-50 duration-200">
+                <PhantomBusterScraperPanel onLaunch={handlePhantomBusterLaunch} isLoading={isLoading} />
+              </div>
             </TabsContent>
           </Tabs>
         </div>

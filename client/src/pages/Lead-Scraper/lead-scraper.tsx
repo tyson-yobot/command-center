@@ -297,15 +297,21 @@ const LeadScraper: React.FC = () => {
           </TabsList>
 
           <TabsContent value="apollo" className="mt-0">
-            <ApolloScraperPanel onLaunch={handleApolloLaunch} isLoading={isLoading} />
+            <div key="apollo-panel" className="animate-in fade-in-50 duration-200">
+              <ApolloScraperPanel onLaunch={handleApolloLaunch} isLoading={isLoading} />
+            </div>
           </TabsContent>
 
           <TabsContent value="apify" className="mt-0">
-            <ApifyScraperPanel onLaunch={handleApifyLaunch} isLoading={isLoading} />
+            <div key="apify-panel" className="animate-in fade-in-50 duration-200">
+              <ApifyScraperPanel onLaunch={handleApifyLaunch} isLoading={isLoading} />
+            </div>
           </TabsContent>
 
           <TabsContent value="phantombuster" className="mt-0">
-            <PhantomBusterScraperPanel onLaunch={handlePhantomBusterLaunch} isLoading={isLoading} />
+            <div key="phantombuster-panel" className="animate-in fade-in-50 duration-200">
+              <PhantomBusterScraperPanel onLaunch={handlePhantomBusterLaunch} isLoading={isLoading} />
+            </div>
           </TabsContent>
         </Tabs>
       </div>
