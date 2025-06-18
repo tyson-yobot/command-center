@@ -24,7 +24,7 @@ export default function LeadScraperDashboard() {
       icon: Target,
       color: 'blue',
       description: 'Professional B2B intelligence with 250M+ verified contacts and advanced enterprise filtering',
-      features: ['Verified Emails', 'Executive Targeting', 'Enterprise-grade accuracy']
+      features: ['✔ Verified Emails', '✔ Executive Targeting', '✔ Enterprise-grade accuracy']
     },
     {
       id: 'apify',
@@ -32,7 +32,7 @@ export default function LeadScraperDashboard() {
       icon: Globe,
       color: 'green',
       description: 'Advanced web intelligence platform for LinkedIn profiles and comprehensive business listings',
-      features: ['Web Intelligence', 'Business Listings', 'Custom data extraction']
+      features: ['✔ Web Intelligence', '✔ Business Listings', '✔ Custom data extraction']
     },
     {
       id: 'phantombuster',
@@ -40,31 +40,31 @@ export default function LeadScraperDashboard() {
       icon: Users,
       color: 'purple',
       description: 'Premium social media automation for LinkedIn, Twitter with intelligent connection management',
-      features: ['Safe Outreach', 'Social Automation', 'Multi-platform reach']
+      features: ['✔ Safe Outreach', '✔ Social Automation', '✔ Multi-platform reach']
     }
   ];
 
-  const additionalFeatures = [
+  const systemFeatures = [
     {
       id: 'realtime',
-      name: 'Real-time Processing',
+      name: 'Real-Time Processing',
       icon: Brain,
-      color: 'green',
-      description: 'Instant lead extraction with live notifications'
+      description: 'Instant lead extraction with live notifications',
+      features: ['✔ Live Updates', '✔ Real-time Sync', '✔ Instant Notifications']
     },
     {
       id: 'security',
       name: 'Enterprise Security',
       icon: Shield,
-      color: 'blue',
-      description: 'Bank-grade encryption and compliance'
+      description: 'Bank-grade encryption and compliance',
+      features: ['✔ Data Protection', '✔ Secure APIs', '✔ Compliance Ready']
     },
     {
       id: 'analytics',
       name: 'Advanced Analytics',
       icon: BarChart3,
-      color: 'purple',
-      description: 'Comprehensive reporting and insights'
+      description: 'Comprehensive reporting and insights',
+      features: ['✔ Performance Metrics', '✔ Lead Scoring', '✔ ROI Analysis']
     }
   ];
 
@@ -78,94 +78,90 @@ export default function LeadScraperDashboard() {
   };
 
   const renderOverview = () => (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800">
-      <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#1E3A8A] py-12 px-4 text-white">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
             <img 
               src={robotHeadImage} 
-              alt="Robot Head" 
-              className="w-20 h-20 object-cover rounded-full"
+              alt="YoBot" 
+              className="w-16 h-16 object-cover rounded-full"
             />
           </div>
-          <h1 className="text-5xl font-bold text-white mb-6">
+          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-400 mb-4">
             Enterprise Lead Intelligence Platform
           </h1>
-          <p className="text-blue-100 text-xl max-w-4xl mx-auto leading-relaxed">
-            Advanced multi-platform lead generation with enterprise-grade targeting and real-time intelligence
+          <p className="text-lg text-blue-100 text-center mb-8 max-w-4xl mx-auto" style={{ maxWidth: '70ch' }}>
+            Advanced multi-platform lead generation with enterprise-grade targeting and real-time intelligence.
           </p>
         </div>
 
         {/* Platform Selection Grid - Top Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mt-6 mb-8">
           {platforms.map((platform) => {
             const IconComponent = platform.icon;
             
             return (
-              <Card
+              <div
                 key={platform.id}
                 onClick={() => handlePlatformSelect(platform.id)}
-                className="bg-slate-800/70 backdrop-blur-sm border-slate-600/50 cursor-pointer transition-all duration-300 hover:bg-slate-700/80 group h-full"
+                className="rounded-2xl bg-gradient-to-br from-[#111827] to-[#1F2937] p-6 shadow-lg transition-all hover:scale-105 hover:shadow-xl cursor-pointer"
               >
-                <CardHeader className="text-center pb-4">
-                  <div className={`
-                    w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center shadow-lg
-                    ${platform.color === 'blue' ? 'bg-blue-500' : 
-                      platform.color === 'green' ? 'bg-green-500' : 'bg-purple-500'}
-                  `}>
-                    <IconComponent className="w-8 h-8 text-white" />
-                  </div>
-                  <CardTitle className="text-xl text-white mb-2">{platform.name}</CardTitle>
-                </CardHeader>
-                <CardContent className="px-4 pb-4">
-                  <CardDescription className="text-slate-300 mb-4 text-sm leading-relaxed text-center">
+                <div className="text-center">
+                  <IconComponent className="w-10 h-10 mx-auto mb-4 text-white" />
+                  <h3 className="text-xl font-semibold text-white mb-2">{platform.name}</h3>
+                  <p className="text-sm text-blue-200 mb-3">
                     {platform.description}
-                  </CardDescription>
-                  <div className="space-y-2">
+                  </p>
+                  <div className="space-y-1">
                     {platform.features.map((feature, index) => (
-                      <div key={index} className="flex justify-center">
-                        <Badge className={`
-                          px-2 py-1 text-xs flex items-center rounded-full border-0
-                          ${platform.color === 'blue' ? 'bg-blue-500/25 text-blue-200' : 
-                            platform.color === 'green' ? 'bg-green-500/25 text-green-200' : 'bg-purple-500/25 text-purple-200'}
-                        `}>
-                          <CheckCircle className="w-3 h-3 mr-1" />
-                          {feature}
-                        </Badge>
-                      </div>
+                      <span
+                        key={index}
+                        className={`text-xs px-3 py-1 rounded-full mr-2 mb-1 inline-block ${
+                          platform.color === 'blue' ? 'bg-blue-900 text-blue-200' :
+                          platform.color === 'green' ? 'bg-green-900 text-green-200' :
+                          'bg-purple-900 text-purple-200'
+                        }`}
+                      >
+                        {feature}
+                      </span>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             );
           })}
         </div>
 
-        {/* Additional Features Grid - Bottom Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {additionalFeatures.map((feature) => {
+        {/* System Features Grid - Bottom Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {systemFeatures.map((feature) => {
             const IconComponent = feature.icon;
             
             return (
-              <Card
+              <div
                 key={feature.id}
-                className="bg-slate-800/70 backdrop-blur-sm border-slate-600/50 cursor-pointer transition-all duration-300 hover:bg-slate-700/80"
+                className="rounded-2xl bg-gradient-to-br from-[#111827] to-[#1F2937] p-6 shadow-lg transition-all hover:scale-105 hover:shadow-xl cursor-pointer"
               >
-                <CardContent className="p-4 text-center">
-                  <div className={`
-                    w-12 h-12 mx-auto mb-3 rounded-2xl flex items-center justify-center shadow-lg
-                    ${feature.color === 'blue' ? 'bg-blue-500' : 
-                      feature.color === 'green' ? 'bg-green-500' : 'bg-purple-500'}
-                  `}>
-                    <IconComponent className="w-6 h-6 text-white" />
-                  </div>
-                  <CardTitle className="text-lg text-white mb-2">{feature.name}</CardTitle>
-                  <CardDescription className="text-slate-300 text-sm">
+                <div className="text-center">
+                  <IconComponent className="w-10 h-10 mx-auto mb-4 text-white" />
+                  <h3 className="text-xl font-semibold text-white mb-2">{feature.name}</h3>
+                  <p className="text-sm text-blue-200 mb-3">
                     {feature.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
+                  </p>
+                  <div className="space-y-1">
+                    {feature.features.map((feat, index) => (
+                      <span
+                        key={index}
+                        className="text-xs bg-slate-800 text-slate-200 px-3 py-1 rounded-full mr-2 mb-1 inline-block"
+                      >
+                        {feat}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
             );
           })}
         </div>
