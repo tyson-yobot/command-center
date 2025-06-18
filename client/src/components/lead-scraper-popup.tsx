@@ -35,144 +35,114 @@ export function LeadScraperPopup({ isOpen, onClose, defaultTab = 'apollo' }: Lea
   if (!showConfig) {
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-        <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 rounded-lg w-full max-w-6xl h-[90vh] overflow-hidden">
+        <div className="bg-gradient-to-br from-blue-900 via-blue-700 to-purple-900 rounded-lg w-full max-w-5xl max-h-[90vh] overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-6 text-white relative">
-            <div className="flex items-center justify-between">
-              <div className="text-center flex-1">
-                <div className="w-16 h-16 bg-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <Target className="w-8 h-8 text-white" />
-                </div>
-                <h2 className="text-3xl font-bold mb-2">Enterprise Lead Intelligence Platform</h2>
-                <p className="text-blue-100">Advanced multi-platform lead generation with enterprise-grade targeting and real-time intelligence</p>
-              </div>
-              <Button 
-                onClick={onClose}
-                variant="ghost" 
-                size="sm"
-                className="absolute top-4 right-4 text-white hover:bg-white/20"
-              >
-                <X className="w-5 h-5" />
-              </Button>
+          <div className="text-center px-6 py-8 relative">
+            <div className="w-20 h-20 bg-purple-600 rounded-full mx-auto mb-6 flex items-center justify-center">
+              <Target className="w-10 h-10 text-white" />
             </div>
+            <h2 className="text-3xl font-bold text-white mb-3">Enterprise Lead Intelligence Platform</h2>
+            <p className="text-blue-100 text-lg">Advanced multi-platform lead generation with enterprise-grade targeting and real-time intelligence</p>
+            
+            <Button 
+              onClick={onClose}
+              variant="ghost" 
+              size="sm"
+              className="absolute top-4 right-4 text-white hover:bg-white/20"
+            >
+              <X className="w-5 h-5" />
+            </Button>
           </div>
 
           {/* Platform Cards */}
-          <div className="p-8">
-            <div className="grid grid-cols-3 gap-8 mb-8">
+          <div className="px-8 pb-8">
+            <div className="grid grid-cols-3 gap-6 mb-8">
               {/* Apollo Card */}
-              <Card 
-                className="cursor-pointer transition-all hover:scale-105 bg-slate-800 border-slate-600 hover:border-blue-400"
+              <div 
+                className="cursor-pointer bg-slate-800/50 rounded-lg p-6 text-center hover:bg-slate-700/50 transition-all"
                 onClick={() => handlePlatformSelect('apollo')}
               >
-                <CardHeader className="text-center pb-4">
-                  <div className="w-16 h-16 bg-blue-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                    <Target className="w-8 h-8 text-white" />
-                  </div>
-                  <CardTitle className="text-white text-2xl">Apollo.io</CardTitle>
-                  <p className="text-slate-400">Professional B2B intelligence with 250M+ verified contacts and advanced enterprise filtering</p>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-center space-x-2">
-                    <Badge className="bg-blue-600/20 text-blue-400 border-blue-400">✓ Verified Emails</Badge>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge className="bg-blue-600/20 text-blue-400 border-blue-400">✓ Executive Targeting</Badge>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge className="bg-blue-600/20 text-blue-400 border-blue-400">✓ Enterprise-grade accuracy</Badge>
-                  </div>
-                </CardContent>
-              </Card>
+                <div className="w-16 h-16 bg-blue-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                  <Target className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-3">Apollo.io</h3>
+                <p className="text-slate-300 text-sm mb-4">Professional B2B intelligence with 250M+ verified contacts and advanced enterprise filtering</p>
+                
+                <div className="space-y-2">
+                  <Badge className="bg-blue-600/20 text-blue-400 border border-blue-500 text-xs px-3 py-1">✓ Verified Emails</Badge>
+                  <br />
+                  <Badge className="bg-blue-600/20 text-blue-400 border border-blue-500 text-xs px-3 py-1">✓ Executive Targeting</Badge>
+                  <br />
+                  <Badge className="bg-blue-600/20 text-blue-400 border border-blue-500 text-xs px-3 py-1">✓ Enterprise-grade accuracy</Badge>
+                </div>
+              </div>
 
               {/* Apify Card */}
-              <Card 
-                className="cursor-pointer transition-all hover:scale-105 bg-slate-800 border-slate-600 hover:border-green-400"
+              <div 
+                className="cursor-pointer bg-slate-800/50 rounded-lg p-6 text-center hover:bg-slate-700/50 transition-all"
                 onClick={() => handlePlatformSelect('apify')}
               >
-                <CardHeader className="text-center pb-4">
-                  <div className="w-16 h-16 bg-green-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                    <Globe className="w-8 h-8 text-white" />
-                  </div>
-                  <CardTitle className="text-white text-2xl">Apify</CardTitle>
-                  <p className="text-slate-400">Advanced web intelligence platform for LinkedIn profiles and comprehensive business listings</p>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-center space-x-2">
-                    <Badge className="bg-green-600/20 text-green-400 border-green-400">✓ Web Intelligence</Badge>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge className="bg-green-600/20 text-green-400 border-green-400">✓ Business Listings</Badge>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge className="bg-green-600/20 text-green-400 border-green-400">✓ Custom data extraction</Badge>
-                  </div>
-                </CardContent>
-              </Card>
+                <div className="w-16 h-16 bg-green-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                  <Globe className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-3">Apify</h3>
+                <p className="text-slate-300 text-sm mb-4">Advanced web intelligence platform for LinkedIn profiles and comprehensive business listings</p>
+                
+                <div className="space-y-2">
+                  <Badge className="bg-green-600/20 text-green-400 border border-green-500 text-xs px-3 py-1">✓ Web Intelligence</Badge>
+                  <br />
+                  <Badge className="bg-green-600/20 text-green-400 border border-green-500 text-xs px-3 py-1">✓ Business Listings</Badge>
+                  <br />
+                  <Badge className="bg-green-600/20 text-green-400 border border-green-500 text-xs px-3 py-1">✓ Custom data extraction</Badge>
+                </div>
+              </div>
 
               {/* PhantomBuster Card */}
-              <Card 
-                className="cursor-pointer transition-all hover:scale-105 bg-slate-800 border-slate-600 hover:border-purple-400"
+              <div 
+                className="cursor-pointer bg-slate-800/50 rounded-lg p-6 text-center hover:bg-slate-700/50 transition-all"
                 onClick={() => handlePlatformSelect('phantombuster')}
               >
-                <CardHeader className="text-center pb-4">
-                  <div className="w-16 h-16 bg-purple-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                    <Users className="w-8 h-8 text-white" />
-                  </div>
-                  <CardTitle className="text-white text-2xl">PhantomBuster</CardTitle>
-                  <p className="text-slate-400">Premium social media automation for LinkedIn, Twitter with intelligent connection management</p>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-center space-x-2">
-                    <Badge className="bg-purple-600/20 text-purple-400 border-purple-400">✓ Social Automation</Badge>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge className="bg-purple-600/20 text-purple-400 border-purple-400">✓ Safe Outreach</Badge>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge className="bg-purple-600/20 text-purple-400 border-purple-400">✓ Multi-platform reach</Badge>
-                  </div>
-                </CardContent>
-              </Card>
+                <div className="w-16 h-16 bg-purple-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                  <Users className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-3">PhantomBuster</h3>
+                <p className="text-slate-300 text-sm mb-4">Premium social media automation for LinkedIn, Twitter with intelligent connection management</p>
+                
+                <div className="space-y-2">
+                  <Badge className="bg-purple-600/20 text-purple-400 border border-purple-500 text-xs px-3 py-1">✓ Social Automation</Badge>
+                  <br />
+                  <Badge className="bg-purple-600/20 text-purple-400 border border-purple-500 text-xs px-3 py-1">✓ Safe Outreach</Badge>
+                  <br />
+                  <Badge className="bg-purple-600/20 text-purple-400 border border-purple-500 text-xs px-3 py-1">✓ Multi-platform reach</Badge>
+                </div>
+              </div>
             </div>
 
             {/* Bottom Feature Cards */}
             <div className="grid grid-cols-3 gap-6">
-              <Card className="bg-slate-800 border-slate-600">
-                <CardHeader className="text-center">
-                  <div className="w-12 h-12 bg-green-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
-                    <Settings className="w-6 h-6 text-white" />
-                  </div>
-                  <CardTitle className="text-white text-lg">Real-time Processing</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-slate-400 text-sm text-center">Instant lead extraction with live notifications</p>
-                </CardContent>
-              </Card>
+              <div className="bg-slate-800/50 rounded-lg p-6 text-center">
+                <div className="w-12 h-12 bg-green-600 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                  <Settings className="w-6 h-6 text-white" />
+                </div>
+                <h4 className="text-white font-semibold mb-2">Real-time Processing</h4>
+                <p className="text-slate-400 text-sm">Instant lead extraction with live notifications</p>
+              </div>
 
-              <Card className="bg-slate-800 border-slate-600">
-                <CardHeader className="text-center">
-                  <div className="w-12 h-12 bg-blue-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
-                    <Target className="w-6 h-6 text-white" />
-                  </div>
-                  <CardTitle className="text-white text-lg">Enterprise Security</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-slate-400 text-sm text-center">Bank-grade encryption and compliance</p>
-                </CardContent>
-              </Card>
+              <div className="bg-slate-800/50 rounded-lg p-6 text-center">
+                <div className="w-12 h-12 bg-blue-600 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                  <Target className="w-6 h-6 text-white" />
+                </div>
+                <h4 className="text-white font-semibold mb-2">Enterprise Security</h4>
+                <p className="text-slate-400 text-sm">Bank-grade encryption and compliance</p>
+              </div>
 
-              <Card className="bg-slate-800 border-slate-600">
-                <CardHeader className="text-center">
-                  <div className="w-12 h-12 bg-purple-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
-                    <Globe className="w-6 h-6 text-white" />
-                  </div>
-                  <CardTitle className="text-white text-lg">Advanced Analytics</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-slate-400 text-sm text-center">Comprehensive reporting and insights</p>
-                </CardContent>
-              </Card>
+              <div className="bg-slate-800/50 rounded-lg p-6 text-center">
+                <div className="w-12 h-12 bg-purple-600 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                  <Globe className="w-6 h-6 text-white" />
+                </div>
+                <h4 className="text-white font-semibold mb-2">Advanced Analytics</h4>
+                <p className="text-slate-400 text-sm">Comprehensive reporting and insights</p>
+              </div>
             </div>
           </div>
         </div>
@@ -223,10 +193,10 @@ export function LeadScraperPopup({ isOpen, onClose, defaultTab = 'apollo' }: Lea
         </div>
 
         {/* Configuration Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-100px)] space-y-6">
+        <div className="px-6 py-5 overflow-y-auto max-h-[calc(90vh-100px)] space-y-5">
           {/* Test Company Mode Toggle */}
           <Card className="bg-slate-800/50 border-slate-600">
-            <CardContent className="p-4">
+            <CardContent className="px-4 py-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Label className="text-white font-medium">Test Company Mode</Label>
@@ -242,14 +212,14 @@ export function LeadScraperPopup({ isOpen, onClose, defaultTab = 'apollo' }: Lea
             <>
               {/* Contact Filters */}
               <Card className="bg-slate-800/50 border-slate-600">
-                <CardHeader>
+                <CardHeader className="px-4 py-3 pb-4">
                   <CardTitle className="text-white flex items-center space-x-2">
                     <Users className="w-5 h-5" />
                     <span>Contact Filters</span>
                   </CardTitle>
                   <p className="text-slate-400 text-sm">Target specific professionals and contact requirements</p>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="px-4 py-3 space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label className="text-white">Job Titles</Label>
@@ -318,15 +288,15 @@ export function LeadScraperPopup({ isOpen, onClose, defaultTab = 'apollo' }: Lea
               </Card>
 
               {/* Company Filters */}
-              <Card className="bg-slate-800/50 border-slate-600">
-                <CardHeader>
+              <Card className="bg-slate-800/50 border-slate-600 mt-5">
+                <CardHeader className="px-4 py-3 pb-4">
                   <CardTitle className="text-white flex items-center space-x-2">
                     <Target className="w-5 h-5" />
                     <span>Company Filters</span>
                   </CardTitle>
                   <p className="text-slate-400 text-sm">Target companies by industry, size, and characteristics</p>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="px-4 py-3 space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label className="text-white">Industry</Label>
@@ -777,7 +747,7 @@ export function LeadScraperPopup({ isOpen, onClose, defaultTab = 'apollo' }: Lea
           )}
 
           {/* Bottom Action Bar */}
-          <div className="flex items-center justify-between bg-slate-800/50 border border-slate-600 rounded-lg p-4">
+          <div className="flex items-center justify-between bg-slate-800/50 border border-slate-600 rounded-lg px-6 py-4 mt-5">
             <div className="flex items-center space-x-4">
               <Badge className="bg-blue-600/20 text-blue-400">
                 {selectedPlatform === 'apollo' && '7 filters applied'}
@@ -789,7 +759,7 @@ export function LeadScraperPopup({ isOpen, onClose, defaultTab = 'apollo' }: Lea
               </span>
             </div>
             <div className="flex space-x-3">
-              <Button className="bg-slate-700 hover:bg-slate-600 text-white">
+              <Button className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2">
                 Save Preset
               </Button>
               <Button 
@@ -797,7 +767,7 @@ export function LeadScraperPopup({ isOpen, onClose, defaultTab = 'apollo' }: Lea
                   selectedPlatform === 'apollo' ? 'bg-blue-600 hover:bg-blue-700' :
                   selectedPlatform === 'apify' ? 'bg-green-600 hover:bg-green-700' :
                   'bg-purple-600 hover:bg-purple-700'
-                } text-white`}
+                } text-white px-4 py-2`}
               >
                 <Play className="w-4 h-4 mr-2" />
                 Launch {selectedPlatform === 'apollo' ? 'Apollo' : selectedPlatform === 'apify' ? 'Apify' : 'Phantom'} Scraper
