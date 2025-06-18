@@ -63,9 +63,10 @@ function PlatformCard({ title, description, icon, gradient, features, badges, on
 
 interface EnterpriseLeadPlatformProps {
   onPlatformSelect?: (platform: string) => void;
+  onNavigateToScraper?: () => void;
 }
 
-export default function EnterpriseLeadPlatform({ onPlatformSelect }: EnterpriseLeadPlatformProps) {
+export default function EnterpriseLeadPlatform({ onPlatformSelect, onNavigateToScraper }: EnterpriseLeadPlatformProps) {
   const handleApolloConfig = () => {
     if (onPlatformSelect) {
       onPlatformSelect('apollo');
