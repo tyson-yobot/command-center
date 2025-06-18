@@ -116,7 +116,7 @@ export default function CommandCenter() {
     { id: 'voiceops', label: 'VoiceOps™', icon: Mic },
     { id: 'ai-intelligence', label: 'AI Intelligence', icon: Brain },
     { id: 'smartspend', label: 'SmartSpend™', icon: DollarSign },
-
+    { id: 'lead-scraper', label: 'Lead Scraper', icon: Search },
     { id: 'system-tools', label: 'System Tools', icon: Settings }
   ];
   
@@ -608,6 +608,26 @@ export default function CommandCenter() {
 
   const handleSendSMS = () => {
     setShowSMSModal(true);
+  };
+
+  const handleLeadScraper = async () => {
+    try {
+      setVoiceStatus('Opening Lead Scraper popup...');
+      setShowLeadScraperPopup(true);
+      setLeadScraperDefaultTab('apollo');
+      setVoiceStatus('Lead Scraper popup opened');
+      toast({
+        title: "Lead Scraper", 
+        description: "Opening Lead Scraper popup interface"
+      });
+    } catch (error) {
+      setVoiceStatus('Lead Scraper popup error');
+      toast({
+        title: "Error", 
+        description: "Unable to open Lead Scraper popup",
+        variant: "destructive" 
+      });
+    }
   };
 
   // Form submission handlers with Airtable logging
