@@ -3826,8 +3826,8 @@ export default function CommandCenter() {
 
 
           {/* SmartSpend™ - Sleek Orange Design */}
-          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-orange-500 shadow-2xl shadow-orange-500/30">
-            <CardHeader className="bg-gradient-to-r from-orange-600/20 to-orange-500/20 border-b border-orange-500/30">
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-orange-500 shadow-2xl shadow-orange-500/30 shadow-[0_0_20px_rgba(249,115,22,0.3)] ring-2 ring-orange-500/50">
+            <CardHeader className="bg-gradient-to-r from-orange-600/20 to-orange-500/20 border-b border-orange-500/30 shadow-[0_2px_10px_rgba(249,115,22,0.2)]">
               <CardTitle className="text-white flex items-center justify-between">
                 <div className="flex items-center">
                   <DollarSign className="w-6 h-6 mr-3 text-orange-400" />
@@ -3839,7 +3839,7 @@ export default function CommandCenter() {
             <CardContent className="p-6">
               <div className="space-y-4">
                 {/* Monthly Ad Spend */}
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg shadow-[0_0_15px_rgba(249,115,22,0.2)] ring-1 ring-orange-500/30">
                   <div className="text-orange-300 text-sm mb-1 font-medium">Monthly Ad Spend:</div>
                   <div className="text-white font-bold text-xl mb-2">
                     { (metrics?.data?.smartSpendData?.monthlyAdSpend || '0')}
@@ -3902,8 +3902,8 @@ export default function CommandCenter() {
           </Card>
 
           {/* Botalytics™ - Sleek Lime Design */}
-          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-lime-400 shadow-2xl shadow-lime-400/30">
-            <CardHeader className="bg-gradient-to-r from-lime-500/20 to-lime-400/20 border-b border-lime-400/30">
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-lime-400 shadow-2xl shadow-lime-400/30 shadow-[0_0_20px_rgba(163,230,53,0.3)] ring-2 ring-lime-400/50">
+            <CardHeader className="bg-gradient-to-r from-lime-500/20 to-lime-400/20 border-b border-lime-400/30 shadow-[0_2px_10px_rgba(163,230,53,0.2)]">
               <CardTitle className="text-white flex items-center">
                 <BarChart3 className="w-6 h-6 mr-3 text-lime-400" />
                 <span className="text-xl font-bold">📊 Botalytics™</span>
@@ -3911,35 +3911,35 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg shadow-[0_0_15px_rgba(163,230,53,0.2)] ring-1 ring-lime-400/30">
                   <div className="text-lime-300 text-sm mb-1 font-medium" title="Ad spend ÷ New clients this month">Cost Per Lead</div>
                   <div className="text-white font-bold text-xl mb-2">{metrics?.data?.costPerLead || '0'}</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
                     <div className="bg-gradient-to-r from-red-500 to-red-400 h-3 rounded-full" style={{ width: `${metrics?.data?.costPerLeadProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg shadow-[0_0_15px_rgba(163,230,53,0.2)] ring-1 ring-lime-400/30">
                   <div className="text-lime-300 text-sm mb-1 font-medium" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</div>
                   <div className="text-white font-bold text-xl mb-2">{metrics?.data?.leadQualityScore || '0'}</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
                     <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-3 rounded-full" style={{ width: `${metrics?.data?.leadQualityProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg shadow-[0_0_15px_rgba(163,230,53,0.2)] ring-1 ring-lime-400/30">
                   <div className="text-lime-300 text-sm mb-1 font-medium" title="Percentage of leads that become paying customers">Close Rate</div>
                   <div className="text-white font-bold text-xl mb-2">0</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
                     <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg shadow-[0_0_15px_rgba(163,230,53,0.2)] ring-1 ring-lime-400/30">
                   <div className="text-lime-300 text-sm mb-1 font-medium" title="Return on investment from automation">ROI</div>
                   <div className="text-white font-bold text-xl mb-2">0</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
                     <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg shadow-[0_0_15px_rgba(163,230,53,0.2)] ring-1 ring-lime-400/30">
                   <div className="text-lime-300 text-sm mb-1 font-medium">Revenue Per Lead</div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="text-white font-bold text-xl">0</div>
@@ -4013,15 +4013,15 @@ export default function CommandCenter() {
 
         {/* Voice & Conversation Analytics */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-green-400 shadow-2xl shadow-green-400/30">
-            <CardHeader className="bg-gradient-to-r from-green-600/20 to-green-500/20 border-b border-green-400/30">
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-green-400 shadow-2xl shadow-green-400/30 shadow-[0_0_20px_rgba(34,197,94,0.3)] ring-2 ring-green-400/50">
+            <CardHeader className="bg-gradient-to-r from-green-600/20 to-green-500/20 border-b border-green-400/30 shadow-[0_2px_10px_rgba(34,197,94,0.2)]">
               <CardTitle className="text-white flex items-center">
                 <Mic className="w-6 h-6 mr-3 text-green-400" />
                 <span className="text-xl font-bold">🎤 Voice Commands</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="mb-3 pb-2 border-b border-slate-600">
+              <div className="mb-4 pb-3 border-b border-green-400/30 shadow-[0_2px_10px_rgba(34,197,94,0.2)]">
                 <h4 className="text-slate-200 font-medium text-sm">Voice Commands Active</h4>
                 <div className="flex items-center space-x-2 mt-1">
                   <div className="flex space-x-1">
@@ -4032,21 +4032,30 @@ export default function CommandCenter() {
                   <span className="text-green-400 text-xs">🎤 Listening</span>
                 </div>
               </div>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-green-400 shadow-lg shadow-green-400/20">
-                  <span className="text-slate-300">"Show me today's leads"</span>
-                  <Badge variant="outline" className="text-green-400 border-green-400">0</Badge>
+              <div className="space-y-4">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-green-400/40 shadow-lg shadow-[0_0_15px_rgba(34,197,94,0.2)] ring-1 ring-green-400/30">
+                  <div className="text-green-300 text-sm mb-1 font-medium">"Show me today's leads"</div>
+                  <div className="text-white font-bold text-xl mb-2">Command Status: Ready</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-green-500 to-green-400 h-3 rounded-full" style={{ width: '100%' }}></div>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-green-400 shadow-lg shadow-green-400/20">
-                  <span className="text-slate-300">"Call my top prospect"</span>
-                  <Badge variant="outline" className="text-green-400 border-green-400">0</Badge>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-green-400/40 shadow-lg shadow-[0_0_15px_rgba(34,197,94,0.2)] ring-1 ring-green-400/30">
+                  <div className="text-green-300 text-sm mb-1 font-medium">"Call my top prospect"</div>
+                  <div className="text-white font-bold text-xl mb-2">Command Status: Active</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-green-500 to-green-400 h-3 rounded-full" style={{ width: '85%' }}></div>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border-2 border-green-400 shadow-lg shadow-green-400/20">
-                  <span className="text-slate-300">"Schedule follow-up"</span>
-                  <Badge variant="outline" className="text-green-400 border-green-400">0</Badge>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-green-400/40 shadow-lg shadow-[0_0_15px_rgba(34,197,94,0.2)] ring-1 ring-green-400/30">
+                  <div className="text-green-300 text-sm mb-1 font-medium">"Schedule follow-up"</div>
+                  <div className="text-white font-bold text-xl mb-2">Command Status: Standby</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-3 rounded-full" style={{ width: '75%' }}></div>
+                  </div>
                 </div>
                 {isListening && (
-                  <div className="mt-4 p-3 bg-green-500/20 border border-green-400 rounded-lg">
+                  <div className="mt-4 p-4 bg-green-500/20 border border-green-400 rounded-lg shadow-[0_0_15px_rgba(34,197,94,0.2)] ring-1 ring-green-400/30">
                     <div className="flex items-center text-green-400">
                       <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse mr-2"></div>
                       Voice Commands Active - Listening...
@@ -4057,8 +4066,8 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-cyan-400 shadow-2xl shadow-cyan-400/30">
-            <CardHeader className="bg-gradient-to-r from-cyan-600/20 to-cyan-500/20 border-b border-cyan-400/30">
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-cyan-400 shadow-2xl shadow-cyan-400/30 shadow-[0_0_20px_rgba(6,182,212,0.3)] ring-2 ring-cyan-400/50">
+            <CardHeader className="bg-gradient-to-r from-cyan-600/20 to-cyan-500/20 border-b border-cyan-400/30 shadow-[0_2px_10px_rgba(6,182,212,0.2)]">
               <CardTitle className="text-white flex items-center">
                 <MessageSquare className="w-6 h-6 mr-3 text-cyan-400" />
                 <span className="text-xl font-bold">💬 Conversation Analytics</span>
@@ -4066,17 +4075,26 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-cyan-400/30">
                   <div className="text-cyan-300 text-sm mb-1 font-medium">Sentiment Analysis</div>
-                  <div className="text-white font-bold text-xl">0</div>
+                  <div className="text-white font-bold text-xl mb-2">0</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-cyan-400/30">
                   <div className="text-cyan-300 text-sm mb-1 font-medium">Emotion Detection</div>
-                  <div className="text-white font-bold text-xl">0</div>
+                  <div className="text-white font-bold text-xl mb-2">0</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-cyan-400/30">
                   <div className="text-cyan-300 text-sm mb-1 font-medium">Avg Call Duration</div>
-                  <div className="text-white font-bold text-xl">0</div>
+                  <div className="text-white font-bold text-xl mb-2">0</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
                 </div>
                 <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
                   <div className="text-cyan-300 text-sm mb-1 font-medium">Resolution Rate</div>
