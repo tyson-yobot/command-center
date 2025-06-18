@@ -2,7 +2,7 @@ import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
 import CommandCenter from "./pages/Command-Center/command-center";
-
+import LeadScraperDashboard from "./pages/Lead-Scraper/lead-scraper";
 import ControlCenter from "./pages/Control-Center/control-center";
 import Mobile from "./pages/Mobile/mobile";
 import { PersistentChatWidget } from "./components/persistent-chat-widget";
@@ -28,6 +28,7 @@ function Router() {
       <Switch>
         <Route path="/" component={CommandCenter} />
         <Route path="/command-center" component={CommandCenter} />
+        <Route path="/lead-scraper" component={LeadScraperDashboard} />
         <Route path="/control-center" component={ControlCenter} />
 
         <Route path="/mobile" component={Mobile} />
