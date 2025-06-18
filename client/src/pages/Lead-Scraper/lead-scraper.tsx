@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Target, Globe, Users, Brain, Shield, BarChart3, Play, Settings, CheckCircle, Download, ExternalLink, Slack, Plus, Info } from 'lucide-react';
-import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750274873156.png';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -83,12 +82,8 @@ export default function LeadScraperDashboard() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
-            <div className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-2xl bg-gradient-to-br from-purple-400 to-pink-500">
-              <img 
-                src={robotHeadImage} 
-                alt="Robot Head" 
-                className="w-12 h-12 object-cover"
-              />
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-xl">
+              <Target className="w-10 h-10 text-white" />
             </div>
           </div>
           <h1 className="text-5xl font-bold text-white mb-6">
@@ -124,16 +119,18 @@ export default function LeadScraperDashboard() {
                   <CardDescription className="text-slate-300 mb-6 text-base leading-relaxed">
                     {platform.description}
                   </CardDescription>
-                  <div className="flex flex-wrap gap-2 justify-center">
+                  <div className="space-y-3">
                     {platform.features.map((feature, index) => (
-                      <Badge key={index} className={`
-                        px-3 py-1 text-xs flex items-center rounded-full border-0
-                        ${platform.color === 'blue' ? 'bg-cyan-400/80 text-slate-800' : 
-                          platform.color === 'green' ? 'bg-emerald-400/80 text-slate-800' : 'bg-violet-400/80 text-slate-800'}
-                      `}>
-                        <CheckCircle className="w-3 h-3 mr-1" />
-                        {feature}
-                      </Badge>
+                      <div key={index} className="flex items-center justify-center">
+                        <Badge className={`
+                          px-3 py-1.5 text-xs flex items-center rounded-full border
+                          ${platform.color === 'blue' ? 'bg-blue-500/20 text-blue-300 border-blue-400/30' : 
+                            platform.color === 'green' ? 'bg-green-500/20 text-green-300 border-green-400/30' : 'bg-purple-500/20 text-purple-300 border-purple-400/30'}
+                        `}>
+                          <CheckCircle className="w-3 h-3 mr-2" />
+                          {feature}
+                        </Badge>
+                      </div>
                     ))}
                   </div>
                 </CardContent>
