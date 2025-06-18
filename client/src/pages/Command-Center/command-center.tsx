@@ -4300,6 +4300,7 @@ export default function CommandCenter() {
                 handleViewKnowledge: handleViewKnowledge,
                 setShowCallReports: (show: boolean) => setShowCallReports(show),
                 setShowCallLogs: (show: boolean) => setShowCallLogs(show),
+                handleLeadScraper: handleLeadScraper,
               }}
             />
             
@@ -7118,6 +7119,15 @@ export default function CommandCenter() {
 
 
 
+
+      {/* Lead Scraper Popup */}
+      {showLeadScraperPopup && (
+        <LeadScraperPopup
+          isOpen={showLeadScraperPopup}
+          onClose={() => setShowLeadScraperPopup(false)}
+          defaultTab={leadScraperDefaultTab}
+        />
+      )}
 
       <KnowledgeViewerModal
         isOpen={showKnowledgeViewer}

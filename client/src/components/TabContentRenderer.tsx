@@ -36,6 +36,7 @@ interface TabContentProps {
     handleViewKnowledge: () => void;
     setShowCallReports: (show: boolean) => void;
     setShowCallLogs: (show: boolean) => void;
+    handleLeadScraper?: () => void;
   };
 }
 
