@@ -3494,39 +3494,51 @@ export default function CommandCenter() {
         {/* Analytics Dashboard - 3 Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           {/* Performance & ROI Analytics */}
-          <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20">
-            <CardHeader>
+          <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border-2 border-purple-400 shadow-2xl shadow-purple-400/30 shadow-[0_0_20px_rgba(147,51,234,0.3)] ring-2 ring-purple-400/50 min-h-[600px]">
+            <CardHeader className="bg-gradient-to-r from-purple-600/20 to-purple-500/20 border-b border-purple-400/30">
               <CardTitle className="text-white flex items-center text-lg">
                 <BarChart3 className="w-5 h-5 mr-2 text-purple-400" />
                 Performance & AI Analytics
-                <Badge className="ml-2 bg-purple-500 text-white text-xs px-2 py-1">ANALYTICS</Badge>
+                <Badge className="ml-2 bg-purple-500 text-white text-xs px-2 py-1 border border-purple-400">ANALYTICS</Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4">
-              <div className="space-y-3">
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
-                  <div className="text-xl font-bold text-orange-400">
+            <CardContent className="p-6">
+              <div className="space-y-5">
+                <div className="bg-slate-900/60 rounded-lg p-5 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
+                  <div className="text-2xl font-bold text-orange-400 mb-2">
                     {metrics?.roi || '0%'}
                   </div>
-                  <div className="text-xs text-slate-300">ROI</div>
+                  <div className="text-sm text-purple-300 font-medium mb-3">ROI</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3 border border-purple-400/20">
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full w-0"></div>
+                  </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
-                  <div className="text-xl font-bold text-green-400">
+                <div className="bg-slate-900/60 rounded-lg p-5 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
+                  <div className="text-2xl font-bold text-green-400 mb-2">
                     {metrics?.conversionRate || '0%'}
                   </div>
-                  <div className="text-xs text-slate-300">Conversion Rate</div>
+                  <div className="text-sm text-purple-300 font-medium mb-3">Conversion Rate</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3 border border-purple-400/20">
+                    <div className="bg-gradient-to-r from-green-500 to-green-400 h-3 rounded-full w-0"></div>
+                  </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
-                  <div className="text-xl font-bold text-blue-400">
+                <div className="bg-slate-900/60 rounded-lg p-5 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
+                  <div className="text-2xl font-bold text-blue-400 mb-2">
                     ${metrics?.revenue || '0'}
                   </div>
-                  <div className="text-xs text-slate-300">Revenue</div>
+                  <div className="text-sm text-purple-300 font-medium mb-3">Revenue</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3 border border-purple-400/20">
+                    <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-3 rounded-full w-0"></div>
+                  </div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
-                  <div className="text-xl font-bold text-purple-400">
+                <div className="bg-slate-900/60 rounded-lg p-5 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
+                  <div className="text-2xl font-bold text-purple-400 mb-2">
                     {metrics?.efficiency || '0%'}
                   </div>
-                  <div className="text-xs text-slate-300">Efficiency</div>
+                  <div className="text-sm text-purple-300 font-medium mb-3">Efficiency</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3 border border-purple-400/20">
+                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full w-0"></div>
+                  </div>
                 </div>
               </div>
             </CardContent>
