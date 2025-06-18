@@ -54,6 +54,71 @@ const LeadScraper: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
   const [totalLeadsFound, setTotalLeadsFound] = useState(0);
   const [lastScrapeTime, setLastScrapeTime] = useState<string>('');
+  const [leadsData, setLeadsData] = useState<any[]>([]);
+  const [leadsStats, setLeadsStats] = useState<any>(null);
+  const [syncLoading, setSyncLoading] = useState(false);
+
+  // Load real leads data from Airtable
+  const loadLeadsData = async () => {
+    try {
+      const [leadsResponse, statsResponse] = await Promise.all([
+        fetch('/api/leads/universal'),
+        fetch('/api/leads/stats')
+      ]);
+
+      if (leadsResponse.ok) {
+        const leadsResult = await leadsResponse.json();
+        setLeadsData(leadsResult.data || []);
+        setTotalLeadsFound(leadsResult.data?.length || 0);
+      }
+
+      if (statsResponse.ok) {
+        const statsResult = await statsResponse.json();
+        setLeadsStats(statsResult.data || null);
+      }
+    } catch (error) {
+      console.error('Failed to load leads data:', error);
+    }
+  };
+
+  // Sync leads from Airtable
+  const syncFromAirtable = async () => {
+    setSyncLoading(true);
+    try {
+      const response = await fetch('/api/leads/sync-airtable', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        await loadLeadsData();
+        toast({
+          title: "Airtable Sync Complete",
+          description: `Synced ${result.count} leads from your Airtable`
+        });
+      } else {
+        toast({
+          title: "Sync Failed",
+          description: result.message || "Airtable API key required",
+          variant: "destructive"
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Sync Error",
+        description: "Failed to connect to Airtable",
+        variant: "destructive"
+      });
+    } finally {
+      setSyncLoading(false);
+    }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    loadLeadsData();
+  }, []);
 
   // Scraper launch handlers
   const handleApolloLaunch = async (filters: any) => {
@@ -179,6 +244,56 @@ const LeadScraper: React.FC = () => {
           <p className="text-xl text-blue-200 max-w-3xl mx-auto">
             Advanced multi-platform lead generation with enterprise-grade targeting and real-time intelligence
           </p>
+        </div>
+
+        {/* Real-time Data Stats */}
+        <div className="grid md:grid-cols-4 gap-4 mb-8">
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-white mb-2">{totalLeadsFound}</div>
+              <div className="text-sm text-blue-200">Total Leads</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-green-400 mb-2">
+                {leadsStats?.callableLeads || 0}
+              </div>
+              <div className="text-sm text-blue-200">Callable</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-purple-400 mb-2">
+                {leadsStats?.sources?.length || 0}
+              </div>
+              <div className="text-sm text-blue-200">Sources</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+            <CardContent className="p-6 text-center">
+              <Button 
+                onClick={syncFromAirtable}
+                disabled={syncLoading}
+                className="w-full bg-blue-600 hover:bg-blue-700"
+              >
+                {syncLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Syncing...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Sync Airtable
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Platform Cards */}

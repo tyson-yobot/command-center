@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { db } from "./db";
-import { storage } from "./storage";
+import { storage, leadsStorage, callLogStorage } from "./storage";
 import { registerAirtableRoutes } from "./modules/airtable/airtableRoutes";
 import { registerScraperRoutes } from "./modules/scraper/scraperRoutes";
 import { registerRealScrapingRoutes } from "./modules/lead-scraper/realScrapingRoutes";
@@ -189,6 +189,80 @@ export function registerRoutes(app: Express): void {
   // Memory activity
   app.get('/api/memory/activity', (req, res) => {
     res.json({ success: true, data: [] });
+  });
+
+  // Pipeline endpoints using real Airtable leads
+  app.post('/api/pipeline/start', async (req, res) => {
+    try {
+      const callableLeads = await leadsStorage.getCallableLeads();
+      
+      if (callableLeads.length === 0) {
+        return res.json({
+          success: false,
+          message: 'No callable leads found in Airtable',
+          total_records: 0,
+          active_calls: 0,
+          activeCalls: []
+        });
+      }
+
+      // Update lead statuses to "Calling" for active leads
+      const activeCalls = [];
+      for (let i = 0; i < Math.min(callableLeads.length, 5); i++) {
+        const lead = callableLeads[i];
+        await leadsStorage.updateLeadCallStatus(lead.id, 'Calling', 1);
+        
+        activeCalls.push({
+          id: lead.id,
+          contact: lead.fullName || `${lead.firstName || ''} ${lead.lastName || ''}`.trim(),
+          phone: lead.phone,
+          company: lead.company,
+          status: 'connecting',
+          type: 'outbound',
+          duration: '00:00',
+          quality: 'good',
+          timestamp: new Date().toISOString()
+        });
+      }
+
+      res.json({
+        success: true,
+        message: `Pipeline started with ${activeCalls.length} calls`,
+        total_records: callableLeads.length,
+        active_calls: activeCalls.length,
+        activeCalls
+      });
+    } catch (error) {
+      console.error('Pipeline start error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to start pipeline',
+        message: 'Airtable connection required'
+      });
+    }
+  });
+
+  app.post('/api/stop-pipeline-calls', async (req, res) => {
+    try {
+      const activeCalls = await leadsStorage.getLeadsByStatus('Calling');
+      
+      // Update all calling leads back to "New" status
+      for (const lead of activeCalls) {
+        await leadsStorage.updateLeadCallStatus(lead.id, 'New', 0);
+      }
+
+      res.json({
+        success: true,
+        message: `Stopped ${activeCalls.length} active calls`,
+        stopped_calls: activeCalls.length
+      });
+    } catch (error) {
+      console.error('Pipeline stop error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to stop pipeline'
+      });
+    }
   });
 
   // Register Airtable routes for lead management and pipeline functionality
