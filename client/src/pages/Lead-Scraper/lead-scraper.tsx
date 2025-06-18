@@ -218,7 +218,14 @@ const LeadScraper: React.FC = () => {
   };
 
   // Enterprise Lead Intelligence Platform Overview
-  const renderOverview = () => <EnterpriseLeadPlatform />;
+  const renderOverview = () => (
+    <EnterpriseLeadPlatform 
+      onPlatformSelect={(platform) => {
+        setActiveTab(platform);
+        setCurrentView('scraper');
+      }}
+    />
+  );
 
   // Scraper Interface
   const renderScraper = () => (

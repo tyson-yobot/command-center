@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Target, Globe, Users, CheckCircle, Shield, TrendingUp, ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'wouter';
+import { useLocation } from 'wouter';
 
 interface PlatformCardProps {
   title: string;
@@ -61,19 +61,27 @@ function PlatformCard({ title, description, icon, gradient, features, badges, on
   );
 }
 
-export default function EnterpriseLeadPlatform() {
-  const [, navigate] = useNavigate();
-  
+interface EnterpriseLeadPlatformProps {
+  onPlatformSelect?: (platform: string) => void;
+}
+
+export default function EnterpriseLeadPlatform({ onPlatformSelect }: EnterpriseLeadPlatformProps) {
   const handleApolloConfig = () => {
-    navigate('/lead-scraper?tab=apollo');
+    if (onPlatformSelect) {
+      onPlatformSelect('apollo');
+    }
   };
   
   const handleApifyConfig = () => {
-    navigate('/lead-scraper?tab=apify');
+    if (onPlatformSelect) {
+      onPlatformSelect('apify');
+    }
   };
   
   const handlePhantomBusterConfig = () => {
-    navigate('/lead-scraper?tab=phantombuster');
+    if (onPlatformSelect) {
+      onPlatformSelect('phantombuster');
+    }
   };
 
   return (
