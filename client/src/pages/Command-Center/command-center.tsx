@@ -3554,59 +3554,59 @@ export default function CommandCenter() {
               </CardTitle>
             </CardHeader>
             {!collapsedSections['analytics-reports'] && (
-              <CardContent className="p-4">
-                <div className="space-y-4">
+              <CardContent className="p-6">
+                <div className="space-y-6">
                   {/* SmartSpend™ Analytics */}
-                  <div className="space-y-3">
-                    <h4 className="text-purple-300 font-semibold flex items-center border-b border-purple-400/30 pb-1 text-sm">
-                      <DollarSign className="w-3 h-3 mr-1" />
+                  <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
+                    <h4 className="text-purple-300 font-semibold flex items-center border-b border-purple-400/30 pb-2 mb-4">
+                      <DollarSign className="w-4 h-4 mr-2" />
                       SmartSpend™ Analytics
                     </h4>
-                    <div className="space-y-2">
-                      <div className="p-2 bg-white/5 rounded-lg">
-                        <div className="flex justify-between">
-                          <span className="text-purple-300 text-xs">Budget Efficiency:</span>
-                          <span className="text-slate-400 font-bold text-xs">0</span>
+                    <div className="space-y-3">
+                      <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/20">
+                        <div className="flex justify-between items-center">
+                          <span className="text-purple-300 text-sm font-medium">Budget Efficiency:</span>
+                          <span className="text-white font-bold text-lg">0</span>
                         </div>
                       </div>
-                      <div className="p-2 bg-white/5 rounded-lg">
-                        <div className="flex justify-between">
-                          <span className="text-purple-300 text-xs">Cost Per Lead:</span>
-                          <span className="text-slate-400 font-bold text-xs">0</span>
+                      <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/20">
+                        <div className="flex justify-between items-center">
+                          <span className="text-purple-300 text-sm font-medium">Cost Per Lead:</span>
+                          <span className="text-white font-bold text-lg">0</span>
                         </div>
                       </div>
-                      <div className="p-2 bg-white/5 rounded-lg">
-                        <div className="flex justify-between">
-                          <span className="text-purple-300 text-xs">ROI:</span>
-                          <span className="text-slate-400 font-bold text-xs">0</span>
+                      <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/20">
+                        <div className="flex justify-between items-center">
+                          <span className="text-purple-300 text-sm font-medium">ROI:</span>
+                          <span className="text-white font-bold text-lg">0</span>
                         </div>
                       </div>
                     </div>
                   </div>
                   
                   {/* Botalytics™ */}
-                  <div className="space-y-3">
-                    <h4 className="text-purple-300 font-semibold flex items-center border-b border-purple-400/30 pb-1 text-sm">
-                      <Brain className="w-3 h-3 mr-1" />
+                  <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
+                    <h4 className="text-purple-300 font-semibold flex items-center border-b border-purple-400/30 pb-2 mb-4">
+                      <Brain className="w-4 h-4 mr-2" />
                       Botalytics™
                     </h4>
-                    <div className="space-y-2">
-                      <div className="p-2 bg-white/5 rounded-lg">
-                        <div className="flex justify-between">
-                          <span className="text-purple-300 text-xs">AI Accuracy:</span>
-                          <span className="text-slate-400 font-bold text-xs">0</span>
+                    <div className="space-y-3">
+                      <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/20">
+                        <div className="flex justify-between items-center">
+                          <span className="text-purple-300 text-sm font-medium">AI Accuracy:</span>
+                          <span className="text-white font-bold text-lg">0</span>
                         </div>
                       </div>
-                      <div className="p-2 bg-white/5 rounded-lg">
-                        <div className="flex justify-between">
-                          <span className="text-purple-300 text-xs">Interactions:</span>
-                          <span className="text-slate-400 font-bold text-xs">0</span>
+                      <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/20">
+                        <div className="flex justify-between items-center">
+                          <span className="text-purple-300 text-sm font-medium">Interactions:</span>
+                          <span className="text-white font-bold text-lg">0</span>
                         </div>
                       </div>
-                      <div className="p-2 bg-white/5 rounded-lg">
-                        <div className="flex justify-between">
-                          <span className="text-purple-300 text-xs">Learning Rate:</span>
-                          <span className="text-slate-400 font-bold text-xs">0</span>
+                      <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/20">
+                        <div className="flex justify-between items-center">
+                          <span className="text-purple-300 text-sm font-medium">Learning Rate:</span>
+                          <span className="text-white font-bold text-lg">0</span>
                         </div>
                       </div>
                     </div>
