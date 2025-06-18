@@ -3225,6 +3225,17 @@ export default function CommandCenter() {
                       <span className="text-sm font-medium">Manual Call Start</span>
                     </div>
                   </Button>
+
+                  <Button
+                    onClick={handleLeadScraper}
+                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500"
+                    title="Lead Scraper - Apollo, Apify, PhantomBuster"
+                  >
+                    <div className="text-center">
+                      <Search className="w-6 h-6 mx-auto mb-2" />
+                      <span className="text-sm font-medium">Lead Scraper</span>
+                    </div>
+                  </Button>
                   
 
 
