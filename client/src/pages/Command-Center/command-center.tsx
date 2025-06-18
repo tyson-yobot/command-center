@@ -3954,8 +3954,8 @@ export default function CommandCenter() {
           </Card>
 
           {/* AI Assistant Insights */}
-          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-purple-400 shadow-2xl shadow-purple-400/30">
-            <CardHeader className="bg-gradient-to-r from-purple-600/20 to-purple-500/20 border-b border-purple-400/30">
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-purple-400 shadow-2xl shadow-purple-400/30 shadow-[0_0_20px_rgba(168,85,247,0.3)] ring-2 ring-purple-400/50">
+            <CardHeader className="bg-gradient-to-r from-purple-600/20 to-purple-500/20 border-b border-purple-400/30 shadow-[0_2px_10px_rgba(168,85,247,0.2)]">
               <CardTitle className="text-white flex items-center">
                 <Brain className="w-6 h-6 mr-3 text-purple-400" />
                 <span className="text-xl font-bold">🧠 AI Assistant Insights</span>
@@ -3963,14 +3963,14 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(168,85,247,0.2)] ring-1 ring-purple-400/30">
                   <div className="text-purple-300 text-sm mb-1 font-medium">Confidence Score</div>
                   <div className="text-white font-bold text-xl mb-2">{metrics?.data?.aiInsights?.confidenceScore || '0%'}</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
                     <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.confidenceProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(168,85,247,0.2)] ring-1 ring-purple-400/30">
                   <div className="text-purple-300 text-sm mb-1 font-medium">Learning Status</div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="text-white font-bold text-xl">{metrics?.data?.aiInsights?.learningStatus || 'Active'}</div>
@@ -3980,21 +3980,21 @@ export default function CommandCenter() {
                     <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.learningProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(168,85,247,0.2)] ring-1 ring-purple-400/30">
                   <div className="text-purple-300 text-sm mb-1 font-medium" title="Percentage of conversations that needed human assistance">Escalation Rate</div>
                   <div className="text-white font-bold text-xl mb-2">{metrics?.data?.aiInsights?.escalationRate || '0%'}</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
                     <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.escalationProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(168,85,247,0.2)] ring-1 ring-purple-400/30">
                   <div className="text-purple-300 text-sm mb-1 font-medium">Response Accuracy</div>
                   <div className="text-white font-bold text-xl mb-2">{metrics?.data?.aiInsights?.responseAccuracy || '0%'}</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
                     <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.accuracyProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(168,85,247,0.2)] ring-1 ring-purple-400/30">
                   <div className="text-purple-300 text-sm mb-1 font-medium">Latest Learning</div>
                   <div className="text-white font-bold text-base">{metrics?.data?.aiInsights?.latestLearning || 'No recent activity'}</div>
                 </div>
