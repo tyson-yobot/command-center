@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Target, Globe, Users, Brain, Shield, BarChart3, Play, Settings, CheckCircle, Download, ExternalLink, Slack, Plus, Info } from 'lucide-react';
+import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750274873156.png';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -39,7 +40,7 @@ export default function LeadScraperDashboard() {
       icon: Users,
       color: 'purple',
       description: 'Premium social media automation for LinkedIn, Twitter with intelligent connection management',
-      features: ['Social Automation', 'Safe Outreach', 'Multi-platform reach']
+      features: ['Safe Outreach', 'Social Automation', 'Multi-platform reach']
     }
   ];
 
@@ -83,7 +84,11 @@ export default function LeadScraperDashboard() {
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-xl">
-              <Target className="w-10 h-10 text-white" />
+              <img 
+                src={robotHeadImage} 
+                alt="Robot Head" 
+                className="w-12 h-12 object-cover"
+              />
             </div>
           </div>
           <h1 className="text-5xl font-bold text-white mb-6">
