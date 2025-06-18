@@ -20,20 +20,20 @@ interface PlatformCardProps {
 
 function PlatformCard({ title, description, icon, gradient, features, badges, onConfigure }: PlatformCardProps) {
   return (
-    <Card className={`${gradient} border-0 text-white shadow-2xl hover:scale-105 transition-all duration-300`}>
+    <Card className="bg-gradient-to-br from-[#111827] via-[#1f2937] to-[#1e3a8a] p-6 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 border-0 text-white">
       <CardHeader className="text-center pb-4">
-        <div className="w-16 h-16 mx-auto bg-white/20 rounded-2xl flex items-center justify-center mb-4">
+        <div className="w-20 h-20 mx-auto bg-white/20 rounded-2xl flex items-center justify-center mb-6">
           {icon}
         </div>
-        <CardTitle className="text-2xl font-bold text-white">{title}</CardTitle>
+        <CardTitle className="text-2xl font-bold text-white mb-3">{title}</CardTitle>
         <p className="text-white/80 text-sm leading-relaxed">{description}</p>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6">
         {/* Feature Badges */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           {badges.map((badge, index) => (
-            <div key={index} className="flex items-center gap-2">
-              <Badge variant="outline" className={`${badge.color} border-white/30 text-white text-xs px-3 py-1`}>
+            <div key={index} className="flex items-center justify-center">
+              <Badge variant="outline" className="bg-white/10 border-white/30 text-white text-xs px-4 py-2 rounded-full">
                 {badge.text}
               </Badge>
             </div>
@@ -41,10 +41,10 @@ function PlatformCard({ title, description, icon, gradient, features, badges, on
         </div>
         
         {/* Features List */}
-        <div className="pt-4 border-t border-white/20">
+        <div className="pt-4 border-t border-white/20 space-y-2">
           {features.map((feature, index) => (
-            <div key={index} className="flex items-center gap-2 text-white/70 text-xs mb-1">
-              <div className="w-1 h-1 bg-white/50 rounded-full"></div>
+            <div key={index} className="flex items-center gap-3 text-white/70 text-sm">
+              <div className="w-2 h-2 bg-white/50 rounded-full"></div>
               {feature}
             </div>
           ))}
@@ -52,7 +52,7 @@ function PlatformCard({ title, description, icon, gradient, features, badges, on
         
         <Button 
           onClick={onConfigure}
-          className="w-full bg-white/20 hover:bg-white/30 text-white border border-white/30 mt-4"
+          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 mt-6 py-3 rounded-xl font-semibold"
         >
           Configure Platform
         </Button>
@@ -94,7 +94,7 @@ export default function EnterpriseLeadPlatform({ onPlatformSelect, onNavigateToS
           <div className="w-20 h-20 mx-auto bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mb-6">
             <Target className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-5xl font-bold text-white mb-4">
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-blue-500 text-center mb-4">
             Enterprise Lead Intelligence Platform
           </h1>
           <p className="text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
@@ -103,7 +103,7 @@ export default function EnterpriseLeadPlatform({ onPlatformSelect, onNavigateToS
         </div>
 
         {/* Platform Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           
           {/* Apollo.io Card */}
           <PlatformCard
@@ -161,7 +161,7 @@ export default function EnterpriseLeadPlatform({ onPlatformSelect, onNavigateToS
         </div>
 
         {/* Bottom Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
           
           <Card className="bg-gradient-to-br from-green-600/20 to-green-800/20 border-green-500/30 text-white">
             <CardContent className="p-6 text-center">
