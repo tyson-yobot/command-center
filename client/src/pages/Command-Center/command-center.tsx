@@ -3084,7 +3084,7 @@ export default function CommandCenter() {
                         className={`${
                           dashboardPreset === preset.id 
                             ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white border-blue-400' 
-                            : 'bg-slate-800/60 text-slate-300 hover:bg-slate-700/80 border-slate-600'
+                            : 'bg-slate-800/40 text-slate-400 hover:bg-slate-700/60 border-slate-700/50 hover:border-slate-600/70'
                         } border transition-all duration-200`}
                         title={`Switch to ${preset.label}`}
                       >
