@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -81,12 +81,17 @@ export function LeadScraperPopup({ isOpen, onClose, defaultTab = 'apollo' }: Lea
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl h-[90vh] bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900 border-slate-600/50 text-white overflow-y-auto">
         <DialogHeader className="flex flex-row items-center justify-between border-b border-slate-600/50 pb-4">
-          <DialogTitle className="text-2xl font-bold text-white flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5 text-white" />
-            </div>
-            Advanced Lead Scraper
-          </DialogTitle>
+          <div>
+            <DialogTitle className="text-2xl font-bold text-white flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <Users className="w-5 h-5 text-white" />
+              </div>
+              Advanced Lead Scraper
+            </DialogTitle>
+            <DialogDescription className="text-slate-400 mt-2">
+              Multi-platform lead generation with Apollo, Apify, and PhantomBuster integration
+            </DialogDescription>
+          </div>
           <Button 
             variant="ghost" 
             size="sm" 
