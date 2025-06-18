@@ -3491,234 +3491,156 @@ export default function CommandCenter() {
 
 
 
-        {/* 4. Performance & ROI Analytics and PDF Export Panel - Side by Side */}
-        <div className="mb-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Performance & ROI Analytics - Half Width */}
-            <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center text-xl">
-                  <BarChart3 className="w-6 h-6 mr-3 text-purple-400" />
-                  Performance & ROI Analytics
-                  <Badge className="ml-3 bg-purple-500 text-white text-sm px-3 py-1">ANALYTICS</Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-2xl font-bold text-orange-400">
-                      {metrics?.roi || '0%'}
-                    </div>
-                    <div className="text-sm text-slate-300">ROI</div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-2xl font-bold text-green-400">
-                      {metrics?.conversionRate || '0%'}
-                    </div>
-                    <div className="text-sm text-slate-300">Conversion Rate</div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-2xl font-bold text-blue-400">
-                      ${metrics?.revenue || '0'}
-                    </div>
-                    <div className="text-sm text-slate-300">Revenue</div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-2xl font-bold text-purple-400">
-                      {metrics?.efficiency || '0%'}
-                    </div>
-                    <div className="text-sm text-slate-300">Efficiency</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-
-          </div>
-        </div>
-
-        {/* Detailed Analytics Section */}
-        <div className="mb-4">
-          <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between text-xl">
+        {/* Analytics Dashboard - 3 Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          {/* Performance & AI Analytics - Orange Design */}
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-orange-500 shadow-2xl shadow-orange-500/30">
+            <CardHeader className="bg-gradient-to-r from-orange-600/20 to-orange-500/20 border-b border-orange-500/30">
+              <CardTitle className="text-white flex items-center justify-between">
                 <div className="flex items-center">
-                  <BarChart3 className="w-6 h-6 mr-3 text-purple-400" />
-                  📊 Detailed Analytics & Reports
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => toggleSection('analytics-reports')}
-                    className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                  >
-                    {collapsedSections['analytics-reports'] ? 
-                      <ChevronDown className="w-4 h-4" /> : 
-                      <ChevronUp className="w-4 h-4" />
-                    }
-                  </Button>
+                  <BarChart3 className="w-6 h-6 mr-3 text-orange-400" />
+                  <span className="text-xl font-bold">📊 Performance & AI Analytics</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-purple-300">Last Updated: Just now</span>
-                </div>
+                <Badge className="bg-orange-500 text-white text-sm px-3 py-1 font-bold shadow-lg">ANALYTICS</Badge>
               </CardTitle>
             </CardHeader>
-            {!collapsedSections['analytics-reports'] && (
-              <CardContent className="p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* SmartSpend™ Analytics */}
-                  <div className="space-y-4">
-                    <h4 className="text-purple-300 font-semibold flex items-center border-b border-purple-400/30 pb-2">
-                      <DollarSign className="w-4 h-4 mr-2" />
-                      📊 SmartSpend™ Analytics
-                    </h4>
-                    <div className="space-y-3">
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="flex justify-between">
-                          <span className="text-purple-300 text-sm">Budget Efficiency:</span>
-                          <span className="text-slate-400 font-bold">0</span>
-                        </div>
-                      </div>
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="flex justify-between">
-                          <span className="text-purple-300 text-sm">Cost Per Lead:</span>
-                          <span className="text-slate-400 font-bold">0</span>
-                        </div>
-                      </div>
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="flex justify-between">
-                          <span className="text-purple-300 text-sm">ROI:</span>
-                          <span className="text-slate-400 font-bold">0</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Botalytics™ */}
-                  <div className="space-y-4">
-                    <h4 className="text-purple-300 font-semibold flex items-center border-b border-purple-400/30 pb-2">
-                      <Brain className="w-4 h-4 mr-2" />
-                      📈 Botalytics™
-                    </h4>
-                    <div className="space-y-3">
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="flex justify-between">
-                          <span className="text-purple-300 text-sm">AI Accuracy:</span>
-                          <span className="text-slate-400 font-bold">0</span>
-                        </div>
-                      </div>
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="flex justify-between">
-                          <span className="text-purple-300 text-sm">Interactions:</span>
-                          <span className="text-slate-400 font-bold">0</span>
-                        </div>
-                      </div>
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="flex justify-between">
-                          <span className="text-purple-300 text-sm">Learning Rate:</span>
-                          <span className="text-slate-400 font-bold">0</span>
-                        </div>
-                      </div>
-                    </div>
+            <CardContent className="p-6">
+              <div className="space-y-4">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
+                  <div className="text-orange-300 text-sm mb-1 font-medium">ROI:</div>
+                  <div className="text-white font-bold text-xl mb-2">{metrics?.roi || '0%'}</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-                
-              </CardContent>
-            )}
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
+                  <div className="text-orange-300 text-sm mb-1 font-medium">Conversion Rate:</div>
+                  <div className="text-white font-bold text-xl mb-2">{metrics?.conversionRate || '0%'}</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
+                  <div className="text-orange-300 text-sm mb-1 font-medium">Revenue:</div>
+                  <div className="text-white font-bold text-xl mb-2">${metrics?.revenue || '0'}</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
+                  <div className="text-orange-300 text-sm mb-1 font-medium">Efficiency Score:</div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-white font-bold text-xl">{metrics?.efficiency || '0%'}</div>
+                    <Badge className="bg-orange-500 text-white text-xs font-bold shadow-md">Unknown</Badge>
+                  </div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
           </Card>
-        </div>
 
-
-
-        {/* 5. System Health + Metrics (Uptime, Client Pulse, Ops Stats) */}
-        <div className="mb-4">
-          <Card className="bg-gradient-to-r from-emerald-900/60 to-teal-800/60 backdrop-blur-sm border border-emerald-400 shadow-lg shadow-emerald-400/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between text-xl">
-                <div className="flex items-center">
-                  <Gauge className="w-6 h-6 mr-3 text-emerald-400" />
-                  📈 System Health + Metrics
-                  <Badge className="ml-3 bg-emerald-500 text-white text-sm px-3 py-1">LIVE</Badge>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => toggleSection('system-health')}
-                    className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                  >
-                    {collapsedSections['system-health'] ? 
-                      <ChevronDown className="w-4 h-4" /> : 
-                      <ChevronUp className="w-4 h-4" />
-                    }
-                  </Button>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                  <span className="text-sm text-red-300">Systems Offline</span>
-                </div>
+          {/* Detailed Analytics & Reports - Lime Design */}
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-lime-400 shadow-2xl shadow-lime-400/30">
+            <CardHeader className="bg-gradient-to-r from-lime-500/20 to-lime-400/20 border-b border-lime-400/30">
+              <CardTitle className="text-white flex items-center">
+                <BarChart3 className="w-6 h-6 mr-3 text-lime-400" />
+                <span className="text-xl font-bold">📊 Detailed Analytics & Reports</span>
               </CardTitle>
             </CardHeader>
-            {!collapsedSections['system-health'] && (
-              <CardContent className="p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  {/* Uptime & Performance */}
-                  <div className="space-y-4">
-                    <h4 className="text-red-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2">
-                      <Activity className="w-4 h-4 mr-2" />
-                      System Uptime
-                    </h4>
-                    <div className="space-y-3">
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-sm text-red-300 mb-1">Uptime</div>
-                        <div className="text-2xl font-bold text-slate-400">0</div>
-                      </div>
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-sm text-red-300 mb-1">Response Time</div>
-                        <div className="text-lg font-bold text-slate-400">0</div>
-                      </div>
-                    </div>
+            <CardContent className="p-6">
+              <div className="space-y-4">
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-green-400 shadow-lg shadow-green-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300">Budget Efficiency</span>
+                    <span className="text-green-400 font-bold">0</span>
                   </div>
-                  
-                  {/* Client Pulse */}
-                  <div className="space-y-4">
-                    <h4 className="text-red-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2">
-                      <Users className="w-4 h-4 mr-2" />
-                      💼 Client Pulse
-                    </h4>
-                    <div className="space-y-3">
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-sm text-red-300 mb-1">NPS Score</div>
-                        <div className="text-2xl font-bold text-slate-400">0</div>
-                      </div>
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-sm text-red-300 mb-1">Active Clients</div>
-                        <div className="text-lg font-bold text-slate-400">0</div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Operations Stats */}
-                  <div className="space-y-4">
-                    <h4 className="text-red-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2">
-                      <Target className="w-4 h-4 mr-2" />
-                      Ops Stats
-                    </h4>
-                    <div className="space-y-3">
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-sm text-red-300 mb-1">Active Calls</div>
-                        <div className="text-lg font-bold text-white">
-                          {activeCalls?.data?.length || 0}
-                        </div>
-                      </div>
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-sm text-red-300 mb-1">Success Rate</div>
-                        <div className="text-lg font-bold text-green-400">
-                          {callMetrics?.data?.successRate || 0}%
-                        </div>
-                      </div>
-                    </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-green-400 h-1 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-              </CardContent>
-            )}
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-blue-400 shadow-lg shadow-blue-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300">Cost Per Lead</span>
+                    <span className="text-blue-400 font-bold">0</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-blue-400 h-1 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-purple-400 shadow-lg shadow-purple-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300">AI Accuracy</span>
+                    <span className="text-purple-400 font-bold">0</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-purple-400 h-1 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-orange-400 shadow-lg shadow-orange-400/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300">Interactions</span>
+                    <span className="text-orange-400 font-bold">0</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-orange-400 h-1 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-800/40 rounded-lg p-3 border-2 border-cyan-400 shadow-lg shadow-cyan-400/20">
+                  <div className="text-slate-300 text-sm mb-1">Learning Rate</div>
+                  <div className="flex items-center justify-between">
+                    <div className="text-cyan-400 font-bold">0</div>
+                    <Badge className="bg-cyan-600 text-white">Active</Badge>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* System Health & Metrics - Purple Design */}
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-purple-400 shadow-2xl shadow-purple-400/30">
+            <CardHeader className="bg-gradient-to-r from-purple-600/20 to-purple-500/20 border-b border-purple-400/30">
+              <CardTitle className="text-white flex items-center">
+                <Gauge className="w-6 h-6 mr-3 text-purple-400" />
+                <span className="text-xl font-bold">📈 System Health & Metrics</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="space-y-4">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                  <div className="text-purple-300 text-sm mb-1 font-medium">System Uptime</div>
+                  <div className="text-white font-bold text-xl mb-2">0</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                  <div className="text-purple-300 text-sm mb-1 font-medium">Response Time</div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-white font-bold text-xl">0</div>
+                    <Badge className="bg-purple-500 text-white text-xs font-bold shadow-md">Offline</Badge>
+                  </div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                  <div className="text-purple-300 text-sm mb-1 font-medium">Active Calls</div>
+                  <div className="text-white font-bold text-xl mb-2">{activeCalls?.data?.length || 0}</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg">
+                  <div className="text-purple-300 text-sm mb-1 font-medium">Success Rate</div>
+                  <div className="text-white font-bold text-xl mb-2">{callMetrics?.data?.successRate || 0}%</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
           </Card>
         </div>
 
