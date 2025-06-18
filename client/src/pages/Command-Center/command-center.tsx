@@ -3533,7 +3533,7 @@ export default function CommandCenter() {
           </Card>
 
           {/* Detailed Analytics & Reports */}
-          <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20">
+          <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border-2 border-purple-400 shadow-2xl shadow-purple-400/30 ring-2 ring-purple-400/50 min-h-[480px]">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between text-lg">
                 <div className="flex items-center">
@@ -3617,18 +3617,18 @@ export default function CommandCenter() {
           </Card>
 
           {/* System Health & Metrics */}
-          <Card className="bg-gradient-to-r from-emerald-900/60 to-teal-800/60 backdrop-blur-sm border border-emerald-400 shadow-lg shadow-emerald-400/20">
+          <Card className="bg-gradient-to-r from-emerald-900/60 to-teal-800/60 backdrop-blur-sm border-2 border-emerald-400 shadow-2xl shadow-emerald-400/30 ring-2 ring-emerald-400/50 min-h-[480px]">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between text-lg">
                 <div className="flex items-center">
                   <Gauge className="w-5 h-5 mr-2 text-emerald-400" />
                   System Health & Metrics
-                  <Badge className="ml-2 bg-emerald-500 text-white text-xs px-2 py-1">LIVE</Badge>
+                  <Badge className="ml-2 bg-emerald-500 text-white text-xs px-2 py-1 border border-emerald-400">LIVE</Badge>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => toggleSection('system-health')}
-                    className="ml-2 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                    className="ml-2 p-1 text-white/60 hover:text-white hover:bg-white/10 border border-emerald-400/50 hover:border-emerald-400"
                   >
                     {collapsedSections['system-health'] ? 
                       <ChevronDown className="w-3 h-3" /> : 
