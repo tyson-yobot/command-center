@@ -1145,7 +1145,10 @@ export default function LeadScraperDashboard() {
             <div>
               <h1 className="text-4xl font-bold text-white mb-2">Intelligence Results</h1>
               <p className="text-blue-100 text-xl">
-                Extracted 1,247 high-quality leads using {selectedPlatform === 'apollo' ? 'Apollo.io' : selectedPlatform === 'apify' ? 'Apify' : 'PhantomBuster'}
+                {scrapingResults ? 
+                  `Extracted ${scrapingResults.count || scrapingResults.leadCount || 0} high-quality leads using ${selectedPlatform === 'apollo' ? 'Apollo.io' : selectedPlatform === 'apify' ? 'Apify' : 'PhantomBuster'}` :
+                  'Processing completed - leads extracted and synced'
+                }
               </p>
             </div>
           </div>
@@ -1212,16 +1215,7 @@ export default function LeadScraperDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {[
-                { name: "Sarah Johnson", company: "TechFlow Inc", email: "sarah.j@techflow.com", phone: "+1 (555) 123-4567" },
-                { name: "Michael Chen", company: "DataSync Solutions", email: "m.chen@datasync.io", phone: "+1 (555) 234-5678" },
-                { name: "Emily Rodriguez", company: "CloudBase Systems", email: "emily.r@cloudbase.com", phone: "+1 (555) 345-6789" },
-                { name: "David Kim", company: "AI Innovations", email: "david.kim@aiinnovations.co", phone: "+1 (555) 456-7890" },
-                { name: "Lisa Thompson", company: "ScaleUp Ventures", email: "lisa.t@scaleup.com", phone: "+1 (555) 567-8901" },
-                { name: "Robert Martinez", company: "Future Systems", email: "r.martinez@futuresys.com", phone: "+1 (555) 678-9012" },
-                { name: "Amanda Foster", company: "NextGen Analytics", email: "amanda.f@nextgen.io", phone: "+1 (555) 789-0123" },
-                { name: "James Wilson", company: "Quantum Labs", email: "james.w@quantumlabs.net", phone: "+1 (555) 890-1234" }
-              ].map((lead, index) => (
+              {(scrapingResults?.leads || []).slice(0, 8).map((lead, index) => (
                 <div
                   key={index}
                   className="flex items-center justify-between p-6 bg-slate-700/40 rounded-xl border border-slate-600/30 hover:bg-slate-700/60 transition-all duration-200"
@@ -1229,17 +1223,17 @@ export default function LeadScraperDashboard() {
                   <div className="flex items-center space-x-6">
                     <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
                       <span className="text-white font-semibold text-lg">
-                        {lead.name.split(' ').map(n => n[0]).join('')}
+                        {((lead.fullName || lead.first_name + ' ' + lead.last_name || 'Unknown').split(' ').map(n => n[0]).join(''))}
                       </span>
                     </div>
                     <div>
-                      <p className="text-white font-semibold text-lg">{lead.name}</p>
-                      <p className="text-slate-400 text-base">{lead.company}</p>
+                      <p className="text-white font-semibold text-lg">{lead.fullName || lead.first_name + ' ' + lead.last_name || 'Unknown Name'}</p>
+                      <p className="text-slate-400 text-base">{lead.company || lead.company_name || 'Unknown Company'}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-slate-300 text-base">{lead.email}</p>
-                    <p className="text-slate-400 text-base">{lead.phone}</p>
+                    <p className="text-slate-300 text-base">{lead.email || 'No email available'}</p>
+                    <p className="text-slate-400 text-base">{lead.phone || 'No phone available'}</p>
                   </div>
                 </div>
               ))}
@@ -1247,7 +1241,7 @@ export default function LeadScraperDashboard() {
             
             <div className="mt-8 pt-6 border-t border-slate-600/50">
               <p className="text-center text-slate-300 text-xl">
-                Total results: <span className="text-white font-semibold">1,247 leads</span>
+                Total results: <span className="text-white font-semibold">{scrapingResults?.count || scrapingResults?.leadCount || 0} leads</span>
               </p>
             </div>
           </CardContent>
