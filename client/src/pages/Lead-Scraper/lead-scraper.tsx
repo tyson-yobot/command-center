@@ -280,7 +280,10 @@ const LeadScraper: React.FC = () => {
 
   // Platform Overview Interface
   const renderOverview = () => (
-    <EnterpriseLeadPlatform onNavigateToScraper={() => setCurrentView('scraper')} />
+    <EnterpriseLeadPlatform 
+      onPlatformSelect={(platform) => setActiveTab(platform)}
+      onNavigateToScraper={() => setCurrentView('scraper')} 
+    />
   );
 
   // Scraper Interface
