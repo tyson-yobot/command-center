@@ -79,26 +79,17 @@ export default function EnterpriseLeadPlatform({ onPlatformSelect, onNavigateToS
     if (onPlatformSelect) {
       onPlatformSelect('apollo');
     }
-    if (onNavigateToScraper) {
-      onNavigateToScraper();
-    }
   };
   
   const handleApifyConfig = () => {
     if (onPlatformSelect) {
       onPlatformSelect('apify');
     }
-    if (onNavigateToScraper) {
-      onNavigateToScraper();
-    }
   };
   
   const handlePhantomBusterConfig = () => {
     if (onPlatformSelect) {
       onPlatformSelect('phantombuster');
-    }
-    if (onNavigateToScraper) {
-      onNavigateToScraper();
     }
   };
 

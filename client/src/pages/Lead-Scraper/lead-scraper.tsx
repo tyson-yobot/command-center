@@ -49,7 +49,7 @@ const LeadScraper: React.FC = () => {
   const { toast } = useToast();
   
   // State management
-  const [currentView, setCurrentView] = useState('overview'); // 'overview', 'scraper', or 'results'
+  const [currentView, setCurrentView] = useState('overview'); // 'overview', 'apollo', 'apify', 'phantombuster', or 'results'
   const [activeTab, setActiveTab] = useState('apollo');
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<ScrapeResult | null>(null);
@@ -281,28 +281,91 @@ const LeadScraper: React.FC = () => {
   // Platform Overview Interface
   const renderOverview = () => (
     <EnterpriseLeadPlatform 
-      onPlatformSelect={(platform) => setActiveTab(platform)}
-      onNavigateToScraper={() => setCurrentView('scraper')} 
+      onPlatformSelect={(platform) => setCurrentView(platform)}
     />
   );
 
-  // Get dynamic background based on active tab
-  const getScraperBackground = () => {
-    switch (activeTab) {
-      case 'apollo':
-        return 'bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900';
-      case 'apify':
-        return 'bg-gradient-to-br from-slate-900 via-green-900 to-slate-900';
-      case 'phantombuster':
-        return 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900';
-      default:
-        return 'bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900';
-    }
-  };
+  // Apollo Configuration Screen
+  const renderApollo = () => (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-4 transition-all duration-500">
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentView('overview')}
+              className="text-white hover:bg-white/10"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Platforms
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold text-white">Apollo.io Professional Configuration</h1>
+              <p className="text-white/60 mt-1">Configure precision targeting parameters</p>
+            </div>
+          </div>
+        </div>
+        <ApolloScraperPanel onLaunch={handleApolloLaunch} isLoading={isLoading} />
+      </div>
+    </div>
+  );
 
-  // Scraper Interface
+  // Apify Configuration Screen  
+  const renderApify = () => (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-green-900 to-slate-900 p-4 transition-all duration-500">
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentView('overview')}
+              className="text-white hover:bg-white/10"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Platforms
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold text-white">Apify Web Intelligence Platform</h1>
+              <p className="text-white/60 mt-1">Advanced data extraction configuration</p>
+            </div>
+          </div>
+        </div>
+        <ApifyScraperPanel onLaunch={handleApifyLaunch} isLoading={isLoading} />
+      </div>
+    </div>
+  );
+
+  // PhantomBuster Configuration Screen
+  const renderPhantomBuster = () => (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 transition-all duration-500">
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentView('overview')}
+              className="text-white hover:bg-white/10"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Platforms
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold text-white">PhantomBuster Social Automation</h1>
+              <p className="text-white/60 mt-1">Social media automation configuration</p>
+            </div>
+          </div>
+        </div>
+        <PhantomBusterScraperPanel onLaunch={handlePhantomBusterLaunch} isLoading={isLoading} />
+      </div>
+    </div>
+  );
+
+  // Legacy Scraper Interface (keeping for compatibility)
   const renderScraper = () => (
-    <div className={`min-h-screen ${getScraperBackground()} p-4 transition-all duration-500`}>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -507,6 +570,12 @@ const LeadScraper: React.FC = () => {
 
   // Main render logic
   switch (currentView) {
+    case 'apollo':
+      return renderApollo();
+    case 'apify':
+      return renderApify();
+    case 'phantombuster':
+      return renderPhantomBuster();
     case 'scraper':
       return renderScraper();
     case 'results':
