@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Target, Globe, Users, Brain, Shield, BarChart3, Play, Settings, CheckCircle, Download, ExternalLink, Slack, Plus, Info } from 'lucide-react';
+import { ArrowLeft, Target, Globe, Users, Brain, Shield, BarChart3, Play, Settings, CheckCircle, Download, ExternalLink, Slack, Plus, Info, Loader2 } from 'lucide-react';
 import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750274873156.png';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -11,11 +11,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 
-type Screen = 'overview' | 'apollo' | 'apify' | 'phantombuster' | 'results';
+type Screen = 'overview' | 'apollo' | 'apify' | 'phantombuster' | 'scraping' | 'results';
 
 export default function LeadScraperDashboard() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('overview');
   const [selectedPlatform, setSelectedPlatform] = useState<string>('');
+  const [isScrapingInProgress, setIsScrapingInProgress] = useState(false);
+  const [scrapingResults, setScrapingResults] = useState<any>(null);
 
   const platforms = [
     {
@@ -75,6 +77,109 @@ export default function LeadScraperDashboard() {
 
   const handleBackToCommandCenter = () => {
     window.location.href = '/command-center';
+  };
+
+  // Real scraper launch functions
+  const launchApolloScraper = async () => {
+    setIsScrapingInProgress(true);
+    setSelectedPlatform('apollo');
+    setCurrentScreen('scraping');
+    
+    try {
+      const response = await fetch('/api/scraper/apollo/launch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          mode: 'live'
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setScrapingResults(result);
+        setCurrentScreen('results');
+      } else {
+        console.error('Apollo scraping failed:', result.error);
+        setCurrentScreen('apollo');
+      }
+    } catch (error) {
+      console.error('Apollo scraping error:', error);
+      setCurrentScreen('apollo');
+    } finally {
+      setIsScrapingInProgress(false);
+    }
+  };
+
+  const launchApifyScraper = async () => {
+    setIsScrapingInProgress(true);
+    setSelectedPlatform('apify');
+    setCurrentScreen('scraping');
+    
+    try {
+      const response = await fetch('/api/scraper/apify/launch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          mode: 'live'
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setScrapingResults(result);
+        setCurrentScreen('results');
+      } else {
+        console.error('Apify scraping failed:', result.error);
+        setCurrentScreen('apify');
+      }
+    } catch (error) {
+      console.error('Apify scraping error:', error);
+      setCurrentScreen('apify');
+    } finally {
+      setIsScrapingInProgress(false);
+    }
+  };
+
+  const launchPhantomBusterScraper = async () => {
+    setIsScrapingInProgress(true);
+    setSelectedPlatform('phantombuster');
+    setCurrentScreen('scraping');
+    
+    try {
+      const response = await fetch('/api/scraper/phantombuster/launch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          mode: 'live'
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setScrapingResults(result);
+        setCurrentScreen('results');
+      } else {
+        console.error('PhantomBuster scraping failed:', result.error);
+        setCurrentScreen('phantombuster');
+      }
+    } catch (error) {
+      console.error('PhantomBuster scraping error:', error);
+      setCurrentScreen('phantombuster');
+    } finally {
+      setIsScrapingInProgress(false);
+    }
   };
 
   const renderOverview = () => (
@@ -453,11 +558,16 @@ export default function LeadScraperDashboard() {
             </Button>
             
             <Button
-              onClick={() => setCurrentScreen('results')}
+              onClick={launchApolloScraper}
+              disabled={isScrapingInProgress}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm"
               size="sm"
             >
-              <Play className="w-4 h-4 mr-2" />
+              {isScrapingInProgress ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Play className="w-4 h-4 mr-2" />
+              )}
               Launch Apollo Scraper
             </Button>
           </div>
@@ -696,11 +806,16 @@ export default function LeadScraperDashboard() {
             </Button>
             
             <Button
-              onClick={() => setCurrentScreen('results')}
+              onClick={launchApifyScraper}
+              disabled={isScrapingInProgress}
               className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-sm"
               size="sm"
             >
-              <Play className="w-4 h-4 mr-2" />
+              {isScrapingInProgress ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Play className="w-4 h-4 mr-2" />
+              )}
               Launch Apify Scraper
             </Button>
           </div>
@@ -935,14 +1050,79 @@ export default function LeadScraperDashboard() {
             </Button>
             
             <Button
-              onClick={() => setCurrentScreen('results')}
+              onClick={launchPhantomBusterScraper}
+              disabled={isScrapingInProgress}
               className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 text-sm"
               size="sm"
             >
-              <Play className="w-4 h-4 mr-2" />
+              {isScrapingInProgress ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Play className="w-4 h-4 mr-2" />
+              )}
               Launch PhantomBuster Scraper
             </Button>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderScrapingInProgress = () => (
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 flex items-center justify-center">
+      <div className="max-w-2xl mx-auto text-center px-6">
+        <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-600/50 rounded-2xl p-12">
+          {/* Animated Loading Icon */}
+          <div className="mb-8">
+            <div className="w-24 h-24 mx-auto bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-6">
+              <Loader2 className="w-12 h-12 text-white animate-spin" />
+            </div>
+          </div>
+
+          {/* Status Text */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-white mb-4">
+              {selectedPlatform === 'apollo' && 'Apollo Scraper Running'}
+              {selectedPlatform === 'apify' && 'Apify Scraper Running'}
+              {selectedPlatform === 'phantombuster' && 'PhantomBuster Scraper Running'}
+            </h1>
+            <p className="text-blue-200 text-lg mb-6">
+              Scraping in progress... Your leads are being extracted and processed.
+            </p>
+            <div className="text-slate-300 text-base">
+              <p className="mb-2">⏳ Estimated time: 1–2 minutes</p>
+              <p className="mb-4">This screen will update automatically when data is ready.</p>
+            </div>
+          </div>
+
+          {/* Progress Steps */}
+          <div className="space-y-4 mb-8">
+            <div className="flex items-center justify-between p-4 bg-slate-700/40 rounded-lg">
+              <span className="text-white">Initializing scraper...</span>
+              <CheckCircle className="w-5 h-5 text-green-400" />
+            </div>
+            <div className="flex items-center justify-between p-4 bg-slate-700/40 rounded-lg">
+              <span className="text-white">Extracting lead data...</span>
+              <Loader2 className="w-5 h-5 text-blue-400 animate-spin" />
+            </div>
+            <div className="flex items-center justify-between p-4 bg-slate-700/20 rounded-lg opacity-50">
+              <span className="text-slate-400">Sending Slack notification...</span>
+              <div className="w-5 h-5 rounded-full border-2 border-slate-500"></div>
+            </div>
+            <div className="flex items-center justify-between p-4 bg-slate-700/20 rounded-lg opacity-50">
+              <span className="text-slate-400">Syncing to Airtable...</span>
+              <div className="w-5 h-5 rounded-full border-2 border-slate-500"></div>
+            </div>
+          </div>
+
+          {/* Cancel Button */}
+          <Button
+            onClick={() => setCurrentScreen('overview')}
+            variant="outline"
+            className="bg-slate-700/50 hover:bg-slate-600/70 text-white border-slate-500/50"
+          >
+            Cancel and Return to Overview
+          </Button>
         </div>
       </div>
     </div>
@@ -1083,6 +1263,8 @@ export default function LeadScraperDashboard() {
       return renderApifyConfig();
     case 'phantombuster':
       return renderPhantomBusterConfig();
+    case 'scraping':
+      return renderScrapingInProgress();
     case 'results':
       return renderResults();
     default:
