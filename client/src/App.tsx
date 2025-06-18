@@ -1,17 +1,12 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, Switch } from "wouter";
+
 import CommandCenter from "./pages/Command-Center/command-center";
 import LeadScraperDashboard from "./pages/Lead-Scraper/lead-scraper";
 import ControlCenter from "./pages/Control-Center/control-center";
 import Mobile from "./pages/Mobile/mobile";
 import { PersistentChatWidget } from "./components/persistent-chat-widget";
-
-
-
-
-
-// Live mode only - no test mode context needed
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,8 +23,8 @@ function Router() {
       <Switch>
         <Route path="/" component={CommandCenter} />
         <Route path="/command-center" component={CommandCenter} />
-        <Route path="/lead-scraper" component={LeadScraperDashboard} />
         <Route path="/control-center" component={ControlCenter} />
+        <Route path="/lead-scraper" component={LeadScraperDashboard} />
         <Route path="/mobile" component={Mobile} />
         <Route>
           <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 flex items-center justify-center">
@@ -40,8 +35,6 @@ function Router() {
           </div>
         </Route>
       </Switch>
-      
-      {/* Persistent Chat Widget - Available on all pages */}
       <PersistentChatWidget />
     </div>
   );
