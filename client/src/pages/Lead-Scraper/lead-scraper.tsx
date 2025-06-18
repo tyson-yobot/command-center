@@ -16,6 +16,7 @@ import ApifyScraperPanel from './components/apify-scraper-panel';
 import ApolloScraperPanel from './components/apollo-scraper-panel';
 import PhantomBusterScraperPanel from './components/phantombuster-scraper-panel';
 import ScraperResultsDisplay from './components/scraper-results-display';
+import IntelligenceResults from './components/intelligence-results';
 
 interface ScrapedLead {
   firstName: string;
@@ -47,7 +48,7 @@ const LeadScraper: React.FC = () => {
   const { toast } = useToast();
   
   // State management
-  const [currentView, setCurrentView] = useState('overview'); // 'overview' or 'scraper'
+  const [currentView, setCurrentView] = useState('overview'); // 'overview', 'scraper', or 'results'
   const [activeTab, setActiveTab] = useState('apollo');
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<ScrapeResult | null>(null);
@@ -57,6 +58,8 @@ const LeadScraper: React.FC = () => {
   const [leadsData, setLeadsData] = useState<any[]>([]);
   const [leadsStats, setLeadsStats] = useState<any>(null);
   const [syncLoading, setSyncLoading] = useState(false);
+  const [lastScrapedCount, setLastScrapedCount] = useState(0);
+  const [lastScrapedSource, setLastScrapedSource] = useState('');
 
   // Load real leads data from Airtable
   const loadLeadsData = async () => {
@@ -135,7 +138,9 @@ const LeadScraper: React.FC = () => {
         setResults(result);
         setTotalLeadsFound(prev => prev + (result.leadCount || 0));
         setLastScrapeTime(new Date().toLocaleString());
-        setShowResults(true);
+        setLastScrapedCount(result.leadCount || 0);
+        setLastScrapedSource('APOLLO');
+        setCurrentView('results');
         toast({
           title: "Apollo Scrape Complete",
           description: `Found ${result.leadCount || 0} professional leads`
@@ -166,7 +171,9 @@ const LeadScraper: React.FC = () => {
         setResults(result);
         setTotalLeadsFound(prev => prev + (result.listingCount || 0));
         setLastScrapeTime(new Date().toLocaleString());
-        setShowResults(true);
+        setLastScrapedCount(result.listingCount || 0);
+        setLastScrapedSource('APIFY');
+        setCurrentView('results');
         toast({
           title: "Apify Scrape Complete",
           description: `Found ${result.listingCount || 0} business listings`

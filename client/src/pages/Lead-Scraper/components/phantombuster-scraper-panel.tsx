@@ -575,9 +575,18 @@ export default function PhantomBusterScraperPanel({ onLaunch, isLoading = false 
           
           <div className="flex gap-3">
             <Button
-              variant="outline"
               onClick={savePreset}
-              className="border-slate-600 text-slate-200 hover:bg-slate-700"
+              className="text-white border transition-all duration-200 hover:shadow-[0_0_8px_rgba(13,130,218,0.5)]"
+              style={{ 
+                backgroundColor: '#0d82da',
+                borderColor: '#0d82da'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#0864b1';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#0d82da';
+              }}
             >
               <Save className="h-4 w-4 mr-2" />
               Save Preset
