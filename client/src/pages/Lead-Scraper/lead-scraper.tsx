@@ -83,13 +83,11 @@ export default function LeadScraperDashboard() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-xl">
-              <img 
-                src={robotHeadImage} 
-                alt="Robot Head" 
-                className="w-12 h-12 object-cover"
-              />
-            </div>
+            <img 
+              src={robotHeadImage} 
+              alt="Robot Head" 
+              className="w-20 h-20 object-cover"
+            />
           </div>
           <h1 className="text-5xl font-bold text-white mb-6">
             Enterprise Lead Intelligence Platform
