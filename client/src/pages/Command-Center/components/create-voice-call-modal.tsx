@@ -113,26 +113,31 @@ export function CreateVoiceCallModal({ isOpen, onClose }: CreateVoiceCallModalPr
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Phone className="w-5 h-5 text-green-600" />
-            Create Voice Call
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-900/95 via-blue-900/90 to-indigo-900/85 backdrop-blur-xl border border-blue-400/30 shadow-2xl shadow-blue-500/20" style={{ backdropFilter: 'blur(10px)' }}>
+        <DialogHeader className="pb-6 border-b border-white/10">
+          <DialogTitle className="flex items-center gap-3 text-2xl font-bold text-white">
+            <div className="p-2 bg-green-600/20 rounded-lg">
+              <Phone className="w-6 h-6 text-green-400" />
+            </div>
+            Manual Call · Voice Ops
           </DialogTitle>
+          <p className="text-slate-300 mt-2 text-sm">Configure and launch a new voice call with advanced targeting options</p>
         </DialogHeader>
         
-        <div className="space-y-6">
-          {/* Contact Information */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold flex items-center gap-2">
-              <User className="w-4 h-4" />
-              Contact Information
+        <div className="space-y-8">
+          {/* 📞 Contact Info Section */}
+          <div className="bg-slate-800/30 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+            <h3 className="text-lg font-semibold flex items-center gap-3 text-white mb-5">
+              <div className="p-1.5 bg-blue-500/20 rounded-lg">
+                <User className="w-5 h-5 text-blue-400" />
+              </div>
+              📞 Contact Info
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="phoneNumber" className="flex items-center gap-2">
-                  <Phone className="w-4 h-4" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <Label htmlFor="phoneNumber" className="flex items-center gap-2 text-slate-200 font-medium text-base">
+                  <Phone className="w-4 h-4 text-blue-400" />
                   Phone Number *
                 </Label>
                 <Input
@@ -140,12 +145,13 @@ export function CreateVoiceCallModal({ isOpen, onClose }: CreateVoiceCallModalPr
                   placeholder="+1 (555) 123-4567"
                   value={formData.phoneNumber}
                   onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                  className="bg-slate-700/50 border border-white/10 text-white text-base p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               
-              <div className="space-y-2">
-                <Label htmlFor="contactName" className="flex items-center gap-2">
-                  <User className="w-4 h-4" />
+              <div className="space-y-3">
+                <Label htmlFor="contactName" className="flex items-center gap-2 text-slate-200 font-medium text-base">
+                  <User className="w-4 h-4 text-blue-400" />
                   Contact Name
                 </Label>
                 <Input
@@ -153,25 +159,13 @@ export function CreateVoiceCallModal({ isOpen, onClose }: CreateVoiceCallModalPr
                   placeholder="John Doe"
                   value={formData.contactName}
                   onChange={(e) => handleInputChange('contactName', e.target.value)}
+                  className="bg-slate-700/50 border border-white/10 text-white text-base p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               
-              <div className="space-y-2">
-                <Label htmlFor="company" className="flex items-center gap-2">
-                  <Building className="w-4 h-4" />
-                  Company
-                </Label>
-                <Input
-                  id="company"
-                  placeholder="Acme Corp"
-                  value={formData.company}
-                  onChange={(e) => handleInputChange('company', e.target.value)}
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="email" className="flex items-center gap-2">
-                  <Mail className="w-4 h-4" />
+              <div className="space-y-3">
+                <Label htmlFor="email" className="flex items-center gap-2 text-slate-200 font-medium text-base">
+                  <Mail className="w-4 h-4 text-blue-400" />
                   Email
                 </Label>
                 <Input
@@ -180,6 +174,21 @@ export function CreateVoiceCallModal({ isOpen, onClose }: CreateVoiceCallModalPr
                   placeholder="john@acme.com"
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
+                  className="bg-slate-700/50 border border-white/10 text-white text-base p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              
+              <div className="space-y-3">
+                <Label htmlFor="company" className="flex items-center gap-2 text-slate-200 font-medium text-base">
+                  <Building className="w-4 h-4 text-blue-400" />
+                  Company
+                </Label>
+                <Input
+                  id="company"
+                  placeholder="Acme Corp"
+                  value={formData.company}
+                  onChange={(e) => handleInputChange('company', e.target.value)}
+                  className="bg-slate-700/50 border border-white/10 text-white text-base p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>

@@ -48,32 +48,42 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
   ];
 
   const defaultScripts = {
-    'Sales Call': 'Hello, this is YoBot calling from [Company]. I wanted to follow up on your recent inquiry about our services. Do you have a moment to discuss how we can help your business?',
-    'Support Call': 'Hi, this is YoBot from customer support. I\'m calling to follow up on your recent support request. How can I assist you today?',
-    'Follow-up Call': 'Hello, this is YoBot calling to follow up on our previous conversation. I wanted to check if you had any questions or if there\'s anything else I can help you with.',
-    'Lead Qualification': 'Hi, this is YoBot calling to learn more about your business needs. I\'d like to ask a few quick questions to see how we might be able to help you.',
-    'Customer Check-in': 'Hello, this is YoBot calling for a quick customer check-in. How has your experience been with our service so far?',
-    'Appointment Reminder': 'Hi, this is YoBot calling to confirm your upcoming appointment. Please let me know if you need to make any changes.',
-    'Survey Call': 'Hello, this is YoBot calling to get your feedback on our recent service. Would you have a few minutes for a brief survey?'
+    'Sales Call': 'Hi [Name], this is [Your Name] from [Company]. I wanted to reach out because we have a solution that could help your business...',
+    'Support Call': 'Hello [Name], this is [Your Name] from [Company] support. I\'m calling regarding your recent inquiry...',
+    'Follow-up Call': 'Hi [Name], this is [Your Name] following up on our previous conversation about...',
+    'Lead Qualification': 'Hello [Name], I\'m [Your Name] from [Company]. I understand you\'re interested in...',
+    'Customer Check-in': 'Hi [Name], this is [Your Name] from [Company]. I wanted to check in and see how everything is going...',
+    'Appointment Reminder': 'Hello [Name], this is [Your Name] calling to remind you about your appointment...',
+    'Survey Call': 'Hi [Name], this is [Your Name] from [Company]. We\'d appreciate a few minutes of your time for a brief survey...'
   };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
-    if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
-    if (!formData.name.trim()) newErrors.name = 'Contact name is required';
-    if (!formData.call_type) newErrors.call_type = 'Call type is required';
-    if (!formData.voice_profile) newErrors.voice_profile = 'Voice profile is required';
-    if (!formData.script.trim()) newErrors.script = 'Script is required';
-    
-    // Phone validation
-    if (formData.phone && !/^\+?[\d\s\-\(\)]{10,}$/.test(formData.phone)) {
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!/^\+?[\d\s\-\(\)]+$/.test(formData.phone)) {
       newErrors.phone = 'Please enter a valid phone number';
     }
-    
-    // Email validation
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Contact name is required';
+    }
+
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
+    }
+
+    if (!formData.call_type) {
+      newErrors.call_type = 'Call type is required';
+    }
+
+    if (!formData.voice_profile) {
+      newErrors.voice_profile = 'Voice profile is required';
+    }
+
+    if (!formData.script.trim()) {
+      newErrors.script = 'Call script is required';
     }
 
     setErrors(newErrors);
@@ -147,181 +157,218 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Phone className="h-5 w-5" />
-            Manual Call Start
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-900/95 via-blue-900/90 to-indigo-900/85 backdrop-blur-xl border border-blue-400/30 shadow-2xl shadow-blue-500/20" style={{ backdropFilter: 'blur(10px)' }}>
+        <DialogHeader className="pb-6 border-b border-white/10">
+          <DialogTitle className="flex items-center gap-3 text-2xl font-bold text-white">
+            <div className="p-2 bg-green-600/20 rounded-lg">
+              <Phone className="w-6 h-6 text-green-400" />
+            </div>
+            Manual Call · Voice Ops
           </DialogTitle>
+          <p className="text-slate-300 mt-2 text-sm">Configure and launch a new voice call with advanced targeting options</p>
         </DialogHeader>
 
-        <div className="space-y-4">
-          {/* Contact Information */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="phone" className="flex items-center gap-1">
-                <Phone className="h-4 w-4" />
-                Phone Number *
-              </Label>
-              <Input
-                id="phone"
-                placeholder="+1 (555) 123-4567"
-                value={formData.phone}
-                onChange={(e) => handleInputChange('phone', e.target.value)}
-                className={errors.phone ? 'border-red-500' : ''}
-              />
-              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+        <div className="space-y-8">
+          {/* Contact Info Section */}
+          <div className="bg-slate-800/30 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+            <h3 className="text-lg font-semibold flex items-center gap-3 text-white mb-6">
+              <div className="p-1.5 bg-blue-500/20 rounded-lg">
+                <Phone className="w-5 h-5 text-blue-400" />
+              </div>
+              📞 Contact Info
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <Label htmlFor="phone" className="flex items-center gap-2 text-slate-200 font-medium text-base">
+                  <Phone className="h-4 w-4 text-blue-400" />
+                  Phone Number *
+                </Label>
+                <Input
+                  id="phone"
+                  placeholder="+1 (555) 123-4567"
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange('phone', e.target.value)}
+                  className={`bg-slate-700/50 border border-white/10 text-white text-base p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.phone ? 'border-red-500' : ''}`}
+                />
+                {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
+              </div>
+              
+              <div className="space-y-3">
+                <Label htmlFor="name" className="flex items-center gap-2 text-slate-200 font-medium text-base">
+                  <User className="h-4 w-4 text-blue-400" />
+                  Contact Name *
+                </Label>
+                <Input
+                  id="name"
+                  placeholder="John Doe"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
+                  className={`bg-slate-700/50 border border-white/10 text-white text-base p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.name ? 'border-red-500' : ''}`}
+                />
+                {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name}</p>}
+              </div>
+              
+              <div className="space-y-3">
+                <Label htmlFor="email" className="flex items-center gap-2 text-slate-200 font-medium text-base">
+                  <Mail className="h-4 w-4 text-blue-400" />
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="john@acme.com"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  className={`bg-slate-700/50 border border-white/10 text-white text-base p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.email ? 'border-red-500' : ''}`}
+                />
+                {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
+              </div>
+              
+              <div className="space-y-3">
+                <Label htmlFor="company" className="flex items-center gap-2 text-slate-200 font-medium text-base">
+                  <Building className="h-4 w-4 text-blue-400" />
+                  Company
+                </Label>
+                <Input
+                  id="company"
+                  placeholder="Acme Corp"
+                  value={formData.company}
+                  onChange={(e) => handleInputChange('company', e.target.value)}
+                  className="bg-slate-700/50 border border-white/10 text-white text-base p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Call Details Section */}
+          <div className="bg-slate-800/30 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+            <h3 className="text-lg font-semibold flex items-center gap-3 text-white mb-6">
+              <div className="p-1.5 bg-orange-500/20 rounded-lg">
+                <MessageSquare className="w-5 h-5 text-orange-400" />
+              </div>
+              🗣️ Call Details
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="space-y-3">
+                <Label htmlFor="call_type" className="text-slate-200 font-medium text-base">Call Type *</Label>
+                <Select value={formData.call_type} onValueChange={handleCallTypeChange}>
+                  <SelectTrigger className={`bg-slate-700/50 border border-white/10 text-white ${errors.call_type ? 'border-red-500' : ''}`}>
+                    <SelectValue placeholder="Select call type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {callTypes.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.call_type && <p className="text-red-400 text-sm mt-1">{errors.call_type}</p>}
+              </div>
+              
+              <div className="space-y-3">
+                <Label htmlFor="priority" className="text-slate-200 font-medium text-base">Priority</Label>
+                <Select value={formData.priority} onValueChange={(value) => handleInputChange('priority', value)}>
+                  <SelectTrigger className="bg-slate-700/50 border border-white/10 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {priorities.map((priority) => (
+                      <SelectItem key={priority} value={priority}>
+                        {priority}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-3">
+                <Label htmlFor="voice_profile" className="flex items-center gap-2 text-slate-200 font-medium text-base">
+                  <Volume2 className="h-4 w-4 text-orange-400" />
+                  Voice Profile *
+                </Label>
+                <Select value={formData.voice_profile} onValueChange={(value) => handleInputChange('voice_profile', value)}>
+                  <SelectTrigger className={`bg-slate-700/50 border border-white/10 text-white ${errors.voice_profile ? 'border-red-500' : ''}`}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {voiceProfiles.map((profile) => (
+                      <SelectItem key={profile} value={profile}>
+                        {profile}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.voice_profile && <p className="text-red-400 text-sm mt-1">{errors.voice_profile}</p>}
+              </div>
             </div>
             
-            <div>
-              <Label htmlFor="name" className="flex items-center gap-1">
-                <User className="h-4 w-4" />
-                Contact Name *
-              </Label>
-              <Input
-                id="name"
-                placeholder="John Doe"
-                value={formData.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
-                className={errors.name ? 'border-red-500' : ''}
+            <div className="mt-6 space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="script" className="flex items-center gap-2 text-slate-200 font-medium text-base">
+                  <MessageSquare className="h-4 w-4 text-orange-400" />
+                  Call Script *
+                </Label>
+                {formData.call_type && defaultScripts[formData.call_type as keyof typeof defaultScripts] && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleUseSuggestedScript}
+                    className="bg-slate-700/50 border border-white/10 text-white hover:bg-slate-600/50"
+                  >
+                    Use Suggested Script
+                  </Button>
+                )}
+              </div>
+              <Textarea
+                id="script"
+                placeholder="Enter the call script or talking points..."
+                value={formData.script}
+                onChange={(e) => handleInputChange('script', e.target.value)}
+                className={`bg-slate-700/50 border border-white/10 text-white min-h-[100px] resize-y ${errors.script ? 'border-red-500' : ''}`}
               />
-              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+              {errors.script && <p className="text-red-400 text-sm mt-1">{errors.script}</p>}
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="company" className="flex items-center gap-1">
-                <Building className="h-4 w-4" />
-                Company
-              </Label>
-              <Input
-                id="company"
-                placeholder="Acme Corp"
-                value={formData.company}
-                onChange={(e) => handleInputChange('company', e.target.value)}
-              />
-            </div>
+          {/* Notes Section */}
+          <div className="bg-slate-800/30 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+            <h3 className="text-lg font-semibold flex items-center gap-3 text-white mb-6">
+              <div className="p-1.5 bg-purple-500/20 rounded-lg">
+                <MessageSquare className="w-5 h-5 text-purple-400" />
+              </div>
+              📝 Notes
+            </h3>
             
-            <div>
-              <Label htmlFor="email" className="flex items-center gap-1">
-                <Mail className="h-4 w-4" />
-                Email
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="john@acme.com"
-                value={formData.email}
-                onChange={(e) => handleInputChange('email', e.target.value)}
-                className={errors.email ? 'border-red-500' : ''}
+            <div className="space-y-3">
+              <Label htmlFor="notes" className="text-slate-200 font-medium text-base">Additional Notes</Label>
+              <Textarea
+                id="notes"
+                placeholder="Any additional notes or context for this call..."
+                value={formData.notes}
+                onChange={(e) => handleInputChange('notes', e.target.value)}
+                className="bg-slate-700/50 border border-white/10 text-white min-h-[80px] resize-y"
               />
-              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
             </div>
-          </div>
-
-          {/* Call Configuration */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="call_type">Call Type *</Label>
-              <Select value={formData.call_type} onValueChange={handleCallTypeChange}>
-                <SelectTrigger className={errors.call_type ? 'border-red-500' : ''}>
-                  <SelectValue placeholder="Select call type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {callTypes.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.call_type && <p className="text-red-500 text-xs mt-1">{errors.call_type}</p>}
-            </div>
-            
-            <div>
-              <Label htmlFor="priority">Priority</Label>
-              <Select value={formData.priority} onValueChange={(value) => handleInputChange('priority', value)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {priorities.map((priority) => (
-                    <SelectItem key={priority} value={priority}>
-                      {priority}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div>
-            <Label htmlFor="voice_profile" className="flex items-center gap-1">
-              <Volume2 className="h-4 w-4" />
-              Voice Profile *
-            </Label>
-            <Select value={formData.voice_profile} onValueChange={(value) => handleInputChange('voice_profile', value)}>
-              <SelectTrigger className={errors.voice_profile ? 'border-red-500' : ''}>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {voiceProfiles.map((profile) => (
-                  <SelectItem key={profile} value={profile}>
-                    {profile}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.voice_profile && <p className="text-red-500 text-xs mt-1">{errors.voice_profile}</p>}
-          </div>
-
-          {/* Script Section */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="script" className="flex items-center gap-1">
-                <MessageSquare className="h-4 w-4" />
-                Call Script *
-              </Label>
-              {formData.call_type && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleUseSuggestedScript}
-                >
-                  Use Suggested Script
-                </Button>
-              )}
-            </div>
-            <Textarea
-              id="script"
-              placeholder="Enter the script for the voice call..."
-              value={formData.script}
-              onChange={(e) => handleInputChange('script', e.target.value)}
-              rows={4}
-              className={errors.script ? 'border-red-500' : ''}
-            />
-            {errors.script && <p className="text-red-500 text-xs mt-1">{errors.script}</p>}
-          </div>
-
-          <div>
-            <Label htmlFor="notes">Additional Notes</Label>
-            <Textarea
-              id="notes"
-              placeholder="Any additional notes for internal logging..."
-              value={formData.notes}
-              onChange={(e) => handleInputChange('notes', e.target.value)}
-              rows={2}
-            />
           </div>
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose} disabled={isCreating}>
+        <DialogFooter className="pt-6 border-t border-white/10">
+          <Button 
+            variant="outline" 
+            onClick={onClose}
+            className="bg-slate-700/50 border border-white/10 text-white hover:bg-slate-600/50"
+          >
             Cancel
           </Button>
-          <Button onClick={handleCreateCall} disabled={isCreating}>
+          <Button 
+            onClick={handleCreateCall} 
+            disabled={isCreating}
+            className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold px-8 py-2.5 shadow-lg transform hover:scale-105 transition-all duration-200"
+          >
             {isCreating ? 'Creating Call...' : 'Create Call'}
           </Button>
         </DialogFooter>
