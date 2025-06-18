@@ -3492,7 +3492,7 @@ export default function CommandCenter() {
 
 
         {/* Analytics Dashboard - 3 Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 h-[450px]">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 h-[320px]">
           {/* Performance & ROI Analytics */}
           <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20 h-full">
             <CardHeader>
@@ -3746,7 +3746,7 @@ export default function CommandCenter() {
 
 
         {/* Key Performance Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12 mt-16">
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
             <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Active Calls</CardTitle>
