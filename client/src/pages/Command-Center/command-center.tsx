@@ -95,7 +95,7 @@ import { ManualCallStartModal } from '@/components/ManualCallStartModal';
 import { LiveCallBanner } from './components/LiveCallBanner';
 import { EnhancedTooltip, QuickTooltip } from '@/components/EnhancedTooltip';
 import { CommandCenterActions } from '@/utils/commandCenterActions';
-import { LeadScraperPopup } from '@/components/lead-scraper-popup';
+
 
 export default function CommandCenter() {
   const queryClient = useQueryClient();
@@ -272,8 +272,7 @@ export default function CommandCenter() {
     dateRange: 'last_30_days'
   });
   const [showCreateVoiceCallModal, setShowCreateVoiceCallModal] = useState(false);
-  const [showLeadScraperPopup, setShowLeadScraperPopup] = useState(false);
-  const [leadScraperDefaultTab, setLeadScraperDefaultTab] = useState<'apollo' | 'apify' | 'phantombuster'>('apollo');
+
 
   // Test statistics for Live Integration Test Results
   const testStats = {
@@ -302,17 +301,8 @@ export default function CommandCenter() {
     // Set up periodic sync every 5 seconds to maintain state consistency
     const interval = setInterval(fetchSystemMode, 5000);
     
-    // Lead scraper popup event listener
-    const handleLeadScraperPopup = (event: CustomEvent) => {
-      setLeadScraperDefaultTab(event.detail.defaultTab || 'apollo');
-      setShowLeadScraperPopup(true);
-    };
-    
-    window.addEventListener('openLeadScraperPopup', handleLeadScraperPopup as EventListener);
-    
     return () => {
       clearInterval(interval);
-      window.removeEventListener('openLeadScraperPopup', handleLeadScraperPopup as EventListener);
     };
   }, []);
 
@@ -1461,25 +1451,7 @@ export default function CommandCenter() {
     }
   };
 
-  const handleLeadScraper = async () => {
-    try {
-      setVoiceStatus('Opening Lead Scraper popup...');
-      setShowLeadScraperPopup(true);
-      setLeadScraperDefaultTab('apollo');
-      setVoiceStatus('Lead Scraper popup opened');
-      setToast({ 
-        title: "Lead Scraper", 
-        description: "Opening Lead Scraper popup interface"
-      });
-    } catch (error) {
-      setVoiceStatus('Lead Scraper popup error');
-      setToast({ 
-        title: "Error", 
-        description: "Unable to open Lead Scraper popup",
-        variant: "destructive" 
-      });
-    }
-  };
+;
 
   const handleMailchimpSync = async () => {
     try {
@@ -3222,16 +3194,7 @@ export default function CommandCenter() {
                     </div>
                   </Button>
                   
-                  <Button
-                    onClick={handleLeadScraper}
-                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500"
-                    title="Lead Scraper Tool"
-                  >
-                    <div className="text-center">
-                      <Search className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Lead Scraper</span>
-                    </div>
-                  </Button>
+
 
                   {/* Middle Row - Purple Content & Marketing */}
                   <Button
