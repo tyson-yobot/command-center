@@ -610,25 +610,7 @@ export default function CommandCenter() {
     setShowSMSModal(true);
   };
 
-  const handleLeadScraper = async () => {
-    try {
-      setVoiceStatus('Opening Lead Scraper popup...');
-      setShowLeadScraperPopup(true);
-      setLeadScraperDefaultTab('apollo');
-      setVoiceStatus('Lead Scraper popup opened');
-      toast({
-        title: "Lead Scraper", 
-        description: "Opening Lead Scraper popup interface"
-      });
-    } catch (error) {
-      setVoiceStatus('Lead Scraper popup error');
-      toast({
-        title: "Error", 
-        description: "Unable to open Lead Scraper popup",
-        variant: "destructive" 
-      });
-    }
-  };
+
 
   // Form submission handlers with Airtable logging
   const submitBookingForm = async () => {
