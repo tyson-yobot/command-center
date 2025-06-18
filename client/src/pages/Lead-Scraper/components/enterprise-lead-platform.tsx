@@ -152,7 +152,8 @@ export default function EnterpriseLeadPlatform({ onPlatformSelect, onNavigateToS
           {/* PhantomBuster Card */}
           <PlatformCard
             title="PhantomBuster"
-            description="Premium social media automation for LinkedIn, Twitter with intelligent connection management"
+            description="Premium social media automation for LinkedIn, 
+Twitter with intelligent connection management"
             icon={<Users className="w-8 h-8 text-white" />}
             gradient="bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800"
             badges={[
