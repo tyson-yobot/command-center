@@ -83,11 +83,9 @@ export default function LeadScraperDashboard() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
-            <img 
-              src={robotHeadImage} 
-              alt="Robot Head" 
-              className="w-20 h-20 object-cover"
-            />
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-xl">
+              <Target className="w-10 h-10 text-white" />
+            </div>
           </div>
           <h1 className="text-5xl font-bold text-white mb-6">
             Enterprise Lead Intelligence Platform
@@ -98,7 +96,7 @@ export default function LeadScraperDashboard() {
         </div>
 
         {/* Platform Selection Grid - Top Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {platforms.map((platform) => {
             const IconComponent = platform.icon;
             
@@ -106,31 +104,31 @@ export default function LeadScraperDashboard() {
               <Card
                 key={platform.id}
                 onClick={() => handlePlatformSelect(platform.id)}
-                className="bg-slate-800/60 backdrop-blur-sm border-slate-600/50 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:bg-slate-700/70 group"
+                className="bg-slate-800/70 backdrop-blur-sm border-slate-600/50 cursor-pointer transition-all duration-300 hover:bg-slate-700/80 group h-full"
               >
-                <CardHeader className="text-center pb-6">
+                <CardHeader className="text-center pb-4">
                   <div className={`
-                    w-20 h-20 mx-auto mb-6 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300
-                    ${platform.color === 'blue' ? 'bg-blue-600 group-hover:bg-blue-500' : 
-                      platform.color === 'green' ? 'bg-green-600 group-hover:bg-green-500' : 'bg-purple-600 group-hover:bg-purple-500'}
+                    w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center shadow-lg
+                    ${platform.color === 'blue' ? 'bg-blue-500' : 
+                      platform.color === 'green' ? 'bg-green-500' : 'bg-purple-500'}
                   `}>
-                    <IconComponent className="w-10 h-10 text-white" />
+                    <IconComponent className="w-8 h-8 text-white" />
                   </div>
-                  <CardTitle className="text-2xl text-white mb-2">{platform.name}</CardTitle>
+                  <CardTitle className="text-xl text-white mb-2">{platform.name}</CardTitle>
                 </CardHeader>
-                <CardContent className="px-6 pb-6">
-                  <CardDescription className="text-slate-300 mb-6 text-base leading-relaxed">
+                <CardContent className="px-4 pb-4">
+                  <CardDescription className="text-slate-300 mb-4 text-sm leading-relaxed text-center">
                     {platform.description}
                   </CardDescription>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {platform.features.map((feature, index) => (
-                      <div key={index} className="flex items-center justify-center">
+                      <div key={index} className="flex justify-center">
                         <Badge className={`
-                          px-3 py-1.5 text-xs flex items-center rounded-full border
-                          ${platform.color === 'blue' ? 'bg-blue-500/20 text-blue-300 border-blue-400/30' : 
-                            platform.color === 'green' ? 'bg-green-500/20 text-green-300 border-green-400/30' : 'bg-purple-500/20 text-purple-300 border-purple-400/30'}
+                          px-2 py-1 text-xs flex items-center rounded-full border-0
+                          ${platform.color === 'blue' ? 'bg-blue-500/25 text-blue-200' : 
+                            platform.color === 'green' ? 'bg-green-500/25 text-green-200' : 'bg-purple-500/25 text-purple-200'}
                         `}>
-                          <CheckCircle className="w-3 h-3 mr-2" />
+                          <CheckCircle className="w-3 h-3 mr-1" />
                           {feature}
                         </Badge>
                       </div>
@@ -143,33 +141,25 @@ export default function LeadScraperDashboard() {
         </div>
 
         {/* Additional Features Grid - Bottom Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {additionalFeatures.map((feature) => {
             const IconComponent = feature.icon;
             
             return (
               <Card
                 key={feature.id}
-                className="bg-slate-800/40 backdrop-blur-sm border-slate-600/30 hover:bg-slate-700/50 transition-all duration-300"
+                className="bg-slate-800/70 backdrop-blur-sm border-slate-600/50 cursor-pointer transition-all duration-300 hover:bg-slate-700/80"
               >
-                <CardHeader className="pb-4">
-                  <div className="flex items-center">
-                    <div className={`
-                      w-14 h-14 rounded-xl flex items-center justify-center mr-5 shadow-lg
-                      ${feature.color === 'blue' ? 'bg-blue-600/20' : 
-                        feature.color === 'green' ? 'bg-green-600/20' : 'bg-purple-600/20'}
-                    `}>
-                      <IconComponent className={`
-                        w-7 h-7
-                        ${feature.color === 'blue' ? 'text-blue-400' : 
-                          feature.color === 'green' ? 'text-green-400' : 'text-purple-400'}
-                      `} />
-                    </div>
-                    <CardTitle className="text-xl text-white">{feature.name}</CardTitle>
+                <CardContent className="p-4 text-center">
+                  <div className={`
+                    w-12 h-12 mx-auto mb-3 rounded-2xl flex items-center justify-center shadow-lg
+                    ${feature.color === 'blue' ? 'bg-blue-500' : 
+                      feature.color === 'green' ? 'bg-green-500' : 'bg-purple-500'}
+                  `}>
+                    <IconComponent className="w-6 h-6 text-white" />
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-slate-400 text-base">
+                  <CardTitle className="text-lg text-white mb-2">{feature.name}</CardTitle>
+                  <CardDescription className="text-slate-300 text-sm">
                     {feature.description}
                   </CardDescription>
                 </CardContent>
