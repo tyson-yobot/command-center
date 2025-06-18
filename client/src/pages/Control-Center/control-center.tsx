@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750002410783.png';
+import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750226991356.png';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
