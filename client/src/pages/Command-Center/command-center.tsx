@@ -3396,7 +3396,17 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={handleStartPipelineCalls}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-4 h-12"
+                      className="w-full text-white border transition-all duration-200 hover:shadow-[0_0_8px_rgba(13,130,218,0.5)] px-4 py-4 h-12"
+                      style={{ 
+                        backgroundColor: '#0d82da',
+                        borderColor: '#0d82da'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#0864b1';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#0d82da';
+                      }}
                     >
                       <Play className="w-4 h-4 mr-2" />
                       Start Pipeline
@@ -3433,14 +3443,34 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={() => setShowCreateVoiceCallModal(true)}
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-4 h-12"
+                      className="w-full text-white border transition-all duration-200 hover:shadow-[0_0_8px_rgba(13,130,218,0.5)] px-4 py-4 h-12"
+                      style={{ 
+                        backgroundColor: '#0d82da',
+                        borderColor: '#0d82da'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#0864b1';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#0d82da';
+                      }}
                     >
                       <Headphones className="w-4 h-4 mr-2" />
                       Voice Studio
                     </Button>
                     <Button
                       onClick={testVoicePersona}
-                      className="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-4 h-12"
+                      className="w-full text-white border transition-all duration-200 hover:shadow-[0_0_8px_rgba(13,130,218,0.5)] px-4 py-4 h-12"
+                      style={{ 
+                        backgroundColor: '#0d82da',
+                        borderColor: '#0d82da'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#0864b1';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#0d82da';
+                      }}
                     >
                       <TestTube className="w-4 h-4 mr-2" />
                       Test Persona
@@ -5078,169 +5108,7 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Audit/Integrity Panel - New Addition */}
-        <div className="mb-8">
-          <Card className="bg-gradient-to-br from-orange-900/40 via-red-900/30 to-yellow-900/20 backdrop-blur-sm border border-orange-400/50 shadow-2xl shadow-orange-500/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between">
-                <div className="flex items-center">
-                  <Shield className="w-5 h-5 mr-2 text-orange-400" />
-                  🛡️ Audit/Integrity Panel
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => toggleSection('audit-integrity')}
-                    className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                  >
-                    {collapsedSections['audit-integrity'] ? 
-                      <ChevronDown className="w-4 h-4" /> : 
-                      <ChevronUp className="w-4 h-4" />
-                    }
-                  </Button>
-                </div>
-                <Badge className="bg-orange-600 text-white">MONITORING</Badge>
-              </CardTitle>
-            </CardHeader>
-            {!collapsedSections['audit-integrity'] && (
-              <CardContent className="p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  {/* Automation Tamper Detection */}
-                  <div className="space-y-4">
-                    <h4 className="text-orange-300 font-semibold flex items-center border-b border-orange-400/30 pb-2">
-                      <AlertTriangle className="w-4 h-4 mr-2" />
-                      Tamper Detection
-                    </h4>
-                    <div className="bg-slate-800/60 rounded-lg p-3 border border-orange-400/30">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-slate-300 text-sm">Last Tamper Check:</span>
-                        <span className="text-white font-bold text-sm">
-                          { '0'}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-300 text-sm">Integrity Status:</span>
-                        <Badge className={currentSystemMode === 'test' ? "bg-green-600 text-white text-xs" : "bg-blue-600 text-white text-xs"}>
-                          { 'UNKNOWN'}
-                        </Badge>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-slate-800/60 rounded-lg p-3 border border-orange-400/30">
-                      <div className="text-slate-300 text-sm mb-2">Recent Flags:</div>
-                      <div className="space-y-1 text-xs text-slate-400">
-                        {currentSystemMode === 'test' ? (
-                          <>
-                            <div className="flex items-center justify-between">
-                              <span>• Config validation passed</span>
-                              <span className="text-green-400">✓</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span>• API endpoint verified</span>
-                              <span className="text-green-400">✓</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span>• No unauthorized access</span>
-                              <span className="text-green-400">✓</span>
-                            </div>
-                          </>
-                        ) : (
-                          <div>No flags detected</div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
 
-                  {/* Logger Activity */}
-                  <div className="space-y-4">
-                    <h4 className="text-orange-300 font-semibold flex items-center border-b border-orange-400/30 pb-2">
-                      <Activity className="w-4 h-4 mr-2" />
-                      Logger Activity
-                    </h4>
-                    <div className="bg-slate-800/60 rounded-lg p-3 border border-orange-400/30">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-slate-300 text-sm">Active Loggers:</span>
-                        <span className="text-white font-bold text-sm">
-                          { '0'}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-300 text-sm">Log Rate:</span>
-                        <span className="text-orange-400 font-bold text-sm">
-                          { '0/min'}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-slate-800/60 rounded-lg p-3 border border-orange-400/30">
-                      <div className="text-slate-300 text-sm mb-2">Latest Entries:</div>
-                      <div className="space-y-1 text-xs text-slate-400">
-                        {currentSystemMode === 'test' ? (
-                          <>
-                            <div>• API call logged (Airtable)</div>
-                            <div>• Function execution recorded</div>
-                            <div>• Error handled gracefully</div>
-                          </>
-                        ) : (
-                          <div>No recent activity</div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Fallback Triggers */}
-                  <div className="space-y-4">
-                    <h4 className="text-orange-300 font-semibold flex items-center border-b border-orange-400/30 pb-2">
-                      <RefreshCw className="w-4 h-4 mr-2" />
-                      Fallback Triggers
-                    </h4>
-                    <div className="bg-slate-800/60 rounded-lg p-3 border border-orange-400/30">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-slate-300 text-sm">Fallbacks Active:</span>
-                        <span className="text-white font-bold text-sm">
-                          { '0'}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-300 text-sm">Last Triggered:</span>
-                        <span className="text-orange-400 font-bold text-sm">
-                          { 'Never'}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Button
-                        onClick={() => {
-                          setToast({ 
-                            title: "Integrity Check", 
-                            description: currentSystemMode === 'test' ? "All systems verified secure" : "System check initiated"
-                          });
-                        }}
-                        className="w-full bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-center p-3 border border-orange-500"
-                      >
-                        <Shield className="w-4 h-4 mr-2" />
-                        Run Integrity Check
-                      </Button>
-                      
-                      <Button
-                        onClick={() => {
-                          setToast({ 
-                            title: "Logger Status", 
-                            description: currentSystemMode === 'test' ? "All loggers operational" : "Logger status checked"
-                          });
-                        }}
-                        className="w-full bg-yellow-600 hover:bg-yellow-700 text-white flex items-center justify-center p-3 border border-yellow-500"
-                      >
-                        <Activity className="w-4 h-4 mr-2" />
-                        Check Logger Status
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            )}
-          </Card>
-        </div>
 
         {/* Call Monitoring & YoBot Support - Positioned Under Document Manager */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
