@@ -4273,6 +4273,28 @@ export default function CommandCenter() {
 
 
 
+        {/* Lead Scraper Quick Access Button */}
+        <div className="mb-8">
+          <Card className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-400/50">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-white text-xl font-bold mb-2">Enterprise Lead Intelligence Platform</h3>
+                  <p className="text-blue-200">Apollo.io, Apify, and PhantomBuster lead generation tools</p>
+                </div>
+                <Button
+                  onClick={handleLeadScraper}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold px-8 py-4 text-lg border border-blue-400"
+                  size="lg"
+                >
+                  <Search className="w-6 h-6 mr-3" />
+                  Open Lead Scraper
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Dashboard Content - Filtered by Preset */}
         {dashboardPreset === 'full' && (
           <>
