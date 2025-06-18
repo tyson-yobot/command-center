@@ -1,11 +1,12 @@
 import type { Express } from "express";
 import { db } from "./db";
-import { storage, leadsStorage, callLogStorage } from "./storage";
+import { leadsStorage, callLogStorage } from "./storage";
 import { registerAirtableRoutes } from "./modules/airtable/airtableRoutes";
 import { registerScraperRoutes } from "./modules/scraper/scraperRoutes";
 import { registerRealScrapingRoutes } from "./modules/lead-scraper/realScrapingRoutes";
 import { generateVoiceReply, testElevenLabsConnection, getAvailableVoices } from "./modules/voice/voiceGeneration";
 import { registerLeadsEndpoints } from "./leadsEndpoints";
+import { registerScraperEndpoints } from "./scraperEndpoints";
 
 let systemMode = 'live';
 
@@ -276,6 +277,9 @@ export function registerRoutes(app: Express): void {
 
   // Register universal leads endpoints
   registerLeadsEndpoints(app);
+
+  // Register scraper endpoints for live lead scraping
+  registerScraperEndpoints(app);
 
   console.log("✅ Command Center routes registered successfully");
 }
