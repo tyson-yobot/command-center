@@ -127,9 +127,9 @@ export default function LeadScraperDashboard() {
                   <div className="flex flex-wrap gap-2">
                     {platform.features.map((feature, index) => (
                       <Badge key={index} className={`
-                        px-3 py-1 text-xs flex items-center rounded-full border-0
-                        ${platform.color === 'blue' ? 'bg-blue-600/30 text-blue-200 border border-blue-500/40' : 
-                          platform.color === 'green' ? 'bg-green-600/30 text-green-200 border border-green-500/40' : 'bg-purple-600/30 text-purple-200 border border-purple-500/40'}
+                        px-2 py-1 text-xs flex items-center rounded-md
+                        ${platform.color === 'blue' ? 'bg-blue-500/20 text-blue-300 border border-blue-400/30' : 
+                          platform.color === 'green' ? 'bg-green-500/20 text-green-300 border border-green-400/30' : 'bg-purple-500/20 text-purple-300 border border-purple-400/30'}
                       `}>
                         <CheckCircle className="w-3 h-3 mr-1" />
                         {feature}
