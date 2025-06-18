@@ -204,7 +204,9 @@ const LeadScraper: React.FC = () => {
         setResults(result);
         setTotalLeadsFound(prev => prev + (result.profileCount || 0));
         setLastScrapeTime(new Date().toLocaleString());
-        setShowResults(true);
+        setLastScrapedCount(result.profileCount || 0);
+        setLastScrapedSource('PHANTOMBUSTER');
+        setCurrentView('results');
         toast({
           title: "PhantomBuster Scrape Complete",
           description: `Found ${result.profileCount || 0} social profiles`
@@ -570,6 +572,17 @@ const LeadScraper: React.FC = () => {
     </div>
   );
 
+  // Handle view routing
+  if (currentView === 'results') {
+    return (
+      <IntelligenceResults 
+        onBack={() => setCurrentView('overview')}
+        source={lastScrapedSource}
+        totalScraped={lastScrapedCount}
+      />
+    );
+  }
+  
   return currentView === 'overview' ? renderOverview() : renderScraper();
 };
 

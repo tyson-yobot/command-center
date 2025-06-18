@@ -260,4 +260,52 @@ export function registerLeadsEndpoints(app: Express) {
       });
     }
   });
+
+  app.get('/api/leads/export-csv', async (req: Request, res: Response) => {
+    try {
+      const leads = await leadsStorage.getUniversalLeads();
+      
+      // Create CSV headers
+      const headers = [
+        'Full Name', 'First Name', 'Last Name', 'Email', 'Phone', 
+        'Company', 'Job Title', 'Website', 'Location', 'Source', 
+        'Status', 'Created At'
+      ];
+      
+      // Convert leads to CSV format
+      const csvRows = [headers.join(',')];
+      
+      for (const lead of leads) {
+        const row = [
+          `"${lead.fullName || ''}"`,
+          `"${lead.firstName || ''}"`,
+          `"${lead.lastName || ''}"`,
+          `"${lead.email || ''}"`,
+          `"${lead.phone || ''}"`,
+          `"${lead.company || ''}"`,
+          `"${lead.jobTitle || ''}"`,
+          `"${lead.website || ''}"`,
+          `"${lead.location || ''}"`,
+          `"${lead.source || ''}"`,
+          `"${lead.status || ''}"`,
+          `"${lead.createdAt || ''}"`
+        ];
+        csvRows.push(row.join(','));
+      }
+      
+      const csvContent = csvRows.join('\n');
+      
+      // Set headers for CSV download
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', `attachment; filename="leads-export-${new Date().toISOString().split('T')[0]}.csv"`);
+      
+      res.send(csvContent);
+    } catch (error) {
+      console.error('CSV export error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: 'Failed to export leads to CSV' 
+      });
+    }
+  });
 }
