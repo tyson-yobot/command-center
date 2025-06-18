@@ -49,6 +49,7 @@ export default function LeadScraperDashboard() {
       id: 'realtime',
       name: 'Real-Time Processing',
       icon: Brain,
+      color: 'green',
       description: 'Instant lead extraction with live notifications',
       features: ['✔ Live Updates', '✔ Real-time Sync', '✔ Instant Notifications']
     },
@@ -56,6 +57,7 @@ export default function LeadScraperDashboard() {
       id: 'security',
       name: 'Enterprise Security',
       icon: Shield,
+      color: 'blue',
       description: 'Bank-grade encryption and compliance',
       features: ['✔ Data Protection', '✔ Secure APIs', '✔ Compliance Ready']
     },
@@ -63,6 +65,7 @@ export default function LeadScraperDashboard() {
       id: 'analytics',
       name: 'Advanced Analytics',
       icon: BarChart3,
+      color: 'purple',
       description: 'Comprehensive reporting and insights',
       features: ['✔ Performance Metrics', '✔ Lead Scoring', '✔ ROI Analysis']
     }
@@ -106,12 +109,34 @@ export default function LeadScraperDashboard() {
               <div
                 key={platform.id}
                 onClick={() => handlePlatformSelect(platform.id)}
-                className="rounded-2xl bg-gradient-to-br from-[#111827] to-[#1F2937] p-6 shadow-lg transition-all hover:scale-105 hover:shadow-xl cursor-pointer"
+                className={`rounded-2xl p-6 shadow-lg transition-all hover:scale-105 hover:shadow-xl cursor-pointer ${
+                  platform.color === 'blue' ? 'bg-gradient-to-br from-blue-900/80 to-blue-800/60 border border-blue-700/50' :
+                  platform.color === 'green' ? 'bg-gradient-to-br from-green-900/80 to-green-800/60 border border-green-700/50' :
+                  'bg-gradient-to-br from-purple-900/80 to-purple-800/60 border border-purple-700/50'
+                }`}
               >
                 <div className="text-center">
-                  <IconComponent className="w-10 h-10 mx-auto mb-4 text-white" />
-                  <h3 className="text-xl font-semibold text-white mb-2">{platform.name}</h3>
-                  <p className="text-sm text-blue-200 mb-3">
+                  <div className={`w-12 h-12 mx-auto mb-4 rounded-lg flex items-center justify-center ${
+                    platform.color === 'blue' ? 'bg-blue-600' :
+                    platform.color === 'green' ? 'bg-green-600' :
+                    'bg-purple-600'
+                  }`}>
+                    <IconComponent className={`w-6 h-6 ${
+                      platform.color === 'blue' ? 'text-blue-100' :
+                      platform.color === 'green' ? 'text-green-100' :
+                      'text-purple-100'
+                    }`} />
+                  </div>
+                  <h3 className={`text-xl font-semibold mb-2 ${
+                    platform.color === 'blue' ? 'text-blue-100' :
+                    platform.color === 'green' ? 'text-green-100' :
+                    'text-purple-100'
+                  }`}>{platform.name}</h3>
+                  <p className={`text-sm mb-3 ${
+                    platform.color === 'blue' ? 'text-blue-200' :
+                    platform.color === 'green' ? 'text-green-200' :
+                    'text-purple-200'
+                  }`}>
                     {platform.description}
                   </p>
                   <div className="space-y-1">
@@ -119,9 +144,9 @@ export default function LeadScraperDashboard() {
                       <span
                         key={index}
                         className={`text-xs px-3 py-1 rounded-full mr-2 mb-1 inline-block ${
-                          platform.color === 'blue' ? 'bg-blue-900 text-blue-200' :
-                          platform.color === 'green' ? 'bg-green-900 text-green-200' :
-                          'bg-purple-900 text-purple-200'
+                          platform.color === 'blue' ? 'bg-blue-800 text-blue-100' :
+                          platform.color === 'green' ? 'bg-green-800 text-green-100' :
+                          'bg-purple-800 text-purple-100'
                         }`}
                       >
                         {feature}
@@ -142,19 +167,45 @@ export default function LeadScraperDashboard() {
             return (
               <div
                 key={feature.id}
-                className="rounded-2xl bg-gradient-to-br from-[#111827] to-[#1F2937] p-6 shadow-lg transition-all hover:scale-105 hover:shadow-xl cursor-pointer"
+                className={`rounded-2xl p-6 shadow-lg transition-all hover:scale-105 hover:shadow-xl cursor-pointer ${
+                  feature.color === 'blue' ? 'bg-gradient-to-br from-blue-900/80 to-blue-800/60 border border-blue-700/50' :
+                  feature.color === 'green' ? 'bg-gradient-to-br from-green-900/80 to-green-800/60 border border-green-700/50' :
+                  'bg-gradient-to-br from-purple-900/80 to-purple-800/60 border border-purple-700/50'
+                }`}
               >
                 <div className="text-center">
-                  <IconComponent className="w-10 h-10 mx-auto mb-4 text-white" />
-                  <h3 className="text-xl font-semibold text-white mb-2">{feature.name}</h3>
-                  <p className="text-sm text-blue-200 mb-3">
+                  <div className={`w-12 h-12 mx-auto mb-4 rounded-lg flex items-center justify-center ${
+                    feature.color === 'blue' ? 'bg-blue-600' :
+                    feature.color === 'green' ? 'bg-green-600' :
+                    'bg-purple-600'
+                  }`}>
+                    <IconComponent className={`w-6 h-6 ${
+                      feature.color === 'blue' ? 'text-blue-100' :
+                      feature.color === 'green' ? 'text-green-100' :
+                      'text-purple-100'
+                    }`} />
+                  </div>
+                  <h3 className={`text-xl font-semibold mb-2 ${
+                    feature.color === 'blue' ? 'text-blue-100' :
+                    feature.color === 'green' ? 'text-green-100' :
+                    'text-purple-100'
+                  }`}>{feature.name}</h3>
+                  <p className={`text-sm mb-3 ${
+                    feature.color === 'blue' ? 'text-blue-200' :
+                    feature.color === 'green' ? 'text-green-200' :
+                    'text-purple-200'
+                  }`}>
                     {feature.description}
                   </p>
                   <div className="space-y-1">
                     {feature.features.map((feat, index) => (
                       <span
                         key={index}
-                        className="text-xs bg-slate-800 text-slate-200 px-3 py-1 rounded-full mr-2 mb-1 inline-block"
+                        className={`text-xs px-3 py-1 rounded-full mr-2 mb-1 inline-block ${
+                          feature.color === 'blue' ? 'bg-blue-800 text-blue-100' :
+                          feature.color === 'green' ? 'bg-green-800 text-green-100' :
+                          'bg-purple-800 text-purple-100'
+                        }`}
                       >
                         {feat}
                       </span>
