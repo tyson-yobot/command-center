@@ -157,8 +157,8 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-900/95 via-blue-900/90 to-indigo-900/85 backdrop-blur-xl border border-blue-400/30 shadow-2xl shadow-blue-500/20" style={{ backdropFilter: 'blur(10px)' }}>
-        <DialogHeader className="pb-6 border-b border-white/10">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-900/95 via-blue-900/90 to-indigo-900/85 backdrop-blur-xl border border-blue-400/30 shadow-2xl shadow-blue-500/20 px-6 py-5" style={{ backdropFilter: 'blur(10px)' }}>
+        <DialogHeader className="pb-4 border-b border-white/10">
           <DialogTitle className="flex items-center gap-3 text-2xl font-bold text-white">
             <div className="p-2 bg-green-600/20 rounded-lg">
               <Phone className="w-6 h-6 text-green-400" />
@@ -168,18 +168,18 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
           <p className="text-slate-300 mt-2 text-sm">Configure and launch a new voice call with advanced targeting options</p>
         </DialogHeader>
 
-        <div className="space-y-8">
+        <div className="space-y-5 mt-5">
           {/* Contact Info Section */}
-          <div className="bg-slate-800/30 backdrop-blur-sm border border-white/10 rounded-xl p-6">
-            <h3 className="text-lg font-semibold flex items-center gap-3 text-white mb-6">
+          <div className="bg-slate-800/30 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-3 mb-5">
+            <h3 className="text-lg font-semibold flex items-center gap-3 text-white mb-4">
               <div className="p-1.5 bg-blue-500/20 rounded-lg">
                 <Phone className="w-5 h-5 text-blue-400" />
               </div>
               📞 Contact Info
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2 px-4 py-3">
                 <Label htmlFor="phone" className="flex items-center gap-2 text-slate-200 font-medium text-base">
                   <Phone className="h-4 w-4 text-blue-400" />
                   Phone Number *
@@ -189,12 +189,12 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
                   placeholder="+1 (555) 123-4567"
                   value={formData.phone}
                   onChange={(e) => handleInputChange('phone', e.target.value)}
-                  className={`bg-slate-700/50 border border-white/10 text-white text-base p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.phone ? 'border-red-500' : ''}`}
+                  className={`bg-slate-700/50 border border-white/10 text-white text-base px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.phone ? 'border-red-500' : ''}`}
                 />
                 {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-2 px-4 py-3">
                 <Label htmlFor="name" className="flex items-center gap-2 text-slate-200 font-medium text-base">
                   <User className="h-4 w-4 text-blue-400" />
                   Contact Name *
@@ -204,12 +204,12 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
                   placeholder="John Doe"
                   value={formData.name}
                   onChange={(e) => handleInputChange('name', e.target.value)}
-                  className={`bg-slate-700/50 border border-white/10 text-white text-base p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.name ? 'border-red-500' : ''}`}
+                  className={`bg-slate-700/50 border border-white/10 text-white text-base px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.name ? 'border-red-500' : ''}`}
                 />
                 {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name}</p>}
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-2 px-4 py-3">
                 <Label htmlFor="email" className="flex items-center gap-2 text-slate-200 font-medium text-base">
                   <Mail className="h-4 w-4 text-blue-400" />
                   Email
@@ -220,12 +220,12 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
                   placeholder="john@acme.com"
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
-                  className={`bg-slate-700/50 border border-white/10 text-white text-base p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.email ? 'border-red-500' : ''}`}
+                  className={`bg-slate-700/50 border border-white/10 text-white text-base px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.email ? 'border-red-500' : ''}`}
                 />
                 {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-2 px-4 py-3">
                 <Label htmlFor="company" className="flex items-center gap-2 text-slate-200 font-medium text-base">
                   <Building className="h-4 w-4 text-blue-400" />
                   Company
@@ -235,26 +235,26 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
                   placeholder="Acme Corp"
                   value={formData.company}
                   onChange={(e) => handleInputChange('company', e.target.value)}
-                  className="bg-slate-700/50 border border-white/10 text-white text-base p-4 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="bg-slate-700/50 border border-white/10 text-white text-base px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
           </div>
 
           {/* Call Details Section */}
-          <div className="bg-slate-800/30 backdrop-blur-sm border border-white/10 rounded-xl p-6">
-            <h3 className="text-lg font-semibold flex items-center gap-3 text-white mb-6">
+          <div className="bg-slate-800/30 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-3 mb-5 mt-5">
+            <h3 className="text-lg font-semibold flex items-center gap-3 text-white mb-4">
               <div className="p-1.5 bg-orange-500/20 rounded-lg">
                 <MessageSquare className="w-5 h-5 text-orange-400" />
               </div>
               🗣️ Call Details
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2 px-4 py-3">
                 <Label htmlFor="call_type" className="text-slate-200 font-medium text-base">Call Type *</Label>
                 <Select value={formData.call_type} onValueChange={handleCallTypeChange}>
-                  <SelectTrigger className={`bg-slate-700/50 border border-white/10 text-white ${errors.call_type ? 'border-red-500' : ''}`}>
+                  <SelectTrigger className={`bg-slate-700/50 border border-white/10 text-white px-4 py-3 ${errors.call_type ? 'border-red-500' : ''}`}>
                     <SelectValue placeholder="Select call type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -268,10 +268,10 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
                 {errors.call_type && <p className="text-red-400 text-sm mt-1">{errors.call_type}</p>}
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-2 px-4 py-3">
                 <Label htmlFor="priority" className="text-slate-200 font-medium text-base">Priority</Label>
                 <Select value={formData.priority} onValueChange={(value) => handleInputChange('priority', value)}>
-                  <SelectTrigger className="bg-slate-700/50 border border-white/10 text-white">
+                  <SelectTrigger className="bg-slate-700/50 border border-white/10 text-white px-4 py-3">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -284,13 +284,13 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
                 </Select>
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-2 px-4 py-3">
                 <Label htmlFor="voice_profile" className="flex items-center gap-2 text-slate-200 font-medium text-base">
                   <Volume2 className="h-4 w-4 text-orange-400" />
                   Voice Profile *
                 </Label>
                 <Select value={formData.voice_profile} onValueChange={(value) => handleInputChange('voice_profile', value)}>
-                  <SelectTrigger className={`bg-slate-700/50 border border-white/10 text-white ${errors.voice_profile ? 'border-red-500' : ''}`}>
+                  <SelectTrigger className={`bg-slate-700/50 border border-white/10 text-white px-4 py-3 ${errors.voice_profile ? 'border-red-500' : ''}`}>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -305,7 +305,7 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
               </div>
             </div>
             
-            <div className="mt-6 space-y-3">
+            <div className="mt-5 space-y-2 px-4 py-3">
               <div className="flex items-center justify-between">
                 <Label htmlFor="script" className="flex items-center gap-2 text-slate-200 font-medium text-base">
                   <MessageSquare className="h-4 w-4 text-orange-400" />
@@ -317,7 +317,7 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
                     variant="outline"
                     size="sm"
                     onClick={handleUseSuggestedScript}
-                    className="bg-slate-700/50 border border-white/10 text-white hover:bg-slate-600/50"
+                    className="bg-slate-700/50 border border-white/10 text-white hover:bg-slate-600/50 px-4 py-2"
                   >
                     Use Suggested Script
                   </Button>
@@ -328,39 +328,39 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
                 placeholder="Enter the call script or talking points..."
                 value={formData.script}
                 onChange={(e) => handleInputChange('script', e.target.value)}
-                className={`bg-slate-700/50 border border-white/10 text-white min-h-[100px] resize-y ${errors.script ? 'border-red-500' : ''}`}
+                className={`bg-slate-700/50 border border-white/10 text-white min-h-[100px] resize-y px-4 py-3 ${errors.script ? 'border-red-500' : ''}`}
               />
               {errors.script && <p className="text-red-400 text-sm mt-1">{errors.script}</p>}
             </div>
           </div>
 
           {/* Notes Section */}
-          <div className="bg-slate-800/30 backdrop-blur-sm border border-white/10 rounded-xl p-6">
-            <h3 className="text-lg font-semibold flex items-center gap-3 text-white mb-6">
+          <div className="bg-slate-800/30 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-3 mb-5 mt-5">
+            <h3 className="text-lg font-semibold flex items-center gap-3 text-white mb-4">
               <div className="p-1.5 bg-purple-500/20 rounded-lg">
                 <MessageSquare className="w-5 h-5 text-purple-400" />
               </div>
               📝 Notes
             </h3>
             
-            <div className="space-y-3">
+            <div className="space-y-2 px-4 py-3">
               <Label htmlFor="notes" className="text-slate-200 font-medium text-base">Additional Notes</Label>
               <Textarea
                 id="notes"
                 placeholder="Any additional notes or context for this call..."
                 value={formData.notes}
                 onChange={(e) => handleInputChange('notes', e.target.value)}
-                className="bg-slate-700/50 border border-white/10 text-white min-h-[80px] resize-y"
+                className="bg-slate-700/50 border border-white/10 text-white min-h-[80px] resize-y px-4 py-3"
               />
             </div>
           </div>
         </div>
 
-        <DialogFooter className="pt-6 border-t border-white/10">
+        <DialogFooter className="py-4 px-6 border-t border-white/10">
           <Button 
             variant="outline" 
             onClick={onClose}
-            className="bg-slate-700/50 border border-white/10 text-white hover:bg-slate-600/50"
+            className="bg-slate-700/50 border border-white/10 text-white hover:bg-slate-600/50 px-4 py-2"
           >
             Cancel
           </Button>
