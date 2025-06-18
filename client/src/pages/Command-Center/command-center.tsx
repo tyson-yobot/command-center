@@ -1524,13 +1524,13 @@ export default function CommandCenter() {
       setVoiceStatus('Opening HubSpot CRM...');
       window.open('https://app.hubspot.com', '_blank');
       setVoiceStatus('HubSpot CRM opened in new tab');
-      setToast({ 
+      toast({ 
         title: "HubSpot CRM", 
         description: "Opening HubSpot CRM platform"
       });
     } catch (error) {
       setVoiceStatus('HubSpot CRM navigation error');
-      setToast({ 
+      toast({ 
         title: "Error", 
         description: "Unable to open HubSpot CRM",
         variant: "destructive" 
