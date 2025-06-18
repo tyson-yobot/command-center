@@ -3566,19 +3566,19 @@ export default function CommandCenter() {
                       <div className="bg-slate-800/60 rounded-lg p-5 border border-purple-400 min-h-[60px]">
                         <div className="flex justify-between items-center">
                           <span className="text-purple-300 text-base font-medium">Budget Efficiency:</span>
-                          <span className="text-white font-bold text-xl">92%</span>
+                          <span className="text-white font-bold text-xl">0</span>
                         </div>
                       </div>
                       <div className="bg-slate-800/60 rounded-lg p-5 border border-purple-400 min-h-[60px]">
                         <div className="flex justify-between items-center">
                           <span className="text-purple-300 text-base font-medium">Cost Per Lead:</span>
-                          <span className="text-white font-bold text-xl">$12.50</span>
+                          <span className="text-white font-bold text-xl">0</span>
                         </div>
                       </div>
                       <div className="bg-slate-800/60 rounded-lg p-5 border border-purple-400 min-h-[60px]">
                         <div className="flex justify-between items-center">
                           <span className="text-purple-300 text-base font-medium">ROI:</span>
-                          <span className="text-white font-bold text-xl">340%</span>
+                          <span className="text-white font-bold text-xl">0</span>
                         </div>
                       </div>
                     </div>
