@@ -143,7 +143,7 @@ export default function LeadScraperDashboard() {
   };
 
   // Empty state check for production
-  const isProduction = import.meta.env.NODE_ENV === 'production';
+  const isProduction = process.env.NODE_ENV === 'production';
   const hasLiveData = scraperResults.length > 0;
 
   const renderOverview = () => (
@@ -1014,12 +1014,22 @@ export default function LeadScraperDashboard() {
             </Button>
             
             <Button
-              onClick={() => setCurrentScreen('results')}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 text-sm"
+              onClick={() => handleLaunchScraper('phantombuster', { /* config data */ })}
+              disabled={isLoading}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 text-sm disabled:opacity-50"
               size="sm"
             >
-              <Play className="w-4 h-4 mr-2" />
-              Launch PhantomBuster Scraper
+              {isLoading ? (
+                <>
+                  <div className="w-4 h-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Launching...
+                </>
+              ) : (
+                <>
+                  <Play className="w-4 h-4 mr-2" />
+                  Launch PhantomBuster Scraper
+                </>
+              )}
             </Button>
           </div>
         </div>
@@ -1139,11 +1149,12 @@ export default function LeadScraperDashboard() {
                   <div className="flex items-center space-x-6">
                     <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
                       <span className="text-white font-semibold text-lg">
-                        {lead.name.split(' ').map(n => n[0]).join('')}
+                        {lead.firstName?.[0] || ''}
+                        {lead.lastName?.[0] || ''}
                       </span>
                     </div>
                     <div>
-                      <p className="text-white font-semibold text-lg">{lead.name}</p>
+                      <p className="text-white font-semibold text-lg">{lead.firstName} {lead.lastName}</p>
                       <p className="text-slate-400 text-base">{lead.company}</p>
                     </div>
                   </div>
