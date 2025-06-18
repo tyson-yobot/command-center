@@ -50,33 +50,6 @@ export function registerRoutes(app: Express): void {
     });
   });
 
-  // Industry templates endpoint
-  app.get('/api/industry-templates', (req, res) => {
-    const industries = [
-      { id: '1', name: 'Technology', category: 'Tech' },
-      { id: '2', name: 'Healthcare', category: 'Medical' },
-      { id: '3', name: 'Finance', category: 'Financial' },
-      { id: '4', name: 'Education', category: 'Academic' },
-      { id: '5', name: 'Retail', category: 'Commerce' },
-      { id: '6', name: 'Manufacturing', category: 'Industrial' },
-      { id: '7', name: 'Consulting', category: 'Professional' },
-      { id: '8', name: 'Media & Entertainment', category: 'Creative' },
-      { id: '9', name: 'Real Estate', category: 'Property' },
-      { id: '10', name: 'Transportation', category: 'Logistics' },
-      { id: '11', name: 'Energy', category: 'Utilities' },
-      { id: '12', name: 'Government', category: 'Public' },
-      { id: '13', name: 'Insurance', category: 'Financial' },
-      { id: '14', name: 'Legal Services', category: 'Professional' },
-      { id: '15', name: 'Non-Profit', category: 'Social' }
-    ];
-    
-    res.json({
-      success: true,
-      industries,
-      total: industries.length
-    });
-  });
-
   // System health
   app.get('/api/system-health', (req, res) => {
     res.json({

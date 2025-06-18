@@ -97,7 +97,6 @@ import { EnhancedTooltip, QuickTooltip } from '@/components/EnhancedTooltip';
 import { CommandCenterActions } from '@/utils/commandCenterActions';
 import { LeadScraperPopup } from '@/components/lead-scraper-popup';
 
-
 export default function CommandCenter() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -609,8 +608,6 @@ export default function CommandCenter() {
   const handleSendSMS = () => {
     setShowSMSModal(true);
   };
-
-
 
   // Form submission handlers with Airtable logging
   const submitBookingForm = async () => {
@@ -1466,14 +1463,19 @@ export default function CommandCenter() {
 
   const handleLeadScraper = async () => {
     try {
-      setVoiceStatus('Opening Lead Scraper platform...');
-      window.location.href = '/lead-scraper';
-      setVoiceStatus('Lead Scraper platform opened');
+      setVoiceStatus('Opening Lead Scraper popup...');
+      setShowLeadScraperPopup(true);
+      setLeadScraperDefaultTab('apollo');
+      setVoiceStatus('Lead Scraper popup opened');
+      setToast({ 
+        title: "Lead Scraper", 
+        description: "Opening Lead Scraper popup interface"
+      });
     } catch (error) {
-      setVoiceStatus('Lead Scraper navigation error');
+      setVoiceStatus('Lead Scraper popup error');
       setToast({ 
         title: "Error", 
-        description: "Unable to navigate to Lead Scraper",
+        description: "Unable to open Lead Scraper popup",
         variant: "destructive" 
       });
     }
