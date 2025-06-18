@@ -183,31 +183,31 @@ export default function LeadScraperDashboard() {
   );
 
   const renderApolloConfig = () => (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 p-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 p-4">
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <Button
               onClick={() => setCurrentScreen('overview')}
               variant="ghost"
-              className="text-white hover:bg-white/10 mr-6 px-2 py-1"
+              className="text-white hover:bg-white/10 mr-4 px-2 py-1 text-sm"
               size="sm"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft className="w-4 h-4 mr-1" />
               Back to Platforms
             </Button>
             <div>
-              <h1 className="text-2xl font-bold text-white">Apollo.io Professional Configuration</h1>
+              <h1 className="text-xl font-bold text-white">Apollo.io Professional Configuration</h1>
               <p className="text-blue-200 text-sm">Configure precision targeting parameters</p>
             </div>
           </div>
           <Button
             variant="outline"
-            className="bg-slate-700/50 hover:bg-slate-600/70 text-white border-slate-500/50 px-4 py-2 text-sm"
+            className="bg-slate-700/50 hover:bg-slate-600/70 text-white border-slate-500/50 px-3 py-1 text-sm"
             size="sm"
           >
-            <Settings className="w-4 h-4 mr-2" />
+            <Settings className="w-4 h-4 mr-1" />
             Save Preset
           </Button>
         </div>
@@ -242,7 +242,7 @@ export default function LeadScraperDashboard() {
                   <div className="flex space-x-1">
                     <Input
                       placeholder="e.g., CEO, VP Sales, Marketing Director"
-                      className="bg-slate-700/60 border-slate-500/40 text-white placeholder:text-slate-500 text-xs h-8 flex-1 rounded"
+                      className="bg-slate-700 border-slate-500 text-white placeholder:text-slate-400 text-sm h-9 flex-1"
                     />
                     <Button
                       size="sm"
