@@ -165,6 +165,65 @@ export const knowledgeUsageLog = pgTable("knowledge_usage_log", {
   usedAt: timestamp("used_at").defaultNow(),
 });
 
+// Universal leads table for all scraping platforms
+export const universalLeads = pgTable("universal_leads", {
+  id: serial("id").primaryKey(),
+  airtableRecordId: text("airtable_record_id").unique(), // Link to Airtable record
+  source: text("source").notNull(), // "apollo", "apify", "phantombuster"
+  sourceId: text("source_id"), // Original ID from source platform
+  campaignId: text("campaign_id"),
+  
+  // Contact Information
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  fullName: text("full_name").notNull(),
+  email: text("email"),
+  phone: text("phone"),
+  
+  // Company Information
+  company: text("company"),
+  website: text("website"),
+  title: text("title"),
+  department: text("department"),
+  seniority: text("seniority"),
+  
+  // Location Data
+  location: text("location"),
+  city: text("city"),
+  state: text("state"),
+  country: text("country"),
+  
+  // Social/Platform Data
+  platform: text("platform"), // LinkedIn, Instagram, etc.
+  profileUrl: text("profile_url"),
+  linkedinUrl: text("linkedin_url"),
+  
+  // Lead Management
+  status: text("status").default("New"), // New, Contacted, Qualified, Converted, Dead
+  priority: integer("priority").default(50), // 1-100 priority score
+  score: integer("score").default(0),
+  leadOwner: text("lead_owner"),
+  
+  // Sync Status
+  syncedAirtable: boolean("synced_airtable").default(false),
+  syncedHubspot: boolean("synced_hubspot").default(false),
+  syncedYobot: boolean("synced_yobot").default(false),
+  
+  // Pipeline Status
+  isCallable: boolean("is_callable").default(true),
+  lastCallAttempt: timestamp("last_call_attempt"),
+  callAttempts: integer("call_attempts").default(0),
+  callStatus: text("call_status"), // "pending", "completed", "failed", "scheduled"
+  
+  // Metadata
+  tags: text("tags").array(),
+  notes: text("notes"),
+  dateAdded: text("date_added"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Keep PhantomBuster table for backward compatibility but mark as deprecated
 export const phantombusterLeads = pgTable("phantombuster_leads", {
   id: serial("id").primaryKey(),
   leadOwner: text("lead_owner").notNull(),
@@ -248,6 +307,12 @@ export const insertKnowledgeBaseSchema = createInsertSchema(knowledgeBase).omit(
   updatedAt: true,
   usageCount: true,
   lastUsedAt: true,
+});
+
+export const insertUniversalLeadSchema = createInsertSchema(universalLeads).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
 });
 
 export const insertPhantombusterLeadSchema = createInsertSchema(phantombusterLeads).omit({
