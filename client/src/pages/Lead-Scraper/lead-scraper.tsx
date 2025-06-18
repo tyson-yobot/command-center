@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Target, Globe, Users, Brain, Shield, BarChart3, Play, Settings, CheckCircle, Download, ExternalLink, Slack } from 'lucide-react';
+import { ArrowLeft, Target, Globe, Users, Brain, Shield, BarChart3, Play, Settings, CheckCircle, Download, ExternalLink, Slack, Plus, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
 
 type Screen = 'overview' | 'apollo' | 'apify' | 'phantombuster' | 'results';
 
@@ -185,56 +186,79 @@ export default function LeadScraperDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800">
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
-        <div className="flex items-center mb-8">
-          <Button
-            onClick={() => setCurrentScreen('overview')}
-            variant="ghost"
-            className="text-white hover:bg-white/10 mr-6 px-4 py-2"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back
-          </Button>
+        <div className="flex items-center justify-between mb-8">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
-              <Target className="w-6 h-6 text-white" />
-            </div>
+            <Button
+              onClick={() => setCurrentScreen('overview')}
+              variant="ghost"
+              className="text-white hover:bg-white/10 mr-6 px-4 py-2"
+            >
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              Back to Platforms
+            </Button>
             <div>
-              <h1 className="text-3xl font-bold text-white">Apollo.io Configuration</h1>
-              <p className="text-blue-100 text-lg">Professional B2B intelligence platform</p>
+              <h1 className="text-3xl font-bold text-white">Apollo.io Professional Configuration</h1>
+              <p className="text-blue-100 text-lg">Configure precision targeting parameters</p>
             </div>
           </div>
+          <Button
+            variant="outline"
+            className="bg-slate-700/50 hover:bg-slate-600/70 text-white border-slate-500/50 px-6 py-2"
+          >
+            <Settings className="w-4 h-4 mr-2" />
+            Save Preset
+          </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Contact Filters */}
+        {/* Test Company Mode Toggle */}
+        <div className="mb-6">
           <Card className="bg-slate-800/60 backdrop-blur-sm border-slate-600/50">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center text-xl">
-                <Users className="w-6 h-6 mr-3" />
-                Contact Filters
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="px-6 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Label className="text-white text-base font-medium">Test Company Mode</Label>
+                  <Info className="w-4 h-4 text-slate-400" />
+                </div>
+                <Switch className="data-[state=checked]:bg-blue-600" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Contact Filters */}
+        <Card className="bg-slate-800/60 backdrop-blur-sm border-slate-600/50 mb-6">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center text-xl">
+              <Users className="w-5 h-5 mr-3" />
+              Contact Filters
+            </CardTitle>
+            <CardDescription className="text-slate-400">
+              Target specific professionals and contact requirements
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <Label className="text-slate-300 text-base mb-2 block">Job Titles</Label>
-                <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-12">
-                    <SelectValue placeholder="Select job titles" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ceo">CEO</SelectItem>
-                    <SelectItem value="cto">CTO</SelectItem>
-                    <SelectItem value="vp-sales">VP of Sales</SelectItem>
-                    <SelectItem value="director">Director</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label className="text-slate-300 text-sm mb-2 block">Job Titles</Label>
+                <div className="flex space-x-2">
+                  <Input
+                    placeholder="e.g., CEO, VP Sales, Marketing Director"
+                    className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400 h-10 flex-1"
+                  />
+                  <Button
+                    size="sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 h-10"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
 
               <div>
-                <Label className="text-slate-300 text-base mb-2 block">Seniority Level</Label>
+                <Label className="text-slate-300 text-sm mb-2 block">Seniority Level</Label>
                 <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-12">
-                    <SelectValue placeholder="Select seniority" />
+                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-10">
+                    <SelectValue placeholder="Select seniority level" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="executive">Executive</SelectItem>
@@ -246,9 +270,9 @@ export default function LeadScraperDashboard() {
               </div>
 
               <div>
-                <Label className="text-slate-300 text-base mb-2 block">Department</Label>
+                <Label className="text-slate-300 text-sm mb-2 block">Department</Label>
                 <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-12">
+                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-10">
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
                   <SelectContent>
@@ -261,55 +285,69 @@ export default function LeadScraperDashboard() {
               </div>
 
               <div>
-                <Label className="text-slate-300 text-base mb-2 block">Location</Label>
-                <Input
-                  placeholder="Enter location (e.g., San Francisco, CA)"
-                  className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400 h-12"
-                />
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <Checkbox id="email-verified" className="border-slate-400" />
-                  <Label htmlFor="email-verified" className="text-slate-300 text-base">Email Verified</Label>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <Checkbox id="phone-available" className="border-slate-400" />
-                  <Label htmlFor="phone-available" className="text-slate-300 text-base">Phone Number Available</Label>
+                <Label className="text-slate-300 text-sm mb-2 block">Location</Label>
+                <div className="flex space-x-2">
+                  <Input
+                    placeholder="e.g., New York, San Francisco, Remote"
+                    className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400 h-10 flex-1"
+                  />
+                  <Button
+                    size="sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 h-10"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Company Filters */}
-          <Card className="bg-slate-800/60 backdrop-blur-sm border-slate-600/50">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center text-xl">
-                <Target className="w-6 h-6 mr-3" />
-                Company Filters
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
+            <div className="flex items-center space-x-8">
+              <div className="flex items-center space-x-2">
+                <Checkbox id="email-verified" className="border-slate-400" />
+                <Label htmlFor="email-verified" className="text-slate-300 text-sm">Email Verified</Label>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <Checkbox id="phone-available" className="border-slate-400" />
+                <Label htmlFor="phone-available" className="text-slate-300 text-sm">Phone Number Available</Label>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Company Filters */}
+        <Card className="bg-slate-800/60 backdrop-blur-sm border-slate-600/50 mb-6">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center text-xl">
+              <Target className="w-5 h-5 mr-3" />
+              Company Filters
+            </CardTitle>
+            <CardDescription className="text-slate-400">
+              Target companies by industry, size, and characteristics
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <Label className="text-slate-300 text-base mb-2 block">Industry</Label>
-                <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-12">
-                    <SelectValue placeholder="Select industry" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="saas">SaaS</SelectItem>
-                    <SelectItem value="fintech">Fintech</SelectItem>
-                    <SelectItem value="ecommerce">E-commerce</SelectItem>
-                    <SelectItem value="healthcare">Healthcare</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label className="text-slate-300 text-sm mb-2 block">Industry</Label>
+                <div className="flex space-x-2">
+                  <Input
+                    placeholder="e.g., Technology, Healthcare, Finance"
+                    className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400 h-10 flex-1"
+                  />
+                  <Button
+                    size="sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 h-10"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
 
               <div>
-                <Label className="text-slate-300 text-base mb-2 block">Company Size</Label>
+                <Label className="text-slate-300 text-sm mb-2 block">Company Size</Label>
                 <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-12">
+                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-10">
                     <SelectValue placeholder="Select company size" />
                   </SelectTrigger>
                   <SelectContent>
@@ -321,9 +359,9 @@ export default function LeadScraperDashboard() {
               </div>
 
               <div>
-                <Label className="text-slate-300 text-base mb-2 block">Funding Stage</Label>
+                <Label className="text-slate-300 text-sm mb-2 block">Funding Stage</Label>
                 <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-12">
+                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-10">
                     <SelectValue placeholder="Select funding stage" />
                   </SelectTrigger>
                   <SelectContent>
@@ -335,9 +373,9 @@ export default function LeadScraperDashboard() {
               </div>
 
               <div>
-                <Label className="text-slate-300 text-base mb-2 block">Revenue Range</Label>
+                <Label className="text-slate-300 text-sm mb-2 block">Revenue Range</Label>
                 <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-12">
+                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-10">
                     <SelectValue placeholder="Select revenue range" />
                   </SelectTrigger>
                   <SelectContent>
@@ -349,47 +387,58 @@ export default function LeadScraperDashboard() {
               </div>
 
               <div>
-                <Label className="text-slate-300 text-base mb-2 block">Technologies Used</Label>
-                <Input
-                  placeholder="e.g., Salesforce, HubSpot, Stripe"
-                  className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400 h-12"
-                />
+                <Label className="text-slate-300 text-sm mb-2 block">Technologies Used</Label>
+                <div className="flex space-x-2">
+                  <Input
+                    placeholder="e.g., Salesforce, HubSpot, AWS, React"
+                    className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400 h-10 flex-1"
+                  />
+                  <Button
+                    size="sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 h-10"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
 
               <div>
-                <Label className="text-slate-300 text-base mb-2 block">Exclude Domains/Companies</Label>
-                <Textarea
-                  placeholder="Enter domains or company names to exclude (one per line)"
-                  className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400 min-h-[100px]"
+                <Label className="text-slate-300 text-sm mb-2 block">Exclude Domains/Companies</Label>
+                <Input
+                  placeholder="e.g., competitor1.com, competitor2.com"
+                  className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400 h-10"
                 />
               </div>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Scraping Settings */}
         <Card className="bg-slate-800/60 backdrop-blur-sm border-slate-600/50 mb-8">
           <CardHeader>
             <CardTitle className="text-white flex items-center text-xl">
-              <Settings className="w-6 h-6 mr-3" />
+              <Settings className="w-5 h-5 mr-3" />
               Scraping Settings
             </CardTitle>
+            <CardDescription className="text-slate-400">
+              Configure scraping parameters and limits
+            </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label className="text-slate-300 text-base mb-2 block">Data Freshness (days)</Label>
+              <Label className="text-slate-300 text-sm mb-2 block">Data Freshness (days)</Label>
               <Input
                 type="number"
                 defaultValue={30}
-                className="bg-slate-700/50 border-slate-600 text-white h-12"
+                className="bg-slate-700/50 border-slate-600 text-white h-10"
               />
             </div>
             <div>
-              <Label className="text-slate-300 text-base mb-2 block">Record Limit</Label>
+              <Label className="text-slate-300 text-sm mb-2 block">Record Limit</Label>
               <Input
                 type="number"
-                defaultValue={1000}
-                className="bg-slate-700/50 border-slate-600 text-white h-12"
+                defaultValue={4000}
+                className="bg-slate-700/50 border-slate-600 text-white h-10"
               />
             </div>
           </CardContent>
@@ -399,9 +448,9 @@ export default function LeadScraperDashboard() {
         <div className="flex items-center justify-between bg-slate-800/70 rounded-2xl p-6 border border-slate-600/50 shadow-xl">
           <div className="flex items-center space-x-6">
             <Badge className="bg-blue-600/20 text-blue-300 border-blue-500/30 px-4 py-2 text-base">
-              7 Filters Applied
+              7 filters applied
             </Badge>
-            <span className="text-slate-300 text-lg">Estimated Leads: 4,000</span>
+            <span className="text-slate-300 text-lg">Estimated leads: 4,000</span>
           </div>
           
           <div className="flex space-x-4">
