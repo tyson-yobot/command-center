@@ -19,10 +19,18 @@ interface PlatformCardProps {
 }
 
 function PlatformCard({ title, description, icon, gradient, features, badges, onConfigure }: PlatformCardProps) {
+  // Determine icon background color based on title
+  const getIconBackground = () => {
+    if (title === 'Apollo.io') return 'bg-blue-500';
+    if (title === 'Apify') return 'bg-green-500';
+    if (title === 'PhantomBuster') return 'bg-purple-500';
+    return 'bg-blue-500';
+  };
+
   return (
     <Card className="bg-gradient-to-br from-[#111827] via-[#1f2937] to-[#1e3a8a] p-6 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 border-0 text-white">
       <CardHeader className="text-center pb-4">
-        <div className="w-20 h-20 mx-auto bg-white/20 rounded-2xl flex items-center justify-center mb-6">
+        <div className={`w-20 h-20 mx-auto ${getIconBackground()} rounded-2xl flex items-center justify-center mb-6 shadow-lg`}>
           {icon}
         </div>
         <CardTitle className="text-2xl font-bold text-white mb-3">{title}</CardTitle>
@@ -118,11 +126,11 @@ export default function EnterpriseLeadPlatform({ onPlatformSelect, onNavigateToS
           <PlatformCard
             title="Apollo.io"
             description="Professional B2B intelligence with 250M+ verified contacts and advanced enterprise filtering"
-            icon={<Target className="w-8 h-8 text-blue-600" />}
-            gradient="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800"
+            icon={<Target className="w-8 h-8 text-white" />}
+            gradient="bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800"
             badges={[
-              { text: "Verified Emails", color: "bg-blue-500/30" },
-              { text: "Executive Targeting", color: "bg-blue-500/30" }
+              { text: "Verified Emails", color: "bg-blue-500/80" },
+              { text: "Executive Targeting", color: "bg-blue-500/80" }
             ]}
             features={[
               "Enterprise-grade accuracy",
@@ -136,11 +144,11 @@ export default function EnterpriseLeadPlatform({ onPlatformSelect, onNavigateToS
           <PlatformCard
             title="Apify"
             description="Advanced web intelligence platform for LinkedIn profiles and comprehensive business listings"
-            icon={<Globe className="w-8 h-8 text-green-600" />}
-            gradient="bg-gradient-to-br from-green-600 via-green-700 to-green-800"
+            icon={<Globe className="w-8 h-8 text-white" />}
+            gradient="bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800"
             badges={[
-              { text: "Web Intelligence", color: "bg-green-500/30" },
-              { text: "Business Listings", color: "bg-green-500/30" }
+              { text: "Web Intelligence", color: "bg-green-500/80" },
+              { text: "Business Listings", color: "bg-green-500/80" }
             ]}
             features={[
               "Custom data extraction",
@@ -154,11 +162,11 @@ export default function EnterpriseLeadPlatform({ onPlatformSelect, onNavigateToS
           <PlatformCard
             title="PhantomBuster"
             description="Premium social media automation for LinkedIn, Twitter with intelligent connection management"
-            icon={<Users className="w-8 h-8 text-purple-600" />}
-            gradient="bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800"
+            icon={<Users className="w-8 h-8 text-white" />}
+            gradient="bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800"
             badges={[
-              { text: "Social Automation", color: "bg-purple-500/30" },
-              { text: "Safe Outreach", color: "bg-purple-500/30" }
+              { text: "Social Automation", color: "bg-purple-500/80" },
+              { text: "Safe Outreach", color: "bg-purple-500/80" }
             ]}
             features={[
               "Multi-platform reach",
