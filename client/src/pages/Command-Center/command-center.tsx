@@ -3492,7 +3492,7 @@ export default function CommandCenter() {
 
 
         {/* Analytics Dashboard - 3 Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 h-[600px]">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 h-[450px]">
           {/* Performance & ROI Analytics */}
           <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20 h-full">
             <CardHeader>
