@@ -17,6 +17,7 @@ import ApolloScraperPanel from './components/apollo-scraper-panel';
 import PhantomBusterScraperPanel from './components/phantombuster-scraper-panel';
 import ScraperResultsDisplay from './components/scraper-results-display';
 import IntelligenceResults from './components/intelligence-results';
+import EnterpriseLeadPlatform from './components/enterprise-lead-platform';
 
 interface ScrapedLead {
   firstName: string;
@@ -224,143 +225,7 @@ const LeadScraper: React.FC = () => {
   };
 
   // Enterprise Lead Intelligence Platform Overview
-  const renderOverview = () => (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <Link to="/" className="text-blue-400 hover:text-blue-300 transition-colors">
-                <ArrowLeft className="w-5 h-5" />
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Icon */}
-        <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Target className="w-10 h-10 text-white" />
-          </div>
-        </div>
-
-        {/* Main Title */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-white mb-4">
-            Enterprise Lead Intelligence Platform
-          </h1>
-          <p className="text-xl text-blue-200 max-w-3xl mx-auto">
-            Advanced multi-platform lead generation with enterprise-grade targeting and real-time intelligence
-          </p>
-        </div>
-
-        {/* Real-time Data Stats */}
-        <div className="grid md:grid-cols-4 gap-4 mb-8">
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-white mb-2">{totalLeadsFound}</div>
-              <div className="text-sm text-blue-200">Total Leads</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-green-400 mb-2">
-                {leadsStats?.callableLeads || 0}
-              </div>
-              <div className="text-sm text-blue-200">Callable</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-purple-400 mb-2">
-                {leadsStats?.sources?.length || 0}
-              </div>
-              <div className="text-sm text-blue-200">Sources</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
-            <CardContent className="p-6 text-center">
-              <Button 
-                onClick={syncFromAirtable}
-                disabled={syncLoading}
-                className="w-full bg-blue-600 hover:bg-blue-700"
-              >
-                {syncLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Syncing...
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Sync Airtable
-                  </>
-                )}
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Platform Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
-          {/* Apollo.io */}
-          <Card 
-            className="bg-gradient-to-br from-blue-900/50 to-blue-800/30 backdrop-blur-sm border border-blue-500/30 hover:border-blue-400/50 transition-all cursor-pointer group"
-            onClick={() => {
-              setActiveTab('apollo');
-              setCurrentView('scraper');
-            }}
-          >
-            <CardContent className="p-8">
-              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6">
-                <Target className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-3">Apollo.io</h3>
-              <p className="text-blue-200 mb-6">
-                Professional B2B intelligence with 250M+ verified contacts and advanced enterprise filtering
-              </p>
-              
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  <span className="text-blue-200 text-sm">Verified Emails</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  <span className="text-blue-200 text-sm">Executive Targeting</span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 text-blue-300 text-sm">
-                <Star className="w-4 h-4" />
-                <span>Enterprise-grade accuracy</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Apify */}
-          <Card 
-            className="bg-gradient-to-br from-green-900/50 to-green-800/30 backdrop-blur-sm border border-green-500/30 hover:border-green-400/50 transition-all cursor-pointer group"
-            onClick={() => {
-              setActiveTab('apify');
-              setCurrentView('scraper');
-            }}
-          >
-            <CardContent className="p-8">
-              <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mb-6">
-                <Globe className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-3">Apify</h3>
-              <p className="text-green-200 mb-6">
-                Advanced web intelligence platform for LinkedIn profiles and comprehensive business listings
-              </p>
-              
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center gap-2">
+  const renderOverview = () => <EnterpriseLeadPlatform />;
                   <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                   <span className="text-green-200 text-sm">Web Intelligence</span>
                 </div>
