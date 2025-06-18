@@ -202,6 +202,22 @@ export default function CommandCenter() {
     staleTime: 30000,
   });
 
+  // Scraped leads data
+  const { data: leadsData } = useQuery({
+    queryKey: ['/api/leads/universal'],
+    queryFn: () => fetch('/api/leads/universal').then(res => res.json()),
+    refetchInterval: 30000,
+    staleTime: 15000,
+  });
+
+  // Update leads count when data changes
+  useEffect(() => {
+    if (leadsData?.data?.length) {
+      setScrapedLeadsCount(leadsData.data.length);
+      setRecentLeads(leadsData.data.slice(0, 20));
+    }
+  }, [leadsData]);
+
   const { data: liveSystemData } = useQuery({ 
     queryKey: ['/api/system-health', currentSystemMode],
     queryFn: () => fetch('/api/system-health', {
@@ -248,6 +264,9 @@ export default function CommandCenter() {
   const [showPublyDashboard, setShowPublyDashboard] = useState(false);
   const [showMailchimpDashboard, setShowMailchimpDashboard] = useState(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [showScrapedLeads, setShowScrapedLeads] = useState(false);
+  const [scrapedLeadsCount, setScrapedLeadsCount] = useState(0);
+  const [recentLeads, setRecentLeads] = useState<any[]>([]);
   const [showLiveChat, setShowLiveChat] = useState(false);
   const [showTicketsList, setShowTicketsList] = useState(false);
   const [showCreateTicket, setShowCreateTicket] = useState(false);
@@ -8151,7 +8170,106 @@ export default function CommandCenter() {
         </Dialog>
       )}
 
+      {/* Scraped Leads Modal */}
+      {showScrapedLeads && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <div className="bg-gradient-to-br from-slate-900 to-blue-900 rounded-lg border border-blue-400/50 shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4 text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-bold">Recently Scraped Leads</h2>
+                  <p className="text-blue-100 text-sm">Last 20 leads from all scraping platforms</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Badge className="bg-green-600 text-white">
+                    Total: {scrapedLeadsCount}
+                  </Badge>
+                  <Button 
+                    onClick={() => setShowScrapedLeads(false)}
+                    variant="ghost" 
+                    size="sm"
+                    className="text-white hover:bg-white/20"
+                  >
+                    <X className="w-5 h-5" />
+                  </Button>
+                </div>
+              </div>
+            </div>
 
+            {/* Content */}
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-100px)]">
+              {recentLeads.length > 0 ? (
+                <div className="space-y-4">
+                  {recentLeads.map((lead, index) => (
+                    <Card key={lead.id || index} className="bg-slate-800 border-slate-600">
+                      <CardContent className="p-4">
+                        <div className="grid grid-cols-3 gap-4">
+                          <div>
+                            <h4 className="text-white font-medium">{lead.firstName} {lead.lastName}</h4>
+                            <p className="text-slate-400 text-sm">{lead.title}</p>
+                            <p className="text-slate-400 text-sm">{lead.company}</p>
+                          </div>
+                          <div>
+                            <div className="text-slate-300 text-sm space-y-1">
+                              {lead.email && (
+                                <div className="flex items-center">
+                                  <Mail className="w-3 h-3 mr-2" />
+                                  {lead.email}
+                                </div>
+                              )}
+                              {lead.phone && (
+                                <div className="flex items-center">
+                                  <Phone className="w-3 h-3 mr-2" />
+                                  {lead.phone}
+                                </div>
+                              )}
+                              {lead.location && (
+                                <div className="flex items-center">
+                                  <Building className="w-3 h-3 mr-2" />
+                                  {lead.location}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <Badge className={`${
+                              lead.source === 'apollo' ? 'bg-blue-600' :
+                              lead.source === 'apify' ? 'bg-green-600' :
+                              'bg-purple-600'
+                            } text-white text-xs`}>
+                              {lead.source?.toUpperCase() || 'UNKNOWN'}
+                            </Badge>
+                            <p className="text-slate-400 text-xs mt-2">
+                              {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : 'Unknown date'}
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <Database className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                  <h3 className="text-white text-lg font-medium mb-2">No Scraped Leads Yet</h3>
+                  <p className="text-slate-400">Start scraping leads using Apollo, Apify, or PhantomBuster to see them here.</p>
+                  <Button 
+                    onClick={() => {
+                      setShowScrapedLeads(false);
+                      handleLeadScraper();
+                    }}
+                    className="mt-4 bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    <Search className="w-4 h-4 mr-2" />
+                    Start Lead Scraping
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       </div>
     </div>
