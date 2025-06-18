@@ -1,1267 +1,502 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Target, Globe, Users, Brain, Shield, BarChart3, Play, Settings, CheckCircle, Download, ExternalLink, Slack, Plus, Info, Loader2 } from 'lucide-react';
-import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750274873156.png';
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
+import { Progress } from '@/components/ui/progress';
+import { useToast } from '@/hooks/use-toast';
+import { 
+  Search, Users, Building, MapPin, Loader2, 
+  CheckCircle, AlertCircle, ArrowLeft, Download,
+  Linkedin, Globe, Database, RefreshCw, Rocket,
+  Star, Target, BarChart3
+} from 'lucide-react';
+import { Link } from 'wouter';
+import ApifyScraperPanel from './components/apify-scraper-panel';
+import ApolloScraperPanel from './components/apollo-scraper-panel';
+import PhantomBusterScraperPanel from './components/phantombuster-scraper-panel';
+import ScraperResultsDisplay from './components/scraper-results-display';
+import IntelligenceResults from './components/intelligence-results';
+import EnterpriseLeadPlatform from './components/enterprise-lead-platform';
 
-type Screen = 'overview' | 'apollo' | 'apify' | 'phantombuster' | 'scraping' | 'results';
+interface ScrapedLead {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  company: string;
+  title: string;
+  location: string;
+  source: string;
+}
 
-export default function LeadScraperDashboard() {
-  const [currentScreen, setCurrentScreen] = useState<Screen>('overview');
-  const [selectedPlatform, setSelectedPlatform] = useState<string>('');
-  const [isScrapingInProgress, setIsScrapingInProgress] = useState(false);
-  const [scrapingResults, setScrapingResults] = useState<any>(null);
+interface ScrapeResult {
+  success: boolean;
+  leadCount?: number;
+  listingCount?: number;
+  profileCount?: number;
+  leads?: any[];
+  listings?: any[];
+  profiles?: any[];
+  sessionId: string;
+  source: string;
+  timestamp: string;
+  message?: string;
+  error?: string;
+}
 
-  const platforms = [
-    {
-      id: 'apollo',
-      name: 'Apollo.io',
-      icon: Target,
-      color: 'blue',
-      description: 'Professional B2B intelligence with 250M+ verified contacts and advanced enterprise filtering',
-      features: ['✔ Verified Emails', '✔ Executive Targeting', '✔ Enterprise-grade accuracy']
-    },
-    {
-      id: 'apify',
-      name: 'Apify',
-      icon: Globe,
-      color: 'green',
-      description: 'Advanced web intelligence platform for LinkedIn profiles and comprehensive business listings',
-      features: ['✔ Web Intelligence', '✔ Business Listings', '✔ Custom data extraction']
-    },
-    {
-      id: 'phantombuster',
-      name: 'PhantomBuster',
-      icon: Users,
-      color: 'purple',
-      description: 'Premium social media automation for LinkedIn, Twitter with intelligent connection management',
-      features: ['✔ Safe Outreach', '✔ Social Automation', '✔ Multi-platform reach']
+const LeadScraper: React.FC = () => {
+  const { toast } = useToast();
+  
+  // State management
+  const [currentView, setCurrentView] = useState('overview'); // 'overview', 'scraper', or 'results'
+  const [activeTab, setActiveTab] = useState('apollo');
+  const [isLoading, setIsLoading] = useState(false);
+  const [results, setResults] = useState<ScrapeResult | null>(null);
+  const [showResults, setShowResults] = useState(false);
+  const [totalLeadsFound, setTotalLeadsFound] = useState(0);
+  const [lastScrapeTime, setLastScrapeTime] = useState<string>('');
+  const [leadsData, setLeadsData] = useState<any[]>([]);
+  const [leadsStats, setLeadsStats] = useState<any>(null);
+  const [syncLoading, setSyncLoading] = useState(false);
+  const [lastScrapedCount, setLastScrapedCount] = useState(0);
+  const [lastScrapedSource, setLastScrapedSource] = useState('');
+
+  // Load real leads data from Airtable
+  const loadLeadsData = async () => {
+    try {
+      const [leadsResponse, statsResponse] = await Promise.all([
+        fetch('/api/leads/universal'),
+        fetch('/api/leads/stats')
+      ]);
+
+      if (leadsResponse.ok) {
+        const leadsResult = await leadsResponse.json();
+        setLeadsData(leadsResult.data || []);
+        setTotalLeadsFound(leadsResult.data?.length || 0);
+      }
+
+      if (statsResponse.ok) {
+        const statsResult = await statsResponse.json();
+        setLeadsStats(statsResult.data || null);
+      }
+    } catch (error) {
+      console.error('Failed to load leads data:', error);
     }
-  ];
-
-  const systemFeatures = [
-    {
-      id: 'realtime',
-      name: 'Real-Time Processing',
-      icon: Brain,
-      description: 'Instant lead extraction with live notifications',
-      features: ['✔ Live Updates', '✔ Real-time Sync', '✔ Instant Notifications']
-    },
-    {
-      id: 'security',
-      name: 'Enterprise Security',
-      icon: Shield,
-      description: 'Bank-grade encryption and compliance',
-      features: ['✔ Data Protection', '✔ Secure APIs', '✔ Compliance Ready']
-    },
-    {
-      id: 'analytics',
-      name: 'Advanced Analytics',
-      icon: BarChart3,
-      description: 'Comprehensive reporting and insights',
-      features: ['✔ Performance Metrics', '✔ Lead Scoring', '✔ ROI Analysis']
-    }
-  ];
-
-  const handlePlatformSelect = (platformId: string) => {
-    setSelectedPlatform(platformId);
-    setCurrentScreen(platformId as Screen);
   };
 
-  const handleBackToCommandCenter = () => {
-    window.location.href = '/command-center';
+  // Sync leads from Airtable
+  const syncFromAirtable = async () => {
+    setSyncLoading(true);
+    try {
+      const response = await fetch('/api/leads/sync-airtable', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        await loadLeadsData();
+        toast({
+          title: "Airtable Sync Complete",
+          description: `Synced ${result.count} leads from your Airtable`
+        });
+      } else {
+        toast({
+          title: "Sync Failed",
+          description: result.message || "Airtable API key required",
+          variant: "destructive"
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Sync Error",
+        description: "Failed to connect to Airtable",
+        variant: "destructive"
+      });
+    } finally {
+      setSyncLoading(false);
+    }
   };
 
-  // Real scraper launch functions
-  const launchApolloScraper = async () => {
-    setIsScrapingInProgress(true);
-    setSelectedPlatform('apollo');
-    setCurrentScreen('scraping');
-    
+  // Load data on component mount
+  useEffect(() => {
+    loadLeadsData();
+  }, []);
+
+  // Scraper launch handlers with real API calls
+  const handleApolloLaunch = async (filters: any) => {
+    setIsLoading(true);
     try {
       const response = await fetch('/api/scraper/apollo/launch', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          filters,
           timestamp: new Date().toISOString(),
-          mode: 'live'
+          mode: process.env.NODE_ENV || 'development'
         })
       });
       
       const result = await response.json();
-      
       if (result.success) {
-        setScrapingResults(result);
-        setCurrentScreen('results');
-      } else {
-        console.error('Apollo scraping failed:', result.error);
-        setCurrentScreen('apollo');
+        // Only proceed if we have real data or confirmed backend process
+        if (process.env.NODE_ENV === 'production' && (!result.leads || result.leads.length === 0)) {
+          toast({
+            title: "No Leads Found",
+            description: "Scraper may have failed or no matching leads found",
+            variant: "destructive"
+          });
+          return;
+        }
+        
+        setResults(result);
+        setTotalLeadsFound(prev => prev + (result.leadCount || 0));
+        setLastScrapeTime(new Date().toLocaleString());
+        setLastScrapedCount(result.leadCount || 0);
+        setLastScrapedSource('APOLLO');
+        setCurrentView('results');
+        
+        // Load fresh data after scraping
+        await loadLeadsData();
+        
+        toast({
+          title: "Apollo Scrape Complete",
+          description: `Found ${result.leadCount || 0} professional leads`
+        });
       }
-    } catch (error) {
-      console.error('Apollo scraping error:', error);
-      setCurrentScreen('apollo');
+    } catch (error: any) {
+      toast({
+        title: "Apollo Scrape Failed",
+        description: error.message,
+        variant: "destructive"
+      });
     } finally {
-      setIsScrapingInProgress(false);
+      setIsLoading(false);
     }
   };
 
-  const launchApifyScraper = async () => {
-    setIsScrapingInProgress(true);
-    setSelectedPlatform('apify');
-    setCurrentScreen('scraping');
-    
+  const handleApifyLaunch = async (filters: any) => {
+    setIsLoading(true);
     try {
       const response = await fetch('/api/scraper/apify/launch', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          filters,
           timestamp: new Date().toISOString(),
-          mode: 'live'
+          mode: process.env.NODE_ENV || 'development'
         })
       });
       
       const result = await response.json();
-      
       if (result.success) {
-        setScrapingResults(result);
-        setCurrentScreen('results');
-      } else {
-        console.error('Apify scraping failed:', result.error);
-        setCurrentScreen('apify');
+        // Only proceed if we have real data or confirmed backend process
+        if (process.env.NODE_ENV === 'production' && (!result.leads || result.leads.length === 0)) {
+          toast({
+            title: "No Leads Found",
+            description: "Scraper may have failed or no matching leads found",
+            variant: "destructive"
+          });
+          return;
+        }
+        
+        setResults(result);
+        setTotalLeadsFound(prev => prev + (result.listingCount || 0));
+        setLastScrapeTime(new Date().toLocaleString());
+        setLastScrapedCount(result.listingCount || 0);
+        setLastScrapedSource('APIFY');
+        setCurrentView('results');
+        
+        // Load fresh data after scraping
+        await loadLeadsData();
+        
+        toast({
+          title: "Apify Scrape Complete",
+          description: `Found ${result.listingCount || 0} business listings`
+        });
       }
-    } catch (error) {
-      console.error('Apify scraping error:', error);
-      setCurrentScreen('apify');
+    } catch (error: any) {
+      toast({
+        title: "Apify Scrape Failed",
+        description: error.message,
+        variant: "destructive"
+      });
     } finally {
-      setIsScrapingInProgress(false);
+      setIsLoading(false);
     }
   };
 
-  const launchPhantomBusterScraper = async () => {
-    setIsScrapingInProgress(true);
-    setSelectedPlatform('phantombuster');
-    setCurrentScreen('scraping');
-    
+  const handlePhantomBusterLaunch = async (filters: any) => {
+    setIsLoading(true);
     try {
       const response = await fetch('/api/scraper/phantombuster/launch', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          filters,
           timestamp: new Date().toISOString(),
-          mode: 'live'
+          mode: process.env.NODE_ENV || 'development'
         })
       });
       
       const result = await response.json();
-      
       if (result.success) {
-        setScrapingResults(result);
-        setCurrentScreen('results');
-      } else {
-        console.error('PhantomBuster scraping failed:', result.error);
-        setCurrentScreen('phantombuster');
+        // Only proceed if we have real data or confirmed backend process
+        if (process.env.NODE_ENV === 'production' && (!result.leads || result.leads.length === 0)) {
+          toast({
+            title: "No Leads Found",
+            description: "Scraper may have failed or no matching leads found",
+            variant: "destructive"
+          });
+          return;
+        }
+        
+        setResults(result);
+        setTotalLeadsFound(prev => prev + (result.profileCount || 0));
+        setLastScrapeTime(new Date().toLocaleString());
+        setLastScrapedCount(result.profileCount || 0);
+        setLastScrapedSource('PHANTOMBUSTER');
+        setCurrentView('results');
+        
+        // Load fresh data after scraping
+        await loadLeadsData();
+        
+        toast({
+          title: "PhantomBuster Scrape Complete",
+          description: `Found ${result.profileCount || 0} LinkedIn profiles`
+        });
       }
-    } catch (error) {
-      console.error('PhantomBuster scraping error:', error);
-      setCurrentScreen('phantombuster');
+    } catch (error: any) {
+      toast({
+        title: "PhantomBuster Scrape Failed",
+        description: error.message,
+        variant: "destructive"
+      });
     } finally {
-      setIsScrapingInProgress(false);
+      setIsLoading(false);
     }
   };
 
+  // Platform Overview Interface
   const renderOverview = () => (
-    <div className="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#1E3A8A] py-12 px-4 text-white">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-6">
-            <img 
-              src={robotHeadImage} 
-              alt="YoBot" 
-              className="w-16 h-16 object-cover rounded-full"
-            />
-          </div>
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-400 mb-4">
-            Enterprise Lead Intelligence Platform
-          </h1>
-          <p className="text-lg text-blue-100 text-center mb-8 max-w-4xl mx-auto" style={{ maxWidth: '70ch' }}>
-            Advanced multi-platform lead generation with enterprise-grade targeting and real-time intelligence.
-          </p>
-        </div>
-
-        {/* Platform Selection Grid - Top Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mt-6 mb-8">
-          {platforms.map((platform) => {
-            const IconComponent = platform.icon;
-            
-            return (
-              <div
-                key={platform.id}
-                onClick={() => handlePlatformSelect(platform.id)}
-                className="rounded-2xl bg-gradient-to-br from-[#111827] to-[#1F2937] p-6 shadow-lg transition-all hover:scale-105 hover:shadow-xl cursor-pointer"
-              >
-                <div className="text-center">
-                  <IconComponent className="w-10 h-10 mx-auto mb-4 text-white" />
-                  <h3 className="text-xl font-semibold text-white mb-2">{platform.name}</h3>
-                  <p className="text-sm text-blue-200 mb-3">
-                    {platform.description}
-                  </p>
-                  <div className="space-y-1">
-                    {platform.features.map((feature, index) => (
-                      <span
-                        key={index}
-                        className={`text-xs px-3 py-1 rounded-full mr-2 mb-1 inline-block ${
-                          platform.color === 'blue' ? 'bg-blue-900 text-blue-200' :
-                          platform.color === 'green' ? 'bg-green-900 text-green-200' :
-                          'bg-purple-900 text-purple-200'
-                        }`}
-                      >
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* System Features Grid - Bottom Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {systemFeatures.map((feature) => {
-            const IconComponent = feature.icon;
-            
-            return (
-              <div
-                key={feature.id}
-                className="rounded-2xl bg-gradient-to-br from-[#111827] to-[#1F2937] p-6 shadow-lg transition-all hover:scale-105 hover:shadow-xl cursor-pointer"
-              >
-                <div className="text-center">
-                  <IconComponent className="w-10 h-10 mx-auto mb-4 text-white" />
-                  <h3 className="text-xl font-semibold text-white mb-2">{feature.name}</h3>
-                  <p className="text-sm text-blue-200 mb-3">
-                    {feature.description}
-                  </p>
-                  <div className="space-y-1">
-                    {feature.features.map((feat, index) => (
-                      <span
-                        key={index}
-                        className="text-xs bg-slate-800 text-slate-200 px-3 py-1 rounded-full mr-2 mb-1 inline-block"
-                      >
-                        {feat}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
+    <EnterpriseLeadPlatform onNavigateToScraper={() => setCurrentView('scraper')} />
   );
 
-  const renderApolloConfig = () => (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 p-4">
-      <div className="max-w-5xl mx-auto">
+  // Scraper Interface
+  const renderScraper = () => (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 p-4">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center">
-            <Button
-              onClick={() => setCurrentScreen('overview')}
-              variant="ghost"
-              className="text-white hover:bg-white/10 mr-4 px-2 py-1 text-sm"
-              size="sm"
-            >
-              <ArrowLeft className="w-4 h-4 mr-1" />
-              Back to Platforms
-            </Button>
-            <div>
-              <h1 className="text-xl font-bold text-white">Apollo.io Professional Configuration</h1>
-              <p className="text-blue-200 text-sm">Configure precision targeting parameters</p>
-            </div>
-          </div>
-          <Button
-            variant="outline"
-            className="bg-slate-700/50 hover:bg-slate-600/70 text-white border-slate-500/50 px-3 py-1 text-sm"
-            size="sm"
-          >
-            <Settings className="w-4 h-4 mr-1" />
-            Save Preset
-          </Button>
-        </div>
-
-        {/* Test Company Mode Toggle */}
-        <div className="mb-6">
-          <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-600/50 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Label className="text-white text-sm font-medium">Test Company Mode</Label>
-                <Info className="w-4 h-4 text-slate-400" />
-              </div>
-              <Switch className="data-[state=checked]:bg-blue-600" />
-            </div>
-          </div>
-        </div>
-
-        {/* Contact Filters */}
-        <div className="mb-6">
-          <div className="bg-slate-800/80 backdrop-blur-sm border border-slate-600/40 rounded-lg">
-            <div className="border-b border-slate-600/30 p-4">
-              <div className="flex items-center">
-                <Users className="w-4 h-4 text-blue-400 mr-2" />
-                <h3 className="text-white font-medium text-base">Contact Filters</h3>
-              </div>
-              <p className="text-slate-400 text-xs mt-1">Target specific professionals and contact requirements</p>
-            </div>
-            <div className="p-4 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-slate-300 text-xs mb-1 block">Job Titles</Label>
-                  <div className="flex space-x-1">
-                    <Input
-                      placeholder="e.g., CEO, VP Sales, Marketing Director"
-                      className="bg-slate-700 border-slate-500 text-white placeholder:text-slate-400 text-sm h-9 flex-1"
-                    />
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-2 h-8 rounded text-xs"
-                    >
-                      +
-                    </Button>
-                  </div>
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-xs mb-1 block">Seniority Level</Label>
-                  <Select>
-                    <SelectTrigger className="bg-slate-700/60 border-slate-500/40 text-white h-8 text-xs rounded">
-                      <SelectValue placeholder="Select seniority level" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="executive">Executive</SelectItem>
-                      <SelectItem value="director">Director</SelectItem>
-                      <SelectItem value="manager">Manager</SelectItem>
-                      <SelectItem value="individual">Individual Contributor</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-xs mb-1 block">Department</Label>
-                  <Select>
-                    <SelectTrigger className="bg-slate-700/60 border-slate-500/40 text-white h-8 text-xs rounded">
-                      <SelectValue placeholder="Select department" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="sales">Sales</SelectItem>
-                      <SelectItem value="marketing">Marketing</SelectItem>
-                      <SelectItem value="engineering">Engineering</SelectItem>
-                      <SelectItem value="operations">Operations</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-xs mb-1 block">Location</Label>
-                  <div className="flex space-x-1">
-                    <Input
-                      placeholder="e.g., New York, San Francisco, Remote"
-                      className="bg-slate-700/60 border-slate-500/40 text-white placeholder:text-slate-500 text-xs h-8 flex-1 rounded"
-                    />
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-2 h-8 rounded text-xs"
-                    >
-                      +
-                    </Button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-6 pt-2">
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="email-verified" className="w-4 h-4 border-slate-400" />
-                  <Label htmlFor="email-verified" className="text-slate-300 text-xs">Email Verified</Label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="phone-available" className="w-4 h-4 border-slate-400" />
-                  <Label htmlFor="phone-available" className="text-slate-300 text-xs">Phone Number Available</Label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Company Filters */}
-        <div className="mb-6">
-          <div className="bg-slate-800/80 backdrop-blur-sm border border-slate-600/40 rounded-lg">
-            <div className="border-b border-slate-600/30 p-4">
-              <div className="flex items-center">
-                <Target className="w-4 h-4 text-blue-400 mr-2" />
-                <h3 className="text-white font-medium text-base">Company Filters</h3>
-              </div>
-              <p className="text-slate-400 text-xs mt-1">Target companies by industry, size, and characteristics</p>
-            </div>
-            <div className="p-4 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-slate-300 text-xs mb-1 block">Industry</Label>
-                  <div className="flex space-x-1">
-                    <Input
-                      placeholder="e.g., Technology, Healthcare, Finance"
-                      className="bg-slate-700/60 border-slate-500/40 text-white placeholder:text-slate-500 text-xs h-8 flex-1 rounded"
-                    />
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-2 h-8 rounded text-xs"
-                    >
-                      +
-                    </Button>
-                  </div>
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-xs mb-1 block">Company Size</Label>
-                  <Select>
-                    <SelectTrigger className="bg-slate-700/60 border-slate-500/40 text-white h-8 text-xs rounded">
-                      <SelectValue placeholder="Select company size" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="startup">1-50 employees</SelectItem>
-                      <SelectItem value="scaleup">51-200 employees</SelectItem>
-                      <SelectItem value="enterprise">200+ employees</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-xs mb-1 block">Funding Stage</Label>
-                  <Select>
-                    <SelectTrigger className="bg-slate-700/60 border-slate-500/40 text-white h-8 text-xs rounded">
-                      <SelectValue placeholder="Select funding stage" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="seed">Seed</SelectItem>
-                      <SelectItem value="series-a">Series A</SelectItem>
-                      <SelectItem value="series-b">Series B+</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-xs mb-1 block">Revenue Range</Label>
-                  <Select>
-                    <SelectTrigger className="bg-slate-700/60 border-slate-500/40 text-white h-8 text-xs rounded">
-                      <SelectValue placeholder="Select revenue range" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1m-10m">$1M - $10M</SelectItem>
-                      <SelectItem value="10m-50m">$10M - $50M</SelectItem>
-                      <SelectItem value="50m+">$50M+</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-xs mb-1 block">Technologies Used</Label>
-                  <div className="flex space-x-1">
-                    <Input
-                      placeholder="e.g., Salesforce, HubSpot, AWS, React"
-                      className="bg-slate-700/60 border-slate-500/40 text-white placeholder:text-slate-500 text-xs h-8 flex-1 rounded"
-                    />
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-2 h-8 rounded text-xs"
-                    >
-                      +
-                    </Button>
-                  </div>
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-xs mb-1 block">Exclude Domains/Companies</Label>
-                  <Input
-                    placeholder="e.g., competitor1.com, competitor2.com"
-                    className="bg-slate-700/60 border-slate-500/40 text-white placeholder:text-slate-500 text-xs h-8 rounded"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Scraping Settings */}
-        <div className="mb-8">
-          <div className="bg-slate-800/80 backdrop-blur-sm border border-slate-600/40 rounded-lg">
-            <div className="border-b border-slate-600/30 p-4">
-              <div className="flex items-center">
-                <Settings className="w-4 h-4 text-blue-400 mr-2" />
-                <h3 className="text-white font-medium text-base">Scraping Settings</h3>
-              </div>
-              <p className="text-slate-400 text-xs mt-1">Configure scraping parameters and limits</p>
-            </div>
-            <div className="p-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-slate-300 text-xs mb-1 block">Data Freshness (days)</Label>
-                  <Input
-                    type="number"
-                    defaultValue={30}
-                    className="bg-slate-700/60 border-slate-500/40 text-white text-xs h-8 rounded"
-                  />
-                </div>
-                <div>
-                  <Label className="text-slate-300 text-xs mb-1 block">Record Limit</Label>
-                  <Input
-                    type="number"
-                    defaultValue={4000}
-                    className="bg-slate-700/60 border-slate-500/40 text-white text-xs h-8 rounded"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Status Bar */}
-        <div className="flex items-center justify-between bg-slate-800/70 rounded-lg p-4 border border-slate-600/50">
+        <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Badge className="bg-blue-600/20 text-blue-300 border-blue-500/30 px-3 py-1 text-sm">
-              7 filters applied
-            </Badge>
-            <span className="text-slate-300 text-sm">Estimated leads: 4,000</span>
-          </div>
-          
-          <div className="flex space-x-3">
             <Button
-              variant="outline"
-              className="bg-slate-700/50 hover:bg-slate-600/70 text-white border-slate-500/50 px-4 py-2 text-sm"
-              size="sm"
-            >
-              <Settings className="w-4 h-4 mr-2" />
-              Save Preset
-            </Button>
-            
-            <Button
-              onClick={launchApolloScraper}
-              disabled={isScrapingInProgress}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm"
-              size="sm"
-            >
-              {isScrapingInProgress ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <Play className="w-4 h-4 mr-2" />
-              )}
-              Launch Apollo Scraper
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderApifyConfig = () => (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center">
-            <Button
-              onClick={() => setCurrentScreen('overview')}
               variant="ghost"
-              className="text-white hover:bg-white/10 mr-6 px-2 py-1"
               size="sm"
+              onClick={() => setCurrentView('overview')}
+              className="text-white hover:bg-white/10"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Platforms
+              Back to Platform Overview
             </Button>
             <div>
-              <h1 className="text-2xl font-bold text-white">Apify Advanced Configuration</h1>
-              <p className="text-blue-200 text-sm">Configure precision targeting parameters</p>
-            </div>
-          </div>
-          <Button
-            variant="outline"
-            className="bg-slate-700/50 hover:bg-slate-600/70 text-white border-slate-500/50 px-4 py-2 text-sm"
-            size="sm"
-          >
-            <Settings className="w-4 h-4 mr-2" />
-            Save Preset
-          </Button>
-        </div>
-
-        {/* Test Company Mode Toggle */}
-        <div className="mb-6">
-          <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-600/50 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Label className="text-white text-sm font-medium">Test Company Mode</Label>
-                <Info className="w-4 h-4 text-slate-400" />
-              </div>
-              <Switch className="data-[state=checked]:bg-green-600" />
-            </div>
-          </div>
-        </div>
-
-        {/* Location Filters */}
-        <div className="mb-6">
-          <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-600/50 rounded-lg">
-            <div className="border-b border-slate-600/30 p-4">
-              <div className="flex items-center">
-                <Globe className="w-5 h-5 text-white mr-3" />
-                <div>
-                  <h3 className="text-white font-medium">Location Filters</h3>
-                  <p className="text-slate-400 text-sm">Target specific geographic areas and search parameters</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-6 space-y-6">
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <Label className="text-slate-300 text-sm mb-2 block">Search Terms</Label>
-                  <div className="flex space-x-2">
-                    <Input
-                      placeholder="e.g., restaurants, hotels, gyms"
-                      className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400 text-sm h-9 flex-1"
-                    />
-                    <Button
-                      size="sm"
-                      className="bg-green-600 hover:bg-green-700 text-white px-3 h-9"
-                    >
-                      Add
-                    </Button>
-                  </div>
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-sm mb-2 block">Location (City/State/ZIP)</Label>
-                  <Input
-                    placeholder="e.g., New York, NY or 10001"
-                    className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400 text-sm h-9"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-sm mb-2 block">Search Radius (miles)</Label>
-                  <Select>
-                    <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-9 text-sm">
-                      <SelectValue placeholder="25 miles" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="5">5 miles</SelectItem>
-                      <SelectItem value="10">10 miles</SelectItem>
-                      <SelectItem value="25">25 miles</SelectItem>
-                      <SelectItem value="50">50 miles</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-sm mb-2 block">Industry Category</Label>
-                  <Select>
-                    <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-9 text-sm">
-                      <SelectValue placeholder="Select industry" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="restaurants">Restaurants</SelectItem>
-                      <SelectItem value="retail">Retail</SelectItem>
-                      <SelectItem value="services">Services</SelectItem>
-                      <SelectItem value="healthcare">Healthcare</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="col-span-2">
-                  <Label className="text-slate-300 text-sm mb-2 block">Exclude Keywords</Label>
-                  <div className="flex space-x-2">
-                    <Input
-                      placeholder="e.g., closed, temporary, franchise"
-                      className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400 text-sm h-9 flex-1"
-                    />
-                    <Button
-                      size="sm"
-                      className="bg-green-600 hover:bg-green-700 text-white px-3 h-9"
-                    >
-                      Add
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Quality Filters */}
-        <div className="mb-8">
-          <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-600/50 rounded-lg">
-            <div className="border-b border-slate-600/30 p-4">
-              <div className="flex items-center">
-                <BarChart3 className="w-5 h-5 text-white mr-3" />
-                <div>
-                  <h3 className="text-white font-medium">Quality Filters</h3>
-                  <p className="text-slate-400 text-sm">Set quality thresholds and data extraction preferences</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-6 space-y-6">
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <Label className="text-slate-300 text-sm mb-2 block">Minimum Reviews Required</Label>
-                  <Select>
-                    <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-9 text-sm">
-                      <SelectValue placeholder="5+ reviews" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">1+ reviews</SelectItem>
-                      <SelectItem value="5">5+ reviews</SelectItem>
-                      <SelectItem value="10">10+ reviews</SelectItem>
-                      <SelectItem value="25">25+ reviews</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-sm mb-2 block">Minimum Rating</Label>
-                  <Select>
-                    <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-9 text-sm">
-                      <SelectValue placeholder="Select minimum rating" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="3">3+ stars</SelectItem>
-                      <SelectItem value="4">4+ stars</SelectItem>
-                      <SelectItem value="4.5">4.5+ stars</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-sm mb-2 block">Max Listings to Pull</Label>
-                  <Input
-                    type="number"
-                    defaultValue={1000}
-                    className="bg-slate-700/50 border-slate-600 text-white text-sm h-9"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-slate-300 text-sm mb-2 block">Delay Between Requests (seconds)</Label>
-                  <Select>
-                    <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-9 text-sm">
-                      <SelectValue placeholder="2 seconds" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">1 second</SelectItem>
-                      <SelectItem value="2">2 seconds</SelectItem>
-                      <SelectItem value="5">5 seconds</SelectItem>
-                      <SelectItem value="10">10 seconds</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <Checkbox id="extract-contact-apify" className="border-slate-400" />
-                <Label htmlFor="extract-contact-apify" className="text-slate-300 text-sm">
-                  Extract Contact Info (email, phone, website)
-                </Label>
-                <Info className="w-4 h-4 text-slate-400" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Status Bar */}
-        <div className="flex items-center justify-between bg-slate-800/70 rounded-lg p-4 border border-slate-600/50">
-          <div className="flex items-center space-x-4">
-            <Badge className="bg-green-600/20 text-green-300 border-green-500/30 px-3 py-1 text-sm">
-              3 filters applied
-            </Badge>
-            <span className="text-slate-300 text-sm">Estimated listings: 1,000</span>
-          </div>
-          
-          <div className="flex space-x-3">
-            <Button
-              variant="outline"
-              className="bg-slate-700/50 hover:bg-slate-600/70 text-white border-slate-500/50 px-4 py-2 text-sm"
-              size="sm"
-            >
-              <Settings className="w-4 h-4 mr-2" />
-              Save Preset
-            </Button>
-            
-            <Button
-              onClick={launchApifyScraper}
-              disabled={isScrapingInProgress}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-sm"
-              size="sm"
-            >
-              {isScrapingInProgress ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <Play className="w-4 h-4 mr-2" />
-              )}
-              Launch Apify Scraper
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderPhantomBusterConfig = () => (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center">
-            <Button
-              onClick={() => setCurrentScreen('overview')}
-              variant="ghost"
-              className="text-white hover:bg-white/10 mr-6 px-2 py-1"
-              size="sm"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Platforms
-            </Button>
-            <div>
-              <h1 className="text-2xl font-bold text-white">PhantomBuster Configuration</h1>
-              <p className="text-blue-200 text-sm">Configure precision targeting parameters</p>
-            </div>
-          </div>
-          <Button
-            variant="outline"
-            className="bg-slate-700/50 hover:bg-slate-600/70 text-white border-slate-500/50 px-4 py-2 text-sm"
-            size="sm"
-          >
-            <Settings className="w-4 h-4 mr-2" />
-            Save Preset
-          </Button>
-        </div>
-
-        <div className="grid grid-cols-3 gap-6 mb-8">
-          {/* Contact Filters */}
-          <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-600/50 rounded-lg">
-            <div className="border-b border-slate-600/30 p-4">
-              <div className="flex items-center">
-                <Users className="w-5 h-5 text-white mr-3" />
-                <div>
-                  <h3 className="text-white font-medium">Contact Filters</h3>
-                  <p className="text-slate-400 text-sm">Target specific profiles</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-4 space-y-4">
-              <div>
-                <Label className="text-slate-300 text-sm mb-2 block">Platform</Label>
-                <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-9 text-sm">
-                    <SelectValue placeholder="Select platform" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="linkedin">LinkedIn</SelectItem>
-                    <SelectItem value="twitter">Twitter</SelectItem>
-                    <SelectItem value="instagram">Instagram</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label className="text-slate-300 text-sm mb-2 block">Keywords</Label>
-                <Input
-                  placeholder="Enter keywords"
-                  className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400 text-sm h-9"
-                />
-              </div>
-
-              <div>
-                <Label className="text-slate-300 text-sm mb-2 block">Connection Degree</Label>
-                <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-9 text-sm">
-                    <SelectValue placeholder="Select degree" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1st">1st Connections</SelectItem>
-                    <SelectItem value="2nd">2nd Connections</SelectItem>
-                    <SelectItem value="3rd">3rd+ Connections</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label className="text-slate-300 text-sm mb-2 block">Seniority Level</Label>
-                <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-9 text-sm">
-                    <SelectValue placeholder="Select seniority" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="executive">Executive</SelectItem>
-                    <SelectItem value="director">Director</SelectItem>
-                    <SelectItem value="manager">Manager</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label className="text-slate-300 text-sm mb-2 block">Department/Function</Label>
-                <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-9 text-sm">
-                    <SelectValue placeholder="Select function" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="sales">Sales</SelectItem>
-                    <SelectItem value="marketing">Marketing</SelectItem>
-                    <SelectItem value="hr">Human Resources</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
-
-          {/* Company Filters */}
-          <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-600/50 rounded-lg">
-            <div className="border-b border-slate-600/30 p-4">
-              <div className="flex items-center">
-                <Target className="w-5 h-5 text-white mr-3" />
-                <div>
-                  <h3 className="text-white font-medium">Company Filters</h3>
-                  <p className="text-slate-400 text-sm">Target specific companies</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-4 space-y-4">
-              <div>
-                <Label className="text-slate-300 text-sm mb-2 block">Industry</Label>
-                <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-9 text-sm">
-                    <SelectValue placeholder="Select industry" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="saas">SaaS</SelectItem>
-                    <SelectItem value="fintech">Fintech</SelectItem>
-                    <SelectItem value="ecommerce">E-commerce</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label className="text-slate-300 text-sm mb-2 block">Company Size</Label>
-                <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-9 text-sm">
-                    <SelectValue placeholder="Select size" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="startup">1-50</SelectItem>
-                    <SelectItem value="scaleup">51-200</SelectItem>
-                    <SelectItem value="enterprise">200+</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label className="text-slate-300 text-sm mb-2 block">Location</Label>
-                <Input
-                  placeholder="Enter location"
-                  className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400 text-sm h-9"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Execution Settings */}
-          <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-600/50 rounded-lg">
-            <div className="border-b border-slate-600/30 p-4">
-              <div className="flex items-center">
-                <Settings className="w-5 h-5 text-white mr-3" />
-                <div>
-                  <h3 className="text-white font-medium">Execution Settings</h3>
-                  <p className="text-slate-400 text-sm">Configure automation rules</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-4 space-y-4">
-              <div>
-                <Label className="text-slate-300 text-sm mb-2 block">Execution Method</Label>
-                <Select>
-                  <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white h-9 text-sm">
-                    <SelectValue placeholder="Select method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="immediate">Immediate</SelectItem>
-                    <SelectItem value="scheduled">Scheduled</SelectItem>
-                    <SelectItem value="drip">Drip Campaign</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label className="text-slate-300 text-sm mb-2 block">Daily Connection Limit</Label>
-                <Input
-                  type="number"
-                  defaultValue={20}
-                  className="bg-slate-700/50 border-slate-600 text-white text-sm h-9"
-                />
-              </div>
-
-              <div>
-                <Label className="text-slate-300 text-sm mb-2 block">Retry Attempts</Label>
-                <Input
-                  type="number"
-                  defaultValue={3}
-                  className="bg-slate-700/50 border-slate-600 text-white text-sm h-9"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Status Bar */}
-        <div className="flex items-center justify-between bg-slate-800/70 rounded-lg p-4 border border-slate-600/50">
-          <div className="flex items-center space-x-4">
-            <Badge className="bg-purple-600/20 text-purple-300 border-purple-500/30 px-3 py-1 text-sm">
-              0 filters applied
-            </Badge>
-            <span className="text-slate-300 text-sm">Estimated profiles: 700</span>
-          </div>
-          
-          <div className="flex space-x-3">
-            <Button
-              variant="outline"
-              className="bg-slate-700/50 hover:bg-slate-600/70 text-white border-slate-500/50 px-4 py-2 text-sm"
-              size="sm"
-            >
-              <Settings className="w-4 h-4 mr-2" />
-              Save Preset
-            </Button>
-            
-            <Button
-              onClick={launchPhantomBusterScraper}
-              disabled={isScrapingInProgress}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 text-sm"
-              size="sm"
-            >
-              {isScrapingInProgress ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <Play className="w-4 h-4 mr-2" />
-              )}
-              Launch PhantomBuster Scraper
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderScrapingInProgress = () => (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 flex items-center justify-center">
-      <div className="max-w-2xl mx-auto text-center px-6">
-        <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-600/50 rounded-2xl p-12">
-          {/* Animated Loading Icon */}
-          <div className="mb-8">
-            <div className="w-24 h-24 mx-auto bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-6">
-              <Loader2 className="w-12 h-12 text-white animate-spin" />
-            </div>
-          </div>
-
-          {/* Status Text */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white mb-4">
-              {selectedPlatform === 'apollo' && 'Apollo Scraper Running'}
-              {selectedPlatform === 'apify' && 'Apify Scraper Running'}
-              {selectedPlatform === 'phantombuster' && 'PhantomBuster Scraper Running'}
-            </h1>
-            <p className="text-blue-200 text-lg mb-6">
-              Scraping in progress... Your leads are being extracted and processed.
-            </p>
-            <div className="text-slate-300 text-base">
-              <p className="mb-2">⏳ Estimated time: 1–2 minutes</p>
-              <p className="mb-4">This screen will update automatically when data is ready.</p>
-            </div>
-          </div>
-
-          {/* Progress Steps */}
-          <div className="space-y-4 mb-8">
-            <div className="flex items-center justify-between p-4 bg-slate-700/40 rounded-lg">
-              <span className="text-white">Initializing scraper...</span>
-              <CheckCircle className="w-5 h-5 text-green-400" />
-            </div>
-            <div className="flex items-center justify-between p-4 bg-slate-700/40 rounded-lg">
-              <span className="text-white">Extracting lead data...</span>
-              <Loader2 className="w-5 h-5 text-blue-400 animate-spin" />
-            </div>
-            <div className="flex items-center justify-between p-4 bg-slate-700/20 rounded-lg opacity-50">
-              <span className="text-slate-400">Sending Slack notification...</span>
-              <div className="w-5 h-5 rounded-full border-2 border-slate-500"></div>
-            </div>
-            <div className="flex items-center justify-between p-4 bg-slate-700/20 rounded-lg opacity-50">
-              <span className="text-slate-400">Syncing to Airtable...</span>
-              <div className="w-5 h-5 rounded-full border-2 border-slate-500"></div>
-            </div>
-          </div>
-
-          {/* Cancel Button */}
-          <Button
-            onClick={() => setCurrentScreen('overview')}
-            variant="outline"
-            className="bg-slate-700/50 hover:bg-slate-600/70 text-white border-slate-500/50"
-          >
-            Cancel and Return to Overview
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderResults = () => (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800">
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center">
-            <Button
-              onClick={() => setCurrentScreen('overview')}
-              variant="ghost"
-              className="text-white hover:bg-white/10 mr-6 px-4 py-2"
-            >
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              Back to Platform Selection
-            </Button>
-            <div>
-              <h1 className="text-4xl font-bold text-white mb-2">Intelligence Results</h1>
-              <p className="text-blue-100 text-xl">
-                {scrapingResults ? 
-                  `Extracted ${scrapingResults.count || scrapingResults.leadCount || 0} high-quality leads using ${selectedPlatform === 'apollo' ? 'Apollo.io' : selectedPlatform === 'apify' ? 'Apify' : 'PhantomBuster'}` :
-                  'Processing completed - leads extracted and synced'
-                }
+              <h1 className="text-3xl font-bold text-white flex items-center">
+                <Search className="w-8 h-8 mr-3 text-green-400" />
+                Advanced Lead Scraper
+              </h1>
+              <p className="text-white/60 mt-1">
+                Professional lead generation with Apollo, Apify, and PhantomBuster integration
               </p>
             </div>
           </div>
-          <Button
-            onClick={handleBackToCommandCenter}
-            className="bg-slate-700/50 hover:bg-slate-600/70 text-white border border-slate-500/50 px-6 py-3"
-          >
-            Back to Command Center
-          </Button>
+          <div className="text-right">
+            <div className="text-green-400 font-semibold">{totalLeadsFound} Total Leads Found</div>
+            {lastScrapeTime && (
+              <div className="text-white/60 text-sm">Last scrape: {lastScrapeTime}</div>
+            )}
+          </div>
         </div>
 
-        {/* Status Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="bg-green-600/20 backdrop-blur-sm border-green-500/30 hover:bg-green-600/30 transition-all duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
-                  <Slack className="w-6 h-6 text-white" />
-                </div>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <Card className="bg-blue-600/20 backdrop-blur-sm border-blue-500/30">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-green-300 font-semibold text-lg">Slack Notification Status</p>
-                  <p className="text-green-200">Sent to #leads-channel</p>
+                  <div className="text-blue-300 text-sm font-medium">Active Leads</div>
+                  <div className="text-white text-2xl font-bold">{totalLeadsFound}</div>
                 </div>
+                <Database className="w-8 h-8 text-blue-400" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-600/20 backdrop-blur-sm border-blue-500/30 hover:bg-blue-600/30 transition-all duration-300 cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
-                  <ExternalLink className="w-6 h-6 text-white" />
-                </div>
+          <Card className="bg-green-600/20 backdrop-blur-sm border-green-500/30">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-blue-300 font-semibold text-lg">View in Airtable</p>
-                  <p className="text-blue-200">Open database</p>
+                  <div className="text-green-300 text-sm font-medium">Last Scraped</div>
+                  <div className="text-white text-2xl font-bold">{lastScrapedCount}</div>
+                  <div className="text-green-200 text-xs">{lastScrapedSource}</div>
                 </div>
+                <Target className="w-8 h-8 text-green-400" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-purple-600/20 backdrop-blur-sm border-purple-500/30 hover:bg-purple-600/30 transition-all duration-300 cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
-                  <Download className="w-6 h-6 text-white" />
-                </div>
+          <Card className="bg-purple-600/20 backdrop-blur-sm border-purple-500/30">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-purple-300 font-semibold text-lg">CSV Export</p>
-                  <p className="text-purple-200">Download results</p>
+                  <div className="text-purple-300 text-sm font-medium">Sources</div>
+                  <div className="text-white text-2xl font-bold">3</div>
+                  <div className="text-purple-200 text-xs">Apollo, Apify, PB</div>
                 </div>
+                <Globe className="w-8 h-8 text-purple-400" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-orange-600/20 backdrop-blur-sm border-orange-500/30">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Button
+                    onClick={syncFromAirtable}
+                    disabled={syncLoading}
+                    size="sm"
+                    className="bg-orange-600 hover:bg-orange-700 text-white text-xs"
+                  >
+                    {syncLoading ? (
+                      <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                    ) : (
+                      <RefreshCw className="w-3 h-3 mr-1" />
+                    )}
+                    Sync Airtable
+                  </Button>
+                </div>
+                <Database className="w-8 h-8 text-orange-400" />
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Results List */}
-        <Card className="bg-slate-800/60 backdrop-blur-sm border-slate-600/50">
+        {/* Scraper Tabs */}
+        <Card className="bg-black/40 backdrop-blur-sm border-white/10">
           <CardHeader>
-            <CardTitle className="text-white text-2xl">Lead Results</CardTitle>
-            <CardDescription className="text-slate-300 text-lg">
-              Most recent high-quality leads extracted from your target criteria
-            </CardDescription>
+            <CardTitle className="text-white flex items-center">
+              <Rocket className="w-6 h-6 mr-2 text-blue-400" />
+              Lead Generation Platforms
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {(scrapingResults?.leads || []).slice(0, 8).map((lead, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-6 bg-slate-700/40 rounded-xl border border-slate-600/30 hover:bg-slate-700/60 transition-all duration-200"
-                >
-                  <div className="flex items-center space-x-6">
-                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-                      <span className="text-white font-semibold text-lg">
-                        {((lead.fullName || lead.first_name + ' ' + lead.last_name || 'Unknown').split(' ').map(n => n[0]).join(''))}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-white font-semibold text-lg">{lead.fullName || lead.first_name + ' ' + lead.last_name || 'Unknown Name'}</p>
-                      <p className="text-slate-400 text-base">{lead.company || lead.company_name || 'Unknown Company'}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-slate-300 text-base">{lead.email || 'No email available'}</p>
-                    <p className="text-slate-400 text-base">{lead.phone || 'No phone available'}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="mt-8 pt-6 border-t border-slate-600/50">
-              <p className="text-center text-slate-300 text-xl">
-                Total results: <span className="text-white font-semibold">{scrapingResults?.count || scrapingResults?.leadCount || 0} leads</span>
-              </p>
-            </div>
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-3 bg-slate-800/50">
+                <TabsTrigger value="apollo" className="text-white data-[state=active]:bg-blue-600">
+                  <Target className="w-4 h-4 mr-2" />
+                  Apollo.io
+                </TabsTrigger>
+                <TabsTrigger value="apify" className="text-white data-[state=active]:bg-green-600">
+                  <Globe className="w-4 h-4 mr-2" />
+                  Apify
+                </TabsTrigger>
+                <TabsTrigger value="phantombuster" className="text-white data-[state=active]:bg-purple-600">
+                  <Linkedin className="w-4 h-4 mr-2" />
+                  PhantomBuster
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="apollo" className="mt-6">
+                <ApolloScraperPanel
+                  onLaunch={handleApolloLaunch}
+                  isLoading={isLoading}
+                />
+              </TabsContent>
+
+              <TabsContent value="apify" className="mt-6">
+                <ApifyScraperPanel
+                  onLaunch={handleApifyLaunch}
+                  isLoading={isLoading}
+                />
+              </TabsContent>
+
+              <TabsContent value="phantombuster" className="mt-6">
+                <PhantomBusterScraperPanel
+                  onLaunch={handlePhantomBusterLaunch}
+                  isLoading={isLoading}
+                />
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
       </div>
     </div>
   );
 
-  switch (currentScreen) {
-    case 'apollo':
-      return renderApolloConfig();
-    case 'apify':
-      return renderApifyConfig();
-    case 'phantombuster':
-      return renderPhantomBusterConfig();
-    case 'scraping':
-      return renderScrapingInProgress();
+  // Results Interface - Only show real data
+  const renderResults = () => {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const hasRealData = leadsData && leadsData.length > 0;
+    const hasRecentResults = results && results.leads && results.leads.length > 0;
+
+    // In production, only show data if we have real leads
+    if (isProduction && !hasRealData && !hasRecentResults) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 p-4">
+          <div className="max-w-4xl mx-auto pt-20">
+            <Card className="bg-black/40 backdrop-blur-sm border-white/10 text-center p-12">
+              <AlertCircle className="w-16 h-16 text-orange-400 mx-auto mb-6" />
+              <h2 className="text-2xl font-bold text-white mb-4">No Leads Available</h2>
+              <p className="text-white/60 mb-6">
+                Scraper may have failed or no matching leads found. Try running a scraper or sync from Airtable.
+              </p>
+              <div className="flex gap-4 justify-center">
+                <Button
+                  onClick={() => setCurrentView('scraper')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <Rocket className="w-4 h-4 mr-2" />
+                  Run Scraper
+                </Button>
+                <Button
+                  onClick={syncFromAirtable}
+                  disabled={syncLoading}
+                  variant="outline"
+                  className="border-white/20 text-white hover:bg-white/10"
+                >
+                  {syncLoading ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                  )}
+                  Sync Airtable
+                </Button>
+              </div>
+            </Card>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <IntelligenceResults
+        results={results}
+        leadsData={leadsData}
+        onBack={() => setCurrentView('scraper')}
+        onBackToOverview={() => setCurrentView('overview')}
+      />
+    );
+  };
+
+  // Main render logic
+  switch (currentView) {
+    case 'scraper':
+      return renderScraper();
     case 'results':
       return renderResults();
     default:
       return renderOverview();
   }
-}
+};
+
+export default LeadScraper;

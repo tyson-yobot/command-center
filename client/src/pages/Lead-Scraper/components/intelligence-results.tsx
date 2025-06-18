@@ -20,17 +20,59 @@ interface Lead {
 
 interface IntelligenceResultsProps {
   onBack: () => void;
+  onBackToOverview: () => void;
+  results?: any;
+  leadsData?: any[];
   source?: string;
   totalScraped?: number;
 }
 
-export default function IntelligenceResults({ onBack, source = "APOLLO", totalScraped = 102 }: IntelligenceResultsProps) {
+export default function IntelligenceResults({ 
+  onBack, 
+  onBackToOverview, 
+  results, 
+  leadsData = [],
+  source = "APOLLO", 
+  totalScraped 
+}: IntelligenceResultsProps) {
   const [exportLoading, setExportLoading] = useState(false);
 
-  const { data: leads = [], isLoading } = useQuery({
+  // Use real leads data - either from recent results or from Airtable
+  const leads = results?.leads || leadsData || [];
+  const actualTotal = totalScraped || results?.leadCount || results?.count || leads.length;
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  // In production, don't show anything if no real data
+  if (isProduction && leads.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
+        <div className="max-w-4xl mx-auto pt-20">
+          <div className="text-center space-y-6">
+            <h1 className="text-3xl font-bold text-white">No Leads Available</h1>
+            <p className="text-slate-300">
+              Scraper may have failed or no matching leads found. Try running a scraper again.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Button onClick={onBack} className="bg-blue-600 hover:bg-blue-700 text-white">
+                Run New Scraper
+              </Button>
+              <Button onClick={onBackToOverview} variant="outline" className="border-white/20 text-white">
+                Back to Overview
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const { data: airtableLeads = [], isLoading } = useQuery({
     queryKey: ['/api/leads/universal'],
+    enabled: leads.length === 0, // Only fetch if we don't have results data
     select: (data: Lead[]) => data.slice(0, 5) // Show first 5 leads as preview
   });
+
+  const displayLeads = leads.length > 0 ? leads.slice(0, 5) : airtableLeads;
 
   const handleExportCSV = async () => {
     setExportLoading(true);
@@ -78,7 +120,7 @@ export default function IntelligenceResults({ onBack, source = "APOLLO", totalSc
         <div className="text-center space-y-2">
           <h1 className="text-4xl font-bold text-white">Intelligence Results</h1>
           <p className="text-slate-300 text-lg">
-            Extracted {totalScraped} high-quality leads using {source} platform
+            Extracted {actualTotal} high-quality leads using {source} platform
           </p>
         </div>
 
@@ -90,7 +132,7 @@ export default function IntelligenceResults({ onBack, source = "APOLLO", totalSc
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <span className="text-green-200 font-semibold">
-                    ✅ {totalScraped} leads scraped. View in Airtable »
+                    ✅ {actualTotal} leads scraped. View in Airtable »
                   </span>
                 </div>
                 <p className="text-green-300/80 text-sm mt-1">
@@ -151,7 +193,7 @@ export default function IntelligenceResults({ onBack, source = "APOLLO", totalSc
               </div>
             ) : (
               <div className="space-y-4">
-                {leads.map((lead, index) => (
+                {displayLeads.map((lead: any, index: number) => (
                   <Card key={lead.id || index} className="bg-slate-700/30 border-slate-600/50">
                     <CardContent className="p-4">
                       <div className="space-y-3">
@@ -196,7 +238,7 @@ export default function IntelligenceResults({ onBack, source = "APOLLO", totalSc
         {/* Footer */}
         <div className="text-center py-6">
           <p className="text-slate-400">
-            Showing 5 of {totalScraped} premium leads. Export complete dataset for full intelligence package.
+            Showing {Math.min(5, displayLeads.length)} of {actualTotal} premium leads. Export complete dataset for full intelligence package.
           </p>
         </div>
       </div>
