@@ -97,6 +97,7 @@ import { EnhancedTooltip, QuickTooltip } from '@/components/EnhancedTooltip';
 import { CommandCenterActions } from '@/utils/commandCenterActions';
 import { LeadScraperPopup } from '@/components/lead-scraper-popup';
 
+
 export default function CommandCenter() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -115,7 +116,7 @@ export default function CommandCenter() {
     { id: 'voiceops', label: 'VoiceOps™', icon: Mic },
     { id: 'ai-intelligence', label: 'AI Intelligence', icon: Brain },
     { id: 'smartspend', label: 'SmartSpend™', icon: DollarSign },
-    { id: 'lead-scraper', label: 'Lead Scraper', icon: Search },
+
     { id: 'system-tools', label: 'System Tools', icon: Settings }
   ];
   
