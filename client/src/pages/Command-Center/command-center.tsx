@@ -3494,12 +3494,12 @@ export default function CommandCenter() {
         {/* Analytics Dashboard - 3 Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           {/* Performance & ROI Analytics */}
-          <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border border-purple-400 shadow-lg shadow-purple-400/20">
+          <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border-2 border-purple-400 shadow-2xl shadow-purple-400/30 ring-2 ring-purple-400/50 min-h-[480px]">
             <CardHeader>
               <CardTitle className="text-white flex items-center text-lg">
                 <BarChart3 className="w-5 h-5 mr-2 text-purple-400" />
                 Performance & AI Analytics
-                <Badge className="ml-2 bg-purple-500 text-white text-xs px-2 py-1">ANALYTICS</Badge>
+                <Badge className="ml-2 bg-purple-500 text-white text-xs px-2 py-1 border border-purple-400">ANALYTICS</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4">
