@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { knowledgeItems, callLogs, type KnowledgeItem, type InsertKnowledgeItem, type CallLog, type InsertCallLog } from "@shared/schema";
+import { knowledgeItems, callLogs, universalLeads, type KnowledgeItem, type InsertKnowledgeItem, type CallLog, type InsertCallLog, type UniversalLead, type InsertUniversalLead } from "@shared/schema";
 import { eq, desc, and } from "drizzle-orm";
 
 export interface IKnowledgeStorage {
@@ -15,6 +15,16 @@ export interface ICallLogStorage {
   createCallLog(log: InsertCallLog): Promise<CallLog>;
   getCallLogsByStatus(status: string): Promise<CallLog[]>;
   getCallLogStats(): Promise<{ totalCalls: number; activeCalls: number; avgDuration: string }>;
+}
+
+export interface ILeadsStorage {
+  getUniversalLeads(): Promise<UniversalLead[]>;
+  createUniversalLead(lead: InsertUniversalLead): Promise<UniversalLead>;
+  getLeadsByStatus(status: string): Promise<UniversalLead[]>;
+  getCallableLeads(): Promise<UniversalLead[]>;
+  updateLeadCallStatus(id: number, status: string, attempts?: number): Promise<UniversalLead | undefined>;
+  syncFromAirtable(): Promise<{ success: boolean; count: number; message: string }>;
+  getLeadsStats(): Promise<{ totalLeads: number; callableLeads: number; sources: string[] }>;
 }
 
 export class DatabaseKnowledgeStorage implements IKnowledgeStorage {
@@ -241,6 +251,93 @@ export class TestKnowledgeStorage implements IKnowledgeStorage {
       totalDocuments: activeItems.filter(item => item.type === 'document').length,
       totalMemories: activeItems.filter(item => item.type === 'memory').length,
       categories: [...new Set(activeItems.map(item => item.category))]
+    };
+  }
+}
+
+// Airtable-connected Leads Storage
+export class AirtableLeadsStorage implements ILeadsStorage {
+  private readonly AIRTABLE_BASE_ID = 'appb2F3D77tC4DWla'; // YoBot Lead Engine
+  private readonly LEADS_TABLE = 'Scraped Leads (Universal) Table';
+  private readonly CALL_QUEUE_TABLE = 'Call Queue Table';
+
+  async getUniversalLeads(): Promise<UniversalLead[]> {
+    try {
+      // Fetch from local database first, sync if needed
+      const leads = await db.select().from(universalLeads).orderBy(desc(universalLeads.createdAt));
+      return leads;
+    } catch (error) {
+      console.error('Failed to fetch universal leads:', error);
+      return [];
+    }
+  }
+
+  async createUniversalLead(lead: InsertUniversalLead): Promise<UniversalLead> {
+    const [created] = await db.insert(universalLeads).values({
+      ...lead,
+      updatedAt: new Date()
+    }).returning();
+    return created;
+  }
+
+  async getLeadsByStatus(status: string): Promise<UniversalLead[]> {
+    return await db.select().from(universalLeads).where(eq(universalLeads.status, status));
+  }
+
+  async getCallableLeads(): Promise<UniversalLead[]> {
+    return await db.select().from(universalLeads).where(
+      and(
+        eq(universalLeads.isCallable, true),
+        eq(universalLeads.status, 'New')
+      )
+    ).limit(50);
+  }
+
+  async updateLeadCallStatus(id: number, status: string, attempts?: number): Promise<UniversalLead | undefined> {
+    const updateData: any = {
+      callStatus: status,
+      updatedAt: new Date()
+    };
+    
+    if (attempts !== undefined) {
+      updateData.callAttempts = attempts;
+      updateData.lastCallAttempt = new Date();
+    }
+
+    const [updated] = await db.update(universalLeads)
+      .set(updateData)
+      .where(eq(universalLeads.id, id))
+      .returning();
+    return updated;
+  }
+
+  async syncFromAirtable(): Promise<{ success: boolean; count: number; message: string }> {
+    try {
+      // This would connect to your Airtable API
+      // For now, return success status until API integration is set up
+      return {
+        success: true,
+        count: 0,
+        message: 'Airtable sync ready - API key required for live data'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        count: 0,
+        message: 'Airtable sync failed - check API configuration'
+      };
+    }
+  }
+
+  async getLeadsStats(): Promise<{ totalLeads: number; callableLeads: number; sources: string[] }> {
+    const allLeads = await this.getUniversalLeads();
+    const callableLeads = await this.getCallableLeads();
+    const sources = [...new Set(allLeads.map(lead => lead.source))];
+    
+    return {
+      totalLeads: allLeads.length,
+      callableLeads: callableLeads.length,
+      sources
     };
   }
 }

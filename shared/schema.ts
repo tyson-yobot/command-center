@@ -341,6 +341,10 @@ export type InsertScannedContact = z.infer<typeof insertScannedContactSchema>;
 export type InsertKnowledgeBase = z.infer<typeof insertKnowledgeBaseSchema>;
 export type InsertPhantombusterLead = z.infer<typeof insertPhantombusterLeadSchema>;
 
+// Universal Leads Types
+export type UniversalLead = typeof universalLeads.$inferSelect;
+export type InsertUniversalLead = z.infer<typeof insertUniversalLeadSchema>;
+
 // Knowledge Items Types
 export type KnowledgeItem = typeof knowledgeItems.$inferSelect;
 export type InsertKnowledgeItem = z.infer<typeof insertKnowledgeItemSchema>;

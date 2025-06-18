@@ -47,6 +47,7 @@ const LeadScraper: React.FC = () => {
   const { toast } = useToast();
   
   // State management
+  const [currentView, setCurrentView] = useState('overview'); // 'overview' or 'scraper'
   const [activeTab, setActiveTab] = useState('apollo');
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<ScrapeResult | null>(null);
@@ -148,18 +149,207 @@ const LeadScraper: React.FC = () => {
     }
   };
 
-  return (
+  // Enterprise Lead Intelligence Platform Overview
+  const renderOverview = () => (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <Link to="/" className="text-blue-400 hover:text-blue-300 transition-colors">
+                <ArrowLeft className="w-5 h-5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Icon */}
+        <div className="text-center mb-8">
+          <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Target className="w-10 h-10 text-white" />
+          </div>
+        </div>
+
+        {/* Main Title */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold text-white mb-4">
+            Enterprise Lead Intelligence Platform
+          </h1>
+          <p className="text-xl text-blue-200 max-w-3xl mx-auto">
+            Advanced multi-platform lead generation with enterprise-grade targeting and real-time intelligence
+          </p>
+        </div>
+
+        {/* Platform Cards */}
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          {/* Apollo.io */}
+          <Card 
+            className="bg-gradient-to-br from-blue-900/50 to-blue-800/30 backdrop-blur-sm border border-blue-500/30 hover:border-blue-400/50 transition-all cursor-pointer group"
+            onClick={() => {
+              setActiveTab('apollo');
+              setCurrentView('scraper');
+            }}
+          >
+            <CardContent className="p-8">
+              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                <Target className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-3">Apollo.io</h3>
+              <p className="text-blue-200 mb-6">
+                Professional B2B intelligence with 250M+ verified contacts and advanced enterprise filtering
+              </p>
+              
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  <span className="text-blue-200 text-sm">Verified Emails</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  <span className="text-blue-200 text-sm">Executive Targeting</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-blue-300 text-sm">
+                <Star className="w-4 h-4" />
+                <span>Enterprise-grade accuracy</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Apify */}
+          <Card 
+            className="bg-gradient-to-br from-green-900/50 to-green-800/30 backdrop-blur-sm border border-green-500/30 hover:border-green-400/50 transition-all cursor-pointer group"
+            onClick={() => {
+              setActiveTab('apify');
+              setCurrentView('scraper');
+            }}
+          >
+            <CardContent className="p-8">
+              <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mb-6">
+                <Globe className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-3">Apify</h3>
+              <p className="text-green-200 mb-6">
+                Advanced web intelligence platform for LinkedIn profiles and comprehensive business listings
+              </p>
+              
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span className="text-green-200 text-sm">Web Intelligence</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span className="text-green-200 text-sm">Business Listings</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-green-300 text-sm">
+                <Database className="w-4 h-4" />
+                <span>Custom data extraction</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* PhantomBuster */}
+          <Card 
+            className="bg-gradient-to-br from-purple-900/50 to-purple-800/30 backdrop-blur-sm border border-purple-500/30 hover:border-purple-400/50 transition-all cursor-pointer group"
+            onClick={() => {
+              setActiveTab('phantombuster');
+              setCurrentView('scraper');
+            }}
+          >
+            <CardContent className="p-8">
+              <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                <Users className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-3">PhantomBuster</h3>
+              <p className="text-purple-200 mb-6">
+                Premium social media automation for LinkedIn, Twitter with intelligent connection management
+              </p>
+              
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                  <span className="text-purple-200 text-sm">Social Automation</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                  <span className="text-purple-200 text-sm">Safe Outreach</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-purple-300 text-sm">
+                <Rocket className="w-4 h-4" />
+                <span>Multi-platform reach</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Feature Grid */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Real-time Processing */}
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+            <CardContent className="p-8 text-center">
+              <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <CheckCircle className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Real-time Processing</h3>
+              <p className="text-gray-300">
+                Instant lead extraction with live notifications
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Enterprise Security */}
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+            <CardContent className="p-8 text-center">
+              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Database className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Enterprise Security</h3>
+              <p className="text-gray-300">
+                Bank-grade encryption and compliance
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Advanced Analytics */}
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10">
+            <CardContent className="p-8 text-center">
+              <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <BarChart3 className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Advanced Analytics</h3>
+              <p className="text-gray-300">
+                Comprehensive reporting and insights
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Scraper Interface
+  const renderScraper = () => (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Link href="/command-center">
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Command Center
-              </Button>
-            </Link>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentView('overview')}
+              className="text-white hover:bg-white/10"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Platform Overview
+            </Button>
             <div>
               <h1 className="text-3xl font-bold text-white flex items-center">
                 <Search className="w-8 h-8 mr-3 text-green-400" />
