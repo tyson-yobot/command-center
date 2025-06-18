@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Target, Globe, Users, Brain, Shield, BarChart3, Play, Settings, CheckCircle, Download, ExternalLink, Slack, Plus, Info } from 'lucide-react';
-import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750232885253.png';
+import robotHeadImage from '@assets/A_flat_vector_illustration_features_a_robot_face_i_1750274873156.png';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -124,12 +124,12 @@ export default function LeadScraperDashboard() {
                   <CardDescription className="text-slate-300 mb-6 text-base leading-relaxed">
                     {platform.description}
                   </CardDescription>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 justify-center">
                     {platform.features.map((feature, index) => (
                       <Badge key={index} className={`
-                        px-2 py-1 text-xs flex items-center rounded-md
-                        ${platform.color === 'blue' ? 'bg-blue-500/20 text-blue-300 border border-blue-400/30' : 
-                          platform.color === 'green' ? 'bg-green-500/20 text-green-300 border border-green-400/30' : 'bg-purple-500/20 text-purple-300 border border-purple-400/30'}
+                        px-3 py-1 text-xs flex items-center rounded-full border-0
+                        ${platform.color === 'blue' ? 'bg-cyan-400/80 text-slate-800' : 
+                          platform.color === 'green' ? 'bg-emerald-400/80 text-slate-800' : 'bg-violet-400/80 text-slate-800'}
                       `}>
                         <CheckCircle className="w-3 h-3 mr-1" />
                         {feature}
