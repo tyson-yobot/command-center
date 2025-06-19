@@ -4228,47 +4228,45 @@ export default function CommandCenter() {
         {/* Detailed Analytics and System Health Side by Side */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Detailed Analytics */}
-          <Card className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2">
+          <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white">
             <CardHeader>
               <CardTitle className="text-white flex items-center text-xl">
-                <BarChart3 className="w-6 h-6 mr-3 text-cyan-400" />
-                📊 Detailed Analytics
-                <Badge className="ml-3 bg-cyan-500 text-white text-sm px-3 py-1">LIVE</Badge>
+                <BarChart3 className="w-6 h-6 mr-3 text-[#0d82da]" />
+                <span className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text">📊 Detailed Analytics</span>
+                <Badge className="ml-3 bg-gradient-to-br from-[#0d82da] to-[#085ca2] text-white text-sm px-3 py-1">LIVE</Badge>
               </CardTitle>
+              <div className="w-full h-[1px] bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mt-2"></div>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="grid grid-cols-1 gap-4">
-                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Call Volume</div>
-                  <div className="text-2xl font-bold text-cyan-400 mb-1">0</div>
-                  <div className="text-sm text-white">Response Time</div>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
+                  <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Call Volume</h4>
+                  <div className="text-2xl font-bold">0</div>
+                  <div className="text-sm text-green-400">+0%</div>
                 </div>
-                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">NPS Score</div>
-                  <div className="text-2xl font-bold text-cyan-400 mb-1 flex items-center">⭐ 0</div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-cyan-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
-                  </div>
+                <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
+                  <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">NPS Score</h4>
+                  <div className="text-2xl font-bold">⭐ 0</div>
+                  <div className="text-sm text-green-400">+0%</div>
                 </div>
-                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Active Clients</div>
-                  <div className="text-2xl font-bold text-cyan-400 mb-1 flex items-center">👥 0</div>
-                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                    <div className="bg-cyan-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
-                  </div>
+                <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
+                  <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Active Clients</h4>
+                  <div className="text-2xl font-bold">👥 0</div>
+                  <div className="text-sm text-green-400">+0%</div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* System Health & Metrics */}
-          <Card className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2">
+          <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white">
             <CardHeader>
               <CardTitle className="text-white flex items-center text-xl">
-                <Gauge className="w-6 h-6 mr-3 text-cyan-400" />
-                System Health & Metrics
-                <Badge className="ml-3 bg-cyan-500 text-white text-sm px-3 py-1">LIVE</Badge>
+                <Gauge className="w-6 h-6 mr-3 text-[#0d82da]" />
+                <span className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text">System Health & Metrics</span>
+                <Badge className="ml-3 bg-gradient-to-br from-[#0d82da] to-[#085ca2] text-white text-sm px-3 py-1">LIVE</Badge>
               </CardTitle>
+              <div className="w-full h-[1px] bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mt-2"></div>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-5">
