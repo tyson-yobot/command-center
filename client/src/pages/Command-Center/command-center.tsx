@@ -3286,7 +3286,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Dashboard Preset Selector */}
-        <div className="mb-8">
+        <div className="mb-6">
           <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
@@ -4760,7 +4760,7 @@ export default function CommandCenter() {
         </Card>
 
         {/* SmartSpend™ Analytics Dashboard */}
-        <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white mb-8">
+        <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white mb-6">
           <CardHeader>
             <CardTitle className="text-white flex items-center space-x-2">
               <DollarSign className="w-5 h-5 text-[#0d82da]" />
@@ -4801,7 +4801,7 @@ export default function CommandCenter() {
 
 
         {/* Lead Scraper Quick Access Button */}
-        <div className="mb-8">
+        <div className="mb-6">
           <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -4858,7 +4858,7 @@ export default function CommandCenter() {
 
 
         {/* RAG Knowledge Base System - Positioned underneath Voice Engine + Command Center */}
-        <div className="mb-4">
+        <div className="mb-6">
           <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white space-y-2">
             <CardHeader className="border-b border-[#0d82da]/30">
               <CardTitle className="text-white flex items-center text-2xl font-bold">
