@@ -34,15 +34,30 @@
   --muted-foreground: 0 0% 76%; /* #c3c3c3 - Soft Gray */
   --popover: 0 0% 0%; /* #000000 */
   --popover-foreground: 0 0% 100%; /* #ffffff */
+  --accent-blue: 210 100% 45%; /* #0d82da */
+  --text-primary: 0 0% 100%; /* #ffffff */
+  --lime-green: 156 70% 40%; /* #10b981 */
+  --card-background: 0 0% 0%; /* #000000 */
+  --prepare-bg: 210 100% 45%; /* #0d82da */
+  
+  /* Destructive colors */
   --destructive: 0 84% 60%; /* #ef4444 */
   --destructive-foreground: 0 0% 100%; /* #ffffff */
-  --ring: 210 100% 45%; /* #0d82da - YoBot Blue */
-  --radius: 0.75rem;
   
-  /* Legacy compatibility aliases */
-  --text-primary: 0 0% 100%; /* #ffffff */
-  --text-secondary: 0 0% 76%; /* #c3c3c3 */
-  --card-background: 0 0% 0%; /* #000000 */
+  /* Ring colors */
+  --ring: 210 100% 45%; /* #0d82da */
+  
+  /* Radius values */
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
 /* YoBot Logo Header Alignment Styles */
@@ -51,65 +66,176 @@
   align-items: baseline;
 }
 
-/* YoBot Button System - Force Override shadcn styles */
-.yobot-purple {
-  background: linear-gradient(to bottom right, #6a11cb, #2575fc) !important;
-  color: white !important;
-  border: none !important;
-  box-shadow: 0 0 10px rgba(106, 17, 203, 0.5) !important;
-  transition: all 0.2s !important;
+.logo-icon {
+  height: 86px;
+  margin-right: 3px;
+  position: relative;
+  top: 14px;
 }
 
-.yobot-purple:hover {
-  background: linear-gradient(to bottom right, #7f1fff, #2c8fff) !important;
-  transform: scale(1.02) !important;
-  color: white !important;
+.header-title {
+  font-size: 3.75rem;
+  line-height: 60px;
 }
 
-.yobot-blue {
-  background: linear-gradient(to bottom right, #0d82da, #085ca2) !important;
-  color: white !important;
-  border: none !important;
-  box-shadow: 0 0 10px #0d82da !important;
-  transition: all 0.2s !important;
-}
+@layer components {
+  /* YoBot Button System - EXACT INSTRUCTIONS IMPLEMENTATION */
+  /* Base Button Structure: px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] */
 
-.yobot-blue:hover {
-  background: linear-gradient(to bottom right, #1391f5, #0a70c2) !important;
-  transform: scale(1.02) !important;
-  color: white !important;
-}
+  /* 🔵 1. YoBot Blue (Primary Action) - Start Pipeline, Quick Export, Open Chat, Start Recording */
+  .btn-yobot-blue {
+    @apply px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98];
+    background: linear-gradient(to bottom right, #0d82da, #0a65b2);
+    box-shadow: 0 0 10px #0d82da;
+  }
+  
+  .btn-yobot-blue:hover {
+    background: linear-gradient(to bottom right, #1391f5, #0c74c7);
+    box-shadow: 0 1px 0 0 rgba(13, 130, 218, 0.5);
+  }
 
-.yobot-green {
-  background: linear-gradient(to bottom right, #0d82da, #085ca2) !important;
-  color: white !important;
-  border: none !important;
-  box-shadow: 0 0 10px #0d82da !important;
-  transition: all 0.2s !important;
-}
+  /* 🔴 2. Red (Danger/Hard Actions) - End Pipeline, Delete, Clear, Emergency */
+  .btn-yobot-red {
+    @apply px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98];
+    background: linear-gradient(to bottom right, #e53935, #b71c1c);
+    box-shadow: 0 0 10px #ff4d4d;
+  }
+  
+  .btn-yobot-red:hover {
+    background: linear-gradient(to bottom right, #f44, #c62828);
+  }
 
-.yobot-green:hover {
-  background: linear-gradient(to bottom right, #1391f5, #0a70c2) !important;
-  transform: scale(1.02) !important;
-  color: white !important;
-}
+  /* 🟣 3. Purple (Voice, Persona, Test, Smart Actions) - Voice Studio, Test Persona, Submit Ticket */
+  .btn-yobot-purple {
+    @apply px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98];
+    background: linear-gradient(to bottom right, #6a11cb, #2575fc);
+    box-shadow: 0 0 10px rgba(126, 76, 255, 0.4);
+  }
+  
+  .btn-yobot-purple:hover {
+    background: linear-gradient(to bottom right, #7f1fff, #2c8fff);
+  }
 
-.yobot-red {
-  background: linear-gradient(to bottom right, #e53935, #b71c1c) !important;
-  color: white !important;
-  border: none !important;
-  box-shadow: 0 0 10px rgba(255, 77, 77, 0.4) !important;
-  transition: all 0.2s !important;
-}
+  /* 🟢 4. Green (Status, Upload, Confirmation) - Upload, Save, Voice Ready, System Online */
+  .btn-yobot-green {
+    @apply px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98];
+    background: linear-gradient(to bottom right, #00d26a, #00a854);
+    box-shadow: 0 0 8px rgba(0, 255, 153, 0.4);
+  }
+  
+  .btn-yobot-green:hover {
+    background: linear-gradient(to bottom right, #1fff77, #00cc66);
+  }
 
-.yobot-red:hover {
-  background: linear-gradient(to bottom right, #f44, #c62828) !important;
-  transform: scale(1.02) !important;
-  color: white !important;
+  /* Legacy support classes */
+  .yobot-button-primary {
+    @apply btn-yobot-blue;
+  }
+  
+  .yobot-button-danger {
+    @apply btn-yobot-red;
+  }
+  
+  .yobot-button-tool {
+    @apply btn-yobot-purple;
+  }
+
+  .yobot-purple {
+    @apply btn-yobot-purple;
+  }
+
+  .yobot-blue {
+    @apply btn-yobot-blue;
+  }
+
+  .yobot-green {
+    @apply btn-yobot-green;
+  }
+
+  .yobot-red {
+    @apply btn-yobot-red;
+  }
+
+  /* Main Card - Black with Electric Border */
+  .yobot-card {
+    @apply bg-black border-2 border-[#0d82da] rounded-xl text-white;
+    box-shadow: 0 0 12px rgba(13, 130, 218, 0.31);
+    transition: all 0.3s ease;
+  }
+  
+  .yobot-card:hover {
+    box-shadow: 0 0 20px rgba(13, 130, 218, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  /* Inner Stat Boxes - Silver Chrome Style */
+  .yobot-stat-box {
+    @apply bg-black/80 rounded-lg text-white;
+    border: 1.5px solid rgba(195, 195, 195, 0.5);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+  }
+  
+  .yobot-stat-box:hover {
+    border-color: rgba(195, 195, 195, 0.8);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 8px rgba(195, 195, 195, 0.2);
+  }
+  
+  /* Silver Chrome Text Effects */
+  .yobot-silver-text {
+    background: linear-gradient(to right, #ffffff, #c3c3c3, #666666);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  
+  /* Accent Strips and Dividers */
+  .yobot-silver-strip {
+    height: 2px;
+    background: linear-gradient(to right, #ffffff, #c3c3c3, #666666);
+    border-radius: 1px;
+  }
+  
+  .yobot-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #c3c3c3, transparent);
+  }
+  
+  /* Module Container Styling */
+  .yobot-module-container {
+    @apply bg-black/80 rounded-xl p-6 text-white;
+    border: 2px solid rgba(13, 130, 218, 0.6);
+    box-shadow: 0 0 12px rgba(13, 130, 218, 0.31);
+    transition: all 0.3s ease;
+  }
+  
+  .yobot-module-container:hover {
+    border-color: #0d82da;
+    box-shadow: 0 0 20px rgba(13, 130, 218, 0.5);
+  }
+  
+  /* Status Indicators */
+  .yobot-stat-active {
+    border-color: rgba(13, 130, 218, 0.8) !important;
+    box-shadow: 0 0 8px rgba(13, 130, 218, 0.4) !important;
+    animation: pulse-glow-blue 2s infinite;
+  }
+  
+  .yobot-stat-inactive {
+    opacity: 0.6;
+    border-color: rgba(195, 195, 195, 0.3) !important;
+  }
+  
+  /* Standard Stat Card */
+  .yobot-stat-card {
+    @apply bg-black/60 rounded-lg p-4 text-white;
+    border: 1px solid rgba(195, 195, 195, 0.3);
+    backdrop-filter: blur(8px);
+  }
 }
 
 /* Control Center Toggle Switch Styling */
-/* Black background with blue dot when OFF, opposite when ON */
 .control-center-switch[data-state="unchecked"] {
   background-color: #000000 !important;
 }
@@ -128,18 +254,6 @@
   transform: translateX(20px) !important;
 }
 
-.logo-icon {
-  height: 86px; /* Slightly taller to extend bottom baseline */
-  margin-right: 3px; /* Moved even closer to Y */
-  position: relative;
-  top: 14px; /* Moved entire head down slightly */
-}
-
-.header-title {
-  font-size: 3.75rem; /* text-6xl equivalent */
-  line-height: 60px;
-}
-
 /* YoBot Brand Card System - Enhanced Visual Stack */
 .card {
   background: #000000;
@@ -147,66 +261,6 @@
   box-shadow: 0 0 12px rgba(13, 130, 218, 0.31);
   border-radius: 0.75rem;
   transition: all 0.3s ease;
-}
-
-/* Fix dropdown option visibility */
-select option {
-  background-color: rgb(51 65 85) !important;
-  color: white !important;
-}
-
-select option:hover {
-  background-color: rgb(59 130 246) !important;
-  color: white !important;
-}
-
-.card:hover {
-  box-shadow: 0 8px 24px rgba(13, 130, 218, 0.6);
-  transform: translateY(-2px);
-  border-color: #0d82da;
-  animation: pulse-glow-blue 2s infinite;
-}
-
-/* Voice command field outlines */
-.voice-command-field {
-  border: 2px solid hsl(var(--lime-green));
-  border-radius: 8px;
-  background: hsl(var(--card-background));
-  color: hsl(var(--text-primary));
-}
-
-/* Live activity outlines - YoBot Brand */
-.live-activity-item {
-  border: 1px solid rgba(13, 130, 218, 0.6);
-  border-radius: 8px;
-  background: #000000;
-  color: #ffffff;
-  box-shadow: 0 0 8px rgba(13, 130, 218, 0.3);
-}
-
-/* Better meter colors for visibility */
-.meter-bar {
-  background: linear-gradient(90deg, hsl(var(--success-green)), hsl(var(--accent-blue)));
-}
-
-/* Prepare button styling */
-.prepare-button {
-  background: hsl(var(--prepare-bg));
-  color: hsl(var(--text-primary));
-  border: 1px solid rgba(59, 130, 246, 0.3);
-}
-
-/* Payback days with teal instead of brown */
-.payback-metric {
-  color: hsl(var(--teal-accent));
-}
-
-/* Consistent button sizing */
-.action-button {
-  min-width: 120px;
-  height: 40px;
-  border-radius: 8px;
-  font-weight: 500;
 }
 
 /* Uniform text styling - all white except specific metrics */
@@ -268,250 +322,62 @@ body, .card, .card-content, .card-header, .card-title, .card-description {
   }
 }
 
-@keyframes pulse-green {
-  0%, 100% { 
-    color: rgb(74, 222, 128);
-    text-shadow: 0 0 4px rgba(74, 222, 128, 0.3);
-  }
-  50% { 
-    color: rgb(34, 197, 94);
-    text-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
-  }
+/* Fix dropdown option visibility */
+select option {
+  background-color: rgb(51 65 85) !important;
+  color: white !important;
 }
 
-.status-active {
+select option:hover {
+  background-color: rgb(59 130 246) !important;
+  color: white !important;
+}
+
+.card:hover {
+  box-shadow: 0 8px 24px rgba(13, 130, 218, 0.6);
+  transform: translateY(-2px);
+  border-color: #0d82da;
   animation: pulse-glow-blue 2s infinite;
-  border: 1px solid #0d82da !important;
-  color: #0d82da !important;
 }
 
-.trend-positive {
-  animation: pulse-green 2s infinite;
+/* Voice command field outlines */
+.voice-command-field {
+  border: 2px solid hsl(var(--lime-green));
+  border-radius: 8px;
+  background: hsl(var(--card-background));
+  color: hsl(var(--text-primary));
 }
 
-/* Enhanced button hover states */
-.export-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
+/* Live activity outlines - YoBot Brand */
+.live-activity-item {
+  border: 1px solid rgba(13, 130, 218, 0.6);
+  border-radius: 8px;
+  background: #000000;
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(13, 130, 218, 0.3);
 }
 
-/* Insight card hover effects */
-.insight-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+/* Better meter colors for visibility */
+.meter-bar {
+  background: linear-gradient(90deg, hsl(var(--success-green)), hsl(var(--accent-blue)));
 }
 
-/* Enhanced visual appeal */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+/* Prepare button styling */
+.prepare-button {
+  background: hsl(var(--prepare-bg));
+  color: hsl(var(--text-primary));
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
-.glass-effect {
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.1);
+/* Payback days with teal instead of brown */
+.payback-metric {
+  color: hsl(var(--teal-accent));
 }
 
-.dark {
-  --background: 15 23 42; /* #0F172A */
-  --foreground: 248 250 252; /* #F8FAFC */
-  --muted: 30 41 59; /* #1E293B */
-  --muted-foreground: 148 163 184; /* #94A3B8 */
-  --popover: 15 23 42; /* #0F172A */
-  --popover-foreground: 248 250 252; /* #F8FAFC */
-  --card: 15 23 42; /* #0F172A */
-  --card-foreground: 248 250 252; /* #F8FAFC */
-  --border: 30 41 59; /* #1E293B */
-  --input: 30 41 59; /* #1E293B */
-  --primary: 30 144 255; /* #1E90FF */
-  --primary-foreground: 255 255 255; /* #FFFFFF */
-  --secondary: 30 41 59; /* #1E293B */
-  --secondary-foreground: 248 250 252; /* #F8FAFC */
-  --accent: 30 41 59; /* #1E293B */
-  --accent-foreground: 248 250 252; /* #F8FAFC */
-  --destructive: 239 68 68; /* #EF4444 */
-  --destructive-foreground: 248 250 252; /* #F8FAFC */
-  --ring: 30 144 255; /* #1E90FF */
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply font-sans antialiased bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
-  }
-}
-
-@layer components {
-  /* YoBot Enhanced Visual Stack Components */
-  
-  /* Primary Action Buttons - Gradient Electric Blue */
-  .yobot-button-primary {
-    background: linear-gradient(135deg, #0d82da, #085ca2);
-    color: white;
-    box-shadow: 0 0 10px #0d82da;
-    transition: all 0.2s ease;
-  }
-  
-  .yobot-button-primary:hover {
-    background: linear-gradient(135deg, #1391f5, #0a70c2);
-    transform: scale(1.02);
-    box-shadow: 0 0 15px #0d82da;
-  }
-  
-  /* Danger/Red Buttons */
-  .yobot-button-danger {
-    background: linear-gradient(135deg, #e53935, #b71c1c);
-    color: white;
-    box-shadow: 0 0 10px rgba(255, 77, 77, 0.6);
-    transition: all 0.2s ease;
-  }
-  
-  /* Tool/Purple Buttons */
-  .yobot-button-tool {
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    color: white;
-    box-shadow: 0 0 10px rgba(106, 17, 203, 0.5);
-    transition: all 0.2s ease;
-  }
-  
-  /* Main Card - Black with Electric Border */
-  .yobot-card {
-    @apply bg-black border-2 border-[#0d82da] rounded-xl text-white;
-    box-shadow: 0 0 12px rgba(13, 130, 218, 0.31);
-    transition: all 0.3s ease;
-  }
-  
-  .yobot-card:hover {
-    box-shadow: 0 0 20px rgba(13, 130, 218, 0.5);
-    transform: translateY(-2px);
-  }
-  
-  /* Inner Stat Boxes - Silver Chrome Style */
-  .yobot-stat-box {
-    @apply bg-black/80 rounded-lg text-white;
-    border: 1.5px solid rgba(195, 195, 195, 0.5);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
-    transition: all 0.3s ease;
-  }
-  
-  .yobot-stat-box:hover {
-    box-shadow: inset 0 0 8px #c3c3c3;
-    border-color: rgba(195, 195, 195, 0.8);
-  }
-  
-  /* Silver Gradient Text for Headers */
-  .yobot-silver-text {
-    background: linear-gradient(90deg, #ffffff, #c3c3c3, #666666);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  
-  /* Silver Accent Strip */
-  .yobot-silver-strip {
-    @apply h-[2px] w-full;
-    background: linear-gradient(90deg, #ffffff, #c3c3c3, #666666);
-  }
-  
-  /* Section Divider */
-  .yobot-divider {
-    @apply h-[1px] w-full;
-    background: linear-gradient(90deg, transparent, #c3c3c3, transparent);
-  }
-  
-  /* Standard Stat Card Structure */
-  .yobot-stat-card {
-    @apply rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 text-white;
-    box-shadow: 0 0 8px #0d82da;
-  }
-  
-  /* Active Status with Ring Animation */
-  .yobot-stat-active {
-    @apply text-[#0d82da] border-[#0d82da];
-    animation: pulse-glow-blue 2s infinite;
-    box-shadow: 0 0 8px rgba(13, 130, 218, 0.4), inset 0 0 8px rgba(13, 130, 218, 0.1);
-  }
-  
-  /* Inactive/Gray Stats */
-  .yobot-stat-inactive {
-    @apply text-[#c3c3c3] opacity-60;
-  }
-  
-  /* Module Container */
-  .yobot-module-container {
-    @apply bg-black border-2 border-[#0d82da] p-6 rounded-xl;
-    box-shadow: 0 0 20px rgba(13, 130, 218, 0.3);
-  }
-
-  .glass-effect {
-    backdrop-filter: blur(10px);
-    background: rgba(0, 0, 0, 0.9);
-  }
-  
-  .metric-card {
-    transition: all 0.3s ease;
-  }
-  
-  .metric-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(13, 130, 218, 0.4);
-  }
-  
-  .notification-dot {
-    animation: pulse 2s infinite;
-  }
-  
-  .conversation-item {
-    transition: background-color 0.2s ease;
-  }
-  
-  .conversation-item:hover {
-    background-color: rgba(13, 130, 218, 0.1);
-  }
-  
-  .search-input:focus {
-    box-shadow: 0 0 0 3px rgba(13, 130, 218, 0.3);
-    border-color: #0d82da;
-  }
-
-  .animate-pulse-slow {
-    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-}
-
-/* Custom animations */
-@keyframes slideUp {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.slide-up {
-  animation: slideUp 0.3s ease-out;
-}
-
-/* PWA specific styles */
-@media (display-mode: standalone) {
-  body {
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
-  }
-}
-
-/* Touch feedback */
-.touch-feedback:active {
-  transform: scale(0.98);
-  transition: transform 0.1s ease;
+/* Consistent button sizing */
+.action-button {
+  min-width: 120px;
+  height: 40px;
+  border-radius: 8px;
+  font-weight: 500;
 }

@@ -3424,7 +3424,7 @@ export default function CommandCenter() {
                 onClick={handleStopPipelineCalls}
                 variant="outline"
                 size="sm"
-                className="border-red-400 text-red-400 hover:bg-red-600/20"
+                className="btn-yobot-red"
               >
                 🛑 Emergency Stop
               </Button>
