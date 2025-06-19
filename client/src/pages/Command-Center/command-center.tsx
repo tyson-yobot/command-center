@@ -3137,6 +3137,38 @@ export default function CommandCenter() {
           </div>
         )}
 
+        {/* Sticky Quick Navigation Bar */}
+        <div className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-lg border-b border-cyan-400/30 shadow-lg mb-8">
+          <div className="max-w-7xl mx-auto px-6 py-3">
+            <nav className="flex items-center justify-between">
+              <div className="flex items-center space-x-6">
+                <span className="text-white font-semibold text-sm">Quick Nav:</span>
+                <a href="#analytics" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors duration-200 hover:underline flex items-center">
+                  📊 Analytics
+                </a>
+                <a href="#tools" className="text-purple-400 hover:text-purple-300 text-sm transition-colors duration-200 hover:underline flex items-center">
+                  🛠 Tools
+                </a>
+                <a href="#voice-engine" className="text-green-400 hover:text-green-300 text-sm transition-colors duration-200 hover:underline flex items-center">
+                  🤖 Voice Engine
+                </a>
+                <a href="#voice-studio" className="text-orange-400 hover:text-orange-300 text-sm transition-colors duration-200 hover:underline flex items-center">
+                  🎙 Voice Studio
+                </a>
+                <a href="#knowledge-base" className="text-blue-400 hover:text-blue-300 text-sm transition-colors duration-200 hover:underline flex items-center">
+                  🧠 Knowledge Base
+                </a>
+                <a href="#exports-logs" className="text-amber-400 hover:text-amber-300 text-sm transition-colors duration-200 hover:underline flex items-center">
+                  📁 Exports & Logs
+                </a>
+              </div>
+              <div className="text-xs text-slate-400">
+                Last updated: {new Date().toLocaleTimeString()}
+              </div>
+            </nav>
+          </div>
+        </div>
+
         {/* Dashboard Title */}
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center mb-4">
@@ -3404,68 +3436,68 @@ export default function CommandCenter() {
                   {/* Middle Row - Purple Content & Marketing */}
                   <Button
                     onClick={handleContentCreatorSync}
-                    className="!bg-purple-600 hover:!bg-purple-700 !text-white flex items-center justify-center p-4 h-24 border border-purple-500"
+                    className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white rounded-2xl px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50 ring-0 hover:ring-2 hover:ring-purple-400/30"
                     title="Content Creator - Jasper.ai"
                   >
                     <div className="text-center">
-                      <PenTool className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Content Creator</span>
+                      <PenTool className="w-6 h-6 mx-auto mb-2 drop-shadow-sm" />
+                      <span className="text-sm font-medium drop-shadow-sm">✍️ Content Creator</span>
                     </div>
                   </Button>
 
                   <Button
                     onClick={handleCreateSupportTicket}
-                    className="!bg-purple-600 hover:!bg-purple-700 !text-white flex items-center justify-center p-4 h-24 border border-purple-500"
+                    className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white rounded-2xl px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50 ring-0 hover:ring-2 hover:ring-purple-400/30"
                     title="Submit Ticket"
                   >
                     <div className="text-center">
-                      <Ticket className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Submit Ticket</span>
+                      <Ticket className="w-6 h-6 mx-auto mb-2 drop-shadow-sm" />
+                      <span className="text-sm font-medium drop-shadow-sm">🎫 Submit Ticket</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={handleMailchimpSync}
-                    className="!bg-purple-600 hover:!bg-purple-700 !text-white flex items-center justify-center p-4 h-24 border border-purple-500"
+                    className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white rounded-2xl px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50 ring-0 hover:ring-2 hover:ring-purple-400/30"
                     title="MailChimp Sync"
                   >
                     <div className="text-center">
-                      <Mail className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">MailChimp</span>
+                      <Mail className="w-6 h-6 mx-auto mb-2 drop-shadow-sm" />
+                      <span className="text-sm font-medium drop-shadow-sm">📧 MailChimp</span>
                     </div>
                   </Button>
 
                   {/* Bottom Row - Orange Analytics & CRM */}
                   <Button
                     onClick={() => setShowAnalyticsModal(true)}
-                    className="!bg-orange-600 hover:!bg-orange-700 !text-white flex items-center justify-center p-4 h-24 border border-orange-500"
+                    className="bg-gradient-to-br from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 text-white rounded-2xl px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-orange-400/50 ring-0 hover:ring-2 hover:ring-orange-400/30"
                     title="Analytics Report"
                   >
                     <div className="text-center">
-                      <BarChart3 className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Analytics Report</span>
+                      <BarChart3 className="w-6 h-6 mx-auto mb-2 drop-shadow-sm" />
+                      <span className="text-sm font-medium drop-shadow-sm">📊 Analytics Report</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={handleDownloadPDF}
-                    className="!bg-orange-600 hover:!bg-orange-700 !text-white flex items-center justify-center p-4 h-24 border border-orange-500"
+                    className="bg-gradient-to-br from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 text-white rounded-2xl px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-orange-400/50 ring-0 hover:ring-2 hover:ring-orange-400/30"
                     title="Quick Export"
                   >
                     <div className="text-center">
-                      <FileText className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Quick Export</span>
+                      <FileText className="w-6 h-6 mx-auto mb-2 drop-shadow-sm" />
+                      <span className="text-sm font-medium drop-shadow-sm">📈 Quick Export</span>
                     </div>
                   </Button>
 
                   <Button
                     onClick={handleHubSpotCRM}
-                    className="!bg-orange-600 hover:!bg-orange-700 !text-white flex items-center justify-center p-4 h-24 border border-orange-500"
+                    className="bg-gradient-to-br from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 text-white rounded-2xl px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-orange-400/50 ring-0 hover:ring-2 hover:ring-orange-400/30"
                     title="HubSpot CRM"
                   >
                     <div className="text-center">
-                      <Building className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm font-medium">HubSpot CRM</span>
+                      <Building className="w-6 h-6 mx-auto mb-2 drop-shadow-sm" />
+                      <span className="text-sm font-medium drop-shadow-sm">🏢 HubSpot CRM</span>
                     </div>
                   </Button>
                 </div>
@@ -3477,45 +3509,45 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                       <Button
                         onClick={handleUploadDocs}
-                        className="bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center p-4 h-20 border border-blue-500"
+                        className="bg-gradient-to-br from-blue-500 to-blue-700 hover:from-blue-400 hover:to-blue-600 text-white rounded-2xl px-4 py-4 h-20 font-semibold shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-blue-400/50 ring-0 hover:ring-2 hover:ring-blue-400/30"
                         title="PDF & Knowledge Upload"
                       >
                         <div className="text-center">
-                          <FileText className="w-5 h-5 mx-auto mb-2" />
-                          <span className="text-xs font-medium">PDF Upload</span>
+                          <FileText className="w-5 h-5 mx-auto mb-2 drop-shadow-sm" />
+                          <span className="text-xs font-medium drop-shadow-sm">📎 PDF Upload</span>
                         </div>
                       </Button>
                       
                       <Button
                         onClick={handleViewKnowledge}
-                        className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center p-4 h-20 border border-purple-500"
+                        className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white rounded-2xl px-4 py-4 h-20 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50 ring-0 hover:ring-2 hover:ring-purple-400/30"
                         title="Knowledge Areas"
                       >
                         <div className="text-center">
-                          <Brain className="w-5 h-5 mx-auto mb-2" />
-                          <span className="text-xs font-medium">Knowledge</span>
+                          <Brain className="w-5 h-5 mx-auto mb-2 drop-shadow-sm" />
+                          <span className="text-xs font-medium drop-shadow-sm">🧠 Knowledge</span>
                         </div>
                       </Button>
                       
                       <Button
                         onClick={handleRunDiagnostics}
-                        className="bg-amber-600 hover:bg-amber-700 text-white flex items-center justify-center p-4 h-20 border border-amber-500"
+                        className="bg-gradient-to-br from-amber-500 to-amber-700 hover:from-amber-400 hover:to-amber-600 text-white rounded-2xl px-4 py-4 h-20 font-semibold shadow-lg hover:shadow-amber-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-amber-400/50 ring-0 hover:ring-2 hover:ring-amber-400/30"
                         title="System Diagnostics"
                       >
                         <div className="text-center">
-                          <Settings className="w-5 h-5 mx-auto mb-2" />
-                          <span className="text-xs font-medium">Diagnostics</span>
+                          <Settings className="w-5 h-5 mx-auto mb-2 drop-shadow-sm" />
+                          <span className="text-xs font-medium drop-shadow-sm">🔧 Diagnostics</span>
                         </div>
                       </Button>
                       
                       <Button
                         onClick={handleEmergencyStop}
-                        className="bg-red-600 hover:bg-red-700 text-white flex items-center justify-center p-4 h-20 border border-red-500"
+                        className="bg-gradient-to-br from-red-500 to-red-700 hover:from-red-400 hover:to-red-600 text-white rounded-2xl px-4 py-4 h-20 font-semibold shadow-lg hover:shadow-red-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-red-400/50 ring-0 hover:ring-2 hover:ring-red-400/30"
                         title="Emergency Stop"
                       >
                         <div className="text-center">
-                          <AlertTriangle className="w-5 h-5 mx-auto mb-2" />
-                          <span className="text-xs font-medium">Emergency</span>
+                          <AlertTriangle className="w-5 h-5 mx-auto mb-2 drop-shadow-sm" />
+                          <span className="text-xs font-medium drop-shadow-sm">🚨 Emergency</span>
                         </div>
                       </Button>
                     </div>
@@ -3601,17 +3633,17 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={() => setShowCreateVoiceCallModal(true)}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white border border-green-500 px-4 py-4 h-12"
+                      className="w-full bg-gradient-to-br from-green-500 to-green-700 hover:from-green-400 hover:to-green-600 text-white rounded-2xl px-4 py-4 h-12 font-semibold shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-green-400/50 ring-0 hover:ring-2 hover:ring-green-400/30"
                     >
-                      <Headphones className="w-4 h-4 mr-2" />
-                      Voice Studio
+                      <Headphones className="w-4 h-4 mr-2 drop-shadow-sm" />
+                      🎙 Voice Studio
                     </Button>
                     <Button
                       onClick={testVoicePersona}
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white border border-purple-500 px-4 py-4 h-12"
+                      className="w-full bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white rounded-2xl px-4 py-4 h-12 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50 ring-0 hover:ring-2 hover:ring-purple-400/30"
                     >
-                      <TestTube className="w-4 h-4 mr-2" />
-                      Test Persona
+                      <TestTube className="w-4 h-4 mr-2 drop-shadow-sm" />
+                      🧪 Test Persona
                     </Button>
                   </div>
                 </div>
