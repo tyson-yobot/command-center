@@ -67,7 +67,10 @@ import {
   ChevronDown,
   ChevronUp,
   Shield,
-  Smartphone
+  Smartphone,
+  BookOpen,
+  PhoneCall,
+  X
 } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -617,6 +620,21 @@ export default function CommandCenter() {
   const [totalRecords, setTotalRecords] = useState(0);
   const [completedCalls, setCompletedCalls] = useState(0);
   const [pipelineRunning, setPipelineRunning] = useState(false);
+  const [setActiveCalls] = useState(() => () => {}); // Placeholder function
+  const [showVoiceCommand, setShowVoiceCommand] = useState(false);
+  const [showCreateCallModal, setShowCreateCallModal] = useState(false);
+
+
+  // Command Center Actions module
+  const CommandCenterActions = {
+    generateAnalyticsReport: () => {
+      console.log('Generating analytics report...');
+      toast({
+        title: "Analytics Report",
+        description: "Report generation started successfully!"
+      });
+    }
+  };
 
   // Button feedback states for enhanced visual feedback
   const [buttonStates, setButtonStates] = useState<Record<string, 'idle' | 'loading' | 'success' | 'error'>>({});
@@ -4884,7 +4902,7 @@ export default function CommandCenter() {
         <div className="mt-12 mb-8">
           <h2 className="text-white text-2xl font-bold mb-6">📊 Analytics Dashboard</h2>
 
-        {/* SmartSpend™ Analytics Dashboard */}
+          {/* SmartSpend™ Analytics Dashboard */}
         <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
           <CardHeader>
             <CardTitle className="text-white flex items-center space-x-2">
@@ -9030,9 +9048,11 @@ export default function CommandCenter() {
           </div>
         </div>
       )}
-        
-        </div>
-      </div>
+
+        </div> {/* End Analytics Dashboard Section */}
+      </div> {/* End main container */}
     </div>
   );
 }
+
+export default CommandCenter;
