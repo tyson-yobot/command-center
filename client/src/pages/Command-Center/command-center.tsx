@@ -4918,28 +4918,28 @@ export default function CommandCenter() {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px]">
                     <Button 
                       onClick={queryKnowledgeBase}
-                      className="relative overflow-hidden !px-4 !py-2 !rounded-md !font-semibold !text-white !shadow-md !transition !duration-200 hover:!scale-[1.02] active:!scale-[0.98] !bg-gradient-to-br !from-[#6a11cb] !to-[#2575fc] !shadow-[0_0_10px_#7e4cff] hover:!from-[#7f1fff] hover:!to-[#2c8fff] !min-w-[120px] !border-none"
+                      className="yobot-purple px-4 py-2 rounded-md font-semibold min-w-[120px] flex items-center justify-center"
                     >
                       <Search className="w-4 h-4 mr-2" />
                       Query Knowledge
                     </Button>
                     <Button 
                       onClick={smartSearch}
-                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50 min-w-[120px]"
+                      className="yobot-blue px-4 py-2 rounded-md font-semibold min-w-[120px] flex items-center justify-center"
                     >
                       <Brain className="w-4 h-4 mr-2" />
                       Smart Search
                     </Button>
                     <Button 
                       onClick={contextSearch}
-                      className="relative overflow-hidden !px-4 !py-2 !rounded-md !font-semibold !text-white !shadow-md !transition !duration-200 hover:!scale-[1.02] active:!scale-[0.98] !bg-gradient-to-br !from-[#6a11cb] !to-[#2575fc] !shadow-[0_0_10px_#7e4cff] hover:!from-[#7f1fff] hover:!to-[#2c8fff] !min-w-[120px] !border-none"
+                      className="yobot-purple px-4 py-2 rounded-md font-semibold min-w-[120px] flex items-center justify-center"
                     >
                       <FileText className="w-4 h-4 mr-2" />
                       Context Search
                     </Button>
                     <Button 
                       onClick={() => document.getElementById('file-upload')?.click()}
-                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] min-w-[120px]"
+                      className="yobot-green px-4 py-2 rounded-md font-semibold min-w-[120px] flex items-center justify-center"
                     >
                       <Upload className="w-4 h-4 mr-2" />
                       Upload Documents
@@ -5369,14 +5369,14 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px] mb-6">
                   <Button 
                     onClick={handleReindexKnowledge}
-                    className="relative overflow-hidden !px-4 !py-2 !rounded-md !font-semibold !text-white !shadow-md !transition !duration-200 hover:!scale-[1.02] active:!scale-[0.98] !bg-gradient-to-br !from-[#6a11cb] !to-[#2575fc] !shadow-[0_0_10px_#7e4cff] hover:!from-[#7f1fff] hover:!to-[#2c8fff] !min-w-[120px] !border-none"
+                    className="yobot-purple px-4 py-2 rounded-md font-semibold min-w-[120px] flex items-center justify-center"
                   >
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Reindex Knowledge
                   </Button>
                   <Button 
                     onClick={handleClearKnowledge}
-                    className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828] min-w-[120px]"
+                    className="yobot-red px-4 py-2 rounded-md font-semibold min-w-[120px] flex items-center justify-center"
                   >
                     <Trash2 className="w-4 h-4 mr-2" />
                     Clear Knowledge
