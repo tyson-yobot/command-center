@@ -3612,28 +3612,6 @@ export default function CommandCenter() {
                       </Button>
                       
                       <Button
-                        onClick={() => setShowCreateVoiceCallModal(true)}
-                        className="btn-yobot-purple h-20"
-                        title="Voice Studio"
-                      >
-                        <div className="text-center">
-                          <div className="text-2xl mb-2">🎙️</div>
-                          <span className="text-xs font-medium drop-shadow-sm">Voice Studio</span>
-                        </div>
-                      </Button>
-                      
-                      <Button
-                        onClick={testVoicePersona}
-                        className="btn-yobot-purple h-20"
-                        title="Test Persona"
-                      >
-                        <div className="text-center">
-                          <div className="text-2xl mb-2">🧪</div>
-                          <span className="text-xs font-medium drop-shadow-sm">Test Persona</span>
-                        </div>
-                      </Button>
-                      
-                      <Button
                         onClick={() => setShowManualCallModal(true)}
                         className="btn-yobot-blue h-20"
                         title="Create Manual Call"
@@ -3654,18 +3632,6 @@ export default function CommandCenter() {
                           <span className="text-xs font-medium drop-shadow-sm">Send SMS</span>
                         </div>
                       </Button>
-                      
-                      <Button
-                        onClick={insertMemoryText}
-                        disabled={!memoryText.trim()}
-                        className="btn-yobot-purple h-20"
-                        title="Insert Memory Text"
-                      >
-                        <div className="text-center">
-                          <div className="text-2xl mb-2">🧠</div>
-                          <span className="text-xs font-medium drop-shadow-sm">Memory Text</span>
-                        </div>
-                      </Button>
                     </div>
                   </div>
                 )}
@@ -3674,6 +3640,124 @@ export default function CommandCenter() {
           </div>
 
 
+        </div>
+
+        {/* VOICE & KNOWLEDGE MANAGEMENT SECTION */}
+        <div className="mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Voice Synthesis Studio */}
+            <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white h-[400px]">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center text-xl">
+                  <Headphones className="w-6 h-6 mr-3 text-purple-400" />
+                  🎙️ Voice Synthesis Studio
+                  <Badge className="ml-3 bg-purple-500 text-white text-sm px-3 py-1">LIVE</Badge>
+                </CardTitle>
+                <div className="w-full h-[1px] bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mt-2"></div>
+              </CardHeader>
+              <CardContent className="p-6 flex flex-col h-full">
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <Button
+                    onClick={() => setShowCreateVoiceCallModal(true)}
+                    className="btn-yobot-purple h-16"
+                    title="Voice Studio"
+                  >
+                    <div className="text-center">
+                      <div className="text-2xl mb-2">🎙️</div>
+                      <span className="text-sm font-medium">Voice Studio</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
+                    onClick={testVoicePersona}
+                    className="btn-yobot-purple h-16"
+                    title="Test Persona"
+                  >
+                    <div className="text-center">
+                      <div className="text-2xl mb-2">🧪</div>
+                      <span className="text-sm font-medium">Test Persona</span>
+                    </div>
+                  </Button>
+                </div>
+                
+                <div className="flex-1 bg-white/5 rounded-lg p-4">
+                  <h4 className="text-purple-300 font-semibold mb-3">Voice Status</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-white/80">Status:</span>
+                      <span className="text-purple-300">{voiceStatus}</span>
+                    </div>
+                    {realTimeTranscript && (
+                      <div className="mt-3 p-2 bg-purple-900/30 rounded">
+                        <div className="text-xs text-purple-300 mb-1">Latest Transcript:</div>
+                        <div className="text-sm text-white">"{realTimeTranscript}"</div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Knowledge Management */}
+            <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white h-[400px]">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center text-xl">
+                  <Brain className="w-6 h-6 mr-3 text-blue-400" />
+                  🧠 Knowledge Management
+                  <Badge className="ml-3 bg-blue-500 text-white text-sm px-3 py-1">ACTIVE</Badge>
+                </CardTitle>
+                <div className="w-full h-[1px] bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mt-2"></div>
+              </CardHeader>
+              <CardContent className="p-6 flex flex-col h-full">
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <Button
+                    onClick={handleUploadDocs}
+                    className="btn-yobot-green h-16"
+                    title="PDF & Knowledge Upload"
+                  >
+                    <div className="text-center">
+                      <div className="text-2xl mb-2">📎</div>
+                      <span className="text-sm font-medium">PDF Upload</span>
+                    </div>
+                  </Button>
+                  
+                  <Button
+                    onClick={handleViewKnowledge}
+                    className="btn-yobot-blue h-16"
+                    title="Knowledge Library"
+                  >
+                    <div className="text-center">
+                      <div className="text-2xl mb-2">📚</div>
+                      <span className="text-sm font-medium">Knowledge Library</span>
+                    </div>
+                  </Button>
+                </div>
+                
+                <div className="flex-1 bg-white/5 rounded-lg p-4">
+                  <h4 className="text-blue-300 font-semibold mb-3">Knowledge Stats</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-white/80">Total Documents:</span>
+                      <span className="text-blue-300">{knowledgeStats?.totalDocuments || 4}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/80">Last Updated:</span>
+                      <span className="text-blue-300">Recent</span>
+                    </div>
+                    <Button
+                      onClick={insertMemoryText}
+                      disabled={!memoryText.trim()}
+                      className="btn-yobot-purple w-full h-10 mt-3"
+                      title="Insert Memory Text"
+                    >
+                      <Brain className="w-4 h-4 mr-2" />
+                      Insert Memory
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* ANALYTICS SECTION - ALL ANALYTICS CARDS AT BOTTOM */}
