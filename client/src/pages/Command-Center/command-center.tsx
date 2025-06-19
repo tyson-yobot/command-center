@@ -3214,7 +3214,7 @@ export default function CommandCenter() {
         )}
 
         {/* Sticky Quick Navigation Bar */}
-        <div className="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-lg border-b border-[#0d82da]/30 shadow-lg mb-8">
+        <div className="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-lg border-b border-[#0d82da]/30 shadow-lg mb-6">
           <div className="max-w-7xl mx-auto px-6 py-3">
             <nav className="flex items-center justify-between">
               <div className="flex items-center space-x-6">
@@ -3246,7 +3246,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Dashboard Title */}
-        <div className="mb-8 text-center">
+        <div className="mb-6 text-center">
           <div className="flex items-center justify-center mb-4">
             <h1 className="text-5xl font-bold text-white mb-2 flex items-center">
               <img 
@@ -3276,7 +3276,7 @@ export default function CommandCenter() {
         />
 
         {/* Enhanced Voice Command Interface */}
-        <div className="mb-8">
+        <div className="mb-6">
           <VoiceCommandInterface
             micStatus={micStatus}
             onMicStatusChange={setMicStatus}
@@ -3406,7 +3406,7 @@ export default function CommandCenter() {
 
         {/* Live Pipeline Banner */}
         {(currentSystemMode === 'test' || (liveActivityData?.data?.callsInProgress > 0)) && (
-          <div className="mb-8 p-4 bg-green-900/30 border border-green-400 rounded-lg">
+          <div className="mb-6 p-4 bg-green-900/30 border border-green-400 rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-3 h-3 bg-red-400 rounded-full animate-pulse"></div>
@@ -3432,11 +3432,11 @@ export default function CommandCenter() {
         )}
 
         {/* INTERACTIVE CARDS SECTION - ALL BUTTONS AT TOP */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white text-center mb-8">Interactive Action Center</h2>
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-white text-center mb-6">Interactive Action Center</h2>
           
           {/* Quick Action Launchpad */}
-          <div id="tools" className="mb-8">
+          <div id="tools" className="mb-6">
             <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white">
               <CardHeader>
                 <CardTitle className="text-white flex items-center justify-between text-2xl">
@@ -3615,7 +3615,7 @@ export default function CommandCenter() {
           </div>
 
           {/* Document Management & Memory Tools */}
-          <div className="mb-8">
+          <div className="mb-6">
             <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500">
               <CardHeader>
                 <CardTitle className="text-white flex items-center">
@@ -3664,8 +3664,8 @@ export default function CommandCenter() {
         </div>
 
         {/* ANALYTICS SECTION - ALL ANALYTICS CARDS AT BOTTOM */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white text-center mb-8">Analytics Dashboard</h2>
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-white text-center mb-6">Analytics Dashboard</h2>
 
         {/* 2. Voice Engine + Command Center (Consolidated Voice Section) */}
         <div className="mb-4">
@@ -3969,7 +3969,7 @@ export default function CommandCenter() {
 
 
         {/* Key Performance Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-6">
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
             <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Active Calls</CardTitle>
@@ -4034,7 +4034,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Essential Business Modules */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-6">
 
 
 
@@ -4045,7 +4045,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Main Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-6">
 
 
           {/* SmartSpend™ - Unified Neon Design */}
@@ -4227,7 +4227,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Detailed Analytics and System Health Side by Side */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
           {/* Detailed Analytics */}
           <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white">
             <CardHeader>
@@ -4321,7 +4321,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Voice Commands Section - Standalone */}
-        <div className="mb-12">
+        <div className="mb-6">
           <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-green-400 shadow-2xl shadow-green-400/30 shadow-[0_0_20px_rgba(34,197,94,0.3)] ring-2 ring-green-400/50">
             <CardHeader className="bg-gradient-to-r from-green-600/20 to-green-500/20 border-b border-green-400/30 shadow-[0_2px_10px_rgba(34,197,94,0.2)]">
               <CardTitle className="text-white flex items-center">
@@ -4379,7 +4379,7 @@ export default function CommandCenter() {
 
 
         {/* Insight Panels Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
 
 
 
@@ -4388,7 +4388,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Document Management & Memory Insertion */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
           {/* Document Manager */}
           <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500 relative">
             <CardHeader>
@@ -4563,7 +4563,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Call Monitoring & YoBot Support - Positioned Under Document Manager */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
           {/* Call Monitoring Panel - Under Document Manager */}
           <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500">
             <CardHeader className="pb-6">
@@ -4657,11 +4657,11 @@ export default function CommandCenter() {
         </div>
 
         {/* Analytics Dashboard Section - MOVED TO BOTTOM */}
-        <div className="mb-8">
+        <div className="mb-6">
           <h2 className="text-white text-2xl font-bold mb-6">📊 Analytics Dashboard</h2>
           
           {/* Botalytics™ Performance Dashboard */}
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-6">
             <CardHeader>
               <CardTitle className="text-white flex items-center space-x-2">
                 <TrendingUp className="w-5 h-5 text-cyan-400" />
@@ -4870,7 +4870,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent className="p-8">
               {/* Query Interface */}
-              <div className="mb-8">
+              <div className="mb-6">
                 <h3 className="text-white text-lg font-semibold mb-4">Knowledge Query Interface</h3>
                 <div className="space-y-4">
                   <div className="relative">
@@ -4947,7 +4947,7 @@ export default function CommandCenter() {
               </div>
 
               {/* Voice Programming Interface */}
-              <div className="mb-8">
+              <div className="mb-6">
                 <h3 className="text-white text-lg font-semibold mb-4">Voice Programming Interface</h3>
                 <div className="bg-gradient-to-br from-blue-900/60 to-cyan-900/60 rounded-lg p-6 border border-blue-400/50">
                   <div className="space-y-4">
@@ -5045,7 +5045,7 @@ export default function CommandCenter() {
               </div>
 
               {/* Voice Synthesis Studio - Unified Module */}
-              <div id="voice-studio" className="mb-8">
+              <div id="voice-studio" className="mb-6">
                 <div className="bg-gradient-to-br from-purple-900/60 to-blue-900/60 rounded-lg p-6 border border-purple-400/50 shadow-lg shadow-purple-400/20">
                   <h3 className="text-white text-xl font-semibold mb-6 flex items-center">
                     <Mic className="w-6 h-6 mr-3 text-purple-400" />
@@ -5415,7 +5415,7 @@ export default function CommandCenter() {
         </div>
 
         {/* RAG Knowledge Base System - Positioned underneath Voice Engine + Command Center */}
-        <div className="mb-8">
+        <div className="mb-6">
           <Card className="bg-gradient-to-br from-purple-900/80 via-blue-900/80 to-indigo-900/80 backdrop-blur-sm border border-purple-400/50 shadow-2xl shadow-purple-500/30">
             <CardHeader className="border-b border-purple-400/30">
               <CardTitle className="text-white flex items-center text-2xl font-bold">
@@ -5426,7 +5426,7 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent className="p-8">
               {/* Query Interface */}
-              <div className="mb-8">
+              <div className="mb-6">
                 <h3 className="text-white text-lg font-semibold mb-4">Knowledge Query Interface</h3>
                 <div className="space-y-4">
                   <div className="relative">
@@ -5503,7 +5503,7 @@ export default function CommandCenter() {
               </div>
 
               {/* Voice Programming Interface */}
-              <div className="mb-8">
+              <div className="mb-6">
                 <h3 className="text-white text-lg font-semibold mb-4">Voice Programming Interface</h3>
                 <div className="bg-gradient-to-br from-blue-900/60 to-cyan-900/60 rounded-lg p-6 border border-blue-400/50">
                   <div className="space-y-4">
@@ -5590,7 +5590,7 @@ export default function CommandCenter() {
         </div>
 
         {/* Document Management & Memory Insertion */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
           {/* Document Manager */}
           <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500 relative">
             <CardHeader>
@@ -5769,7 +5769,7 @@ export default function CommandCenter() {
 
 
         {/* Call Monitoring & YoBot Support - Positioned Under Document Manager */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
           {/* Call Monitoring Panel - Under Document Manager */}
           <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500">
             <CardHeader className="pb-6">
@@ -7503,7 +7503,7 @@ export default function CommandCenter() {
             </div>
             <div className="p-6">
               {/* Content Creation Interface */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <Card className="bg-slate-800/60 border border-orange-400/50">
                   <CardHeader>
                     <CardTitle className="text-white flex items-center">
@@ -7645,7 +7645,7 @@ export default function CommandCenter() {
             </div>
             <div className="p-6">
               {/* Email Campaign Management */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 <Card className="bg-slate-800/60 border border-green-400/50">
                   <CardHeader>
                     <CardTitle className="text-white flex items-center">
@@ -8064,7 +8064,7 @@ export default function CommandCenter() {
             </div>
             <div className="p-6">
               {/* Day Navigation */}
-              <div className="flex items-center justify-center mb-8">
+              <div className="flex items-center justify-center mb-6">
                 <div className="flex items-center space-x-2 bg-slate-800/60 rounded-lg p-2 border border-blue-400/30">
                   {Array.from({ length: 7 }, (_, i) => {
                     const targetDate = new Date();
