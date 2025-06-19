@@ -6004,23 +6004,26 @@ export default function CommandCenter() {
                 </h4>
                 <div className="h-[1px] w-full bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mb-4"></div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-slate-800/60 rounded-lg p-4 border border-purple-400/30">
-                    <div className="text-slate-300 text-sm mb-2">Support Status</div>
-                    <div className="text-green-400 font-bold text-lg">Online</div>
+                  <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
+                    <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Support Status</h4>
+                    <div className="text-2xl font-bold">Online</div>
+                    <div className="text-sm text-green-400">+100%</div>
                   </div>
-                  <div className="bg-slate-800/60 rounded-lg p-4 border border-purple-400/30">
-                    <div className="text-slate-300 text-sm mb-2">Open Tickets</div>
-                    <div className="text-white font-bold text-lg">0</div>
+                  <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
+                    <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Open Tickets</h4>
+                    <div className="text-2xl font-bold">0</div>
+                    <div className="text-sm text-green-400">+0%</div>
                   </div>
                 </div>
               </div>
 
               {/* Quick Actions */}
               <div className="space-y-4">
-                <h4 className="text-white font-medium text-base flex items-center border-b border-purple-400/30 pb-2">
-                  <Zap className="w-5 h-5 mr-2 text-purple-400" />
+                <h4 className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text font-medium text-base flex items-center border-b border-[#0d82da]/30 pb-2">
+                  <Zap className="w-5 h-5 mr-2 text-[#0d82da]" />
                   Quick Actions
                 </h4>
+                <div className="h-[1px] w-full bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mb-2"></div>
                 <div className="space-y-3">
                   <Button 
                     onClick={() => {
@@ -6045,7 +6048,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button 
                     onClick={() => setShowCreateTicketModal(true)}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white border border-purple-400 h-12 text-base"
+                    className="w-full bg-gradient-to-br from-[#0d82da] to-[#085ca2] text-white shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0a70c2] h-12 text-base"
                     title="Opens Support Ticket Form modal to submit new support requests"
                   >
                     <Plus className="w-5 h-5 mr-3" />
@@ -6053,7 +6056,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button 
                     onClick={() => setShowTicketHistory(true)}
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white border border-indigo-400 h-12 text-base"
+                    className="w-full bg-gradient-to-br from-[#0d82da] to-[#085ca2] text-white shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0a70c2] h-12 text-base"
                     title="View all previous support tickets with status filtering"
                   >
                     <FileText className="w-5 h-5 mr-3" />
@@ -6063,25 +6066,26 @@ export default function CommandCenter() {
               </div>
 
               {/* Recent Activity */}
-              <div className="bg-slate-700/40 rounded-lg p-6 border border-purple-400">
-                <h4 className="text-white font-medium mb-4 text-base flex items-center">
-                  <Clock className="w-5 h-5 mr-2 text-purple-400" />
+              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white">
+                <h4 className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text font-medium mb-4 text-base flex items-center">
+                  <Clock className="w-5 h-5 mr-2 text-[#0d82da]" />
                   Recent Activity
                 </h4>
+                <div className="h-[1px] w-full bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mb-4"></div>
                 <div className="space-y-3 max-h-40 overflow-y-auto">
                   {recentActivity.length > 0 ? recentActivity.map((activity) => (
-                    <div key={activity.id} className="flex items-center justify-between text-sm bg-slate-800/40 rounded-lg p-3 border border-purple-400/20">
+                    <div key={activity.id} className="flex items-center justify-between text-sm rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30">
                       <div className="flex items-center space-x-3">
                         <span className={`w-3 h-3 rounded-full ${
-                          activity.type === 'ticket' ? 'bg-purple-400' :
-                          activity.type === 'chat' ? 'bg-blue-400' : 'bg-red-400'
+                          activity.type === 'ticket' ? 'bg-[#0d82da]' :
+                          activity.type === 'chat' ? 'bg-[#0d82da]' : 'bg-red-400'
                         }`}></span>
-                        <span className="text-slate-300">{activity.message}</span>
+                        <span className="text-[#c3c3c3]">{activity.message}</span>
                       </div>
-                      <span className="text-slate-400">{activity.timestamp}</span>
+                      <span className="text-[#c3c3c3]">{activity.timestamp}</span>
                     </div>
                   )) : (
-                    <div className="text-slate-400 text-sm text-center py-4">
+                    <div className="text-[#c3c3c3] text-sm text-center py-4">
                       No recent activity
                     </div>
                   )}
