@@ -435,7 +435,7 @@ export default function CommandCenter() {
     successRate: currentSystemMode === 'test' ? (automationPerformance?.data?.successRate || 95.9) : (automationPerformance?.data?.successRate || null)
   };
 
-  // Fetch current system mode on load and set up periodic sync
+  // Fetch current system mode on load (removed automatic polling to prevent toggle override)
   useEffect(() => {
     const fetchSystemMode = () => {
       fetch('/api/system-mode')
@@ -449,11 +449,8 @@ export default function CommandCenter() {
         .catch(err => console.error('Failed to fetch system mode:', err));
     };
     
-    // Fetch immediately
+    // Fetch immediately on component mount only
     fetchSystemMode();
-    
-    // Set up periodic sync every 5 seconds to maintain state consistency
-    const interval = setInterval(fetchSystemMode, 5000);
     
     // Lead scraper popup event listener
     const handleLeadScraperPopup = (event: CustomEvent) => {
@@ -464,7 +461,6 @@ export default function CommandCenter() {
     window.addEventListener('openLeadScraperPopup', handleLeadScraperPopup as EventListener);
     
     return () => {
-      clearInterval(interval);
       window.removeEventListener('openLeadScraperPopup', handleLeadScraperPopup as EventListener);
     };
   }, []);
@@ -3780,44 +3776,44 @@ export default function CommandCenter() {
               <CardContent className="p-6">
                 <div className="space-y-6">
                   {/* SmartSpend™ Analytics */}
-                  <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
-                    <h4 className="text-purple-300 font-semibold flex items-center border-b border-purple-400/30 pb-2 mb-4">
-                      <DollarSign className="w-4 h-4 mr-2" />
+                  <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2 gap-3">
+                    <h4 className="text-white font-semibold flex items-center border-b border-cyan-400/30 pb-2 mb-4">
+                      <DollarSign className="w-4 h-4 mr-2 text-cyan-400" />
                       SmartSpend™ Analytics
                     </h4>
                     <div className="grid grid-cols-1 gap-4">
-                      <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="text-2xl font-bold text-purple-400 mb-1">0</div>
-                        <div className="text-sm text-purple-300">Budget Efficiency</div>
+                      <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center">
+                        <div className="text-2xl font-bold text-cyan-400 mb-1">0</div>
+                        <div className="text-sm text-white">Budget Efficiency</div>
                       </div>
-                      <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="text-2xl font-bold text-purple-400 mb-1">0</div>
-                        <div className="text-sm text-purple-300">Cost Per Lead</div>
+                      <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center">
+                        <div className="text-2xl font-bold text-cyan-400 mb-1">0</div>
+                        <div className="text-sm text-white">Cost Per Lead</div>
                       </div>
-                      <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="text-2xl font-bold text-purple-400 mb-1">0</div>
-                        <div className="text-sm text-purple-300">ROI</div>
+                      <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center">
+                        <div className="text-2xl font-bold text-cyan-400 mb-1">0</div>
+                        <div className="text-sm text-white">ROI</div>
                       </div>
                     </div>
                   </div>
                   
                   {/* Botalytics™ */}
-                  <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
-                    <h4 className="text-purple-300 font-semibold flex items-center border-b border-purple-400/30 pb-2 mb-4">
-                      <Brain className="w-4 h-4 mr-2" />
+                  <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2 gap-3">
+                    <h4 className="text-white font-semibold flex items-center border-b border-cyan-400/30 pb-2 mb-4">
+                      <Brain className="w-4 h-4 mr-2 text-cyan-400" />
                       Botalytics™
                     </h4>
                     <div className="grid grid-cols-1 gap-4">
-                      <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="text-2xl font-bold text-purple-400 mb-1">0</div>
-                        <div className="text-sm text-purple-300">AI Accuracy</div>
+                      <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center">
+                        <div className="text-2xl font-bold text-cyan-400 mb-1">0</div>
+                        <div className="text-sm text-white">AI Accuracy</div>
                       </div>
-                      <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="text-2xl font-bold text-purple-400 mb-1">0</div>
-                        <div className="text-sm text-purple-300">Interactions</div>
+                      <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center">
+                        <div className="text-2xl font-bold text-cyan-400 mb-1">0</div>
+                        <div className="text-sm text-white">Interactions</div>
                       </div>
-                      <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="text-2xl font-bold text-purple-400 mb-1">0</div>
+                      <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center">
+                        <div className="text-2xl font-bold text-cyan-400 mb-1">0</div>
                         <div className="text-sm text-purple-300">Learning Rate</div>
                       </div>
                     </div>
