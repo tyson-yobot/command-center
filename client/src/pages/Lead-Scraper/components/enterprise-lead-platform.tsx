@@ -60,7 +60,7 @@ function PlatformCard({ title, description, icon, gradient, features, badges, on
         
         <Button 
           onClick={onConfigure}
-          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 mt-6 py-3 rounded-xl font-semibold"
+          className="yobot-blue w-full mt-6 py-3 rounded-xl font-semibold"
         >
           Configure Platform
         </Button>
