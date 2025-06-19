@@ -3629,7 +3629,7 @@ export default function CommandCenter() {
                   <Button 
                     onClick={insertMemoryText}
                     disabled={!memoryText.trim()}
-                    className="w-full yobot-button-tool px-4 py-3 h-16"
+                    className="w-full px-4 py-3 h-16 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
                   >
                     <Brain className="w-4 h-4 mr-2" />
                     Insert Memory Text
@@ -3637,7 +3637,7 @@ export default function CommandCenter() {
 
                   <Button 
                     onClick={handleViewKnowledge}
-                    className="w-full yobot-button-primary px-4 py-3 h-16"
+                    className="w-full px-4 py-3 h-16 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50"
                   >
                     <FileText className="w-4 h-4 mr-2" />
                     View Knowledge Library
@@ -3645,7 +3645,7 @@ export default function CommandCenter() {
 
                   <Button 
                     onClick={() => setShowCreateCallModal(true)}
-                    className="w-full yobot-button-primary px-4 py-3 h-16"
+                    className="w-full px-4 py-3 h-16 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50"
                   >
                     <Phone className="w-4 h-4 mr-2" />
                     Create Manual Call
@@ -3653,7 +3653,7 @@ export default function CommandCenter() {
 
                   <Button 
                     onClick={() => setShowSMSModal(true)}
-                    className="w-full yobot-button-primary px-4 py-3 h-16"
+                    className="w-full px-4 py-3 h-16 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50"
                   >
                     <MessageSquare className="w-4 h-4 mr-2" />
                     Send SMS
@@ -3706,14 +3706,14 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={handleStartPipelineCalls}
-                      className="yobot-button-primary rounded-xl px-5 py-3 font-semibold tracking-wide w-full h-12"
+                      className="w-full px-5 py-3 h-12 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50"
                     >
                       <Play className="w-4 h-4 mr-2" />
                       Start Pipeline
                     </Button>
                     <Button
                       onClick={handleStopPipelineCalls}
-                      className="yobot-button-danger rounded-xl px-5 py-3 font-semibold tracking-wide w-full h-12"
+                      className="w-full px-5 py-3 h-12 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828]"
                     >
                       <PhoneOff className="w-4 h-4 mr-2" />
                       End Pipeline
@@ -3743,14 +3743,14 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={() => setShowCreateVoiceCallModal(true)}
-                      className="w-full yobot-button-tool rounded-2xl px-4 py-4 h-12 font-semibold"
+                      className="w-full px-4 py-4 h-12 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
                     >
                       <Headphones className="w-4 h-4 mr-2 drop-shadow-sm" />
                       🎙 Voice Studio
                     </Button>
                     <Button
                       onClick={testVoicePersona}
-                      className="w-full yobot-button-tool rounded-2xl px-4 py-4 h-12 font-semibold"
+                      className="w-full px-4 py-4 h-12 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
                     >
                       <TestTube className="w-4 h-4 mr-2 drop-shadow-sm" />
                       🧪 Test Persona
