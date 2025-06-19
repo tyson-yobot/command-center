@@ -3706,14 +3706,14 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={handleStartPipelineCalls}
-                      className="rounded-xl px-5 py-3 font-semibold tracking-wide text-white shadow-xl bg-gradient-to-br from-emerald-400 via-lime-500 to-green-400 hover:from-lime-400 hover:to-emerald-500 hover:shadow-green-400/50 transition-all duration-150 ease-in-out hover:scale-105 w-full h-12"
+                      className="yobot-button-primary rounded-xl px-5 py-3 font-semibold tracking-wide w-full h-12"
                     >
                       <Play className="w-4 h-4 mr-2" />
                       Start Pipeline
                     </Button>
                     <Button
                       onClick={handleStopPipelineCalls}
-                      className="rounded-xl px-5 py-3 font-semibold tracking-wide text-white shadow-xl bg-gradient-to-br from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 hover:shadow-red-400/50 transition-all duration-150 ease-in-out hover:scale-105 w-full h-12"
+                      className="yobot-button-danger rounded-xl px-5 py-3 font-semibold tracking-wide w-full h-12"
                     >
                       <PhoneOff className="w-4 h-4 mr-2" />
                       End Pipeline
@@ -3750,7 +3750,7 @@ export default function CommandCenter() {
                     </Button>
                     <Button
                       onClick={testVoicePersona}
-                      className="w-full bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white rounded-2xl px-4 py-4 h-12 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50 ring-0 hover:ring-2 hover:ring-purple-400/30"
+                      className="w-full yobot-button-tool rounded-2xl px-4 py-4 h-12 font-semibold"
                     >
                       <TestTube className="w-4 h-4 mr-2 drop-shadow-sm" />
                       🧪 Test Persona
