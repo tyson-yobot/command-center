@@ -67,10 +67,7 @@ import {
   ChevronDown,
   ChevronUp,
   Shield,
-  Smartphone,
-  BookOpen,
-  PhoneCall,
-  X
+  Smartphone
 } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -81,8 +78,6 @@ import { ContentCreatorDashboard } from '@/components/content-creator-dashboard'
 import { MailchimpSyncDashboard } from '@/components/mailchimp-sync-dashboard';
 import { SocialContentCreator } from '@/components/social-content-creator';
 import { useToast } from '@/hooks/use-toast';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Toast, ToastTitle, ToastDescription } from '@/components/ui/toast';
 import { KnowledgeViewerModal } from '@/components/knowledge-viewer-modal';
 import { DocumentPreviewModal } from '@/components/document-preview-modal';
@@ -401,7 +396,9 @@ export default function CommandCenter() {
   const [showPublyDashboard, setShowPublyDashboard] = useState(false);
   const [showMailchimpDashboard, setShowMailchimpDashboard] = useState(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
-
+  const [showScrapedLeads, setShowScrapedLeads] = useState(false);
+  const [scrapedLeadsCount, setScrapedLeadsCount] = useState(0);
+  const [recentLeads, setRecentLeads] = useState<any[]>([]);
   const [showLiveChat, setShowLiveChat] = useState(false);
   const [showTicketsList, setShowTicketsList] = useState(false);
   const [showCreateTicket, setShowCreateTicket] = useState(false);
@@ -411,8 +408,8 @@ export default function CommandCenter() {
   const [previewDocumentId, setPreviewDocumentId] = useState('');
   const [previewDocumentName, setPreviewDocumentName] = useState('');
   const [selectedKnowledgeItems, setSelectedKnowledgeItems] = useState<string[]>([]);
-  const [knowledgeItems, setKnowledgeItems] = useState<any[]>([]);
-  const [memoryActivityLog, setMemoryActivityLog] = useState<Array<{timestamp: string, type: string, category: string, result: string}>>([]);
+  const [knowledgeItems, setKnowledgeItems] = useState([]);
+  const [memoryActivityLog, setMemoryActivityLog] = useState([]);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showManualCallModal, setShowManualCallModal] = useState(false);
   const [voiceActive, setVoiceActive] = useState(false);
@@ -429,9 +426,6 @@ export default function CommandCenter() {
   const [showCreateVoiceCallModal, setShowCreateVoiceCallModal] = useState(false);
   const [showLeadScraperPopup, setShowLeadScraperPopup] = useState(false);
   const [leadScraperDefaultTab, setLeadScraperDefaultTab] = useState<'apollo' | 'apify' | 'phantombuster'>('apollo');
-  const [showScrapedLeads, setShowScrapedLeads] = useState(false);
-  const [scrapedLeadsCount, setScrapedLeadsCount] = useState(0);
-  const [recentLeads, setRecentLeads] = useState<any[]>([]);
 
 
   // Test statistics for Live Integration Test Results
@@ -623,21 +617,6 @@ export default function CommandCenter() {
   const [totalRecords, setTotalRecords] = useState(0);
   const [completedCalls, setCompletedCalls] = useState(0);
   const [pipelineRunning, setPipelineRunning] = useState(false);
-  const [setActiveCalls] = useState(() => () => {}); // Placeholder function
-  const [showVoiceCommand, setShowVoiceCommand] = useState(false);
-  const [showCreateCallModal, setShowCreateCallModal] = useState(false);
-
-
-  // Command Center Actions module
-  const CommandCenterActions = {
-    generateAnalyticsReport: () => {
-      console.log('Generating analytics report...');
-      toast({
-        title: "Analytics Report",
-        description: "Report generation started successfully!"
-      });
-    }
-  };
 
   // Button feedback states for enhanced visual feedback
   const [buttonStates, setButtonStates] = useState<Record<string, 'idle' | 'loading' | 'success' | 'error'>>({});
@@ -4701,211 +4680,110 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Voice Engine & Command Center */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Voice Engine Control Panel */}
-          <Card className="bg-gradient-to-br from-green-900/60 to-emerald-900/60 backdrop-blur-sm border border-green-500">
-            <CardHeader className="pb-6">
-              <CardTitle className="text-white flex items-center text-xl">
-                <Headphones className="w-6 h-6 mr-3 text-green-400" />
-                Voice Engine + Command Center
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <Button 
-                  onClick={() => setShowVoiceCommand(true)}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white border border-green-400 px-4 py-3"
-                >
-                  <Mic className="w-4 h-4 mr-2" />
-                  🎤 Open Voice Command Interface
-                </Button>
-                
-                <Button 
-                  onClick={() => setShowCreateCallModal(true)}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-3"
-                >
-                  <PhoneCall className="w-4 h-4 mr-2" />
-                  📞 Start Manual Call
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* RAG Knowledge Base - MOVED UNDER VOICE ENGINE */}
-          <Card className="bg-orange-900/40 backdrop-blur-sm border border-orange-500">
+        {/* Analytics Dashboard Section - MOVED TO BOTTOM */}
+        <div className="mb-8">
+          <h2 className="text-white text-2xl font-bold mb-6">📊 Analytics Dashboard</h2>
+          
+          {/* Botalytics™ Performance Dashboard */}
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
             <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Brain className="w-5 h-5 mr-2 text-orange-400" />
-                RAG Knowledge Base
+              <CardTitle className="text-white flex items-center space-x-2">
+                <TrendingUp className="w-5 h-5 text-cyan-400" />
+                <span>📊 Botalytics™ Metrics</span>
+                <div className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded-full">PROPRIETARY</div>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="bg-orange-800/40 rounded-lg p-4 border border-orange-400/50">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-white font-medium">Knowledge Stats</h4>
-                    <Badge className="bg-orange-600/30 text-orange-300">
-                      {knowledgeStats?.data?.totalDocuments || 0} docs
-                    </Badge>
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+                {/* Cost Per Lead */}
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-green-400 mb-1">0</div>
+                  <div className="text-slate-300 text-sm">Cost Per Lead</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Last Month</span>
+                    <span className="text-cyan-400">0</span>
                   </div>
-                  <div className="text-sm text-orange-300">
-                    Last updated: {knowledgeStats?.data?.lastUpdated ? 
-                      new Date(knowledgeStats.data.lastUpdated).toLocaleString() : 
-                      'Never'
-                    }
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className={`bg-red-400 h-2 rounded-full ${ 'w0-'}`}></div>
                   </div>
                 </div>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  <Button 
-                    onClick={handleUploadDocs}
-                    disabled={documentsLoading}
-                    className="bg-orange-600 hover:bg-orange-700 text-white text-sm"
-                  >
-                    <Upload className="w-3 h-3 mr-1" />
-                    {documentsLoading ? 'Processing...' : 'Upload'}
-                  </Button>
-                  <Button 
-                    onClick={handleReindexKnowledge}
-                    className="bg-purple-600 hover:bg-purple-700 text-white text-sm"
-                  >
-                    <RefreshCw className="w-3 h-3 mr-1" />
-                    Reindex
-                  </Button>
-                </div>
-                
-                <Button 
-                  onClick={handleViewKnowledge}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
-                >
-                  <Eye className="w-4 h-4 mr-2" />
-                  View Knowledge Base
-                </Button>
               </div>
-            </CardContent>
-          </Card>
-        </div>
 
-        {/* Interactive Cards Section - MOVED TO TOP UNDER QUICK ACTIONS */}
-        <div className="mt-8 mb-8">
-          <h2 className="text-white text-2xl font-bold mb-6">🚀 Interactive Tools</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            
-            {/* Lead Scraper Card */}
-            <Card className="bg-gray-800/50 border border-gray-600 shadow-lg hover:shadow-blue-500/30 transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="text-white text-lg font-bold flex items-center">
-                  <Target className="w-5 h-5 mr-2 text-blue-400" />
-                  Lead Intelligence Platform
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300 text-sm mb-4">
-                  Enterprise-grade lead generation and intelligence gathering across multiple platforms.
-                </p>
-                <Button
-                  onClick={handleLeadScraper}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25"
-                >
-                  🎯 Launch Platform
-                </Button>
-              </CardContent>
-            </Card>
+              {/* Interaction Quality */}
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-blue-400 mb-1">0</div>
+                  <div className="text-slate-300 text-sm">Accuracy Rate</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Target</span>
+                    <span className="text-green-400">0</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className={`bg-blue-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                  </div>
+                </div>
+              </div>
 
-            {/* Voice Command Card */}
-            <Card className="bg-gray-800/50 border border-gray-600 shadow-lg hover:shadow-green-500/30 transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="text-white text-lg font-bold flex items-center">
-                  <Mic className="w-5 h-5 mr-2 text-green-400" />
-                  Voice Command Center
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300 text-sm mb-4">
-                  Advanced voice-activated automation and command processing system.
-                </p>
-                <Button
-                  onClick={() => setShowVoiceCommand(true)}
-                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25"
-                >
-                  🎤 Activate Voice
-                </Button>
-              </CardContent>
-            </Card>
+              {/* Learning Rate */}
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-purple-400 mb-1">0</div>
+                  <div className="text-slate-300 text-sm">Learning Rate</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Weekly</span>
+                    <span className="text-yellow-400">0</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className={`bg-purple-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                  </div>
+                </div>
+              </div>
 
-            {/* Manual Call System Card */}
-            <Card className="bg-gray-800/50 border border-gray-600 shadow-lg hover:shadow-purple-500/30 transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="text-white text-lg font-bold flex items-center">
-                  <PhoneCall className="w-5 h-5 mr-2 text-purple-400" />
-                  Manual Call System
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300 text-sm mb-4">
-                  Direct communication system for high-priority lead engagement.
-                </p>
-                <Button
-                  onClick={() => setShowCreateCallModal(true)}
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25"
-                >
-                  📞 Start Call
-                </Button>
-              </CardContent>
-            </Card>
+              {/* Total Interactions */}
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-cyan-400 mb-1">0</div>
+                  <div className="text-slate-300 text-sm">Interactions</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Today</span>
+                    <span className="text-emerald-400">0</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className={`bg-cyan-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                  </div>
+                </div>
+              </div>
 
-            {/* Analytics Report Card */}
-            <Card className="bg-gray-800/50 border border-gray-600 shadow-lg hover:shadow-cyan-500/30 transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="text-white text-lg font-bold flex items-center">
-                  <BarChart3 className="w-5 h-5 mr-2 text-cyan-400" />
-                  Analytics Generator
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300 text-sm mb-4">
-                  Generate comprehensive performance reports and business intelligence.
-                </p>
-                <Button
-                  onClick={() => CommandCenterActions.generateAnalyticsReport()}
-                  className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/25"
-                >
-                  📊 Generate Report
-                </Button>
-              </CardContent>
-            </Card>
+              {/* Conversion Rate */}
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-emerald-400 mb-1">0</div>
+                  <div className="text-slate-300 text-sm">Close Rate</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Industry Avg</span>
+                    <span className="text-orange-400">0</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className={`bg-emerald-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-            {/* Knowledge Base Card */}
-            <Card className="bg-gray-800/50 border border-gray-600 shadow-lg hover:shadow-orange-500/30 transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="text-white text-lg font-bold flex items-center">
-                  <BookOpen className="w-5 h-5 mr-2 text-orange-400" />
-                  Knowledge Base
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300 text-sm mb-4">
-                  Access comprehensive documentation, guides, and best practices.
-                </p>
-                <Button
-                  onClick={() => window.open('/knowledge-base', '_blank')}
-                  className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/25"
-                >
-                  📚 View Knowledge Base
-                </Button>
-              </CardContent>
-            </Card>
-
-          </div>
-        </div>
-
-        {/* Analytics Dashboard Section - MOVED TO BOTTOM */}
-        <div className="mt-12 mb-8">
-          <h2 className="text-white text-2xl font-bold mb-6">📊 Analytics Dashboard</h2>
-
-          {/* SmartSpend™ Analytics Dashboard */}
+        {/* SmartSpend™ Analytics Dashboard */}
         <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
           <CardHeader>
             <CardTitle className="text-white flex items-center space-x-2">
@@ -9051,9 +8929,9 @@ export default function CommandCenter() {
           </div>
         </div>
       )}
-
-        </div> {/* End Analytics Dashboard Section */}
-      </div> {/* End main container */}
+        
+        </div>
+      </div>
     </div>
   );
 }
