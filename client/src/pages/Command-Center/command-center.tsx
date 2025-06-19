@@ -3688,13 +3688,29 @@ export default function CommandCenter() {
                       Client Pulse
                     </h4>
                     <div className="grid grid-cols-1 gap-4">
-                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="text-2xl font-bold text-emerald-400 mb-1">0</div>
-                        <div className="text-sm text-emerald-300">NPS Score</div>
+                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 animate-pulse"></div>
+                        <div className="relative z-10">
+                          <div className="text-2xl font-bold text-emerald-400 mb-1 flex items-center">
+                            ⭐ 0
+                          </div>
+                          <div className="text-sm text-emerald-300">NPS Score</div>
+                          <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                            <div className="bg-emerald-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="text-2xl font-bold text-emerald-400 mb-1">0</div>
-                        <div className="text-sm text-emerald-300">Active Clients</div>
+                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 animate-pulse"></div>
+                        <div className="relative z-10">
+                          <div className="text-2xl font-bold text-emerald-400 mb-1 flex items-center">
+                            👥 0
+                          </div>
+                          <div className="text-sm text-emerald-300">Active Clients</div>
+                          <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                            <div className="bg-emerald-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -3706,17 +3722,29 @@ export default function CommandCenter() {
                       Ops Stats
                     </h4>
                     <div className="grid grid-cols-1 gap-4">
-                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="text-2xl font-bold text-emerald-400 mb-1">
-                          {activeCalls?.data?.length || 0}
+                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 animate-pulse"></div>
+                        <div className="relative z-10">
+                          <div className="text-2xl font-bold text-emerald-400 mb-1 flex items-center">
+                            📞 {activeCalls?.data?.length || 0}
+                          </div>
+                          <div className="text-sm text-emerald-300">Active Calls</div>
+                          <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                            <div className="bg-emerald-400 h-1 rounded-full w-0 animate-pulse" style={{width: `${Math.min((activeCalls?.data?.length || 0) * 20, 100)}%`}}></div>
+                          </div>
                         </div>
-                        <div className="text-sm text-emerald-300">Active Calls</div>
                       </div>
-                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="text-2xl font-bold text-emerald-400 mb-1">
-                          {callMetrics?.data?.successRate || 0}%
+                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 animate-pulse"></div>
+                        <div className="relative z-10">
+                          <div className="text-2xl font-bold text-emerald-400 mb-1 flex items-center">
+                            ✅ {callMetrics?.data?.successRate || 0}%
+                          </div>
+                          <div className="text-sm text-emerald-300">Success Rate</div>
+                          <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                            <div className="bg-emerald-400 h-1 rounded-full w-0 animate-pulse" style={{width: `${callMetrics?.data?.successRate || 0}%`}}></div>
+                          </div>
                         </div>
-                        <div className="text-sm text-emerald-300">Success Rate</div>
                       </div>
                     </div>
                   </div>
