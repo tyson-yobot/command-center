@@ -3503,30 +3503,48 @@ export default function CommandCenter() {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4">
-              <div className="space-y-3">
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+              <div className="space-y-2">
+                <div className="bg-slate-800/60 rounded-lg p-3 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
                   <div className="text-xl font-bold text-orange-400">
                     {metrics?.roi || '0%'}
                   </div>
-                  <div className="text-xs text-slate-300">ROI</div>
+                  <div className="text-xs text-purple-300">ROI</div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+                <div className="bg-slate-800/60 rounded-lg p-3 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
                   <div className="text-xl font-bold text-green-400">
                     {metrics?.conversionRate || '0%'}
                   </div>
-                  <div className="text-xs text-slate-300">Conversion Rate</div>
+                  <div className="text-xs text-purple-300">Conversion Rate</div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+                <div className="bg-slate-800/60 rounded-lg p-3 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
                   <div className="text-xl font-bold text-blue-400">
                     ${metrics?.revenue || '0'}
                   </div>
-                  <div className="text-xs text-slate-300">Revenue</div>
+                  <div className="text-xs text-purple-300">Revenue</div>
                 </div>
-                <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-600">
+                <div className="bg-slate-800/60 rounded-lg p-3 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
                   <div className="text-xl font-bold text-purple-400">
                     {metrics?.efficiency || '0%'}
                   </div>
-                  <div className="text-xs text-slate-300">Efficiency</div>
+                  <div className="text-xs text-purple-300">Efficiency</div>
+                </div>
+                <div className="bg-slate-800/60 rounded-lg p-3 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
+                  <div className="text-xl font-bold text-cyan-400">
+                    {metrics?.aiConfidence || '0%'}
+                  </div>
+                  <div className="text-xs text-purple-300">AI Confidence Score</div>
+                </div>
+                <div className="bg-slate-800/60 rounded-lg p-3 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
+                  <div className="text-xl font-bold text-yellow-400">
+                    {metrics?.avgResponseTime || '0ms'}
+                  </div>
+                  <div className="text-xs text-purple-300">Avg. Response Time (Bot)</div>
+                </div>
+                <div className="bg-slate-800/60 rounded-lg p-3 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
+                  <div className="text-xl font-bold text-pink-400">
+                    {metrics?.engagementRate || '0%'}
+                  </div>
+                  <div className="text-xs text-purple-300">Engagement Rate</div>
                 </div>
               </div>
             </CardContent>
@@ -3543,7 +3561,7 @@ export default function CommandCenter() {
                     variant="ghost"
                     size="sm"
                     onClick={() => toggleSection('analytics-reports')}
-                    className="ml-2 p-1 text-white/60 hover:text-white hover:bg-white/10"
+                    className="ml-2 p-1 text-white/60 hover:text-white hover:bg-white/10 border border-purple-400/50 hover:border-purple-400"
                   >
                     {collapsedSections['analytics-reports'] ? 
                       <ChevronDown className="w-3 h-3" /> : 
@@ -3562,23 +3580,23 @@ export default function CommandCenter() {
                       <DollarSign className="w-4 h-4 mr-2" />
                       SmartSpend™ Analytics
                     </h4>
-                    <div className="space-y-3">
-                      <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/20">
+                    <div className="space-y-4">
+                      <div className="bg-slate-800/60 rounded-lg p-4 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
                         <div className="flex justify-between items-center">
-                          <span className="text-purple-300 text-sm font-medium">Budget Efficiency:</span>
-                          <span className="text-white font-bold text-lg">0</span>
+                          <span className="text-purple-300 text-base font-medium">Budget Efficiency:</span>
+                          <span className="text-purple-400 font-bold text-xl">0</span>
                         </div>
                       </div>
-                      <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/20">
+                      <div className="bg-slate-800/60 rounded-lg p-4 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
                         <div className="flex justify-between items-center">
-                          <span className="text-purple-300 text-sm font-medium">Cost Per Lead:</span>
-                          <span className="text-white font-bold text-lg">0</span>
+                          <span className="text-purple-300 text-base font-medium">Cost Per Lead:</span>
+                          <span className="text-purple-400 font-bold text-xl">0</span>
                         </div>
                       </div>
-                      <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/20">
+                      <div className="bg-slate-800/60 rounded-lg p-4 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30">
                         <div className="flex justify-between items-center">
-                          <span className="text-purple-300 text-sm font-medium">ROI:</span>
-                          <span className="text-white font-bold text-lg">0</span>
+                          <span className="text-purple-300 text-base font-medium">ROI:</span>
+                          <span className="text-purple-400 font-bold text-xl">0</span>
                         </div>
                       </div>
                     </div>
@@ -3639,60 +3657,60 @@ export default function CommandCenter() {
               </CardTitle>
             </CardHeader>
             {!collapsedSections['system-health'] && (
-              <CardContent className="p-4">
-                <div className="space-y-4">
+              <CardContent className="p-5">
+                <div className="space-y-5">
                   {/* System Uptime */}
-                  <div className="space-y-3">
-                    <h4 className="text-red-300 font-semibold flex items-center border-b border-emerald-400/30 pb-1 text-sm">
-                      <Activity className="w-3 h-3 mr-1" />
+                  <div className="space-y-4">
+                    <h4 className="text-emerald-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2 text-base">
+                      <Activity className="w-4 h-4 mr-2" />
                       System Uptime
                     </h4>
-                    <div className="space-y-2">
-                      <div className="p-2 bg-white/5 rounded-lg">
-                        <div className="text-xs text-red-300 mb-1">Uptime</div>
-                        <div className="text-lg font-bold text-slate-400">0</div>
+                    <div className="space-y-3">
+                      <div className="p-4 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30">
+                        <div className="text-sm text-emerald-300 mb-2">Uptime</div>
+                        <div className="text-xl font-bold text-emerald-400">0</div>
                       </div>
-                      <div className="p-2 bg-white/5 rounded-lg">
-                        <div className="text-xs text-red-300 mb-1">Response Time</div>
-                        <div className="text-sm font-bold text-slate-400">0</div>
+                      <div className="p-4 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30">
+                        <div className="text-sm text-emerald-300 mb-2">Response Time</div>
+                        <div className="text-xl font-bold text-emerald-400">0</div>
                       </div>
                     </div>
                   </div>
                   
                   {/* Client Pulse */}
-                  <div className="space-y-3">
-                    <h4 className="text-red-300 font-semibold flex items-center border-b border-emerald-400/30 pb-1 text-sm">
-                      <Users className="w-3 h-3 mr-1" />
+                  <div className="space-y-4">
+                    <h4 className="text-emerald-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2 text-base">
+                      <Users className="w-4 h-4 mr-2" />
                       Client Pulse
                     </h4>
-                    <div className="space-y-2">
-                      <div className="p-2 bg-white/5 rounded-lg">
-                        <div className="text-xs text-red-300 mb-1">NPS Score</div>
-                        <div className="text-lg font-bold text-slate-400">0</div>
+                    <div className="space-y-3">
+                      <div className="p-4 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30">
+                        <div className="text-sm text-emerald-300 mb-2">NPS Score</div>
+                        <div className="text-xl font-bold text-emerald-400">0</div>
                       </div>
-                      <div className="p-2 bg-white/5 rounded-lg">
-                        <div className="text-xs text-red-300 mb-1">Active Clients</div>
-                        <div className="text-sm font-bold text-slate-400">0</div>
+                      <div className="p-4 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30">
+                        <div className="text-sm text-emerald-300 mb-2">Active Clients</div>
+                        <div className="text-xl font-bold text-emerald-400">0</div>
                       </div>
                     </div>
                   </div>
                   
                   {/* Operations Stats */}
-                  <div className="space-y-3">
-                    <h4 className="text-red-300 font-semibold flex items-center border-b border-emerald-400/30 pb-1 text-sm">
-                      <Target className="w-3 h-3 mr-1" />
+                  <div className="space-y-4">
+                    <h4 className="text-emerald-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2 text-base">
+                      <Target className="w-4 h-4 mr-2" />
                       Ops Stats
                     </h4>
-                    <div className="space-y-2">
-                      <div className="p-2 bg-white/5 rounded-lg">
-                        <div className="text-xs text-red-300 mb-1">Active Calls</div>
-                        <div className="text-sm font-bold text-white">
+                    <div className="space-y-3">
+                      <div className="p-4 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30">
+                        <div className="text-sm text-emerald-300 mb-2">Active Calls</div>
+                        <div className="text-xl font-bold text-emerald-400">
                           {activeCalls?.data?.length || 0}
                         </div>
                       </div>
-                      <div className="p-2 bg-white/5 rounded-lg">
-                        <div className="text-xs text-red-300 mb-1">Success Rate</div>
-                        <div className="text-sm font-bold text-green-400">
+                      <div className="p-4 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30">
+                        <div className="text-sm text-emerald-300 mb-2">Success Rate</div>
+                        <div className="text-xl font-bold text-emerald-400">
                           {callMetrics?.data?.successRate || 0}%
                         </div>
                       </div>
