@@ -647,9 +647,9 @@ export default function CommandCenter() {
         case 'loading':
           return `${baseClasses} ${className} opacity-80 cursor-wait`;
         case 'success':
-          return `${baseClasses} ${className} bg-green-600 hover:bg-green-700 border-green-500 text-white shadow-lg shadow-green-500/50`;
+          return `${baseClasses} ${className} bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] border-green-500 text-white shadow-lg shadow-green-500/50`;
         case 'error':
-          return `${baseClasses} ${className} bg-red-600 hover:bg-red-700 border-red-500 text-white shadow-lg shadow-red-500/50`;
+          return `${baseClasses} ${className} bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828] border-red-500 text-white shadow-lg shadow-red-500/50`;
         default:
           return `${baseClasses} ${className}`;
       }
@@ -3166,7 +3166,7 @@ export default function CommandCenter() {
                 <p className="text-red-700 text-sm">Automation requires attention</p>
               </div>
               <div className="flex space-x-3">
-                <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white border border-red-500">
+                <Button className="flex-1 bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828] text-white border border-red-500">
                   Fix Now
                 </Button>
                 <Button 
@@ -3202,7 +3202,7 @@ export default function CommandCenter() {
                   }
                 </p>
                 <div className="flex space-x-3">
-                  <Button onClick={nextDemoStep} className="bg-blue-600 hover:bg-blue-700 text-white">
+                  <Button onClick={nextDemoStep} className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white">
                     {demoStep === 4 ? "Finish Demo" : "Next Step"}
                   </Button>
                   <Button variant="outline" onClick={() => setDemoMode(false)} className="border-blue-400 text-blue-400">
@@ -3288,7 +3288,7 @@ export default function CommandCenter() {
 
         {/* Dashboard Preset Selector */}
         <div className="mb-6">
-          <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white">
+          <Card className="rounded-xl border-2 border-[#0d82da] bg-black shadow-[0_0_12px_#0d82da50] text-white">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
@@ -3629,7 +3629,7 @@ export default function CommandCenter() {
                   <Button 
                     onClick={insertMemoryText}
                     disabled={!memoryText.trim()}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 h-16"
+                    className="w-full bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white px-4 py-3 h-16"
                   >
                     <Brain className="w-4 h-4 mr-2" />
                     Insert Memory Text
@@ -3637,7 +3637,7 @@ export default function CommandCenter() {
 
                   <Button 
                     onClick={handleViewKnowledge}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-3 h-16"
+                    className="w-full bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white border border-blue-500 px-4 py-3 h-16"
                   >
                     <FileText className="w-4 h-4 mr-2" />
                     View Knowledge Library
@@ -3645,7 +3645,7 @@ export default function CommandCenter() {
 
                   <Button 
                     onClick={() => setShowCreateCallModal(true)}
-                    className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 h-16"
+                    className="w-full bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white px-4 py-3 h-16"
                   >
                     <Phone className="w-4 h-4 mr-2" />
                     Create Manual Call
@@ -4406,7 +4406,7 @@ export default function CommandCenter() {
                 <div className="flex gap-3">
                   <Button 
                     onClick={() => document.getElementById('file-upload')?.click()}
-                    className="bg-green-600 hover:bg-green-700 text-white border border-green-400 px-4 py-3"
+                    className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white border border-green-400 px-4 py-3"
                   >
                     <Upload className="w-4 h-4 mr-2" />
                     Upload & Program Documents
@@ -4414,7 +4414,7 @@ export default function CommandCenter() {
                   <Button 
                     onClick={deleteSelectedDocuments}
                     disabled={selectedDocuments.length === 0}
-                    className="bg-red-600 hover:bg-red-700 text-white border border-red-400 px-4 py-3"
+                    className="bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828] text-white border border-red-400 px-4 py-3"
                   >
                     Delete Selected ({selectedDocuments.length})
                   </Button>
@@ -4455,7 +4455,7 @@ export default function CommandCenter() {
                               setPreviewDocumentName(doc.fileName || doc.filename || doc.name);
                               setShowDocumentPreview(true);
                             }}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1"
+                            className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white text-xs px-2 py-1"
                           >
                             🔍 Preview
                           </Button>
@@ -4514,7 +4514,7 @@ export default function CommandCenter() {
                 <Button 
                   onClick={insertMemoryText}
                   disabled={!memoryText.trim()}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3"
+                  className="w-full bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white px-4 py-3"
                 >
                   <Brain className="w-4 h-4 mr-2" />
                   Insert into Memory
@@ -4523,7 +4523,7 @@ export default function CommandCenter() {
                 {/* View Knowledge Library Button */}
                 <Button 
                   onClick={handleViewKnowledge}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-3"
+                  className="w-full bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white border border-blue-500 px-4 py-3"
                 >
                   <FileText className="w-4 h-4 mr-2" />
                   🗂 View Knowledge Library
@@ -4601,7 +4601,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('monitoring', 'start')}
-                            className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 border border-green-400 shadow-md hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                            className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white text-sm px-4 py-2 border border-green-400 shadow-md hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                             title="Start monitoring service"
                           >
                             <Play className="w-3 h-3" />
@@ -4609,7 +4609,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('monitoring', 'stop')}
-                            className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 border border-red-400 shadow-md hover:shadow-red-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                            className="bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828] text-white text-sm px-4 py-2 border border-red-400 shadow-md hover:shadow-red-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                             title="Stop monitoring service"
                           >
                             <Square className="w-3 h-3" />
@@ -4617,7 +4617,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('monitoring', 'restart')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 border border-blue-400 shadow-md hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                            className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white text-sm px-4 py-2 border border-blue-400 shadow-md hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                             title="Restart monitoring service"
                           >
                             <RotateCcw className="w-3 h-3" />
@@ -4803,7 +4803,7 @@ export default function CommandCenter() {
 
         {/* Lead Scraper Quick Access Button */}
         <div className="mb-6">
-          <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white">
+          <Card className="rounded-xl border-2 border-[#0d82da] bg-black shadow-[0_0_12px_#0d82da50] text-white">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -4861,7 +4861,7 @@ export default function CommandCenter() {
 
         {/* RAG Knowledge Base System - Positioned underneath Voice Engine + Command Center */}
         <div className="mb-6">
-          <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white space-y-2">
+          <Card className="rounded-xl border-2 border-[#0d82da] bg-black shadow-[0_0_12px_#0d82da50] text-white space-y-2">
             <CardHeader className="border-b border-[#0d82da]/30">
               <CardTitle className="text-white flex items-center text-2xl font-bold">
                 <Brain className="w-7 h-7 mr-3 text-[#0d82da]" />
@@ -4886,7 +4886,7 @@ export default function CommandCenter() {
                     />
                     <Button 
                       onClick={startQueryVoiceRecognition}
-                      className={`absolute right-2 top-2 p-2 flex items-center space-x-1 ${userInitiatedVoice && isListening ? 'bg-green-500 animate-pulse' : 'bg-green-600 hover:bg-green-700'}`}
+                      className={`absolute right-2 top-2 p-2 flex items-center space-x-1 ${userInitiatedVoice && isListening ? 'bg-green-500 animate-pulse' : 'bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66]'}`}
                     >
                       <Mic className="w-4 h-4" />
                       {userInitiatedVoice && isListening && (
@@ -4918,28 +4918,28 @@ export default function CommandCenter() {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px]">
                     <Button 
                       onClick={queryKnowledgeBase}
-                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                      className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white"
                     >
                       <Search className="w-4 h-4 mr-2" />
                       Query Knowledge
                     </Button>
                     <Button 
                       onClick={smartSearch}
-                      className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+                      className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white border border-blue-500"
                     >
                       <Brain className="w-4 h-4 mr-2" />
                       Smart Search
                     </Button>
                     <Button 
                       onClick={contextSearch}
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                      className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white"
                     >
                       <FileText className="w-4 h-4 mr-2" />
                       Context Search
                     </Button>
                     <Button 
                       onClick={() => document.getElementById('file-upload')?.click()}
-                      className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
+                      className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white border border-green-500"
                     >
                       <Upload className="w-4 h-4 mr-2" />
                       Upload Documents
@@ -4963,7 +4963,7 @@ export default function CommandCenter() {
                       />
                       <Button 
                         onClick={startProgrammingVoiceRecognition}
-                        className={`absolute top-2 right-2 p-2 ${userInitiatedVoice && isListening ? 'bg-red-500 animate-pulse' : 'bg-red-600 hover:bg-red-700'}`}
+                        className={`absolute top-2 right-2 p-2 ${userInitiatedVoice && isListening ? 'bg-red-500 animate-pulse' : 'bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828]'}`}
                       >
                         <Mic className="w-4 h-4" />
                         {userInitiatedVoice && isListening && <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>}
@@ -4997,7 +4997,7 @@ export default function CommandCenter() {
                         <Button 
                           size="sm" 
                           onClick={stopVoiceRecognition}
-                          className="bg-blue-600 hover:bg-blue-700"
+                          className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7]"
                         >
                           <MicOff className="w-3 h-3" />
                         </Button>
@@ -5007,14 +5007,14 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <Button 
                         onClick={isListening ? stopVoiceRecognition : startProgrammingVoiceRecognition}
-                        className={`${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} text-white px-4 py-3`}
+                        className={`${isListening ? 'bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828]' : 'bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7]'} text-white px-4 py-3`}
                       >
                         <Mic className="w-4 h-4 mr-2" />
                         {isListening ? 'Stop Recording' : 'Start Recording'}
                       </Button>
                       <Button 
                         onClick={processVoiceProgramming}
-                        className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-3"
+                        className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white border border-blue-500 px-4 py-3"
                         disabled={!programmingText.trim()}
                       >
                         <Brain className="w-4 h-4 mr-2" />
@@ -5022,7 +5022,7 @@ export default function CommandCenter() {
                       </Button>
                       <Button 
                         onClick={fetchAvailableVoices}
-                        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3"
+                        className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white px-4 py-3"
                       >
                         <RefreshCw className="w-4 h-4 mr-2" />
                         Refresh Voices
@@ -5093,14 +5093,14 @@ export default function CommandCenter() {
                           </Button>
                           <Button 
                             onClick={testVoicePersona}
-                            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 text-sm px-4 py-3 shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                            className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white border border-blue-500 text-sm px-4 py-3 shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                           >
                             <Headphones className="w-3 h-3 mr-1" />
                             Test Voice
                           </Button>
                           <Button 
                             onClick={handleApplyPersona}
-                            className="bg-green-600 hover:bg-green-700 text-white border border-green-500 text-sm px-4 py-3 shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                            className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white border border-green-500 text-sm px-4 py-3 shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                           >
                             <Settings className="w-3 h-3 mr-1" />
                             Apply Persona
@@ -5182,7 +5182,7 @@ export default function CommandCenter() {
                             <Button 
                               size="sm" 
                               onClick={fetchAvailableVoices}
-                              className="bg-purple-600 hover:bg-purple-700 text-xs px-2 py-1 h-6"
+                              className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-xs px-2 py-1 h-6"
                               disabled={voicesLoading}
                             >
                               {voicesLoading ? 'Loading...' : 'Refresh'}
@@ -5269,7 +5269,7 @@ export default function CommandCenter() {
                           console.error('Failed to load voice recordings:', error);
                         }
                       }}
-                      className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-3"
+                      className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white text-sm px-4 py-3"
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       View Recordings
@@ -5286,7 +5286,7 @@ export default function CommandCenter() {
                           }
                         }
                       }}
-                      className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-3"
+                      className="bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828] text-white text-sm px-4 py-3"
                     >
                       <Trash2 className="w-4 h-4 mr-2" />
                       Clear All Recordings
@@ -5369,14 +5369,14 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px] mb-6">
                   <Button 
                     onClick={handleReindexKnowledge}
-                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                    className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white"
                   >
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Reindex Knowledge
                   </Button>
                   <Button 
                     onClick={handleClearKnowledge}
-                    className="bg-red-600 hover:bg-red-700 text-white"
+                    className="bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828] text-white"
                   >
                     <Trash2 className="w-4 h-4 mr-2" />
                     Clear Knowledge
@@ -5442,7 +5442,7 @@ export default function CommandCenter() {
                     />
                     <Button 
                       onClick={startQueryVoiceRecognition}
-                      className={`absolute right-2 top-2 p-2 flex items-center space-x-1 ${userInitiatedVoice && isListening ? 'bg-green-500 animate-pulse' : 'bg-green-600 hover:bg-green-700'}`}
+                      className={`absolute right-2 top-2 p-2 flex items-center space-x-1 ${userInitiatedVoice && isListening ? 'bg-green-500 animate-pulse' : 'bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66]'}`}
                     >
                       <Mic className="w-4 h-4" />
                       {userInitiatedVoice && isListening && (
@@ -5474,28 +5474,28 @@ export default function CommandCenter() {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px]">
                     <Button 
                       onClick={queryKnowledgeBase}
-                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                      className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white"
                     >
                       <Search className="w-4 h-4 mr-2" />
                       Query Knowledge
                     </Button>
                     <Button 
                       onClick={smartSearch}
-                      className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+                      className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white border border-blue-500"
                     >
                       <Brain className="w-4 h-4 mr-2" />
                       Smart Search
                     </Button>
                     <Button 
                       onClick={contextSearch}
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                      className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white"
                     >
                       <FileText className="w-4 h-4 mr-2" />
                       Context Search
                     </Button>
                     <Button 
                       onClick={() => document.getElementById('file-upload')?.click()}
-                      className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
+                      className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white border border-green-500"
                     >
                       <Upload className="w-4 h-4 mr-2" />
                       Upload Documents
@@ -5519,7 +5519,7 @@ export default function CommandCenter() {
                       />
                       <Button 
                         onClick={startProgrammingVoiceRecognition}
-                        className={`absolute top-2 right-2 p-2 ${userInitiatedVoice && isListening ? 'bg-red-500 animate-pulse' : 'bg-red-600 hover:bg-red-700'}`}
+                        className={`absolute top-2 right-2 p-2 ${userInitiatedVoice && isListening ? 'bg-red-500 animate-pulse' : 'bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828]'}`}
                       >
                         <Mic className="w-4 h-4" />
                         {userInitiatedVoice && isListening && <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>}
@@ -5553,7 +5553,7 @@ export default function CommandCenter() {
                         <Button 
                           size="sm" 
                           onClick={stopVoiceRecognition}
-                          className="bg-blue-600 hover:bg-blue-700"
+                          className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7]"
                         >
                           <MicOff className="w-3 h-3" />
                         </Button>
@@ -5563,14 +5563,14 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <Button 
                         onClick={isListening ? stopVoiceRecognition : startProgrammingVoiceRecognition}
-                        className={`${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} text-white px-4 py-3`}
+                        className={`${isListening ? 'bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828]' : 'bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7]'} text-white px-4 py-3`}
                       >
                         <Mic className="w-4 h-4 mr-2" />
                         {isListening ? 'Stop Recording' : 'Start Recording'}
                       </Button>
                       <Button 
                         onClick={processVoiceProgramming}
-                        className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-3"
+                        className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white border border-blue-500 px-4 py-3"
                         disabled={!programmingText.trim()}
                       >
                         <Brain className="w-4 h-4 mr-2" />
@@ -5578,7 +5578,7 @@ export default function CommandCenter() {
                       </Button>
                       <Button 
                         onClick={fetchAvailableVoices}
-                        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3"
+                        className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white px-4 py-3"
                       >
                         <RefreshCw className="w-4 h-4 mr-2" />
                         Refresh Voices
@@ -5609,7 +5609,7 @@ export default function CommandCenter() {
                 <div className="flex gap-3">
                   <Button 
                     onClick={() => document.getElementById('file-upload')?.click()}
-                    className="bg-green-600 hover:bg-green-700 text-white border border-green-400 px-4 py-3"
+                    className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white border border-green-400 px-4 py-3"
                   >
                     <Upload className="w-4 h-4 mr-2" />
                     Upload & Program Documents
@@ -5617,7 +5617,7 @@ export default function CommandCenter() {
                   <Button 
                     onClick={deleteSelectedDocuments}
                     disabled={selectedDocuments.length === 0}
-                    className="bg-red-600 hover:bg-red-700 text-white border border-red-400 px-4 py-3"
+                    className="bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828] text-white border border-red-400 px-4 py-3"
                   >
                     Delete Selected ({selectedDocuments.length})
                   </Button>
@@ -5658,7 +5658,7 @@ export default function CommandCenter() {
                               setPreviewDocumentName(doc.fileName || doc.filename || doc.name);
                               setShowDocumentPreview(true);
                             }}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1"
+                            className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white text-xs px-2 py-1"
                           >
                             🔍 Preview
                           </Button>
@@ -5717,7 +5717,7 @@ export default function CommandCenter() {
                 <Button 
                   onClick={insertMemoryText}
                   disabled={!memoryText.trim()}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3"
+                  className="w-full bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white px-4 py-3"
                 >
                   <Brain className="w-4 h-4 mr-2" />
                   Insert into Memory
@@ -5726,7 +5726,7 @@ export default function CommandCenter() {
                 {/* View Knowledge Library Button */}
                 <Button 
                   onClick={handleViewKnowledge}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-3"
+                  className="w-full bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white border border-blue-500 px-4 py-3"
                 >
                   <FileText className="w-4 h-4 mr-2" />
                   🗂 View Knowledge Library
@@ -5808,7 +5808,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('monitoring', 'start')}
-                            className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 border border-green-400 shadow-md hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                            className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white text-sm px-4 py-2 border border-green-400 shadow-md hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                             title="Start monitoring service"
                           >
                             Start
@@ -5824,7 +5824,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('monitoring', 'ping')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 border border-blue-400"
+                            className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white text-sm px-4 py-2 border border-blue-400"
                             title="Ping monitoring service"
                           >
                             Ping
@@ -5857,7 +5857,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('recording', 'start')}
-                            className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 border border-green-400"
+                            className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white text-sm px-4 py-2 border border-green-400"
                             title="Start recording service"
                           >
                             Start
@@ -5873,7 +5873,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('recording', 'ping')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 border border-blue-400"
+                            className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white text-sm px-4 py-2 border border-blue-400"
                             title="Ping recording service"
                           >
                             Ping
@@ -5906,7 +5906,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('analytics', 'start')}
-                            className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 border border-green-400"
+                            className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white text-sm px-4 py-2 border border-green-400"
                             title="Start analytics service"
                           >
                             Start
@@ -5922,7 +5922,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('analytics', 'ping')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 border border-blue-400"
+                            className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white text-sm px-4 py-2 border border-blue-400"
                             title="Ping analytics service"
                           >
                             Ping
@@ -5962,7 +5962,7 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-3 gap-[18px]">
                   <Button 
                     onClick={handleSimulateTestCall}
-                    className="bg-purple-600 hover:bg-purple-700 text-white text-sm px-4 py-3 border border-purple-400"
+                    className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white text-sm px-4 py-3 border border-purple-400"
                     title="Triggers a mock call event in the system"
                   >
                     <Phone className="w-5 h-5 mr-2" />
@@ -5970,7 +5970,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button 
                     onClick={() => setShowCallReports(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-3 border border-blue-400"
+                    className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white text-sm px-4 py-3 border border-blue-400"
                     title="View call reports and analytics"
                   >
                     <FileText className="w-5 h-5 mr-2" />
@@ -5978,7 +5978,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button 
                     onClick={() => setShowCallLogs(true)}
-                    className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-3 border border-green-400"
+                    className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white text-sm px-4 py-3 border border-green-400"
                     title="View detailed call log history"
                   >
                     <Clock className="w-5 h-5 mr-2" />
@@ -6156,7 +6156,7 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <Button
                     onClick={() => setShowCreateVoiceCallModal(true)}
-                    className="bg-green-600 hover:bg-green-700 text-white h-20 text-lg font-semibold"
+                    className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white h-20 text-lg font-semibold"
                     title="Start a new voice call with advanced options"
                   >
                     <Phone className="w-6 h-6 mr-3" />
@@ -6164,7 +6164,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button
                     onClick={() => setShowVoiceRecordings(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white h-20 text-lg font-semibold"
+                    className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white h-20 text-lg font-semibold"
                     title="Review and analyze voice call recordings"
                   >
                     <Play className="w-6 h-6 mr-3" />
@@ -6243,7 +6243,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button
                     onClick={() => setShowAnalyticsModal(true)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white h-20 text-lg font-semibold"
+                    className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white h-20 text-lg font-semibold"
                     title="Generate detailed SmartSpend analytics reports"
                   >
                     <BarChart className="w-6 h-6 mr-3" />
@@ -6314,7 +6314,7 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <Button
                     onClick={() => setShowCreateVoiceCallModal(true)}
-                    className="bg-green-600 hover:bg-green-700 text-white h-20 text-lg font-semibold"
+                    className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white h-20 text-lg font-semibold"
                     title="Start a new voice call with advanced options"
                   >
                     <Phone className="w-6 h-6 mr-3" />
@@ -6322,7 +6322,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button
                     onClick={() => setShowVoiceRecordings(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white h-20 text-lg font-semibold"
+                    className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white h-20 text-lg font-semibold"
                     title="Review and analyze voice call recordings"
                   >
                     <Play className="w-6 h-6 mr-3" />
@@ -6401,7 +6401,7 @@ export default function CommandCenter() {
                   </Button>
                   <Button
                     onClick={() => setShowAnalyticsModal(true)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white h-20 text-lg font-semibold"
+                    className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white h-20 text-lg font-semibold"
                     title="Generate detailed SmartSpend analytics reports"
                   >
                     <BarChart className="w-6 h-6 mr-3" />
@@ -6444,7 +6444,7 @@ export default function CommandCenter() {
                   setShowClearConfirm(false);
                   setDeleteConfirmText('');
                 }}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                className="flex-1 bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white"
               >
                 Cancel
               </Button>
@@ -6453,7 +6453,7 @@ export default function CommandCenter() {
                 disabled={deleteConfirmText.toLowerCase() !== 'delete'}
                 className={`flex-1 ${
                   deleteConfirmText.toLowerCase() === 'delete'
-                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                    ? 'bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828] text-white'
                     : 'bg-slate-600 text-slate-400 cursor-not-allowed'
                 }`}
               >
@@ -6706,7 +6706,7 @@ export default function CommandCenter() {
                       setToast({ title: "Error", description: "Failed to schedule follow-up", variant: "destructive" });
                     }
                   }}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg"
+                  className="flex-1 bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828] text-white font-semibold py-3 px-6 rounded-lg"
                 >
                   Schedule Follow-up
                 </Button>
@@ -6794,7 +6794,7 @@ export default function CommandCenter() {
                       setToast({ title: "Error", description: "Failed to send SMS", variant: "destructive" });
                     }
                   }}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg"
+                  className="flex-1 bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white font-semibold py-3 px-6 rounded-lg"
                 >
                   Send SMS
                 </Button>
@@ -7026,7 +7026,7 @@ export default function CommandCenter() {
                       setToast({ title: "Error", description: "Failed to process order", variant: "destructive" });
                     }
                   }}
-                  className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg"
+                  className="flex-1 bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white font-semibold py-3 px-6 rounded-lg"
                 >
                   Process Order
                 </Button>
@@ -7163,7 +7163,7 @@ export default function CommandCenter() {
               <div className="text-center text-white">
                 <p>Lead scraping functionality has been moved to the dedicated Lead Scraper page.</p>
                 <Link href="/lead-scraper">
-                  <Button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white">
+                  <Button className="mt-4 bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white">
                     Go to Lead Scraper
                   </Button>
                 </Link>
@@ -7348,7 +7348,7 @@ export default function CommandCenter() {
                     setNewTicketPriority('medium');
                   }}
                   disabled={!newTicketName.trim() || !newTicketEmail.trim() || !newTicketCategory || !newTicketSubject.trim() || !newTicketDescription.trim()}
-                  className="flex-1 bg-purple-600 hover:bg-purple-700 text-white border border-purple-400 py-3 text-lg font-medium"
+                  className="flex-1 bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white border border-purple-400 py-3 text-lg font-medium"
                 >
                   🚀 Submit Ticket
                 </Button>
@@ -7767,7 +7767,7 @@ export default function CommandCenter() {
                     </div>
                   </div>
                   <div className="mt-4 flex gap-3">
-                    <Button className="bg-green-600 hover:bg-green-700 text-white border border-green-500">
+                    <Button className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white border border-green-500">
                       Start Sync
                     </Button>
                     <Button variant="outline" className="border-green-400 text-green-400">
@@ -7925,7 +7925,7 @@ export default function CommandCenter() {
                 <Button
                   onClick={handleSendMessage}
                   disabled={!currentMessage.trim()}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4"
+                  className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white px-4"
                 >
                   <Send className="w-4 h-4" />
                 </Button>
@@ -8386,7 +8386,7 @@ export default function CommandCenter() {
 
               {/* Quick Actions */}
               <div className="mt-6 flex items-center justify-center space-x-4">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white">
                   <Calendar className="w-4 h-4 mr-2" />
                   Add Meeting
                 </Button>
@@ -8420,7 +8420,7 @@ export default function CommandCenter() {
               <Bell className="w-5 h-5 text-blue-400" />
               <span className="text-white font-medium">Next Scheduled Voice Test: Today @ 2:00 PM</span>
             </div>
-            <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button size="sm" className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white">
               View Details
             </Button>
           </div>
@@ -8434,7 +8434,7 @@ export default function CommandCenter() {
           <p className="text-slate-300 mb-4">Our team is here to help optimize your automation</p>
           <Button 
             onClick={handleContactSupport}
-            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+            className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white border border-blue-500"
           >
             <Headphones className="w-4 h-4 mr-2" />
             Contact Support
@@ -8533,7 +8533,7 @@ export default function CommandCenter() {
                     ].map((report, index) => (
                       <div key={index} className="flex items-center justify-between">
                         <span className="text-slate-300 text-sm">{report}</span>
-                        <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white text-xs">
+                        <Button size="sm" className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white text-xs">
                           View
                         </Button>
                       </div>
@@ -8618,7 +8618,7 @@ export default function CommandCenter() {
                       <span>Call ID: {call.id}</span>
                       <span>Duration: {call.duration}</span>
                       <span>Time: {call.timestamp}</span>
-                      <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs">
+                      <Button size="sm" className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white text-xs">
                         Listen
                       </Button>
                     </div>
@@ -8789,7 +8789,7 @@ export default function CommandCenter() {
               </Button>
               <Button
                 onClick={handleGenerateExport}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white"
               >
                 Generate Export
               </Button>
@@ -8887,7 +8887,7 @@ export default function CommandCenter() {
                       setShowScrapedLeads(false);
                       handleLeadScraper();
                     }}
-                    className="mt-4 bg-blue-600 hover:bg-blue-700 text-white"
+                    className="mt-4 bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white"
                   >
                     <Search className="w-4 h-4 mr-2" />
                     Start Lead Scraping
