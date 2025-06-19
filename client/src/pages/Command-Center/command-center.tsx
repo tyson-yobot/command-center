@@ -3214,31 +3214,31 @@ export default function CommandCenter() {
         )}
 
         {/* Sticky Quick Navigation Bar */}
-        <div className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-lg border-b border-cyan-400/30 shadow-lg mb-8">
+        <div className="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-lg border-b border-[#0d82da]/30 shadow-lg mb-8">
           <div className="max-w-7xl mx-auto px-6 py-3">
             <nav className="flex items-center justify-between">
               <div className="flex items-center space-x-6">
-                <span className="text-white font-semibold text-sm">Quick Nav:</span>
-                <a href="#analytics" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors duration-200 hover:underline flex items-center">
+                <span className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text font-semibold text-sm">Quick Nav:</span>
+                <a href="#analytics" className="text-[#0d82da] hover:text-[#1391f5] text-sm transition-colors duration-200 hover:underline flex items-center">
                   📊 Analytics
                 </a>
-                <a href="#tools" className="text-purple-400 hover:text-purple-300 text-sm transition-colors duration-200 hover:underline flex items-center">
+                <a href="#tools" className="text-[#0d82da] hover:text-[#1391f5] text-sm transition-colors duration-200 hover:underline flex items-center">
                   🛠 Tools
                 </a>
-                <a href="#voice-engine" className="text-green-400 hover:text-green-300 text-sm transition-colors duration-200 hover:underline flex items-center">
+                <a href="#voice-engine" className="text-[#0d82da] hover:text-[#1391f5] text-sm transition-colors duration-200 hover:underline flex items-center">
                   🤖 Voice Engine
                 </a>
-                <a href="#voice-studio" className="text-orange-400 hover:text-orange-300 text-sm transition-colors duration-200 hover:underline flex items-center">
+                <a href="#voice-studio" className="text-[#0d82da] hover:text-[#1391f5] text-sm transition-colors duration-200 hover:underline flex items-center">
                   🎙 Voice Studio
                 </a>
-                <a href="#knowledge-base" className="text-blue-400 hover:text-blue-300 text-sm transition-colors duration-200 hover:underline flex items-center">
+                <a href="#knowledge-base" className="text-[#0d82da] hover:text-[#1391f5] text-sm transition-colors duration-200 hover:underline flex items-center">
                   🧠 Knowledge Base
                 </a>
-                <a href="#exports-logs" className="text-amber-400 hover:text-amber-300 text-sm transition-colors duration-200 hover:underline flex items-center">
+                <a href="#exports-logs" className="text-[#0d82da] hover:text-[#1391f5] text-sm transition-colors duration-200 hover:underline flex items-center">
                   📁 Exports & Logs
                 </a>
               </div>
-              <div className="text-xs text-slate-400">
+              <div className="text-xs text-[#c3c3c3]">
                 Last updated: {new Date().toLocaleTimeString()}
               </div>
             </nav>
@@ -3287,13 +3287,13 @@ export default function CommandCenter() {
 
         {/* Dashboard Preset Selector */}
         <div className="mb-8">
-          <Card className="bg-slate-800/40 backdrop-blur-sm border border-cyan-400">
+          <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
-                    <Settings className="w-5 h-5 text-cyan-400" />
-                    <span className="text-white font-medium">Dashboard View:</span>
+                    <Settings className="w-5 h-5 text-[#0d82da]" />
+                    <span className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text font-medium">Dashboard View:</span>
                   </div>
                   <div className="flex space-x-2">
                     {[
@@ -3437,15 +3437,16 @@ export default function CommandCenter() {
           
           {/* Quick Action Launchpad */}
           <div id="tools" className="mb-8">
-            <Card className="bg-gradient-to-r from-blue-900/60 to-purple-900/60 backdrop-blur-sm border border-blue-400 shadow-lg shadow-blue-400/20">
+            <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white">
               <CardHeader>
                 <CardTitle className="text-white flex items-center justify-between text-2xl">
                   <div className="flex items-center">
-                    <Zap className="w-6 h-6 mr-3 text-blue-400" />
-                    🚀 Quick Action Launchpad
-                    <Badge className="ml-3 bg-blue-500 text-white text-sm px-3 py-1">ALL TRIGGERS</Badge>
+                    <Zap className="w-6 h-6 mr-3 text-[#0d82da]" />
+                    <span className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text">🚀 Quick Action Launchpad</span>
+                    <Badge className="ml-3 bg-gradient-to-br from-[#0d82da] to-[#085ca2] text-white text-sm px-3 py-1">ALL TRIGGERS</Badge>
                   </div>
                 </CardTitle>
+                <div className="w-full h-[1px] bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mt-2"></div>
               </CardHeader>
               <CardContent className="p-6">
                 <div className="grid grid-cols-3 gap-4">
@@ -4759,54 +4760,39 @@ export default function CommandCenter() {
         </Card>
 
         {/* SmartSpend™ Analytics Dashboard */}
-        <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+        <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white mb-8">
           <CardHeader>
             <CardTitle className="text-white flex items-center space-x-2">
-              <DollarSign className="w-5 h-5 text-green-400" />
-              <span>📈 SmartSpend™ Analytics</span>
-              <div className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full">PROPRIETARY</div>
+              <DollarSign className="w-5 h-5 text-[#0d82da]" />
+              <span className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text">📈 SmartSpend™ Analytics</span>
+              <div className="text-xs bg-gradient-to-br from-[#0d82da] to-[#085ca2] text-white px-2 py-1 rounded-full">PROPRIETARY</div>
             </CardTitle>
+            <div className="w-full h-[1px] bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mt-2"></div>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              <div className="bg-gradient-to-br from-green-600/20 to-green-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
-                <div className="text-center">
-                  <div className="text-3xl font-black text-green-400 mb-2">0</div>
-                  <div className="text-slate-300 text-sm">Monthly Savings</div>
-                  <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
-                    <div className={`bg-red-400 h-2 rounded-full ${ 'w0-'}`}></div>
-                  </div>
-                </div>
+              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
+                <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Monthly Savings</h4>
+                <div className="text-2xl font-bold">$0</div>
+                <div className="text-sm text-green-400">+0%</div>
               </div>
               
-              <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
-                <div className="text-center">
-                  <div className="text-3xl font-black text-blue-400 mb-2">0</div>
-                  <div className="text-blue-300 text-sm">Cost Reduction</div>
-                  <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
-                    <div className={`bg-blue-400 h-2 rounded-full ${ 'w0-'}`}></div>
-                  </div>
-                </div>
+              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
+                <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Cost Reduction</h4>
+                <div className="text-2xl font-bold">$0</div>
+                <div className="text-sm text-green-400">+0%</div>
               </div>
               
-              <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
-                <div className="text-center">
-                  <div className="text-3xl font-black text-purple-400 mb-2">0</div>
-                  <div className="text-slate-300 text-sm">ROI</div>
-                  <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
-                    <div className={`bg-purple-400 h-2 rounded-full ${ 'w0-'}`}></div>
-                  </div>
-                </div>
+              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
+                <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">ROI</h4>
+                <div className="text-2xl font-bold">0%</div>
+                <div className="text-sm text-green-400">+0%</div>
               </div>
               
-              <div className="bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 border border-blue-400 shadow-lg shadow-blue-400/20 rounded-lg p-4">
-                <div className="text-center">
-                  <div className="text-3xl font-black text-yellow-400 mb-2">0</div>
-                  <div className="text-slate-300 text-sm">Payback Days</div>
-                  <div className="w-full bg-slate-700 rounded-full h-2 mt-2">
-                    <div className={`bg-yellow-400 h-2 rounded-full ${ 'w0-'}`}></div>
-                  </div>
-                </div>
+              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
+                <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Payback Days</h4>
+                <div className="text-2xl font-bold">0</div>
+                <div className="text-sm text-green-400">+0%</div>
               </div>
             </div>
           </CardContent>
@@ -4816,16 +4802,16 @@ export default function CommandCenter() {
 
         {/* Lead Scraper Quick Access Button */}
         <div className="mb-8">
-          <Card className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-400/50">
+          <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-white text-xl font-bold mb-2">Enterprise Lead Intelligence Platform</h3>
-                  <p className="text-blue-200">Apollo.io, Apify, and PhantomBuster lead generation tools</p>
+                  <h3 className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text text-xl font-bold mb-2">Enterprise Lead Intelligence Platform</h3>
+                  <p className="text-[#c3c3c3]">Apollo.io, Apify, and PhantomBuster lead generation tools</p>
                 </div>
                 <Button
                   onClick={handleLeadScraper}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold px-8 py-4 text-lg border border-blue-400"
+                  className="bg-gradient-to-br from-[#0d82da] to-[#085ca2] text-white shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0a70c2] font-bold px-8 py-4 text-lg"
                   size="lg"
                 >
                   <Search className="w-6 h-6 mr-3" />
@@ -4873,13 +4859,14 @@ export default function CommandCenter() {
 
         {/* RAG Knowledge Base System - Positioned underneath Voice Engine + Command Center */}
         <div className="mb-4">
-          <Card className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2">
-            <CardHeader className="border-b border-purple-400/30">
+          <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white space-y-2">
+            <CardHeader className="border-b border-[#0d82da]/30">
               <CardTitle className="text-white flex items-center text-2xl font-bold">
-                <Brain className="w-7 h-7 mr-3 text-purple-400" />
-                🧠 RAG Knowledge Base
-                <Badge className="ml-3 bg-green-600 text-white">0</Badge>
+                <Brain className="w-7 h-7 mr-3 text-[#0d82da]" />
+                <span className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text">🧠 RAG Knowledge Base</span>
+                <Badge className="ml-3 bg-gradient-to-br from-[#0d82da] to-[#085ca2] text-white">0</Badge>
               </CardTitle>
+              <div className="w-full h-[1px] bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mt-2"></div>
             </CardHeader>
             <CardContent className="p-8">
               {/* Query Interface */}
