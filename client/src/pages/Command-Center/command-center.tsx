@@ -3390,7 +3390,7 @@ export default function CommandCenter() {
                         setActiveTab('admin-tools');
                       }
                     }}
-                    className="bg-red-600 hover:bg-red-700 text-white"
+                    className="bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d]/60 text-white"
                     title="Admin Tools - Administrative controls and system management"
                   >
                     <Shield className="w-4 h-4 mr-2" />
