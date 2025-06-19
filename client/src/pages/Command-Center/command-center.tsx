@@ -3454,7 +3454,7 @@ export default function CommandCenter() {
                   {/* Pipeline Controls */}
                   <Button
                     onClick={handleStartPipelineCalls}
-                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500 shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                    className="flex items-center justify-center p-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50"
                     title="Start/End Pipeline Calls"
                   >
                     <div className="text-center">
@@ -3465,7 +3465,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={() => setShowManualCallModal(true)}
-                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500 shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                    className="flex items-center justify-center p-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50"
                     title="Manual Call Start"
                   >
                     <div className="text-center">
@@ -3477,7 +3477,7 @@ export default function CommandCenter() {
                   <Button
                     onClick={handleLeadScraper}
                     onDoubleClick={() => setShowScrapedLeads(true)}
-                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500 relative shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                    className="flex items-center justify-center p-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50 relative"
                     title="Lead Scraper - Apollo, Apify, PhantomBuster"
                   >
                     <div className="text-center">
@@ -3494,7 +3494,7 @@ export default function CommandCenter() {
                   {/* Content & Marketing */}
                   <Button
                     onClick={handleContentCreatorSync}
-                    className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50"
+                    className="flex items-center justify-center px-4 py-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
                     title="Content Creator - Jasper.ai"
                   >
                     <div className="text-center">
@@ -3505,7 +3505,7 @@ export default function CommandCenter() {
 
                   <Button
                     onClick={handleCreateSupportTicket}
-                    className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50"
+                    className="flex items-center justify-center px-4 py-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
                     title="Submit Ticket"
                   >
                     <div className="text-center">
@@ -3516,7 +3516,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleMailchimpSync}
-                    className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50"
+                    className="flex items-center justify-center px-4 py-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
                     title="MailChimp Sync"
                   >
                     <div className="text-center">
@@ -3528,7 +3528,7 @@ export default function CommandCenter() {
                   {/* Analytics & Export Tools */}
                   <Button
                     onClick={() => setShowAnalyticsModal(true)}
-                    className="bg-gradient-to-br from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 text-white px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-orange-400/50"
+                    className="flex items-center justify-center px-4 py-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#ff6b35] to-[#f7931e] shadow-[0_0_10px_#ff8c42]/40 hover:from-[#ff7849] hover:to-[#ffb347]"
                     title="Analytics Report"
                   >
                     <div className="text-center">
@@ -3539,7 +3539,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleDownloadPDF}
-                    className="bg-gradient-to-br from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 text-white px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-orange-400/50"
+                    className="flex items-center justify-center px-4 py-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#ff6b35] to-[#f7931e] shadow-[0_0_10px_#ff8c42]/40 hover:from-[#ff7849] hover:to-[#ffb347]"
                     title="Quick Export"
                   >
                     <div className="text-center">
@@ -3550,7 +3550,7 @@ export default function CommandCenter() {
 
                   <Button
                     onClick={handleHubSpotCRM}
-                    className="bg-gradient-to-br from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 text-white px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-orange-400/50"
+                    className="flex items-center justify-center px-4 py-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#ff6b35] to-[#f7931e] shadow-[0_0_10px_#ff8c42]/40 hover:from-[#ff7849] hover:to-[#ffb347]"
                     title="HubSpot CRM"
                   >
                     <div className="text-center">
@@ -3567,7 +3567,7 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                       <Button
                         onClick={handleUploadDocs}
-                        className="bg-gradient-to-br from-blue-500 to-blue-700 hover:from-blue-400 hover:to-blue-600 text-white rounded-2xl px-4 py-4 h-20 font-semibold shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-blue-400/50 ring-0 hover:ring-2 hover:ring-blue-400/30"
+                        className="flex items-center justify-center px-4 py-4 h-20 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50"
                         title="PDF & Knowledge Upload"
                       >
                         <div className="text-center">
