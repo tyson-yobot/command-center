@@ -5997,11 +5997,12 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Support Status */}
-              <div className="bg-slate-700/40 rounded-lg p-6 border border-purple-400">
-                <h4 className="text-white font-medium mb-4 text-base flex items-center">
-                  <Activity className="w-5 h-5 mr-2 text-purple-400" />
+              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white">
+                <h4 className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text font-medium mb-4 text-base flex items-center">
+                  <Activity className="w-5 h-5 mr-2 text-[#0d82da]" />
                   Support Status
                 </h4>
+                <div className="h-[1px] w-full bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mb-4"></div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-slate-800/60 rounded-lg p-4 border border-purple-400/30">
                     <div className="text-slate-300 text-sm mb-2">Support Status</div>
