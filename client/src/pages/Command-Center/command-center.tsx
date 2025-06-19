@@ -5428,7 +5428,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleDownloadPDF}
-                    className="w-full bg-pink-600 hover:bg-pink-700 text-white flex items-center justify-center px-4 py-3 border border-pink-500"
+                    className="w-full bg-pink-600 hover:bg-pink-700 text-white flex items-center justify-center px-4 py-3 border border-pink-500 shadow-lg hover:shadow-pink-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                   >
                     <span className="text-xl mr-3">📋</span>
                     <span>Generate PDF Report</span>
@@ -5494,7 +5494,7 @@ export default function CommandCenter() {
                           <Button 
                             size="sm" 
                             onClick={() => handleServiceAction('monitoring', 'start')}
-                            className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 border border-green-400"
+                            className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 border border-green-400 shadow-md hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                             title="Start monitoring service"
                           >
                             Start
