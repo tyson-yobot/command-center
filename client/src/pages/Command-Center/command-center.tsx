@@ -8456,8 +8456,6 @@ export default function CommandCenter() {
           </div>
         </div>
       )}
-
-      </div>
     </div>
   );
 }
