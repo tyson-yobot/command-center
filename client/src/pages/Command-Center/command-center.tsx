@@ -4365,52 +4365,6 @@ export default function CommandCenter() {
               </div>
             </CardContent>
           </Card>
-
-          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-cyan-400 shadow-2xl shadow-cyan-400/30 shadow-[0_0_20px_rgba(6,182,212,0.3)] ring-2 ring-cyan-400/50">
-            <CardHeader className="bg-gradient-to-r from-cyan-600/20 to-cyan-500/20 border-b border-cyan-400/30 shadow-[0_2px_10px_rgba(6,182,212,0.2)]">
-              <CardTitle className="text-white flex items-center">
-                <MessageSquare className="w-6 h-6 mr-3 text-cyan-400" />
-                <span className="text-xl font-bold">💬 Conversation Analytics</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-cyan-400/30">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Sentiment Analysis</div>
-                  <div className="text-white font-bold text-xl mb-2">0</div>
-                  <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
-                </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-cyan-400/30">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Emotion Detection</div>
-                  <div className="text-white font-bold text-xl mb-2">0</div>
-                  <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
-                </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-cyan-400/30">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Avg Call Duration</div>
-                  <div className="text-white font-bold text-xl mb-2">0</div>
-                  <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
-                </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Resolution Rate</div>
-                  <div className="text-white font-bold text-xl">0</div>
-                </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Satisfaction Score</div>
-                  <div className="text-white font-bold text-xl">0</div>
-                </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Top Intent Detected</div>
-                  <div className="text-white font-bold text-base">No data available</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
 
@@ -5367,74 +5321,7 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* PDF Export Section */}
-        <div id="exports-logs" className="grid grid-cols-1 gap-8 mb-12">
 
-          {/* PDF & Export Panel */}
-          <Card className="bg-gradient-to-br from-purple-900/40 via-pink-900/30 to-red-900/20 backdrop-blur-sm border border-purple-400/50 shadow-2xl shadow-purple-500/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <FileText className="w-5 h-5 mr-2 text-purple-400" />
-                🧾 PDF & Export Panel
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/30">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-slate-300 text-sm">Last PDF Generated:</span>
-                    <span className="text-white font-bold text-sm">
-                      { 'Never'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300 text-sm">Export Timestamp:</span>
-                    <span className="text-purple-400 font-bold text-sm">
-                      { '0'}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Button
-                    onClick={() => setShowExportModal(true)}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center px-4 py-3 border border-purple-500 shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
-                  >
-                    <div className="text-center w-full">
-                      <div className="text-3xl mb-2">📊</div>
-                      <span>Quick Export Dashboard</span>
-                    </div>
-                  </Button>
-                  
-                  <Button
-                    onClick={handleDownloadPDF}
-                    className="w-full bg-pink-600 hover:bg-pink-700 text-white flex items-center justify-center px-4 py-3 border border-pink-500 shadow-lg hover:shadow-pink-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
-                  >
-                    <div className="text-center w-full">
-                      <div className="text-3xl mb-2">📋</div>
-                      <span>Generate PDF Report</span>
-                    </div>
-                  </Button>
-                </div>
-                
-                <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/30">
-                  <div className="text-slate-300 text-sm mb-2">Recent Exports:</div>
-                  <div className="space-y-1 text-xs text-slate-400">
-                    {currentSystemMode === 'test' ? (
-                      <>
-                        <div>• analytics_report_2024.pdf</div>
-                        <div>• dashboard_export.json</div>
-                        <div>• performance_metrics.csv</div>
-                      </>
-                    ) : (
-                      <div>No recent exports</div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
 
 
 
