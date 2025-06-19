@@ -4204,8 +4204,115 @@ export default function CommandCenter() {
 
 
 
-        {/* Voice & Conversation Analytics */}
+        {/* System Health & Metrics and Conversation Analytics Side by Side */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          {/* System Health & Metrics */}
+          <Card className="bg-gradient-to-r from-emerald-900/60 to-teal-800/60 backdrop-blur-sm border-2 border-emerald-400 shadow-2xl shadow-emerald-400/30 ring-2 ring-emerald-400/50 min-h-[480px]">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center text-lg">
+                <Gauge className="w-5 h-5 mr-2 text-emerald-400" />
+                System Health & Metrics
+                <Badge className="ml-2 bg-emerald-500 text-white text-xs px-2 py-1 border border-emerald-400">LIVE</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-5">
+              <div className="space-y-5">
+                {/* System Uptime */}
+                <div className="space-y-4">
+                  <h4 className="text-emerald-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2 text-base">
+                    <Activity className="w-4 h-4 mr-2" />
+                    System Uptime
+                  </h4>
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30">
+                      <div className="text-emerald-300 text-sm mb-1 font-medium">Current Uptime</div>
+                      <div className="text-white font-bold text-xl mb-2">{liveSystemData?.uptime || '0 hrs'}</div>
+                      <div className="w-full bg-slate-700/60 rounded-full h-3">
+                        <div className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-3 rounded-full" style={{ width: '98%' }}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Performance Metrics */}
+                <div className="space-y-4">
+                  <h4 className="text-emerald-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2 text-base">
+                    <TrendingUp className="w-4 h-4 mr-2" />
+                    Performance
+                  </h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="p-3 bg-slate-800/60 rounded-lg border border-emerald-400/40">
+                      <div className="text-emerald-300 text-xs mb-1">CPU Usage</div>
+                      <div className="text-white font-bold text-lg">{liveSystemData?.cpu || '45%'}</div>
+                    </div>
+                    <div className="p-3 bg-slate-800/60 rounded-lg border border-emerald-400/40">
+                      <div className="text-emerald-300 text-xs mb-1">Memory</div>
+                      <div className="text-white font-bold text-lg">{liveSystemData?.memory || '62%'}</div>
+                    </div>
+                    <div className="p-3 bg-slate-800/60 rounded-lg border border-emerald-400/40">
+                      <div className="text-emerald-300 text-xs mb-1">API Status</div>
+                      <div className="text-white font-bold text-lg">{liveSystemData?.apiStatus || 'ACTIVE'}</div>
+                    </div>
+                    <div className="p-3 bg-slate-800/60 rounded-lg border border-emerald-400/40">
+                      <div className="text-emerald-300 text-xs mb-1">Response Time</div>
+                      <div className="text-white font-bold text-lg">{liveSystemData?.responseTime || '12ms'}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Conversation Analytics */}
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-cyan-400 shadow-2xl shadow-cyan-400/30 shadow-[0_0_20px_rgba(6,182,212,0.3)] ring-2 ring-cyan-400/50">
+            <CardHeader className="bg-gradient-to-r from-cyan-600/20 to-cyan-500/20 border-b border-cyan-400/30 shadow-[0_2px_10px_rgba(6,182,212,0.2)]">
+              <CardTitle className="text-white flex items-center">
+                <MessageSquare className="w-6 h-6 mr-3 text-cyan-400" />
+                <span className="text-xl font-bold">💬 Conversation Analytics</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="space-y-4">
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-cyan-400/30">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Sentiment Analysis</div>
+                  <div className="text-white font-bold text-xl mb-2">0</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-cyan-400/30">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Emotion Detection</div>
+                  <div className="text-white font-bold text-xl mb-2">0</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-cyan-400/30">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Avg Call Duration</div>
+                  <div className="text-white font-bold text-xl mb-2">0</div>
+                  <div className="w-full bg-slate-700/60 rounded-full h-3">
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                  </div>
+                </div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Resolution Rate</div>
+                  <div className="text-white font-bold text-xl">0</div>
+                </div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Satisfaction Score</div>
+                  <div className="text-white font-bold text-xl">0</div>
+                </div>
+                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Top Intent Detected</div>
+                  <div className="text-white font-bold text-base">No data available</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Voice Commands Section - Standalone */}
+        <div className="mb-12">
           <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-green-400 shadow-2xl shadow-green-400/30 shadow-[0_0_20px_rgba(34,197,94,0.3)] ring-2 ring-green-400/50">
             <CardHeader className="bg-gradient-to-r from-green-600/20 to-green-500/20 border-b border-green-400/30 shadow-[0_2px_10px_rgba(34,197,94,0.2)]">
               <CardTitle className="text-white flex items-center">
