@@ -614,6 +614,84 @@ export default function CommandCenter() {
   const [completedCalls, setCompletedCalls] = useState(0);
   const [pipelineRunning, setPipelineRunning] = useState(false);
 
+  // Button feedback states for enhanced visual feedback
+  const [buttonStates, setButtonStates] = useState<Record<string, 'idle' | 'loading' | 'success' | 'error'>>({});
+
+  // Enhanced button feedback function
+  const showButtonFeedback = (buttonId: string, state: 'loading' | 'success' | 'error', duration = 2000) => {
+    setButtonStates(prev => ({ ...prev, [buttonId]: state }));
+    
+    if (state === 'success' || state === 'error') {
+      setTimeout(() => {
+        setButtonStates(prev => ({ ...prev, [buttonId]: 'idle' }));
+      }, duration);
+    }
+  };
+
+  // Enhanced button component with visual feedback states
+  const EnhancedButton = ({ 
+    children, 
+    onClick, 
+    buttonId, 
+    className = '', 
+    variant = 'default',
+    ...props 
+  }: any) => {
+    const currentState = buttonStates[buttonId] || 'idle';
+    
+    const getButtonClasses = () => {
+      const baseClasses = "relative overflow-hidden transition-all duration-300 transform active:scale-95";
+      
+      switch (currentState) {
+        case 'loading':
+          return `${baseClasses} ${className} opacity-80 cursor-wait`;
+        case 'success':
+          return `${baseClasses} ${className} bg-green-600 hover:bg-green-700 border-green-500 text-white shadow-lg shadow-green-500/50`;
+        case 'error':
+          return `${baseClasses} ${className} bg-red-600 hover:bg-red-700 border-red-500 text-white shadow-lg shadow-red-500/50`;
+        default:
+          return `${baseClasses} ${className}`;
+      }
+    };
+
+    const handleClick = async (e: any) => {
+      if (currentState === 'loading') return;
+      
+      showButtonFeedback(buttonId, 'loading');
+      try {
+        await onClick?.(e);
+        showButtonFeedback(buttonId, 'success');
+      } catch (error) {
+        showButtonFeedback(buttonId, 'error');
+      }
+    };
+
+    return (
+      <Button
+        {...props}
+        className={getButtonClasses()}
+        onClick={handleClick}
+        disabled={currentState === 'loading'}
+      >
+        {currentState === 'loading' && (
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 animate-pulse" />
+        )}
+        {currentState === 'success' && (
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-green-400/20 animate-pulse" />
+        )}
+        {currentState === 'error' && (
+          <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-red-400/20 animate-pulse" />
+        )}
+        <span className="relative z-10 flex items-center">
+          {currentState === 'loading' && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />}
+          {currentState === 'success' && <span className="mr-2">✓</span>}
+          {currentState === 'error' && <span className="mr-2">✗</span>}
+          {children}
+        </span>
+      </Button>
+    );
+  };
+
   // Service Management Functions
   const handleServiceAction = async (service: 'monitoring' | 'recording' | 'analytics', action: 'start' | 'restart' | 'ping') => {
     if (action === 'start') {
@@ -3356,7 +3434,7 @@ export default function CommandCenter() {
         )}
 
         {/* 1. Quick Action Launchpad - All Manual Triggers Consolidated at Top */}
-        <div className="mb-4">
+        <div id="tools" className="mb-4">
           <Card className="bg-gradient-to-r from-blue-900/60 to-purple-900/60 backdrop-blur-sm border border-blue-400 shadow-lg shadow-blue-400/20">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between text-2xl">
@@ -3655,7 +3733,7 @@ export default function CommandCenter() {
 
 
         {/* Analytics Dashboard - 3 Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div id="analytics" className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           {/* Performance & ROI Analytics */}
           <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border-2 border-purple-400 shadow-2xl shadow-purple-400/30 ring-2 ring-purple-400/50 min-h-[480px]">
             <CardHeader className="border-b-2 border-purple-400/40 shadow-lg bg-gradient-to-r from-purple-800/40 to-indigo-800/40 rounded-t-lg">
@@ -4767,7 +4845,7 @@ export default function CommandCenter() {
               </div>
 
               {/* Voice Synthesis Studio - Unified Module */}
-              <div className="mb-8">
+              <div id="voice-studio" className="mb-8">
                 <div className="bg-gradient-to-br from-purple-900/60 to-blue-900/60 rounded-lg p-6 border border-purple-400/50 shadow-lg shadow-purple-400/20">
                   <h3 className="text-white text-xl font-semibold mb-6 flex items-center">
                     <Mic className="w-6 h-6 mr-3 text-purple-400" />
