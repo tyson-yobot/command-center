@@ -3569,22 +3569,16 @@ export default function CommandCenter() {
                     </h4>
                     <div className="grid grid-cols-1 gap-4">
                       <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="flex justify-between items-center">
-                          <span className="text-purple-300 text-sm font-medium">Budget Efficiency:</span>
-                          <span className="text-purple-400 font-bold text-2xl">0</span>
-                        </div>
+                        <div className="text-2xl font-bold text-purple-400 mb-1">0</div>
+                        <div className="text-sm text-purple-300">Budget Efficiency</div>
                       </div>
                       <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="flex justify-between items-center">
-                          <span className="text-purple-300 text-sm font-medium">Cost Per Lead:</span>
-                          <span className="text-purple-400 font-bold text-2xl">0</span>
-                        </div>
+                        <div className="text-2xl font-bold text-purple-400 mb-1">0</div>
+                        <div className="text-sm text-purple-300">Cost Per Lead</div>
                       </div>
                       <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="flex justify-between items-center">
-                          <span className="text-purple-300 text-sm font-medium">ROI:</span>
-                          <span className="text-purple-400 font-bold text-2xl">0</span>
-                        </div>
+                        <div className="text-2xl font-bold text-purple-400 mb-1">0</div>
+                        <div className="text-sm text-purple-300">ROI</div>
                       </div>
                     </div>
                   </div>
@@ -3595,24 +3589,18 @@ export default function CommandCenter() {
                       <Brain className="w-4 h-4 mr-2" />
                       Botalytics™
                     </h4>
-                    <div className="space-y-3">
-                      <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/20">
-                        <div className="flex justify-between items-center">
-                          <span className="text-purple-300 text-sm font-medium">AI Accuracy:</span>
-                          <span className="text-white font-bold text-lg">0</span>
-                        </div>
+                    <div className="grid grid-cols-1 gap-4">
+                      <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
+                        <div className="text-2xl font-bold text-purple-400 mb-1">0</div>
+                        <div className="text-sm text-purple-300">AI Accuracy</div>
                       </div>
-                      <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/20">
-                        <div className="flex justify-between items-center">
-                          <span className="text-purple-300 text-sm font-medium">Interactions:</span>
-                          <span className="text-white font-bold text-lg">0</span>
-                        </div>
+                      <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
+                        <div className="text-2xl font-bold text-purple-400 mb-1">0</div>
+                        <div className="text-sm text-purple-300">Interactions</div>
                       </div>
-                      <div className="bg-slate-800/60 rounded-lg p-3 border border-purple-400/20">
-                        <div className="flex justify-between items-center">
-                          <span className="text-purple-300 text-sm font-medium">Learning Rate:</span>
-                          <span className="text-white font-bold text-lg">0</span>
-                        </div>
+                      <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
+                        <div className="text-2xl font-bold text-purple-400 mb-1">0</div>
+                        <div className="text-sm text-purple-300">Learning Rate</div>
                       </div>
                     </div>
                   </div>
