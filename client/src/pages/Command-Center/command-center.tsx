@@ -3248,8 +3248,8 @@ export default function CommandCenter() {
 
         {/* Dashboard Title */}
         <div className="mb-6 text-center">
-          <div className="flex items-center justify-center mb-4">
-            <h1 className="text-5xl font-bold text-white mb-2 flex items-center">
+          <div className="bg-gradient-to-r from-[#c3c3c3] via-white to-[#c3c3c3] rounded-xl p-6 mb-4 mx-auto max-w-4xl border-2 border-[#0d82da] shadow-[0_0_15px_#0d82da50]">
+            <h1 className="text-5xl font-bold text-black mb-2 flex items-center justify-center">
               <img 
                 src={robotHeadImage} 
                 alt="YoBot Robot Head" 
@@ -3261,14 +3261,16 @@ export default function CommandCenter() {
                   if (botIcon) botIcon.style.display = 'block';
                 }}
               />
-              <Bot className="w-16 h-16 mr-2 -mt-2 text-blue-400" style={{ display: 'none' }} />
-              YoBot<sup className="text-xl">®</sup>&nbsp;Command Center Dashboard
+              <Bot className="w-16 h-16 mr-2 -mt-2 text-black" style={{ display: 'none' }} />
+              YoBot<sup className="text-xl">®</sup>&nbsp;Command Center
             </h1>
+            <p className="text-black/80 text-lg font-medium">Your Complete AI Automation Dashboard</p>
           </div>
-          <p className="text-slate-300 text-lg mb-2">Your Complete AI Automation Dashboard</p>
-          <p className="text-slate-300 text-lg">
-            {selectedTier !== 'All' && `${selectedTier} Tier`}
-          </p>
+          {selectedTier !== 'All' && (
+            <p className="text-slate-300 text-lg">
+              {selectedTier} Tier
+            </p>
+          )}
         </div>
 
         {/* Live Call Banner */}

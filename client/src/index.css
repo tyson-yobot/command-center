@@ -91,7 +91,8 @@
   
   .btn-yobot-blue:hover {
     background: linear-gradient(to bottom right, #1391f5, #0c74c7);
-    box-shadow: 0 1px 0 0 rgba(13, 130, 218, 0.5);
+    box-shadow: 0 0 20px #0d82da, 0 0 30px rgba(13, 130, 218, 0.3);
+    border: 1px solid rgba(13, 130, 218, 0.6);
   }
 
   /* 🔴 2. Red (Danger/Hard Actions) - End Pipeline, Delete, Clear, Emergency */
@@ -103,6 +104,8 @@
   
   .btn-yobot-red:hover {
     background: linear-gradient(to bottom right, #f44, #c62828);
+    box-shadow: 0 0 20px #ff4d4d, 0 0 30px rgba(255, 77, 77, 0.3);
+    border: 1px solid rgba(229, 57, 53, 0.6);
   }
 
   /* 🟣 3. Purple (Voice, Persona, Test, Smart Actions) - Voice Studio, Test Persona, Submit Ticket */
@@ -114,6 +117,8 @@
   
   .btn-yobot-purple:hover {
     background: linear-gradient(to bottom right, #7f1fff, #2c8fff);
+    box-shadow: 0 0 20px #7e4cff, 0 0 30px rgba(126, 76, 255, 0.3);
+    border: 1px solid rgba(106, 17, 203, 0.6);
   }
 
   /* 🟢 4. Green (Status, Upload, Confirmation) - Upload, Save, Voice Ready, System Online */
@@ -125,6 +130,8 @@
   
   .btn-yobot-green:hover {
     background: linear-gradient(to bottom right, #1fff77, #00cc66);
+    box-shadow: 0 0 20px #4caf50, 0 0 30px rgba(76, 175, 80, 0.3);
+    border: 1px solid rgba(76, 175, 80, 0.6);
   }
 
   /* Legacy support classes */
