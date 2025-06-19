@@ -5178,6 +5178,181 @@ export default function CommandCenter() {
           </Card>
         </div>
 
+        {/* RAG Knowledge Base System - Positioned underneath Voice Engine + Command Center */}
+        <div className="mb-8">
+          <Card className="bg-gradient-to-br from-purple-900/80 via-blue-900/80 to-indigo-900/80 backdrop-blur-sm border border-purple-400/50 shadow-2xl shadow-purple-500/30">
+            <CardHeader className="border-b border-purple-400/30">
+              <CardTitle className="text-white flex items-center text-2xl font-bold">
+                <Brain className="w-7 h-7 mr-3 text-purple-400" />
+                🧠 RAG Knowledge Base
+                <Badge className="ml-3 bg-green-600 text-white">0</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
+              {/* Query Interface */}
+              <div className="mb-8">
+                <h3 className="text-white text-lg font-semibold mb-4">Knowledge Query Interface</h3>
+                <div className="space-y-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-5 w-5 text-purple-400" />
+                    <input
+                      type="text"
+                      value={queryText}
+                      onChange={(e) => setQueryText(e.target.value)}
+                      placeholder="Ask the knowledge base anything..."
+                      className="w-full pl-12 pr-20 py-3 bg-blue-900/60 border border-purple-400/50 rounded-lg text-white placeholder-purple-300 focus:border-purple-400 focus:outline-none"
+                    />
+                    <Button 
+                      onClick={startQueryVoiceRecognition}
+                      className={`absolute right-2 top-2 p-2 flex items-center space-x-1 ${userInitiatedVoice && isListening ? 'bg-green-500 animate-pulse' : 'bg-green-600 hover:bg-green-700'}`}
+                    >
+                      <Mic className="w-4 h-4" />
+                      {userInitiatedVoice && isListening && (
+                        <div className="flex items-center space-x0-.5 ml-1">
+                          {[1,2,3].map(i => (
+                            <div key={i} className="w0-.5 bg-green-300 rounded animate-pulse" style={{height: `${Math.random() * 6 + 3}px`, animationDelay: `${i * 100}ms`}}></div>
+                          ))}
+                        </div>
+                      )}
+                    </Button>
+                  </div>
+                  
+                  {/* Voice Activity Meter - Compact */}
+                  {userInitiatedVoice && isListening && (
+                    <div className="bg-blue-800/30 border border-blue-400/30 rounded px-3 py-1 mt-1">
+                      <div className="flex items-center space-x-2 text-xs">
+                        <div className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse"></div>
+                        <span className="text-blue-300">Voice Commands Active</span>
+                        <div className="flex items-center space-x-1 ml-auto">
+                          <span className="text-white opacity-70">Level:</span>
+                          <div className="w-16 bg-slate-700 rounded-full h-1">
+                            <div className="bg-red-400 h-1 rounded-full transition-all duration-150" style={{ width: `${Math.min(100, Math.max(5, (Math.random() * 60) + 20))}%` }}></div>
+                          </div>
+                          <span className="text-white opacity-70 w-8">{Math.round(Math.random() * 40 + 30)}%</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <Button 
+                      onClick={queryKnowledgeBase}
+                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                    >
+                      <Search className="w-4 h-4 mr-2" />
+                      Query Knowledge
+                    </Button>
+                    <Button 
+                      onClick={smartSearch}
+                      className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500"
+                    >
+                      <Brain className="w-4 h-4 mr-2" />
+                      Smart Search
+                    </Button>
+                    <Button 
+                      onClick={contextSearch}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                    >
+                      <FileText className="w-4 h-4 mr-2" />
+                      Context Search
+                    </Button>
+                    <Button 
+                      onClick={() => document.getElementById('file-upload')?.click()}
+                      className="bg-green-600 hover:bg-green-700 text-white border border-green-500"
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      Upload Documents
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Voice Programming Interface */}
+              <div className="mb-8">
+                <h3 className="text-white text-lg font-semibold mb-4">Voice Programming Interface</h3>
+                <div className="bg-gradient-to-br from-blue-900/60 to-cyan-900/60 rounded-lg p-6 border border-blue-400/50">
+                  <div className="space-y-4">
+                    <div className="relative">
+                      <textarea
+                        value={programmingText}
+                        onChange={(e) => setProgrammingText(e.target.value)}
+                        placeholder="Program the RAG system with voice commands or type instructions..."
+                        className="w-full p-4 bg-blue-800/60 border border-blue-400/50 rounded-lg text-white placeholder-blue-300 resize-none"
+                        rows={4}
+                      />
+                      <Button 
+                        onClick={startProgrammingVoiceRecognition}
+                        className={`absolute top-2 right-2 p-2 ${userInitiatedVoice && isListening ? 'bg-red-500 animate-pulse' : 'bg-red-600 hover:bg-red-700'}`}
+                      >
+                        <Mic className="w-4 h-4" />
+                        {userInitiatedVoice && isListening && <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>}
+                      </Button>
+                    </div>
+                    
+                    {/* Voice Activity Meter for Programming - Compact */}
+                    {userInitiatedVoice && isListening && (
+                      <div className="bg-cyan-800/30 border border-cyan-400/30 rounded px-3 py-1 mt-1">
+                        <div className="flex items-center space-x-2 text-xs">
+                          <div className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse"></div>
+                          <span className="text-cyan-300">Voice Commands Active - Programming instructions</span>
+                          <div className="flex items-center space-x-1 ml-auto">
+                            <span className="text-white opacity-70">Level:</span>
+                            <div className="w-16 bg-slate-700 rounded-full h-1">
+                              <div className="bg-cyan-400 h-1 rounded-full transition-all duration-150" style={{ width: `${Math.min(100, Math.max(5, (Math.random() * 70) + 15))}%` }}></div>
+                            </div>
+                            <span className="text-white opacity-70 w-8">{Math.round(Math.random() * 50 + 25)}%</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center justify-between p-3 bg-blue-800/40 rounded border border-blue-400/30">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-3 h-3 rounded-full ${userInitiatedVoice && isListening ? 'bg-red-400 animate-pulse' : 'bg-blue-400'}`}></div>
+                        <span className="text-blue-300 text-sm">{userInitiatedVoice && isListening ? 'Voice Recognition Active' : 'Voice Recognition Ready'}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-blue-400 text-xs">Status: {voiceStatus}</span>
+                        <Button 
+                          size="sm" 
+                          onClick={stopVoiceRecognition}
+                          className="bg-blue-600 hover:bg-blue-700"
+                        >
+                          <MicOff className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <Button 
+                        onClick={isListening ? stopVoiceRecognition : startProgrammingVoiceRecognition}
+                        className={`${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} text-white px-4 py-3`}
+                      >
+                        <Mic className="w-4 h-4 mr-2" />
+                        {isListening ? 'Stop Recording' : 'Start Recording'}
+                      </Button>
+                      <Button 
+                        onClick={processVoiceProgramming}
+                        className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-3"
+                        disabled={!programmingText.trim()}
+                      >
+                        <Brain className="w-4 h-4 mr-2" />
+                        Process Voice
+                      </Button>
+                      <Button 
+                        onClick={fetchAvailableVoices}
+                        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3"
+                      >
+                        <RefreshCw className="w-4 h-4 mr-2" />
+                        Refresh Voices
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Document Management & Memory Insertion */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Document Manager */}
