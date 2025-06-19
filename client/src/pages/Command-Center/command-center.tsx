@@ -3144,7 +3144,7 @@ export default function CommandCenter() {
         onModeToggle={toggleSystemMode}
       />
       
-      <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-4 px-4">
+      <div className="min-h-screen bg-black pt-4 px-4">
         <div className="w-full">
 
 
@@ -3349,7 +3349,7 @@ export default function CommandCenter() {
                         }
                       }}
                       size="sm"
-                      className="bg-green-600 hover:bg-green-700 text-white"
+                      className="bg-gradient-to-br from-[#0d82da] to-[#085ca2] text-white shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0a70c2]"
                       title="Quick access to automation operations"
                     >
                       <Zap className="w-4 h-4 mr-1" />
@@ -3371,7 +3371,7 @@ export default function CommandCenter() {
                         setShowAnalyticsModal(true);
                       }
                     }}
-                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                    className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] text-white shadow-[0_0_10px_#6a11cb]/50"
                     title="Generate Analytics Report with customizable options"
                   >
                     <FileText className="w-4 h-4 mr-2" />
