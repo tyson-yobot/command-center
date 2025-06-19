@@ -3148,9 +3148,7 @@ export default function CommandCenter() {
       />
       
       <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-4 px-4">
-
-      
-      <div className="w-full">
+        <div className="w-full">
 
 
 
@@ -8456,6 +8454,7 @@ export default function CommandCenter() {
           </div>
         </div>
       )}
+        </div>
       </div>
     </div>
   );
