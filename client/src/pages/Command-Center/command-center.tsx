@@ -63,6 +63,7 @@ import {
   TestTube,
   Plus,
   Play,
+  Square,
   ChevronDown,
   ChevronUp,
   Shield,
