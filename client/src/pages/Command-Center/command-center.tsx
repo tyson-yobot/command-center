@@ -4318,52 +4318,7 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          {/* Conversation Analytics */}
-          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-cyan-400 shadow-2xl shadow-cyan-400/30 shadow-[0_0_20px_rgba(6,182,212,0.3)] ring-2 ring-cyan-400/50">
-            <CardHeader className="bg-gradient-to-r from-cyan-600/20 to-cyan-500/20 border-b border-cyan-400/30 shadow-[0_2px_10px_rgba(6,182,212,0.2)]">
-              <CardTitle className="text-white flex items-center">
-                <MessageSquare className="w-6 h-6 mr-3 text-cyan-400" />
-                <span className="text-xl font-bold">💬 Conversation Analytics</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-cyan-400/30">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Sentiment Analysis</div>
-                  <div className="text-white font-bold text-xl mb-2">0</div>
-                  <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
-                </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-cyan-400/30">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Emotion Detection</div>
-                  <div className="text-white font-bold text-xl mb-2">0</div>
-                  <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
-                </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-cyan-400/30">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Avg Call Duration</div>
-                  <div className="text-white font-bold text-xl mb-2">0</div>
-                  <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
-                </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Resolution Rate</div>
-                  <div className="text-white font-bold text-xl">0</div>
-                </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Satisfaction Score</div>
-                  <div className="text-white font-bold text-xl">0</div>
-                </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-cyan-400/40 shadow-lg">
-                  <div className="text-cyan-300 text-sm mb-1 font-medium">Top Intent Detected</div>
-                  <div className="text-white font-bold text-base">No data available</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+
         </div>
 
         {/* Voice Commands Section - Standalone */}
@@ -4918,9 +4873,9 @@ export default function CommandCenter() {
 
 
 
-        {/* RAG Knowledge Base System - Positioned at bottom as requested */}
+        {/* RAG Knowledge Base System - Positioned underneath Voice Engine + Command Center */}
         <div className="mb-4">
-          <Card className="bg-gradient-to-br from-purple-900/80 via-blue-900/80 to-indigo-900/80 backdrop-blur-sm border border-purple-400/50 shadow-2xl shadow-purple-500/30">
+          <Card className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2">
             <CardHeader className="border-b border-purple-400/30">
               <CardTitle className="text-white flex items-center text-2xl font-bold">
                 <Brain className="w-7 h-7 mr-3 text-purple-400" />
