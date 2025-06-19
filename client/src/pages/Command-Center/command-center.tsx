@@ -4918,28 +4918,28 @@ export default function CommandCenter() {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px]">
                     <Button 
                       onClick={queryKnowledgeBase}
-                      className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white"
+                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] min-w-[120px]"
                     >
                       <Search className="w-4 h-4 mr-2" />
                       Query Knowledge
                     </Button>
                     <Button 
                       onClick={smartSearch}
-                      className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white border border-blue-500"
+                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50 min-w-[120px]"
                     >
                       <Brain className="w-4 h-4 mr-2" />
                       Smart Search
                     </Button>
                     <Button 
                       onClick={contextSearch}
-                      className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white"
+                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] min-w-[120px]"
                     >
                       <FileText className="w-4 h-4 mr-2" />
                       Context Search
                     </Button>
                     <Button 
                       onClick={() => document.getElementById('file-upload')?.click()}
-                      className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white border border-green-500"
+                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] min-w-[120px]"
                     >
                       <Upload className="w-4 h-4 mr-2" />
                       Upload Documents
@@ -5369,14 +5369,14 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px] mb-6">
                   <Button 
                     onClick={handleReindexKnowledge}
-                    className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white"
+                    className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] min-w-[120px]"
                   >
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Reindex Knowledge
                   </Button>
                   <Button 
                     onClick={handleClearKnowledge}
-                    className="bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828] text-white"
+                    className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828] min-w-[120px]"
                   >
                     <Trash2 className="w-4 h-4 mr-2" />
                     Clear Knowledge
@@ -5474,28 +5474,28 @@ export default function CommandCenter() {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px]">
                     <Button 
                       onClick={queryKnowledgeBase}
-                      className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white"
+                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] min-w-[120px]"
                     >
                       <Search className="w-4 h-4 mr-2" />
                       Query Knowledge
                     </Button>
                     <Button 
                       onClick={smartSearch}
-                      className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white border border-blue-500"
+                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50 min-w-[120px]"
                     >
                       <Brain className="w-4 h-4 mr-2" />
                       Smart Search
                     </Button>
                     <Button 
                       onClick={contextSearch}
-                      className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white"
+                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] min-w-[120px]"
                     >
                       <FileText className="w-4 h-4 mr-2" />
                       Context Search
                     </Button>
                     <Button 
                       onClick={() => document.getElementById('file-upload')?.click()}
-                      className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white border border-green-500"
+                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] min-w-[120px]"
                     >
                       <Upload className="w-4 h-4 mr-2" />
                       Upload Documents
@@ -7767,7 +7767,7 @@ export default function CommandCenter() {
                     </div>
                   </div>
                   <div className="mt-4 flex gap-3">
-                    <Button className="bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white border border-green-500">
+                    <Button className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] min-w-[120px]">
                       Start Sync
                     </Button>
                     <Button variant="outline" className="border-green-400 text-green-400">
@@ -8434,7 +8434,7 @@ export default function CommandCenter() {
           <p className="text-slate-300 mb-4">Our team is here to help optimize your automation</p>
           <Button 
             onClick={handleContactSupport}
-            className="bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white border border-blue-500"
+            className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50 min-w-[120px]"
           >
             <Headphones className="w-4 h-4 mr-2" />
             Contact Support
