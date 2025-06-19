@@ -3578,7 +3578,7 @@ export default function CommandCenter() {
                       
                       <Button
                         onClick={handleViewKnowledge}
-                        className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white rounded-2xl px-4 py-4 h-20 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50 ring-0 hover:ring-2 hover:ring-purple-400/30"
+                        className="flex items-center justify-center px-4 py-4 h-20 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
                         title="Knowledge Areas"
                       >
                         <div className="text-center">
@@ -3589,7 +3589,7 @@ export default function CommandCenter() {
                       
                       <Button
                         onClick={handleRunDiagnostics}
-                        className="bg-gradient-to-br from-amber-500 to-amber-700 hover:from-amber-400 hover:to-amber-600 text-white rounded-2xl px-4 py-4 h-20 font-semibold shadow-lg hover:shadow-amber-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-amber-400/50 ring-0 hover:ring-2 hover:ring-amber-400/30"
+                        className="flex items-center justify-center px-4 py-4 h-20 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#ff6b35] to-[#f7931e] shadow-[0_0_10px_#ff8c42]/40 hover:from-[#ff7849] hover:to-[#ffb347]"
                         title="System Diagnostics"
                       >
                         <div className="text-center">
