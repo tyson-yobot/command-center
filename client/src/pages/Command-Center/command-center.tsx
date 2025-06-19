@@ -81,6 +81,8 @@ import { ContentCreatorDashboard } from '@/components/content-creator-dashboard'
 import { MailchimpSyncDashboard } from '@/components/mailchimp-sync-dashboard';
 import { SocialContentCreator } from '@/components/social-content-creator';
 import { useToast } from '@/hooks/use-toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Toast, ToastTitle, ToastDescription } from '@/components/ui/toast';
 import { KnowledgeViewerModal } from '@/components/knowledge-viewer-modal';
 import { DocumentPreviewModal } from '@/components/document-preview-modal';
@@ -399,9 +401,7 @@ export default function CommandCenter() {
   const [showPublyDashboard, setShowPublyDashboard] = useState(false);
   const [showMailchimpDashboard, setShowMailchimpDashboard] = useState(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
-  const [showScrapedLeads, setShowScrapedLeads] = useState(false);
-  const [scrapedLeadsCount, setScrapedLeadsCount] = useState(0);
-  const [recentLeads, setRecentLeads] = useState<any[]>([]);
+
   const [showLiveChat, setShowLiveChat] = useState(false);
   const [showTicketsList, setShowTicketsList] = useState(false);
   const [showCreateTicket, setShowCreateTicket] = useState(false);
@@ -411,8 +411,8 @@ export default function CommandCenter() {
   const [previewDocumentId, setPreviewDocumentId] = useState('');
   const [previewDocumentName, setPreviewDocumentName] = useState('');
   const [selectedKnowledgeItems, setSelectedKnowledgeItems] = useState<string[]>([]);
-  const [knowledgeItems, setKnowledgeItems] = useState([]);
-  const [memoryActivityLog, setMemoryActivityLog] = useState([]);
+  const [knowledgeItems, setKnowledgeItems] = useState<any[]>([]);
+  const [memoryActivityLog, setMemoryActivityLog] = useState<Array<{timestamp: string, type: string, category: string, result: string}>>([]);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showManualCallModal, setShowManualCallModal] = useState(false);
   const [voiceActive, setVoiceActive] = useState(false);
@@ -429,6 +429,9 @@ export default function CommandCenter() {
   const [showCreateVoiceCallModal, setShowCreateVoiceCallModal] = useState(false);
   const [showLeadScraperPopup, setShowLeadScraperPopup] = useState(false);
   const [leadScraperDefaultTab, setLeadScraperDefaultTab] = useState<'apollo' | 'apify' | 'phantombuster'>('apollo');
+  const [showScrapedLeads, setShowScrapedLeads] = useState(false);
+  const [scrapedLeadsCount, setScrapedLeadsCount] = useState(0);
+  const [recentLeads, setRecentLeads] = useState<any[]>([]);
 
 
   // Test statistics for Live Integration Test Results
@@ -9054,5 +9057,3 @@ export default function CommandCenter() {
     </div>
   );
 }
-
-export default CommandCenter;
