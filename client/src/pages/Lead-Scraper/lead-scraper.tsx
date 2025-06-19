@@ -347,7 +347,7 @@ const LeadScraper: React.FC = () => {
               variant="ghost"
               size="sm"
               onClick={() => setCurrentView('overview')}
-              className="text-white hover:bg-white/10"
+              className="text-white hover:bg-white/10 min-w-[120px] px-4 py-2"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Platforms
@@ -374,7 +374,7 @@ const LeadScraper: React.FC = () => {
               variant="ghost"
               size="sm"
               onClick={() => setCurrentView('overview')}
-              className="text-white hover:bg-white/10"
+              className="text-white hover:bg-white/10 min-w-[120px] px-4 py-2"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Platform Overview

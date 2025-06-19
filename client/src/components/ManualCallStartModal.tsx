@@ -360,14 +360,14 @@ export function ManualCallStartModal({ isOpen, onClose }: ManualCallStartModalPr
           <Button 
             variant="outline" 
             onClick={onClose}
-            className="bg-slate-700/50 border border-white/10 text-white hover:bg-slate-600/50 px-4 py-2"
+            className="bg-slate-700/50 border border-white/10 text-white hover:bg-slate-600/50 min-w-[120px] px-4 py-2"
           >
             Cancel
           </Button>
           <Button 
             onClick={handleCreateCall} 
             disabled={isCreating}
-            className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold px-8 py-2.5 shadow-lg transform hover:scale-105 transition-all duration-200"
+            className="btn-yobot-green min-w-[120px] px-8 py-2.5"
           >
             {isCreating ? 'Creating Call...' : 'Create Call'}
           </Button>
