@@ -3824,12 +3824,12 @@ export default function CommandCenter() {
           </Card>
 
           {/* System Health & Metrics */}
-          <Card className="bg-gradient-to-r from-emerald-900/60 to-teal-800/60 backdrop-blur-sm border-2 border-emerald-400 shadow-2xl shadow-emerald-400/30 ring-2 ring-emerald-400/50 min-h-[480px]">
+          <Card className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2 min-h-[480px]">
             <CardHeader>
               <CardTitle className="text-white flex items-center text-lg">
-                <Gauge className="w-5 h-5 mr-2 text-emerald-400" />
+                <Gauge className="w-5 h-5 mr-2 text-cyan-400" />
                 System Health & Metrics
-                <Badge className="ml-2 bg-emerald-500 text-white text-xs px-2 py-1 border border-emerald-400">LIVE</Badge>
+                <Badge className="ml-2 bg-cyan-500 text-white text-xs px-2 py-1 border border-cyan-400">LIVE</Badge>
               </CardTitle>
             </CardHeader>
             {!collapsedSections['system-health'] && (
@@ -3837,50 +3837,50 @@ export default function CommandCenter() {
                 <div className="space-y-5">
                   {/* System Uptime */}
                   <div className="space-y-4">
-                    <h4 className="text-emerald-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2 text-base">
-                      <Activity className="w-4 h-4 mr-2" />
+                    <h4 className="text-white font-semibold flex items-center border-b border-cyan-400/30 pb-2 text-base">
+                      <Activity className="w-4 h-4 mr-2 text-cyan-400" />
                       System Uptime
                     </h4>
                     <div className="grid grid-cols-1 gap-4">
-                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="text-2xl font-bold text-emerald-400 mb-1">0</div>
-                        <div className="text-sm text-emerald-300">Uptime</div>
+                      <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center">
+                        <div className="text-2xl font-bold text-cyan-400 mb-1">0</div>
+                        <div className="text-sm text-white">Uptime</div>
                       </div>
-                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center">
-                        <div className="text-2xl font-bold text-emerald-400 mb-1">0</div>
-                        <div className="text-sm text-emerald-300">Response Time</div>
+                      <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center">
+                        <div className="text-2xl font-bold text-cyan-400 mb-1">0</div>
+                        <div className="text-sm text-white">Response Time</div>
                       </div>
                     </div>
                   </div>
                   
                   {/* Client Pulse */}
                   <div className="space-y-4">
-                    <h4 className="text-emerald-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2 text-base">
-                      <Users className="w-4 h-4 mr-2" />
+                    <h4 className="text-white font-semibold flex items-center border-b border-cyan-400/30 pb-2 text-base">
+                      <Users className="w-4 h-4 mr-2 text-cyan-400" />
                       Client Pulse
                     </h4>
                     <div className="grid grid-cols-1 gap-4">
-                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 animate-pulse"></div>
+                      <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-cyan-400/5 animate-pulse"></div>
                         <div className="relative z-10">
-                          <div className="text-2xl font-bold text-emerald-400 mb-1 flex items-center">
+                          <div className="text-2xl font-bold text-cyan-400 mb-1 flex items-center">
                             ⭐ 0
                           </div>
-                          <div className="text-sm text-emerald-300">NPS Score</div>
+                          <div className="text-sm text-white">NPS Score</div>
                           <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                            <div className="bg-emerald-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
+                            <div className="bg-cyan-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
                           </div>
                         </div>
                       </div>
-                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 animate-pulse"></div>
+                      <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-cyan-400/5 animate-pulse"></div>
                         <div className="relative z-10">
-                          <div className="text-2xl font-bold text-emerald-400 mb-1 flex items-center">
+                          <div className="text-2xl font-bold text-cyan-400 mb-1 flex items-center">
                             👥 0
                           </div>
-                          <div className="text-sm text-emerald-300">Active Clients</div>
+                          <div className="text-sm text-white">Active Clients</div>
                           <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                            <div className="bg-emerald-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
+                            <div className="bg-cyan-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
                           </div>
                         </div>
                       </div>
@@ -3889,32 +3889,32 @@ export default function CommandCenter() {
                   
                   {/* Operations Stats */}
                   <div className="space-y-4">
-                    <h4 className="text-emerald-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2 text-base">
-                      <Target className="w-4 h-4 mr-2" />
+                    <h4 className="text-white font-semibold flex items-center border-b border-cyan-400/30 pb-2 text-base">
+                      <Target className="w-4 h-4 mr-2 text-cyan-400" />
                       Ops Stats
                     </h4>
                     <div className="grid grid-cols-1 gap-4">
-                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 animate-pulse"></div>
+                      <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-cyan-400/5 animate-pulse"></div>
                         <div className="relative z-10">
-                          <div className="text-2xl font-bold text-emerald-400 mb-1 flex items-center">
+                          <div className="text-2xl font-bold text-cyan-400 mb-1 flex items-center">
                             📞 {activeCalls?.data?.length || 0}
                           </div>
-                          <div className="text-sm text-emerald-300">Active Calls</div>
+                          <div className="text-sm text-white">Active Calls</div>
                           <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                            <div className="bg-emerald-400 h-1 rounded-full w-0 animate-pulse" style={{width: `${Math.min((activeCalls?.data?.length || 0) * 20, 100)}%`}}></div>
+                            <div className="bg-cyan-400 h-1 rounded-full w-0 animate-pulse" style={{width: `${Math.min((activeCalls?.data?.length || 0) * 20, 100)}%`}}></div>
                           </div>
                         </div>
                       </div>
-                      <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 animate-pulse"></div>
+                      <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-cyan-400/5 animate-pulse"></div>
                         <div className="relative z-10">
-                          <div className="text-2xl font-bold text-emerald-400 mb-1 flex items-center">
+                          <div className="text-2xl font-bold text-cyan-400 mb-1 flex items-center">
                             ✅ {callMetrics?.data?.successRate || 0}%
                           </div>
-                          <div className="text-sm text-emerald-300">Success Rate</div>
+                          <div className="text-sm text-white">Success Rate</div>
                           <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
-                            <div className="bg-emerald-400 h-1 rounded-full w-0 animate-pulse" style={{width: `${callMetrics?.data?.successRate || 0}%`}}></div>
+                            <div className="bg-cyan-400 h-1 rounded-full w-0 animate-pulse" style={{width: `${callMetrics?.data?.successRate || 0}%`}}></div>
                           </div>
                         </div>
                       </div>
