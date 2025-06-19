@@ -3672,7 +3672,7 @@ export default function CommandCenter() {
 
         {/* 2. Voice Engine + Command Center (Consolidated Voice Section) */}
         <div className="mb-4">
-          <Card className="bg-gradient-to-br from-green-900/60 to-emerald-800/40 backdrop-blur-sm border border-green-400 shadow-lg shadow-green-400/20">
+          <Card className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between text-xl">
                 <div className="flex items-center">
@@ -3708,14 +3708,14 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={handleStartPipelineCalls}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-4 h-12 shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                      className="rounded-xl px-5 py-3 font-semibold tracking-wide text-white shadow-xl bg-gradient-to-br from-emerald-400 via-lime-500 to-green-400 hover:from-lime-400 hover:to-emerald-500 hover:shadow-green-400/50 transition-all duration-150 ease-in-out hover:scale-105 w-full h-12"
                     >
                       <Play className="w-4 h-4 mr-2" />
                       Start Pipeline
                     </Button>
                     <Button
                       onClick={handleStopPipelineCalls}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-4 h-12 shadow-lg hover:shadow-red-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                      className="rounded-xl px-5 py-3 font-semibold tracking-wide text-white shadow-xl bg-gradient-to-br from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 hover:shadow-red-400/50 transition-all duration-150 ease-in-out hover:scale-105 w-full h-12"
                     >
                       <PhoneOff className="w-4 h-4 mr-2" />
                       End Pipeline
@@ -3769,7 +3769,7 @@ export default function CommandCenter() {
 
 
           {/* Detailed Analytics & Reports */}
-          <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border-2 border-purple-400 shadow-2xl shadow-purple-400/30 ring-2 ring-purple-400/50 min-h-[480px]">
+          <Card className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2 min-h-[480px]">
             <CardHeader>
               <CardTitle className="text-white flex items-center text-lg">
                 <BarChart3 className="w-5 h-5 mr-2 text-purple-400" />
