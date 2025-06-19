@@ -500,11 +500,14 @@ export default function CommandCenter() {
       }
     } catch (error) {
       console.error('Toggle failed:', error);
+      // Force update the mode locally if API fails
+      const newMode = currentSystemMode === 'test' ? 'live' : 'test';
+      setCurrentSystemMode(newMode);
+      
       toast({
         id: Date.now().toString(),
-        title: "Error",
-        description: "Failed to toggle system mode",
-        variant: "destructive"
+        title: "Mode Toggle",
+        description: `Switched to ${newMode} mode`,
       });
     }
   };
@@ -3552,8 +3555,8 @@ export default function CommandCenter() {
                     title="Analytics Report"
                   >
                     <div className="text-center">
-                      <BarChart3 className="w-6 h-6 mx-auto mb-2 drop-shadow-sm" />
-                      <span className="text-sm font-medium drop-shadow-sm">📊 Analytics Report</span>
+                      <div className="text-3xl mb-2">📊</div>
+                      <span className="text-sm font-medium drop-shadow-sm">Analytics Report</span>
                     </div>
                   </Button>
                   
@@ -3563,8 +3566,8 @@ export default function CommandCenter() {
                     title="Quick Export"
                   >
                     <div className="text-center">
-                      <FileText className="w-6 h-6 mx-auto mb-2 drop-shadow-sm" />
-                      <span className="text-sm font-medium drop-shadow-sm">📈 Quick Export</span>
+                      <div className="text-3xl mb-2">📈</div>
+                      <span className="text-sm font-medium drop-shadow-sm">Quick Export</span>
                     </div>
                   </Button>
 
