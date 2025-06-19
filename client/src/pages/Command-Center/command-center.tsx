@@ -3629,7 +3629,7 @@ export default function CommandCenter() {
                   <Button 
                     onClick={insertMemoryText}
                     disabled={!memoryText.trim()}
-                    className="w-full bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white px-4 py-3 h-16"
+                    className="w-full yobot-button-tool px-4 py-3 h-16"
                   >
                     <Brain className="w-4 h-4 mr-2" />
                     Insert Memory Text
@@ -3637,7 +3637,7 @@ export default function CommandCenter() {
 
                   <Button 
                     onClick={handleViewKnowledge}
-                    className="w-full bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] text-white border border-blue-500 px-4 py-3 h-16"
+                    className="w-full yobot-button-primary px-4 py-3 h-16"
                   >
                     <FileText className="w-4 h-4 mr-2" />
                     View Knowledge Library
@@ -3645,7 +3645,7 @@ export default function CommandCenter() {
 
                   <Button 
                     onClick={() => setShowCreateCallModal(true)}
-                    className="w-full bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66] text-white px-4 py-3 h-16"
+                    className="w-full yobot-button-primary px-4 py-3 h-16"
                   >
                     <Phone className="w-4 h-4 mr-2" />
                     Create Manual Call
@@ -3653,7 +3653,7 @@ export default function CommandCenter() {
 
                   <Button 
                     onClick={() => setShowSMSModal(true)}
-                    className="w-full bg-teal-600 hover:bg-teal-700 text-white px-4 py-3 h-16"
+                    className="w-full yobot-button-primary px-4 py-3 h-16"
                   >
                     <MessageSquare className="w-4 h-4 mr-2" />
                     Send SMS
@@ -3743,7 +3743,7 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={() => setShowCreateVoiceCallModal(true)}
-                      className="w-full bg-gradient-to-br from-green-500 to-green-700 hover:from-green-400 hover:to-green-600 text-white rounded-2xl px-4 py-4 h-12 font-semibold shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-green-400/50 ring-0 hover:ring-2 hover:ring-green-400/30"
+                      className="w-full yobot-button-tool rounded-2xl px-4 py-4 h-12 font-semibold"
                     >
                       <Headphones className="w-4 h-4 mr-2 drop-shadow-sm" />
                       🎙 Voice Studio

@@ -29,10 +29,10 @@ export function YoBotButton({
   };
 
   const variantStyles = {
-    blue: "bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50",
+    blue: "bg-gradient-to-br from-[#0d82da] to-[#085ca2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0a70c2] hover:ring-1 hover:ring-[#0d82da]/50",
     red: "bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828]",
-    purple: "bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]",
-    green: "bg-gradient-to-br from-[#00d26a] to-[#00a854] shadow-[0_0_8px_#00ff99]/40 hover:from-[#1fff77] hover:to-[#00cc66]",
+    purple: "bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#6a11cb]/50 hover:from-[#7f1fff] hover:to-[#2c8fff]",
+    green: "bg-gradient-to-br from-[#0d82da] to-[#085ca2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0a70c2]",
   };
 
   return (

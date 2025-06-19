@@ -56,7 +56,7 @@
   background: linear-gradient(to bottom right, #6a11cb, #2575fc) !important;
   color: white !important;
   border: none !important;
-  box-shadow: 0 0 10px rgba(126, 76, 255, 0.4) !important;
+  box-shadow: 0 0 10px rgba(106, 17, 203, 0.5) !important;
   transition: all 0.2s !important;
 }
 
@@ -67,29 +67,29 @@
 }
 
 .yobot-blue {
-  background: #0d82da !important;
+  background: linear-gradient(to bottom right, #0d82da, #085ca2) !important;
   color: white !important;
   border: none !important;
-  box-shadow: 0 0 10px rgba(13, 130, 218, 0.4) !important;
+  box-shadow: 0 0 10px #0d82da !important;
   transition: all 0.2s !important;
 }
 
 .yobot-blue:hover {
-  background: #0b6ab5 !important;
+  background: linear-gradient(to bottom right, #1391f5, #0a70c2) !important;
   transform: scale(1.02) !important;
   color: white !important;
 }
 
 .yobot-green {
-  background: linear-gradient(to bottom right, #00d26a, #00a854) !important;
+  background: linear-gradient(to bottom right, #0d82da, #085ca2) !important;
   color: white !important;
   border: none !important;
-  box-shadow: 0 0 8px rgba(0, 255, 153, 0.4) !important;
+  box-shadow: 0 0 10px #0d82da !important;
   transition: all 0.2s !important;
 }
 
 .yobot-green:hover {
-  background: linear-gradient(to bottom right, #1fff77, #00cc66) !important;
+  background: linear-gradient(to bottom right, #1391f5, #0a70c2) !important;
   transform: scale(1.02) !important;
   color: white !important;
 }
