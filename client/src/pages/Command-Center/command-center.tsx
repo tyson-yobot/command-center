@@ -3528,7 +3528,7 @@ export default function CommandCenter() {
                   {/* Analytics & Export Tools */}
                   <Button
                     onClick={() => setShowAnalyticsModal(true)}
-                    className="btn-yobot-purple"
+                    className="btn-yobot-purple h-24"
                     title="Analytics Report"
                   >
                     <div className="text-center">
@@ -3539,7 +3539,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleDownloadPDF}
-                    className="btn-yobot-blue"
+                    className="btn-yobot-blue h-24"
                     title="Quick Export"
                   >
                     <div className="text-center">
@@ -3550,7 +3550,7 @@ export default function CommandCenter() {
 
                   <Button
                     onClick={handleHubSpotCRM}
-                    className="btn-yobot-purple"
+                    className="btn-yobot-purple h-24"
                     title="HubSpot CRM"
                   >
                     <div className="text-center">

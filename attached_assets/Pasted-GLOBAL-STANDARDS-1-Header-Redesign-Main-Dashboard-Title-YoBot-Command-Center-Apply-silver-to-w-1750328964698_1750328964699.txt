@@ -1,0 +1,92 @@
+GLOBAL STANDARDS
+1. Header Redesign
+Main Dashboard Title (YoBot® Command Center):
+
+Apply silver-to-white gradient background.
+
+Text should be #000000 (Black), bold, large, and centered.
+
+Include the YoBot® icon on the left.
+
+Top bar (currently Royal Blue):
+
+Replace with darker gradient (e.g., #0d82da to #000000) or a matte YoBot® Navy.
+
+Navigation icons should glow subtly on hover.
+
+🧩 CARD & LAYOUT RULES
+2. All Cards
+Minimum of 2 cards per row, ideally 3.
+
+NEVER allow a single card to span full width alone.
+
+Add 24px padding around every card.
+
+Outer border = THICK electric blue neon.
+
+Inside elements = subtle silver inner glow (for charts, text blocks, or sections).
+
+3. Interactive Cards (with buttons)
+These must be grouped TOGETHER at the top.
+
+All button-based cards (manual calls, ticket submission, PDF upload, scraper, diagnostics, etc.) must be:
+
+Under the Quick Action Launchpad and above all analytics.
+
+Grouped consistently — do not scatter them across the dashboard.
+
+🧲 BUTTON STYLE MANDATE
+4. All Buttons (Primary, Action, Navigation)
+Uniform style across the entire system.
+
+Use neon border + soft glow/shadow.
+
+Color logic:
+
+✅ Success/confirm: Electric Blue with white glow
+
+⚠️ Warning: Orange
+
+❌ Critical/Emergency: Red with glow
+
+📄 Secondary/actions: Silver with glow on hover
+
+Text inside buttons must be readable: white or black depending on contrast.
+
+📊 ANALYTICS LAYOUT
+5. Analytics & Metrics Cards
+All analytics and reporting blocks should appear in clean rows at the bottom.
+
+Use consistent layout:
+
+One row: SmartSpend™
+
+One row: Botalytics™
+
+One row: AI Assistant Insights + Ops Stats + Client Pulse
+
+Last row: System Health
+
+Keep metrics stacked in 2–3 cards per row — don’t stack 6 long blocks vertically.
+
+🔄 ORGANIZATION DEMANDS
+6. Order of Sections
+plaintext
+Copy
+Edit
+1. Header (Gradient + Branding)
+2. Quick Actions Bar
+3. Interactive Action Center (all buttons/tools)
+4. Voice Engine + Status
+5. RAG / Programming / Voice Studio
+6. Document Tools & Upload
+7. Analytics Section (SmartSpend™, Botalytics™, AI Insights, etc.)
+8. System Health + Call Logs + Support
+🪩 Final Vibe Goals
+Dashboard must POP — neon accents, clean spacing, symmetric rows.
+
+Flow matters: buttons up top, data below.
+
+Space matters: no wasted width.
+
+Style matters: high-gloss, electric trim, premium-grade polish.
