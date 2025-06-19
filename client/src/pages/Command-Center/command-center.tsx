@@ -4121,49 +4121,50 @@ export default function CommandCenter() {
             </CardContent>
           </Card>
 
-          {/* Botalytics™ - Sleek Lime Design */}
-          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-lime-400 shadow-2xl shadow-lime-400/30 shadow-[0_0_20px_rgba(163,230,53,0.3)] ring-2 ring-lime-400/50">
-            <CardHeader className="bg-gradient-to-r from-lime-500/20 to-lime-400/20 border-b border-lime-400/30 shadow-[0_2px_10px_rgba(163,230,53,0.2)]">
-              <CardTitle className="text-white flex items-center">
-                <BarChart3 className="w-6 h-6 mr-3 text-lime-400" />
-                <span className="text-xl font-bold">📊 Botalytics™</span>
+          {/* Botalytics™ - Unified Neon Design */}
+          <Card className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center text-xl">
+                <BarChart3 className="w-6 h-6 mr-3 text-cyan-400" />
+                📊 Botalytics™
+                <Badge className="ml-3 bg-cyan-500 text-white text-sm px-3 py-1">LIVE</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg shadow-[0_0_15px_rgba(163,230,53,0.2)] ring-1 ring-lime-400/30">
-                  <div className="text-lime-300 text-sm mb-1 font-medium" title="Ad spend ÷ New clients this month">Cost Per Lead</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium" title="Ad spend ÷ New clients this month">Cost Per Lead</div>
                   <div className="text-white font-bold text-xl mb-2">{metrics?.data?.costPerLead || '0'}</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-red-500 to-red-400 h-3 rounded-full" style={{ width: `${metrics?.data?.costPerLeadProgress || 0}%` }}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: `${metrics?.data?.costPerLeadProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg shadow-[0_0_15px_rgba(163,230,53,0.2)] ring-1 ring-lime-400/30">
-                  <div className="text-lime-300 text-sm mb-1 font-medium" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium" title="Based on NLP sentiment, duration, and conversion path">Lead Quality Score</div>
                   <div className="text-white font-bold text-xl mb-2">{metrics?.data?.leadQualityScore || '0'}</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-3 rounded-full" style={{ width: `${metrics?.data?.leadQualityProgress || 0}%` }}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: `${metrics?.data?.leadQualityProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg shadow-[0_0_15px_rgba(163,230,53,0.2)] ring-1 ring-lime-400/30">
-                  <div className="text-lime-300 text-sm mb-1 font-medium" title="Percentage of leads that become paying customers">Close Rate</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium" title="Percentage of leads that become paying customers">Close Rate</div>
                   <div className="text-white font-bold text-xl mb-2">0</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg shadow-[0_0_15px_rgba(163,230,53,0.2)] ring-1 ring-lime-400/30">
-                  <div className="text-lime-300 text-sm mb-1 font-medium" title="Return on investment from automation">ROI</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium" title="Return on investment from automation">ROI</div>
                   <div className="text-white font-bold text-xl mb-2">0</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: '0%' }}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-lime-400/40 shadow-lg shadow-[0_0_15px_rgba(163,230,53,0.2)] ring-1 ring-lime-400/30">
-                  <div className="text-lime-300 text-sm mb-1 font-medium">Revenue Per Lead</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Revenue Per Lead</div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="text-white font-bold text-xl">0</div>
-                    <Badge className="bg-lime-500 text-white text-xs font-bold shadow-md">0</Badge>
+                    <Badge className="bg-cyan-500 text-white text-xs font-bold shadow-md">0</Badge>
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
                     <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '0%' }}></div>
@@ -4174,48 +4175,49 @@ export default function CommandCenter() {
           </Card>
 
           {/* AI Assistant Insights */}
-          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-purple-400 shadow-2xl shadow-purple-400/30 shadow-[0_0_20px_rgba(168,85,247,0.3)] ring-2 ring-purple-400/50">
-            <CardHeader className="bg-gradient-to-r from-purple-600/20 to-purple-500/20 border-b border-purple-400/30 shadow-[0_2px_10px_rgba(168,85,247,0.2)]">
-              <CardTitle className="text-white flex items-center">
-                <Brain className="w-6 h-6 mr-3 text-purple-400" />
-                <span className="text-xl font-bold">🧠 AI Assistant Insights</span>
+          <Card className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center text-xl">
+                <Brain className="w-6 h-6 mr-3 text-cyan-400" />
+                🧠 AI Assistant Insights
+                <Badge className="ml-3 bg-cyan-500 text-white text-sm px-3 py-1">LIVE</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(168,85,247,0.2)] ring-1 ring-purple-400/30">
-                  <div className="text-purple-300 text-sm mb-1 font-medium">Confidence Score</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Confidence Score</div>
                   <div className="text-white font-bold text-xl mb-2">{metrics?.data?.aiInsights?.confidenceScore || '0%'}</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.confidenceProgress || 0}%` }}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.confidenceProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(168,85,247,0.2)] ring-1 ring-purple-400/30">
-                  <div className="text-purple-300 text-sm mb-1 font-medium">Learning Status</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Learning Status</div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="text-white font-bold text-xl">{metrics?.data?.aiInsights?.learningStatus || 'Active'}</div>
-                    <Badge className="bg-purple-500 text-white text-xs font-bold shadow-md">Active</Badge>
+                    <Badge className="bg-cyan-500 text-white text-xs font-bold shadow-md">Active</Badge>
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.learningProgress || 0}%` }}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.learningProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(168,85,247,0.2)] ring-1 ring-purple-400/30">
-                  <div className="text-purple-300 text-sm mb-1 font-medium" title="Percentage of conversations that needed human assistance">Escalation Rate</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium" title="Percentage of conversations that needed human assistance">Escalation Rate</div>
                   <div className="text-white font-bold text-xl mb-2">{metrics?.data?.aiInsights?.escalationRate || '0%'}</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.escalationProgress || 0}%` }}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.escalationProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(168,85,247,0.2)] ring-1 ring-purple-400/30">
-                  <div className="text-purple-300 text-sm mb-1 font-medium">Response Accuracy</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Response Accuracy</div>
                   <div className="text-white font-bold text-xl mb-2">{metrics?.data?.aiInsights?.responseAccuracy || '0%'}</div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.accuracyProgress || 0}%` }}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: `${metrics?.data?.aiInsights?.accuracyProgress || 0}%` }}></div>
                   </div>
                 </div>
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(168,85,247,0.2)] ring-1 ring-purple-400/30">
-                  <div className="text-purple-300 text-sm mb-1 font-medium">Latest Learning</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Latest Learning</div>
                   <div className="text-white font-bold text-base">{metrics?.data?.aiInsights?.latestLearning || 'No recent activity'}</div>
                 </div>
               </div>
