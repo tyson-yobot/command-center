@@ -4410,18 +4410,291 @@ export default function CommandCenter() {
 
         </div>
 
-        {/* Botalytics™ Performance Dashboard */}
-        <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center space-x-2">
-              <TrendingUp className="w-5 h-5 text-cyan-400" />
-              <span>📊 Botalytics™ Metrics</span>
-              <div className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded-full">PROPRIETARY</div>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-              {/* Cost Per Lead */}
+        {/* Document Management & Memory Insertion */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          {/* Document Manager */}
+          <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500 relative">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center justify-between">
+                <div className="flex items-center">
+                  <Database className="w-5 h-5 mr-2 text-blue-400" />
+                  Document Manager
+                </div>
+                <Badge className="bg-yellow-600 text-white">🧪 Test-Only</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex gap-3">
+                  <Button 
+                    onClick={() => document.getElementById('file-upload')?.click()}
+                    className="bg-green-600 hover:bg-green-700 text-white border border-green-400 px-4 py-3"
+                  >
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload & Program Documents
+                  </Button>
+                  <Button 
+                    onClick={deleteSelectedDocuments}
+                    disabled={selectedDocuments.length === 0}
+                    className="bg-red-600 hover:bg-red-700 text-white border border-red-400 px-4 py-3"
+                  >
+                    Delete Selected ({selectedDocuments.length})
+                  </Button>
+                </div>
+                
+                {/* Enhanced Document List with Live Status */}
+                <div className="bg-slate-700/40 rounded-lg p-4 border border-blue-400">
+                  <h4 className="text-white font-medium mb-3">📄 Uploaded Documents</h4>
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                    {uploadedDocuments.length > 0 ? uploadedDocuments.map((doc) => (
+                      <div 
+                        key={doc.id}
+                        className="flex items-center justify-between p-3 bg-slate-800/60 rounded border border-blue-400"
+                      >
+                        <div className="flex-1">
+                          <div className="text-white font-medium">{doc.originalname || doc.filename || 'Untitled Document'}</div>
+                          <div className="text-slate-400 text-sm flex items-center space-x-2">
+                            <span>{(doc.size / 1024).toFixed(1)} KB</span>
+                            <span>•</span>
+                            <span>{new Date(doc.uploadTime || doc.uploadedAt || Date.now()).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${
+                            doc.status === 'processed' || doc.status === 'indexed' 
+                              ? 'bg-green-600/30 text-green-400' 
+                              : doc.status === 'processing' 
+                              ? 'bg-yellow-600/30 text-yellow-400' 
+                              : 'bg-blue-600/30 text-blue-400'
+                          }`}>
+                            {doc.status === 'processed' || doc.status === 'indexed' ? '✅ Indexed' : 
+                             doc.status === 'processing' ? '⏳ Processing' : '📄 Ready'}
+                          </span>
+                          <Button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPreviewDocumentId(doc.documentId || doc.id);
+                              setPreviewDocumentName(doc.fileName || doc.filename || doc.name);
+                              setShowDocumentPreview(true);
+                            }}
+                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1"
+                          >
+                            🔍 Preview
+                          </Button>
+                        </div>
+                      </div>
+                    )) : (
+                      <div className="text-slate-400 text-center py-4">
+                        Upload documents to program knowledge
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Memory Text Insertion */}
+          <Card className="bg-purple-900/40 backdrop-blur-sm border border-purple-500">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Brain className="w-5 h-5 mr-2 text-purple-400" />
+                Memory Text Insertion
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-white text-sm font-medium mb-2 block">
+                    Text to Insert (e.g. https://yobot.bot)
+                  </label>
+                  <textarea
+                    value={memoryText}
+                    onChange={(e) => setMemoryText(e.target.value)}
+                    placeholder="Enter text, URLs, or information to store in memory..."
+                    className="w-full h-24 p-3 bg-slate-700/60 border border-purple-400/50 rounded-lg text-white placeholder-slate-400 focus:border-purple-400 focus:outline-none resize-none shadow-lg shadow-purple-400/10"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-white text-sm font-medium mb-2 block">
+                    Memory Category
+                  </label>
+                  <select
+                    value={memoryCategory}
+                    onChange={(e) => setMemoryCategory(e.target.value)}
+                    className="w-full p-3 bg-slate-700/60 border border-purple-400/50 rounded-lg text-white focus:border-purple-400 focus:outline-none shadow-lg shadow-purple-400/10"
+                  >
+                    <option value="general">General</option>
+                    <option value="urls">URLs & Links</option>
+                    <option value="contacts">Contacts</option>
+                    <option value="instructions">Instructions</option>
+                    <option value="reference">Reference</option>
+                  </select>
+                </div>
+                
+                <Button 
+                  onClick={insertMemoryText}
+                  disabled={!memoryText.trim()}
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3"
+                >
+                  <Brain className="w-4 h-4 mr-2" />
+                  Insert into Memory
+                </Button>
+
+                {/* View Knowledge Library Button */}
+                <Button 
+                  onClick={handleViewKnowledge}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-3"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  🗂 View Knowledge Library
+                </Button>
+                
+                {/* Latest Memory Activity Log */}
+                <div className="bg-slate-700/40 rounded-lg p-4 border border-purple-400">
+                  <h4 className="text-white font-medium mb-3 flex items-center">
+                    <Brain className="w-4 h-4 mr-2 text-purple-400" />
+                    🧠 Latest Memory Activity Log
+                  </h4>
+                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                    {memoryActivityLog.length > 0 ? memoryActivityLog.slice(-5).reverse().map((entry, index) => (
+                      <div key={index} className="flex items-center justify-between p-2 bg-slate-800/60 rounded border border-purple-400">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-xs text-slate-400">{entry.timestamp}</span>
+                          <span className="text-sm text-white">{entry.type}</span>
+                          <span className="text-xs text-purple-400">{entry.category}</span>
+                        </div>
+                        <span className={`text-xs font-medium ${entry.result === 'Success' ? 'text-green-400' : 'text-red-400'}`}>
+                          {entry.result === 'Success' ? '✅ Success' : '❌ Error'}
+                        </span>
+                      </div>
+                    )) : (
+                      <div className="text-slate-400 text-sm text-center py-4">
+                        No recent memory activity
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="text-slate-400 text-xs">
+                  Memory entries are stored with high priority and can be retrieved during conversations.
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Call Monitoring & YoBot Support - Positioned Under Document Manager */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* Call Monitoring Panel - Under Document Manager */}
+          <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500">
+            <CardHeader className="pb-6">
+              <CardTitle className="text-white flex items-center text-xl">
+                <Phone className="w-6 h-6 mr-3 text-blue-400" />
+                Call Monitoring Panel
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-6">
+                {/* System Services */}
+                <div className="bg-slate-700/40 rounded-lg p-6 border border-blue-400">
+                  <h4 className="text-white font-medium mb-5 flex items-center text-lg">
+                    <Settings className="w-5 h-5 mr-3 text-blue-400" />
+                    System Services
+                  </h4>
+                  <div className="space-y-4">
+                    {/* Monitoring Service */}
+                    <div className="bg-slate-800/60 rounded-lg p-4 border border-blue-400">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <Activity className="w-5 h-5 text-yellow-400" />
+                          <span className="text-white text-base">Monitoring Service</span>
+                          <span className={`text-xs font-bold px-2 py-1 rounded ${
+                            serviceStates.monitoring.status === 'ACTIVE' ? 'bg-green-600/20 text-green-400' :
+                            serviceStates.monitoring.status === 'RESTARTING' ? 'bg-yellow-600/20 text-yellow-400' :
+                            'text-yellow-400'
+                          }`}>
+                            {currentSystemMode === 'test' ? (serviceStates.monitoring.status === 'ACTIVE' ? '🟢 ACTIVE' :
+                             serviceStates.monitoring.status === 'RESTARTING' ? '🔄 RESTARTING' : 'IDLE') : ''}
+                          </span>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleServiceAction('monitoring', 'start')}
+                            className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 border border-green-400 shadow-md hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                            title="Start monitoring service"
+                          >
+                            <Play className="w-3 h-3" />
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleServiceAction('monitoring', 'stop')}
+                            className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 border border-red-400 shadow-md hover:shadow-red-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                            title="Stop monitoring service"
+                          >
+                            <Square className="w-3 h-3" />
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleServiceAction('monitoring', 'restart')}
+                            className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 border border-blue-400 shadow-md hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
+                            title="Restart monitoring service"
+                          >
+                            <RotateCcw className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* YoBot Support Panel */}
+          <Card className="bg-gradient-to-br from-purple-900/60 to-pink-900/60 backdrop-blur-sm border border-purple-500">
+            <CardHeader className="pb-6">
+              <CardTitle className="text-white flex items-center text-xl">
+                <MessageSquare className="w-6 h-6 mr-3 text-purple-400" />
+                YoBot Support
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <div className="bg-purple-800/40 rounded-lg p-4 border border-purple-400/50">
+                  <h4 className="text-white font-medium mb-3 flex items-center">
+                    <Users className="w-4 h-4 mr-2 text-purple-400" />
+                    Team Contact
+                  </h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="text-purple-300">📧 support@yobot.com</div>
+                    <div className="text-purple-300">📱 +1 (555) YO-BOTS</div>
+                    <div className="text-purple-300">💬 Live Chat Available</div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Analytics Dashboard Section - MOVED TO BOTTOM */}
+        <div className="mb-8">
+          <h2 className="text-white text-2xl font-bold mb-6">📊 Analytics Dashboard</h2>
+          
+          {/* Botalytics™ Performance Dashboard */}
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center space-x-2">
+                <TrendingUp className="w-5 h-5 text-cyan-400" />
+                <span>📊 Botalytics™ Metrics</span>
+                <div className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded-full">PROPRIETARY</div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+                {/* Cost Per Lead */}
               <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
                   <div className="text-2xl font-black text-green-400 mb-1">0</div>
@@ -8655,6 +8928,8 @@ export default function CommandCenter() {
           </div>
         </div>
       )}
+        
+        </div>
       </div>
     </div>
   );
