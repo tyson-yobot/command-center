@@ -3528,7 +3528,7 @@ export default function CommandCenter() {
                   {/* Analytics & Export Tools */}
                   <Button
                     onClick={() => setShowAnalyticsModal(true)}
-                    className="flex items-center justify-center px-4 py-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#ff6b35] to-[#f7931e] shadow-[0_0_10px_#ff8c42]/40 hover:from-[#ff7849] hover:to-[#ffb347]"
+                    className="btn-yobot-purple"
                     title="Analytics Report"
                   >
                     <div className="text-center">
@@ -3539,7 +3539,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleDownloadPDF}
-                    className="flex items-center justify-center px-4 py-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#ff6b35] to-[#f7931e] shadow-[0_0_10px_#ff8c42]/40 hover:from-[#ff7849] hover:to-[#ffb347]"
+                    className="btn-yobot-blue"
                     title="Quick Export"
                   >
                     <div className="text-center">
@@ -3550,7 +3550,7 @@ export default function CommandCenter() {
 
                   <Button
                     onClick={handleHubSpotCRM}
-                    className="flex items-center justify-center px-4 py-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#ff6b35] to-[#f7931e] shadow-[0_0_10px_#ff8c42]/40 hover:from-[#ff7849] hover:to-[#ffb347]"
+                    className="btn-yobot-purple"
                     title="HubSpot CRM"
                   >
                     <div className="text-center">
@@ -3567,7 +3567,7 @@ export default function CommandCenter() {
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                       <Button
                         onClick={handleUploadDocs}
-                        className="flex items-center justify-center px-4 py-4 h-20 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50"
+                        className="btn-yobot-green h-20"
                         title="PDF & Knowledge Upload"
                       >
                         <div className="text-center">
@@ -3578,7 +3578,7 @@ export default function CommandCenter() {
                       
                       <Button
                         onClick={handleViewKnowledge}
-                        className="flex items-center justify-center px-4 py-4 h-20 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
+                        className="btn-yobot-purple h-20"
                         title="Knowledge Areas"
                       >
                         <div className="text-center">
@@ -3589,7 +3589,7 @@ export default function CommandCenter() {
                       
                       <Button
                         onClick={handleRunDiagnostics}
-                        className="flex items-center justify-center px-4 py-4 h-20 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#ff6b35] to-[#f7931e] shadow-[0_0_10px_#ff8c42]/40 hover:from-[#ff7849] hover:to-[#ffb347]"
+                        className="btn-yobot-purple h-20"
                         title="System Diagnostics"
                       >
                         <div className="text-center">

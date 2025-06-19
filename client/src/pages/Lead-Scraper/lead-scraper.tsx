@@ -533,7 +533,7 @@ const LeadScraper: React.FC = () => {
               <div className="flex gap-4 justify-center">
                 <Button
                   onClick={() => setCurrentView('scraper')}
-                  className="px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50"
+                  className="btn-yobot-blue"
                 >
                   <Rocket className="w-4 h-4 mr-2" />
                   Run Scraper
