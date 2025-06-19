@@ -3476,7 +3476,7 @@ export default function CommandCenter() {
                     title="Start/End Pipeline Calls"
                   >
                     <div className="text-center">
-                      <Phone className="w-6 h-6 mx-auto mb-2" />
+                      <div className="text-3xl mb-2">📞</div>
                       <span className="text-sm font-medium">Start Pipeline</span>
                     </div>
                   </Button>
@@ -3487,7 +3487,7 @@ export default function CommandCenter() {
                     title="Manual Call Start"
                   >
                     <div className="text-center">
-                      <PhoneOff className="w-6 h-6 mx-auto mb-2" />
+                      <div className="text-3xl mb-2">📱</div>
                       <span className="text-sm font-medium">Manual Call Start</span>
                     </div>
                   </Button>
@@ -3499,7 +3499,7 @@ export default function CommandCenter() {
                     title="Lead Scraper - Apollo, Apify, PhantomBuster | Double-click to view last 20 leads"
                   >
                     <div className="text-center">
-                      <Search className="w-6 h-6 mx-auto mb-1" />
+                      <div className="text-3xl mb-2">🔍</div>
                       <span className="text-sm font-medium">Lead Scraper</span>
                       <div className="text-xs text-green-200 mt-1">
                         Last 20: {scrapedLeadsCount || 0}
@@ -3577,8 +3577,8 @@ export default function CommandCenter() {
                     title="HubSpot CRM"
                   >
                     <div className="text-center">
-                      <Building className="w-6 h-6 mx-auto mb-2 drop-shadow-sm" />
-                      <span className="text-sm font-medium drop-shadow-sm">🏢 HubSpot CRM</span>
+                      <div className="text-3xl mb-2">🏢</div>
+                      <span className="text-sm font-medium drop-shadow-sm">HubSpot CRM</span>
                     </div>
                   </Button>
                 </div>
@@ -3594,8 +3594,8 @@ export default function CommandCenter() {
                         title="PDF & Knowledge Upload"
                       >
                         <div className="text-center">
-                          <FileText className="w-5 h-5 mx-auto mb-2 drop-shadow-sm" />
-                          <span className="text-xs font-medium drop-shadow-sm">📎 PDF Upload</span>
+                          <div className="text-2xl mb-2">📎</div>
+                          <span className="text-xs font-medium drop-shadow-sm">PDF Upload</span>
                         </div>
                       </Button>
                       
@@ -3605,8 +3605,8 @@ export default function CommandCenter() {
                         title="Knowledge Areas"
                       >
                         <div className="text-center">
-                          <Brain className="w-5 h-5 mx-auto mb-2 drop-shadow-sm" />
-                          <span className="text-xs font-medium drop-shadow-sm">🧠 Knowledge</span>
+                          <div className="text-2xl mb-2">🧠</div>
+                          <span className="text-xs font-medium drop-shadow-sm">Knowledge</span>
                         </div>
                       </Button>
                       
@@ -3616,8 +3616,8 @@ export default function CommandCenter() {
                         title="System Diagnostics"
                       >
                         <div className="text-center">
-                          <Settings className="w-5 h-5 mx-auto mb-2 drop-shadow-sm" />
-                          <span className="text-xs font-medium drop-shadow-sm">🔧 Diagnostics</span>
+                          <div className="text-2xl mb-2">🔧</div>
+                          <span className="text-xs font-medium drop-shadow-sm">Diagnostics</span>
                         </div>
                       </Button>
                       
@@ -3627,8 +3627,8 @@ export default function CommandCenter() {
                         title="Emergency Stop"
                       >
                         <div className="text-center">
-                          <AlertTriangle className="w-5 h-5 mx-auto mb-2 drop-shadow-sm" />
-                          <span className="text-xs font-medium drop-shadow-sm">🚨 Emergency</span>
+                          <div className="text-2xl mb-2">🚨</div>
+                          <span className="text-xs font-medium drop-shadow-sm">Emergency</span>
                         </div>
                       </Button>
                     </div>
