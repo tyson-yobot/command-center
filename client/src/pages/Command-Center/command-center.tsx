@@ -3454,7 +3454,7 @@ export default function CommandCenter() {
                   {/* Pipeline Controls */}
                   <Button
                     onClick={handleStartPipelineCalls}
-                    className="flex items-center justify-center p-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50"
+                    className="flex items-center justify-center p-4 h-24 min-w-[120px] px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50"
                     title="Start/End Pipeline Calls"
                   >
                     <div className="text-center">
@@ -3477,7 +3477,7 @@ export default function CommandCenter() {
                   <Button
                     onClick={handleLeadScraper}
                     onDoubleClick={() => setShowScrapedLeads(true)}
-                    className="flex items-center justify-center p-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50 relative"
+                    className="flex items-center justify-center p-4 h-24 min-w-[120px] px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#0d82da] to-[#0a65b2] shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0c74c7] hover:ring-1 hover:ring-[#0d82da]/50 relative"
                     title="Lead Scraper - Apollo, Apify, PhantomBuster"
                   >
                     <div className="text-center">
@@ -3494,7 +3494,7 @@ export default function CommandCenter() {
                   {/* Content & Marketing */}
                   <Button
                     onClick={handleContentCreatorSync}
-                    className="flex items-center justify-center px-4 py-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
+                    className="flex items-center justify-center p-4 h-24 min-w-[120px] px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
                     title="Content Creator - Jasper.ai"
                   >
                     <div className="text-center">
@@ -3505,7 +3505,7 @@ export default function CommandCenter() {
 
                   <Button
                     onClick={handleCreateSupportTicket}
-                    className="flex items-center justify-center px-4 py-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
+                    className="flex items-center justify-center p-4 h-24 min-w-[120px] px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
                     title="Submit Ticket"
                   >
                     <div className="text-center">
@@ -3516,7 +3516,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={handleMailchimpSync}
-                    className="flex items-center justify-center px-4 py-4 h-24 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
+                    className="flex items-center justify-center p-4 h-24 min-w-[120px] px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
                     title="MailChimp Sync"
                   >
                     <div className="text-center">
@@ -3600,7 +3600,7 @@ export default function CommandCenter() {
                       
                       <Button
                         onClick={handleEmergencyStop}
-                        className="bg-gradient-to-br from-red-500 to-red-700 hover:from-red-400 hover:to-red-600 text-white rounded-2xl px-4 py-4 h-20 font-semibold shadow-lg hover:shadow-red-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-red-400/50 ring-0 hover:ring-2 hover:ring-red-400/30"
+                        className="flex items-center justify-center p-4 h-20 min-w-[120px] px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828]"
                         title="Emergency Stop"
                       >
                         <div className="text-center">
@@ -3629,7 +3629,7 @@ export default function CommandCenter() {
                   <Button 
                     onClick={insertMemoryText}
                     disabled={!memoryText.trim()}
-                    className="w-full px-4 py-3 h-16 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
+                    className="w-full min-w-[120px] px-4 py-2 h-16 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff]"
                   >
                     <Brain className="w-4 h-4 mr-2" />
                     Insert Memory Text
