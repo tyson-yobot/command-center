@@ -5006,7 +5006,7 @@ export default function CommandCenter() {
               </div>
 
               {/* Knowledge Management */}
-              <div className="bg-slate-800/60 rounded-lg p-6 border border-purple-400/50">
+              <div id="knowledge-base" className="bg-slate-800/60 rounded-lg p-6 border border-purple-400/50">
                 <h3 className="text-white text-lg font-semibold mb-4 flex items-center">
                   <Database className="w-5 h-5 mr-2 text-purple-400" />
                   Knowledge Management (Collapsible)
@@ -5390,7 +5390,7 @@ export default function CommandCenter() {
         </div>
 
         {/* PDF Export Section */}
-        <div className="grid grid-cols-1 gap-8 mb-12">
+        <div id="exports-logs" className="grid grid-cols-1 gap-8 mb-12">
 
           {/* PDF & Export Panel */}
           <Card className="bg-gradient-to-br from-purple-900/40 via-pink-900/30 to-red-900/20 backdrop-blur-sm border border-purple-400/50 shadow-2xl shadow-purple-500/20">
