@@ -11,6 +11,14 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
+        // YoBot Brand Colors
+        yobot: {
+          blue: "#0d82da",
+          "blue-hover": "#0b6ab5", 
+          black: "#000000",
+          white: "#ffffff",
+          gray: "#c3c3c3"
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
