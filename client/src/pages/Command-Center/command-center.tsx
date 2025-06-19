@@ -4918,7 +4918,7 @@ export default function CommandCenter() {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px]">
                     <Button 
                       onClick={queryKnowledgeBase}
-                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] min-w-[120px]"
+                      className="relative overflow-hidden !px-4 !py-2 !rounded-md !font-semibold !text-white !shadow-md !transition !duration-200 hover:!scale-[1.02] active:!scale-[0.98] !bg-gradient-to-br !from-[#6a11cb] !to-[#2575fc] !shadow-[0_0_10px_#7e4cff] hover:!from-[#7f1fff] hover:!to-[#2c8fff] !min-w-[120px] !border-none"
                     >
                       <Search className="w-4 h-4 mr-2" />
                       Query Knowledge
@@ -4932,7 +4932,7 @@ export default function CommandCenter() {
                     </Button>
                     <Button 
                       onClick={contextSearch}
-                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] min-w-[120px]"
+                      className="relative overflow-hidden !px-4 !py-2 !rounded-md !font-semibold !text-white !shadow-md !transition !duration-200 hover:!scale-[1.02] active:!scale-[0.98] !bg-gradient-to-br !from-[#6a11cb] !to-[#2575fc] !shadow-[0_0_10px_#7e4cff] hover:!from-[#7f1fff] hover:!to-[#2c8fff] !min-w-[120px] !border-none"
                     >
                       <FileText className="w-4 h-4 mr-2" />
                       Context Search
@@ -5369,7 +5369,7 @@ export default function CommandCenter() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px] mb-6">
                   <Button 
                     onClick={handleReindexKnowledge}
-                    className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] min-w-[120px]"
+                    className="relative overflow-hidden !px-4 !py-2 !rounded-md !font-semibold !text-white !shadow-md !transition !duration-200 hover:!scale-[1.02] active:!scale-[0.98] !bg-gradient-to-br !from-[#6a11cb] !to-[#2575fc] !shadow-[0_0_10px_#7e4cff] hover:!from-[#7f1fff] hover:!to-[#2c8fff] !min-w-[120px] !border-none"
                   >
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Reindex Knowledge
@@ -5474,7 +5474,7 @@ export default function CommandCenter() {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px]">
                     <Button 
                       onClick={queryKnowledgeBase}
-                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] min-w-[120px]"
+                      className="relative overflow-hidden !px-4 !py-2 !rounded-md !font-semibold !text-white !shadow-md !transition !duration-200 hover:!scale-[1.02] active:!scale-[0.98] !bg-gradient-to-br !from-[#6a11cb] !to-[#2575fc] !shadow-[0_0_10px_#7e4cff] hover:!from-[#7f1fff] hover:!to-[#2c8fff] !min-w-[120px] !border-none"
                     >
                       <Search className="w-4 h-4 mr-2" />
                       Query Knowledge
@@ -5488,7 +5488,7 @@ export default function CommandCenter() {
                     </Button>
                     <Button 
                       onClick={contextSearch}
-                      className="relative overflow-hidden px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] min-w-[120px]"
+                      className="relative overflow-hidden !px-4 !py-2 !rounded-md !font-semibold !text-white !shadow-md !transition !duration-200 hover:!scale-[1.02] active:!scale-[0.98] !bg-gradient-to-br !from-[#6a11cb] !to-[#2575fc] !shadow-[0_0_10px_#7e4cff] hover:!from-[#7f1fff] hover:!to-[#2c8fff] !min-w-[120px] !border-none"
                     >
                       <FileText className="w-4 h-4 mr-2" />
                       Context Search
