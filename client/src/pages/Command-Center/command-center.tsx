@@ -4047,76 +4047,74 @@ export default function CommandCenter() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
 
 
-          {/* SmartSpend™ - Sleek Orange Design */}
-          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/90 to-slate-900/95 backdrop-blur-sm border-2 border-orange-500 shadow-2xl shadow-orange-500/30 shadow-[0_0_20px_rgba(249,115,22,0.3)] ring-2 ring-orange-500/50">
-            <CardHeader className="bg-gradient-to-r from-orange-600/20 to-orange-500/20 border-b border-orange-500/30 shadow-[0_2px_10px_rgba(249,115,22,0.2)]">
-              <CardTitle className="text-white flex items-center justify-between">
-                <div className="flex items-center">
-                  <DollarSign className="w-6 h-6 mr-3 text-orange-400" />
-                  <span className="text-xl font-bold">💰 SmartSpend™</span>
-                </div>
-                <Badge className="bg-orange-500 text-white text-sm px-3 py-1 font-bold shadow-lg">LIVE</Badge>
+          {/* SmartSpend™ - Unified Neon Design */}
+          <Card className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center text-xl">
+                <DollarSign className="w-6 h-6 mr-3 text-cyan-400" />
+                💰 SmartSpend™
+                <Badge className="ml-3 bg-cyan-500 text-white text-sm px-3 py-1">LIVE</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
                 {/* Monthly Ad Spend */}
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg shadow-[0_0_15px_rgba(249,115,22,0.2)] ring-1 ring-orange-500/30">
-                  <div className="text-orange-300 text-sm mb-1 font-medium">Monthly Ad Spend:</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Monthly Ad Spend:</div>
                   <div className="text-white font-bold text-xl mb-2">
                     { (metrics?.data?.smartSpendData?.monthlyAdSpend || '0')}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.spendUtilization || 0}%` }}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.spendUtilization || 0}%` }}></div>
                   </div>
                 </div>
 
                 {/* Cost Per Lead */}
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
-                  <div className="text-orange-300 text-sm mb-1 font-medium">Cost Per Lead:</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Cost Per Lead:</div>
                   <div className="text-white font-bold text-xl mb-2">
                     { (metrics?.data?.smartSpendData?.costPerLead || '0')}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.costEfficiency || 0}%` }}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.costEfficiency || 0}%` }}></div>
                   </div>
                 </div>
 
                 {/* ROI This Month */}
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
-                  <div className="text-orange-300 text-sm mb-1 font-medium">ROI This Month:</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">ROI This Month:</div>
                   <div className="text-white font-bold text-xl mb-2">
                     { (metrics?.data?.smartSpendData?.monthlyROI || '0')}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.roiProgress || 0}%` }}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.roiProgress || 0}%` }}></div>
                   </div>
                 </div>
 
                 {/* Conversion Rate */}
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
-                  <div className="text-orange-300 text-sm mb-1 font-medium">Conversion Rate:</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Conversion Rate:</div>
                   <div className="text-white font-bold text-xl mb-2">
                     { (metrics?.data?.smartSpendData?.conversionRate || '0')}
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.conversionProgress || 0}%` }}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.conversionProgress || 0}%` }}></div>
                   </div>
                 </div>
 
                 {/* Budget Efficiency Score */}
-                <div className="bg-slate-900/60 rounded-lg p-4 border border-orange-500/40 shadow-lg">
-                  <div className="text-orange-300 text-sm mb-1 font-medium">Budget Efficiency Score:</div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Budget Efficiency Score:</div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="text-white font-bold text-xl">
                       { (metrics?.data?.smartSpendData?.budgetEfficiency || '0')}
                     </div>
-                    <Badge className="bg-orange-500 text-white text-xs font-bold shadow-md">
+                    <Badge className="bg-cyan-500 text-white text-xs font-bold shadow-md">
                       { (metrics?.data?.smartSpendData?.efficiencyStatus || 'Unknown')}
                     </Badge>
                   </div>
                   <div className="w-full bg-slate-700/60 rounded-full h-3">
-                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.budgetEfficiency || 0}%` }}></div>
+                    <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: `${metrics?.data?.smartSpendData?.budgetEfficiency || 0}%` }}></div>
                   </div>
                 </div>
               </div>
@@ -4225,39 +4223,65 @@ export default function CommandCenter() {
           </Card>
         </div>
 
-        {/* Second Row - Empty for now */}
+        {/* Detailed Analytics and System Health Side by Side */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-
-
-        </div>
-
-
-
-        {/* System Health & Metrics and Conversation Analytics Side by Side */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          {/* System Health & Metrics */}
-          <Card className="bg-gradient-to-r from-emerald-900/60 to-teal-800/60 backdrop-blur-sm border-2 border-emerald-400 shadow-2xl shadow-emerald-400/30 ring-2 ring-emerald-400/50 min-h-[480px]">
+          {/* Detailed Analytics */}
+          <Card className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2">
             <CardHeader>
-              <CardTitle className="text-white flex items-center text-lg">
-                <Gauge className="w-5 h-5 mr-2 text-emerald-400" />
-                System Health & Metrics
-                <Badge className="ml-2 bg-emerald-500 text-white text-xs px-2 py-1 border border-emerald-400">LIVE</Badge>
+              <CardTitle className="text-white flex items-center text-xl">
+                <BarChart3 className="w-6 h-6 mr-3 text-cyan-400" />
+                📊 Detailed Analytics
+                <Badge className="ml-3 bg-cyan-500 text-white text-sm px-3 py-1">LIVE</Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-5">
+            <CardContent className="p-6">
+              <div className="grid grid-cols-1 gap-4">
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Call Volume</div>
+                  <div className="text-2xl font-bold text-cyan-400 mb-1">0</div>
+                  <div className="text-sm text-white">Response Time</div>
+                </div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">NPS Score</div>
+                  <div className="text-2xl font-bold text-cyan-400 mb-1 flex items-center">⭐ 0</div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-cyan-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
+                  </div>
+                </div>
+                <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                  <div className="text-cyan-300 text-sm mb-1 font-medium">Active Clients</div>
+                  <div className="text-2xl font-bold text-cyan-400 mb-1 flex items-center">👥 0</div>
+                  <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                    <div className="bg-cyan-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* System Health & Metrics */}
+          <Card className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 md:p-6 lg:p-8 space-y-2">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center text-xl">
+                <Gauge className="w-6 h-6 mr-3 text-cyan-400" />
+                System Health & Metrics
+                <Badge className="ml-3 bg-cyan-500 text-white text-sm px-3 py-1">LIVE</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
               <div className="space-y-5">
                 {/* System Uptime */}
                 <div className="space-y-4">
-                  <h4 className="text-emerald-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2 text-base">
-                    <Activity className="w-4 h-4 mr-2" />
+                  <h4 className="text-white font-semibold flex items-center border-b border-cyan-400/30 pb-2 text-base">
+                    <Activity className="w-4 h-4 mr-2 text-cyan-400" />
                     System Uptime
                   </h4>
                   <div className="grid grid-cols-1 gap-4">
-                    <div className="p-5 bg-slate-800/60 rounded-lg border-2 border-emerald-400/40 shadow-lg shadow-[0_0_15px_rgba(16,185,129,0.2)] ring-1 ring-emerald-400/30">
-                      <div className="text-emerald-300 text-sm mb-1 font-medium">Current Uptime</div>
+                    <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
+                      <div className="text-cyan-300 text-sm mb-1 font-medium">Current Uptime</div>
                       <div className="text-white font-bold text-xl mb-2">{liveSystemData?.uptime || '0 hrs'}</div>
                       <div className="w-full bg-slate-700/60 rounded-full h-3">
-                        <div className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-3 rounded-full" style={{ width: '98%' }}></div>
+                        <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-3 rounded-full" style={{ width: '98%' }}></div>
                       </div>
                     </div>
                   </div>
@@ -4265,25 +4289,25 @@ export default function CommandCenter() {
                 
                 {/* Performance Metrics */}
                 <div className="space-y-4">
-                  <h4 className="text-emerald-300 font-semibold flex items-center border-b border-emerald-400/30 pb-2 text-base">
-                    <TrendingUp className="w-4 h-4 mr-2" />
+                  <h4 className="text-white font-semibold flex items-center border-b border-cyan-400/30 pb-2 text-base">
+                    <TrendingUp className="w-4 h-4 mr-2 text-cyan-400" />
                     Performance
                   </h4>
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3 bg-slate-800/60 rounded-lg border border-emerald-400/40">
-                      <div className="text-emerald-300 text-xs mb-1">CPU Usage</div>
+                    <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-3">
+                      <div className="text-cyan-300 text-xs mb-1">CPU Usage</div>
                       <div className="text-white font-bold text-lg">{liveSystemData?.cpu || '45%'}</div>
                     </div>
-                    <div className="p-3 bg-slate-800/60 rounded-lg border border-emerald-400/40">
-                      <div className="text-emerald-300 text-xs mb-1">Memory</div>
+                    <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-3">
+                      <div className="text-cyan-300 text-xs mb-1">Memory</div>
                       <div className="text-white font-bold text-lg">{liveSystemData?.memory || '62%'}</div>
                     </div>
-                    <div className="p-3 bg-slate-800/60 rounded-lg border border-emerald-400/40">
-                      <div className="text-emerald-300 text-xs mb-1">API Status</div>
+                    <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-3">
+                      <div className="text-cyan-300 text-xs mb-1">API Status</div>
                       <div className="text-white font-bold text-lg">{liveSystemData?.apiStatus || 'ACTIVE'}</div>
                     </div>
-                    <div className="p-3 bg-slate-800/60 rounded-lg border border-emerald-400/40">
-                      <div className="text-emerald-300 text-xs mb-1">Response Time</div>
+                    <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-3">
+                      <div className="text-cyan-300 text-xs mb-1">Response Time</div>
                       <div className="text-white font-bold text-lg">{liveSystemData?.responseTime || '12ms'}</div>
                     </div>
                   </div>
