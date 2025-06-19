@@ -3563,32 +3563,23 @@ export default function CommandCenter() {
                 </div>
                 
                 {/* Advanced Tools Section */}
-                {!collapsedSections['advanced-tools'] && (
-                  <div className="mt-6 pt-4 border-t border-white/20">
-                    <h4 className="text-white/80 text-sm font-medium mb-3">Advanced Tools</h4>
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                      <Button
-                        onClick={handleUploadDocs}
-                        className="btn-yobot-green h-20"
-                        title="PDF & Knowledge Upload"
-                      >
-                        <div className="text-center">
-                          <div className="text-2xl mb-2">📎</div>
-                          <span className="text-xs font-medium drop-shadow-sm">PDF Upload</span>
-                        </div>
-                      </Button>
-                      
-                      <Button
-                        onClick={handleViewKnowledge}
-                        className="btn-yobot-purple h-20"
-                        title="Knowledge Areas"
-                      >
-                        <div className="text-center">
-                          <div className="text-2xl mb-2">🧠</div>
-                          <span className="text-xs font-medium drop-shadow-sm">Knowledge</span>
-                        </div>
-                      </Button>
-                      
+                <div className="mt-6 pt-4 border-t border-white/20">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-white/80 text-sm font-medium">Advanced Tools</h4>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => toggleSection('advanced-tools')}
+                      className="p-1 text-white/60 hover:text-white hover:bg-white/10"
+                    >
+                      {collapsedSections['advanced-tools'] ? 
+                        <ChevronDown className="w-4 h-4" /> : 
+                        <ChevronUp className="w-4 h-4" />
+                      }
+                    </Button>
+                  </div>
+                  {!collapsedSections['advanced-tools'] && (
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                       <Button
                         onClick={handleRunDiagnostics}
                         className="btn-yobot-purple h-20"
@@ -3602,7 +3593,7 @@ export default function CommandCenter() {
                       
                       <Button
                         onClick={handleEmergencyStop}
-                        className="flex items-center justify-center p-4 h-20 min-w-[120px] px-4 py-2 rounded-md font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-br from-[#e53935] to-[#b71c1c] shadow-[0_0_10px_#ff4d4d] hover:from-[#f44] hover:to-[#c62828]"
+                        className="btn-yobot-red h-20"
                         title="Emergency Stop"
                       >
                         <div className="text-center">
@@ -3633,8 +3624,8 @@ export default function CommandCenter() {
                         </div>
                       </Button>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </CardContent>
             </Card>
           </div>
