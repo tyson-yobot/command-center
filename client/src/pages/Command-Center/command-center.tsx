@@ -3434,40 +3434,25 @@ export default function CommandCenter() {
           </div>
         )}
 
-        {/* 1. Quick Action Launchpad - All Manual Triggers Consolidated at Top */}
-        <div id="tools" className="mb-4">
-          <Card className="bg-gradient-to-r from-blue-900/60 to-purple-900/60 backdrop-blur-sm border border-blue-400 shadow-lg shadow-blue-400/20">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between text-2xl">
-                <div className="flex items-center">
-                  <Zap className="w-6 h-6 mr-3 text-blue-400" />
-                  🚀 Quick Action Launchpad
-                  <Badge className="ml-3 bg-blue-500 text-white text-sm px-3 py-1">ALL TRIGGERS</Badge>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => toggleSection('quick-actions')}
-                    className="ml-3 p-1 text-white/60 hover:text-white hover:bg-white/10"
-                  >
-                    {collapsedSections['quick-actions'] ? 
-                      <ChevronDown className="w-4 h-4" /> : 
-                      <ChevronUp className="w-4 h-4" />
-                    }
-                  </Button>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-white/60">Show Advanced Tools</span>
-                  <Switch 
-                    checked={collapsedSections['advanced-tools'] !== true}
-                    onCheckedChange={(checked) => setCollapsedSections(prev => ({...prev, 'advanced-tools': !checked}))}
-                  />
-                </div>
-              </CardTitle>
-            </CardHeader>
-            {!collapsedSections['quick-actions'] && (
+        {/* INTERACTIVE CARDS SECTION - ALL BUTTONS AT TOP */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-white text-center mb-8">Interactive Action Center</h2>
+          
+          {/* Quick Action Launchpad */}
+          <div id="tools" className="mb-8">
+            <Card className="bg-gradient-to-r from-blue-900/60 to-purple-900/60 backdrop-blur-sm border border-blue-400 shadow-lg shadow-blue-400/20">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between text-2xl">
+                  <div className="flex items-center">
+                    <Zap className="w-6 h-6 mr-3 text-blue-400" />
+                    🚀 Quick Action Launchpad
+                    <Badge className="ml-3 bg-blue-500 text-white text-sm px-3 py-1">ALL TRIGGERS</Badge>
+                  </div>
+                </CardTitle>
+              </CardHeader>
               <CardContent className="p-6">
                 <div className="grid grid-cols-3 gap-4">
-                  {/* Top Row - Green Pipeline Controls */}
+                  {/* Pipeline Controls */}
                   <Button
                     onClick={handleStartPipelineCalls}
                     className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500 shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
@@ -3486,7 +3471,7 @@ export default function CommandCenter() {
                   >
                     <div className="text-center">
                       <div className="text-3xl mb-2">📱</div>
-                      <span className="text-sm font-medium">Manual Call Start</span>
+                      <span className="text-sm font-medium">Manual Call</span>
                     </div>
                   </Button>
 
@@ -3494,14 +3479,11 @@ export default function CommandCenter() {
                     onClick={handleLeadScraper}
                     onDoubleClick={() => setShowScrapedLeads(true)}
                     className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500 relative shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
-                    title="Lead Scraper - Apollo, Apify, PhantomBuster | Double-click to view last 20 leads"
+                    title="Lead Scraper - Apollo, Apify, PhantomBuster"
                   >
                     <div className="text-center">
                       <div className="text-3xl mb-2">🔍</div>
                       <span className="text-sm font-medium">Lead Scraper</span>
-                      <div className="text-xs text-green-200 mt-1">
-                        Last 20: {scrapedLeadsCount || 0}
-                      </div>
                     </div>
                     {scrapedLeadsCount > 0 && (
                       <Badge className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs px-1 min-w-[20px] h-5 flex items-center justify-center">
@@ -3509,74 +3491,72 @@ export default function CommandCenter() {
                       </Badge>
                     )}
                   </Button>
-                  
 
-
-                  {/* Middle Row - Purple Content & Marketing */}
+                  {/* Content & Marketing */}
                   <Button
                     onClick={handleContentCreatorSync}
-                    className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white rounded-2xl px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50 ring-0 hover:ring-2 hover:ring-purple-400/30"
+                    className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50"
                     title="Content Creator - Jasper.ai"
                   >
                     <div className="text-center">
-                      <PenTool className="w-6 h-6 mx-auto mb-2 drop-shadow-sm" />
-                      <span className="text-sm font-medium drop-shadow-sm">✍️ Content Creator</span>
+                      <div className="text-3xl mb-2">✍️</div>
+                      <span className="text-sm font-medium">Content Creator</span>
                     </div>
                   </Button>
 
                   <Button
                     onClick={handleCreateSupportTicket}
-                    className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white rounded-2xl px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50 ring-0 hover:ring-2 hover:ring-purple-400/30"
+                    className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50"
                     title="Submit Ticket"
                   >
                     <div className="text-center">
-                      <Ticket className="w-6 h-6 mx-auto mb-2 drop-shadow-sm" />
-                      <span className="text-sm font-medium drop-shadow-sm">🎫 Submit Ticket</span>
+                      <div className="text-3xl mb-2">🎫</div>
+                      <span className="text-sm font-medium">Submit Ticket</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={handleMailchimpSync}
-                    className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white rounded-2xl px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50 ring-0 hover:ring-2 hover:ring-purple-400/30"
+                    className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-purple-400/50"
                     title="MailChimp Sync"
                   >
                     <div className="text-center">
-                      <Mail className="w-6 h-6 mx-auto mb-2 drop-shadow-sm" />
-                      <span className="text-sm font-medium drop-shadow-sm">📧 MailChimp</span>
+                      <div className="text-3xl mb-2">📧</div>
+                      <span className="text-sm font-medium">MailChimp</span>
                     </div>
                   </Button>
 
-                  {/* Bottom Row - Orange Analytics & CRM */}
+                  {/* Analytics & Export Tools */}
                   <Button
                     onClick={() => setShowAnalyticsModal(true)}
-                    className="bg-gradient-to-br from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 text-white rounded-2xl px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-orange-400/50 ring-0 hover:ring-2 hover:ring-orange-400/30"
+                    className="bg-gradient-to-br from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 text-white px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-orange-400/50"
                     title="Analytics Report"
                   >
                     <div className="text-center">
                       <div className="text-3xl mb-2">📊</div>
-                      <span className="text-sm font-medium drop-shadow-sm">Analytics Report</span>
+                      <span className="text-sm font-medium">Analytics Report</span>
                     </div>
                   </Button>
                   
                   <Button
                     onClick={handleDownloadPDF}
-                    className="bg-gradient-to-br from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 text-white rounded-2xl px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-orange-400/50 ring-0 hover:ring-2 hover:ring-orange-400/30"
+                    className="bg-gradient-to-br from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 text-white px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-orange-400/50"
                     title="Quick Export"
                   >
                     <div className="text-center">
                       <div className="text-3xl mb-2">📈</div>
-                      <span className="text-sm font-medium drop-shadow-sm">Quick Export</span>
+                      <span className="text-sm font-medium">Quick Export</span>
                     </div>
                   </Button>
 
                   <Button
                     onClick={handleHubSpotCRM}
-                    className="bg-gradient-to-br from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 text-white rounded-2xl px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-orange-400/50 ring-0 hover:ring-2 hover:ring-orange-400/30"
+                    className="bg-gradient-to-br from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 text-white px-4 py-4 h-24 font-semibold shadow-lg hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95 border border-orange-400/50"
                     title="HubSpot CRM"
                   >
                     <div className="text-center">
                       <div className="text-3xl mb-2">🏢</div>
-                      <span className="text-sm font-medium drop-shadow-sm">HubSpot CRM</span>
+                      <span className="text-sm font-medium">HubSpot CRM</span>
                     </div>
                   </Button>
                 </div>
@@ -3633,9 +3613,61 @@ export default function CommandCenter() {
                   </div>
                 )}
               </CardContent>
-            )}
-          </Card>
+            </Card>
+          </div>
+
+          {/* Document Management & Memory Tools */}
+          <div className="mb-8">
+            <Card className="bg-blue-900/40 backdrop-blur-sm border border-blue-500">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Database className="w-5 h-5 mr-2 text-blue-400" />
+                  Document Management & Memory
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <Button 
+                    onClick={insertMemoryText}
+                    disabled={!memoryText.trim()}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 h-16"
+                  >
+                    <Brain className="w-4 h-4 mr-2" />
+                    Insert Memory Text
+                  </Button>
+
+                  <Button 
+                    onClick={handleViewKnowledge}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-3 h-16"
+                  >
+                    <FileText className="w-4 h-4 mr-2" />
+                    View Knowledge Library
+                  </Button>
+
+                  <Button 
+                    onClick={() => setShowCreateCallModal(true)}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 h-16"
+                  >
+                    <Phone className="w-4 h-4 mr-2" />
+                    Create Manual Call
+                  </Button>
+
+                  <Button 
+                    onClick={() => setShowSMSModal(true)}
+                    className="w-full bg-teal-600 hover:bg-teal-700 text-white px-4 py-3 h-16"
+                  >
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    Send SMS
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
+
+        {/* ANALYTICS SECTION - ALL ANALYTICS CARDS AT BOTTOM */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-white text-center mb-8">Analytics Dashboard</h2>
 
         {/* 2. Voice Engine + Command Center (Consolidated Voice Section) */}
         <div className="mb-4">
@@ -8448,6 +8480,7 @@ export default function CommandCenter() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
