@@ -3734,16 +3734,15 @@ export default function CommandCenter() {
 
         {/* Document Manager Section with RAG */}
         <div id="knowledge-base" className="mb-8">
-          <Card className="bg-gradient-to-r from-green-900/60 to-teal-900/60 backdrop-blur-sm border-2 border-green-400 shadow-2xl shadow-green-400/30 ring-2 ring-green-400/50"
-            onClick={() => setActiveView('rag')}>
-            <CardHeader className="border-b-2 border-purple-400/40 shadow-lg bg-gradient-to-r from-purple-800/40 to-indigo-800/40 rounded-t-lg">
+          <Card className="bg-gradient-to-r from-green-900/60 to-teal-900/60 backdrop-blur-sm border-2 border-green-400 shadow-2xl shadow-green-400/30 ring-2 ring-green-400/50 cursor-pointer hover:shadow-green-400/50 transition-all duration-300 hover:scale-[1.02]">
+            <CardHeader className="border-b-2 border-green-400/40 shadow-lg bg-gradient-to-r from-green-800/40 to-teal-800/40 rounded-t-lg">
               <CardTitle className="text-white flex items-center text-lg relative">
-                <div className="absolute -top-1 left-0 w-full h-1 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full shadow-lg shadow-purple-400/50"></div>
-                <BarChart3 className="w-5 h-5 mr-2 text-purple-400 animate-pulse" />
-                <span className="bg-gradient-to-r from-purple-300 to-indigo-300 bg-clip-text text-transparent font-bold">
-                  Performance & AI Analytics
+                <div className="absolute -top-1 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-teal-400 rounded-full shadow-lg shadow-green-400/50"></div>
+                <FileText className="w-5 h-5 mr-2 text-green-400 animate-pulse" />
+                <span className="text-white font-bold">
+                  Document Manager & RAG
                 </span>
-                <Badge className="ml-2 bg-purple-500 text-white text-xs px-2 py-1 border border-purple-400 animate-pulse">LIVE</Badge>
+                <Badge className="ml-2 bg-green-500 text-white text-xs px-2 py-1 border border-green-400 animate-pulse">ACTIVE</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-5">
@@ -5422,16 +5421,20 @@ export default function CommandCenter() {
                     onClick={() => setShowExportModal(true)}
                     className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center px-4 py-3 border border-purple-500 shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                   >
-                    <span className="text-xl mr-3">📊</span>
-                    <span>Quick Export Dashboard</span>
+                    <div className="text-center w-full">
+                      <div className="text-3xl mb-2">📊</div>
+                      <span>Quick Export Dashboard</span>
+                    </div>
                   </Button>
                   
                   <Button
                     onClick={handleDownloadPDF}
                     className="w-full bg-pink-600 hover:bg-pink-700 text-white flex items-center justify-center px-4 py-3 border border-pink-500 shadow-lg hover:shadow-pink-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                   >
-                    <span className="text-xl mr-3">📋</span>
-                    <span>Generate PDF Report</span>
+                    <div className="text-center w-full">
+                      <div className="text-3xl mb-2">📋</div>
+                      <span>Generate PDF Report</span>
+                    </div>
                   </Button>
                 </div>
                 
