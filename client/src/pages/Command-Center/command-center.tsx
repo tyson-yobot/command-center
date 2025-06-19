@@ -3504,47 +3504,89 @@ export default function CommandCenter() {
             </CardHeader>
             <CardContent className="p-5">
               <div className="grid grid-cols-1 gap-4 h-full">
-                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                  <div className="text-2xl font-bold text-orange-400 mb-1">
-                    {metrics?.roi || '0%'}
+                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-orange-400/5 animate-pulse"></div>
+                  <div className="relative z-10">
+                    <div className="text-2xl font-bold text-orange-400 mb-1 flex items-center">
+                      📈 {metrics?.roi || '0%'}
+                    </div>
+                    <div className="text-sm text-purple-300">ROI</div>
+                    <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                      <div className="bg-orange-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
+                    </div>
                   </div>
-                  <div className="text-sm text-purple-300">ROI</div>
                 </div>
-                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                  <div className="text-2xl font-bold text-green-400 mb-1">
-                    {metrics?.conversionRate || '0%'}
+                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-green-400/5 animate-pulse"></div>
+                  <div className="relative z-10">
+                    <div className="text-2xl font-bold text-green-400 mb-1 flex items-center">
+                      🔄 {metrics?.conversionRate || '0%'}
+                    </div>
+                    <div className="text-sm text-purple-300">Conversion Rate</div>
+                    <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                      <div className="bg-green-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
+                    </div>
                   </div>
-                  <div className="text-sm text-purple-300">Conversion Rate</div>
                 </div>
-                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                  <div className="text-2xl font-bold text-blue-400 mb-1">
-                    ${metrics?.revenue || '0'}
+                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-blue-400/5 animate-pulse"></div>
+                  <div className="relative z-10">
+                    <div className="text-2xl font-bold text-blue-400 mb-1 flex items-center">
+                      💰 ${metrics?.revenue || '0'}
+                    </div>
+                    <div className="text-sm text-purple-300">Revenue</div>
+                    <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                      <div className="bg-blue-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
+                    </div>
                   </div>
-                  <div className="text-sm text-purple-300">Revenue</div>
                 </div>
-                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                  <div className="text-2xl font-bold text-purple-400 mb-1">
-                    {metrics?.efficiency || '0%'}
+                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-purple-400/5 animate-pulse"></div>
+                  <div className="relative z-10">
+                    <div className="text-2xl font-bold text-purple-400 mb-1 flex items-center">
+                      ⚙️ {metrics?.efficiency || '0%'}
+                    </div>
+                    <div className="text-sm text-purple-300">Efficiency</div>
+                    <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                      <div className="bg-purple-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
+                    </div>
                   </div>
-                  <div className="text-sm text-purple-300">Efficiency</div>
                 </div>
-                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                  <div className="text-2xl font-bold text-cyan-400 mb-1">
-                    {metrics?.aiConfidence || '0%'}
+                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-cyan-400/5 animate-pulse"></div>
+                  <div className="relative z-10">
+                    <div className="text-2xl font-bold text-cyan-400 mb-1 flex items-center">
+                      🤖 {metrics?.aiConfidence || '0%'}
+                    </div>
+                    <div className="text-sm text-purple-300">AI Confidence Score</div>
+                    <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                      <div className="bg-cyan-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
+                    </div>
                   </div>
-                  <div className="text-sm text-purple-300">AI Confidence Score</div>
                 </div>
-                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                  <div className="text-2xl font-bold text-yellow-400 mb-1">
-                    {metrics?.avgResponseTime || '0ms'}
+                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-yellow-400/5 animate-pulse"></div>
+                  <div className="relative z-10">
+                    <div className="text-2xl font-bold text-yellow-400 mb-1 flex items-center">
+                      ⚡ {metrics?.avgResponseTime || '0ms'}
+                    </div>
+                    <div className="text-sm text-purple-300">Avg. Response Time (Bot)</div>
+                    <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                      <div className="bg-yellow-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
+                    </div>
                   </div>
-                  <div className="text-sm text-purple-300">Avg. Response Time (Bot)</div>
                 </div>
-                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center">
-                  <div className="text-2xl font-bold text-pink-400 mb-1">
-                    {metrics?.engagementRate || '0%'}
+                <div className="bg-slate-800/60 rounded-lg p-5 border-2 border-purple-400/40 shadow-lg shadow-[0_0_15px_rgba(147,51,234,0.2)] ring-1 ring-purple-400/30 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-pink-400/5 animate-pulse"></div>
+                  <div className="relative z-10">
+                    <div className="text-2xl font-bold text-pink-400 mb-1 flex items-center">
+                      💬 {metrics?.engagementRate || '0%'}
+                    </div>
+                    <div className="text-sm text-purple-300">Engagement Rate</div>
+                    <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+                      <div className="bg-pink-400 h-1 rounded-full w-0 animate-pulse" style={{width: '0%'}}></div>
+                    </div>
                   </div>
-                  <div className="text-sm text-purple-300">Engagement Rate</div>
                 </div>
               </div>
             </CardContent>
