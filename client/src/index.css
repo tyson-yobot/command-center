@@ -134,6 +134,20 @@
     border: 1px solid rgba(76, 175, 80, 0.6);
   }
 
+  /* 🔘 5. Silver (Secondary Actions) - Settings, View Details, Secondary Navigation */
+  .btn-yobot-silver {
+    @apply px-4 py-2 rounded-md font-semibold text-black shadow-md transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
+    background: linear-gradient(to bottom right, #c3c3c3, #888888);
+    box-shadow: 0 0 10px #c3c3c3;
+    border: 1px solid rgba(195, 195, 195, 0.3);
+  }
+  
+  .btn-yobot-silver:hover {
+    background: linear-gradient(to bottom right, #e0e0e0, #a0a0a0);
+    box-shadow: 0 0 20px #c3c3c3, 0 0 30px rgba(195, 195, 195, 0.3);
+    border: 1px solid rgba(195, 195, 195, 0.6);
+  }
+
   /* Legacy support classes */
   .yobot-button-primary {
     @apply btn-yobot-blue;

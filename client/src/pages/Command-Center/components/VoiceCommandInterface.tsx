@@ -403,7 +403,7 @@ export function VoiceCommandInterface({
                     onClick={() => generateVoice.mutate(realTimeTranscript)}
                     disabled={generateVoice.isPending}
                     size="sm"
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                    className="btn-yobot-blue"
                   >
                     <Volume2 className="h-4 w-4 mr-2" />
                     {generateVoice.isPending ? 'Generating...' : 'Speak Response'}
@@ -413,7 +413,7 @@ export function VoiceCommandInterface({
                     <select
                       value={selectedVoice}
                       onChange={(e) => setSelectedVoice(e.target.value)}
-                      className="bg-slate-800 text-blue-300 border border-blue-400/50 rounded px-3 py-1 text-sm"
+                      className="bg-slate-800 text-black border border-[#c3c3c3]/50 rounded px-3 py-1 text-sm"
                     >
                       {voices.map((voice: any) => (
                         <option key={voice.id} value={voice.id}>
