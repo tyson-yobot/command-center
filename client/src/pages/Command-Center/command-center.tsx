@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import HeaderBar from '@/components/HeaderBar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { YoBotButton } from '@/components/ui/yobot-button';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
 
@@ -4760,7 +4761,7 @@ export default function CommandCenter() {
         </Card>
 
         {/* SmartSpend™ Analytics Dashboard */}
-        <Card className="rounded-xl border-2 border-[#0d82da] p-4 bg-[#0a0a0a]/80 backdrop-blur-md shadow-[0_0_8px_#0d82da] text-white mb-6">
+        <Card className="rounded-xl border-2 border-[#0d82da] bg-black shadow-[0_0_12px_#0d82da50] text-white mb-6">
           <CardHeader>
             <CardTitle className="text-white flex items-center space-x-2">
               <DollarSign className="w-5 h-5 text-[#0d82da]" />
@@ -4809,14 +4810,15 @@ export default function CommandCenter() {
                   <h3 className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text text-xl font-bold mb-2">Enterprise Lead Intelligence Platform</h3>
                   <p className="text-[#c3c3c3]">Apollo.io, Apify, and PhantomBuster lead generation tools</p>
                 </div>
-                <Button
+                <YoBotButton
                   onClick={handleLeadScraper}
-                  className="bg-gradient-to-br from-[#0d82da] to-[#085ca2] text-white shadow-[0_0_10px_#0d82da] hover:from-[#1391f5] hover:to-[#0a70c2] font-bold px-8 py-4 text-lg"
+                  variant="blue"
+                  icon={Search}
                   size="lg"
+                  className="font-bold px-8 py-4 text-lg"
                 >
-                  <Search className="w-6 h-6 mr-3" />
                   Open Lead Scraper
-                </Button>
+                </YoBotButton>
               </div>
             </CardContent>
           </Card>
