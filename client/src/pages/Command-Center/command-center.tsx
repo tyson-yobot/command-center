@@ -3732,10 +3732,10 @@ export default function CommandCenter() {
 
 
 
-        {/* Analytics Dashboard - 3 Column Layout */}
-        <div id="analytics" className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {/* Performance & ROI Analytics */}
-          <Card className="bg-gradient-to-r from-purple-900/60 to-indigo-900/60 backdrop-blur-sm border-2 border-purple-400 shadow-2xl shadow-purple-400/30 ring-2 ring-purple-400/50 min-h-[480px]">
+        {/* Document Manager Section with RAG */}
+        <div id="knowledge-base" className="mb-8">
+          <Card className="bg-gradient-to-r from-green-900/60 to-teal-900/60 backdrop-blur-sm border-2 border-green-400 shadow-2xl shadow-green-400/30 ring-2 ring-green-400/50"
+            onClick={() => setActiveView('rag')}>
             <CardHeader className="border-b-2 border-purple-400/40 shadow-lg bg-gradient-to-r from-purple-800/40 to-indigo-800/40 rounded-t-lg">
               <CardTitle className="text-white flex items-center text-lg relative">
                 <div className="absolute -top-1 left-0 w-full h-1 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full shadow-lg shadow-purple-400/50"></div>
@@ -4876,7 +4876,7 @@ export default function CommandCenter() {
                         <div className="grid grid-cols-4 gap-2">
                           <Button 
                             onClick={generateVoice}
-                            className="bg-cyan-600 hover:bg-cyan-700 text-white border border-cyan-500 px-4 py-3"
+                            className="bg-cyan-600 hover:bg-cyan-700 text-white border border-cyan-500 px-4 py-3 shadow-lg hover:shadow-cyan-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                             disabled={!voiceGenerationText.trim()}
                           >
                             <Headphones className="w-4 h-4 mr-2" />
@@ -4884,21 +4884,21 @@ export default function CommandCenter() {
                           </Button>
                           <Button 
                             onClick={downloadAudio}
-                            className="bg-teal-600 hover:bg-teal-700 text-white border border-teal-500 px-4 py-3"
+                            className="bg-teal-600 hover:bg-teal-700 text-white border border-teal-500 px-4 py-3 shadow-lg hover:shadow-teal-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                           >
                             <Download className="w-4 h-4 mr-2" />
                             Download Audio
                           </Button>
                           <Button 
                             onClick={testVoicePersona}
-                            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 text-sm px-4 py-3"
+                            className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 text-sm px-4 py-3 shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                           >
                             <Headphones className="w-3 h-3 mr-1" />
                             Test Voice
                           </Button>
                           <Button 
                             onClick={handleApplyPersona}
-                            className="bg-green-600 hover:bg-green-700 text-white border border-green-500 text-sm px-4 py-3"
+                            className="bg-green-600 hover:bg-green-700 text-white border border-green-500 text-sm px-4 py-3 shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                           >
                             <Settings className="w-3 h-3 mr-1" />
                             Apply Persona
