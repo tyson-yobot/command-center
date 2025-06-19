@@ -3449,7 +3449,7 @@ export default function CommandCenter() {
                 <div className="w-full h-[1px] bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mt-2"></div>
               </CardHeader>
               <CardContent className="p-6">
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-[18px]">
                   {/* Pipeline Controls */}
                   <Button
                     onClick={handleStartPipelineCalls}
@@ -3624,7 +3624,7 @@ export default function CommandCenter() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-[18px]">
                   <Button 
                     onClick={insertMemoryText}
                     disabled={!memoryText.trim()}
@@ -3782,7 +3782,7 @@ export default function CommandCenter() {
                       <DollarSign className="w-4 h-4 mr-2 text-cyan-400" />
                       SmartSpend™ Analytics
                     </h4>
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 gap-[18px]">
                       <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center">
                         <div className="text-2xl font-bold text-cyan-400 mb-1">0</div>
                         <div className="text-sm text-white">Budget Efficiency</div>
@@ -3804,7 +3804,7 @@ export default function CommandCenter() {
                       <Brain className="w-4 h-4 mr-2 text-cyan-400" />
                       Botalytics™
                     </h4>
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 gap-[18px]">
                       <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center">
                         <div className="text-2xl font-bold text-cyan-400 mb-1">0</div>
                         <div className="text-sm text-white">AI Accuracy</div>
@@ -3842,7 +3842,7 @@ export default function CommandCenter() {
                       <Activity className="w-4 h-4 mr-2 text-cyan-400" />
                       System Uptime
                     </h4>
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 gap-[18px]">
                       <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center">
                         <div className="text-2xl font-bold text-cyan-400 mb-1">0</div>
                         <div className="text-sm text-white">Uptime</div>
@@ -3860,7 +3860,7 @@ export default function CommandCenter() {
                       <Users className="w-4 h-4 mr-2 text-cyan-400" />
                       Client Pulse
                     </h4>
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 gap-[18px]">
                       <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-cyan-400/5 animate-pulse"></div>
                         <div className="relative z-10">
@@ -3894,7 +3894,7 @@ export default function CommandCenter() {
                       <Target className="w-4 h-4 mr-2 text-cyan-400" />
                       Ops Stats
                     </h4>
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 gap-[18px]">
                       <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4 min-h-[70px] flex flex-col justify-center relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-cyan-400/5 animate-pulse"></div>
                         <div className="relative z-10">
@@ -4239,7 +4239,7 @@ export default function CommandCenter() {
               <div className="w-full h-[1px] bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mt-2"></div>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-[18px]">
                 <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
                   <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Call Volume</h4>
                   <div className="text-2xl font-bold">0</div>
@@ -4277,7 +4277,7 @@ export default function CommandCenter() {
                     <Activity className="w-4 h-4 mr-2 text-cyan-400" />
                     System Uptime
                   </h4>
-                  <div className="grid grid-cols-1 gap-4">
+                  <div className="grid grid-cols-1 gap-[18px]">
                     <div className="rounded-xl border border-cyan-400/60 shadow-[0_0_12px_#0ff] bg-gradient-to-b from-[#0f172a] via-[#0c1c30] to-[#070d16] p-4">
                       <div className="text-cyan-300 text-sm mb-1 font-medium">Current Uptime</div>
                       <div className="text-white font-bold text-xl mb-2">{liveSystemData?.uptime || '0 hrs'}</div>
@@ -4670,7 +4670,7 @@ export default function CommandCenter() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-[18px]">
                 {/* Cost Per Lead */}
               <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <div className="text-center mb-3">
@@ -4913,7 +4913,7 @@ export default function CommandCenter() {
                       </div>
                     </div>
                   )}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px]">
                     <Button 
                       onClick={queryKnowledgeBase}
                       className="bg-purple-600 hover:bg-purple-700 text-white"
@@ -5364,7 +5364,7 @@ export default function CommandCenter() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px] mb-6">
                   <Button 
                     onClick={handleReindexKnowledge}
                     className="bg-purple-600 hover:bg-purple-700 text-white"
@@ -5469,7 +5469,7 @@ export default function CommandCenter() {
                       </div>
                     </div>
                   )}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-[18px]">
                     <Button 
                       onClick={queryKnowledgeBase}
                       className="bg-purple-600 hover:bg-purple-700 text-white"
@@ -5937,7 +5937,7 @@ export default function CommandCenter() {
                 </div>
 
                 {/* Call Statistics */}
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-4 gap-[18px]">
                   <div className="bg-slate-700/40 rounded-lg p-4 text-center border border-blue-400">
                     <div className="text-slate-300 text-sm mb-2">Active Calls</div>
                     <div className="text-white font-bold text-xl">{currentSystemMode === 'test' ? callStats.activeCalls : ''}</div>
@@ -5957,7 +5957,7 @@ export default function CommandCenter() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-[18px]">
                   <Button 
                     onClick={handleSimulateTestCall}
                     className="bg-purple-600 hover:bg-purple-700 text-white text-sm px-4 py-3 border border-purple-400"
@@ -6003,7 +6003,7 @@ export default function CommandCenter() {
                   Support Status
                 </h4>
                 <div className="h-[1px] w-full bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mb-4"></div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-[18px]">
                   <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
                     <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Support Status</h4>
                     <div className="text-2xl font-bold">Online</div>
@@ -6109,7 +6109,7 @@ export default function CommandCenter() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-[18px]">
                   <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
                     <div className="text-center">
                       <div className="text-2xl font-black text-green-400 mb-1">{ '0'}</div>
@@ -6189,7 +6189,7 @@ export default function CommandCenter() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-[18px]">
                   <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
                     <div className="text-center">
                       <div className="text-2xl font-black text-green-400 mb-1">$0</div>
@@ -6267,7 +6267,7 @@ export default function CommandCenter() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-[18px]">
                   <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
                     <div className="text-center">
                       <div className="text-2xl font-black text-green-400 mb-1">{ '0'}</div>
@@ -6347,7 +6347,7 @@ export default function CommandCenter() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-[18px]">
                   <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
                     <div className="text-center">
                       <div className="text-2xl font-black text-green-400 mb-1">$0</div>
@@ -6937,7 +6937,7 @@ export default function CommandCenter() {
             </div>
             
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-[18px]">
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">Client Name</label>
                   <input 
@@ -7215,7 +7215,7 @@ export default function CommandCenter() {
             </div>
             <div className="p-6 space-y-6">
               {/* Personal Information */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-[18px]">
                 <div>
                   <label className="text-white text-sm font-medium mb-2 block">👤 Name</label>
                   <input
@@ -7239,7 +7239,7 @@ export default function CommandCenter() {
               </div>
 
               {/* Ticket Details */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-[18px]">
                 <div>
                   <label className="text-white text-sm font-medium mb-2 block">🏷️ Ticket Type</label>
                   <select
@@ -7315,7 +7315,7 @@ export default function CommandCenter() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-4 pt-4 border-t border-purple-400/30">
+              <div className="flex gap-[18px] pt-4 border-t border-purple-400/30">
                 <Button
                   onClick={() => {
                     const ticketData = {
@@ -7746,7 +7746,7 @@ export default function CommandCenter() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-[18px]">
                     <div>
                       <label className="text-white text-sm font-medium mb-2 block">Sync Source</label>
                       <select className="w-full p-3 bg-slate-700 border border-green-400/50 rounded text-white">
@@ -8360,7 +8360,7 @@ export default function CommandCenter() {
               {/* Day Summary */}
               <div className="mt-8 bg-slate-800/40 rounded-lg p-4 border border-slate-600">
                 <h4 className="text-white font-semibold mb-3">Day Summary</h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-[18px] text-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-slate-300">Total Meetings:</span>
                     <span className="text-white font-medium">
@@ -8830,7 +8830,7 @@ export default function CommandCenter() {
                   {recentLeads.map((lead, index) => (
                     <Card key={lead.id || index} className="bg-slate-800 border-slate-600">
                       <CardContent className="p-4">
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-3 gap-[18px]">
                           <div>
                             <h4 className="text-white font-medium">{lead.firstName} {lead.lastName}</h4>
                             <p className="text-slate-400 text-sm">{lead.title}</p>
