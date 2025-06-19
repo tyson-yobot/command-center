@@ -3469,7 +3469,7 @@ export default function CommandCenter() {
                   {/* Top Row - Green Pipeline Controls */}
                   <Button
                     onClick={handleStartPipelineCalls}
-                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500"
+                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500 shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                     title="Start/End Pipeline Calls"
                   >
                     <div className="text-center">
@@ -3480,7 +3480,7 @@ export default function CommandCenter() {
                   
                   <Button
                     onClick={() => setShowManualCallModal(true)}
-                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500"
+                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500 shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                     title="Manual Call Start"
                   >
                     <div className="text-center">
@@ -3492,7 +3492,7 @@ export default function CommandCenter() {
                   <Button
                     onClick={handleLeadScraper}
                     onDoubleClick={() => setShowScrapedLeads(true)}
-                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500 relative"
+                    className="!bg-green-600 hover:!bg-green-700 !text-white flex items-center justify-center p-4 h-24 border border-green-500 relative shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                     title="Lead Scraper - Apollo, Apify, PhantomBuster | Double-click to view last 20 leads"
                   >
                     <div className="text-center">
@@ -3674,14 +3674,14 @@ export default function CommandCenter() {
                     </h4>
                     <Button
                       onClick={handleStartPipelineCalls}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-4 h-12"
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 px-4 py-4 h-12 shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                     >
                       <Play className="w-4 h-4 mr-2" />
                       Start Pipeline
                     </Button>
                     <Button
                       onClick={handleStopPipelineCalls}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-4 h-12"
+                      className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-4 h-12 shadow-lg hover:shadow-red-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                     >
                       <PhoneOff className="w-4 h-4 mr-2" />
                       End Pipeline
@@ -5420,7 +5420,7 @@ export default function CommandCenter() {
                 <div className="space-y-2">
                   <Button
                     onClick={() => setShowExportModal(true)}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center px-4 py-3 border border-purple-500"
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center px-4 py-3 border border-purple-500 shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
                   >
                     <span className="text-xl mr-3">📊</span>
                     <span>Quick Export Dashboard</span>
