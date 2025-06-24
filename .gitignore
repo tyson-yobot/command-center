@@ -1,6 +1,41 @@
-node_modules
-dist
+# Replit & build files
+.replit
+*.replit
+build/
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environments
+.env
+.env.*
+
+# Node modules
+node_modules/
+
+# System files
 .DS_Store
-server/public
-vite.config.ts.*
-*.tar.gz
+Thumbs.db
+
+# IDE folders
+.vscode/
+.idea/
+
+# Git temp files
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+
+# TypeScript cache
+*.tsbuildinfo
+
+# OS junk
+*.bak
+*.tmp
