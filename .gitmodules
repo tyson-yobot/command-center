@@ -1,3 +1,0 @@
-[submodule "integrations/icloud-calendar-sync"]
-	path = integrations/calendar-sync
-	url = https://github.com/tyson-yobot/icloud-calendar-sync.git
