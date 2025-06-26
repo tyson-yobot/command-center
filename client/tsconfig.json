@@ -17,9 +17,9 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./client/src/*"],
-      "@shared/*": ["./shared/*"],
-      "@assets/*": ["./attached_assets/*"]
+      "@/*": ["src/*"],
+      "@shared/*": ["../shared/*"],
+      "@assets/*": ["../attached_assets/*"]
     }
   },
   "include": [
