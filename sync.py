@@ -1,72 +1,87 @@
 import os
 import requests
-from pyicloud import PyiCloudService
 from datetime import datetime, timedelta
+from pyicloud import PyiCloudService
+
 
 def sync_calendar_to_airtable() -> None:
-    """
-    Pull the next 30 days of iCloud events and push them to Airtable.
-    """
-    # ── ENV ─────────────────────────────────────────────
-    icloud_username     = os.getenv("ICLOUD_USERNAME")
-    icloud_password     = os.getenv("ICLOUD_PASSWORD")
-    airtable_api_key    = os.getenv("AIRTABLE_PRODUCTION_API_KEY")
-    airtable_base_id    = os.getenv("AIRTABLE_BASE_ID")
-    airtable_table_name = os.getenv("AIRTABLE_TABLE_NAME")
+    """Sync the next 30 days of iCloud events into Airtable."""
 
-    # Guard-rail: abort if any var is missing
-    if not all([icloud_username, icloud_password,
-                airtable_api_key, airtable_base_id, airtable_table_name]):
-        print("❌  Missing one or more environment variables. Sync aborted.")
+    # ── CONSTANTS ― hard‑coded for now ───────────────────────────────
+    ICLOUD_USERNAME  = "tlerfald@yahoo.com"
+    ICLOUD_PASSWORD  = "ndvw-naba-ntiu-sdmf"               #  app‑specific pwd
+    AIRTABLE_API_KEY = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
+    AIRTABLE_BASE_ID = "appRt8V3tH4g5Z51f"
+    AIRTABLE_TABLE_ID = "tblB92YDxck99T7tr"                #  📅 Calendar Sync Log
+
+    # ── QUICK SANITY‑CHECK ──────────────────────────────────────────
+    config = {
+        "ICLOUD_USERNAME": ICLOUD_USERNAME,
+        "ICLOUD_PASSWORD": ICLOUD_PASSWORD,
+        "AIRTABLE_API_KEY": AIRTABLE_API_KEY,
+        "AIRTABLE_BASE_ID": AIRTABLE_BASE_ID,
+        "AIRTABLE_TABLE_ID": AIRTABLE_TABLE_ID,
+    }
+    missing = [k for k, v in config.items() if not v]
+    if missing:
+        print(f"❌  Missing values for: {', '.join(missing)} — aborting")
         return
 
-    # ── LOGIN ───────────────────────────────────────────
-    icloud = PyiCloudService(icloud_username, icloud_password)
+    print("🚀  Starting iCloud → Airtable sync …")
+
+    # ── LOGIN ───────────────────────────────────────────────────────
+    icloud = PyiCloudService(ICLOUD_USERNAME, ICLOUD_PASSWORD)
     if icloud.requires_2fa:
-        print("🔐  2-factor auth required. Complete it in the iCloud account.")
+        print("🔐  2‑factor auth still required — check Apple ID settings and regenerate password")
         return
+    print("🔑  Logged in to iCloud")
 
-    # ── FETCH EVENTS ────────────────────────────────────
+    # ── FETCH EVENTS ────────────────────────────────────────────────
     now, future = datetime.now(), datetime.now() + timedelta(days=30)
     events = icloud.calendar.events(now, future)
-    print(f"🗓️  {len(events)} events found; syncing first 50 …")
+    print(f"🗓️   {len(events)} events fetched; syncing up to 50 …")
 
-    airtable_url = f"https://api.airtable.com/v0/{airtable_base_id}/{airtable_table_name}"
+    # ── AIRTABLE ENDPOINT ───────────────────────────────────────────
+    airtable_url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_TABLE_ID}"
     headers = {
-        "Authorization": f"Bearer {airtable_api_key}",
-        "Content-Type":  "application/json"
+        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Content-Type": "application/json",
     }
 
-    # ── PUSH LOOP ───────────────────────────────────────
+    # ── PUSH LOOP ───────────────────────────────────────────────────
     for event in events[:50]:
         try:
-            title       = event.get("title") or "Untitled"
-            start_time  = event.get("startDate")
-            end_time    = event.get("endDate")
-            location    = event.get("location", "")
-            notes       = event.get("notes", "")
+            title      = event.get("title") or "Untitled"
+            start_time = event.get("startDate")
+            end_time   = event.get("endDate")
+            location   = event.get("location", "")
+            notes      = event.get("notes", "")
 
-            def iso(dt):  # helper
+            def iso(dt):
                 return dt.isoformat() if isinstance(dt, datetime) else dt
 
             payload = {
                 "fields": {
                     "📅 Event Title": title,
-                    "🕒 Start Time":  iso(start_time),
-                    "⏰ End Time":    iso(end_time),
-                    "🗺 Location":    location,
-                    "📝 Notes":       notes,
-                    "📆 Synced At":   datetime.utcnow().isoformat()
+                    "🕒 Start Time": iso(start_time),
+                    "⏰ End Time": iso(end_time),
+                    "🗺 Location": location,
+                    "📝 Notes": notes,
+                    "📆 Synced At": datetime.utcnow().isoformat(),
                 }
             }
-            resp = requests.post(airtable_url, headers=headers, json=payload)
+
+            resp = requests.post(airtable_url, headers=headers, json=payload, timeout=15)
             if resp.status_code == 200:
                 print(f"✅  Synced: {title}")
             else:
                 print(f"⚠️  Airtable error {resp.status_code}: {resp.text}")
 
         except Exception as e:
-            print(f"❌  Failed to sync event “{event.get('title', 'N/A')}” → {e}")
+            print(f"❌  Failed to sync ‘{title}’ → {e}")
+
+    print("🏁  Sync finished – check Airtable table ‘📅 Calendar Sync Log’.")
+
 
 if __name__ == "__main__":
     sync_calendar_to_airtable()
