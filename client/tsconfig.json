@@ -17,10 +17,10 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@shared/*": ["../shared/*"],
-      "@assets/*": ["../attached_assets/*"]
-    }
+		  "@/*": ["./src/*"],
+		  "@shared/*": ["../shared/*"],
+		  "@assets/*": ["../attached_assets/*"]
+		}
   },
   "include": [
     "client/src",
