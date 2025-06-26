@@ -31,4 +31,4 @@ def sync_calendar_to_airtable():
         print(f"Found {len(events)} events to sync.")
 
         for event in events[:50]:
-            title = event.get("tit
+            title = event.get("title")
