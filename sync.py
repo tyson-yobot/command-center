@@ -9,10 +9,10 @@ def sync_calendar_to_airtable() -> None:
 
     # ── CONSTANTS ― hard‑coded for now ───────────────────────────────
     ICLOUD_USERNAME  = "tlerfald@yahoo.com"
-    ICLOUD_PASSWORD  = "ndvw-naba-ntiu-sdmf"               #  app‑specific pwd
+    ICLOUD_PASSWORD  = "mavc-znhk-rxai-bgfa"               # app‑specific pwd
     AIRTABLE_API_KEY = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
     AIRTABLE_BASE_ID = "appRt8V3tH4g5Z51f"
-    AIRTABLE_TABLE_ID = "tblB92YDxck99T7tr"                #  📅 Calendar Sync Log
+    AIRTABLE_TABLE_ID = "tblB92YDxck99T7tr"                # 📅 Calendar Sync Log
 
     # ── QUICK SANITY‑CHECK ──────────────────────────────────────────
     config = {
