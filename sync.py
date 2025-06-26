@@ -1,7 +1,7 @@
 import os
 import requests
 from datetime import datetime, timedelta
-from pyicloud import PyiCloudService
+from pyicloud_ipd import PyiCloudService
 
 
 def sync_calendar_to_airtable() -> None:
