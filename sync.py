@@ -5,14 +5,22 @@ from pyicloud_ipd import PyiCloudService
 
 
 def sync_calendar_to_airtable() -> None:
-    """Sync the next 30 days of iCloud events into Airtable."""
+    """Sync the next 30 days of iCloud events into Airtable.
 
-    # ── CONSTANTS ― hard‑coded for now ───────────────────────────────
-    ICLOUD_USERNAME  = "tlerfald@yahoo.com"
-    ICLOUD_PASSWORD  = "mavc-znhk-rxai-bgfa"               
-    AIRTABLE_API_KEY = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
-    AIRTABLE_BASE_ID = "appRt8V3tH4g5Z51f"
-    AIRTABLE_TABLE_ID = "tblB92YDxck99T7tr"                
+    Environment variables required:
+    - ICLOUD_USERNAME  (usually your @icloud.com alias)
+    - ICLOUD_PASSWORD  (app‑specific password)
+    - AIRTABLE_API_KEY
+    - AIRTABLE_BASE_ID
+    - AIRTABLE_TABLE_ID
+    """
+
+    # ── LOAD SECRETS FROM ENV ───────────────────────────────────────
+    ICLOUD_USERNAME  = os.getenv("ICLOUD_USERNAME")
+    ICLOUD_PASSWORD  = os.getenv("ICLOUD_PASSWORD")
+    AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
+    AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID")
+    AIRTABLE_TABLE_ID = os.getenv("AIRTABLE_TABLE_ID")
 
     # ── QUICK SANITY‑CHECK ──────────────────────────────────────────
     config = {
@@ -24,7 +32,7 @@ def sync_calendar_to_airtable() -> None:
     }
     missing = [k for k, v in config.items() if not v]
     if missing:
-        print(f"❌  Missing values for: {', '.join(missing)} — aborting")
+        print(f"❌  Missing env vars: {', '.join(missing)} — aborting")
         return
 
     print("🚀  Starting iCloud → Airtable sync …")
@@ -32,12 +40,13 @@ def sync_calendar_to_airtable() -> None:
     # ── LOGIN ───────────────────────────────────────────────────────
     icloud = PyiCloudService(ICLOUD_USERNAME, ICLOUD_PASSWORD)
     if icloud.requires_2fa:
-        print("🔐  2‑factor auth still required — check Apple ID settings and regenerate password")
+        print("🔐  2‑factor auth required — complete it once, then rerun")
         return
     print("🔑  Logged in to iCloud")
 
     # ── FETCH EVENTS ────────────────────────────────────────────────
-    now, future = datetime.now(), datetime.now() + timedelta(days=30)
+    now = datetime.now()
+    future = now + timedelta(days=30)
     events = icloud.calendar.events(now, future)
     print(f"🗓️   {len(events)} events fetched; syncing up to 50 …")
 
@@ -48,35 +57,35 @@ def sync_calendar_to_airtable() -> None:
         "Content-Type": "application/json",
     }
 
+    # ── HELPERS ─────────────────────────────────────────────────────
+    def iso(dt):
+        return dt.isoformat() if isinstance(dt, datetime) else dt
+
     # ── PUSH LOOP ───────────────────────────────────────────────────
     for event in events[:50]:
-        try:
-            title      = event.get("title") or "Untitled"
-            start_time = event.get("startDate")
-            end_time   = event.get("endDate")
-            location   = event.get("location", "")
-            notes      = event.get("notes", "")
+        title = event.get("title") or "Untitled"
+        start_time = event.get("startDate")
+        end_time   = event.get("endDate")
+        location   = event.get("location") or ""
+        notes      = event.get("notes") or ""
 
-            def iso(dt):
-                return dt.isoformat() if isinstance(dt, datetime) else dt
-
-            payload = {
-                "fields": {
-                    "📅 Event Title": title,
-                    "🕒 Start Time": iso(start_time),
-                    "⏰ End Time": iso(end_time),
-                    "🗺 Location": location,
-                    "📝 Notes": notes,
-                    "📆 Synced At": datetime.utcnow().isoformat(),
-                }
+        payload = {
+            "fields": {
+                "📅 Event Title": title,
+                "🕒 Start Time": iso(start_time),
+                "⏰ End Time": iso(end_time),
+                "🗺 Location": location,
+                "📝 Notes": notes,
+                "📆 Synced At": datetime.utcnow().isoformat(),
             }
+        }
 
+        try:
             resp = requests.post(airtable_url, headers=headers, json=payload, timeout=15)
             if resp.status_code == 200:
                 print(f"✅  Synced: {title}")
             else:
                 print(f"⚠️  Airtable error {resp.status_code}: {resp.text}")
-
         except Exception as e:
             print(f"❌  Failed to sync ‘{title}’ → {e}")
 
