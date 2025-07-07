@@ -14,22 +14,31 @@
     "@radix-ui/react-dialog": "^1.1.14",
     "airtable": "^0.12.2",
     "axios": "^1.10.0",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "express": "^4.21.2",
     "lucide-react": "^0.521.0",
     "next": "^15.3.4",
+    "postcss-nesting": "^13.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "socket.io": "^4.8.1",
     "tailwind-merge": "^3.3.1",
+    "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
     "@types/airtable": "^0.10.5",
     "@types/axios": "^0.9.36",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "autoprefixer": "^10.4.21",
     "cross-env": "^7.0.3",
     "tsx": "^4.19.1",
     "typescript": "^5.6.3",
-    "vite": "^5.4.14"
+    "vite": "^5.4.19",
+    "vite-tsconfig-paths": "^5.1.4"
   }
 }
