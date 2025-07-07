@@ -74,26 +74,16 @@ const SmartQuotingCard: React.FC = () => {
 
   const queryClient = useQueryClient();
 
-  const {
-    data: services = [],
-    isLoading,
-  } = useQuery<Service[]>({
-    queryKey: ['services'],
-    queryFn: fetchServices,
+  const { data: services, isLoading } = useQuery(['services'], fetchServices, {
     staleTime: 5 * 60 * 1000,
   });
 
-  const createSO = useMutation<
-    { recordId: string },
-    Error,
-    CreateSOBody
-  >({
-    mutationFn: createSalesOrder,
+  const createSO = useMutation(createSalesOrder, {
     onSuccess: ({ recordId }) => {
       toast.success('Sales Order created, generating PDF…');
       setSalesOrderId(recordId);
     },
-    onError: (err: Error) => toast.error(err.message),
+    onError: (err: any) => toast.error(err.message),
   });
 
   const handleCreateQuote = () => {
@@ -109,7 +99,7 @@ const SmartQuotingCard: React.FC = () => {
 
   const total = services
     ?.filter((s) => selected[s.id])
-    .reduce((sum: number, s) => sum + s.unitPrice * selected[s.id], 0);
+    .reduce((sum, s) => sum + s.unitPrice * selected[s.id], 0);
 
   if (salesOrderId) {
     return <PDFQuoteGeneratorCard recordId={salesOrderId} />;
@@ -142,7 +132,7 @@ const SmartQuotingCard: React.FC = () => {
             <Loader2 className="animate-spin h-4 w-4" /> Loading services…
           </p>
         ) : (
-          services.map((svc) => (
+          services?.map((svc) => (
             <label
               key={svc.id}
               className="flex items-center justify-between text-sm"
@@ -150,7 +140,7 @@ const SmartQuotingCard: React.FC = () => {
               <span className="flex items-center gap-2">
                 <Checkbox
                   checked={!!selected[svc.id]}
-                  onCheckedChange={(v: boolean) =>
+                  onCheckedChange={(v) =>
                     setSelected((prev) => ({
                       ...prev,
                       [svc.id]: v ? 1 : 0,
@@ -206,8 +196,8 @@ interface PDFProps {
 }
 
 const PDFQuoteGeneratorCard: React.FC<PDFProps> = ({ recordId }) => {
-  const gen = useMutation<unknown, Error>({
-    mutationFn: async () => {
+  const gen = useMutation(
+    async () => {
       const res = await fetch(API('/api/generate-quote'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -216,24 +206,28 @@ const PDFQuoteGeneratorCard: React.FC<PDFProps> = ({ recordId }) => {
       if (!res.ok) throw new Error(await res.text());
       return res.json();
     },
-    onSuccess: () => toast.success('Quote PDF generated!'),
-    onError: (err: Error) => toast.error(err.message),
-  });
+    {
+      onSuccess: () => toast.success('Quote PDF generated!'),
+      onError: (err: any) => toast.error(err.message),
+    }
+  );
 
-  const pollStatus = useMutation<unknown, Error, void, unknown>({
-    mutationFn: async () => {
+  const pollStatus = useMutation(
+    async () => {
       const res = await fetch(API(`/api/quote-status/${recordId}`));
       if (!res.ok) throw new Error(await res.text());
       return res.json();
     },
-    onSuccess: (data: any) => {
-      if (data.status === 'completed') {
-        toast.success('Quote signed via DocuSign.');
-      } else if (data.status === 'failed') {
-        toast.error('DocuSign failed.');
-      }
-    },
-  });
+    {
+      onSuccess: (data) => {
+        if (data.status === 'completed') {
+          toast.success('Quote signed via DocuSign.');
+        } else if (data.status === 'failed') {
+          toast.error('DocuSign failed.');
+        }
+      },
+    }
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -273,6 +267,4 @@ const PDFQuoteGeneratorCard: React.FC<PDFProps> = ({ recordId }) => {
   );
 };
 
-export { SmartQuotingCard, PDFQuoteGeneratorCard };
-
-
+export { SmartQuotingCard };
