@@ -16,3 +16,32 @@ services:
       sync: false
     - key: AIRTABLE_TABLE_NAME
       sync: false
+
+- type: worker
+  name: social-post-scheduler
+  env: python
+  plan: free
+  buildCommand: "pip install -r requirements.txt"
+  startCommand: "python post_scheduler.py"
+  autoDeploy: true
+  envVars:
+    - key: FB_TOKEN_YOBOT
+      sync: false
+    - key: FB_TOKEN_YOBOT_INC
+      sync: false
+    - key: FB_TOKEN_DAN
+      sync: false
+    - key: FB_PAGE_ID_DAN
+      sync: false
+    - key: IG_BUSINESS_ID_YOBOT
+      sync: false
+    - key: LINKEDIN_TOKEN
+      sync: false
+    - key: LINKEDIN_URN_YOBOT
+      sync: false
+    - key: LINKEDIN_TOKEN_DAN
+      sync: false
+    - key: LINKEDIN_URN_DAN
+      sync: false
+    - key: SLACK_WEBHOOK
+      sync: false

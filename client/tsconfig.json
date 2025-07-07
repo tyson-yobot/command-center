@@ -1,32 +1,46 @@
 {
+  // ------------------------------------------------------------------
+  //  YoBot® Command Center  –  TypeScript project configuration
+  //  • baseUrl = "."        → all paths are resolved from repo root
+  //  • @/*                  → absolute import for anything in /src
+  //  • @components/*        → UI & layout primitives  (ShadCN+YoBot DS)
+  //  • @modules/*           → dashboard cards & business logic
+  //  • @pages/*             → top-level route components
+  // ------------------------------------------------------------------
   "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    /* ------------------------------------------------- language ---- */
+    "target": "ES2021",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "jsx": "react-jsx",
+
+    /* ------------------------------------------- module / bundler -- */
     "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+
+    /* -------------------------------------------------- type-safety -- */
     "strict": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    /* ---------------------------------------------------- aliases ---- */
     "baseUrl": ".",
     "paths": {
-		  "@/*": ["./src/*"],
-		  "@shared/*": ["../shared/*"],
-		  "@assets/*": ["../attached_assets/*"]
-		}
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@modules/*": ["src/modules/*"],
+      "@pages/*": ["src/pages/*"]
+    },
+
+    /* ---------------------------------------------- tooling hooks --- */
+    "types": ["vite/client"]
   },
-  "include": [
-    "client/src",
-    "shared",
-    "server",
-    "vite.config.ts"
-  ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+
+  /* ------------------------------------------------ file inclusion -- */
+  "include": ["src", "vite-env.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }
