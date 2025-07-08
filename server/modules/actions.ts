@@ -9,6 +9,7 @@
 //  • Typed logger integration (logInfo / logError)
 //  • Health endpoint for container probes
 // =============================================================================
+<<<<<<< HEAD
 import actionsRouter from "./modules/actionsRouter.js";
 app.use("/api/actions", actionsRouter);
 import axios, { AxiosError } from "axios";
@@ -44,6 +45,12 @@ router.post('/', async (req, res) => {
 });
 
 export default router;
+=======
+
+import express, { Request, Response } from "express";
+import axios, { AxiosError } from "axios";
+import { logInfo, logError } from "../utils/logger";
+>>>>>>> 692751fa02aec1a95d0ca2c3113091d5e0732d44
 
 // -----------------------------------------------------------------------------
 //  Environment / Config

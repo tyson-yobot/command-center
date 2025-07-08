@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ES2021",
     "module": "ESNext",
+<<<<<<< HEAD
     "jsx": "react-jsx",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
@@ -17,4 +18,21 @@
     }
   },
   "include": ["client/src/**/*", "server/**/*"]
+=======
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+  "include": ["Client/src/**/*", "client/src/**/*"]
+
+>>>>>>> 692751fa02aec1a95d0ca2c3113091d5e0732d44
 }

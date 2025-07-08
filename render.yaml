@@ -1,3 +1,53 @@
+<<<<<<< HEAD
 import os
 if not os.getenv("DISABLE_ICLOUD_SYNC"):
     # existing Flask boot code
+=======
+services:
+- type: web
+  name: icloud-sync
+  env: python
+  plan: free
+  buildCommand: ""
+  startCommand: python3 app.py
+  envVars:
+    - key: ICLOUD_USERNAME
+      sync: false
+    - key: ICLOUD_PASSWORD
+      sync: false
+    - key: AIRTABLE_API_KEY
+      sync: false
+    - key: AIRTABLE_BASE_ID
+      sync: false
+    - key: AIRTABLE_TABLE_NAME
+      sync: false
+
+- type: worker
+  name: social-post-scheduler
+  env: python
+  plan: free
+  buildCommand: "pip install -r requirements.txt"
+  startCommand: "python post_scheduler.py"
+  autoDeploy: true
+  envVars:
+    - key: FB_TOKEN_YOBOT
+      sync: false
+    - key: FB_TOKEN_YOBOT_INC
+      sync: false
+    - key: FB_TOKEN_DAN
+      sync: false
+    - key: FB_PAGE_ID_DAN
+      sync: false
+    - key: IG_BUSINESS_ID_YOBOT
+      sync: false
+    - key: LINKEDIN_TOKEN
+      sync: false
+    - key: LINKEDIN_URN_YOBOT
+      sync: false
+    - key: LINKEDIN_TOKEN_DAN
+      sync: false
+    - key: LINKEDIN_URN_DAN
+      sync: false
+    - key: SLACK_WEBHOOK
+      sync: false
+>>>>>>> 692751fa02aec1a95d0ca2c3113091d5e0732d44

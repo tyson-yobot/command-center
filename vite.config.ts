@@ -5,7 +5,11 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+<<<<<<< HEAD
 
+=======
+import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
+>>>>>>> 692751fa02aec1a95d0ca2c3113091d5e0732d44
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -21,6 +25,7 @@ export default defineConfig({
     outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,
   },
+<<<<<<< HEAD
   server: {
     port: 5173,
     strictPort: true,
@@ -29,3 +34,6 @@ export default defineConfig({
     },
   },
 });
+=======
+});
+>>>>>>> 692751fa02aec1a95d0ca2c3113091d5e0732d44
