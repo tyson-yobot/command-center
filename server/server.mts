@@ -4,6 +4,12 @@ import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
 import { createEventAdapter } from '@slack/events-api';
+import { featureRegistry } from "./feature-registry";
+
+// Example route guard (optional, for dashboard or API checks)
+app.get("/api/feature-status", (req, res) => {
+  res.json(featureRegistry);
+});
 
 import actionsRouter from './modules/actionsRouter.js';
 import airtableRouter from './modules/airtableRouter.js';

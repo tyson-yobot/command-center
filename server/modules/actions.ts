@@ -9,10 +9,41 @@
 //  • Typed logger integration (logInfo / logError)
 //  • Health endpoint for container probes
 // =============================================================================
-
-import express, { Request, Response } from "express";
+import actionsRouter from "./modules/actionsRouter.js";
+app.use("/api/actions", actionsRouter);
 import axios, { AxiosError } from "axios";
 import { logInfo, logError } from "../utils/logger";
+import express from 'express';
+const router = express.Router();
+
+router.post('/', async (req, res) => {
+  const payload = JSON.parse(req.body.payload);
+  const { type, user, actions, callback_id, trigger_id } = payload;
+
+  console.log("Slack Interaction:", payload);
+
+  if (type === 'block_actions') {
+    const actionId = actions?.[0]?.action_id || '';
+    if (actionId === 'demo_button') {
+      // Respond to a button click
+      console.log(`Button clicked by ${user.username}`);
+    }
+
+    if (actionId === 'select_training_topic') {
+      const selected = actions[0].selected_option.value;
+      console.log(`User selected: ${selected}`);
+    }
+  }
+
+  if (type === 'shortcut') {
+    console.log(`Shortcut triggered: ${callback_id}`);
+    // You can open a modal here using Slack API + trigger_id
+  }
+
+  res.status(200).send(); // Must always respond within 3 seconds
+});
+
+export default router;
 
 // -----------------------------------------------------------------------------
 //  Environment / Config

@@ -1,0 +1,1062 @@
+Base Name,Base ID,Table Name,Table ID,Field Name,Field Type
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,✅ SmartSpend Master Table,tbl185XqDi71n76II,Tool / Service Name,singleLineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,✅ SmartSpend Master Table,tbl185XqDi71n76II,Vendor / Platform,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,✅ SmartSpend Master Table,tbl185XqDi71n76II,Billing Amount ($),currency
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,✅ SmartSpend Master Table,tbl185XqDi71n76II,Billing Frequency,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,✅ SmartSpend Master Table,tbl185XqDi71n76II,Next Billing Date,dateTime
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,✅ SmartSpend Master Table,tbl185XqDi71n76II,Assigned Card,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,✅ SmartSpend Master Table,tbl185XqDi71n76II,Department,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,✅ SmartSpend Master Table,tbl185XqDi71n76II,Category,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,✅ SmartSpend Master Table,tbl185XqDi71n76II,Auto-Renew?,checkbox
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,✅ SmartSpend Master Table,tbl185XqDi71n76II,Notes / Login Info,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,✅ SmartSpend Master Table,tbl185XqDi71n76II,Monthly Spend (Calculated),formula
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,✅ SmartSpend Master Table,tbl185XqDi71n76II,🛑 Incomplete Entry,formula
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,✅ SmartSpend Master Table,tbl185XqDi71n76II,Vendor,singleLineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🏢 Company Name,singleLineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🌐 Company Website,url
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🏭 Industry,singleLineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,👤 Main Contact Name,singleLineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,📧 Main Contact Email,email
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,📞 Main Contact Phone,phoneNumber
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,💬 Preferred Contact Method,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🧰 Current Tools Used,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🔧 Tool Categories Needed,multipleSelects
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🔗 Smart Links,url
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🧾 Other Tool Categories (If Selected),multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,💸 Monthly Software Spend,number
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🕵️ Monitor All Tools?,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🔁 Billing Frequency,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🔐 Require Shared Logins?,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🧵 Slack/Comm Tool Used,singleLineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🧩 Department Breakdown,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,📝 Special Instructions,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,📊 SmartSpend™ · Budget & ROI Tracker,tbldzMgJudUxGjkv4,📅 Period,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,📊 SmartSpend™ · Budget & ROI Tracker,tbldzMgJudUxGjkv4,💸 Budget,number
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,📊 SmartSpend™ · Budget & ROI Tracker,tbldzMgJudUxGjkv4,💳 Actual Spend,number
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,📊 SmartSpend™ · Budget & ROI Tracker,tbldzMgJudUxGjkv4,📊 % of Budget Used,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,📊 SmartSpend™ · Budget & ROI Tracker,tbldzMgJudUxGjkv4,📈 ROI,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,📊 SmartSpend™ · Budget & ROI Tracker,tbldzMgJudUxGjkv4,📣 Alert Sent,checkbox
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,📊 SmartSpend™ · Budget & ROI Tracker,tbldzMgJudUxGjkv4,🗒 Notes,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Task Name,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Module / Scenario (Clean),singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,OLD -Module / Scenario,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,System Category,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Owner,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Status,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Priority,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Notes,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Phase,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Due Date,date
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,🧮 Completed This Week?,formula
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Task Age (Days Ago),formula
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Record ID,formula
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Smart Link,formula
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Created Time,createdTime
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Email,email
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Slack Message Sent?,checkbox
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,VoiceBot Triggered,checkbox
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,CRM Mapping Notes,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Imported table,tblvRrFeKO2gqRBT6,Created From Table,singleLineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Feature Name,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Module / Scenario (Clean),singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,System Category,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Owner,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Status,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Priority,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Notes,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Estimated Due Date,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Feature Type,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Applies To,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Phase,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Department,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Future Flag,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Resource Link,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Auto Department,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Priority Color,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Created Time,createdTime
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Smart Link,singleLineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,Completed This Week?,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,YoBot® Integration + Roadmap Tracker,tblYhB5BhG2PiyOkA,OLD - Module / Scenario,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Go Live Roadmap Tracker,tblzptuSLLlmvFgOD,Feature Name,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Go Live Roadmap Tracker,tblzptuSLLlmvFgOD,Module / Scenario (Clean),multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Go Live Roadmap Tracker,tblzptuSLLlmvFgOD,System Category,multilineText
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Go Live Roadmap Tracker,tblzptuSLLlmvFgOD,Owner,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Go Live Roadmap Tracker,tblzptuSLLlmvFgOD,Priority,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Go Live Roadmap Tracker,tblzptuSLLlmvFgOD,Status,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Go Live Roadmap Tracker,tblzptuSLLlmvFgOD,Estimated Hours,number
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Go Live Roadmap Tracker,tblzptuSLLlmvFgOD,Feature Type,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Go Live Roadmap Tracker,tblzptuSLLlmvFgOD,Phase,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Go Live Roadmap Tracker,tblzptuSLLlmvFgOD,Department,singleSelect
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Go Live Roadmap Tracker,tblzptuSLLlmvFgOD,Applies To,multipleSelects
+YoBot® SmartSpend Tracker (Main).xlsx,appGtcRZU6QJngkQS,Go Live Roadmap Tracker,tblzptuSLLlmvFgOD,Estimated Due Date,date
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,✅ SmartSpend Master Table,tbl185XqDi71n76II,Tool / Service Name,singleLineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,✅ SmartSpend Master Table,tbl185XqDi71n76II,Vendor / Platform,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,✅ SmartSpend Master Table,tbl185XqDi71n76II,Billing Amount ($),currency
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,✅ SmartSpend Master Table,tbl185XqDi71n76II,Billing Frequency,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,✅ SmartSpend Master Table,tbl185XqDi71n76II,Next Billing Date,dateTime
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,✅ SmartSpend Master Table,tbl185XqDi71n76II,Assigned Card,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,✅ SmartSpend Master Table,tbl185XqDi71n76II,Department,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,✅ SmartSpend Master Table,tbl185XqDi71n76II,Category,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,✅ SmartSpend Master Table,tbl185XqDi71n76II,Auto-Renew?,checkbox
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,✅ SmartSpend Master Table,tbl185XqDi71n76II,Notes / Login Info,multilineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,✅ SmartSpend Master Table,tbl185XqDi71n76II,Monthly Spend (Calculated),formula
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,✅ SmartSpend Master Table,tbl185XqDi71n76II,🛑 Incomplete Entry,formula
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,✅ SmartSpend Master Table,tbl185XqDi71n76II,Vendor,singleLineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🏢 Company Name,singleLineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🌐 Company Website,url
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🏭 Industry,singleLineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,👤 Main Contact Name,singleLineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,📧 Main Contact Email,email
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,📞 Main Contact Phone,phoneNumber
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,💬 Preferred Contact Method,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🧰 Current Tools Used,multilineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🔧 Tool Categories Needed,multipleSelects
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🔗 Smart Links,url
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🧾 Other Tool Categories (If Selected),multilineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,💸 Monthly Software Spend,number
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🕵️ Monitor All Tools?,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🔁 Billing Frequency,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🔐 Require Shared Logins?,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🧵 Slack/Comm Tool Used,singleLineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,🧩 Department Breakdown,multilineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Dashboard Intake Submissions,tblWFJVCJIo4yRqVF,📝 Special Instructions,multilineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,Feature Name,multilineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,Module / Scenario,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,System Category,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,Owner,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,Status,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,Priority,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,Notes,multilineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,Estimated Due Date,date
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,Feature Type,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,Applies To,multipleSelects
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,Phase,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,Department,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,Future Flag,checkbox
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,YoBot® Integration + Roadmap Tracker,tblOgmxKHcSDFHX7M,Resource Link,url
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Task Name,multilineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Module / Scenario,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,System Category,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Owner,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Status,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Priority,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Notes,multilineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Phase,singleSelect
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Due Date,date
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,🧮 Completed This Week?,formula
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Task Age (Days Ago),formula
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Smart Link,singleLineText
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Label,formula
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Last Modified (Smart Link Trigger),lastModifiedTime
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Record ID,formula
+🗃️ ARCHIVED – SmartSpend™ Tracker Z (DO NOT USE),appsViuNPQnXGT82W,Phase 1 - Launch Tasks,tblvRrFeKO2gqRBT6,Airtable_ID,formula
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,📅 Date,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🏷️ Client / Bot Name,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,💬 Conversations,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,✉️ Messages Exchanged,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🎯 Leads Captured,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🔀 Live Transfers,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,⏱️ Avg Response Time (sec),number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,📈 Conversion Rate,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,💰 Revenue Booked,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,📛 Errors/Fallbacks,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,📊 Engagement Score,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,📣 Notifications Sent,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🎤 VoiceBot Used,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,✍️ Transcription Enabled,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,😃 Avg Sentiment Score,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🧠 Summary Generated,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🗂 RAG Accessed,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🔄 CRM Synced,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,📄 Docs Retrieved,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,✅ Completed,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,📝 Notes,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🟢 System Status,singleLineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,⚙️ Make Webhooks Processed,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,📆 Last Activity Timestamp,dateTime
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🔗 QA Integration Logs,singleLineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,📅 Test Date (from 🔗 QA Integration Logs),dateTime
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,✅ Pass/Fail (from 🔗 QA Integration Logs),checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🐞 Errors Observed (from 🔗 QA Integration Logs),multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,📤 Output Data Populated (from 🔗 QA Integration Logs),checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🗃️ Record Created? (from 🔗 QA Integration Logs),checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🔁 Retry Attempted? (from 🔗 QA Integration Logs),checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🧠 Notes / Debug (from 🔗 QA Integration Logs),multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,🧑‍💻 QA Owner (from 🔗 QA Integration Logs),singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,⚙️ Function,singleLineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📊 Command Center · Metrics Tracker,tblJ7z2beo9ZGYLMB,📍 Dashboard,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration QA Tracker,tblMpejPhgo7BdPTX,🔧 Integration Name,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration QA Tracker,tblMpejPhgo7BdPTX,🧩 Module Type,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration QA Tracker,tblMpejPhgo7BdPTX,📅 Test Date,date
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration QA Tracker,tblMpejPhgo7BdPTX,🧪 Test Scenario,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration QA Tracker,tblMpejPhgo7BdPTX,✅ Pass/Fail,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration QA Tracker,tblMpejPhgo7BdPTX,🐞 Errors Observed,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration QA Tracker,tblMpejPhgo7BdPTX,📤 Output Data Populated,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration QA Tracker,tblMpejPhgo7BdPTX,🗃️ Record Created?,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration QA Tracker,tblMpejPhgo7BdPTX,🔁 Retry Attempted?,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration QA Tracker,tblMpejPhgo7BdPTX,🧠 Notes / Debug,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration QA Tracker,tblMpejPhgo7BdPTX,🧑‍💻 QA Owner,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration QA Tracker,tblMpejPhgo7BdPTX,📂 Related Scenario Link,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log,tbly0fjE2M5uHET9X,🔧 Integration Name,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log,tbly0fjE2M5uHET9X,✅ Pass/Fail,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log,tbly0fjE2M5uHET9X,🧠 Notes / Debug,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log,tbly0fjE2M5uHET9X,📅 Test Date,dateTime
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log,tbly0fjE2M5uHET9X,🧑‍💻 QA Owner,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log,tbly0fjE2M5uHET9X,📤 Output Data Populated,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log,tbly0fjE2M5uHET9X,🗃️ Record Created?,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log,tbly0fjE2M5uHET9X,🔁 Retry Attempted?,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log,tbly0fjE2M5uHET9X,🧩 Module Type,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log,tbly0fjE2M5uHET9X,📂 Related Scenario Link,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,✅ Completed Integration QA,tbljcu0JE20SQqvUf,🔧 Integration Name,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,✅ Completed Integration QA,tbljcu0JE20SQqvUf,🧩 Module Type,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,✅ Completed Integration QA,tbljcu0JE20SQqvUf,📅 Test Date,date
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,✅ Completed Integration QA,tbljcu0JE20SQqvUf,✅ Pass/Fail,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,✅ Completed Integration QA,tbljcu0JE20SQqvUf,🧠 Notes / Debug,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,✅ Completed Integration QA,tbljcu0JE20SQqvUf,🧑‍💻 QA Owner,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,✅ Completed Integration QA,tbljcu0JE20SQqvUf,📤 Output Data Populated,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,✅ Completed Integration QA,tbljcu0JE20SQqvUf,🗃️ Record Created?,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,✅ Completed Integration QA,tbljcu0JE20SQqvUf,🔁 Retry Attempted?,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,✅ Completed Integration QA,tbljcu0JE20SQqvUf,📂 Related Scenario Link,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log 2,tblmaP2sOgowTkmGI,🔧 Integration Name,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log 2,tblmaP2sOgowTkmGI,✅ Pass/Fail,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log 2,tblmaP2sOgowTkmGI,🧠 Notes / Debug,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log 2,tblmaP2sOgowTkmGI,📅 Test Date,date
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log 2,tblmaP2sOgowTkmGI,🧑‍💻 QA Owner,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log 2,tblmaP2sOgowTkmGI,📤 Output Data Populated,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log 2,tblmaP2sOgowTkmGI,🗃️ Record Created?,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log 2,tblmaP2sOgowTkmGI,🔁 Retry Attempted?,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log 2,tblmaP2sOgowTkmGI,🧩 Module Type,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧪 Integration Test Log 2,tblmaP2sOgowTkmGI,📂 Related Scenario Link,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧠 Client Instances,tblCmBeyaJg9S1kPd,🧾 Client Name,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧠 Client Instances,tblCmBeyaJg9S1kPd,📧 Email,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧠 Client Instances,tblCmBeyaJg9S1kPd,📦 Render ID,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧠 Client Instances,tblCmBeyaJg9S1kPd,📦 Render URL,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧠 Client Instances,tblCmBeyaJg9S1kPd,📊 Airtable Base ID,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧠 Client Instances,tblCmBeyaJg9S1kPd,🔔 Slack Webhook,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧠 Client Instances,tblCmBeyaJg9S1kPd,📅 Last Deploy,date
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧠 Client Instances,tblCmBeyaJg9S1kPd,👀 Demo Views,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧠 Client Instances,tblCmBeyaJg9S1kPd,💥 Errors,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧠 Client Instances,tblCmBeyaJg9S1kPd,✅ Features Enabled,multipleSelects
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧲 Leads - Intake,tblZhtHGNNRncYG9v,🧲 Lead ID,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧲 Leads - Intake,tblZhtHGNNRncYG9v,🧾 Client Name,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧲 Leads - Intake,tblZhtHGNNRncYG9v,👤 Lead Name,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧲 Leads - Intake,tblZhtHGNNRncYG9v,📞 Phone,number
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧲 Leads - Intake,tblZhtHGNNRncYG9v,✉️ Email,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧲 Leads - Intake,tblZhtHGNNRncYG9v,🏢 Company,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧲 Leads - Intake,tblZhtHGNNRncYG9v,🌐 Website,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧲 Leads - Intake,tblZhtHGNNRncYG9v,🗓️ Scraped On,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧲 Leads - Intake,tblZhtHGNNRncYG9v,🔁 Source,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧲 Leads - Intake,tblZhtHGNNRncYG9v,📥 CRM Synced,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,🧲 Leads - Intake,tblZhtHGNNRncYG9v,📤 Call Scheduled,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📚 Industry Templates,tblGAn6K4fxtetDb0,🏷️ Industry,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📚 Industry Templates,tblGAn6K4fxtetDb0,📋 QA Questions,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📚 Industry Templates,tblGAn6K4fxtetDb0,💬 Call Script Template,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📚 Industry Templates,tblGAn6K4fxtetDb0,🔑 NLP Keywords,multipleSelects
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📚 Industry Templates,tblGAn6K4fxtetDb0,🧠 GPT Prompt Style,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📚 Industry Templates,tblGAn6K4fxtetDb0,🎙️ Voice Prompts,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📚 Industry Templates,tblGAn6K4fxtetDb0,📥 Intake Fields (JSON),multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📚 Industry Templates,tblGAn6K4fxtetDb0,🛠 Config JSON,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,🆔 Client ID,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,🏢 Business Name,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,👤 Contact Name,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,📧 Email,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,📞 Phone,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,🌐 Website,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,🏷️ Industry,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,📍 Location,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,🎯 Primary Goal,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,🧠 Bot Type (Voice/Text/Both),multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,📞 Needs Outbound Calls? (Y/N),multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,🔗 CRM Integration?,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,📦 Services Offered (comma-separated),multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📝 Client Intake,tblR7B9a8z7L5wbUu,💡 Notes / Special Requests,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📥 Inbound Call Log,tbldPRZ4nHbtj9opU,📞 Caller Number,phoneNumber
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📥 Inbound Call Log,tbldPRZ4nHbtj9opU,📅 Call Time,dateTime
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📥 Inbound Call Log,tbldPRZ4nHbtj9opU,🎤 VoiceBot Engaged,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📥 Inbound Call Log,tbldPRZ4nHbtj9opU,🧠 Transcription,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📥 Inbound Call Log,tbldPRZ4nHbtj9opU,📄 Call Outcome,singleSelect
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📥 Inbound Call Log,tbldPRZ4nHbtj9opU,📅 Callback Scheduled,dateTime
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📥 Inbound Call Log,tbldPRZ4nHbtj9opU,🔁 Callback Attempted?,checkbox
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📥 Inbound Call Log,tbldPRZ4nHbtj9opU,☎️ Callback SID,singleLineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📥 Inbound Call Log,tbldPRZ4nHbtj9opU,📊 Callback Result Summary,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📥 Inbound Call Log,tbldPRZ4nHbtj9opU,📅 Callback Day,formula
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📥 Inbound Call Log,tbldPRZ4nHbtj9opU,🗨️ SMS Reply,singleLineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📅 Calendar Sync Log,tblB92YDxck99T7tr,📅 Event Title,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📅 Calendar Sync Log,tblB92YDxck99T7tr,🕒 Start Time,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📅 Calendar Sync Log,tblB92YDxck99T7tr,⏰ End Time,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📅 Calendar Sync Log,tblB92YDxck99T7tr,🗺 Location,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📅 Calendar Sync Log,tblB92YDxck99T7tr,📝 Notes,multilineText
+YoBot® Command Center (Live Ops),appRt8V3tH4g5Z5if,📅 Calendar Sync Log,tblB92YDxck99T7tr,📆 Synced At,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 Client Bookings,tblGu1ieJO1mtYSkb,🧑 Client Full Name,singleLineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 Client Bookings,tblGu1ieJO1mtYSkb,📧 Client Email,email
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 Client Bookings,tblGu1ieJO1mtYSkb,📱 Client Phone Number,phoneNumber
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 Client Bookings,tblGu1ieJO1mtYSkb,🗂️ Booking Type,singleSelect
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 Client Bookings,tblGu1ieJO1mtYSkb,📅 Booking Date & Time,dateTime
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 Client Bookings,tblGu1ieJO1mtYSkb,📝 Notes,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 Client Bookings,tblGu1ieJO1mtYSkb,📌 Booking Status,singleSelect
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 Client Bookings,tblGu1ieJO1mtYSkb,🔗 Google Calendar Event ID,singleLineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 Client Bookings,tblGu1ieJO1mtYSkb,🌐 Google Calendar Event URL,url
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🙋 Team Members,tbli9KOJdtoLtrfoX,🆔 Contact ID,number
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🙋 Team Members,tbli9KOJdtoLtrfoX,👤 Full Name,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🙋 Team Members,tbli9KOJdtoLtrfoX,📧 Email,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🙋 Team Members,tbli9KOJdtoLtrfoX,📞 Phone Number,number
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🙋 Team Members,tbli9KOJdtoLtrfoX,🏢 Company Name,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🙋 Team Members,tbli9KOJdtoLtrfoX,🌐 Website,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🙋 Team Members,tbli9KOJdtoLtrfoX,🧩 Linked Deals,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🙋 Team Members,tbli9KOJdtoLtrfoX,🎫 Linked Tickets,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🙋 Team Members,tbli9KOJdtoLtrfoX,👤 Assigned Rep,multipleRecordLinks
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🙋 Team Members,tbli9KOJdtoLtrfoX,🗓️ Date Added,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🙋 Team Members,tbli9KOJdtoLtrfoX,📝 Notes,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🙋 Team Members,tbli9KOJdtoLtrfoX,🧾 Invoice Tracking,multipleRecordLinks
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📅 Deal Milestones Table,tbllmq9I7cFU2y7Xz,🆔 Quote ID,number
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📅 Deal Milestones Table,tbllmq9I7cFU2y7Xz,🆔 Deal ID,autoNumber
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📅 Deal Milestones Table,tbllmq9I7cFU2y7Xz,🧾 Quote Name,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📅 Deal Milestones Table,tbllmq9I7cFU2y7Xz,📅 Date Generated,date
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📅 Deal Milestones Table,tbllmq9I7cFU2y7Xz,📇 Linked Contact,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📅 Deal Milestones Table,tbllmq9I7cFU2y7Xz,💼 Package Selected,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📅 Deal Milestones Table,tbllmq9I7cFU2y7Xz,🧩 Add-Ons Selected,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📅 Deal Milestones Table,tbllmq9I7cFU2y7Xz,💲 One-Time Total,number
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📅 Deal Milestones Table,tbllmq9I7cFU2y7Xz,💵 Monthly Recurring,number
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📅 Deal Milestones Table,tbllmq9I7cFU2y7Xz,📎 Quote File Link,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📅 Deal Milestones Table,tbllmq9I7cFU2y7Xz,👤 Created By,singleSelect
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📅 Deal Milestones Table,tbllmq9I7cFU2y7Xz,📝 Notes,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📅 Deal Milestones Table,tbllmq9I7cFU2y7Xz,🧾 Invoice Tracking,multipleRecordLinks
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📄 Quote Generator Logs,tbl7tGwUBXiasxAhj,🆔 Quote ID,number
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📄 Quote Generator Logs,tbl7tGwUBXiasxAhj,🧾 Quote Name,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📄 Quote Generator Logs,tbl7tGwUBXiasxAhj,📅 Date Generated,date
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📄 Quote Generator Logs,tbl7tGwUBXiasxAhj,📇 Linked Contact,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📄 Quote Generator Logs,tbl7tGwUBXiasxAhj,💼 Package Selected,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📄 Quote Generator Logs,tbl7tGwUBXiasxAhj,🧩 Add-Ons Selected,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📄 Quote Generator Logs,tbl7tGwUBXiasxAhj,💲 One-Time Total,number
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📄 Quote Generator Logs,tbl7tGwUBXiasxAhj,💵 Monthly Recurring,number
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📄 Quote Generator Logs,tbl7tGwUBXiasxAhj,📎 Quote File Link,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📄 Quote Generator Logs,tbl7tGwUBXiasxAhj,👤 Created By,singleSelect
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📄 Quote Generator Logs,tbl7tGwUBXiasxAhj,📝 Notes,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📄 Quote Generator Logs,tbl7tGwUBXiasxAhj,🧍 Contact Name (Text),formula
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,🆔 Contact ID,number
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,👤 Full Name,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,📧 Email,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,📞 Phone Number,number
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,🏢 Company Name,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,🌐 Website,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,🧩 Linked Deals,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,🎫 Linked Tickets,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,👤 Assigned Rep,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,🗓️ Date Added,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,📝 Notes,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,🧾 Invoice Tracking,multipleRecordLinks
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,💼 Title,singleLineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,📇 CRM Contacts,tblFr3oS4IUFld0d1,🏷️ Lead Source (Card Scan),singleSelect
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,👥 Rep Assignment Tracker,tblXnxtOUhXNA0ZNq,🧑 Rep Name,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,👥 Rep Assignment Tracker,tblXnxtOUhXNA0ZNq,🔢 Assigned Count,number
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,👥 Rep Assignment Tracker,tblXnxtOUhXNA0ZNq,✅ Active,checkbox
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,🧾 Invoice ID,autoNumber
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,📇 Linked Contact,multipleRecordLinks
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,📅 Invoice Date,date
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,📦 Linked Deal,multipleRecordLinks
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,💲 Amount Billed,currency
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,💵 Monthly Fee,currency
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,📅 Due Date,date
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,✅ Paid?,singleSelect
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,📎 Invoice File Link,url
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,🔄 Payment Method,singleSelect
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,👤 Billed By,multipleRecordLinks
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,📝 Notes,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,📆 Last Modified,lastModifiedTime
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,👤 Contact Name (Lookup),multipleLookupValues
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,💲 Amount Billed (Number),formula
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🧾 Invoice Tracking,tblbOh8Fy1tBKEb5k,🧍 Contact Name (Text),formula
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🎟️ Support Ticket Summary,tblFTcKVSAAOv5pyQ,Ticket ID,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🎟️ Support Ticket Summary,tblFTcKVSAAOv5pyQ,Subject,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🎟️ Support Ticket Summary,tblFTcKVSAAOv5pyQ,Requester Name,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🎟️ Support Ticket Summary,tblFTcKVSAAOv5pyQ,Requester Email,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🎟️ Support Ticket Summary,tblFTcKVSAAOv5pyQ,Status,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🎟️ Support Ticket Summary,tblFTcKVSAAOv5pyQ,Priority,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🎟️ Support Ticket Summary,tblFTcKVSAAOv5pyQ,Assigned Rep,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🎟️ Support Ticket Summary,tblFTcKVSAAOv5pyQ,Summary,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🎟️ Support Ticket Summary,tblFTcKVSAAOv5pyQ,Ticket URL,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🎟️ Support Ticket Summary,tblFTcKVSAAOv5pyQ,Notes,multilineText
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🎟️ Support Ticket Summary,tblFTcKVSAAOv5pyQ,Created Time,createdTime
+YoBot® Client CRM,appMbVQJ0n3nWRl1N,🎟️ Support Ticket Summary,tblFTcKVSAAOv5pyQ,Resolved TIme,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,👤 Client Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,📧 Email,email
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,🏢 Company Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,🤖 Bot Package,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,💵 Price (One-Time) (from Bot Package),multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,💸 Monthly Fee (from Bot Package),multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,🧩 Selected Add-Ons,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,💵 One-Time Fee,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,📅 Monthly Fee (from Add-Ons),multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,Payment Method,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,📝 Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,📌 Status,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,🧾 Invoice ID,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,📅 Requested Start Date,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,📞 Voice Call Log,multipleRecordLinks
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,💳 First Invoice Due,formula
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,💼 Total Package Value,formula
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,📎 Quote PDF Link,url
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,📄 Bot Package Description,multipleLookupValues
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,🤖 Bot Package (Linked),multipleRecordLinks
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,📦 Included Modules (from 🤖 Bot Package (Linked)),multipleLookupValues
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,📌 Project Roadmap Tracker,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,📌 Project Roadmap Tracker 2,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Sales Orders,tblmYdOB13Ze9c4aJ,📌 Project Roadmap Tracker 3,multipleRecordLinks
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 Bot Packages,tbl5lPXFQi6jjfHQE,🤖 Package,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 Bot Packages,tbl5lPXFQi6jjfHQE,💵 Price (One-Time),multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 Bot Packages,tbl5lPXFQi6jjfHQE,💸 Monthly Fee,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 Bot Packages,tbl5lPXFQi6jjfHQE,📦 Included Modules,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 Bot Packages,tbl5lPXFQi6jjfHQE,🧾 Sales Orders,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 Bot Packages,tbl5lPXFQi6jjfHQE,🧾 Sales Orders 2,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 Bot Packages,tbl5lPXFQi6jjfHQE,🧾 Sales Orders 3,multipleRecordLinks
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧩 Add-On Modules,tbl0AnSPzx37knE2V,🧩 Add-On Module,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧩 Add-On Modules,tbl0AnSPzx37knE2V,💵 Price,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧩 Add-On Modules,tbl0AnSPzx37knE2V,📝 Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🔗 Call ID (Auto),autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,📅 Date & Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🧑‍💼 Contact Name,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,📞 Phone Number,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🔁 Call Direction,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🎯 Call Type,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🤖 Assigned Bot,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,📝 Call Summary,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,⏱ Duration (min),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,📂 Call Recording Link,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,📡 Source,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,✅ Outcome,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🔗 Related Deal,multipleRecordLinks
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,👤 Assigned Rep,multipleRecordLinks
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🧾 Tally Form Submission ID,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,⚙️ Logged via,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🧪 QA Tag,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🛠 VoiceBot Version,multipleRecordLinks
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🧬 Tone / Voice Style (from 🛠 VoiceBot Version),multipleLookupValues
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,📌 Notes / Tags (from 🛠 VoiceBot Version),multipleLookupValues
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🔄 Synced to HubSpot,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,📁 Transcript Summary (Auto),multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🧠 NLP Keywords,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,📈 Call Sentiment,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🗒️ Notes / Flags,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Voice Call Log,tblun0fG9zWbsUwC8,🧪 Testing Status,multipleLookupValues
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,🔍 QA Review ID (Auto),autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,📅 Review Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,👤 Reviewed By,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,📞 Call ID,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,🧪 QA Tag,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,📈 Call Quality Score,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,📝 Reviewer Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,🧠 NLP Keywords (Call),multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,📂 Call Recording Link,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,📊 Sentiment (Call),singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,🎯 Outcome Accuracy,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,🤖 Bot Handling Accuracy,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,📁 Transcript Summary,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,📌 Follow-Up Required,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,🗂️ Linked Deal or Client,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧪 QA Call Review Log,tbldfEoTQr2AwZB5m,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,🧾 Script ID (Auto),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,🎭 Script Title,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,💬 Use Case,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,🗂️ Bot Personality Pack,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,📁 Script Type,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,📞 Channel,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,📝 Script Content,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,🧠 NLP Keywords (Expected),multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,📈 Usage Frequency,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,📊 Performance Rating,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,🔁 Last Reviewed,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,👤 Owner,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,📂 Script File (Optional),multipleAttachments
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,✅ Approved,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,🧪 Tag for A/B Testing,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,📌 Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 VoiceBot Script Tracker,tblvDs4fk8r6TTlyL,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,🆔 Lead ID (Auto),autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,📅 Qualification Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,🧑‍💼 Contact Name,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,🏢 Company Name,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,📞 Phone Number,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,📧 Email Address,email
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,🎯 Qualification Status,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,💰 Budget Confirmed,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,⏱ Timeline to Buy,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,🔍 Lead Source,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,🤖 Qualified by Bot,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,📋 Notes / Details,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,🔗 Related Deal,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,📈 Lead Score,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,🧠 Intent Keywords,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,🧾 Tally Form Submission ID,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,👤 Assigned Rep,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,✅ Follow-Up Scheduled,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🎯 Lead Qualification Tracker,tblLEUH3UophHQLhA,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 NLP Keyword Tracker,tbl6jk834KPZZJute,🧠 Keyword ID (Auto),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 NLP Keyword Tracker,tbl6jk834KPZZJute,🧩 Keyword / Phrase,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 NLP Keyword Tracker,tbl6jk834KPZZJute,🗂️ Intent Category,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 NLP Keyword Tracker,tbl6jk834KPZZJute,📊 Volume Detected,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 NLP Keyword Tracker,tbl6jk834KPZZJute,🎯 Match Confidence,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 NLP Keyword Tracker,tbl6jk834KPZZJute,📞 Sample Call ID,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 NLP Keyword Tracker,tbl6jk834KPZZJute,📋 Sample Script ID,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 NLP Keyword Tracker,tbl6jk834KPZZJute,📝 Example Usage,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 NLP Keyword Tracker,tbl6jk834KPZZJute,👤 Logged By,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 NLP Keyword Tracker,tbl6jk834KPZZJute,🔁 Last Updated,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 NLP Keyword Tracker,tbl6jk834KPZZJute,🗒️ Notes / Observations,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 NLP Keyword Tracker,tbl6jk834KPZZJute,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📁 Call Recording Tracker,tblMFrL1En861OGX2,🔗 Recording ID (Auto),autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📁 Call Recording Tracker,tblMFrL1En861OGX2,📅 Call Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📁 Call Recording Tracker,tblMFrL1En861OGX2,📞 Call ID,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📁 Call Recording Tracker,tblMFrL1En861OGX2,🧾 Recording URL,url
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📁 Call Recording Tracker,tblMFrL1En861OGX2,🗂️ Storage Location,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📁 Call Recording Tracker,tblMFrL1En861OGX2,🔐 Privacy Level,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📁 Call Recording Tracker,tblMFrL1En861OGX2,⏱ Duration (min),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📁 Call Recording Tracker,tblMFrL1En861OGX2,📂 Transcript Attached,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📁 Call Recording Tracker,tblMFrL1En861OGX2,🧠 Keywords Extracted,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📁 Call Recording Tracker,tblMFrL1En861OGX2,👤 Logged By,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📁 Call Recording Tracker,tblMFrL1En861OGX2,🗒️ Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📁 Call Recording Tracker,tblMFrL1En861OGX2,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Call Sentiment Log,tblfKCV5fE4qdvWu5,📊 Sentiment Log ID (Auto),autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Call Sentiment Log,tblfKCV5fE4qdvWu5,📅 Call Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Call Sentiment Log,tblfKCV5fE4qdvWu5,📞 Call ID,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Call Sentiment Log,tblfKCV5fE4qdvWu5,😊 Sentiment Rating,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Call Sentiment Log,tblfKCV5fE4qdvWu5,📈 Confidence Score,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Call Sentiment Log,tblfKCV5fE4qdvWu5,🧠 Sentiment Keywords,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Call Sentiment Log,tblfKCV5fE4qdvWu5,🤖 Generated By,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Call Sentiment Log,tblfKCV5fE4qdvWu5,👤 Reviewed By,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Call Sentiment Log,tblfKCV5fE4qdvWu5,🗒️ Review Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Call Sentiment Log,tblfKCV5fE4qdvWu5,📌 Escalation Flag,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Call Sentiment Log,tblfKCV5fE4qdvWu5,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,🚨 Escalation ID (Auto),autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,📅 Escalation Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,📞 Call ID,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,🧑‍💼 Contact Name,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,🗂️ Escalation Type,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,🎯 Trigger Source,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,🧠 Trigger Keywords,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,📋 Summary / Reason,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,👤 Assigned Rep,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,⏱ Response SLA (hrs),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,✅ Resolved,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,📅 Resolved Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,🗒️ Resolution Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 Escalation Tracker,tbl4Qj8m4qlP1ZMHE,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💼 Client Touchpoint Log,tblH2QzeUmvjYqdRI,💼 Touchpoint ID (Auto),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💼 Client Touchpoint Log,tblH2QzeUmvjYqdRI,📅 Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💼 Client Touchpoint Log,tblH2QzeUmvjYqdRI,🧑‍💼 Contact Name,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💼 Client Touchpoint Log,tblH2QzeUmvjYqdRI,🏢 Company,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💼 Client Touchpoint Log,tblH2QzeUmvjYqdRI,📞 Channel,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💼 Client Touchpoint Log,tblH2QzeUmvjYqdRI,🎯 Purpose,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💼 Client Touchpoint Log,tblH2QzeUmvjYqdRI,📝 Summary,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💼 Client Touchpoint Log,tblH2QzeUmvjYqdRI,👤 Logged By,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💼 Client Touchpoint Log,tblH2QzeUmvjYqdRI,📌 Notes / Flags,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💼 Client Touchpoint Log,tblH2QzeUmvjYqdRI,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💼 Client Touchpoint Log,tblH2QzeUmvjYqdRI,🔗 Related Deal,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💼 Client Touchpoint Log,tblH2QzeUmvjYqdRI,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Missed Call Log,tblFPwk95IFCXX1Ao,📞 Missed Call ID (Auto),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Missed Call Log,tblFPwk95IFCXX1Ao,📅 Missed Date & Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Missed Call Log,tblFPwk95IFCXX1Ao,🧑‍💼 Caller Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Missed Call Log,tblFPwk95IFCXX1Ao,📞 Phone Number,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Missed Call Log,tblFPwk95IFCXX1Ao,📡 Source,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Missed Call Log,tblFPwk95IFCXX1Ao,🔁 Attempted Callback,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Missed Call Log,tblFPwk95IFCXX1Ao,📅 Callback Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Missed Call Log,tblFPwk95IFCXX1Ao,👤 Assigned Rep,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Missed Call Log,tblFPwk95IFCXX1Ao,🗒️ Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Missed Call Log,tblFPwk95IFCXX1Ao,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📞 Missed Call Log,tblFPwk95IFCXX1Ao,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,🧾 A/B Test ID (Auto),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,🎭 Test Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,📅 Start Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,📅 End Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,📝 Variant A Script,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,📝 Variant B Script,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,🎯 Use Case,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,📞 Channel,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,📊 Performance Metric,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,📈 Variant A Result,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,📈 Variant B Result,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,🏆 Winner,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,👤 Reviewed By,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,📌 Notes / Observations,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📥 Your A/B Test Log,tblYqfaqVDjRFQ0Bj,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📣 Slack Alerts Log,tblXVTyWGrRWnf31H,📣 Alert ID (Auto),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📣 Slack Alerts Log,tblXVTyWGrRWnf31H,📅 Timestamp,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📣 Slack Alerts Log,tblXVTyWGrRWnf31H,🔔 Alert Type,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📣 Slack Alerts Log,tblXVTyWGrRWnf31H,💬 Slack Channel,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📣 Slack Alerts Log,tblXVTyWGrRWnf31H,📥 Trigger Source,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📣 Slack Alerts Log,tblXVTyWGrRWnf31H,🧾 Related Record ID,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📣 Slack Alerts Log,tblXVTyWGrRWnf31H,📄 Message Summary,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📣 Slack Alerts Log,tblXVTyWGrRWnf31H,👤 Triggered By,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📣 Slack Alerts Log,tblXVTyWGrRWnf31H,📌 Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📣 Slack Alerts Log,tblXVTyWGrRWnf31H,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📣 Slack Alerts Log,tblXVTyWGrRWnf31H,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 Integration Sync Tracker,tblF16URVzLZd8QP2,🔗 Sync ID (Auto),autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 Integration Sync Tracker,tblF16URVzLZd8QP2,📅 Sync Date & Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 Integration Sync Tracker,tblF16URVzLZd8QP2,🔌 Integration Type,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 Integration Sync Tracker,tblF16URVzLZd8QP2,📥 Sync Trigger,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 Integration Sync Tracker,tblF16URVzLZd8QP2,📄 Record Type,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 Integration Sync Tracker,tblF16URVzLZd8QP2,🧾 Record ID,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 Integration Sync Tracker,tblF16URVzLZd8QP2,✅ Sync Status,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 Integration Sync Tracker,tblF16URVzLZd8QP2,📋 Sync Summary,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 Integration Sync Tracker,tblF16URVzLZd8QP2,🔁 Retry Needed,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 Integration Sync Tracker,tblF16URVzLZd8QP2,👤 Initiated By,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 Integration Sync Tracker,tblF16URVzLZd8QP2,📌 Notes / Flags,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 Integration Sync Tracker,tblF16URVzLZd8QP2,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 Integration Sync Tracker,tblF16URVzLZd8QP2,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,🧠 Pack ID (Auto),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,🎨 Pack Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,🎯 Use Case,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,📞 Channel,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,🧬 Tone / Voice Style,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,🔄 Default Script Pack,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,🧾 Description,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,📁 Script IDs Included,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,👤 Created By,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,📅 Last Updated,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,📌 Notes / Tags,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,📞 Voice Call Log,multipleRecordLinks
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Bot Personality Pack Tracker,tblu1F5YYTmokSpG1,🧪 A/B Test Status,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,📈 Performance Log ID (Auto),autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,📅 Call Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,📞 Call ID,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,🎯 Intent Recognized,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,🧠 NLP Match Score,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,✅ Handled by Bot,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,🔁 Transferred to Agent,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,📞 Call Duration (min),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,📝 Bot Response Summary,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,📊 Sentiment Rating,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,🧪 QA Flag,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,🧠 Detected Keywords,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,👤 Reviewed By,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,📌 Notes / Tags,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 VoiceBot Performance Dashboard Log,tblNb1Uj2qyUz6v4D,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Compliance Checklist Log,tblGjGOaQVfsgvBTB,✅ Compliance ID (Auto),autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Compliance Checklist Log,tblGjGOaQVfsgvBTB,📅 Review Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Compliance Checklist Log,tblGjGOaQVfsgvBTB,🏢 Client / Entity,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Compliance Checklist Log,tblGjGOaQVfsgvBTB,🧾 Compliance Area,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Compliance Checklist Log,tblGjGOaQVfsgvBTB,📋 Requirement Description,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Compliance Checklist Log,tblGjGOaQVfsgvBTB,📂 Document Provided,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Compliance Checklist Log,tblGjGOaQVfsgvBTB,📁 File Link,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Compliance Checklist Log,tblGjGOaQVfsgvBTB,📌 Status,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Compliance Checklist Log,tblGjGOaQVfsgvBTB,📅 Expiration Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Compliance Checklist Log,tblGjGOaQVfsgvBTB,👤 Assigned To,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Compliance Checklist Log,tblGjGOaQVfsgvBTB,🗒️ Notes / Flags,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Compliance Checklist Log,tblGjGOaQVfsgvBTB,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Compliance Checklist Log,tblGjGOaQVfsgvBTB,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,🧮 Report ID (Auto),autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,📅 Month,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,🏢 Client,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,📞 Total Calls,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,🤖 Calls Handled by Bot,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,🙋 Calls Transferred to Rep,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,⏳ Avg Response Time (Bot),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,💸 Estimated Labor Savings ($),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,📈 Revenue Lift Attributed ($),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,🎯 Lead Conversions Attributed,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,🧠 Keywords Triggered,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,📊 Monthly Summary,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,✅ Submitted to Client,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,📁 PDF Report Link,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,📌 Notes / Tags,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧮 Botalytics Monthly Log,tblw0LFxyg0CVAgIi,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗃 File Upload Tracker,tblphqI0Acsk8BbZG,🗃 File ID (Auto),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗃 File Upload Tracker,tblphqI0Acsk8BbZG,📅 Upload Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗃 File Upload Tracker,tblphqI0Acsk8BbZG,📂 File Type,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗃 File Upload Tracker,tblphqI0Acsk8BbZG,📎 File Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗃 File Upload Tracker,tblphqI0Acsk8BbZG,🔗 File URL,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗃 File Upload Tracker,tblphqI0Acsk8BbZG,🏷️ Related Client,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗃 File Upload Tracker,tblphqI0Acsk8BbZG,📞 Related Call ID,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗃 File Upload Tracker,tblphqI0Acsk8BbZG,🧾 Related Record ID,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗃 File Upload Tracker,tblphqI0Acsk8BbZG,👤 Uploaded By,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗃 File Upload Tracker,tblphqI0Acsk8BbZG,📌 Notes / Tags,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗃 File Upload Tracker,tblphqI0Acsk8BbZG,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗃 File Upload Tracker,tblphqI0Acsk8BbZG,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Follow-Up Reminder Tracker,tbl0Fya76nVswRpzD,✅ Reminder ID (Auto),autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Follow-Up Reminder Tracker,tbl0Fya76nVswRpzD,📅 Follow-Up Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Follow-Up Reminder Tracker,tbl0Fya76nVswRpzD,⏰ Reminder Time,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Follow-Up Reminder Tracker,tbl0Fya76nVswRpzD,🏢 Client / Contact,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Follow-Up Reminder Tracker,tbl0Fya76nVswRpzD,📋 Reminder Type,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Follow-Up Reminder Tracker,tbl0Fya76nVswRpzD,📌 Reminder Description,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Follow-Up Reminder Tracker,tbl0Fya76nVswRpzD,🔗 Related Record ID,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Follow-Up Reminder Tracker,tbl0Fya76nVswRpzD,👤 Assigned Rep,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Follow-Up Reminder Tracker,tbl0Fya76nVswRpzD,📤 Notification Sent,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Follow-Up Reminder Tracker,tbl0Fya76nVswRpzD,📝 Notes / Outcome,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Follow-Up Reminder Tracker,tbl0Fya76nVswRpzD,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,✅ Follow-Up Reminder Tracker,tbl0Fya76nVswRpzD,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 PDF Quote Generator Log,tblghXq9W9erQ9qIj,🧾 PDF Quote ID (Auto),autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 PDF Quote Generator Log,tblghXq9W9erQ9qIj,📅 Generation Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 PDF Quote Generator Log,tblghXq9W9erQ9qIj,🏢 Client / Business,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 PDF Quote Generator Log,tblghXq9W9erQ9qIj,📦 Selected Bot Package,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 PDF Quote Generator Log,tblghXq9W9erQ9qIj,🧩 Selected Add-Ons,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 PDF Quote Generator Log,tblghXq9W9erQ9qIj,💵 One-Time Total ($),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 PDF Quote Generator Log,tblghXq9W9erQ9qIj,💸 Recurring Monthly ($),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 PDF Quote Generator Log,tblghXq9W9erQ9qIj,📎 PDF File Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 PDF Quote Generator Log,tblghXq9W9erQ9qIj,🔗 PDF Link,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 PDF Quote Generator Log,tblghXq9W9erQ9qIj,👤 Generated By,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 PDF Quote Generator Log,tblghXq9W9erQ9qIj,📌 Notes / Customization,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 PDF Quote Generator Log,tblghXq9W9erQ9qIj,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 PDF Quote Generator Log,tblghXq9W9erQ9qIj,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔐 Internal Security Checklist,tblEtqPDBnZLd0Ubt,🔐 Security Task ID (Auto),autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔐 Internal Security Checklist,tblEtqPDBnZLd0Ubt,📅 Review Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔐 Internal Security Checklist,tblEtqPDBnZLd0Ubt,🧩 System / Tool,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔐 Internal Security Checklist,tblEtqPDBnZLd0Ubt,🛡️ Security Area,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔐 Internal Security Checklist,tblEtqPDBnZLd0Ubt,📋 Task Description,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔐 Internal Security Checklist,tblEtqPDBnZLd0Ubt,📌 Status,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔐 Internal Security Checklist,tblEtqPDBnZLd0Ubt,📅 Due Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔐 Internal Security Checklist,tblEtqPDBnZLd0Ubt,👤 Responsible,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔐 Internal Security Checklist,tblEtqPDBnZLd0Ubt,📝 Notes / Audit Trail,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔐 Internal Security Checklist,tblEtqPDBnZLd0Ubt,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔐 Internal Security Checklist,tblEtqPDBnZLd0Ubt,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔔 Slack Message Review Tracker,tblj2FzenQSNfu29d,🔔 Slack Review ID (Auto),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔔 Slack Message Review Tracker,tblj2FzenQSNfu29d,📅 Message Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔔 Slack Message Review Tracker,tblj2FzenQSNfu29d,💬 Message Content,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔔 Slack Message Review Tracker,tblj2FzenQSNfu29d,📣 Channel,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔔 Slack Message Review Tracker,tblj2FzenQSNfu29d,📥 Triggered By,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔔 Slack Message Review Tracker,tblj2FzenQSNfu29d,📎 Related Record ID,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔔 Slack Message Review Tracker,tblj2FzenQSNfu29d,👤 Reviewed By,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔔 Slack Message Review Tracker,tblj2FzenQSNfu29d,✅ Approved / Action Taken,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔔 Slack Message Review Tracker,tblj2FzenQSNfu29d,📌 Review Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔔 Slack Message Review Tracker,tblj2FzenQSNfu29d,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔔 Slack Message Review Tracker,tblj2FzenQSNfu29d,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧑_💼 Rep Scorecard Log,tblh3NQUtD22M7tDM,🧑‍💼 Scorecard ID (Auto),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧑_💼 Rep Scorecard Log,tblh3NQUtD22M7tDM,📅 Week Ending,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧑_💼 Rep Scorecard Log,tblh3NQUtD22M7tDM,👤 Rep Name,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧑_💼 Rep Scorecard Log,tblh3NQUtD22M7tDM,📞 Calls Reviewed,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧑_💼 Rep Scorecard Log,tblh3NQUtD22M7tDM,📈 QA Average Score (%),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧑_💼 Rep Scorecard Log,tblh3NQUtD22M7tDM,✅ Tasks Completed,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧑_💼 Rep Scorecard Log,tblh3NQUtD22M7tDM,🧠 Sentiment Accuracy (%),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧑_💼 Rep Scorecard Log,tblh3NQUtD22M7tDM,🎯 Conversion Impact,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧑_💼 Rep Scorecard Log,tblh3NQUtD22M7tDM,🏅 Notes / Feedback,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧑_💼 Rep Scorecard Log,tblh3NQUtD22M7tDM,📊 Included in Botalytics,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧑_💼 Rep Scorecard Log,tblh3NQUtD22M7tDM,⏱ Created Time,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧑_💼 Rep Scorecard Log,tblh3NQUtD22M7tDM,📞 Voice Call Log,multipleRecordLinks
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📦 Client Add-On Selections Log,tblfxDj7LdrVNquWG,Client,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📦 Client Add-On Selections Log,tblfxDj7LdrVNquWG,Add-On Name,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📦 Client Add-On Selections Log,tblfxDj7LdrVNquWG,Start Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📦 Client Add-On Selections Log,tblfxDj7LdrVNquWG,Active?,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📦 Client Add-On Selections Log,tblfxDj7LdrVNquWG,Monthly Cost,currency
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📦 Client Add-On Selections Log,tblfxDj7LdrVNquWG,Billing Records,multipleRecordLinks
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Add-On Billing Line Items,tblM4VTYU5lWPBgL4,🧩 Add-On Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Add-On Billing Line Items,tblM4VTYU5lWPBgL4,Billing Type,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Add-On Billing Line Items,tblM4VTYU5lWPBgL4,Amount,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Add-On Billing Line Items,tblM4VTYU5lWPBgL4,📝 Description,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Add-On Billing Line Items,tblM4VTYU5lWPBgL4,📦 Client Add-On Selections Log,multipleRecordLinks
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Task Template Table,tblakvT7m2dQOjlPC,📌 Task Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Task Template Table,tblakvT7m2dQOjlPC,🧩 Applies To,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Task Template Table,tblakvT7m2dQOjlPC,📂 Module,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Task Template Table,tblakvT7m2dQOjlPC,👤 Default Owner,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Task Template Table,tblakvT7m2dQOjlPC,⚡ Priority,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Task Template Table,tblakvT7m2dQOjlPC,⏱️ Offset (Days),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Task Template Table,tblakvT7m2dQOjlPC,📝 Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Task Template Table,tblakvT7m2dQOjlPC,💠 Core Package Match,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Task Template Table,tblakvT7m2dQOjlPC,🧩 Add-On Match	,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Task Template Table,tblakvT7m2dQOjlPC,🔗 Internal Toggle ID,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Task Template Table,tblakvT7m2dQOjlPC,👤 Assigned To,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 YoBot® Promo CRM Tracker,tblf0mYX7FYJgwtPe,🆔 Submission ID,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 YoBot® Promo CRM Tracker,tblf0mYX7FYJgwtPe,📅 Submission Date,date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 YoBot® Promo CRM Tracker,tblf0mYX7FYJgwtPe,👤 Full Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 YoBot® Promo CRM Tracker,tblf0mYX7FYJgwtPe,📧 Email,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 YoBot® Promo CRM Tracker,tblf0mYX7FYJgwtPe,📞 Phone,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 YoBot® Promo CRM Tracker,tblf0mYX7FYJgwtPe,🏢 Company Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 YoBot® Promo CRM Tracker,tblf0mYX7FYJgwtPe,💬 Source,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 YoBot® Promo CRM Tracker,tblf0mYX7FYJgwtPe,📣 Slack Alert Sent,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 YoBot® Promo CRM Tracker,tblf0mYX7FYJgwtPe,🚀 Sales Status,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 YoBot® Promo CRM Tracker,tblf0mYX7FYJgwtPe,📅 Booking Status,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📋 YoBot® Promo CRM Tracker,tblf0mYX7FYJgwtPe,📆 Booking Follow-Up Sent,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Stripe Price Tracker (Live),tbl148aRcEy73R7E7,🧩 Add-On Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Stripe Price Tracker (Live),tbl148aRcEy73R7E7,💵 Setup Fee ($),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Stripe Price Tracker (Live),tbl148aRcEy73R7E7,🔁 Monthly Fee ($),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Stripe Price Tracker (Live),tbl148aRcEy73R7E7,Live Price ID,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Stripe Price Tracker (Live),tbl148aRcEy73R7E7,🆔 One-Time Price ID,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Stripe Price Tracker (Live),tbl148aRcEy73R7E7,🆔 Monthly Price ID,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Stripe Price Tracker (Live),tbl148aRcEy73R7E7,📊 Billing Status,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Stripe Price Tracker (Live),tbl148aRcEy73R7E7,✅ Stripe Synced,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💳 Stripe Products,tblxnajn8WcJoSvvD,💡 Product Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💳 Stripe Products,tblxnajn8WcJoSvvD,💵 One-Time Setup,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💳 Stripe Products,tblxnajn8WcJoSvvD,🔁 Monthly Price,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💳 Stripe Products,tblxnajn8WcJoSvvD,📝 Stripe Description,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💳 Stripe Products,tblxnajn8WcJoSvvD,🆔 Stripe Price ID (One-Time),multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💳 Stripe Products,tblxnajn8WcJoSvvD,🆔 Stripe Price ID (Recurring),multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💳 Stripe Products,tblxnajn8WcJoSvvD,✅ Is Add-On?,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,💳 Stripe Products,tblxnajn8WcJoSvvD,📦 Product Category,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔧 Internal Config,tblnGehxqtwpcUanJ,🧩 Config Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔧 Internal Config,tblnGehxqtwpcUanJ,🔑 Config Value,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔧 Internal Config,tblnGehxqtwpcUanJ,📝 Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔧 Internal Config,tblnGehxqtwpcUanJ,🗓 Last Updated,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Airtable Schema Documentation,tblhL6LEzqGuPjanm,🧾 Field Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Airtable Schema Documentation,tblhL6LEzqGuPjanm,⚙️ Field Type,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧾 Airtable Schema Documentation,tblhL6LEzqGuPjanm,Description,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗣️ Tone Response Variant Library,tblkIvcuxcZE2IVDF,🗣️ Response Base,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗣️ Tone Response Variant Library,tblkIvcuxcZE2IVDF,🎭 Tone Variant - Friendly,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗣️ Tone Response Variant Library,tblkIvcuxcZE2IVDF,🎭 Tone Variant - Empathetic,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗣️ Tone Response Variant Library,tblkIvcuxcZE2IVDF,🎭 Tone Variant - Sassy,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗣️ Tone Response Variant Library,tblkIvcuxcZE2IVDF,🎭 Tone Variant - Professional,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗣️ Tone Response Variant Library,tblkIvcuxcZE2IVDF,🎯 Trigger Keywords,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗣️ Tone Response Variant Library,tblkIvcuxcZE2IVDF,🧠 Expressive Insert (Optional),singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗣️ Tone Response Variant Library,tblkIvcuxcZE2IVDF,✅ Active in Production,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗣️ Tone Response Variant Library,tblkIvcuxcZE2IVDF,📅 Last Used Timestamp ,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗣️ Tone Response Variant Library,tblkIvcuxcZE2IVDF,🔁 Use Count,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🗣️ Tone Response Variant Library,tblkIvcuxcZE2IVDF,🔑 Keyword,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧯 Fallback Log,tblvRSWcZyNr8RNfu,🧵 Trigger,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧯 Fallback Log,tblvRSWcZyNr8RNfu,🗣️ Tone,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧯 Fallback Log,tblvRSWcZyNr8RNfu,📅 Timestamp,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧯 Fallback Log,tblvRSWcZyNr8RNfu,🎧 Audio File URL,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧯 Fallback Log,tblvRSWcZyNr8RNfu,📦 File Size (kb),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧯 Fallback Log,tblvRSWcZyNr8RNfu,📍 Source IP (optional),multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧯 Fallback Log,tblvRSWcZyNr8RNfu,📝 Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 Bot Health Monitor,tbllf2LVhJfNhhBaE,🤖 Bot Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 Bot Health Monitor,tbllf2LVhJfNhhBaE,⏱️ Response Time (ms),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 Bot Health Monitor,tbllf2LVhJfNhhBaE,❌ Current Errors,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 Bot Health Monitor,tbllf2LVhJfNhhBaE,📶 Uptime %,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 Bot Health Monitor,tbllf2LVhJfNhhBaE,📊 Status,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 System Alerts Log,tbl9yHYB3peBJBEXD,🚨 Alert Type,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 System Alerts Log,tbl9yHYB3peBJBEXD,⚙️ Triggered By,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 System Alerts Log,tbl9yHYB3peBJBEXD,🔥 Severity,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 System Alerts Log,tbl9yHYB3peBJBEXD,📍 Status,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🚨 System Alerts Log,tbl9yHYB3peBJBEXD,🕒 Timestamp,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 Revenue Forecast Log,tbl3xRiOhzWXxOuJq,📅 Date,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 Revenue Forecast Log,tbl3xRiOhzWXxOuJq,💵 MRR,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 Revenue Forecast Log,tbl3xRiOhzWXxOuJq,📊 30-Day Forecast,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 Revenue Forecast Log,tbl3xRiOhzWXxOuJq,📈 Pipeline Deals,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📈 Revenue Forecast Log,tbl3xRiOhzWXxOuJq,🔮 Confidence %,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,👥 Client Pulse Tracker,tbly4pa1fjDBlZqoz,👥 Client Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,👥 Client Pulse Tracker,tbly4pa1fjDBlZqoz,📊 NPS Score,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,👥 Client Pulse Tracker,tbly4pa1fjDBlZqoz,⚠️ Churn Risk,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,👥 Client Pulse Tracker,tbly4pa1fjDBlZqoz,⏱️ Last Login (Days Ago),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Ops Metrics Log,tbli1OHbGvs4FQ6KP,📅 Date,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Ops Metrics Log,tbli1OHbGvs4FQ6KP,⏱️ Avg Bot Response Time (s),number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Ops Metrics Log,tbli1OHbGvs4FQ6KP,✅ Success Rate %,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Ops Metrics Log,tbli1OHbGvs4FQ6KP,❌ Error Count,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Ops Metrics Log,tbli1OHbGvs4FQ6KP,📡 API Usage %,number
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,👥 Client Tier View,tbl3Ub5y8pI6cYdBb,👥 Client Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,👥 Client Tier View,tbl3Ub5y8pI6cYdBb,🏷️ Tier,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,Command Center Wiring Tracker,tblLpj1543WwwR8m0,Category,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,Command Center Wiring Tracker,tblLpj1543WwwR8m0,Metric,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,Command Center Wiring Tracker,tblLpj1543WwwR8m0,Source,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,Command Center Wiring Tracker,tblLpj1543WwwR8m0,Status,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,Command Center Wiring Tracker,tblLpj1543WwwR8m0,Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📄 Contract Status Tracker,tbl3Fn7PqK9I9HFBc,👤 Full Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📄 Contract Status Tracker,tbl3Fn7PqK9I9HFBc,📧 Email,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📄 Contract Status Tracker,tbl3Fn7PqK9I9HFBc,🏢 Company,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📄 Contract Status Tracker,tbl3Fn7PqK9I9HFBc,📄 Contract Status,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📄 Contract Status Tracker,tbl3Fn7PqK9I9HFBc,🕒 Signed At,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 CRM + Voice Audit Log,tbl0c1WDjkErF2qAI,📧 Email,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 CRM + Voice Audit Log,tbl0c1WDjkErF2qAI,🆔 CRM ID,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 CRM + Voice Audit Log,tbl0c1WDjkErF2qAI,🎙️ Voice Log ID,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 CRM + Voice Audit Log,tbl0c1WDjkErF2qAI,✅ Matched,checkbox
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🔗 CRM + Voice Audit Log,tbl0c1WDjkErF2qAI,🔄 Synced At,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Suggestions Push Log,tblw9PL6VN83ZEDCg,📧 Email,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Suggestions Push Log,tblw9PL6VN83ZEDCg,🏢 Company,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Suggestions Push Log,tblw9PL6VN83ZEDCg,💡 Suggestions,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Suggestions Push Log,tblw9PL6VN83ZEDCg,🎯 Trigger Event,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🧠 Suggestions Push Log,tblw9PL6VN83ZEDCg,🕒 Timestamp,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📤 Manual Review Queue,tblUYLcWhVvW7KU3F,🎫 Ticket ID,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📤 Manual Review Queue,tblUYLcWhVvW7KU3F,🛠 Assigned To,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📤 Manual Review Queue,tblUYLcWhVvW7KU3F,🧠 AI Reply (Blocked),multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📤 Manual Review Queue,tblUYLcWhVvW7KU3F,📝 Manual Response,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📤 Manual Review Queue,tblUYLcWhVvW7KU3F,🧪 Sentiment Score,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📤 Manual Review Queue,tblUYLcWhVvW7KU3F,✅ Resolution Status,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📤 Manual Review Queue,tblUYLcWhVvW7KU3F,⏱ Time to Resolve,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📅 Follow-Up Scheduler Log,tbl1J3AgcA22OIQPP,🎫 Ticket ID,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📅 Follow-Up Scheduler Log,tbl1J3AgcA22OIQPP,📅 Scheduled Follow-Up Date,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📅 Follow-Up Scheduler Log,tbl1J3AgcA22OIQPP,✅ Follow-Up Sent?,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📅 Follow-Up Scheduler Log,tbl1J3AgcA22OIQPP,📣 Slack Alert Sent,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📅 Follow-Up Scheduler Log,tbl1J3AgcA22OIQPP,💬 Client Response,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📅 Follow-Up Scheduler Log,tbl1J3AgcA22OIQPP,⏳ Time to Respond,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Support Metrics Rollup,tblrETnBeoUMd71Wx,📆 Week,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Support Metrics Rollup,tblrETnBeoUMd71Wx,📈 Total Tickets,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Support Metrics Rollup,tblrETnBeoUMd71Wx,🧠 AI Handled,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Support Metrics Rollup,tblrETnBeoUMd71Wx,🙋‍♂️ Human Handled,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Support Metrics Rollup,tblrETnBeoUMd71Wx,🚨 Escalated,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Support Metrics Rollup,tblrETnBeoUMd71Wx,🧪 Avg Sentiment Score,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📊 Support Metrics Rollup,tblrETnBeoUMd71Wx,📊 AI Accuracy %,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🛠 Support Settings,tblGAlZk8s1bANNSj,🏢 Client,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🛠 Support Settings,tblGAlZk8s1bANNSj,🤖 AI Auto-Reply Enabled?,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🛠 Support Settings,tblGAlZk8s1bANNSj,🔒 Escalation Lock Active?,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🛠 Support Settings,tblGAlZk8s1bANNSj,🎧 Voice Reply Enabled?,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🛠 Support Settings,tblGAlZk8s1bANNSj,🧪 Sentiment Analysis On?,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Full Automation Task Template,tblX2mB0us8P3uZJN,Task Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Full Automation Task Template,tblX2mB0us8P3uZJN,Applies To,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Full Automation Task Template,tblX2mB0us8P3uZJN,Phase,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Full Automation Task Template,tblX2mB0us8P3uZJN,Owner Type,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📑 Full Automation Task Template,tblX2mB0us8P3uZJN,Automation Notes,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,📌 Task Name,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,🏢 Company Name (Linked),singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,📂 Module,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,👤 Client Name (from Sales Order),singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,⚡ Priority,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,📅 Requested Start Date (from Sales Order),date
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,📌 Status (from Sales Order),singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,🧩 Selected Add-Ons (from Sales Order),multipleLookupValues
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,📝 Notes (from Sales Order),multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,✅ Status,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,📝 Notes 2,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,🤖 Bot Package (from Sales Order),multipleLookupValues
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,💼 Total Package Value (from Sales Order),currency
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,📦 Included Modules (from Bot Package),multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,📌 Project Roadmap Tracker,tbl0ZH8s0UoHBvSj2,🔗 Sales Order Link,multipleRecordLinks
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 YoBot® Prompt Library,tblcNIkQ0HJyVYpVz,🆔Prompt ID,autoNumber
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 YoBot® Prompt Library,tblcNIkQ0HJyVYpVz,🎯Category,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 YoBot® Prompt Library,tblcNIkQ0HJyVYpVz,🧠 Prompt Description,multilineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 YoBot® Prompt Library,tblcNIkQ0HJyVYpVz,🖼️Image Prompt,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 YoBot® Prompt Library,tblcNIkQ0HJyVYpVz,🎨Brand Palette,singleSelect
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 YoBot® Prompt Library,tblcNIkQ0HJyVYpVz,📣Channels,multipleSelects
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 YoBot® Prompt Library,tblcNIkQ0HJyVYpVz,🗓️ Created Date,dateTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 YoBot® Prompt Library,tblcNIkQ0HJyVYpVz,📤 Last Posted To,singleLineText
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 YoBot® Prompt Library,tblcNIkQ0HJyVYpVz,📅 Last Posted Date,lastModifiedTime
+YoBot® Sales & Automation,appe0OSJtB1In1kn5,🤖 YoBot® Prompt Library,tblcNIkQ0HJyVYpVz,🔗 Post Status	,singleSelect
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Client Name,singleLineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Industry,singleSelect
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Conversion Rate (Manual),number
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Conversion Rate (YoBot),number
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Deals Closed (Manual),formula
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Deals Closed (YoBot),formula
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Avg Revenue per Deal,number
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Monthly Revenue (Manual),formula
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Monthly Revenue (YoBot),formula
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Labor Cost Saved,number
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Bot Monthly Cost,number
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Net ROI,formula
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Notes,multilineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Client ROI Results,tbl62cLytAMj6rIX6,Parsed Leads per Month,number
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,📈 Botalytics · ROI Tracker,tblt0WJwiw9q9NJoo,🏷️ Client Name,multilineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,📈 Botalytics · ROI Tracker,tblt0WJwiw9q9NJoo,📅 Period,dateTime
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,📈 Botalytics · ROI Tracker,tblt0WJwiw9q9NJoo,🤝 Leads Captured,number
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,📈 Botalytics · ROI Tracker,tblt0WJwiw9q9NJoo,📈 Conversion Rate (Bot),multilineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,📈 Botalytics · ROI Tracker,tblt0WJwiw9q9NJoo,📉 Conversion Rate (Manual),multilineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,📈 Botalytics · ROI Tracker,tblt0WJwiw9q9NJoo,💬 Deals Closed (Bot),number
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,📈 Botalytics · ROI Tracker,tblt0WJwiw9q9NJoo,🧾 Deals Closed (Manual),number
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,📈 Botalytics · ROI Tracker,tblt0WJwiw9q9NJoo,💰 Revenue (Bot),number
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,📈 Botalytics · ROI Tracker,tblt0WJwiw9q9NJoo,💵 Revenue (Manual),number
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,📈 Botalytics · ROI Tracker,tblt0WJwiw9q9NJoo,📈 Revenue Increase,multilineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,📈 Botalytics · ROI Tracker,tblt0WJwiw9q9NJoo,⏱️ Time Saved (hrs),number
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,📈 Botalytics · ROI Tracker,tblt0WJwiw9q9NJoo,📝 Notes,multilineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Integration Name,singleLineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Executed (Wired)?,checkbox
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Pass/Fail,singleSelect
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Validation Outcome,singleSelect
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Notes / Debug,multilineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Test Date,dateTime
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,QA Owner,singleLineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Output Data Populated?,checkbox
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Record Created?,checkbox
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Retry Attempted?,checkbox
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Module Type,singleSelect
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Related Scenario Link,url
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Last Editor,lastModifiedBy
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Logger Source,singleSelect
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Execution UUID,singleLineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Tampering Flag,checkbox
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Red Flag Reason,multilineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Integrity Hash,singleLineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Hash Present?,formula
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,Integration Test Log,tbl7K5RthCtD69BE1,Tampering Detected?,formula
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,🛡️ Logger Integrity Tracker,tbl4RG0C69J9Mke9s,🔧 Integration Name,multilineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,🛡️ Logger Integrity Tracker,tbl4RG0C69J9Mke9s,✅ Pass/Fail,singleSelect
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,🛡️ Logger Integrity Tracker,tbl4RG0C69J9Mke9s,📅 Test Date,dateTime
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,🛡️ Logger Integrity Tracker,tbl4RG0C69J9Mke9s,🧑‍💻 QA Owner,multilineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,🛡️ Logger Integrity Tracker,tbl4RG0C69J9Mke9s,🧠 Notes / Debug,multilineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,🛡️ Logger Integrity Tracker,tbl4RG0C69J9Mke9s,🧩 Module Type,singleSelect
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,🛡️ Logger Integrity Tracker,tbl4RG0C69J9Mke9s,📤 Output Data Populated,checkbox
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,🛡️ Logger Integrity Tracker,tbl4RG0C69J9Mke9s,🗃️ Record Created?,checkbox
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,🛡️ Logger Integrity Tracker,tbl4RG0C69J9Mke9s,🔁 Retry Attempted?,checkbox
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,🛡️ Logger Integrity Tracker,tbl4RG0C69J9Mke9s,🛡️ Logger Source,multilineText
+YoBot® ROI Calculator,appbFDTqB2WtRNV1H,🛡️ Logger Integrity Tracker,tbl4RG0C69J9Mke9s,⚠️ Tamper Flag,formula
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🕷️ Scraping Campaigns,tbltGOKyDCoi7JDHb,🕷️ Campaign Name,singleLineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🕷️ Scraping Campaigns,tbltGOKyDCoi7JDHb,🏢 Client,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🕷️ Scraping Campaigns,tbltGOKyDCoi7JDHb,🌐 Target Platform,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🕷️ Scraping Campaigns,tbltGOKyDCoi7JDHb,🔍 Target Keywords,multipleSelects
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🕷️ Scraping Campaigns,tbltGOKyDCoi7JDHb,⚙️ Scraper Tool,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🕷️ Scraping Campaigns,tbltGOKyDCoi7JDHb,🚦 Run Status,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🕷️ Scraping Campaigns,tbltGOKyDCoi7JDHb,📅 Last Run,date
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🕷️ Scraping Campaigns,tbltGOKyDCoi7JDHb,📊 Records Scraped,number
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🕷️ Scraping Campaigns,tbltGOKyDCoi7JDHb,🔗 Webhook Triggered,checkbox
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🕷️ Scraping Campaigns,tbltGOKyDCoi7JDHb,🆔 Source Campaign ID,dateTime
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,👤 Lead Owner,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,🛠️ Lead Source,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,🆔 Source Campaign ID,dateTime
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,🌐 Platform,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,🧑‍💼 Name,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,✉️ Email,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,📞 Phone,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,🏢 Company,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,🔗 Website,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,💼 Title,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,📍 Location,singleLineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,📞 Call Status,singleSelect
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,✅ Synced to HubSpot?,checkbox
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,🤖 Synced to YoBot Queue?,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,📈 Enrichment Score,number
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,📅 Date Added,date
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,# Call Attempts,number
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,📅 Last Called	,date
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,🚨 Slack Alert Sent	,checkbox
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,🧠 Escalated	,checkbox
+YoBot Lead Engine,appb2f3D77Tc4DWAr,📥 Scraped Leads (Universal),tbluqrDSomu5UVhDw,🚦 Status,singleSelect
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🎯 Call Queue,tblC9FltlnmzLrSOO,🔗 Lead ID (Linked),multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🎯 Call Queue,tblC9FltlnmzLrSOO,🧑‍💼 Name,singleLineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🎯 Call Queue,tblC9FltlnmzLrSOO,📞 Phone,phoneNumber
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🎯 Call Queue,tblC9FltlnmzLrSOO,✉️ Email,email
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🎯 Call Queue,tblC9FltlnmzLrSOO,🏢 Company,singleLineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🎯 Call Queue,tblC9FltlnmzLrSOO,🚦 Status,singleSelect
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🎯 Call Queue,tblC9FltlnmzLrSOO,📲 Call Status,singleSelect
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🎯 Call Queue,tblC9FltlnmzLrSOO,📅 Last Call Attempt,date
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🎯 Call Queue,tblC9FltlnmzLrSOO,✅ Result,singleSelect
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🎯 Call Queue,tblC9FltlnmzLrSOO,🧑‍💼 Assigned Agent,singleSelect
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🎯 Call Queue,tblC9FltlnmzLrSOO,📆 Date Added,date
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🧲 Lead Scraping · Demo Leads,tblmX8bSeeuENtron,🧍 Full Name,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🧲 Lead Scraping · Demo Leads,tblmX8bSeeuENtron,🏢 Company,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🧲 Lead Scraping · Demo Leads,tblmX8bSeeuENtron,📧 Email,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🧲 Lead Scraping · Demo Leads,tblmX8bSeeuENtron,☎️ Phone,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🧲 Lead Scraping · Demo Leads,tblmX8bSeeuENtron,🌐 Website,multilineText
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🧲 Lead Scraping · Demo Leads,tblmX8bSeeuENtron,🏷️ Source,singleSelect
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🧲 Lead Scraping · Demo Leads,tblmX8bSeeuENtron,🔁 Synced to HubSpot?,checkbox
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🧲 Lead Scraping · Demo Leads,tblmX8bSeeuENtron,🕒 Date Scraped,date
+YoBot Lead Engine,appb2f3D77Tc4DWAr,🧲 Lead Scraping · Demo Leads,tblmX8bSeeuENtron,📌 Assigned Rep,singleSelect
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📊 SmartSpend™ – Slack Logs,tblcFr2l6r9Hgpooz,📅 Date,dateTime
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📊 SmartSpend™ – Slack Logs,tblcFr2l6r9Hgpooz,👤 User,singleLineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📊 SmartSpend™ – Slack Logs,tblcFr2l6r9Hgpooz,💬 Channel,singleLineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📊 SmartSpend™ – Slack Logs,tblcFr2l6r9Hgpooz,📝 Message,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📊 SmartSpend™ – Slack Logs,tblcFr2l6r9Hgpooz,🔗 Slack Link,url
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📊 SmartSpend™ – Slack Logs,tblcFr2l6r9Hgpooz,🚩 Flag,singleSelect
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📛 Error + Fallback Log,tblo1ESkt9ybkvaJH,🗓️ Date,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📛 Error + Fallback Log,tblo1ESkt9ybkvaJH,⏰ Time,formula
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📛 Error + Fallback Log,tblo1ESkt9ybkvaJH,📅 Timestamp,dateTime
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📛 Error + Fallback Log,tblo1ESkt9ybkvaJH,🧠 Source Module,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📛 Error + Fallback Log,tblo1ESkt9ybkvaJH,🚨 Error Type,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📛 Error + Fallback Log,tblo1ESkt9ybkvaJH,📄 Error Message,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📛 Error + Fallback Log,tblo1ESkt9ybkvaJH,📤 Fallback Triggered,checkbox
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📛 Error + Fallback Log,tblo1ESkt9ybkvaJH,🎧 Fallback File Name,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📛 Error + Fallback Log,tblo1ESkt9ybkvaJH,🔁 Retry Attempted,checkbox
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📛 Error + Fallback Log,tblo1ESkt9ybkvaJH,📶 Retry Result,singleSelect
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📛 Error + Fallback Log,tblo1ESkt9ybkvaJH,🔗 Log URL,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📛 Error + Fallback Log,tblo1ESkt9ybkvaJH,📝 Notes,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📡 Event Sync Log,tblRfeIho29IKqqCQ,🕒 Timestamp,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📡 Event Sync Log,tblRfeIho29IKqqCQ,🧠 Event Type,singleSelect
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📡 Event Sync Log,tblRfeIho29IKqqCQ,🧩 Source Module,singleSelect
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📡 Event Sync Log,tblRfeIho29IKqqCQ,👤 Contact,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📡 Event Sync Log,tblRfeIho29IKqqCQ,📍 Status,singleSelect
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📡 Event Sync Log,tblRfeIho29IKqqCQ,📄 Details,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📡 Event Sync Log,tblRfeIho29IKqqCQ,🧾 System Trace ID,dateTime
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📄 Support Ticket Log,tblQPr9cHyNZDpipS,🆔 Ticket ID,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📄 Support Ticket Log,tblQPr9cHyNZDpipS,🧑 Client Name,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📄 Support Ticket Log,tblQPr9cHyNZDpipS,📌 Topic,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📄 Support Ticket Log,tblQPr9cHyNZDpipS,🤖 AI Reply,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📄 Support Ticket Log,tblQPr9cHyNZDpipS,🚩 Escalation Flag,checkbox
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📄 Support Ticket Log,tblQPr9cHyNZDpipS,📉 Sentiment,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,📄 Support Ticket Log,tblQPr9cHyNZDpipS,🎧 Voice File,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,🧪 Integration Test Log 2,tblRNjNnaGL5ICIf9,🧩 Integration Name,singleLineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,🧪 Integration Test Log 2,tblRNjNnaGL5ICIf9,✅ Pass/Fail,singleSelect
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,🧪 Integration Test Log 2,tblRNjNnaGL5ICIf9,📝 Notes / Debug,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,🧪 Integration Test Log 2,tblRNjNnaGL5ICIf9,📅 Test Date,dateTime
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,🧪 Integration Test Log 2,tblRNjNnaGL5ICIf9,👤 QA Owner,singleLineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,🧪 Integration Test Log 2,tblRNjNnaGL5ICIf9,☑️ Output Data Populated?,multilineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,🧪 Integration Test Log 2,tblRNjNnaGL5ICIf9,📁 Record Created?,checkbox
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,🧪 Integration Test Log 2,tblRNjNnaGL5ICIf9,🔁 Retry Attempted?,checkbox
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,🧪 Integration Test Log 2,tblRNjNnaGL5ICIf9,⚙️ Module Type,singleLineText
+YoBot® Ops & Alerts Log,appCoAtCZdARb4AM2,🧪 Integration Test Log 2,tblRNjNnaGL5ICIf9,📂 Related Scenario Link,url
