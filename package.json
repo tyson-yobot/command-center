@@ -32,6 +32,11 @@
     "vite": "^7.0.1"
   },
   "dependencies": {
+    "@fullcalendar/daygrid": "^6.1.18",
+    "@fullcalendar/interaction": "^6.1.18",
+    "@fullcalendar/list": "^6.1.18",
+    "@fullcalendar/react": "^6.1.18",
+    "@fullcalendar/timegrid": "^6.1.18",
     "@neondatabase/serverless": "^1.0.1",
     "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
     "@slack/events-api": "^3.0.1",

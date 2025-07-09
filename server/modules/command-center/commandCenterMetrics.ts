@@ -513,7 +513,7 @@ export function registerCommandCenterMetrics(app: Express) {
 
       res.json({
         success: true,
-        message: 'Sales flow automation logged to Command Center Metrics',
+        message: '        Sales flow automation logged to Command Center Metrics',
         action: 'Automate Sales Flow'
       });
     } catch (error) {

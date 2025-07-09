@@ -29,9 +29,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { featureRegistry } from '../../../../server/feature-registry';
-import YoBotLogo from '../../assets/Engage Smarter Logo Transparent.png';
-import SubmitTicketForm from '../../modules/icloud-calendar-sync/SubmitTicketForm';
-import * as Cards from '../../components/ui/cards';
+import YoBotLogo from '../../../../assets/Engage Smarter Logo Transparent.png';
+import SubmitTicketForm from '../../../../icloud-calendar-sync/SubmitTicketForm';
+import * as Cards from '../../../components/ui/cards';
+
 
 /* ──────────── UI ATOMS ──────────── */
 const CardGrid: React.FC<{ children: React.ReactNode }> = ({ children }) => (
