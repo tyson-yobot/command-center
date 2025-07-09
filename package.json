@@ -10,11 +10,13 @@
     "@replit/vite-plugin-cartographer": "^0.2.7",
     "@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
     "@tailwindcss/postcss": "^4.1.11",
+    "@tsconfig/node18": "^18.2.4",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/helmet": "^0.0.48",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.0.10",
+    "@types/node-fetch": "^2.6.12",
     "@types/react": "^18.3.23",
     "@vitejs/plugin-react": "^4.6.0",
     "autoprefixer": "^10.4.21",
@@ -67,7 +69,6 @@
     "zod": "^3.24.2",
     "zod-validation-error": "^3.4.0"
   },
-
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
   }

@@ -1,38 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ES2021",
+    "target": "ESNext",
     "module": "ESNext",
-<<<<<<< HEAD
-    "jsx": "react-jsx",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-
-    // ✅ Path alias for "@/..." to work (client/src)
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
       "@/*": ["client/src/*"]
     }
   },
   "include": ["client/src/**/*", "server/**/*"]
-=======
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
-  },
-  "include": ["Client/src/**/*", "client/src/**/*"]
-
->>>>>>> 692751fa02aec1a95d0ca2c3113091d5e0732d44
 }
