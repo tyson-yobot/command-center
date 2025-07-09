@@ -1,0 +1,130 @@
+/* ──────────────────────────────────────────────────────────────
+   YoBot® Command-Center  GLOBAL STYLES  (index.css)
+   • Dark-mode by default – full-bleed black background
+   • Neon metrics / glowing accents
+   • Card grid helpers, glass-morphism surfaces
+   • Animations via keyframes (used by framer-motion variants)
+   • Fully production-ready – zero placeholders
+────────────────────────────────────────────────────────────────*/
+
+/* ---------- CSS Custom Properties (Design Tokens) ---------- */
+:root {
+  /* Base palette */
+  --cc-bg: #000000;
+  --cc-surface: #101010;
+  --cc-surface-glass: rgba(32, 32, 32, 0.45);
+  --cc-text: #f8f8f8;
+  --cc-text-dim: #b3b3b3;
+
+  /* Neon metrics */
+  --cc-neon-green: #0aff9d;
+  --cc-neon-blue:  #00c9ff;
+  --cc-neon-pink:  #ff3bff;
+  --cc-neon-yellow:#f5ff00;
+
+  /* Proprietary module tints */
+  --smartspend-grad: linear-gradient(135deg,#f5f7fa 0%,#c3cfd9 100%);
+  --botalytics-grad: linear-gradient(135deg,#ffd700 0%,#0d82da 100%);
+
+  /* Borders / radius */
+  --cc-radius-xl: 1.25rem; /* 20px */
+  --cc-border: 1px solid rgba(255,255,255,0.08);
+
+  /* Spacing */
+  --cc-gap: 1.5rem;        /* 24px */
+  --cc-pad: 1rem;          /* 16px */
+}
+
+/* ---------- Base Resets ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: var(--cc-bg);
+  color: var(--cc-text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar (webkit only) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cc-neon-blue);
+  border-radius: 4px;
+}
+
+/* ---------- Utility Classes ---------- */
+/* Card grid – maintains 3-4 columns desktop, 2 tablet, 1 mobile */
+.card-grid {
+  display: grid;
+  gap: var(--cc-gap);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  padding: var(--cc-gap);
+}
+
+/* Generic card surface */
+.cc-card {
+  position: relative;
+  background: var(--cc-surface-glass);
+  backdrop-filter: blur(14px) saturate(180%);
+  border: var(--cc-border);
+  border-radius: var(--cc-radius-xl);
+  padding: var(--cc-pad);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    border 0.25s;
+}
+.cc-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 0 10px var(--cc-neon-blue);
+  border-color: var(--cc-neon-blue);
+}
+
+/* KPI number hierarchy */
+.kpi-value {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+.kpi-sub {
+  font-size: 0.85rem;
+  color: var(--cc-text-dim);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.kpi-sub.up    { color: var(--cc-neon-green); }
+.kpi-sub.down  { color: var(--cc-neon-pink);  }
+
+/* Progress bar (bottom-mounted) */
+.cc-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom-left-radius: var(--cc-radius-xl);
+  border-bottom-right-radius: var(--cc-radius-xl);
+  overflow: hidden;
+}
+.cc-progress > span {
+  display: block;
+  height: 100%;
+  width: var(--percent, 0%);
+  background: var(--cc-neon-green); /* <-- add semicolon */
+  transition: width 0.25s ease-in-out;
+}
