@@ -2,10 +2,14 @@
   "name": "rest-express",
   "version": "1.0.0",
   "type": "module",
-"scripts": {
-  "dev": "nodemon --loader ts-node/esm server/server.ts",
-  "start": "node --loader ts-node/esm server/server.ts"
-},
+  "scripts": {
+    "dev": "nodemon --loader ts-node/esm server/server.ts",
+    "start": "node --loader ts-node/esm server/server.ts",
+    "dev:client": "vite",
+    "build:client": "vite build",
+    "preview:client": "vite preview",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:client\""
+  },
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node"
@@ -43,7 +47,8 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
-    "vite": "^7.0.1"
+    "vite": "^7.0.1",
+    "concurrently": "^8.2.2"
   },
   "dependencies": {
     "@fullcalendar/daygrid": "^6.1.18",
@@ -66,6 +71,7 @@
     "express": "^4.21.2",
     "formidable": "^3.5.4",
     "helmet": "^8.1.0",
+    "lucide-react": "^0.525.0",
     "mammoth": "^1.9.1",
     "morgan": "^1.10.0",
     "multer": "^2.0.1",
