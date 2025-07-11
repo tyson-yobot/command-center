@@ -2,9 +2,10 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -16,7 +17,7 @@
     "paths": {
       "@/*": ["client/src/*"]
     },
-    "types": [],
+    "types": ["node", "express", "cors", "helmet", "morgan"],
     "typeRoots": ["./node_modules/@types"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true

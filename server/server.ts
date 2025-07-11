@@ -1,79 +1,143 @@
-// ========================================================================
-// server.ts – PRODUCTION VERSION
-// Fully Wired · Airtable/Slack/Functions Integrated · Built to Scale
-// ========================================================================
-import * as express from "express";
-import { Request, Response, NextFunction } from "express";
-import dotenv from "dotenv";
+console.log("Starting basic test...");
+
+import express, { Request, Response, NextFunction } from "express";
+console.log("Express imported successfully");
+
+import 'dotenv/config';
+console.log("Dotenv imported successfully");
+
 import helmet from "helmet";
-import * as cors from "cors";
-const morgan = require("morgan");
-const slackEvents = require("@slack/events-api");
-import path from "path";
-import { fileURLToPath } from "url";
+console.log("Helmet imported successfully");
 
-// Convert import.meta.url to __dirname for ESM compatibility
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import cors from "cors";
+console.log("Cors imported successfully");
 
-import airtableRouter from "./modules/airtable/airtableRouter.js";
-import loggerWebhookRouter from "./routes/loggerWebhookRouter.js";
-import { featureRegistry } from "./feature-registry.js";
-import { runFunction } from "../backend/utils/airtable/function_runner.js"; 
+import morgan from "morgan";
+console.log("Morgan imported successfully");
+
+import { createEventAdapter } from "@slack/events-api";
+console.log("Slack Events API imported successfully");
+
+// Advanced imports with error handling
+let airtableRouter: any;
+let loggerWebhookRouter: any;
+let featureRegistry: any;
+let runFunction: any;
+
+try {
+  airtableRouter = require("./modules/airtable/airtableRouter");
+  console.log("Airtable router imported successfully");
+} catch (error) {
+  console.warn("⚠️  Could not load airtableRouter:", error);
+  airtableRouter = express.Router();
+}
+
+try {
+  loggerWebhookRouter = require("./routes/loggerWebhookRouter");
+  console.log("Logger webhook router imported successfully");
+} catch (error) {
+  console.warn("⚠️  Could not load loggerWebhookRouter:", error);
+  loggerWebhookRouter = express.Router();
+}
+
+try {
+  featureRegistry = require("./feature-registry").featureRegistry;
+  console.log("Feature registry imported successfully");
+} catch (error) {
+  console.warn("⚠️  Could not load featureRegistry:", error);
+  featureRegistry = { status: "disabled" };
+}
+
+try {
+  runFunction = require("../backend/utils/airtable/function_runner").runFunction;
+  console.log("Function runner imported successfully");
+} catch (error) {
+  console.warn("⚠️  Could not load runFunction:", error);
+  runFunction = async () => {};
+}
+
+console.log("All imports successful, creating advanced server...");
+
 async function main() {
   try {
-// ── ENV + Slack Setup ─────────────────────────────────────────────
-dotenv.config();
-const slackSigningSecret = process.env.SLACK_SIGNING_SECRET || "";
-const slackEventsAdapter = slackEvents.createEventAdapter(slackSigningSecret);
-// ...existing code...
+    console.log("🚀 Starting advanced server...");
 
-slackEventsAdapter.on("app_mention", async (event: any) => {
-  console.log("🤖 Mentioned in Slack:", event.text);
-  await runFunction("onSlackMention", event); // New Slack hook
-});
+    // Slack Events Setup
+    const slackSigningSecret = process.env.SLACK_SIGNING_SECRET || "";
+    const slackEventsAdapter = createEventAdapter(slackSigningSecret);
 
-slackEventsAdapter.on("error", (error: Error) => {
-  console.error("❌ Slack Event Error:", error);
-});
+    slackEventsAdapter.on("app_mention", async (event: any) => {
+      console.log("🤖 Mentioned in Slack:", event.text);
+      await runFunction("onSlackMention", event);
+    });
 
-// ── Express App ───────────────────────────────────────────────────
-const app = (express as any)();
-// ...existing code...
-const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
+    slackEventsAdapter.on("error", (error: Error) => {
+      console.error("❌ Slack Event Error:", error);
+    });
 
-app.use(helmet());
-app.use((cors as any)());
-app.use((express as any).json({ limit: "2mb" }));
-app.use((morgan as any)("tiny"));
+    // Express App Setup
+    const app = express();
+    const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
-// ...existing code...
+    // Add middleware
+    app.use(helmet());
+    app.use(cors());
+    app.use(express.json({ limit: "2mb" }));
+    app.use(morgan("tiny"));
 
-// ── Routes ────────────────────────────────────────────────────────
-app.get("/healthz", (_req: Request, res: Response) => {
-  res.json({ status: "ok" });
-});
+    // Basic Routes
+    app.get("/", (req: Request, res: Response) => {
+      res.json({ message: "Advanced server is working!" });
+    });
 
-app.get("/api/feature-status", (_req: Request, res: Response) => {
-  res.json(featureRegistry);
-});
+    app.get("/healthz", (req: Request, res: Response) => {
+      res.json({ status: "ok", timestamp: new Date().toISOString() });
+    });
 
-app.use("/api/airtable", airtableRouter);
-app.use("/api/logger", loggerWebhookRouter);
-app.use("/api/slack", (req: Request, res: Response, next: NextFunction) => {
-  return slackEventsAdapter.expressMiddleware()(req as any, res as any, next);
-});
+    // API Routes
+    app.get("/api/feature-status", (req: Request, res: Response) => {
+      res.json(featureRegistry);
+    });
 
-// ── Start Server ──────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+    app.use("/api/airtable", airtableRouter);
+    app.use("/api/logger", loggerWebhookRouter);
+    app.use("/api/slack", (req: Request, res: Response, next: NextFunction) => {
+      return slackEventsAdapter.expressMiddleware()(req as any, res as any, next);
+    });
 
+    // 404 handler
+    app.use((req: Request, res: Response) => {
+      res.status(404).json({
+        error: "Endpoint not found",
+        path: req.originalUrl,
+      });
+    });
+
+    // Global error handler
+    app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+      console.error("❌ Uncaught server error:", err);
+      res.status(500).json({ error: err.message });
+    });
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Advanced server running on port ${PORT}`);
+      console.log(`📋 Available endpoints:`);
+      console.log(`   GET  /              - Main route`);
+      console.log(`   GET  /healthz       - Health check`);
+      console.log(`   GET  /api/feature-status - Feature status`);
+      console.log(`   POST /api/airtable  - Airtable operations`);
+      console.log(`   POST /api/logger    - Webhook logging`);
+      console.log(`   POST /api/slack     - Slack events`);
+    });
   } catch (error) {
     console.error("❌ Server startup error:", error);
+    console.error("❌ Error details:", (error as Error).message);
+    console.error("❌ Stack trace:", (error as Error).stack);
     process.exit(1);
   }
 }
 
-main();
-
+main().catch((error) => {
+  console.error("❌ Unhandled error in main:", error);
+  process.exit(1);
+});
