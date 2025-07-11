@@ -1,75 +1,48 @@
-
 {
   "name": "rest-express",
   "version": "1.0.0",
   "type": "module",
-  "license": "MIT",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development tsx file://./server/index.ts",
-    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/index.js",
-    "start": "cross-env NODE_ENV=production tsx server/index.ts",
-    "check": "tsc",
-    "db:push": "drizzle-kit push"
-  },
-  "dependencies": {
-    "@radix-ui/react-dialog": "^1.1.14",
-    "airtable": "^0.12.2",
-    "axios": "^1.10.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "express": "^4.21.2",
-    "lucide-react": "^0.521.0",
-    "next": "^15.3.4",
-    "postcss-nesting": "^13.0.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "socket.io": "^4.8.1",
-    "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.24.2"
+    "dev": "nodemon server/server.mts",
+    "start": "ts-node server/server.mts"
   },
   "devDependencies": {
+    "@replit/vite-plugin-cartographer": "^0.2.7",
+    "@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
     "@tailwindcss/postcss": "^4.1.11",
-    "@types/airtable": "^0.10.5",
-    "@types/axios": "^0.9.36",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
+    "@tsconfig/node18": "^18.2.4",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/formidable": "^3.4.5",
+    "@types/helmet": "^0.0.48",
+    "@types/node": "^20.9.1",
+    "@types/node-fetch": "^3.0.12",
+    "@types/react": "^18.3.23",
+    "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^4.6.0",
     "autoprefixer": "^10.4.21",
     "cross-env": "^7.0.3",
-    "tsx": "^4.19.1",
-    "typescript": "^5.6.3",
-    "vite": "^5.4.19",
-    "vite-tsconfig-paths": "^5.1.4",
-    "esbuild": "^0.21.4"
+    "nodemon": "^3.1.0",
+    "postcss": "^8.4.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.3",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.3.3",
+    "vite": "^4.7.0"
   },
-  "alias": {
-    "@": "./client/src",
-    "@server": "./server",
-    "@shared": "./shared",
-    "@assets": "./attached_assets"
-  },
-  "tsconfig": {
-    "compilerOptions": {
-      "module": "ESNext",
-      "moduleResolution": "Bundler",
-      "target": "ES2020",
-      "baseUrl": ".",
-      "paths": {
-        "@/*": ["client/src/*"],
-        "@server/*": ["server/*"],
-        "@shared/*": ["shared/*"],
-        "@assets/*": ["attached_assets/*"]
-      },
-      "resolveJsonModule": true,
-      "allowImportingTsExtensions": true,
-      "allowSyntheticDefaultImports": true,
-      "verbatimModuleSyntax": true
-    },
-    "include": ["client", "server", "shared"]
-  },
-  "engines": {
-    "node": ">=18.0.0"
+  "dependencies": {
+    "@fullcalendar/daygrid": "^6.1.18",
+    "@fullcalendar/interaction": "^6.1.18",
+    "@fullcalendar/list": "^6.1.18",
+    "@fullcalendar/react": "^6.1.18",
+    "@fullcalendar/timegrid": "^6.1.18",
+    "@neondatabase/serverless": "^0.10.1",
+    "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
+    "@slack/web-api": "^7.9.3",
+    "axios": "^1.6.8",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.3"
   }
 }
-

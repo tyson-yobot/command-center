@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // ========================================================================
 // server.mts – PRODUCTION VERSION
 // Fully Wired · Airtable/Slack/Functions Integrated · Built to Scale
@@ -20,8 +19,7 @@ const __dirname = path.dirname(__filename);
 import airtableRouter from "./modules/airtable/airtableRouter.js";
 import loggerWebhookRouter from "./routes/loggerWebhookRouter.js";
 import { featureRegistry } from "./feature-registry.js";
-import { runFunction } from "../backend/utils/airtable/function_runner.js";
-import { runFunction } from "../backend/utils/airtable/function_runner.js"; // 🔁 Fully integrated runner
+import { runFunction } from "../backend/utils/airtable/function_runner.js"; 
 
 // ── ENV + Slack Setup ─────────────────────────────────────────────
 dotenv.config();
@@ -63,54 +61,10 @@ app.use("/api/slack", (req, res, next) => slackEvents.expressMiddleware()(req as
 app.use((req: Request, res: Response) => {
   res.status(404).json({
     error: "Endpoint not found",
-=======
-import express, { Request, Response, NextFunction } from 'express';
-import dotenv from 'dotenv';
-import helmet from 'helmet';
-import cors from 'cors';
-import morgan from 'morgan';
-import { createEventAdapter } from '@slack/events-api';
-
-import actionsRouter from './modules/actionsRouter.js';
-import airtableRouter from './modules/airtableRouter.js';
-
-// ---------------------------------------------------------------------
-//  YoBot® server – production‑ready Express API
-// ---------------------------------------------------------------------
-
-dotenv.config();
-
-const slackSigningSecret = process.env.SLACK_SIGNING_SECRET || '';
-const slackEvents = createEventAdapter(slackSigningSecret);
-
-const app = express();
-const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
-
-// --- Middleware ------------------------------------------------------
-app.use(helmet());
-app.use(cors());
-app.use(express.json({ limit: '1mb' }));
-app.use(morgan('tiny'));
-
-// --- Routes ----------------------------------------------------------
-app.get('/healthz', (req: Request, res: Response): void => {
-  res.json({ status: 'ok' });
-});
-
-app.use('/api/actions', actionsRouter);
-app.use('/api/airtable', airtableRouter);
-app.use('/api/slack', slackEvents.expressMiddleware());
-
-// --- 404 Handler -----------------------------------------------------
-app.use((req: Request, res: Response): void => {
-  res.status(404).json({
-    error: 'Endpoint not found',
->>>>>>> 692751fa02aec1a95d0ca2c3113091d5e0732d44
     path: req.originalUrl,
   });
 });
 
-<<<<<<< HEAD
 // ── Global Error Handler ──────────────────────────────────────────
 app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
   console.error("❌ Uncaught server error:", err);
@@ -119,15 +73,5 @@ app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
 
 // ── Start Server ──────────────────────────────────────────────────
 app.listen(PORT, () => {
-=======
-// --- Error Handler ---------------------------------------------------
-app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
-  console.error(err);
-  res.status(500).json({ error: err.message });
-});
-
-// --- Boot ------------------------------------------------------------
-app.listen(PORT, (): void => {
->>>>>>> 692751fa02aec1a95d0ca2c3113091d5e0732d44
   console.log(`✅ YoBot® server running at http://localhost:${PORT}`);
 });

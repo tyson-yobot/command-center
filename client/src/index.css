@@ -9,54 +9,39 @@
 
 /* ---------- CSS Custom Properties (Design Tokens) ---------- */
 :root {
-  /* Base palette */
   --cc-bg: #000000;
   --cc-surface: #101010;
   --cc-surface-glass: rgba(32, 32, 32, 0.45);
   --cc-text: #f8f8f8;
   --cc-text-dim: #b3b3b3;
-
-  /* Neon metrics */
   --cc-neon-green: #0aff9d;
-  --cc-neon-blue:  #00c9ff;
+  --cc-neon-blue:  #0d82da;
   --cc-neon-pink:  #ff3bff;
   --cc-neon-yellow:#f5ff00;
-
-  /* Proprietary module tints */
-  --smartspend-grad: linear-gradient(135deg,#f5f7fa 0%,#c3cfd9 100%);
+  --smartspend-grad: linear-gradient(135deg,#f5f7fa 0%,#ffffff 100%);
   --botalytics-grad: linear-gradient(135deg,#ffd700 0%,#0d82da 100%);
-
-  /* Borders / radius */
-  --cc-radius-xl: 1.25rem; /* 20px */
+  --cc-radius-xl: 1.25rem;
   --cc-border: 1px solid rgba(255,255,255,0.08);
-
-  /* Spacing */
-  --cc-gap: 1.5rem;        /* 24px */
-  --cc-pad: 1rem;          /* 16px */
+  --cc-gap: 1.5rem;
+  --cc-pad: 1rem;
 }
 
 /* ---------- Base Resets ---------- */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
 }
-
-html,
-body {
+html, body {
   width: 100%;
   height: 100%;
   margin: 0;
   background: var(--cc-bg);
   color: var(--cc-text);
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: Inter, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
 }
 
-/* Scrollbar (webkit only) */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -66,34 +51,30 @@ body {
   border-radius: 4px;
 }
 
-/* ---------- Utility Classes ---------- */
-/* Card grid – maintains 3-4 columns desktop, 2 tablet, 1 mobile */
+/* ---------- Card & Grid Layout ---------- */
 .card-grid {
   display: grid;
   gap: var(--cc-gap);
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   padding: var(--cc-gap);
 }
-
-/* Generic card surface */
 .cc-card {
   position: relative;
   background: var(--cc-surface-glass);
   backdrop-filter: blur(14px) saturate(180%);
-  border: var(--cc-border);
+  border: 4px solid var(--cc-neon-blue);
   border-radius: var(--cc-radius-xl);
   padding: var(--cc-pad);
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    border 0.25s;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 0 16px var(--cc-neon-blue);
+  color: var(--cc-text);
 }
 .cc-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 0 10px var(--cc-neon-blue);
-  border-color: var(--cc-neon-blue);
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 0 24px var(--cc-neon-blue);
 }
 
-/* KPI number hierarchy */
+/* ---------- KPI Section ---------- */
 .kpi-value {
   font-size: 2.6rem;
   font-weight: 700;
@@ -109,14 +90,13 @@ body {
 .kpi-sub.up    { color: var(--cc-neon-green); }
 .kpi-sub.down  { color: var(--cc-neon-pink);  }
 
-/* Progress bar (bottom-mounted) */
 .cc-progress {
   position: absolute;
   left: 0;
   bottom: 0;
-  height: 4px;
+  height: 6px;
   width: 100%;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
   border-bottom-left-radius: var(--cc-radius-xl);
   border-bottom-right-radius: var(--cc-radius-xl);
   overflow: hidden;
@@ -125,6 +105,83 @@ body {
   display: block;
   height: 100%;
   width: var(--percent, 0%);
-  background: var(--cc-neon-green); /* <-- add semicolon */
+  background: var(--cc-neon-green);
   transition: width 0.25s ease-in-out;
+}
+
+/* ---------- Launchpad Buttons ---------- */
+.launchpad-button {
+  background: linear-gradient(135deg, #c3c3c3, #ffffff);
+  border: 3px solid var(--cc-neon-blue);
+  border-radius: var(--cc-radius-xl);
+  color: #000;
+  padding: 1rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.launchpad-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 16px var(--cc-neon-blue);
+}
+.button-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* ---------- Toggle Switches ---------- */
+.toggle-switch {
+  display: inline-flex;
+  align-items: center;
+  background: #333;
+  border-radius: 9999px;
+  width: 3rem;
+  height: 1.5rem;
+  cursor: pointer;
+}
+.toggle-switch-indicator {
+  background: #ffffff;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  transform: translateX(0.25rem);
+  transition: transform 0.2s;
+}
+.toggle-switch-on .toggle-switch-indicator {
+  transform: translateX(1.25rem);
+  background: var(--cc-neon-blue);
+}
+
+/* ---------- Special Cards ---------- */
+.smartspend-card {
+  background: var(--smartspend-grad);
+  border: 4px solid var(--cc-neon-yellow);
+  color: #000;
+}
+.botalytics-card {
+  background: var(--botalytics-grad);
+  border: 4px solid var(--cc-neon-blue);
+  color: #000;
+}
+
+/* ---------- Animations ---------- */
+@keyframes pulse-meter {
+  0% { box-shadow: 0 0 0 0 rgba(13,130,218,0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(13,130,218,0); }
+  100% { box-shadow: 0 0 0 0 rgba(13,130,218,0); }
+}
+.neon-pulse {
+  animation: pulse-meter 2s infinite;
+}
+
+/* ---------- Footer ---------- */
+.yobot-footer {
+  padding: 2rem;
+  text-align: center;
+  color: var(--cc-text-dim);
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: 4rem;
 }

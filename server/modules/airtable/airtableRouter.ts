@@ -11,6 +11,7 @@ import express, { Request, Response } from "express";
 import { runPythonFunction } from "../../utils/functionRunner";
 import { logInfo, logError } from "../../utils/logger";
 
+
 const DEFAULT_BASE: string = process.env.AIRTABLE_DEFAULT_BASE ?? "";
 const DEFAULT_TABLE: string = process.env.AIRTABLE_DEFAULT_TABLE ?? "";
 
