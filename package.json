@@ -2,10 +2,10 @@
   "name": "rest-express",
   "version": "1.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "nodemon",
-    "start": "node --loader ts-node/esm server/server.ts"
-  },
+"scripts": {
+  "dev": "nodemon --loader ts-node/esm server/server.ts",
+  "start": "node --loader ts-node/esm server/server.ts"
+},
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node"
@@ -22,7 +22,6 @@
     "@types/babel__traverse": "^7.20.7",
     "@types/connect": "^3.4.38",
     "@types/cors": "^2.8.19",
-    "@types/dotenv": "^8.2.3",
     "@types/estree": "^1.0.8",
     "@types/express": "^5.0.3",
     "@types/formidable": "^3.4.5",
