@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server/server.mts",
-    "start": "ts-node server/server.mts"
+    "dev": "nodemon --loader ts-node/esm server/server.ts",
+    "start": "node --loader ts-node/esm server/server.ts"
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   },
   "devDependencies": {
     "@replit/vite-plugin-cartographer": "^0.2.7",
@@ -12,13 +16,19 @@
     "@tailwindcss/postcss": "^4.1.11",
     "@tsconfig/node18": "^18.2.4",
     "@types/airtable": "^0.10.0",
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__generator": "^7.27.0",
+    "@types/babel__template": "^7.4.4",
+    "@types/babel__traverse": "^7.20.7",
+    "@types/connect": "^3.4.38",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/formidable": "^3.4.5",
     "@types/helmet": "^0.0.48",
     "@types/morgan": "^1.9.10",
-    "@types/node": "^24.0.10",
+    "@types/node": "^24.0.13",
     "@types/node-fetch": "^2.6.12",
+    "@types/pg": "^8.15.4",
     "@types/react": "^18.3.23",
     "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^4.6.0",
@@ -59,9 +69,7 @@
     "pdf-parse": "^1.1.1",
     "pdfkit": "^0.17.1",
     "puppeteer": "^24.10.0",
-    "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
-    "react-dom": "^18.3.1",
     "react-hook-form": "^7.55.0",
     "react-icons": "^5.4.0",
     "react-resizable-panels": "^2.1.7",
