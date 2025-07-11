@@ -5,8 +5,8 @@
 // ========================================================================
 
 import express, { Request, Response } from 'express';
-import { logToAirtable } from '../utils/airtableLogger';
-import { postSlackAlert } from '../utils/slackLogger';
+import { logToAirtable } from '../../server/utils/airtableLogger';
+import { postSlackAlert } from '../../client/src/hooks/utils/slackLogger';
 
 const router = express.Router();
 

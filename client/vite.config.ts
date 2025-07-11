@@ -13,7 +13,10 @@ dotenv.config();
  * • Server/HMR tuned for concurrent Express backend on :3000
  */
 export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+  plugins: [
+    react(),
+    tsconfigPaths(),
+  ],
 
   resolve: {
     alias: {

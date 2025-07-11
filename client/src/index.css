@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 /* ──────────────────────────────────────────────────────────────
    YoBot® Command-Center  GLOBAL STYLES  (index.css)
    • Dark-mode by default – full-bleed black background

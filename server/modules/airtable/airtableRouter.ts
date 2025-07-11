@@ -9,7 +9,7 @@
 
 import express, { Request, Response } from "express";
 import { runPythonFunction } from "../../utils/functionRunner";
-import { logInfo, logError } from "../../utils/logger";
+import { logInfo, logError } from "../../../client/src/hooks/utils/logger";
 
 
 const DEFAULT_BASE: string = process.env.AIRTABLE_DEFAULT_BASE ?? "";
