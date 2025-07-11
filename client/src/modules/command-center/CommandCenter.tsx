@@ -253,6 +253,7 @@ export default function CommandCenter() {
     break;
 
 }
+  };
 
    const closeModal = () => setSelectedModal(null);
 const [smartSpendStats, setSmartSpendStats] = useState(null);
@@ -356,8 +357,9 @@ useEffect(() => {
               key={i}
               label={label}
               airtableField={label}
-              color={neonColors[Math.floor(Math.random() * neonColors.length)]} showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
-              showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
+              color={neonColors[Math.floor(Math.random() * neonColors.length)]}
+              showMeter={true}
+              meterThresholds={{ green: 75, yellow: 50, red: 25 }}
             />
           ))}
         </div>
