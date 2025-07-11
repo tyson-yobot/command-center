@@ -1,14 +1,14 @@
 // ========================================================================
-// server.mts – PRODUCTION VERSION
+// server.ts – PRODUCTION VERSION
 // Fully Wired · Airtable/Slack/Functions Integrated · Built to Scale
 // ========================================================================
-
-import express, { Request, Response, NextFunction } from "express";
+import * as express from "express";
+import { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
-import cors from "cors";
-import morgan from "morgan";
-import { createEventAdapter } from "@slack/events-api";
+import * as cors from "cors";
+const morgan = require("morgan");
+const slackEvents = require("@slack/events-api");
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -20,29 +20,34 @@ import airtableRouter from "./modules/airtable/airtableRouter.js";
 import loggerWebhookRouter from "./routes/loggerWebhookRouter.js";
 import { featureRegistry } from "./feature-registry.js";
 import { runFunction } from "../backend/utils/airtable/function_runner.js"; 
-
+async function main() {
+  try {
 // ── ENV + Slack Setup ─────────────────────────────────────────────
 dotenv.config();
 const slackSigningSecret = process.env.SLACK_SIGNING_SECRET || "";
-const slackEvents = createEventAdapter(slackSigningSecret);
+const slackEventsAdapter = slackEvents.createEventAdapter(slackSigningSecret);
+// ...existing code...
 
-slackEvents.on("app_mention", async (event) => {
+slackEventsAdapter.on("app_mention", async (event: any) => {
   console.log("🤖 Mentioned in Slack:", event.text);
   await runFunction("onSlackMention", event); // New Slack hook
 });
 
-slackEvents.on("error", (error) => {
+slackEventsAdapter.on("error", (error: Error) => {
   console.error("❌ Slack Event Error:", error);
 });
 
 // ── Express App ───────────────────────────────────────────────────
-const app = express();
+const app = (express as any)();
+// ...existing code...
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
 app.use(helmet());
-app.use(cors());
-app.use(express.json({ limit: "2mb" }));
-app.use(morgan("tiny"));
+app.use((cors as any)());
+app.use((express as any).json({ limit: "2mb" }));
+app.use((morgan as any)("tiny"));
+
+// ...existing code...
 
 // ── Routes ────────────────────────────────────────────────────────
 app.get("/healthz", (_req: Request, res: Response) => {
@@ -55,23 +60,20 @@ app.get("/api/feature-status", (_req: Request, res: Response) => {
 
 app.use("/api/airtable", airtableRouter);
 app.use("/api/logger", loggerWebhookRouter);
-app.use("/api/slack", (req, res, next) => slackEvents.expressMiddleware()(req as any, res as any, next));
-
-// ── 404 Handler ───────────────────────────────────────────────────
-app.use((req: Request, res: Response) => {
-  res.status(404).json({
-    error: "Endpoint not found",
-    path: req.originalUrl,
-  });
-});
-
-// ── Global Error Handler ──────────────────────────────────────────
-app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
-  console.error("❌ Uncaught server error:", err);
-  res.status(500).json({ error: err.message });
+app.use("/api/slack", (req: Request, res: Response, next: NextFunction) => {
+  return slackEventsAdapter.expressMiddleware()(req as any, res as any, next);
 });
 
 // ── Start Server ──────────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`✅ YoBot® server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
+
+  } catch (error) {
+    console.error("❌ Server startup error:", error);
+    process.exit(1);
+  }
+}
+
+main();
+

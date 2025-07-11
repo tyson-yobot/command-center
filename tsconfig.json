@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
@@ -16,7 +16,8 @@
     "paths": {
       "@/*": ["client/src/*"]
     },
-    "types": ["node", "vite/client"],
+    "types": [],
+    "typeRoots": ["./node_modules/@types"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },

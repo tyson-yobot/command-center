@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --loader ts-node/esm server/server.ts",
+    "dev": "nodemon",
     "start": "node --loader ts-node/esm server/server.ts"
   },
   "ts-node": {
@@ -22,6 +22,7 @@
     "@types/babel__traverse": "^7.20.7",
     "@types/connect": "^3.4.38",
     "@types/cors": "^2.8.19",
+    "@types/estree": "^1.0.8",
     "@types/express": "^5.0.3",
     "@types/formidable": "^3.4.5",
     "@types/helmet": "^0.0.48",
@@ -58,13 +59,15 @@
     "airtable": "^0.12.2",
     "axios": "^1.10.0",
     "cors": "^2.8.5",
-    "dotenv": "^17.0.1",
+    "dotenv": "^17.2.0",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.2",
     "drizzle-zod": "^0.8.2",
     "express": "^4.21.2",
     "formidable": "^3.5.4",
+    "helmet": "^8.1.0",
     "mammoth": "^1.9.1",
+    "morgan": "^1.10.0",
     "multer": "^2.0.1",
     "pdf-parse": "^1.1.1",
     "pdfkit": "^0.17.1",
