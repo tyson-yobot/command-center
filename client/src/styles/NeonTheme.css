@@ -1,0 +1,43 @@
+/* NeonTheme.css */
+
+.neon-text {
+  color: #ffffff;
+  text-shadow: 0 0 8px #0d82da, 0 0 16px #0d82da, 0 0 24px #0d82da;
+}
+
+.kpi-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.kpi-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: flex-start;
+}
+
+.kpi-group {
+  margin-bottom: 48px;
+}
+
+/* Force white font for all KPI cards and module cards */
+.kpi-title,
+.kpi-row,
+.kpi-group,
+.analytics-dashboard,
+.quick-action-launchpad,
+.advanced-tools-drawer,
+.module-stack,
+.module-section,
+.smartspend-card,
+.botalytics-card,
+.kpi-card,
+.card,
+.card-title,
+.card-content,
+button {
+  color: #ffffff !important;
+}

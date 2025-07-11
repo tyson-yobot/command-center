@@ -1,0 +1,37 @@
+/* StyledComponents.css */
+
+.quick-action-launchpad div,
+.advanced-tools-drawer div,
+.analytics-dashboard div {
+  padding: 24px;
+}
+
+.card-container {
+  border: 4px solid #0d82da;
+  box-shadow: 0 0 12px #0d82da;
+  border-radius: 16px;
+  padding: 24px;
+  background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
+  color: #ffffff;
+}
+
+.card-inner {
+  border: 1px solid #0d82da;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+button {
+  background-color: #0d82da;
+  border: 2px solid #c0c0c0;
+  border-radius: 10px;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+button:hover {
+  box-shadow: 0 0 12px #0d82da, 0 0 24px #0d82da;
+}

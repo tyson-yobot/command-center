@@ -1,6 +1,7 @@
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "server")))
+from modules.rag.ragEngine import get_documents, ingest_documents
 
 from flask import Blueprint, jsonify
 from pyairtable import Table
