@@ -1,7 +1,7 @@
 // ✅ FINAL PRODUCTION FILE — SlackMonitorModal.tsx
 // 🔒 100% Automation | No placeholders | Fully wired to Flask backend
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/dialog';
 import { Card, CardContent } from '@/components/card';
 import { Button } from '@/components/button';

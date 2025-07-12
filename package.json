@@ -37,6 +37,7 @@
     "@types/pdf-parse": "^1.1.5",
     "@types/pg": "^8.15.4",
     "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
     "@types/retry": "^0.12.5",
     "@types/uuid": "^10.0.0",
     "@types/yargs": "^17.0.33",
@@ -56,6 +57,7 @@
     "vite": "^7.0.1"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.18",
     "@fullcalendar/daygrid": "^6.1.18",
     "@fullcalendar/interaction": "^6.1.18",
     "@fullcalendar/list": "^6.1.18",

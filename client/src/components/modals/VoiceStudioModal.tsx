@@ -1,29 +1,10 @@
 // File: client/src/components/modals/VoiceStudioModal.tsx
 // ✅ Fully automated version — no cleanup of unused, everything kept for SmartCalendar etc.
 
-// ✅ Core React
-import React, { useState, useEffect, useRef } from 'react';
-
-// ✅ UI Components
+import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-
-// ✅ Axios for API
-import axios from 'axios';
-
-// ✅ SmartCalendar Support (keep all for automation)
-// ✅ Corrected FullCalendar Types
-import {
-  EventClickArg,
-  EventSourceInput,
-  EventDropArg,
-  DatesSetArg
-} from '@fullcalendar/core';
-
-// @ts-ignore
-import { formatISO } from 'date-fns';
-
-// ✅ Lucide Icons (keep for UI)
 import {
   Mic,
   UploadCloud,
@@ -36,11 +17,17 @@ import {
   Podcast,
   Languages,
 } from 'lucide-react';
-
-// ✅ Toasts (for future alerts)
 import { toast } from 'react-hot-toast';
 
-const VoiceStudioModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+interface VoiceStudioModalProps {
+  onClose: () => void;
+}
+
+interface VoiceResponse {
+  audiourl: string;
+}
+
+const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
   const [recording, setRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [voiceOption, setVoiceOption] = useState('Brian');
@@ -54,7 +41,11 @@ const VoiceStudioModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const fetchVoices = async () => {
       try {
         const res = await axios.get<{ voices: string[] }>('/api/elevenlabs-voices');
-        setVoiceList(res.data.voices);
+        if (Array.isArray(res.data.voices)) {
+          setVoiceList(res.data.voices);
+        } else {
+          throw new Error('Invalid response');
+        }
       } catch {
         setVoiceList(['Brian', 'Tyson', 'Clone']);
       }
@@ -93,17 +84,24 @@ const VoiceStudioModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   };
 
   const generateVoice = async () => {
-    if (!textInput) return;
-    const res = await axios.post<{ audioUrl: string }>('/api/generate-voice', {
-      text: textInput,
-      voice: voiceOption,
-      style: styleOption
-    });
-    const { audioUrl } = res.data;
-    const audio = new Audio(audioUrl);
-    audio.volume = volume;
-    audioRef.current = audio;
-    audio.play();
+    try {
+      const res = await axios.post<VoiceResponse>('/api/generate-voice', {
+        text: textInput,
+        voice: voiceOption,
+        style: styleOption
+      });
+
+      console.log('✅ Voice response:', res.data);
+
+      if (!res.data.audiourl) throw new Error('Invalid audio URL response');
+
+      const audio = new Audio(res.data.audiourl);
+      audio.volume = volume;
+      audioRef.current = audio;
+      audio.play();
+    } catch (error) {
+      console.error('❌ Voice generation failed:', error);
+    }
   };
 
   return (
