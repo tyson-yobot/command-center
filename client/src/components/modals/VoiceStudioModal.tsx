@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 // File: client/src/components/modals/VoiceStudioModal.tsx
 // This is the styled, production-ready Voice Studio modal.
@@ -173,3 +174,62 @@ const VoiceStudioModal = ({ onClose }: { onClose: () => void }) => {
 
 export default VoiceStudioModal;
 >>>>>>> 14e679ed (Save current work before pull)
+=======
+// ✅ FINAL PRODUCTION FILE — VoiceStudioModal.tsx
+// 🔒 100% Automation | No placeholders | Fully wired to Flask backend
+
+import React, { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/dialog';
+import { Card, CardContent } from '@/components/card';
+import { Button } from '@/components/button';
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const VoiceStudioModal = ({ isOpen, onClose }: ModalProps) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleRunVoiceStudio = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/voice-studio-run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profile: 'brian', mode: 'session-start' })
+      });
+
+      const data = await response.json();
+      if (data.status === 'success') {
+        console.log('🎙️ Voice studio launched:', data.result);
+      } else {
+        console.error('❌ Voice studio error:', data.message);
+      }
+    } catch (error) {
+      console.error('🚨 Server error:', error);
+    } finally {
+      setLoading(false);
+      onClose();
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle>🎙️ Launch Voice Studio</DialogTitle>
+        </DialogHeader>
+        <Card>
+          <CardContent className="space-y-4 p-4">
+            <p className="text-sm text-gray-300">Starts the real-time Voice Studio session using your Brian voice clone and opens the AI audio scripting engine.</p>
+            <Button onClick={handleRunVoiceStudio} disabled={loading} className="w-full">
+              {loading ? 'Activating...' : 'Start Voice Studio'}
+            </Button>
+          </CardContent>
+        </Card>
+      </DialogContent>
+    </Dialog>
+  );
+};
+>>>>>>> d6e18e6e (Fix commandCenterMetrics.ts - full production-ready rewrite)

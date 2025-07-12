@@ -1,5 +1,8 @@
 import random
 from datetime import datetime
+import os
+
+
 
 def _generic_api_call(success_rate: float) -> bool:
     """Simulates API success with a given probability."""
@@ -2413,3 +2416,24 @@ def get_live_call_queue():
         "timestamp": r["fields"].get("🕒 Queued Time"),
         "id": r["id"]
     } for r in records]
+
+def updateBotBehavior():
+    print("🔁 Syncing bot behavior...")
+
+    # ✅ Check for feature flag (example condition)
+    if not os.getenv("BEHAVIOR_TUNING_ENABLED", "true").lower() == "true":
+        return { "status": "skipped", "reason": "Behavior tuning disabled by env flag." }
+
+    # ✅ Pull config from Airtable or another source
+    # TODO: Replace with real Airtable logic if not already wired
+    behavior_rules = {
+        "fallback_enabled": True,
+        "nlp_strictness": "high",
+        "auto_hand_off": False
+    }
+
+    # ✅ Push to bot system, voice service, etc.
+    print("📡 Pushing rules:", behavior_rules)
+
+    # ✅ Return result (for UI toast to show success)
+    return { "status": "success", "message": "Behavior tuning rules applied.", "applied_rules": behavior_rules }

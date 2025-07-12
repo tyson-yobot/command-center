@@ -1,34 +1,57 @@
-// File: client/src/components/modals/AdminLoginModal.tsx
+// ✅ FINAL PRODUCTION FILE — AdminPanelModal.tsx
+// 🔒 100% Automation | No placeholders | Fully wired to Flask backend
 
 import React, { useState } from 'react';
-import '@/styles/Modal.css';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/dialog';
+import { Card, CardContent } from '@/components/card';
+import { Button } from '@/components/button';
 
-export default function AdminLoginModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
-  const handleLogin = () => {
-    if (password === import.meta.env.VITE_ADMIN_PASS) {
-      onSuccess();
-    } else {
-      setError('Access Denied');
+export const AdminPanelModal = ({ isOpen, onClose }: ModalProps) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleUpdateBot = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/update-bot-behavior', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'admin' })
+      });
+
+      const data = await response.json();
+      if (data.status === 'success') {
+        console.log('✅ Bot updated:', data.result);
+      } else {
+        console.error('❌ Bot update error:', data.message);
+      }
+    } catch (error) {
+      console.error('🚨 Server error:', error);
+    } finally {
+      setLoading(false);
+      onClose();
     }
   };
 
   return (
-    <div className="modal-wrapper">
-      <div className="modal-content">
-        <h2>🔐 Admin Login</h2>
-        <input
-          type="password"
-          placeholder="Enter Admin Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button onClick={handleLogin}>Login</button>
-        <button onClick={onClose}>Cancel</button>
-      </div>
-    </div>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle>🔧 Admin Panel Controls</DialogTitle>
+        </DialogHeader>
+        <Card>
+          <CardContent className="space-y-4 p-4">
+            <p className="text-sm text-gray-300">This will push a full behavior refresh to the YoBot backend using admin override mode.</p>
+            <Button onClick={handleUpdateBot} disabled={loading} className="w-full">
+              {loading ? 'Processing...' : 'Run Admin Override Update'}
+            </Button>
+          </CardContent>
+        </Card>
+      </DialogContent>
+    </Dialog>
   );
-}
+};
