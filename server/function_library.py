@@ -2388,7 +2388,8 @@ def function_send_status_dashboard():
     return {"error": "Status share failed."}
 
 def submit_copilot_command(command: str, user: str):
-    from src.utils.airtable import airtable_post
+    from icloud_calendar_sync.aggregator import airtable_post, airtable_get
+
     from datetime import datetime
 
     record = {
@@ -2403,7 +2404,7 @@ def submit_copilot_command(command: str, user: str):
         payload=record
     )
 def get_live_call_queue():
-    from utils.airtable import airtable_get
+    from icloud_calendar_sync.aggregator import airtable_post, airtable_get
     records = airtable_get(
         base_id="appRt8V3tH4g5Z5if",
         table_id="tblLiveCalls123",  # Replace with real ID

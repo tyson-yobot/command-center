@@ -1,5 +1,5 @@
 // File: client/src/components/modals/VoiceStudioModal.tsx
-// ✅ Fully automated version — no cleanup of unused, everything kept for SmartCalendar etc.
+// ✅ FINAL VERSION — Fully Automated, No Hardcoding (except Airtable Base ID)
 
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
@@ -12,12 +12,22 @@ import {
   PlayCircle,
   Volume2,
   Music,
-  Settings,
   BookOpen,
   Podcast,
   Languages,
+  Trash2,
+  Settings,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+
+const AIRTABLE_BASE_ID = 'appRt8V3tH4g5Z5if';
+const AIRTABLE_API_URL = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}`;
+
+interface ImportMetaEnv {
+  readonly VITE_AIRTABLE_KEY: string;
+  readonly VITE_AIRTABLE_VOICE_TABLE: string;
+  readonly VITE_AIRTABLE_STYLE_TABLE: string;
+}
 
 interface VoiceStudioModalProps {
   onClose: () => void;
@@ -27,30 +37,69 @@ interface VoiceResponse {
   audiourl: string;
 }
 
+interface UploadVoiceResponse {
+  transcript: string;
+  label: string;
+  timestamp: string;
+  confidence: number;
+  wordCount: number;
+}
+
+declare global {
+  interface ImportMeta {
+    env: ImportMetaEnv;
+  }
+}
+
 const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
   const [recording, setRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-  const [voiceOption, setVoiceOption] = useState('Brian');
-  const [styleOption, setStyleOption] = useState('Conversational');
+  const [voiceOption, setVoiceOption] = useState('');
+  const [styleOption, setStyleOption] = useState('');
   const [textInput, setTextInput] = useState('');
   const [volume, setVolume] = useState(1);
   const [voiceList, setVoiceList] = useState<string[]>([]);
+  const [styleList, setStyleList] = useState<{ label: string; value: string }[]>([]);
+  const [transcript, setTranscript] = useState('');
+  const [label, setLabel] = useState('');
+  const [timestamp, setTimestamp] = useState('');
+  const [confidence, setConfidence] = useState<number>(0);
+  const [wordCount, setWordCount] = useState<number>(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const fetchVoices = async () => {
       try {
         const res = await axios.get<{ voices: string[] }>('/api/elevenlabs-voices');
-        if (Array.isArray(res.data.voices)) {
-          setVoiceList(res.data.voices);
-        } else {
-          throw new Error('Invalid response');
-        }
+        setVoiceList(res.data.voices || []);
       } catch {
-        setVoiceList(['Brian', 'Tyson', 'Clone']);
+        setVoiceList([]);
       }
     };
+
+    const fetchStyles = async () => {
+      try {
+        const res = await axios.get<any>(
+          `${AIRTABLE_API_URL}/${import.meta.env.VITE_AIRTABLE_STYLE_TABLE}`,
+          {
+            headers: {
+              Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_KEY}`,
+            },
+          }
+        );
+        const styles = res.data.records.map((r: any) => ({
+          label: r.fields['🎚️ Style Label'],
+          value: r.fields['🔑 Style Value'],
+        }));
+        setStyleList(styles);
+        if (styles.length > 0) setStyleOption(styles[0].value);
+      } catch {
+        setStyleList([]);
+      }
+    };
+
     fetchVoices();
+    fetchStyles();
   }, []);
 
   const startRecording = async () => {
@@ -59,28 +108,62 @@ const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
     const chunks: Blob[] = [];
 
     mediaRecorder.ondataavailable = e => chunks.push(e.data);
-    mediaRecorder.onstop = () => {
-      const blob = new Blob(chunks, { type: 'audio/webm' });
-      setAudioBlob(blob);
-    };
+    mediaRecorder.onstop = () => setAudioBlob(new Blob(chunks, { type: 'audio/webm' }));
 
     mediaRecorder.start();
     setRecording(true);
-
     setTimeout(() => {
       mediaRecorder.stop();
       setRecording(false);
     }, 5000);
   };
 
+  const clearState = () => {
+    setTranscript('');
+    setLabel('');
+    setTimestamp('');
+    setConfidence(0);
+    setWordCount(0);
+    setAudioBlob(null);
+  };
+
   const uploadAudio = async () => {
     if (!audioBlob) return;
     const formData = new FormData();
     formData.append('file', audioBlob, 'voice.webm');
+    const res = await axios.post<UploadVoiceResponse>('/api/upload-voice', formData);
+    const { transcript, label, timestamp, confidence, wordCount } = res.data;
+    setTranscript(transcript);
+    setLabel(label);
+    setTimestamp(timestamp);
+    setConfidence(confidence);
+    setWordCount(wordCount);
 
-    await axios.post('/api/upload-voice', formData);
-    setAudioBlob(null);
-    toast.success('✅ Uploaded, transcribed, labeled, and logged.');
+    await axios.post(
+      `${AIRTABLE_API_URL}/${import.meta.env.VITE_AIRTABLE_VOICE_TABLE}`,
+      {
+        records: [
+          {
+            fields: {
+              '📝 Transcript': transcript,
+              '🏷️ Label': label,
+              '📆 Timestamp': timestamp,
+              '🔢 Word Count': wordCount,
+              '🎯 Confidence': confidence,
+              '🎙️ Voice': voiceOption,
+              '🎚️ Style': styleOption,
+            },
+          },
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    toast.success('✅ Uploaded + Logged');
   };
 
   const generateVoice = async () => {
@@ -88,20 +171,39 @@ const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
       const res = await axios.post<VoiceResponse>('/api/generate-voice', {
         text: textInput,
         voice: voiceOption,
-        style: styleOption
+        style: styleOption,
       });
-
-      console.log('✅ Voice response:', res.data);
-
-      if (!res.data.audiourl) throw new Error('Invalid audio URL response');
-
       const audio = new Audio(res.data.audiourl);
       audio.volume = volume;
       audioRef.current = audio;
       audio.play();
-    } catch (error) {
-      console.error('❌ Voice generation failed:', error);
+    } catch {
+      toast.error('Voice playback failed');
     }
+  };
+
+  const savePreset = async () => {
+    await axios.post(
+      `${AIRTABLE_API_URL}/${import.meta.env.VITE_AIRTABLE_VOICE_TABLE}`,
+      {
+        records: [
+          {
+            fields: {
+              '🎙️ Voice': voiceOption,
+              '🎚️ Style': styleOption,
+              'Preset Name': 'Default Preset',
+            },
+          },
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    toast.success('🎛️ Preset saved');
   };
 
   return (
@@ -125,14 +227,19 @@ const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
                 </Button>
               </>
             )}
+            <Button onClick={clearState} variant="outline" className="mt-2 border border-red-500 bg-[#1e1e1e] text-white">
+              <Trash2 className="mr-2" /> Clear State
+            </Button>
           </div>
           <div className="flex flex-col gap-4">
             <h3 className="text-lg font-semibold">🧠 AI Engine</h3>
             <p className="text-sm text-gray-400">Transcription + Labeling logs appear here after upload.</p>
             <div className="border border-gray-600 bg-[#222] rounded p-3 text-sm text-gray-300 min-h-[60px]">
-              <p><strong>📝 Transcript:</strong> [auto-filled]</p>
-              <p><strong>🏷️ Label:</strong> [auto-filled]</p>
-              <p><strong>📆 Timestamp:</strong> [auto-filled]</p>
+              <p><strong>📝 Transcript:</strong> {transcript}</p>
+              <p><strong>🏷️ Label:</strong> {label}</p>
+              <p><strong>📆 Timestamp:</strong> {timestamp}</p>
+              <p><strong>🎯 Confidence:</strong> {confidence}</p>
+              <p><strong>🔢 Word Count:</strong> {wordCount}</p>
             </div>
           </div>
           <div className="col-span-2 border-t border-gray-600 pt-4">
@@ -150,11 +257,9 @@ const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
                 ))}
               </select>
               <select value={styleOption} onChange={e => setStyleOption(e.target.value)} className="bg-[#222] border border-gray-500 p-2 rounded text-white">
-                <option value="Conversational">💬 Conversational</option>
-                <option value="Narrator">📖 Narrator</option>
-                <option value="Energetic">⚡ Energetic</option>
-                <option value="Calm">🌙 Calm</option>
-                <option value="British">🇬🇧 British</option>
+                {styleList.map((style, i) => (
+                  <option key={i} value={style.value}>{style.label}</option>
+                ))}
               </select>
               <Button onClick={generateVoice} className="bg-[#0d82da] text-white">
                 <PlayCircle className="mr-2" /> Play Voice
@@ -188,7 +293,7 @@ const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
               <Button variant="outline" className="border border-blue-500 bg-[#1e1e1e] text-white">
                 <Languages className="mr-2" /> Voice Dubbing
               </Button>
-              <Button variant="outline" className="border border-blue-500 bg-[#1e1e1e] text-white">
+              <Button onClick={savePreset} variant="outline" className="border border-blue-500 bg-[#1e1e1e] text-white">
                 <Settings className="mr-2" /> Save Preset
               </Button>
             </div>
