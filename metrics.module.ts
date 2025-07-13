@@ -1,10 +1,11 @@
 import axios from "axios";
+import { COMMAND_CENTER_BASE_ID } from "./server/config/airtableBase";
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
 if (!AIRTABLE_API_KEY) {
   console.warn('AIRTABLE_API_KEY is not set');
 }
-const BASE_ID = "appRt8V3tH4g5Z51f";
+const BASE_ID = COMMAND_CENTER_BASE_ID;
 const TABLE_NAME = "Command Center - Metrics Tracker Table";
 
 const BASE_URL = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`;

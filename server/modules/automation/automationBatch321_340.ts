@@ -1,11 +1,12 @@
 import express from 'express';
 import axios from 'axios';
+import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
 
 const router = express.Router();
 
 // Airtable configuration
 const API_KEY = process.env.AIRTABLE_API_KEY as string;
-const BASE_ID = "appRt8V3tH4g5Z51f";
+const BASE_ID = COMMAND_CENTER_BASE_ID;
 const HEADERS = {
   "Authorization": `Bearer ${API_KEY}`,
   "Content-Type": "application/json"

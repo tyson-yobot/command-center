@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import { COMMAND_CENTER_BASE_ID } from "../../config/airtableBase";
 
 interface QATestResult {
   integrationName: string;
@@ -178,7 +179,7 @@ class QAValidationSystem {
     if (!process.env.AIRTABLE_API_KEY) return;
     
     try {
-      await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z51f/tbldPRZ4nHbtj9opU", {
+      await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/tbldPRZ4nHbtj9opU`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,

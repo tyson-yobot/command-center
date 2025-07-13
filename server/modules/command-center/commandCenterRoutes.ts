@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import { COMMAND_CENTER_BASE_ID } from "../../config/airtableBase";
 
 // Import system mode from main routes
 let systemMode: 'test' | 'live' = 'live';
@@ -95,7 +96,7 @@ async function logToAirtableQA(testData: {
     }
 
     // Production Airtable logging (only in live mode)
-    await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z51f/tbldPRZ4nHbtj9opU", {
+    await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/tbldPRZ4nHbtj9opU`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
