@@ -23,7 +23,7 @@ class AirtableLogger {
   constructor() {
     this.baseId = 'appRt8V3tH4g5Z5if';
     this.tableId = 'tbly0fjE2M5uHET9X';
-    this.apiKey = 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa';
+    this.apiKey = process.env.AIRTABLE_API_KEY || '';
     this.baseUrl = `https://api.airtable.com/v0/${this.baseId}/${this.tableId}`;
   }
 

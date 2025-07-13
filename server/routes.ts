@@ -12,10 +12,6 @@ const logger = pino();
 
 let systemMode = 'live';
 
-/**
- * Registers all API routes and endpoints for the application.
- * @param {Express} app - The Express application instance to register routes on.
- */
 export function registerRoutes(app: Express): void {
   
   // System mode endpoints
@@ -90,31 +86,40 @@ export function registerRoutes(app: Express): void {
   app.get('/api/voice/personas', async (req, res) => {
     try {
       const voices = await getAvailableVoices();
+
       res.json({ success: true, data: voices });
     } catch (error) {
       logger.error({ err: error }, 'Failed to fetch voices');
       res.json({ success: false, data: [] });
+
+      res.json({
+        success: true,
+        data: voices
+      });
+    } catch (error) {
+      logger.error('Failed to fetch voices:', error);
+      res.json({
+        success: true,
+        data: []
+      });
+
     }
   });
 
   // Voice generation endpoints
-  app.post('/api/voice/generate', async (req: import("express").Request, res: import("express").Response) => {
+  app.post('/api/voice/generate', async (req, res) => {
     try {
       const { text, voiceId } = req.body;
       if (!text) {
         return res.status(400).json({ success: false, error: 'Text is required' });
       }
       
-      // Add a random suffix to the filename to avoid collisions
-      const randomSuffix = Math.random().toString(36).substring(2, 10);
-      const filename = `voice_${Date.now()}_${randomSuffix}.mp3`;
-
-      // You may want to call generateVoiceReply here and return the result
-      const result = await generateVoiceReply(text, voiceId, filename);
-
+      const filename = `voice_${Date.now()}.mp3`;
+      const result = await generateVoiceReply(text, filename);
+      
       res.json(result);
     } catch (error) {
-      logger.error({ err: error }, 'Voice generation error');
+      logger.error('Voice generation error:', error);
       res.status(500).json({ 
         success: false, 
         error: 'Voice generation failed' 
@@ -123,11 +128,11 @@ export function registerRoutes(app: Express): void {
   });
 
   app.get('/api/voice/test-connection', async (req, res) => {
-      logger.error({ err: error }, 'Voice connection test error');
+    try {
       const result = await testElevenLabsConnection();
       res.json(result);
     } catch (error) {
-      console.error('Voice connection test error:', error);
+      logger.error('Voice connection test error:', error);
       res.status(500).json({ 
         success: false, 
         message: 'Connection test failed' 
@@ -139,17 +144,7 @@ export function registerRoutes(app: Express): void {
   app.get('/api/calls/active', async (req, res) => {
     try {
       const activeCalls = await leadsStorage.getLeadsByStatus('Calling');
-      const formattedCalls = activeCalls.map((lead: any): {
-        id: string;
-        contact: string;
-        phone: string;
-        company: string;
-        status: string;
-        type: string;
-        duration: string;
-        quality: string;
-        timestamp: string;
-      } => ({
+      const formattedCalls = activeCalls.map(lead => ({
         id: lead.id,
         contact: lead.fullName || `${lead.firstName || ''} ${lead.lastName || ''}`.trim(),
         phone: lead.phone,
@@ -160,11 +155,11 @@ export function registerRoutes(app: Express): void {
         quality: 'good',
         timestamp: new Date().toISOString()
       }));
-
+      
       res.json({ success: true, data: formattedCalls });
     } catch (error) {
-      console.error('Failed to fetch active calls:', error);
-      res.json({ success: false, data: [] });
+      logger.error('Failed to fetch active calls:', error);
+      res.json({ success: true, data: [] });
     }
   });
 
@@ -172,16 +167,15 @@ export function registerRoutes(app: Express): void {
     try {
       const stats = await callLogStorage.getCallLogStats();
       res.json({
-        success: false,
+        success: true,
         data: {
-          totalCalls: 0,
-          completedCalls: 0,
-          avgDuration: '0m 0s'
-        },
-        error: 'Failed to fetch call metrics'
+          totalCalls: stats.totalCalls,
+          completedCalls: stats.totalCalls - stats.activeCalls,
+          avgDuration: stats.avgDuration
+        }
       });
     } catch (error) {
-      console.error('Failed to fetch call metrics:', error);
+      logger.error('Failed to fetch call metrics:', error);
       res.json({
         success: true,
         data: {
@@ -204,12 +198,14 @@ export function registerRoutes(app: Express): void {
 
   // Memory activity
   app.get('/api/memory/activity', (req, res) => {
-  import type { Request, Response } from "express";
+    res.json({ success: true, data: [] });
+  });
 
-  app.post('/api/pipeline/start', async (req: Request, res: Response) => {
+  // Pipeline endpoints using real Airtable leads
+  app.post('/api/pipeline/start', async (req, res) => {
     try {
       const callableLeads = await leadsStorage.getCallableLeads();
-
+      
       if (callableLeads.length === 0) {
         return res.json({
           success: false,
@@ -220,15 +216,12 @@ export function registerRoutes(app: Express): void {
         });
       }
 
-      // Update lead statuses to "Calling" for active leads in parallel
-      const leadsToCall = callableLeads.slice(0, 5);
-      await Promise.all(
+      // Update lead statuses to "Calling" for active leads
       const activeCalls = [];
-      const leadsToCall = callableLeads.slice(0, 5);
-
-      await Promise.all(leadsToCall.map(async (lead) => {
+      for (let i = 0; i < Math.min(callableLeads.length, 5); i++) {
+        const lead = callableLeads[i];
         await leadsStorage.updateLeadCallStatus(lead.id, 'Calling', 1);
-
+        
         activeCalls.push({
           id: lead.id,
           contact: lead.fullName || `${lead.firstName || ''} ${lead.lastName || ''}`.trim(),
@@ -240,22 +233,20 @@ export function registerRoutes(app: Express): void {
           quality: 'good',
           timestamp: new Date().toISOString()
         });
-      }));
+      }
+
       res.json({
         success: true,
         message: `Pipeline started with ${activeCalls.length} calls`,
         total_records: callableLeads.length,
+        active_calls: activeCalls.length,
         activeCalls
       });
     } catch (error) {
-      console.error('Pipeline start error:', error);
+      logger.error('Pipeline start error:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to start pipeline',
-        message: 'Airtable connection required'
-      });
-    }
-  });
         message: 'Airtable connection required'
       });
     }
@@ -272,11 +263,11 @@ export function registerRoutes(app: Express): void {
 
       res.json({
         success: true,
-      logger.error({ err: error }, 'Pipeline stop error');
+        message: `Stopped ${activeCalls.length} active calls`,
         stopped_calls: activeCalls.length
       });
     } catch (error) {
-      console.error('Pipeline stop error:', error);
+      logger.error('Pipeline stop error:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to stop pipeline'
@@ -296,5 +287,6 @@ export function registerRoutes(app: Express): void {
   // Register universal leads endpoints
   registerLeadsEndpoints(app);
 
-  console.log("✅ Command Center routes registered successfully");
+  logger.info("✅ Command Center routes registered successfully");
 }
+

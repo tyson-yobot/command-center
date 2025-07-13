@@ -67,7 +67,7 @@ async function isDuplicate(email?: string, fullName?: string, domain?: string): 
   try {
     const airtableBaseId = "appRt8V3tH4g5Z5if";
     const airtableTableId = "tblPRZ4nHbtj9opU"; // 📥 Scraped Leads · Universal
-    const airtableToken = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa";
+    const airtableToken = process.env.AIRTABLE_API_KEY as string;
     const headers = {
       "Authorization": `Bearer ${airtableToken}`
     };
@@ -108,7 +108,7 @@ async function flagDuplicateInAirtable(recordId: string): Promise<boolean> {
   try {
     const airtableBaseId = "appRt8V3tH4g5Z5if";
     const airtableTableId = "tblPRZ4nHbtj9opU";
-    const airtableToken = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa";
+    const airtableToken = process.env.AIRTABLE_API_KEY as string;
 
     const url = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableId}/${recordId}`;
     const headers = {
@@ -135,7 +135,7 @@ async function updateExistingLead(recordId: string, email?: string, phone?: stri
   try {
     const airtableBaseId = "appRt8V3tH4g5Z5if";
     const airtableTableId = "tblPRZ4nHbtj9opU";
-    const airtableToken = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa";
+    const airtableToken = process.env.AIRTABLE_API_KEY as string;
 
     const url = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableId}/${recordId}`;
     const headers = {
@@ -186,7 +186,7 @@ async function pushToAirtableLeads(leadData: LeadData): Promise<boolean> {
     const airtableTableId = "tblPRZ4nHbtj9opU"; // 📥 Scraped Leads · Universal
     const airtableUrl = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableId}`;
     const headers = {
-      "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
       "Content-Type": "application/json"
     };
     
@@ -248,7 +248,7 @@ async function updateSyncStatus(email: string, synced: boolean): Promise<void> {
   try {
     const airtableUrl = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblScrapedLeads";
     const headers = {
-      "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa"
+      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`
     };
 
     // Find record by email
