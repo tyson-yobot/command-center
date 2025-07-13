@@ -11,9 +11,18 @@ import {
 
 // Configuration
 const GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh";
+
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
+const BASE_ID = "appRt8V3tH4g5Z5if";
+
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY as string;
+
 const BASE_ID = COMMAND_CENTER_BASE_ID;
 const TABLE_NAME = SCRAPED_LEADS_TABLE_NAME;
+
+const BASE_ID = "appRt8V3tH4g5Z51f";
+
+
 
 interface FormData {
   'Contact Name': string;
@@ -110,11 +119,16 @@ export class SalesOrderProcessor {
   // 2. Send email to team
   async sendEmail(toEmails: string[], subject: string, body: string, attachmentPath: string): Promise<void> {
     try {
+      const gmailPassword = process.env.EMAIL_APP_PASSWORD;
+      if (!gmailPassword) {
+        throw new Error('EMAIL_APP_PASSWORD must be set');
+      }
+
       const transporter = nodemailer.createTransporter({
         service: 'gmail',
         auth: {
           user: 'noreply@yobot.bot',
-          pass: process.env.EMAIL_APP_PASSWORD || 'wpboevwgicvrchkt'
+          pass: gmailPassword
         }
       });
 
@@ -253,8 +267,11 @@ export class SalesOrderProcessor {
         pdfPath
       );
 
-      // 3. Slack Alert (use environment variable or fallback)
-      const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL || 'https://hooks.slack.com/services/your/webhook/url';
+      // 3. Slack Alert
+      const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
+      if (!slackWebhookUrl) {
+        throw new Error('SLACK_WEBHOOK_URL must be set');
+      }
       await this.sendSlackAlert(slackWebhookUrl, formData['Company Name'], quoteLink);
 
       // 4. DocuSign Signature Request
