@@ -1,6 +1,7 @@
 // Airtable Integration Test Logger for YoBot Command Center
-const AIRTABLE_BASE_ID = "appRt8V3tH4g5Z51f"; // YoBot Command Center (Live Ops)
-const INTEGRATION_TEST_LOG_TABLE = "Integration Test Log Table";
+import { COMMAND_CENTER_BASE_ID, TABLE_NAMES } from "@shared/airtableConfig";
+const AIRTABLE_BASE_ID = COMMAND_CENTER_BASE_ID; // YoBot Command Center (Live Ops)
+const INTEGRATION_TEST_LOG_TABLE = TABLE_NAMES.INTEGRATION_TEST_LOG;
 
 interface IntegrationTestLog {
   integrationName: string;

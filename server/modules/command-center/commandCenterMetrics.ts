@@ -6,6 +6,7 @@
  */
 
 import type { Express } from "express";
+import { COMMAND_CENTER_BASE_ID } from "@shared/airtableConfig";
 
 interface MetricsRecord {
   '🛠️ Triggered Action': string;
@@ -51,7 +52,7 @@ interface IntegrationTestRecord {
 }
 
 class CommandCenterMetrics {
-  private baseId = 'appRt8V3tH4g5Z51f';
+  private baseId = COMMAND_CENTER_BASE_ID;
   private metricsTableId = 'tbl7K5RthCtD69BE1'; // Command Center - Metrics Tracker Table
   private integrationTestTableId = 'tblIntegrationTest'; // Integration Test Log Table
   private apiKey: string;
