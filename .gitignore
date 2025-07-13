@@ -40,3 +40,6 @@ __pycache__/
 # OS junk
 *.bak
 *.tmp
+
+# Ignore client environment
+client/src/.env
