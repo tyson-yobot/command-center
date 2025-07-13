@@ -8,7 +8,7 @@ export class LiveDashboardData {
   static async getAutomationMetrics() {
     try {
       // Get metrics from Airtable Integration Test Log Table
-      const airtableResponse = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbly0fjE2M5uHET9X", {
+      const airtableResponse = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z51f/tbly0fjE2M5uHET9X", {
         headers: {
           "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
           "Content-Type": "application/json"

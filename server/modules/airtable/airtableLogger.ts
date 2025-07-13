@@ -21,7 +21,7 @@ class AirtableLogger {
   private baseUrl: string;
 
   constructor() {
-    this.baseId = 'appRt8V3tH4g5Z5if';
+    this.baseId = 'appRt8V3tH4g5Z51f';
     this.tableId = 'tbly0fjE2M5uHET9X';
     this.apiKey = process.env.AIRTABLE_API_KEY || '';
     this.baseUrl = `https://api.airtable.com/v0/${this.baseId}/${this.tableId}`;
