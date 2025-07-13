@@ -1,11 +1,14 @@
 import axios from 'axios';
 import { logEventToAirtable } from './hubspotCRM';
+
+import { COMMAND_CENTER_BASE_ID } from '@shared/airtableConfig';
+
 import {
   COMMAND_CENTER_BASE_ID,
   SCRAPED_LEADS_TABLE_ID,
   tableUrl,
   recordUrl,
-} from "../../shared/airtableConfig";
+
 
 interface LeadData {
   first_name: string;
@@ -71,9 +74,12 @@ async function enrichWithApollo(firstName: string, lastName: string, companyDoma
 // Deduplication check - returns record ID if duplicate found
 async function isDuplicate(email?: string, fullName?: string, domain?: string): Promise<string | null> {
   try {
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
+
 
 
     const airtableBaseId = "appRt8V3tH4g5Z51f";
+
     const airtableTableId = "tblPRZ4nHbtj9opU"; // 📥 Scraped Leads · Universal
 
     const airtableToken = process.env.AIRTABLE_API_KEY || "";
@@ -120,6 +126,9 @@ async function isDuplicate(email?: string, fullName?: string, domain?: string): 
 async function flagDuplicateInAirtable(recordId: string): Promise<boolean> {
   try {
 
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
+
+
     const airtableToken = process.env.AIRTABLE_API_KEY as string;
 
     const url = recordUrl(COMMAND_CENTER_BASE_ID, SCRAPED_LEADS_TABLE_ID, recordId);
@@ -155,11 +164,15 @@ async function flagDuplicateInAirtable(recordId: string): Promise<boolean> {
 async function updateExistingLead(recordId: string, email?: string, phone?: string, jobTitle?: string): Promise<boolean> {
   try {
 
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
+
+
     const airtableToken = process.env.AIRTABLE_API_KEY as string;
 
     const url = recordUrl(COMMAND_CENTER_BASE_ID, SCRAPED_LEADS_TABLE_ID, recordId);
 
     const airtableBaseId = "appRt8V3tH4g5Z51f";
+
     const airtableTableId = "tblPRZ4nHbtj9opU";
 
     const airtableToken = process.env.AIRTABLE_API_KEY || "";
@@ -213,7 +226,13 @@ async function notifyDuplicateSlack(fullName: string, domain: string): Promise<v
 // Push to Airtable Scraped Leads table
 async function pushToAirtableLeads(leadData: LeadData): Promise<boolean> {
   try {
+
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
+    const airtableTableId = "tblPRZ4nHbtj9opU"; // 📥 Scraped Leads · Universal
+    const airtableUrl = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableId}`;
+
     const airtableUrl = tableUrl(COMMAND_CENTER_BASE_ID, SCRAPED_LEADS_TABLE_ID);
+
     const headers = {
       "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
       "Content-Type": "application/json"

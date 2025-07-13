@@ -3,6 +3,15 @@ import path from 'path';
 import { google } from 'googleapis';
 import nodemailer from 'nodemailer';
 import axios from 'axios';
+
+import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, getAirtableApiKey } from '@shared/airtableConfig';
+
+// Configuration
+const GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh";
+const AIRTABLE_API_KEY = getAirtableApiKey() as string;
+const BASE_ID = COMMAND_CENTER_BASE_ID;
+const TABLE_NAME = TABLE_NAMES.SCRAPED_LEADS;
+
 import {
   COMMAND_CENTER_BASE_ID,
   SCRAPED_LEADS_TABLE_NAME,
@@ -21,6 +30,7 @@ const BASE_ID = COMMAND_CENTER_BASE_ID;
 const TABLE_NAME = SCRAPED_LEADS_TABLE_NAME;
 
 const BASE_ID = "appRt8V3tH4g5Z51f";
+
 
 
 
