@@ -1,9 +1,9 @@
-import express from "express";
+import express, { json } from "express";
 
 const app = express();
 
 // Parse JSON request bodies
-app.use(express.json());
+app.use(json());
 const PORT = process.env.PORT || 3000;
 
 app.get("/", (_req, res) => {

@@ -1,5 +1,6 @@
 import { db } from "./db";
 import { knowledgeItems, callLogs, universalLeads, type KnowledgeItem, type InsertKnowledgeItem, type CallLog, type InsertCallLog, type UniversalLead, type InsertUniversalLead } from "@shared/schema";
+import { LEAD_ENGINE_BASE_ID, TABLE_NAMES } from "@shared/airtableConfig";
 import { eq, desc, and } from "drizzle-orm";
 
 export interface IKnowledgeStorage {
@@ -257,8 +258,8 @@ export class TestKnowledgeStorage implements IKnowledgeStorage {
 
 // Airtable-connected Leads Storage
 export class AirtableLeadsStorage implements ILeadsStorage {
-  private readonly AIRTABLE_BASE_ID = 'appb2F3D77tC4DWla'; // YoBot Lead Engine
-  private readonly LEADS_TABLE = 'Scraped Leads (Universal) Table';
+  private readonly AIRTABLE_BASE_ID = LEAD_ENGINE_BASE_ID; // YoBot Lead Engine
+  private readonly LEADS_TABLE = TABLE_NAMES.SCRAPED_LEADS;
   private readonly CALL_QUEUE_TABLE = 'Call Queue Table';
 
   async getUniversalLeads(): Promise<UniversalLead[]> {

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Download, ExternalLink, Mail, Phone, MapPin, CheckCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import { LEAD_ENGINE_BASE_ID } from '@shared/airtableConfig';
 
 interface Lead {
   id: number;
@@ -95,7 +96,7 @@ export default function IntelligenceResults({
   };
 
   const handleViewInAirtable = () => {
-    window.open('https://airtable.com/appb2F3D77tC4DWla/tblXXXXXXXXXXXXXX/viwXXXXXXXXXXXXXX', '_blank');
+    window.open(`https://airtable.com/${LEAD_ENGINE_BASE_ID}/tblXXXXXXXXXXXXXX/viwXXXXXXXXXXXXXX`, '_blank');
   };
 
   return (

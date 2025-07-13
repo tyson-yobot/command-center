@@ -1,23 +1,98 @@
 # YoBotAssistant
 
+YoBotAssistant is the backend command center that powers YoBot's automation and metrics tracking. It exposes a small Express API and a collection of modules for scraping, voice generation, automation runs and more.
+
+## Prerequisites
+
+- Node.js v20 or higher
+- PNPM package manager (`npm install -g pnpm`)
+- Python 3.11 (only required for the optional calendar sync scripts)
 
 ## Setup
 
-1. Install the Node.js dependencies:
+1. Install Node dependencies:
+
+## Prerequisites
+
+- **Node.js** 18 or higher
+- **PNPM** 8+ (optional, can use `npm` instead)
+- **Python** 3.10+ for the optional iCloud sync scripts
+
+## Environment Variables
+
+The application relies on several environment variables. Create a `.env` file or
+configure these variables in your deployment environment:
+
+- `ICLOUD_USERNAME` – iCloud account username
+- `ICLOUD_PASSWORD` – iCloud app-specific password
+- `AIRTABLE_API_KEY` – API key for Airtable access
+- `AIRTABLE_BASE_ID` – Airtable base identifier
+- `AIRTABLE_TABLE_NAME` – default table used for metrics
+
+
+## Setup
+
+1. Install Node dependencies in the project root:
    ```bash
    npm install
+   # or
+   pnpm install
    ```
-2. Install the Python requirements if you plan to run the iCloud sync service:
+2. Install dependencies for the React client:
+
    ```bash
-   pip install -r requirements.txt
+   cd client
+   npm install
+
+   cd client && npm install
    ```
-3. Copy `.env.example` to `.env` and fill in the environment variables.
-4. Start the development server:
+
+2. Copy `.env.example` to `.env` and fill in your environment variables.
+3. Start the Express development server:
+
    ```bash
    npm run dev
    ```
-   The server listens on the port defined by `PORT` (defaults to `3000`).
-5. To manually start the iCloud calendar sync run:
+
+   The server listens on `PORT` (defaults to `3000`).
+
+4. Launch the React client:
+
+   ```bash
+   cd client
+   npm run dev
+   ```
+
+   The client starts on `http://localhost:5173` by default.
+
+5. (Optional) Install Python requirements and run the calendar sync:
+
+   ```bash
+   pip install -r requirements.txt
+   python app.py
+   ```
+
+   # or
+   pnpm install
+   cd ..
+   ```
+3. (Optional) install the Python requirements if you plan to run the iCloud sync service:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Copy `.env.example` to `.env` and fill in the environment variables.
+5. Start the Express server:
+   ```bash
+   npm run dev
+   ```
+   The server listens on `PORT` (defaults to `3000`).
+6. In another terminal start the React client:
+   ```bash
+   cd client
+   npm run dev
+   ```
+   The client runs on `http://localhost:5173` by default.
+7. To manually run the iCloud calendar sync:
    ```bash
    python app.py
    ```
@@ -83,106 +158,45 @@ ZENDESK_EMAIL
 
 YoBotAssistant is the backend command center that powers YoBot’s automation and metrics tracking. It exposes a small Express API and a collection of modules for scraping, voice generation, automation runs and more.
 
-## Running the Express Server
-
-1. Install dependencies:
-
-
-## Installation
-
-1. Install Node dependencies in the project root:
-
-   ```bash
-   npm install
-   ```
-
-
-2. Start the development server:
-
-   ```bash
-   npm run dev
-   ```
-
-   The server listens on `http://localhost:3000` by default or the value of the `PORT` environment variable.
-
-2. Install dependencies for the React client:
-   ```bash
-   cd client && npm install
-   ```
-
-3. (Optional) Install Python requirements if you plan to run the sync scripts:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
 
 ## Environment Variables
 
-Create a `.env` file based on `.env.example` and fill in the values for your environment. At minimum the server expects:
+At minimum provide the following variables in your `.env` file:
 
 ```bash
 AIRTABLE_API_KEY=your-airtable-api-key
 AIRTABLE_BASE_ID=your-airtable-base-id
-AIRTABLE_TABLE_NAME=Command Center · Metrics Tracker
+AIRTABLE_TABLE_NAME=Command Center - Metrics Tracker Table
 ICLOUD_USERNAME=your-icloud-username
 ICLOUD_PASSWORD=your-icloud-password
 DATABASE_URL=postgres-connection-string
+# PORT=3000
+```
 
-The `DATABASE_URL` is required for the database pool and `PORT` can be set to change the listening port. Other environment variables such as `ELEVENLABS_API_KEY`, `SLACK_WEBHOOK_URL` or `TWILIO_*` enable additional integrations.
+Additional variables such as `SLACK_WEBHOOK_URL`, `ELEVENLABS_API_KEY`,
+`TWILIO_*` and many others enable optional integrations. See
+`.env.example` for the full list used across the project.
 
 ## Available Modules
 
-
-Not every variable is required for a basic development setup, but specific features (voice automation, Slack integration, lead scraping, etc.) will require the related keys.
-Server modules live under [`server/modules`](server/modules) and include:
-
-- **airtable** – Airtable integrations and lead management
-- **automation** – various automation batch scripts
-- **auth** – auth helpers and role utilities
-- **command-center** – dashboard metrics and real/live data providers
-- **control-center** – configuration helpers
-- **lead-scraper** – scraping pipelines for lead generation
-- **pdf** – PDF generation utilities
-- **qa** – QA tracking and validation
-- **rag** – RAG engine and knowledge store helpers
-- **sales** – sales order processing
-- **scraper** – generic scraping routes
-- **voice** – voice generation and callback handling
-- **webhooks** – centralized webhook processing
-
-See [`YOBOT_BRAND_GUIDE.md`](YOBOT_BRAND_GUIDE.md) for UI styling guidelines.
-
-Ensure `AIRTABLE_API_KEY` is provided in your environment before running the server.
-
-These variables are used throughout the server modules for Airtable and iCloud integrations.
-
-## Running the Node/Express Server
-
-Start the API server from the project root:
-
-```bash
-npm run dev
-```
-
-The server listens on `PORT` (default `3000`).
-
-## Starting the React Client
-
-The front‑end lives in `client/`. Launch the Vite dev server:
-
-```bash
-cd client
-npm run dev
-```
-
-This starts the React client on port `5173` by default.
+Server modules under [`server/modules`](server/modules) handle Airtable
+integrations, lead scraping, PDF generation, voice automation and more.
+Refer to the source for details.
 
 ## Optional Python Scripts
 
 Two helper scripts provide iCloud calendar syncing:
 
+
+- `app.py` – small Flask server scheduling `sync_calendar_to_airtable`
+- `sync.py` – manual one‑off sync
+
+They require the same environment variables and packages from
+`requirements.txt`.
+
 * `app.py` – a small Flask server that schedules `sync_calendar_to_airtable` every 15 minutes.
 * `sync.py` – a standalone script for manual one‑off syncs.
+* `server/yobot_command_center/sales_order.py` – processes sales order data when triggered from the Express API.
 
 They require the same environment variables as above and the packages listed in `requirements.txt`.
 
@@ -190,7 +204,33 @@ These variables are used throughout the server modules for Airtable and iCloud
 integrations.
 
 
+**Security Notice:** The repository previously contained example credentials in
+`client/src/.env`. Those values have been removed from version control. If you
+used them, rotate your iCloud and Airtable credentials immediately and update
+your personal `.env` file with fresh keys.
+
+
+## Setup
+
+Install the Python dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+
+
+## Running Tests
+
+```bash
+npm test
+```
+
 ## License
 
+
+This project is licensed under the [MIT License](LICENSE).
+
 This project is licensed under the [MIT License](LICENSE)
+
 
