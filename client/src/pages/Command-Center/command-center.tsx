@@ -98,6 +98,11 @@ import { LiveCallBanner } from './components/LiveCallBanner';
 import { EnhancedTooltip, QuickTooltip } from '@/components/EnhancedTooltip';
 import { CommandCenterActions } from '@/utils/commandCenterActions';
 import { LeadScraperPopup } from '@/components/lead-scraper-popup';
+import { SmartSpendCard } from '@/components/analytics-cards/SmartSpendCard';
+import { BotalyticsCard } from '@/components/analytics-cards/BotalyticsCard';
+import { ABTestCard } from '@/components/analytics-cards/ABTestCard';
+import { CalendarSyncCard } from '@/components/analytics-cards/CalendarSyncCard';
+import { RepScorecardCard } from '@/components/analytics-cards/RepScorecardCard';
 
 // Animated Counter Component
 const AnimatedCounter = ({ value, suffix = '', prefix = '', duration = 2000, color = 'text-white' }) => {
@@ -4045,7 +4050,7 @@ export default function CommandCenter() {
         {/* Key Performance Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-6">
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Active Calls</CardTitle>
               <Phone className="h-4 w-4 text-green-400" />
             </CardHeader>
@@ -4060,7 +4065,7 @@ export default function CommandCenter() {
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Bot Processing</CardTitle>
               <Brain className="h-4 w-4 text-blue-400" />
             </CardHeader>
@@ -4075,7 +4080,7 @@ export default function CommandCenter() {
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Success Rate</CardTitle>
               <DollarSign className="h-4 w-4 text-emerald-400" />
             </CardHeader>
@@ -4091,7 +4096,7 @@ export default function CommandCenter() {
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">System Health</CardTitle>
               <Gauge className="h-4 w-4 text-amber-400" />
             </CardHeader>
@@ -4733,7 +4738,7 @@ export default function CommandCenter() {
         {/* Analytics Dashboard Section - MOVED TO BOTTOM */}
         <div className="mb-6">
           <h2 className="text-white text-2xl font-bold mb-6">📊 Analytics Dashboard</h2>
-          
+ 
           {/* Botalytics™ Performance Dashboard */}
           <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-6">
             <CardHeader>
@@ -4757,7 +4762,7 @@ export default function CommandCenter() {
                     <span className="text-cyan-400">0</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-red-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                    <div className="bg-red-400 h-2 rounded-full w-0"></div>
                   </div>
                 </div>
               </div>
@@ -4774,7 +4779,7 @@ export default function CommandCenter() {
                     <span className="text-green-400">0</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-blue-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                    <div className="bg-blue-400 h-2 rounded-full w-0"></div>
                   </div>
                 </div>
               </div>
@@ -4791,7 +4796,7 @@ export default function CommandCenter() {
                     <span className="text-yellow-400">0</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-purple-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                    <div className="bg-purple-400 h-2 rounded-full w-0"></div>
                   </div>
                 </div>
               </div>
@@ -4808,7 +4813,7 @@ export default function CommandCenter() {
                     <span className="text-emerald-400">0</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-cyan-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                    <div className="bg-cyan-400 h-2 rounded-full w-0"></div>
                   </div>
                 </div>
               </div>
@@ -4825,7 +4830,7 @@ export default function CommandCenter() {
                     <span className="text-orange-400">0</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-emerald-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                    <div className="bg-emerald-400 h-2 rounded-full w-0"></div>
                   </div>
                 </div>
               </div>
@@ -4871,6 +4876,19 @@ export default function CommandCenter() {
             </div>
           </CardContent>
         </Card>
+
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <SmartSpendCard />
+            <BotalyticsCard />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ABTestCard />
+            <CalendarSyncCard />
+            <RepScorecardCard />
+          </div>
+        </div>
+
 
 
 
@@ -4963,9 +4981,9 @@ export default function CommandCenter() {
                     >
                       <Mic className="w-4 h-4" />
                       {userInitiatedVoice && isListening && (
-                        <div className="flex items-center space-x0-.5 ml-1">
+                        <div className="flex items-center space-x-0.5 ml-1">
                           {[1,2,3].map(i => (
-                            <div key={i} className="w0-.5 bg-green-300 rounded animate-pulse" style={{height: `${Math.random() * 6 + 3}px`, animationDelay: `${i * 100}ms`}}></div>
+                            <div key={i} className="w-0.5 bg-green-300 rounded animate-pulse" style={{height: `${Math.random() * 6 + 3}px`, animationDelay: `${i * 100}ms`}}></div>
                           ))}
                         </div>
                       )}
@@ -5519,9 +5537,9 @@ export default function CommandCenter() {
                     >
                       <Mic className="w-4 h-4" />
                       {userInitiatedVoice && isListening && (
-                        <div className="flex items-center space-x0-.5 ml-1">
+                        <div className="flex items-center space-x-0.5 ml-1">
                           {[1,2,3].map(i => (
-                            <div key={i} className="w0-.5 bg-green-300 rounded animate-pulse" style={{height: `${Math.random() * 6 + 3}px`, animationDelay: `${i * 100}ms`}}></div>
+                            <div key={i} className="w-0.5 bg-green-300 rounded animate-pulse" style={{height: `${Math.random() * 6 + 3}px`, animationDelay: `${i * 100}ms`}}></div>
                           ))}
                         </div>
                       )}
@@ -6590,7 +6608,7 @@ export default function CommandCenter() {
       {/* Support Ticket Form Modal */}
       {showSupportTicketModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-blue-400/50 p-6 animate-in fade-in0- duration-300">
+          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-blue-400/50 p-6 animate-in fade-in duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Create Support Ticket</h2>
               <Button
@@ -6693,7 +6711,7 @@ export default function CommandCenter() {
       {/* Follow-up Form Modal */}
       {showFollowUpModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-red-400/50 p-6 animate-in fade-in0- duration-300">
+          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-red-400/50 p-6 animate-in fade-in duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Create Follow-up</h2>
               <Button
@@ -6799,7 +6817,7 @@ export default function CommandCenter() {
       {/* SMS Modal */}
       {showSMSModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-blue-400/50 p-6 animate-in fade-in0- duration-300">
+          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-blue-400/50 p-6 animate-in fade-in duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Send SMS</h2>
               <Button
@@ -6887,7 +6905,7 @@ export default function CommandCenter() {
       {/* Support Ticket Modal */}
       {showSupportTicketModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[520px] bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 rounded-xl p-6 animate-in fade-in0- duration-300">
+          <div className="w-[520px] bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 rounded-xl p-6 animate-in fade-in duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-blue-300 flex items-center">
                 <span className="text-2xl mr-3">🆘</span>
@@ -6999,7 +7017,7 @@ export default function CommandCenter() {
       {/* Sales Order Automation Modal */}
       {showSalesOrderProcessor && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[600px] bg-[#1a1a1a] rounded-xl border border-purple-400/50 p-6 animate-in fade-in0- duration-300">
+          <div className="w-[600px] bg-[#1a1a1a] rounded-xl border border-purple-400/50 p-6 animate-in fade-in duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Automate Sales Order</h2>
               <Button
@@ -7119,7 +7137,7 @@ export default function CommandCenter() {
       {/* Manual Call Modal */}
       {showCreateVoiceCallModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[560px] bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 rounded-xl p-6 animate-in fade-in0- duration-300">
+          <div className="w-[560px] bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 rounded-xl p-6 animate-in fade-in duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-blue-300 flex items-center">
                 <span className="text-2xl mr-3">📞</span>
