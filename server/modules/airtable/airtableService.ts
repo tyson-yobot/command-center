@@ -57,13 +57,18 @@ export class AirtableService {
   private config: AirtableConfig;
 
   constructor() {
+    const apiKey = process.env.AIRTABLE_API_KEY as string;
+    if (!apiKey) {
+      throw new Error('AIRTABLE_API_KEY not configured for AirtableService');
+    }
+
     this.config = {
       baseId: process.env.AIRTABLE_BASE_ID || 'appb2F3D77tC4DWla', // YoBot Lead Engine
-      apiKey: process.env.AIRTABLE_API_KEY || '',
+      apiKey,
       tables: {
         scrapedLeads: 'Scraped Leads (Universal) Table', // Scraped Leads (Universal)
         bookings: 'tblBookings',
-        supportTickets: 'tblSupportTickets', 
+        supportTickets: 'tblSupportTickets',
         followUps: 'tblFollowUps',
         pipelineCalls: 'Call Queue Table'
       }

@@ -58,9 +58,9 @@ class CommandCenterMetrics {
   private localBackupLog: any[] = [];
 
   constructor() {
-    this.apiKey = process.env.AIRTABLE_API_KEY || '';
+    this.apiKey = process.env.AIRTABLE_API_KEY as string;
     if (!this.apiKey) {
-      console.warn('AIRTABLE_API_KEY not configured for Command Center Metrics');
+      throw new Error('AIRTABLE_API_KEY not configured for Command Center Metrics');
     }
   }
 
