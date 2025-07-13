@@ -30,6 +30,7 @@ ICLOUD_PASSWORD=your-icloud-password
 ```
 
 Ensure `AIRTABLE_API_KEY` is provided in your environment before running the server.
+
 These variables are used throughout the server modules for Airtable and iCloud integrations.
 
 ## Running the Node/Express Server
@@ -61,3 +62,10 @@ Two helper scripts provide iCloud calendar syncing:
 * `sync.py` – a standalone script for manual one‑off syncs.
 
 They require the same environment variables as above and the packages listed in `requirements.txt`.
+=======
+These variables are used throughout the server modules for Airtable and iCloud
+integrations.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE)
