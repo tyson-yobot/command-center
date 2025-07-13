@@ -4,4 +4,7 @@ module.exports = {
   extensionsToTreatAsEsm: ['.ts'],
   testMatch: ['**/?(*.)+(test).ts'],
   modulePathIgnorePatterns: ['<rootDir>/client'],
+  moduleNameMapper: {
+    '^@shared/(.*)$': '<rootDir>/shared/$1'
+  },
 };
