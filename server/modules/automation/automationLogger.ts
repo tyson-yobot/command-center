@@ -63,7 +63,7 @@ async function logToAirtable(logData: AutomationLog): Promise<void> {
       return;
     }
 
-    const url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblXyLogAuto";
+    const url = "https://api.airtable.com/v0/appRt8V3tH4g5Z51f/tblXyLogAuto";
     const headers = {
       "Authorization": `Bearer ${airtableKey}`,
       "Content-Type": "application/json"

@@ -47,7 +47,7 @@ export default function PowerModeToggle({ onModeChange, currentMode }: PowerMode
         'Complete system diagnostics',
         'Bot deployment controls',
         'Real-time log monitoring',
-        'Emergency protocols access'
+        'Emergency protocols, access'
       ],
       color: 'from-blue-600 to-cyan-600',
       icon: Settings
