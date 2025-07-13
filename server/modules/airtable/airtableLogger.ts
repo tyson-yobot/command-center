@@ -32,6 +32,11 @@ class AirtableLogger {
     this.tableId = 'tbly0fjE2M5uHET9X';
     this.apiKey = process.env.AIRTABLE_API_KEY as string;
 
+    if (!this.apiKey) {
+      throw new Error('AIRTABLE_API_KEY not configured for AirtableLogger');
+    }
+
+
     this.baseUrl = `https://api.airtable.com/v0/${this.baseId}/${this.tableId}`;
   }
 
