@@ -1,7 +1,15 @@
 // Airtable Integration Test Logger for YoBot Command Center
+
 import { COMMAND_CENTER_BASE_ID, TABLE_NAMES } from "@shared/airtableConfig";
 const AIRTABLE_BASE_ID = COMMAND_CENTER_BASE_ID; // YoBot Command Center (Live Ops)
 const INTEGRATION_TEST_LOG_TABLE = TABLE_NAMES.INTEGRATION_TEST_LOG;
+
+import {
+  COMMAND_CENTER_BASE_ID,
+  INTEGRATION_TEST_LOG_TABLE,
+  tableUrl,
+} from "../../shared/airtableConfig";
+
 
 interface IntegrationTestLog {
   integrationName: string;
@@ -24,7 +32,7 @@ export async function logIntegrationTest(testData: IntegrationTestLog): Promise<
   try {
     const timestamp = new Date().toISOString();
     
-    const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(INTEGRATION_TEST_LOG_TABLE)}`, {
+    const response = await fetch(tableUrl(COMMAND_CENTER_BASE_ID, INTEGRATION_TEST_LOG_TABLE), {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,

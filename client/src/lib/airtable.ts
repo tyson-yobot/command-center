@@ -10,6 +10,18 @@ if (!AIRTABLE_API_KEY) {
 const BASE_ID = COMMAND_CENTER_BASE_ID;
 const TABLE_NAME = TABLE_NAMES.METRICS_TRACKER;
 
+
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
+
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+if (!AIRTABLE_API_KEY) {
+  console.warn('AIRTABLE_API_KEY is not set');
+}
+
+const BASE_ID = "appRt8V3tH4g5Z51f";
+const TABLE_NAME = "Command Center - Metrics Tracker Table";
+
+
 const airtableInstance = axios.create({
   baseURL: `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`,
   headers: {

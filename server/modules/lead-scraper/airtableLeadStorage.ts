@@ -1,9 +1,16 @@
 import type { Express } from "express";
 import { LEAD_ENGINE_BASE_ID, TABLE_NAMES } from "@shared/airtableConfig";
 
-// Airtable configuration for YoBot Lead Engine
+
 const AIRTABLE_BASE_ID = LEAD_ENGINE_BASE_ID; // YoBot Lead Engine
 const SCRAPED_LEADS_TABLE = TABLE_NAMES.SCRAPED_LEADS;
+
+import {
+  LEAD_ENGINE_BASE_ID,
+  SCRAPED_LEADS_TABLE,
+  tableUrl,
+} from "../../shared/airtableConfig";
+
 
 interface ScrapedLead {
   fullName: string;
@@ -64,7 +71,7 @@ export async function storeLeadsInAirtable(leads: ScrapedLead[], scrapeTool: str
     let totalStored = 0;
     
     for (const batch of batches) {
-      const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(SCRAPED_LEADS_TABLE)}`, {
+      const response = await fetch(tableUrl(LEAD_ENGINE_BASE_ID, SCRAPED_LEADS_TABLE), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
@@ -133,7 +140,7 @@ export async function logScrapingCampaign(tool: string, filters: any, leadCount:
   try {
     const timestamp = new Date().toISOString();
     
-    await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Scraping Campaigns Table`, {
+    await fetch(tableUrl(LEAD_ENGINE_BASE_ID, 'Scraping Campaigns Table'), {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
