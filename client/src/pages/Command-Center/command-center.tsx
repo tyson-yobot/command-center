@@ -4050,7 +4050,7 @@ export default function CommandCenter() {
         {/* Key Performance Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-6">
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Active Calls</CardTitle>
               <Phone className="h-4 w-4 text-green-400" />
             </CardHeader>
@@ -4065,7 +4065,7 @@ export default function CommandCenter() {
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Bot Processing</CardTitle>
               <Brain className="h-4 w-4 text-blue-400" />
             </CardHeader>
@@ -4080,7 +4080,7 @@ export default function CommandCenter() {
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">Success Rate</CardTitle>
               <DollarSign className="h-4 w-4 text-emerald-400" />
             </CardHeader>
@@ -4096,7 +4096,7 @@ export default function CommandCenter() {
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-sm border border-blue-400">
-            <CardHeader className="flex flex-row items-center justify-between space-y0- pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-300">System Health</CardTitle>
               <Gauge className="h-4 w-4 text-amber-400" />
             </CardHeader>
@@ -4738,7 +4738,145 @@ export default function CommandCenter() {
         {/* Analytics Dashboard Section - MOVED TO BOTTOM */}
         <div className="mb-6">
           <h2 className="text-white text-2xl font-bold mb-6">📊 Analytics Dashboard</h2>
-          
+ 
+          {/* Botalytics™ Performance Dashboard */}
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-6">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center space-x-2">
+                <TrendingUp className="w-5 h-5 text-cyan-400" />
+                <span>📊 Botalytics™ Metrics</span>
+                <div className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded-full">PROPRIETARY</div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-[18px]">
+                {/* Cost Per Lead */}
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-green-400 mb-1">0</div>
+                  <div className="text-slate-300 text-sm">Cost Per Lead</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Last Month</span>
+                    <span className="text-cyan-400">0</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className="bg-red-400 h-2 rounded-full w-0"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Interaction Quality */}
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-blue-400 mb-1">0</div>
+                  <div className="text-slate-300 text-sm">Accuracy Rate</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Target</span>
+                    <span className="text-green-400">0</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className="bg-blue-400 h-2 rounded-full w-0"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Learning Rate */}
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-purple-400 mb-1">0</div>
+                  <div className="text-slate-300 text-sm">Learning Rate</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Weekly</span>
+                    <span className="text-yellow-400">0</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className="bg-purple-400 h-2 rounded-full w-0"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Total Interactions */}
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-cyan-400 mb-1">0</div>
+                  <div className="text-slate-300 text-sm">Interactions</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Today</span>
+                    <span className="text-emerald-400">0</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className="bg-cyan-400 h-2 rounded-full w-0"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Conversion Rate */}
+              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
+                <div className="text-center mb-3">
+                  <div className="text-2xl font-black text-emerald-400 mb-1">0</div>
+                  <div className="text-slate-300 text-sm">Close Rate</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Industry Avg</span>
+                    <span className="text-orange-400">0</span>
+                  </div>
+                  <div className="w-full bg-slate-700 rounded-full h-2">
+                    <div className="bg-emerald-400 h-2 rounded-full w-0"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* SmartSpend™ Analytics Dashboard */}
+        <Card className="rounded-xl border-2 border-[#0d82da] bg-black shadow-[0_0_12px_#0d82da50] text-white mb-6">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center space-x-2">
+              <DollarSign className="w-5 h-5 text-[#0d82da]" />
+              <span className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text">📈 SmartSpend™ Analytics</span>
+              <div className="text-xs bg-gradient-to-br from-[#0d82da] to-[#085ca2] text-white px-2 py-1 rounded-full">PROPRIETARY</div>
+            </CardTitle>
+            <div className="w-full h-[1px] bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mt-2"></div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
+                <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Monthly Savings</h4>
+                <div className="text-2xl font-bold">$0</div>
+                <div className="text-sm text-green-400">+0%</div>
+              </div>
+              
+              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
+                <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Cost Reduction</h4>
+                <div className="text-2xl font-bold">$0</div>
+                <div className="text-sm text-green-400">+0%</div>
+              </div>
+              
+              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
+                <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">ROI</h4>
+                <div className="text-2xl font-bold">0%</div>
+                <div className="text-sm text-green-400">+0%</div>
+              </div>
+              
+              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
+                <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Payback Days</h4>
+                <div className="text-2xl font-bold">0</div>
+                <div className="text-sm text-green-400">+0%</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <SmartSpendCard />
@@ -4750,6 +4888,7 @@ export default function CommandCenter() {
             <RepScorecardCard />
           </div>
         </div>
+
 
 
 
@@ -4842,9 +4981,9 @@ export default function CommandCenter() {
                     >
                       <Mic className="w-4 h-4" />
                       {userInitiatedVoice && isListening && (
-                        <div className="flex items-center space-x0-.5 ml-1">
+                        <div className="flex items-center space-x-0.5 ml-1">
                           {[1,2,3].map(i => (
-                            <div key={i} className="w0-.5 bg-green-300 rounded animate-pulse" style={{height: `${Math.random() * 6 + 3}px`, animationDelay: `${i * 100}ms`}}></div>
+                            <div key={i} className="w-0.5 bg-green-300 rounded animate-pulse" style={{height: `${Math.random() * 6 + 3}px`, animationDelay: `${i * 100}ms`}}></div>
                           ))}
                         </div>
                       )}
@@ -5398,9 +5537,9 @@ export default function CommandCenter() {
                     >
                       <Mic className="w-4 h-4" />
                       {userInitiatedVoice && isListening && (
-                        <div className="flex items-center space-x0-.5 ml-1">
+                        <div className="flex items-center space-x-0.5 ml-1">
                           {[1,2,3].map(i => (
-                            <div key={i} className="w0-.5 bg-green-300 rounded animate-pulse" style={{height: `${Math.random() * 6 + 3}px`, animationDelay: `${i * 100}ms`}}></div>
+                            <div key={i} className="w-0.5 bg-green-300 rounded animate-pulse" style={{height: `${Math.random() * 6 + 3}px`, animationDelay: `${i * 100}ms`}}></div>
                           ))}
                         </div>
                       )}
@@ -6469,7 +6608,7 @@ export default function CommandCenter() {
       {/* Support Ticket Form Modal */}
       {showSupportTicketModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-blue-400/50 p-6 animate-in fade-in0- duration-300">
+          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-blue-400/50 p-6 animate-in fade-in duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Create Support Ticket</h2>
               <Button
@@ -6572,7 +6711,7 @@ export default function CommandCenter() {
       {/* Follow-up Form Modal */}
       {showFollowUpModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-red-400/50 p-6 animate-in fade-in0- duration-300">
+          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-red-400/50 p-6 animate-in fade-in duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Create Follow-up</h2>
               <Button
@@ -6678,7 +6817,7 @@ export default function CommandCenter() {
       {/* SMS Modal */}
       {showSMSModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-blue-400/50 p-6 animate-in fade-in0- duration-300">
+          <div className="w-[480px] bg-[#1a1a1a] rounded-xl border border-blue-400/50 p-6 animate-in fade-in duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Send SMS</h2>
               <Button
@@ -6766,7 +6905,7 @@ export default function CommandCenter() {
       {/* Support Ticket Modal */}
       {showSupportTicketModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[520px] bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 rounded-xl p-6 animate-in fade-in0- duration-300">
+          <div className="w-[520px] bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 rounded-xl p-6 animate-in fade-in duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-blue-300 flex items-center">
                 <span className="text-2xl mr-3">🆘</span>
@@ -6878,7 +7017,7 @@ export default function CommandCenter() {
       {/* Sales Order Automation Modal */}
       {showSalesOrderProcessor && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[600px] bg-[#1a1a1a] rounded-xl border border-purple-400/50 p-6 animate-in fade-in0- duration-300">
+          <div className="w-[600px] bg-[#1a1a1a] rounded-xl border border-purple-400/50 p-6 animate-in fade-in duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">Automate Sales Order</h2>
               <Button
@@ -6998,7 +7137,7 @@ export default function CommandCenter() {
       {/* Manual Call Modal */}
       {showCreateVoiceCallModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-[560px] bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 rounded-xl p-6 animate-in fade-in0- duration-300">
+          <div className="w-[560px] bg-gradient-to-br from-slate-900/95 via-blue-900/80 to-indigo-900/70 backdrop-blur-xl border border-blue-400/50 shadow-2xl shadow-blue-500/20 rounded-xl p-6 animate-in fade-in duration-300">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-blue-300 flex items-center">
                 <span className="text-2xl mr-3">📞</span>

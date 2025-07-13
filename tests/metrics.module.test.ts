@@ -1,5 +1,11 @@
 import axios from 'axios';
 
+
+process.env.AIRTABLE_API_KEY = 'testkey';
+process.env.AIRTABLE_BASE_ID = 'base123';
+import { fetchMetrics } from '../metrics.module';
+
+
 jest.mock('axios');
 
 describe('fetchMetrics', () => {

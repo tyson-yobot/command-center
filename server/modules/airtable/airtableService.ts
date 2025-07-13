@@ -64,7 +64,11 @@ export class AirtableService {
 
     this.config = {
       baseId: process.env.AIRTABLE_BASE_ID || 'appb2F3D77tC4DWla', // YoBot Lead Engine
+
       apiKey,
+
+      apiKey: process.env.AIRTABLE_API_KEY as string,
+
       tables: {
         scrapedLeads: 'Scraped Leads (Universal) Table', // Scraped Leads (Universal)
         bookings: 'tblBookings',
