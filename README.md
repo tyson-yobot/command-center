@@ -15,3 +15,19 @@ ICLOUD_PASSWORD=your-icloud-password
 Ensure `AIRTABLE_API_KEY` is provided in your environment before running the server.
 These variables are used throughout the server modules for Airtable and iCloud
 integrations.
+
+## Running Tests
+
+Install dependencies if you haven't already:
+
+```bash
+npm install
+```
+
+Then run the test suite with:
+
+```bash
+npm test
+```
+
+
