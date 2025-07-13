@@ -1,51 +1,45 @@
+// ✅ Modal Imports (deduplicated)
+import { LeadScraperModal } from '@/components/modals/LeadScraperModal';
+import { VoiceStudioModal } from '@/components/modals/VoiceStudioModal';
+import { CalendarModal } from '@/components/modals/CalendarModal';
+import { SmartQuotingModal } from '@/components/modals/SmartQuotingModal';
+import { ContentCreatorModal } from '@/components/modals/ContentCreatorModal';
+import { SubmitTicketModal } from '@/components/modals/SubmitTicketModal';
+import { ExportModal } from '@/components/modals/ExportModal';
+import { HubspotModal } from '@/components/modals/HubspotModal';
+import { AdminPanelModal } from '@/components/modals/AdminPanelModal';
+import { AdminLoginModal } from '@/components/modals/AdminLoginModal';
+import { DiagnosticsModal } from '@/components/modals/DiagnosticsModal';
+import { EmergencyModal } from '@/components/modals/EmergencyModal';
+import { SalesOrderModal } from '@/components/modals/SalesOrderModal';
+import { CopilotModal } from '@/components/modals/CopilotModal';
+import { PdfUploadModal } from '@/components/modals/PdfUploadModal';
+import { CallQueueModal } from '@/components/modals/CallQueueModal';
+import { AirtableSyncModal } from '@/components/modals/AirtableSyncModal';
+import { LoggerTrackerModal } from '@/components/modals/LoggerTrackerModal';
+import { MetricsPanelModal } from '@/components/modals/MetricsPanelModal';
+import { BehaviorTuningModal } from '@/components/modals/BehaviorTuningModal';
 
+import { RAGModal } from '@/components/modals/RAGModal';
+import { RevenueChartsModal } from '@/components/modals/RevenueChartsModal';
+import { SlackMonitorModal } from '@/components/modals/SlackMonitorModal';
+import { AdminSettingsModal } from '@/components/modals/AdminSettingsModal';
+import { SmartSchedulerModal } from '@/components/modals/SmartSchedulerModal';
 
+// ✅ UI Components
+import QuickActionCard from '@/components/ui/cards/QuickActionCard';
+import KPIAnalyticsCard from '@/components/ui/cards/KPIAnalyticsCard';
+import SmartSpendCard from '@/components/ui/cards/SmartSpendCard';
+import BotalyticsCard from '@/components/ui/cards/BotalyticsCard';
+import SmartCalendarCard from '@/components/ui/cards/SmartCalendarCard';
+import AIAvatarOverlay from '@/components/ui/cards/AIAvatarOverlayCard';
+import SupportChatWidget from '@/components/ui/cards/SupportChatWidget';
+import TopNavBar from '@/components/ui/cards/TopNavBar';
 
 import React, { useEffect, useState } from 'react';
 import '@/styles/CommandCenter.css';
 import '@/styles/NeonTheme.css';
 import '@/styles/StyledComponents.css';
-
-// Modal Imports (deduplicated)
-import LeadScraperModal from '@/components/modals/LeadScraperModal';
-import VoiceStudioModal from '@/components/modals/VoiceStudioModal';
-import CalendarModal from '@/components/modals/CalendarModal';
-import SmartQuotingModal from '@/components/modals/SmartQuotingModal';
-import ContentCreatorModal from '@/components/modals/ContentCreatorModal';
-import SubmitTicketModal from '@/components/modals/SubmitTicketModal';
-import HubspotModal from '@/components/modals/HubspotModal';
-import ExportModal from '@/components/modals/ExportModal';
-import AdminPanelModal from '@/components/modals/AdminPanelModal';
-import RagModal from '@/components/modals/RagModal';
-import DiagnosticsModal from '@/components/modals/DiagnosticsModal';
-import EmergencyModal from '@/components/modals/EmergencyModal';
-import PdfUploadModal from '@/components/modals/PdfUploadModal';
-import SalesOrderModal from '@/components/modals/SalesOrderModal';
-import CopilotModal from '@/components/modals/CopilotModal';
-import CallQueueModal from '@/components/modals/CallQueueModal';
-import AirtableSyncModal from '@/components/modals/AirtableSyncModal';
-import LoggerTrackerModal from '@/components/modals/LoggerTrackerModal';
-import MetricsPanelModal from '@/components/modals/MetricsPanelModal';
-import BehaviorTuningModal from '@/components/modals/BehaviorTuningModal';
-import VoiceTrainingModal from '@/components/modals/VoiceTrainingModal';
-import RAGInsightsModal from '@/components/modals/RAGInsightsModal';
-import RevenueChartsModal from '@/components/modals/RevenueChartsModal';
-import SlackMonitorModal from '@/components/modals/SlackMonitorModal';
-import AdminSettingsModal from '@/components/modals/AdminSettingsModal';
-import SmartSchedulerModal from '@/components/modals/SmartSchedulerModal';
-import SmartCalendarCard from '@/components/ui/cards/SmartCalendarCard';
-
-
-
-// UI Components
-import QuickActionCard from '@/components/cards/QuickActionCard';
-import KPIAnalyticsCard from '@/components/cards/KPIAnalyticsCard';
-import SmartSpendCard from '@/components/cards/SmartSpendCard';
-import BotalyticsCard from '@/components/cards/BotalyticsCard';
-import AIAgentOverlay from '@/components/overlays/AIAgentOverlay';
-import SupportChatWidget from '@/components/widgets/SupportChatWidget';
-import TopNavBar from '@/components/nav/TopNavBar';
-
 
 import {
   fetchLeadsFromApollo,
@@ -79,6 +73,8 @@ import {
   fetchSmartSpendStats,
   fetchBotalyticsStats
 } from '@/utils/function_library';
+
+
 
 
 const neonColors = ['#FFFF33', '#39FF14', '#FF6EC7', '#DA70D6', '#FFA500'];
@@ -253,7 +249,6 @@ export default function CommandCenter() {
     break;
 
 }
-  };
 
    const closeModal = () => setSelectedModal(null);
 const [smartSpendStats, setSmartSpendStats] = useState(null);
@@ -357,9 +352,8 @@ useEffect(() => {
               key={i}
               label={label}
               airtableField={label}
-              color={neonColors[Math.floor(Math.random() * neonColors.length)]}
-              showMeter={true}
-              meterThresholds={{ green: 75, yellow: 50, red: 25 }}
+              color={neonColors[Math.floor(Math.random() * neonColors.length)]} showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
+              showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
             />
           ))}
         </div>
@@ -432,8 +426,16 @@ useEffect(() => {
       {selectedModal === 'revenueCharts' && <RevenueChartsModal onClose={closeModal} />}
       {selectedModal === 'slackMonitor' && <SlackMonitorModal onClose={closeModal} />}
       {selectedModal === 'adminSettings' && <AdminSettingsModal onClose={closeModal} />}
+      {selectedModal === 'metricsPanel' && <MetricsPanelModal onClose={closeModal} />}
+      {selectedModal === 'behaviorTuning' && <BehaviorTuningModal onClose={closeModal} />}
+      {selectedModal === 'smartCalendar' && <SmartCalendarCard />}
+      {selectedModal === 'metricsPanel' && <MetricsPanelModal onClose={closeModal} />}
+      {selectedModal === 'behaviorTuning' && <BehaviorTuningModal onClose={closeModal} />}
+      {selectedModal === 'slackTest' && <DiagnosticsModal onClose={closeModal} />}
+      {selectedModal === 'adminLogin' && <AdminPanelModal onClose={closeModal} />}
+      {selectedModal === 'auditLog' && <LoggerTrackerModal onClose={closeModal} />}
 
     </div>
   );
 }
-
+}

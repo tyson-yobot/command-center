@@ -90,6 +90,17 @@ async function main() {
       res.json({ message: "Advanced server is working!" });
     });
 
+    // ✅ Behavior tuning endpoint (full automation)
+app.post("/api/behavior-tuning", async (req: Request, res: Response) => {
+  try {
+    const result = await runFunction("updateBotBehavior");
+    res.status(200).json({ success: true, result });
+  } catch (err: any) {
+    console.error("❌ updateBotBehavior failed:", err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
     app.get("/healthz", (req: Request, res: Response) => {
       res.json({ status: "ok", timestamp: new Date().toISOString() });
     });
