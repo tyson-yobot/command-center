@@ -1,19 +1,9 @@
-[user]
-  name = Tyson Lerfald
-  email = tyson@yobot.bot
-
-[core]
-  editor = code --wait
-
 [alias]
   st = status
   co = checkout
   br = branch
   cm = commit -m
-  pu = stash && pull origin dev
+  pu = pull origin dev
   ps = push origin dev
   stash = stash pop
-  sync = !"git stash push -m '🧠 Auto Stash' && git pull origin dev && git add . && git commit -m '🔁 Auto Sync' && git push origin dev && git stash pop"
-
-[push]
-  default = simple
+  sync = !"git stash push -m '🧠 Auto Stash' && git pull origin dev && git add -u && git commit -m '🔁 Auto Sync' && git push origin dev && git stash pop"
