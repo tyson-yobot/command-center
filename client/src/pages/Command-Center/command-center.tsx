@@ -98,6 +98,11 @@ import { LiveCallBanner } from './components/LiveCallBanner';
 import { EnhancedTooltip, QuickTooltip } from '@/components/EnhancedTooltip';
 import { CommandCenterActions } from '@/utils/commandCenterActions';
 import { LeadScraperPopup } from '@/components/lead-scraper-popup';
+import { SmartSpendCard } from '@/components/analytics-cards/SmartSpendCard';
+import { BotalyticsCard } from '@/components/analytics-cards/BotalyticsCard';
+import { ABTestCard } from '@/components/analytics-cards/ABTestCard';
+import { CalendarSyncCard } from '@/components/analytics-cards/CalendarSyncCard';
+import { RepScorecardCard } from '@/components/analytics-cards/RepScorecardCard';
 
 // Animated Counter Component
 const AnimatedCounter = ({ value, suffix = '', prefix = '', duration = 2000, color = 'text-white' }) => {
@@ -4733,7 +4738,7 @@ export default function CommandCenter() {
         {/* Analytics Dashboard Section - MOVED TO BOTTOM */}
         <div className="mb-6">
           <h2 className="text-white text-2xl font-bold mb-6">📊 Analytics Dashboard</h2>
-          
+ 
           {/* Botalytics™ Performance Dashboard */}
           <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-6">
             <CardHeader>
@@ -4871,6 +4876,19 @@ export default function CommandCenter() {
             </div>
           </CardContent>
         </Card>
+
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <SmartSpendCard />
+            <BotalyticsCard />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ABTestCard />
+            <CalendarSyncCard />
+            <RepScorecardCard />
+          </div>
+        </div>
+
 
 
 
