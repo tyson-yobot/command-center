@@ -30,4 +30,3 @@ Then run the test suite with:
 npm test
 ```
 
-
