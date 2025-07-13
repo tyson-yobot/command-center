@@ -3,6 +3,11 @@ import path from 'path';
 import { google } from 'googleapis';
 import nodemailer from 'nodemailer';
 import axios from 'axios';
+import {
+  COMMAND_CENTER_BASE_ID,
+  SCRAPED_LEADS_TABLE_NAME,
+  tableUrl,
+} from '../../shared/airtableConfig';
 
 // Configuration
 const GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh";
@@ -11,9 +16,13 @@ const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
 const BASE_ID = "appRt8V3tH4g5Z5if";
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY as string;
+
+const BASE_ID = COMMAND_CENTER_BASE_ID;
+const TABLE_NAME = SCRAPED_LEADS_TABLE_NAME;
+
 const BASE_ID = "appRt8V3tH4g5Z51f";
 
-const TABLE_NAME = "📥 Scraped Leads (Universal)";
+
 
 interface FormData {
   'Contact Name': string;
@@ -194,7 +203,7 @@ export class SalesOrderProcessor {
   // 5. Add to Airtable
   async insertScrapedLead(formData: FormData): Promise<void> {
     try {
-      const airtableUrl = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`;
+      const airtableUrl = tableUrl(BASE_ID, TABLE_NAME);
       
       const headers = {
         'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
