@@ -22,7 +22,7 @@ export async function logSupportTicketToAirtable(ticketId: string, subject: stri
       data,
       {
         headers: {
-          "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+          "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
           "Content-Type": "application/json"
         }
       }
