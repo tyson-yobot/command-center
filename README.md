@@ -96,6 +96,10 @@ configure these variables in your deployment environment:
    ```bash
    python app.py
    ```
+6. Run the test suite to ensure everything works:
+   ```bash
+   npm test
+   ```
 
 ## Environment Variables
 
