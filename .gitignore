@@ -13,7 +13,11 @@ yarn-error.log*
 # Environments
 .env
 .env.*
+
+client/src/.env
+
 !.env.example
+
 
 # Node modules
 node_modules/
