@@ -3,16 +3,21 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node ./server/index.mjs"
+    "dev": "node ./server/index.mjs",
+    "test": "jest"
   },
   "devDependencies": {
     "@replit/vite-plugin-cartographer": "^0.2.7",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.3",
     "cross-env": "^7.0.3",
+    "jest": "^30.0.4",
+    "ts-jest": "^29.4.0",
     "tsx": "^3.12.7"
   },
   "dependencies": {
     "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
+    "axios": "^1.10.0",
     "express": "^4.18.2"
   }
 }
