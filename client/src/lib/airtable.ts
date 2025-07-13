@@ -1,6 +1,12 @@
 
 // /lib/airtable.ts
 import axios from 'axios';
+
+import { getApiKey, BASE_ID, METRICS_TABLE_NAME } from '@shared/airtableConfig';
+
+const AIRTABLE_API_KEY = getApiKey();
+const TABLE_NAME = METRICS_TABLE_NAME;
+
 import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, getAirtableApiKey } from '@shared/airtableConfig';
 
 const AIRTABLE_API_KEY = getAirtableApiKey();
@@ -20,6 +26,7 @@ if (!AIRTABLE_API_KEY) {
 
 const BASE_ID = "appRt8V3tH4g5Z51f";
 const TABLE_NAME = "Command Center - Metrics Tracker Table";
+
 
 
 const airtableInstance = axios.create({

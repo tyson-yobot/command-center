@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { logEventToAirtable } from './hubspotCRM';
+import { getApiKey, BASE_ID, SCRAPED_LEADS_TABLE_ID } from '@shared/airtableConfig';
 
 import { COMMAND_CENTER_BASE_ID } from '@shared/airtableConfig';
 
@@ -74,6 +75,11 @@ async function enrichWithApollo(firstName: string, lastName: string, companyDoma
 // Deduplication check - returns record ID if duplicate found
 async function isDuplicate(email?: string, fullName?: string, domain?: string): Promise<string | null> {
   try {
+
+    const airtableBaseId = BASE_ID;
+    const airtableTableId = SCRAPED_LEADS_TABLE_ID; // 📥 Scraped Leads · Universal
+    const airtableToken = getApiKey();
+
     const airtableBaseId = COMMAND_CENTER_BASE_ID;
 
 
@@ -86,6 +92,7 @@ async function isDuplicate(email?: string, fullName?: string, domain?: string): 
 
 
     const airtableToken = process.env.AIRTABLE_API_KEY as string;
+
 
     const headers = {
       "Authorization": `Bearer ${airtableToken}`
@@ -126,6 +133,11 @@ async function isDuplicate(email?: string, fullName?: string, domain?: string): 
 async function flagDuplicateInAirtable(recordId: string): Promise<boolean> {
   try {
 
+    const airtableBaseId = BASE_ID;
+    const airtableTableId = SCRAPED_LEADS_TABLE_ID;
+    const airtableToken = getApiKey();
+
+
     const airtableBaseId = COMMAND_CENTER_BASE_ID;
 
 
@@ -164,6 +176,11 @@ async function flagDuplicateInAirtable(recordId: string): Promise<boolean> {
 async function updateExistingLead(recordId: string, email?: string, phone?: string, jobTitle?: string): Promise<boolean> {
   try {
 
+    const airtableBaseId = BASE_ID;
+    const airtableTableId = SCRAPED_LEADS_TABLE_ID;
+    const airtableToken = getApiKey();
+
+
     const airtableBaseId = COMMAND_CENTER_BASE_ID;
 
 
@@ -178,6 +195,7 @@ async function updateExistingLead(recordId: string, email?: string, phone?: stri
     const airtableToken = process.env.AIRTABLE_API_KEY || "";
 
     const airtableToken = process.env.AIRTABLE_API_KEY as string;
+
 
 
     const url = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableId}/${recordId}`;
@@ -227,14 +245,19 @@ async function notifyDuplicateSlack(fullName: string, domain: string): Promise<v
 async function pushToAirtableLeads(leadData: LeadData): Promise<boolean> {
   try {
 
+    const airtableBaseId = BASE_ID;
+    const airtableTableId = SCRAPED_LEADS_TABLE_ID; // 📥 Scraped Leads · Universal
+
+
     const airtableBaseId = COMMAND_CENTER_BASE_ID;
     const airtableTableId = "tblPRZ4nHbtj9opU"; // 📥 Scraped Leads · Universal
+
     const airtableUrl = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableId}`;
 
     const airtableUrl = tableUrl(COMMAND_CENTER_BASE_ID, SCRAPED_LEADS_TABLE_ID);
 
     const headers = {
-      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
+      "Authorization": `Bearer ${getApiKey()}`,
       "Content-Type": "application/json"
     };
     
@@ -294,9 +317,13 @@ async function syncToHubSpot(leadData: LeadData): Promise<boolean> {
 // Update Airtable sync status
 async function updateSyncStatus(email: string, synced: boolean): Promise<void> {
   try {
+
+    const airtableUrl = `https://api.airtable.com/v0/${BASE_ID}/${SCRAPED_LEADS_TABLE_ID}`;
+
     const airtableUrl = tableUrl(OPS_BASE_ID, 'tblScrapedLeads');
+
     const headers = {
-      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`
+      "Authorization": `Bearer ${getApiKey()}`
     };
 
     // Find record by email
