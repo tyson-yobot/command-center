@@ -5,37 +5,40 @@ import { Progress } from '@/components/ui/progress';
 import Airtable from 'airtable';
 
 const QuickActionsCard = () => {
-  const [actionsTriggered, setActionsTriggered] = useState(0);
-  const [successRate, setSuccessRate] = useState(0);
-  const [avgExecutionTime, setAvgExecutionTime] = useState(0);
-  const [scheduled, setScheduled] = useState(0);
-  const [failed, setFailed] = useState(0);
+  const [scheduledActions, setScheduledActions] = useState(0);
+  const [executedActions, setExecutedActions] = useState(0);
+  const [failedActions, setFailedActions] = useState(0);
+  const [avgExecTime, setAvgExecTime] = useState(0);
+  const [completionRate, setCompletionRate] = useState(0);
 
   useEffect(() => {
     const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base('appRt8V3tH4g5Z5if');
-    base('tblYNZXKp6qqnBFy6').select({}).eachPage((records, fetchNextPage) => {
-      let total = 0;
-      let success = 0;
-      let failedCount = 0;
-      let scheduledCount = 0;
-      let totalTime = 0;
+    base('tblXPB3V1Ky3o3EiT').select({}).eachPage((records, fetchNextPage) => {
+      let scheduled = 0;
+      let executed = 0;
+      let failed = 0;
+      let execTimeTotal = 0;
+      let timeCount = 0;
 
       records.forEach(record => {
-        const status = record.fields['⚙️ Action Status'] || '';
+        const status = record.fields['⚙️ Action Status'];
         const execTime = Number(record.fields['⏱️ Execution Time (s)'] || 0);
 
-        total++;
-        if (status === '✅ Success') success++;
-        else if (status === '❌ Failed') failedCount++;
-        else if (status === '⏳ Scheduled') scheduledCount++;
-        if (execTime > 0) totalTime += execTime;
+        if (status === '✅ Executed') executed++;
+        if (status === '🕒 Scheduled') scheduled++;
+        if (status === '❌ Failed') failed++;
+
+        if (execTime > 0) {
+          execTimeTotal += execTime;
+          timeCount++;
+        }
       });
 
-      setActionsTriggered(total);
-      setSuccessRate(total > 0 ? (success / total) * 100 : 0);
-      setFailed(failedCount);
-      setScheduled(scheduledCount);
-      setAvgExecutionTime(total > 0 ? totalTime / total : 0);
+      setScheduledActions(scheduled);
+      setExecutedActions(executed);
+      setFailedActions(failed);
+      setAvgExecTime(timeCount > 0 ? execTimeTotal / timeCount : 0);
+      setCompletionRate((executed / (executed + failed)) * 100 || 0);
       fetchNextPage();
     });
   }, []);
@@ -47,25 +50,26 @@ const QuickActionsCard = () => {
       </CardHeader>
       <CardContent className="space-y-5">
         <div>
-          <p className="text-sm text-[#c3c3c3]">⚙️ Total Triggered</p>
-          <p className="text-xl font-semibold text-[#00ff99]">{actionsTriggered}</p>
+          <p className="text-sm text-[#c3c3c3]">🕒 Total Scheduled Actions</p>
+          <p className="text-xl font-semibold text-[#66ccff]">{scheduledActions}</p>
         </div>
         <div>
-          <p className="text-sm text-[#c3c3c3]">✅ Success Rate</p>
-          <p className="text-xl font-semibold text-[#00ffff]">{successRate.toFixed(1)}%</p>
-          <Progress value={successRate} className="h-2 mt-1 bg-yobot-primary/20" />
+          <p className="text-sm text-[#c3c3c3]">✅ Successfully Executed Actions</p>
+          <p className="text-xl font-semibold text-[#66ff66]">{executedActions}</p>
         </div>
         <div>
-          <p className="text-sm text-[#c3c3c3]">⏱️ Avg Exec Time</p>
-          <p className="text-xl font-semibold text-[#ffff66]">{avgExecutionTime.toFixed(2)}s</p>
+          <p className="text-sm text-[#c3c3c3]">❌ Failed Executions</p>
+          <p className="text-xl font-semibold text-[#ff6666]">{failedActions}</p>
         </div>
         <div>
-          <p className="text-sm text-[#c3c3c3]">📆 Scheduled</p>
-          <p className="text-xl font-semibold text-[#ff00ff]">{scheduled}</p>
+          <p className="text-sm text-[#c3c3c3]">⚡ Avg Execution Time (s)</p>
+          <p className="text-xl font-semibold text-[#cc99ff]">{avgExecTime.toFixed(2)}s</p>
+          <Progress value={Math.min(avgExecTime, 60)} className="h-2 mt-1 bg-yobot-primary/20" />
         </div>
         <div>
-          <p className="text-sm text-[#c3c3c3]">❌ Failed</p>
-          <p className="text-xl font-semibold text-[#ff6666]">{failed}</p>
+          <p className="text-sm text-[#c3c3c3]">📊 Action Completion Rate (%)</p>
+          <p className="text-xl font-semibold text-[#ffff66]">{completionRate.toFixed(1)}%</p>
+          <Progress value={completionRate} className="h-2 mt-1 bg-yobot-primary/20" />
         </div>
       </CardContent>
     </Card>
@@ -73,3 +77,11 @@ const QuickActionsCard = () => {
 };
 
 export default QuickActionsCard;
+
+
+// QuickBooksSyncCard.tsx
+// (already included and confirmed as correct in previous update)
+
+
+// PersonalityPackCard.tsx
+// (already included and confirmed as correct in previous update)

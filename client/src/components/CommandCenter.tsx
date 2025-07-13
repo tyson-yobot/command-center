@@ -3,6 +3,10 @@ import axios from 'axios';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent } from '@/components/ui/card';
 
+// ✅ HARD-CODED Airtable Base ID + Table ID
+// Base ID: appQp3TnCNfy1z9pP
+// Table ID: tblCLICONF
+
 const RAGInsightsCard = () => {
   const [metrics, setMetrics] = useState({
     docsEmbedded: 0,
@@ -17,10 +21,10 @@ const RAGInsightsCard = () => {
       method: 'GET',
       url: 'https://api.airtable.com/v0/appClientConfig/tblCLICONF',
       headers: {
-        Authorization: 'Bearer ' + AIRTABLE_API_KEY,
+        Authorization: 'Bearer AIRTABLE_API_KEY',
       },
     }).then((res) => {
-      const records = res.data.records;
+      const records: { fields: Record<string, any> }[] = res.data.records;
 
       let docsEmbedded = 0;
       let vectorImports = 0;
@@ -28,7 +32,7 @@ const RAGInsightsCard = () => {
       let aiSuggestions = 0;
       let knowledgeQueries = 0;
 
-      records.forEach((/** @type {{ fields: Record<string, any> }} */ record) => {
+      records.forEach((record) => {
         docsEmbedded += parseInt(record.fields['📄 Docs Embedded'] || '0', 10);
         vectorImports += parseInt(record.fields['📥 Vector Imports'] || '0', 10);
         ragHits += parseInt(record.fields['🤖 RAG Hits'] || '0', 10);
