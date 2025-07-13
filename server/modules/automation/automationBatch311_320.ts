@@ -37,7 +37,11 @@ export async function logSupportTicketToAirtable(ticketId: string, subject: stri
 // Function 312: Send Admin Slack Alert
 export async function sendAdminSlackAlert(message: string) {
   try {
-    const webhookUrl = process.env.SLACK_WEBHOOK_URL || "https://hooks.slack.com/services/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";
+    const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+    if (!webhookUrl) {
+      console.warn("Slack webhook not configured for admin alerts");
+      return { success: false, error: "Slack webhook not configured" };
+    }
     
     await axios.post(webhookUrl, {
       text: `🚨 Admin Alert:\n${message}`
