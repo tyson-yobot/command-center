@@ -48,7 +48,7 @@ export async function closeOutFollowupByPhone(phone: string): Promise<any> {
   try {
     const url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📞 Follow-Up Reminder Tracker";
     const headers = {
-      "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`,
+      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
       "Content-Type": "application/json"
     };
     
@@ -83,7 +83,7 @@ export async function logFollowupEventByPhone(phone: string, method: string, out
   try {
     const url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📞 Follow-Up Reminder Tracker";
     const headers = {
-      "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`,
+      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
       "Content-Type": "application/json"
     };
     
@@ -175,7 +175,7 @@ export async function statusMonitor(): Promise<any> {
   try {
     const url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📞 Follow-Up Reminder Tracker?filterByFormula={✅ Completed}=FALSE()";
     const headers = {
-      "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`
+      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`
     };
     
     const response = await axios.get(url, { headers });
@@ -216,7 +216,7 @@ export async function dailySummaryPush(): Promise<any> {
     const pendingUrl = `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📞 Follow-Up Reminder Tracker?filterByFormula=AND({✅ Completed}=FALSE(), DATETIME_FORMAT({📅 Follow-Up Date}, 'YYYY-MM-DD')='${today}')`;
     
     const headers = {
-      "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`
+      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`
     };
     
     const [completedResponse, pendingResponse] = await Promise.all([
