@@ -98,6 +98,11 @@ import { LiveCallBanner } from './components/LiveCallBanner';
 import { EnhancedTooltip, QuickTooltip } from '@/components/EnhancedTooltip';
 import { CommandCenterActions } from '@/utils/commandCenterActions';
 import { LeadScraperPopup } from '@/components/lead-scraper-popup';
+import { SmartSpendCard } from '@/components/analytics-cards/SmartSpendCard';
+import { BotalyticsCard } from '@/components/analytics-cards/BotalyticsCard';
+import { ABTestCard } from '@/components/analytics-cards/ABTestCard';
+import { CalendarSyncCard } from '@/components/analytics-cards/CalendarSyncCard';
+import { RepScorecardCard } from '@/components/analytics-cards/RepScorecardCard';
 
 // Animated Counter Component
 const AnimatedCounter = ({ value, suffix = '', prefix = '', duration = 2000, color = 'text-white' }) => {
@@ -4734,143 +4739,17 @@ export default function CommandCenter() {
         <div className="mb-6">
           <h2 className="text-white text-2xl font-bold mb-6">📊 Analytics Dashboard</h2>
           
-          {/* Botalytics™ Performance Dashboard */}
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10 mb-6">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center space-x-2">
-                <TrendingUp className="w-5 h-5 text-cyan-400" />
-                <span>📊 Botalytics™ Metrics</span>
-                <div className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded-full">PROPRIETARY</div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-[18px]">
-                {/* Cost Per Lead */}
-              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
-                <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-green-400 mb-1">0</div>
-                  <div className="text-slate-300 text-sm">Cost Per Lead</div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Last Month</span>
-                    <span className="text-cyan-400">0</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-red-400 h-2 rounded-full ${ 'w0-'}`}></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Interaction Quality */}
-              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
-                <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-blue-400 mb-1">0</div>
-                  <div className="text-slate-300 text-sm">Accuracy Rate</div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Target</span>
-                    <span className="text-green-400">0</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-blue-400 h-2 rounded-full ${ 'w0-'}`}></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Learning Rate */}
-              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
-                <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-purple-400 mb-1">0</div>
-                  <div className="text-slate-300 text-sm">Learning Rate</div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Weekly</span>
-                    <span className="text-yellow-400">0</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-purple-400 h-2 rounded-full ${ 'w0-'}`}></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Total Interactions */}
-              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
-                <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-cyan-400 mb-1">0</div>
-                  <div className="text-slate-300 text-sm">Interactions</div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Today</span>
-                    <span className="text-emerald-400">0</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-cyan-400 h-2 rounded-full ${ 'w0-'}`}></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Conversion Rate */}
-              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600">
-                <div className="text-center mb-3">
-                  <div className="text-2xl font-black text-emerald-400 mb-1">0</div>
-                  <div className="text-slate-300 text-sm">Close Rate</div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-slate-400">Industry Avg</span>
-                    <span className="text-orange-400">0</span>
-                  </div>
-                  <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-emerald-400 h-2 rounded-full ${ 'w0-'}`}></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* SmartSpend™ Analytics Dashboard */}
-        <Card className="rounded-xl border-2 border-[#0d82da] bg-black shadow-[0_0_12px_#0d82da50] text-white mb-6">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center space-x-2">
-              <DollarSign className="w-5 h-5 text-[#0d82da]" />
-              <span className="bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] text-transparent bg-clip-text">📈 SmartSpend™ Analytics</span>
-              <div className="text-xs bg-gradient-to-br from-[#0d82da] to-[#085ca2] text-white px-2 py-1 rounded-full">PROPRIETARY</div>
-            </CardTitle>
-            <div className="w-full h-[1px] bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666] mt-2"></div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
-                <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Monthly Savings</h4>
-                <div className="text-2xl font-bold">$0</div>
-                <div className="text-sm text-green-400">+0%</div>
-              </div>
-              
-              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
-                <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Cost Reduction</h4>
-                <div className="text-2xl font-bold">$0</div>
-                <div className="text-sm text-green-400">+0%</div>
-              </div>
-              
-              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
-                <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">ROI</h4>
-                <div className="text-2xl font-bold">0%</div>
-                <div className="text-sm text-green-400">+0%</div>
-              </div>
-              
-              <div className="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white ring-1 ring-[#0d82da]/30 animate-pulse">
-                <h4 className="text-sm text-[#c3c3c3] uppercase tracking-wide">Payback Days</h4>
-                <div className="text-2xl font-bold">0</div>
-                <div className="text-sm text-green-400">+0%</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <SmartSpendCard />
+            <BotalyticsCard />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ABTestCard />
+            <CalendarSyncCard />
+            <RepScorecardCard />
+          </div>
+        </div>
 
 
 
