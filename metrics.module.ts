@@ -1,5 +1,13 @@
 import axios from "axios";
 
+
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+const BASE_ID = process.env.AIRTABLE_BASE_ID;
+const TABLE_NAME = process.env.AIRTABLE_TABLE_NAME;
+
+if (!AIRTABLE_API_KEY || !BASE_ID || !TABLE_NAME) {
+  console.warn('AIRTABLE_API_KEY, AIRTABLE_BASE_ID, or AIRTABLE_TABLE_NAME is not set');
+}
 import { COMMAND_CENTER_BASE_ID } from "./server/config/airtableBase";
 
 import { getApiKey, BASE_ID, METRICS_TABLE_NAME } from "./shared/airtableConfig";
@@ -36,6 +44,7 @@ const TABLE_NAME = AIRTABLE_BASES.COMMAND_CENTER.tables.METRICS_TRACKER;
 const BASE_ID = "appRt8V3tH4g5Z51f";
 
 const TABLE_NAME = "Command Center - Metrics Tracker Table";
+
 
 
 
