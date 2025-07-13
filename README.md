@@ -2,8 +2,7 @@
 
 ## Environment Variables
 
-Create a `.env` file based on the provided `.env.example` and set the values for
-your environment. At minimum the following variables are required:
+Create a `.env` file based on the provided `.env.example` and set the values for your environment. At minimum the following variables are required and will be read from `process.env`:
 
 ```
 AIRTABLE_API_KEY=your-airtable-api-key
@@ -13,5 +12,6 @@ ICLOUD_USERNAME=your-icloud-username
 ICLOUD_PASSWORD=your-icloud-password
 ```
 
+Ensure `AIRTABLE_API_KEY` is provided in your environment before running the server.
 These variables are used throughout the server modules for Airtable and iCloud
 integrations.
