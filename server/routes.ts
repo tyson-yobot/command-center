@@ -86,16 +86,10 @@ export function registerRoutes(app: Express): void {
   app.get('/api/voice/personas', async (req, res) => {
     try {
       const voices = await getAvailableVoices();
-      res.json({
-        success: true,
-        data: voices
-      });
+      res.json({ success: true, data: voices });
     } catch (error) {
-      logger.error('Failed to fetch voices:', error);
-      res.json({
-        success: true,
-        data: []
-      });
+      logger.error({ err: error }, "Failed to fetch voices");
+      res.json({ success: false, data: [] });
     }
   });
 
