@@ -37,3 +37,7 @@ __pycache__/
 # OS junk
 *.bak
 *.tmp
+
+# Ignore environment variable files
+.env
+.env.*
