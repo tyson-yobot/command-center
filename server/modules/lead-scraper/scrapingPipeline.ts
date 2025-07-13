@@ -1,6 +1,19 @@
 import axios from 'axios';
 import { logEventToAirtable } from './hubspotCRM';
 
+import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
+=======import { getApiKey, BASE_ID, SCRAPED_LEADS_TABLE_ID } from '@shared/airtableConfig';
+
+import { COMMAND_CENTER_BASE_ID } from '@shared/airtableConfig';
+
+import {
+  COMMAND_CENTER_BASE_ID,
+  SCRAPED_LEADS_TABLE_ID,
+  tableUrl,
+  recordUrl,
+
+
+
 interface LeadData {
   first_name: string;
   last_name: string;
@@ -65,9 +78,29 @@ async function enrichWithApollo(firstName: string, lastName: string, companyDoma
 // Deduplication check - returns record ID if duplicate found
 async function isDuplicate(email?: string, fullName?: string, domain?: string): Promise<string | null> {
   try {
+
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
+
+
+    const airtableBaseId = BASE_ID;
+    const airtableTableId = SCRAPED_LEADS_TABLE_ID; // 📥 Scraped Leads · Universal
+    const airtableToken = getApiKey();
+
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
+
+
+
     const airtableBaseId = "appRt8V3tH4g5Z51f";
+
+
     const airtableTableId = "tblPRZ4nHbtj9opU"; // 📥 Scraped Leads · Universal
+
+    const airtableToken = process.env.AIRTABLE_API_KEY || "";
+
+
     const airtableToken = process.env.AIRTABLE_API_KEY as string;
+
+
     const headers = {
       "Authorization": `Bearer ${airtableToken}`
     };
@@ -83,7 +116,7 @@ async function isDuplicate(email?: string, fullName?: string, domain?: string): 
       return null;
     }
 
-    const url = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableId}`;
+    const url = tableUrl(COMMAND_CENTER_BASE_ID, SCRAPED_LEADS_TABLE_ID);
     const response = await axios.get(url, {
       headers,
       params: {
@@ -106,11 +139,31 @@ async function isDuplicate(email?: string, fullName?: string, domain?: string): 
 // Flag duplicate in Airtable
 async function flagDuplicateInAirtable(recordId: string): Promise<boolean> {
   try {
-    const airtableBaseId = "appRt8V3tH4g5Z51f";
-    const airtableTableId = "tblPRZ4nHbtj9opU";
+
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
+
+
+    const airtableBaseId = BASE_ID;
+    const airtableTableId = SCRAPED_LEADS_TABLE_ID;
+    const airtableToken = getApiKey();
+
+
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
+
+
     const airtableToken = process.env.AIRTABLE_API_KEY as string;
 
-    const url = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableId}/${recordId}`;
+    const url = recordUrl(COMMAND_CENTER_BASE_ID, SCRAPED_LEADS_TABLE_ID, recordId);
+
+    const airtableBaseId = "appRt8V3tH4g5Z51f";
+
+    const airtableTableId = "tblPRZ4nHbtj9opU";
+    const airtableToken = process.env.AIRTABLE_API_KEY || "";
+
+    const airtableToken = process.env.AIRTABLE_API_KEY as string;
+
+
+
     const headers = {
       "Authorization": `Bearer ${airtableToken}`,
       "Content-Type": "application/json"
@@ -133,11 +186,33 @@ async function flagDuplicateInAirtable(recordId: string): Promise<boolean> {
 // Update existing lead with new data
 async function updateExistingLead(recordId: string, email?: string, phone?: string, jobTitle?: string): Promise<boolean> {
   try {
-    const airtableBaseId = "appRt8V3tH4g5Z51f";
-    const airtableTableId = "tblPRZ4nHbtj9opU";
+
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
+
+    const airtableBaseId = BASE_ID;
+    const airtableTableId = SCRAPED_LEADS_TABLE_ID;
+    const airtableToken = getApiKey();
+
+
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
+
+
     const airtableToken = process.env.AIRTABLE_API_KEY as string;
 
+    const url = recordUrl(COMMAND_CENTER_BASE_ID, SCRAPED_LEADS_TABLE_ID, recordId);
+
+    const airtableBaseId = "appRt8V3tH4g5Z51f";
+
+    const airtableTableId = "tblPRZ4nHbtj9opU";
+
+    const airtableToken = process.env.AIRTABLE_API_KEY || "";
+
+    const airtableToken = process.env.AIRTABLE_API_KEY as string;
+
+
+
     const url = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableId}/${recordId}`;
+
     const headers = {
       "Authorization": `Bearer ${airtableToken}`,
       "Content-Type": "application/json"
@@ -182,11 +257,21 @@ async function notifyDuplicateSlack(fullName: string, domain: string): Promise<v
 // Push to Airtable Scraped Leads table
 async function pushToAirtableLeads(leadData: LeadData): Promise<boolean> {
   try {
-    const airtableBaseId = "appRt8V3tH4g5Z51f";
+
+
+
+    const airtableBaseId = BASE_ID;
+    const airtableTableId = SCRAPED_LEADS_TABLE_ID; // 📥 Scraped Leads · Universal
+
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
     const airtableTableId = "tblPRZ4nHbtj9opU"; // 📥 Scraped Leads · Universal
+
     const airtableUrl = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableId}`;
+
+    const airtableUrl = tableUrl(COMMAND_CENTER_BASE_ID, SCRAPED_LEADS_TABLE_ID);
+
     const headers = {
-      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
+      "Authorization": `Bearer ${getApiKey()}`,
       "Content-Type": "application/json"
     };
     
@@ -246,9 +331,13 @@ async function syncToHubSpot(leadData: LeadData): Promise<boolean> {
 // Update Airtable sync status
 async function updateSyncStatus(email: string, synced: boolean): Promise<void> {
   try {
-    const airtableUrl = "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblScrapedLeads";
+
+    const airtableUrl = `https://api.airtable.com/v0/${BASE_ID}/${SCRAPED_LEADS_TABLE_ID}`;
+
+    const airtableUrl = tableUrl(OPS_BASE_ID, 'tblScrapedLeads');
+
     const headers = {
-      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`
+      "Authorization": `Bearer ${getApiKey()}`
     };
 
     // Find record by email

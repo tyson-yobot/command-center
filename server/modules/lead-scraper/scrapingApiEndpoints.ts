@@ -1,4 +1,10 @@
 import type { Express } from "express";
+import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
+
+import { COMMAND_CENTER_BASE_ID, TABLE_NAMES } from "@shared/airtableConfig";
+
+import { COMMAND_CENTER_BASE_ID, tableUrl } from "../../shared/airtableConfig";
+
 
 // Scraper API endpoints for Apollo, Apify, and PhantomBuster
 export function registerScrapingEndpoints(app: Express) {
@@ -29,7 +35,15 @@ export function registerScrapingEndpoints(app: Express) {
 
       // Log to Airtable Integration Test Log
       try {
-        await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z51f/Integration%20Test%20Log", {
+
+        await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/Integration%20Test%20Log`, {
+
+
+        await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/${encodeURIComponent(TABLE_NAMES.INTEGRATION_TEST_LOG)}`, {
+
+        await fetch(tableUrl(COMMAND_CENTER_BASE_ID, 'Integration Test Log'), {
+
+n
           method: "POST",
           headers: {
             "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
@@ -70,7 +84,14 @@ export function registerScrapingEndpoints(app: Express) {
       // Sync leads to Airtable CRM table
       for (const lead of leads.slice(0, 10)) { // Limit to first 10 for demo
         try {
-          await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z51f/tblLDB2yFEdVvNlxr", {
+
+          await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/tblLDB2yFEdVvNlxr`, {
+
+
+
+          await fetch(tableUrl(COMMAND_CENTER_BASE_ID, 'tblLDB2yFEdVvNlxr'), {
+
+
             method: "POST",
             headers: {
               "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
@@ -119,7 +140,15 @@ export function registerScrapingEndpoints(app: Express) {
       const { tool, name, filters } = req.body;
       
       // Log preset save to Airtable
-      await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z51f/Integration%20Test%20Log", {
+
+      await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/Integration%20Test%20Log`, {
+
+
+      await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/${encodeURIComponent(TABLE_NAMES.INTEGRATION_TEST_LOG)}`, {
+
+      await fetch(tableUrl(COMMAND_CENTER_BASE_ID, 'Integration Test Log'), {
+
+
         method: "POST",
         headers: {
           "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
@@ -172,7 +201,15 @@ export function registerScrapingEndpoints(app: Express) {
       
       // Log export to Airtable
       try {
-        await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z51f/Integration%20Test%20Log", {
+
+        await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/Integration%20Test%20Log`, {
+
+
+        await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/${encodeURIComponent(TABLE_NAMES.INTEGRATION_TEST_LOG)}`, {
+
+        await fetch(tableUrl(COMMAND_CENTER_BASE_ID, 'Integration Test Log'), {
+
+
           method: "POST",
           headers: {
             "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
