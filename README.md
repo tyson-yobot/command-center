@@ -179,6 +179,7 @@ Two helper scripts provide iCloud calendar syncing:
 
 * `app.py` – a small Flask server that schedules `sync_calendar_to_airtable` every 15 minutes.
 * `sync.py` – a standalone script for manual one‑off syncs.
+* `server/yobot_command_center/sales_order.py` – processes sales order data when triggered from the Express API.
 
 They require the same environment variables as above and the packages listed in `requirements.txt`.
 
