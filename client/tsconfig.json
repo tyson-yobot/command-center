@@ -23,5 +23,15 @@
       "@utils/*": ["src/utils/*"]
     }
   },
+<<<<<<< HEAD
   "include": ["src"]
+=======
+  "include": [
+    "src",
+    "../shared",
+    "../server",
+    "vite.config.ts"
+  ],
+  "references": [{ "path": "../tsconfig.node.json" }]
+>>>>>>> a6153e2bc84e9af5b7dfb06fb2fc23a83dde23ee
 }
