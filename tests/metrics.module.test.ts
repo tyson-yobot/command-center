@@ -1,9 +1,11 @@
 import axios from 'axios';
+process.env.AIRTABLE_API_KEY = 'test';
 import { fetchMetrics } from '../metrics.module';
 
 jest.mock('axios');
 
 test('fetchMetrics returns parsed metrics', async () => {
+  process.env.AIRTABLE_API_KEY = 'test';
   const mockedResponse = {
     data: {
       records: [

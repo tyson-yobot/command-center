@@ -18,6 +18,9 @@ GOOGLE_SA_FILE = os.getenv('GOOGLE_SA_FILE', 'service_account.json')
 GOOGLE_DRIVE_PARENT_ID = os.getenv('GOOGLE_DRIVE_PARENT_ID')
 SLACK_WEBHOOK_URL = os.getenv('SLACK_WEBHOOK_URL')
 
+if not AIRTABLE_API_KEY:
+    raise EnvironmentError('AIRTABLE_API_KEY is not set')
+
 # Airtable helper
 def airtable_create_record(fields: dict):
     url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_SALES_TABLE}"

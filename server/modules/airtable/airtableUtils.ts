@@ -6,6 +6,9 @@
 import axios from 'axios';
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+if (!AIRTABLE_API_KEY) {
+  throw new Error('AIRTABLE_API_KEY is not set');
+}
 const BASE_URL = 'https://api.airtable.com/v0';
 
 // Base IDs from the table inventory

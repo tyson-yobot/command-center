@@ -23,7 +23,11 @@ class AirtableLogger {
   constructor() {
     this.baseId = 'appRt8V3tH4g5Z51f';
     this.tableId = 'tbly0fjE2M5uHET9X';
-    this.apiKey = process.env.AIRTABLE_API_KEY || '';
+    const key = process.env.AIRTABLE_API_KEY;
+    if (!key) {
+      throw new Error('AIRTABLE_API_KEY is not set for AirtableLogger');
+    }
+    this.apiKey = key;
     this.baseUrl = `https://api.airtable.com/v0/${this.baseId}/${this.tableId}`;
   }
 

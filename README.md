@@ -117,7 +117,7 @@ YoBotAssistant is the backend command center that powers YoBot’s automation an
 Create a `.env` file based on `.env.example` and fill in the values for your environment. At minimum the server expects:
 
 ```bash
-AIRTABLE_API_KEY=your-airtable-api-key
+AIRTABLE_API_KEY=<your-airtable-api-key>
 AIRTABLE_BASE_ID=your-airtable-base-id
 AIRTABLE_TABLE_NAME=Command Center · Metrics Tracker
 ICLOUD_USERNAME=your-icloud-username

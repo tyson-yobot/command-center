@@ -220,7 +220,10 @@ async function syncToHubSpot(leadData: LeadData): Promise<boolean> {
       return false;
     }
 
-    const hubspotUrl = process.env.HUBSPOT_WEBHOOK_URL || "https://hook.us2.make.com/hubspot-sync";
+    const hubspotUrl = process.env.HUBSPOT_WEBHOOK_URL;
+    if (!hubspotUrl) {
+      throw new Error('HUBSPOT_WEBHOOK_URL is not set');
+    }
     
     const response = await axios.post(hubspotUrl, {
       firstName: leadData.first_name,

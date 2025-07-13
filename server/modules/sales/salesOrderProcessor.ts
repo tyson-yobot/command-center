@@ -105,11 +105,15 @@ export class SalesOrderProcessor {
   // 2. Send email to team
   async sendEmail(toEmails: string[], subject: string, body: string, attachmentPath: string): Promise<void> {
     try {
+      const emailPass = process.env.EMAIL_APP_PASSWORD;
+      if (!emailPass) {
+        throw new Error('EMAIL_APP_PASSWORD is not set');
+      }
       const transporter = nodemailer.createTransporter({
         service: 'gmail',
         auth: {
           user: 'noreply@yobot.bot',
-          pass: process.env.EMAIL_APP_PASSWORD || 'wpboevwgicvrchkt'
+          pass: emailPass
         }
       });
 
@@ -248,8 +252,10 @@ export class SalesOrderProcessor {
         pdfPath
       );
 
-      // 3. Slack Alert (use environment variable or fallback)
-      const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL || 'https://hooks.slack.com/services/your/webhook/url';
+      const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
+      if (!slackWebhookUrl) {
+        throw new Error('SLACK_WEBHOOK_URL is not set');
+      }
       await this.sendSlackAlert(slackWebhookUrl, formData['Company Name'], quoteLink);
 
       // 4. DocuSign Signature Request
