@@ -2,6 +2,16 @@ import type { Express } from "express";
 import { logIntegrationTest } from "./airtableIntegrationLogger";
 import { storeLeadsInAirtable, logScrapingCampaign } from "./airtableLeadStorage";
 
+import { LEAD_ENGINE_BASE_ID, TABLE_NAMES } from "@shared/airtableConfig";
+
+import {
+  LEAD_ENGINE_BASE_ID,
+  SCRAPED_LEADS_TABLE,
+  SCRAPED_LEADS_TABLE_NAME,
+  tableUrl,
+} from "../../shared/airtableConfig";
+
+
 // Real API integration for lead scraping with proper test/live mode separation
 export function registerRealScrapingRoutes(app: Express) {
   
@@ -97,7 +107,7 @@ export function registerRealScrapingRoutes(app: Express) {
 
       if (process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID) {
         try {
-          await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Scraping Logs`, {
+          await fetch(tableUrl(process.env.AIRTABLE_BASE_ID, 'Scraping Logs'), {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
@@ -260,7 +270,7 @@ export function registerRealScrapingRoutes(app: Express) {
 
       if (process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID) {
         try {
-          await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Scraping Logs`, {
+          await fetch(tableUrl(process.env.AIRTABLE_BASE_ID, 'Scraping Logs'), {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
@@ -426,7 +436,7 @@ export function registerRealScrapingRoutes(app: Express) {
 
       if (process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID) {
         try {
-          await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Scraping Logs`, {
+          await fetch(tableUrl(process.env.AIRTABLE_BASE_ID, 'Scraping Logs'), {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
@@ -577,7 +587,11 @@ export function registerRealScrapingRoutes(app: Express) {
         return res.status(400).json({ success: false, error: 'Airtable API key required' });
       }
 
-      const response = await fetch(`https://api.airtable.com/v0/appb2F3D77tC4DWla/Scraped%20Leads%20(Universal)%20Table`, {
+
+      const response = await fetch(`https://api.airtable.com/v0/${LEAD_ENGINE_BASE_ID}/${encodeURIComponent(TABLE_NAMES.SCRAPED_LEADS)}`, {
+
+      const response = await fetch(tableUrl(LEAD_ENGINE_BASE_ID, SCRAPED_LEADS_TABLE), {
+
         headers: {
           'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`
         }

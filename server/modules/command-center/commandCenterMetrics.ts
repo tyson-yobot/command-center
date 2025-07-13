@@ -6,6 +6,7 @@
  */
 
 import type { Express } from "express";
+import { COMMAND_CENTER_BASE_ID } from "@shared/airtableConfig";
 
 interface MetricsRecord {
   '🛠️ Triggered Action': string;
@@ -51,16 +52,16 @@ interface IntegrationTestRecord {
 }
 
 class CommandCenterMetrics {
-  private baseId = 'appRt8V3tH4g5Z51f';
+  private baseId = COMMAND_CENTER_BASE_ID;
   private metricsTableId = 'tbl7K5RthCtD69BE1'; // Command Center - Metrics Tracker Table
   private integrationTestTableId = 'tblIntegrationTest'; // Integration Test Log Table
   private apiKey: string;
   private localBackupLog: any[] = [];
 
   constructor() {
-    this.apiKey = process.env.AIRTABLE_API_KEY || '';
+    this.apiKey = process.env.AIRTABLE_API_KEY as string;
     if (!this.apiKey) {
-      console.warn('AIRTABLE_API_KEY not configured for Command Center Metrics');
+      throw new Error('AIRTABLE_API_KEY not configured for Command Center Metrics');
     }
   }
 
