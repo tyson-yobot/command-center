@@ -31,7 +31,8 @@ const TABLE_NAME = SCRAPED_LEADS_TABLE_NAME;
 
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
-const BASE_ID = "appRt8V3tH4g5Z5if";
+// Use the shared Command Center base
+const BASE_ID = "appRt8V3tH4g5Z51f";
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY as string;
 
@@ -149,7 +150,7 @@ export class SalesOrderProcessor {
         throw new Error('EMAIL_APP_PASSWORD must be set');
       }
 
-      const transporter = nodemailer.createTransporter({
+      const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
           user: 'noreply@yobot.bot',
