@@ -3,6 +3,8 @@
  * Connects to Scraped Leads (Universal) and other client tables
  */
 
+import { LEAD_ENGINE_BASE_ID, TABLE_NAMES, getAirtableApiKey } from '../../shared/airtableConfig';
+
 interface AirtableConfig {
   baseId: string;
   apiKey: string;
@@ -57,20 +59,16 @@ export class AirtableService {
   private config: AirtableConfig;
 
   constructor() {
-    const apiKey = process.env.AIRTABLE_API_KEY as string;
+    const apiKey = getAirtableApiKey();
     if (!apiKey) {
       throw new Error('AIRTABLE_API_KEY not configured for AirtableService');
     }
 
     this.config = {
-      baseId: process.env.AIRTABLE_BASE_ID || 'appb2F3D77tC4DWla', // YoBot Lead Engine
-
+      baseId: process.env.AIRTABLE_BASE_ID || LEAD_ENGINE_BASE_ID,
       apiKey,
-
-      apiKey: process.env.AIRTABLE_API_KEY as string,
-
       tables: {
-        scrapedLeads: 'Scraped Leads (Universal) Table', // Scraped Leads (Universal)
+        scrapedLeads: TABLE_NAMES.SCRAPED_LEADS,
         bookings: 'tblBookings',
         supportTickets: 'tblSupportTickets',
         followUps: 'tblFollowUps',
