@@ -309,7 +309,11 @@ class ScrapingService {
    */
   private async sendSlackNotification(platform: string, totalLeads: number, savedLeads: number): Promise<void> {
     try {
-      const slackWebhookUrl = "https://hooks.slack.com/services/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";
+      const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
+      if (!slackWebhookUrl) {
+        console.warn('Slack webhook not configured for scraping notifications');
+        return;
+      }
       
       await fetch(slackWebhookUrl, {
         method: "POST",
