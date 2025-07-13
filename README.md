@@ -6,6 +6,18 @@
 - **PNPM** 8+ (optional, can use `npm` instead)
 - **Python** 3.10+ for the optional iCloud sync scripts
 
+## Environment Variables
+
+The application relies on several environment variables. Create a `.env` file or
+configure these variables in your deployment environment:
+
+- `ICLOUD_USERNAME` – iCloud account username
+- `ICLOUD_PASSWORD` – iCloud app-specific password
+- `AIRTABLE_API_KEY` – API key for Airtable access
+- `AIRTABLE_BASE_ID` – Airtable base identifier
+- `AIRTABLE_TABLE_NAME` – default table used for metrics
+
+
 ## Setup
 
 1. Install Node dependencies in the project root:
@@ -174,6 +186,21 @@ These variables are used throughout the server modules for Airtable and iCloud
 integrations.
 
 
+**Security Notice:** The repository previously contained example credentials in
+`client/src/.env`. Those values have been removed from version control. If you
+used them, rotate your iCloud and Airtable credentials immediately and update
+your personal `.env` file with fresh keys.
+
+
+## Setup
+
+Install the Python dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+
 ## Running Tests
 
 Install dependencies if you haven't already:
@@ -191,4 +218,6 @@ npm test
 ## License
 
 This project is licensed under the [MIT License](LICENSE)
+
+
 
