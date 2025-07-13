@@ -1,6 +1,4 @@
-# Replit & build files
-.replit
-*.replit
+# Build files
 build/
 dist/
 
