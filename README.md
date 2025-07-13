@@ -186,6 +186,12 @@ These variables are used throughout the server modules for Airtable and iCloud
 integrations.
 
 
+**Security Notice:** The repository previously contained example credentials in
+`client/src/.env`. Those values have been removed from version control. If you
+used them, rotate your iCloud and Airtable credentials immediately and update
+your personal `.env` file with fresh keys.
+
+
 ## Setup
 
 Install the Python dependencies:
@@ -211,4 +217,5 @@ npm test
 ## License
 
 This project is licensed under the [MIT License](LICENSE)
+
 
