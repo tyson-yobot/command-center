@@ -28,3 +28,15 @@ test('fetchMetrics returns parsed metrics', async () => {
     revenue: 4,
   });
 });
+
+test('fetchMetrics returns zeros on error', async () => {
+  (axios.get as jest.Mock).mockRejectedValue(new Error('network error'));
+
+  const metrics = await fetchMetrics();
+  expect(metrics).toEqual({
+    conversations: 0,
+    messages: 0,
+    leads: 0,
+    revenue: 0,
+  });
+});

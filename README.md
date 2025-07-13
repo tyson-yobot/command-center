@@ -21,6 +21,10 @@
    ```bash
    python app.py
    ```
+6. Run the test suite to ensure everything works:
+   ```bash
+   npm test
+   ```
 
 ## Environment Variables
 
@@ -185,28 +189,6 @@ They require the same environment variables as above and the packages listed in 
 These variables are used throughout the server modules for Airtable and iCloud
 integrations.
 
-
-## Setup
-
-Install the Python dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-## Running Tests
-
-Install dependencies if you haven't already:
-
-```bash
-npm install
-```
-
-Then run the test suite with:
-
-```bash
-npm test
-```
 
 ## License
 
