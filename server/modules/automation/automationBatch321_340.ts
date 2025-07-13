@@ -1,11 +1,21 @@
 import express from 'express';
 import axios from 'axios';
+import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, getAirtableApiKey } from '@shared/airtableConfig';
 
 const router = express.Router();
 
 // Airtable configuration
+
+const API_KEY = getAirtableApiKey() as string;
+const BASE_ID = COMMAND_CENTER_BASE_ID;
+
+
+const API_KEY = process.env.AIRTABLE_API_KEY || "";
+
 const API_KEY = process.env.AIRTABLE_API_KEY as string;
+
 const BASE_ID = "appRt8V3tH4g5Z51f";
+
 const HEADERS = {
   "Authorization": `Bearer ${API_KEY}`,
   "Content-Type": "application/json"
@@ -23,7 +33,7 @@ export async function logCommandCenterEvent(eventType: string, detail: string) {
     };
 
     const response = await axios.post(
-      `https://api.airtable.com/v0/${BASE_ID}/tblCCEVENTS`,
+      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAMES.CCEVENTS}`,
       payload,
       { headers: HEADERS }
     );
@@ -117,7 +127,11 @@ export async function logErrorToCCTracker(moduleName: string, error: string) {
 // Function 327: Trigger Slack CC Alert
 export async function triggerSlackCCAlert(title: string, msg: string) {
   try {
-    const webhookUrl = process.env.SLACK_WEBHOOK_URL || "https://hooks.slack.com/services/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";
+    const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+    if (!webhookUrl) {
+      console.warn("Slack webhook not configured for Command Center alerts");
+      return { success: false, error: "Slack webhook not configured" };
+    }
     
     await axios.post(webhookUrl, {
       text: `*${title}*\n${msg}`
@@ -382,7 +396,7 @@ router.post('/execute-all', async (req, res) => {
       botId: "bot_123",
       newStatus: "Active",
       anomalyText: "Unusual traffic spike detected",
-      tableId: "tblCCEVENTS",
+      tableId: TABLE_NAMES.CCEVENTS,
       reason: "Manual intervention required"
     };
 
