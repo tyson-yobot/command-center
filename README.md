@@ -106,6 +106,15 @@ They require the same environment variables as above and the packages listed in 
 These variables are used throughout the server modules for Airtable and iCloud
 integrations.
 
+
+## Setup
+
+Install the Python dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Running Tests
 
 Install dependencies if you haven't already:
