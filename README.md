@@ -66,6 +66,22 @@ They require the same environment variables as above and the packages listed in 
 These variables are used throughout the server modules for Airtable and iCloud
 integrations.
 
+## Running Tests
+
+Install dependencies if you haven't already:
+
+```bash
+npm install
+```
+
+Then run the test suite with:
+
+```bash
+npm test
+```
+
+=======
 ## License
 
 This project is licensed under the [MIT License](LICENSE)
+
