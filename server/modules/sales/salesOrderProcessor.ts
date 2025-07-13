@@ -6,7 +6,7 @@ import axios from 'axios';
 
 // Configuration
 const GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh";
-const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa";
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
 const BASE_ID = "appRt8V3tH4g5Z5if";
 const TABLE_NAME = "📥 Scraped Leads (Universal)";
 

@@ -4,7 +4,7 @@ import axios from 'axios';
 const router = express.Router();
 
 // Airtable configuration
-const API_KEY = "paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa";
+const API_KEY = process.env.AIRTABLE_API_KEY;
 const BASE_ID = "appRt8V3tH4g5Z51f";
 const HEADERS = {
   "Authorization": `Bearer ${API_KEY}`,
