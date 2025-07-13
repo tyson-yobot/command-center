@@ -1,5 +1,82 @@
 # YoBotAssistant
 
+
+## Setup
+
+1. Install the Node.js dependencies:
+   ```bash
+   npm install
+   ```
+2. Install the Python requirements if you plan to run the iCloud sync service:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Copy `.env.example` to `.env` and fill in the environment variables.
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+   The server listens on the port defined by `PORT` (defaults to `3000`).
+5. To manually start the iCloud calendar sync run:
+   ```bash
+   python app.py
+   ```
+
+## Environment Variables
+
+The application relies on a number of environment variables for external services. Below is a consolidated list of all variables referenced in the codebase:
+
+```
+ADMIN_PASSWORD
+AIRTABLE_API_KEY
+AIRTABLE_BASE_ID
+AIRTABLE_COMMAND_CENTER_BASE_TOKEN
+AIRTABLE_PERSONAL_ACCESS_TOKEN
+AIRTABLE_TABLE_ID
+AIRTABLE_TABLE_NAME
+AIRTABLE_VALID_TOKEN
+APIFY_API_KEY
+APOLLO_API_KEY
+BOOKING_LINK
+COMMAND_CENTER_URL
+DASHBOARD_ID
+DATABASE_URL
+ELEVENLABS_API_KEY
+ELEVENLABS_VOICE_ID
+EMAIL_APP_PASSWORD
+GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET
+GOOGLE_REFRESH_TOKEN
+HUBSPOT_API_KEY
+HUBSPOT_WEBHOOK_URL
+ICLOUD_PASSWORD
+ICLOUD_USERNAME
+KILL_SWITCH
+LINKEDIN_SESSION_COOKIE
+MAKE_WEBHOOK_URL
+NODE_ENV
+OPENAI_API_KEY
+PHANTOMBUSTER_AGENT_ID
+PHANTOMBUSTER_API_KEY
+PORT
+QUICKBOOKS_ACCESS_TOKEN
+QUICKBOOKS_REALM_ID
+REPL_ID
+SLACK_BOT_TOKEN
+SLACK_CHANNEL_ID
+SLACK_WEBHOOK_URL
+STRIPE_SECRET_KEY
+SYSTEM_MODE
+TWILIO_ACCOUNT_SID
+TWILIO_AUTH_TOKEN
+TWILIO_PHONE_NUMBER
+TWILIO_SMS_URL
+VOICEBOT_API_KEY
+VOICEBOT_TRIGGER_URL
+ZENDESK_API_TOKEN
+ZENDESK_DOMAIN
+ZENDESK_EMAIL
+
 YoBotAssistant is the backend command center that powers YoBot’s automation and metrics tracking. It exposes a small Express API and a collection of modules for scraping, voice generation, automation runs and more.
 
 ## Running the Express Server
@@ -46,11 +123,13 @@ AIRTABLE_TABLE_NAME=Command Center · Metrics Tracker
 ICLOUD_USERNAME=your-icloud-username
 ICLOUD_PASSWORD=your-icloud-password
 DATABASE_URL=postgres-connection-string
-```
+
 The `DATABASE_URL` is required for the database pool and `PORT` can be set to change the listening port. Other environment variables such as `ELEVENLABS_API_KEY`, `SLACK_WEBHOOK_URL` or `TWILIO_*` enable additional integrations.
 
 ## Available Modules
 
+
+Not every variable is required for a basic development setup, but specific features (voice automation, Slack integration, lead scraping, etc.) will require the related keys.
 Server modules live under [`server/modules`](server/modules) and include:
 
 - **airtable** – Airtable integrations and lead management
@@ -68,7 +147,7 @@ Server modules live under [`server/modules`](server/modules) and include:
 - **webhooks** – centralized webhook processing
 
 See [`YOBOT_BRAND_GUIDE.md`](YOBOT_BRAND_GUIDE.md) for UI styling guidelines.
-=======
+
 Ensure `AIRTABLE_API_KEY` is provided in your environment before running the server.
 
 These variables are used throughout the server modules for Airtable and iCloud integrations.
@@ -132,5 +211,4 @@ npm test
 ## License
 
 This project is licensed under the [MIT License](LICENSE)
-
 
