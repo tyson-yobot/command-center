@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
+
 import { COMMAND_CENTER_BASE_ID } from "../../config/airtableBase";
+
+import { COMMAND_CENTER_BASE_ID, TABLE_NAMES } from '@shared/airtableConfig';
+
 
 // Live data aggregator - pulls only from actual running systems
 export class LiveDashboardData {

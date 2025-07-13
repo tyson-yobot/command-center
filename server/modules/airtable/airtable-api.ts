@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { COMMAND_CENTER_BASE_ID } from "../../config/airtableBase";
 
-const AIRTABLE_API_KEY = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_VALID_TOKEN || process.env.AIRTABLE_API_KEY;
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
 const INTEGRATION_TEST_BASE = "appCoAtCZdARb4AM2";
 const INTEGRATION_TEST_TABLE = "🧪 Integration Test Log 2";
 

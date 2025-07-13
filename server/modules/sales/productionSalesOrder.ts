@@ -49,7 +49,8 @@ export function registerProductionSalesOrder(app: Express) {
       console.log(`💾 Real Tally submission saved: ${filename}`);
       
       // Process with live Tally processor
-      const pythonProcess = spawn('python3', ['live_tally_processor.py'], {
+      // Path updated to match new python script location
+      const pythonProcess = spawn('python3', ['server/yobot_command_center/sales_order.py'], {
         stdio: ['pipe', 'pipe', 'pipe']
       });
       
@@ -149,7 +150,8 @@ export function registerProductionSalesOrder(app: Express) {
       // Execute Python pipeline for all 10 steps
       console.log("🐍 Executing complete Python automation pipeline");
       
-      const pythonProcess = spawn('python3', ['server/completeProductionSalesOrder.py'], {
+      // Updated script path for production sales order pipeline
+      const pythonProcess = spawn('python3', ['server/yobot_command_center/sales_order.py'], {
         stdio: ['pipe', 'pipe', 'pipe']
       });
 
