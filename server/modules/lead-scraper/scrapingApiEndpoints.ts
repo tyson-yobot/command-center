@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
 
 import { COMMAND_CENTER_BASE_ID, TABLE_NAMES } from "@shared/airtableConfig";
 
@@ -35,10 +36,14 @@ export function registerScrapingEndpoints(app: Express) {
       // Log to Airtable Integration Test Log
       try {
 
+        await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/Integration%20Test%20Log`, {
+
+
         await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/${encodeURIComponent(TABLE_NAMES.INTEGRATION_TEST_LOG)}`, {
 
         await fetch(tableUrl(COMMAND_CENTER_BASE_ID, 'Integration Test Log'), {
 
+n
           method: "POST",
           headers: {
             "Authorization": `Bearer ${process.env.AIRTABLE_VALID_TOKEN}`,
@@ -80,8 +85,12 @@ export function registerScrapingEndpoints(app: Express) {
       for (const lead of leads.slice(0, 10)) { // Limit to first 10 for demo
         try {
 
+          await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/tblLDB2yFEdVvNlxr`, {
+
+
 
           await fetch(tableUrl(COMMAND_CENTER_BASE_ID, 'tblLDB2yFEdVvNlxr'), {
+
 
             method: "POST",
             headers: {
@@ -132,9 +141,13 @@ export function registerScrapingEndpoints(app: Express) {
       
       // Log preset save to Airtable
 
+      await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/Integration%20Test%20Log`, {
+
+
       await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/${encodeURIComponent(TABLE_NAMES.INTEGRATION_TEST_LOG)}`, {
 
       await fetch(tableUrl(COMMAND_CENTER_BASE_ID, 'Integration Test Log'), {
+
 
         method: "POST",
         headers: {
@@ -189,9 +202,13 @@ export function registerScrapingEndpoints(app: Express) {
       // Log export to Airtable
       try {
 
+        await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/Integration%20Test%20Log`, {
+
+
         await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/${encodeURIComponent(TABLE_NAMES.INTEGRATION_TEST_LOG)}`, {
 
         await fetch(tableUrl(COMMAND_CENTER_BASE_ID, 'Integration Test Log'), {
+
 
           method: "POST",
           headers: {

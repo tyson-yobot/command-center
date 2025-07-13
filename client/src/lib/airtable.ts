@@ -24,7 +24,11 @@ if (!AIRTABLE_API_KEY) {
   console.warn('AIRTABLE_API_KEY is not set');
 }
 
+const BASE_ID = process.env.AIRTABLE_BASE_ID || "appRt8V3tH4g5Z51f";
+
+
 const BASE_ID = "appRt8V3tH4g5Z51f";
+
 const TABLE_NAME = "Command Center - Metrics Tracker Table";
 
 

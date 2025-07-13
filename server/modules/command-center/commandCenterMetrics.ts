@@ -6,7 +6,11 @@
  */
 
 import type { Express } from "express";
+
+import { COMMAND_CENTER_BASE_ID } from "../../config/airtableBase";
+
 import { COMMAND_CENTER_BASE_ID } from "@shared/airtableConfig";
+
 
 interface MetricsRecord {
   '🛠️ Triggered Action': string;
@@ -631,7 +635,7 @@ export function registerCommandCenterMetrics(app: Express) {
         return res.status(400).json({ success: false, error: 'No API key configured' });
       }
 
-      const response = await fetch(`https://api.airtable.com/v0/appRt8V3tH4g5Z51f/tbl7K5RthCtD69BE1?maxRecords=1`, {
+      const response = await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/tbl7K5RthCtD69BE1?maxRecords=1`, {
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json'

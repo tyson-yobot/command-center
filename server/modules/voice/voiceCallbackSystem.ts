@@ -1,9 +1,13 @@
 import axios from 'axios';
+
+import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
+
 import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, getAirtableApiKey } from '@shared/airtableConfig';
 
 const BASE_ID = COMMAND_CENTER_BASE_ID;
 const FOLLOWUP_TABLE = TABLE_NAMES.FOLLOW_UP_REMINDER;
 const API_KEY = getAirtableApiKey();
+
 
 // Trigger voice callback using VoiceBot
 export async function triggerVoiceCallback(phoneNumber: string, callId: string): Promise<any> {
@@ -51,7 +55,11 @@ export async function trackResponse(incomingMessage: string, phone: string): Pro
 // Close follow-up by phone number
 export async function closeOutFollowupByPhone(phone: string): Promise<any> {
   try {
+
+    const url = `https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/📞 Follow-Up Reminder Tracker`;
+
     const url = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}`;
+
     const headers = {
       "Authorization": `Bearer ${API_KEY}`,
       "Content-Type": "application/json"
@@ -86,7 +94,11 @@ export async function closeOutFollowupByPhone(phone: string): Promise<any> {
 // Log follow-up event by phone number
 export async function logFollowupEventByPhone(phone: string, method: string, outcome: string): Promise<any> {
   try {
+
+    const url = `https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/📞 Follow-Up Reminder Tracker`;
+
     const url = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}`;
+
     const headers = {
       "Authorization": `Bearer ${API_KEY}`,
       "Content-Type": "application/json"
@@ -178,7 +190,11 @@ export async function logAlertToSlack(message: string): Promise<number> {
 // Monitor follow-up status and flag overdue ones
 export async function statusMonitor(): Promise<any> {
   try {
+
+    const url = `https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/📞 Follow-Up Reminder Tracker?filterByFormula={✅ Completed}=FALSE()`;
+
     const url = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}?filterByFormula={✅ Completed}=FALSE()`;
+
     const headers = {
       "Authorization": `Bearer ${API_KEY}`
     };
@@ -217,8 +233,13 @@ export async function dailySummaryPush(): Promise<any> {
   try {
     const today = new Date().toISOString().split('T')[0];
     
+
+    const completedUrl = `https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/📞 Follow-Up Reminder Tracker?filterByFormula=AND({✅ Completed}=TRUE(), DATETIME_FORMAT({📅 Follow-Up Date}, 'YYYY-MM-DD')='${today}')`;
+    const pendingUrl = `https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/📞 Follow-Up Reminder Tracker?filterByFormula=AND({✅ Completed}=FALSE(), DATETIME_FORMAT({📅 Follow-Up Date}, 'YYYY-MM-DD')='${today}')`;
+
     const completedUrl = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}?filterByFormula=AND({✅ Completed}=TRUE(), DATETIME_FORMAT({📅 Follow-Up Date}, 'YYYY-MM-DD')='${today}')`;
     const pendingUrl = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}?filterByFormula=AND({✅ Completed}=FALSE(), DATETIME_FORMAT({📅 Follow-Up Date}, 'YYYY-MM-DD')='${today}')`;
+
     
     const headers = {
       "Authorization": `Bearer ${API_KEY}`

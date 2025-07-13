@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { logEventToAirtable } from './hubspotCRM';
-import { getApiKey, BASE_ID, SCRAPED_LEADS_TABLE_ID } from '@shared/airtableConfig';
+
+import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
+=======import { getApiKey, BASE_ID, SCRAPED_LEADS_TABLE_ID } from '@shared/airtableConfig';
 
 import { COMMAND_CENTER_BASE_ID } from '@shared/airtableConfig';
 
@@ -9,6 +11,7 @@ import {
   SCRAPED_LEADS_TABLE_ID,
   tableUrl,
   recordUrl,
+
 
 
 interface LeadData {
@@ -76,6 +79,9 @@ async function enrichWithApollo(firstName: string, lastName: string, companyDoma
 async function isDuplicate(email?: string, fullName?: string, domain?: string): Promise<string | null> {
   try {
 
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
+
+
     const airtableBaseId = BASE_ID;
     const airtableTableId = SCRAPED_LEADS_TABLE_ID; // 📥 Scraped Leads · Universal
     const airtableToken = getApiKey();
@@ -85,6 +91,7 @@ async function isDuplicate(email?: string, fullName?: string, domain?: string): 
 
 
     const airtableBaseId = "appRt8V3tH4g5Z51f";
+
 
     const airtableTableId = "tblPRZ4nHbtj9opU"; // 📥 Scraped Leads · Universal
 
@@ -133,6 +140,9 @@ async function isDuplicate(email?: string, fullName?: string, domain?: string): 
 async function flagDuplicateInAirtable(recordId: string): Promise<boolean> {
   try {
 
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
+
+
     const airtableBaseId = BASE_ID;
     const airtableTableId = SCRAPED_LEADS_TABLE_ID;
     const airtableToken = getApiKey();
@@ -146,6 +156,7 @@ async function flagDuplicateInAirtable(recordId: string): Promise<boolean> {
     const url = recordUrl(COMMAND_CENTER_BASE_ID, SCRAPED_LEADS_TABLE_ID, recordId);
 
     const airtableBaseId = "appRt8V3tH4g5Z51f";
+
     const airtableTableId = "tblPRZ4nHbtj9opU";
     const airtableToken = process.env.AIRTABLE_API_KEY || "";
 
@@ -175,6 +186,8 @@ async function flagDuplicateInAirtable(recordId: string): Promise<boolean> {
 // Update existing lead with new data
 async function updateExistingLead(recordId: string, email?: string, phone?: string, jobTitle?: string): Promise<boolean> {
   try {
+
+    const airtableBaseId = COMMAND_CENTER_BASE_ID;
 
     const airtableBaseId = BASE_ID;
     const airtableTableId = SCRAPED_LEADS_TABLE_ID;
@@ -245,9 +258,10 @@ async function notifyDuplicateSlack(fullName: string, domain: string): Promise<v
 async function pushToAirtableLeads(leadData: LeadData): Promise<boolean> {
   try {
 
+
+
     const airtableBaseId = BASE_ID;
     const airtableTableId = SCRAPED_LEADS_TABLE_ID; // 📥 Scraped Leads · Universal
-
 
     const airtableBaseId = COMMAND_CENTER_BASE_ID;
     const airtableTableId = "tblPRZ4nHbtj9opU"; // 📥 Scraped Leads · Universal

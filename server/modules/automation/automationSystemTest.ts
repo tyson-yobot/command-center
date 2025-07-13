@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { executeFollowupAutomation, sendFollowupSMS } from './followupAutomation';
+import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
 import { triggerVoiceCallback, statusMonitor, dailySummaryPush } from './voiceCallbackSystem';
 
 // Comprehensive automation system test
@@ -217,8 +218,8 @@ async function testAirtableConnection(): Promise<any> {
   try {
     const testBases = [
       { name: "QA Call Review Log", url: "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblQACallReviewLog" },
-      { name: "Follow-Up Tracker", url: "https://api.airtable.com/v0/appRt8V3tH4g5Z51f/📞 Follow-Up Reminder Tracker" },
-      { name: "Inbound Call Log", url: "https://api.airtable.com/v0/appRt8V3tH4g5Z51f/📥 Inbound Call Log" }
+      { name: "Follow-Up Tracker", url: `https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/📞 Follow-Up Reminder Tracker` },
+      { name: "Inbound Call Log", url: `https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/📥 Inbound Call Log` }
     ];
 
     const results = [];
