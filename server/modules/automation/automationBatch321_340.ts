@@ -117,7 +117,11 @@ export async function logErrorToCCTracker(moduleName: string, error: string) {
 // Function 327: Trigger Slack CC Alert
 export async function triggerSlackCCAlert(title: string, msg: string) {
   try {
-    const webhookUrl = process.env.SLACK_WEBHOOK_URL || "https://hooks.slack.com/services/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";
+    const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+    if (!webhookUrl) {
+      console.warn("Slack webhook not configured for Command Center alerts");
+      return { success: false, error: "Slack webhook not configured" };
+    }
     
     await axios.post(webhookUrl, {
       text: `*${title}*\n${msg}`
