@@ -4757,7 +4757,7 @@ export default function CommandCenter() {
                     <span className="text-cyan-400">0</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-red-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                    <div className="bg-red-400 h-2 rounded-full w-0"></div>
                   </div>
                 </div>
               </div>
@@ -4774,7 +4774,7 @@ export default function CommandCenter() {
                     <span className="text-green-400">0</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-blue-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                    <div className="bg-blue-400 h-2 rounded-full w-0"></div>
                   </div>
                 </div>
               </div>
@@ -4791,7 +4791,7 @@ export default function CommandCenter() {
                     <span className="text-yellow-400">0</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-purple-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                    <div className="bg-purple-400 h-2 rounded-full w-0"></div>
                   </div>
                 </div>
               </div>
@@ -4808,7 +4808,7 @@ export default function CommandCenter() {
                     <span className="text-emerald-400">0</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-cyan-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                    <div className="bg-cyan-400 h-2 rounded-full w-0"></div>
                   </div>
                 </div>
               </div>
@@ -4825,7 +4825,7 @@ export default function CommandCenter() {
                     <span className="text-orange-400">0</span>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div className={`bg-emerald-400 h-2 rounded-full ${ 'w0-'}`}></div>
+                    <div className="bg-emerald-400 h-2 rounded-full w-0"></div>
                   </div>
                 </div>
               </div>
