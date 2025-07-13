@@ -23,10 +23,10 @@
 		}
   },
   "include": [
-    "client/src",
-    "shared",
-    "server",
+    "src",
+    "../shared",
+    "../server",
     "vite.config.ts"
   ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [{ "path": "../tsconfig.node.json" }]
 }
