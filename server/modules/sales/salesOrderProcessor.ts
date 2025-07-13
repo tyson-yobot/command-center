@@ -3,12 +3,12 @@ import path from 'path';
 import { google } from 'googleapis';
 import nodemailer from 'nodemailer';
 import axios from 'axios';
+import { getApiKey, BASE_ID, SCRAPED_LEADS_TABLE_NAME } from '@shared/airtableConfig';
 
 // Configuration
 const GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh";
-const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY as string;
-const BASE_ID = "appRt8V3tH4g5Z51f";
-const TABLE_NAME = "📥 Scraped Leads (Universal)";
+const AIRTABLE_API_KEY = getApiKey();
+const TABLE_NAME = SCRAPED_LEADS_TABLE_NAME;
 
 interface FormData {
   'Contact Name': string;
