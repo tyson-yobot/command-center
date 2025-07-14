@@ -29,7 +29,6 @@
   --cc-pad: 1rem;
 }
 
-<<<<<<< HEAD
 /* ---------- Base Resets ---------- */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -44,7 +43,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
-=======
+}
 @layer base {
   * {
     border-color: hsl(var(--border));
@@ -52,7 +51,6 @@ html, body {
   body {
     @apply bg-background text-foreground;
   }
->>>>>>> a6153e2bc84e9af5b7dfb06fb2fc23a83dde23ee
 }
 
 ::-webkit-scrollbar {

@@ -3,49 +3,6 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-<<<<<<< HEAD
-    "dev": "nodemon server/server.mts",
-    "start": "ts-node server/server.mts"
-  },
-  "devDependencies": {
-    "@replit/vite-plugin-cartographer": "^0.2.7",
-    "@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
-    "@tailwindcss/postcss": "^4.1.11",
-    "@tsconfig/node18": "^18.2.4",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
-    "@types/formidable": "^3.4.5",
-    "@types/helmet": "^0.0.48",
-    "@types/node": "^20.9.1",
-    "@types/node-fetch": "^3.0.12",
-    "@types/react": "^18.3.23",
-    "@types/uuid": "^10.0.0",
-    "@vitejs/plugin-react": "^4.6.0",
-    "autoprefixer": "^10.4.21",
-    "cross-env": "^7.0.3",
-    "nodemon": "^3.1.0",
-    "postcss": "^8.4.35",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "tailwindcss": "^3.4.3",
-    "ts-node": "^10.9.2",
-    "tsx": "^4.20.3",
-    "typescript": "^5.3.3",
-    "vite": "^4.7.0"
-  },
-  "dependencies": {
-    "@fullcalendar/daygrid": "^6.1.18",
-    "@fullcalendar/interaction": "^6.1.18",
-    "@fullcalendar/list": "^6.1.18",
-    "@fullcalendar/react": "^6.1.18",
-    "@fullcalendar/timegrid": "^6.1.18",
-    "@neondatabase/serverless": "^0.10.1",
-    "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
-    "@slack/web-api": "^7.9.3",
-    "axios": "^1.6.8",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.3"
-=======
     "dev": "vite",
     "build": "vite build",
     "start": "cross-env NODE_ENV=production node dist/index.js",
@@ -109,6 +66,5 @@
     "typescript": "^5.6.3",
     "vite": "^5.4.14",
     "vite-tsconfig-paths": "^4.2.0"
->>>>>>> a6153e2bc84e9af5b7dfb06fb2fc23a83dde23ee
   }
 }
