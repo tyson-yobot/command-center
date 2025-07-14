@@ -2,7 +2,7 @@ import axios from 'axios';
 import { logEventToAirtable } from './hubspotCRM';
 
 import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
-=======import { getApiKey, BASE_ID, SCRAPED_LEADS_TABLE_ID } from '@shared/airtableConfig';
+=======import { requireAirtableApiKey, BASE_ID, SCRAPED_LEADS_TABLE_ID } from '@shared/airtableConfig';
 
 import { COMMAND_CENTER_BASE_ID } from '@shared/airtableConfig';
 
@@ -84,7 +84,7 @@ async function isDuplicate(email?: string, fullName?: string, domain?: string): 
 
     const airtableBaseId = BASE_ID;
     const airtableTableId = SCRAPED_LEADS_TABLE_ID; // 📥 Scraped Leads · Universal
-    const airtableToken = getApiKey();
+    const airtableToken = requireAirtableApiKey();
 
     const airtableBaseId = COMMAND_CENTER_BASE_ID;
 
@@ -145,7 +145,7 @@ async function flagDuplicateInAirtable(recordId: string): Promise<boolean> {
 
     const airtableBaseId = BASE_ID;
     const airtableTableId = SCRAPED_LEADS_TABLE_ID;
-    const airtableToken = getApiKey();
+    const airtableToken = requireAirtableApiKey();
 
 
     const airtableBaseId = COMMAND_CENTER_BASE_ID;
@@ -191,7 +191,7 @@ async function updateExistingLead(recordId: string, email?: string, phone?: stri
 
     const airtableBaseId = BASE_ID;
     const airtableTableId = SCRAPED_LEADS_TABLE_ID;
-    const airtableToken = getApiKey();
+    const airtableToken = requireAirtableApiKey();
 
 
     const airtableBaseId = COMMAND_CENTER_BASE_ID;
@@ -271,7 +271,7 @@ async function pushToAirtableLeads(leadData: LeadData): Promise<boolean> {
     const airtableUrl = tableUrl(COMMAND_CENTER_BASE_ID, SCRAPED_LEADS_TABLE_ID);
 
     const headers = {
-      "Authorization": `Bearer ${getApiKey()}`,
+      "Authorization": `Bearer ${requireAirtableApiKey()}`,
       "Content-Type": "application/json"
     };
     
@@ -337,7 +337,7 @@ async function updateSyncStatus(email: string, synced: boolean): Promise<void> {
     const airtableUrl = tableUrl(OPS_BASE_ID, 'tblScrapedLeads');
 
     const headers = {
-      "Authorization": `Bearer ${getApiKey()}`
+      "Authorization": `Bearer ${requireAirtableApiKey()}`
     };
 
     // Find record by email

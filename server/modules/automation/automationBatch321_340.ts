@@ -3,14 +3,14 @@ import axios from 'axios';
 
 import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
 
-import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, getAirtableApiKey } from '@shared/airtableConfig';
+import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, requireAirtableApiKey } from '@shared/airtableConfig';
 
 
 const router = express.Router();
 
 // Airtable configuration
 
-const API_KEY = getAirtableApiKey() as string;
+const API_KEY = requireAirtableApiKey() as string;
 const BASE_ID = COMMAND_CENTER_BASE_ID;
 
 

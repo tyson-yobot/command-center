@@ -2,11 +2,11 @@ import axios from 'axios';
 
 import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
 
-import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, getAirtableApiKey } from '@shared/airtableConfig';
+import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, requireAirtableApiKey } from '@shared/airtableConfig';
 
 const BASE_ID = COMMAND_CENTER_BASE_ID;
 const FOLLOWUP_TABLE = TABLE_NAMES.FOLLOW_UP_REMINDER;
-const API_KEY = getAirtableApiKey();
+const API_KEY = requireAirtableApiKey();
 
 
 // Trigger voice callback using VoiceBot

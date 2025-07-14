@@ -10,14 +10,14 @@ if (!AIRTABLE_API_KEY || !BASE_ID || !TABLE_NAME) {
 }
 import { COMMAND_CENTER_BASE_ID } from "./server/config/airtableBase";
 
-import { getApiKey, BASE_ID, METRICS_TABLE_NAME } from "./shared/airtableConfig";
+import { requireAirtableApiKey, BASE_ID, METRICS_TABLE_NAME } from "./shared/airtableConfig";
 
 
 
-const AIRTABLE_API_KEY = getApiKey();
+const AIRTABLE_API_KEY = requireAirtableApiKey();
 const TABLE_NAME = METRICS_TABLE_NAME;
 
-import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, getAirtableApiKey } from "@shared/airtableConfig";
+import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, requireAirtableApiKey } from "@shared/airtableConfig";
 
 import { AIRTABLE_BASES } from "./server/modules/airtable/airtableConfig";
 
@@ -28,7 +28,7 @@ import { AIRTABLE_BASES } from "./server/modules/airtable/airtableConfig";
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
 
 
-const AIRTABLE_API_KEY = getAirtableApiKey();
+const AIRTABLE_API_KEY = requireAirtableApiKey();
 if (!AIRTABLE_API_KEY) {
   console.warn('AIRTABLE_API_KEY is not set');
 }
