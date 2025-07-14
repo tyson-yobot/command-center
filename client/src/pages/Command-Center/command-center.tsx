@@ -103,6 +103,7 @@ import { BotalyticsCard } from '@/components/analytics-cards/BotalyticsCard';
 import { ABTestCard } from '@/components/analytics-cards/ABTestCard';
 import { CalendarSyncCard } from '@/components/analytics-cards/CalendarSyncCard';
 import { RepScorecardCard } from '@/components/analytics-cards/RepScorecardCard';
+import { VoicePerformanceCard } from './components/VoicePerformanceCard';
 
 // Animated Counter Component
 const AnimatedCounter = ({ value, suffix = '', prefix = '', duration = 2000, color = 'text-white' }) => {
@@ -6194,46 +6195,7 @@ export default function CommandCenter() {
             <h2 className="text-2xl font-bold text-white text-center mb-6">Voice Operations Dashboard</h2>
             
             {/* Voice Analytics Section */}
-            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 min-h-[200px]">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center space-x-2">
-                  <Mic className="w-5 h-5 text-cyan-400" />
-                  <span>Voice Analytics & Performance</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-[18px]">
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-green-400 mb-1">{ '0'}</div>
-                      <div className="text-slate-300 text-sm">Total Calls Today</div>
-                      <div className="text-xs text-slate-400 mt-2">+5 from yesterday</div>
-                    </div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-blue-400 mb-1">{ '0:00'}</div>
-                      <div className="text-slate-300 text-sm">Avg Call Duration</div>
-                      <div className="text-xs text-slate-400 mt-2">Above target</div>
-                    </div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-purple-400 mb-1">0</div>
-                      <div className="text-slate-300 text-sm">Success Rate</div>
-                      <div className="text-xs text-slate-400 mt-2">Industry leading</div>
-                    </div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-cyan-400 mb-1">{ '0'}</div>
-                      <div className="text-slate-300 text-sm">Conversion Rate</div>
-                      <div className="text-xs text-slate-400 mt-2">+2.1% this week</div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <VoicePerformanceCard />
 
             {/* Voice Commands Section */}
             <Card className="bg-white/5 backdrop-blur-sm border border-white/10 min-h-[200px]">
@@ -6352,46 +6314,7 @@ export default function CommandCenter() {
             <h2 className="text-2xl font-bold text-white text-center mb-6">Voice Operations Dashboard</h2>
             
             {/* Voice Analytics Section */}
-            <Card className="bg-white/5 backdrop-blur-sm border border-white/10 min-h-[200px]">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center space-x-2">
-                  <Mic className="w-5 h-5 text-cyan-400" />
-                  <span>Voice Analytics & Performance</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-[18px]">
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-green-400 mb-1">{ '0'}</div>
-                      <div className="text-slate-300 text-sm">Total Calls Today</div>
-                      <div className="text-xs text-slate-400 mt-2">+5 from yesterday</div>
-                    </div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-blue-400 mb-1">{ '0:00'}</div>
-                      <div className="text-slate-300 text-sm">Avg Call Duration</div>
-                      <div className="text-xs text-slate-400 mt-2">Above target</div>
-                    </div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-purple-400 mb-1">0</div>
-                      <div className="text-slate-300 text-sm">Success Rate</div>
-                      <div className="text-xs text-slate-400 mt-2">Industry leading</div>
-                    </div>
-                  </div>
-                  <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-600 h-32 flex flex-col justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-black text-cyan-400 mb-1">{ '0'}</div>
-                      <div className="text-slate-300 text-sm">Conversion Rate</div>
-                      <div className="text-xs text-slate-400 mt-2">+2.1% this week</div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <VoicePerformanceCard />
 
             {/* Voice Commands Section */}
             <Card className="bg-white/5 backdrop-blur-sm border border-white/10 min-h-[200px]">
