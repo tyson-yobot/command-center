@@ -2,13 +2,16 @@
 // /lib/airtable.ts
 import axios from 'axios';
 
-import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, getAirtableApiKey } from '@shared/airtableConfig';
+import {
+  AIRTABLE_API_KEY,
+  AIRTABLE_BASE_ID,
+  TABLE_NAMES,
+} from '@shared/airtableConfig';
 
-const AIRTABLE_API_KEY = getAirtableApiKey();
 if (!AIRTABLE_API_KEY) {
   console.warn('AIRTABLE_API_KEY is not set');
 }
-const BASE_ID = COMMAND_CENTER_BASE_ID;
+const BASE_ID = AIRTABLE_BASE_ID;
 const TABLE_NAME = TABLE_NAMES.METRICS_TRACKER;
 
 const airtableInstance = axios.create({
