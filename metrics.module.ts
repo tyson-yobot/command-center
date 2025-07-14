@@ -1,12 +1,14 @@
 import axios from "axios";
 
-
-import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, getAirtableApiKey } from "./shared/airtableConfig";
-import { AIRTABLE_BASES } from "./server/modules/airtable/airtableConfig";
+import {
+  COMMAND_CENTER_BASE_ID,
+  TABLE_NAMES,
+  getAirtableApiKey,
+} from "@shared/airtableConfig";
 
 const AIRTABLE_API_KEY = getAirtableApiKey();
-const BASE_ID = AIRTABLE_BASES.COMMAND_CENTER.baseId;
-const TABLE_NAME = AIRTABLE_BASES.COMMAND_CENTER.tables.METRICS_TRACKER;
+const BASE_ID = COMMAND_CENTER_BASE_ID;
+const TABLE_NAME = TABLE_NAMES.METRICS_TRACKER;
 
 if (!AIRTABLE_API_KEY || !BASE_ID || !TABLE_NAME) {
   console.error('Airtable configuration is incomplete. Please ensure AIRTABLE_API_KEY, COMMAND_CENTER_BASE_ID, and METRICS_TRACKER table name are properly set.');
