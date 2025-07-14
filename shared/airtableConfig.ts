@@ -1,17 +1,18 @@
 
+export const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+export const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
+
 export function getApiKey(): string {
-  const key = process.env.AIRTABLE_API_KEY;
-  if (!key) {
+  if (!AIRTABLE_API_KEY) {
     throw new Error('AIRTABLE_API_KEY is not set');
   }
-  return key;
+  return AIRTABLE_API_KEY;
 }
 
-const baseId = process.env.AIRTABLE_BASE_ID;
-if (!baseId) {
+if (!AIRTABLE_BASE_ID) {
   throw new Error('AIRTABLE_BASE_ID is not set');
 }
-export const BASE_ID = baseId;
+export const BASE_ID = AIRTABLE_BASE_ID;
 
 
 export const TABLE_NAMES = {
