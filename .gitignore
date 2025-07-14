@@ -13,11 +13,10 @@ yarn-error.log*
 # Environments
 .env
 .env.*
-
-client/src/.env
-
 !.env.example
 
+# Ignore client environment
+client/src/.env
 
 # Node modules
 node_modules/
@@ -45,20 +44,8 @@ __pycache__/
 *.bak
 *.tmp
 
-
-# Ignore client environment
-client/src/.env
-
-# Command Center zipped page
-client/src/pages/Command-Center.zip
-
 # Temporary text documents
 client/src/lib/New Text Document.txt
 
-client/src/.env
-
-
-client/src/.env
 .config/
-
 
