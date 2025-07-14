@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import os
-if not os.getenv("DISABLE_ICLOUD_SYNC"):
-    # existing Flask boot code
-=======
 services:
 - type: web
   name: icloud-sync
@@ -50,4 +45,3 @@ services:
       sync: false
     - key: SLACK_WEBHOOK
       sync: false
->>>>>>> 692751fa02aec1a95d0ca2c3113091d5e0732d44

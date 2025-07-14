@@ -48,7 +48,4 @@ if __name__ == "__main__":
     elif args.push:
         push_snapshot_to_airtable()
     else:
-        cli_print_schema()from modules.calendar.calendar_router import calendar_router
-        app.register_blueprint(calendar_router, url_prefix="/api/calendar")
-    else:
         cli_print_schema()
