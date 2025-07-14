@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "type": "module",
 "scripts": {
-  "dev": "node ./server/index.mjs",
-  "test": "jest"
+  "dev": "node ./server/index.mjs"
 },
   "devDependencies": {
     "@replit/vite-plugin-cartographer": "^0.2.7",
