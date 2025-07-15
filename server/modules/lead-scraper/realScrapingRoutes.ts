@@ -2,14 +2,13 @@ import type { Express } from "express";
 import { logIntegrationTest } from "./airtableIntegrationLogger";
 import { storeLeadsInAirtable, logScrapingCampaign } from "./airtableLeadStorage";
 
-import { LEAD_ENGINE_BASE_ID, TABLE_NAMES } from "@shared/airtableConfig";
-
 import {
   LEAD_ENGINE_BASE_ID,
+  TABLE_NAMES,
   SCRAPED_LEADS_TABLE,
   SCRAPED_LEADS_TABLE_NAME,
   tableUrl,
-} from "../../shared/airtableConfig";
+} from "@shared/airtableConfig";
 
 
 // Real API integration for lead scraping with proper test/live mode separation
@@ -587,8 +586,6 @@ export function registerRealScrapingRoutes(app: Express) {
         return res.status(400).json({ success: false, error: 'Airtable API key required' });
       }
 
-
-      const response = await fetch(`https://api.airtable.com/v0/${LEAD_ENGINE_BASE_ID}/${encodeURIComponent(TABLE_NAMES.SCRAPED_LEADS)}`, {
 
       const response = await fetch(tableUrl(LEAD_ENGINE_BASE_ID, SCRAPED_LEADS_TABLE), {
 
