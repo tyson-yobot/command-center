@@ -133,7 +133,8 @@ export async function logMetricToCommandCenter(metricName: string, value: number
     };
     
     // Note: Replace with actual command center URL
-    const commandCenterUrl = process.env.COMMAND_CENTER_URL || "http://localhost:5000/api/metrics";
+    const commandCenterUrl = process.env.COMMAND_CENTER_URL;
+    if (!commandCenterUrl) throw new Error("COMMAND_CENTER_URL not set");
     
     const response = await axios.post(commandCenterUrl, payload);
     

@@ -1,7 +1,6 @@
-import express from 'express';
+/// <reference types="express" />
+import express, { Request, Response } from 'express';
 import axios from 'axios';
-
-import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
 
 import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, getAirtableApiKey } from '@shared/airtableConfig';
 
@@ -10,18 +9,8 @@ const router = express.Router();
 
 // Airtable configuration
 
-const API_KEY = getAirtableApiKey() as string;
-const BASE_ID = COMMAND_CENTER_BASE_ID;
-
-
-const API_KEY = process.env.AIRTABLE_API_KEY || "";
-
 const API_KEY = process.env.AIRTABLE_API_KEY as string;
-
 const BASE_ID = COMMAND_CENTER_BASE_ID;
-
-
-const BASE_ID = "appRt8V3tH4g5Z51f";
 
 
 const HEADERS = {
@@ -376,7 +365,7 @@ const functionRoutes = [
 
 // Create routes for each function
 functionRoutes.forEach(({ id, name, handler }) => {
-  router.post(`/function-${id}`, async (req, res) => {
+  router.post(`/function-${id}`, async (req: Request, res: Response) => {
     try {
       const result = await handler(req);
       res.json({ success: true, functionId: id, name, result });
@@ -387,7 +376,7 @@ functionRoutes.forEach(({ id, name, handler }) => {
 });
 
 // Execute all functions 321-340
-router.post('/execute-all', async (req, res) => {
+router.post('/execute-all', async (req: Request, res: Response) => {
   const results = [];
   
   try {

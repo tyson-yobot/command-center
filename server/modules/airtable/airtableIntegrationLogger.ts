@@ -6,12 +6,12 @@
 export interface LogEntry {
   operation: string;
   status: 'success' | 'error' | 'warning';
-  data: any;
+  data: Record<string, unknown>;
   timestamp: string;
   source: string;
 }
 
-export async function logOperation(operation: string, data: any, status: 'success' | 'error' | 'warning' = 'success', message?: string) {
+export async function logOperation(operation: string, data: Record<string, unknown>, status: 'success' | 'error' | 'warning' = 'success', message?: string) {
   const logEntry: LogEntry = {
     operation,
     status,
@@ -54,6 +54,6 @@ export async function logSystemHealth(component: string, status: string) {
   }, status === 'healthy' ? 'success' : 'warning', `Health check: ${component}`);
 }
 
-export async function logIntegrationTest(data: any) {
+export async function logIntegrationTest(data: Record<string, unknown>) {
   return await logOperation('integration-test', data, 'success', 'Integration test logged');
 }
