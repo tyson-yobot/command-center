@@ -1,18 +1,13 @@
 import axios from 'axios';
 import { logEventToAirtable } from './hubspotCRM';
-
-import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
-=======import { getApiKey, BASE_ID, SCRAPED_LEADS_TABLE_ID } from '@shared/airtableConfig';
-
-import { COMMAND_CENTER_BASE_ID } from '@shared/airtableConfig';
-
 import {
   COMMAND_CENTER_BASE_ID,
   SCRAPED_LEADS_TABLE_ID,
+  OPS_BASE_ID,
   tableUrl,
   recordUrl,
-
-
+  getApiKey
+} from '@shared/airtableConfig';
 
 interface LeadData {
   first_name: string;
@@ -40,12 +35,12 @@ async function enrichWithApollo(firstName: string, lastName: string, companyDoma
       return null;
     }
 
-    const url = "https://api.apollo.io/v1/mixed_people/search";
+    const url = 'https://api.apollo.io/v1/mixed_people/search';
     const headers = {
-      "Cache-Control": "no-cache",
-      "Content-Type": "application/json"
+      'Cache-Control': 'no-cache',
+      'Content-Type': 'application/json'
     };
-    
+
     const payload = {
       api_key: apolloKey,
       q_organization_domains: [companyDomain],
@@ -55,7 +50,7 @@ async function enrichWithApollo(firstName: string, lastName: string, companyDoma
     };
 
     const response = await axios.post(url, payload, { headers, timeout: 10000 });
-    
+
     if (response.status === 200) {
       const data = response.data;
       if (data.people && data.people.length > 0) {
@@ -78,34 +73,9 @@ async function enrichWithApollo(firstName: string, lastName: string, companyDoma
 // Deduplication check - returns record ID if duplicate found
 async function isDuplicate(email?: string, fullName?: string, domain?: string): Promise<string | null> {
   try {
+    const headers = { Authorization: `Bearer ${getApiKey()}` };
 
-    const airtableBaseId = COMMAND_CENTER_BASE_ID;
-
-
-    const airtableBaseId = BASE_ID;
-    const airtableTableId = SCRAPED_LEADS_TABLE_ID; // 📥 Scraped Leads · Universal
-    const airtableToken = getApiKey();
-
-    const airtableBaseId = COMMAND_CENTER_BASE_ID;
-
-
-
-    const airtableBaseId = "appRt8V3tH4g5Z51f";
-
-
-    const airtableTableId = "tblPRZ4nHbtj9opU"; // 📥 Scraped Leads · Universal
-
-    const airtableToken = process.env.AIRTABLE_API_KEY || "";
-
-
-    const airtableToken = process.env.AIRTABLE_API_KEY as string;
-
-
-    const headers = {
-      "Authorization": `Bearer ${airtableToken}`
-    };
-
-    let filterFormula = "";
+    let filterFormula = '';
     if (email) {
       filterFormula = `{📧 Email} = '${email}'`;
     } else if (fullName && domain) {
@@ -139,39 +109,15 @@ async function isDuplicate(email?: string, fullName?: string, domain?: string): 
 // Flag duplicate in Airtable
 async function flagDuplicateInAirtable(recordId: string): Promise<boolean> {
   try {
-
-    const airtableBaseId = COMMAND_CENTER_BASE_ID;
-
-
-    const airtableBaseId = BASE_ID;
-    const airtableTableId = SCRAPED_LEADS_TABLE_ID;
-    const airtableToken = getApiKey();
-
-
-    const airtableBaseId = COMMAND_CENTER_BASE_ID;
-
-
-    const airtableToken = process.env.AIRTABLE_API_KEY as string;
-
     const url = recordUrl(COMMAND_CENTER_BASE_ID, SCRAPED_LEADS_TABLE_ID, recordId);
-
-    const airtableBaseId = "appRt8V3tH4g5Z51f";
-
-    const airtableTableId = "tblPRZ4nHbtj9opU";
-    const airtableToken = process.env.AIRTABLE_API_KEY || "";
-
-    const airtableToken = process.env.AIRTABLE_API_KEY as string;
-
-
-
     const headers = {
-      "Authorization": `Bearer ${airtableToken}`,
-      "Content-Type": "application/json"
+      Authorization: `Bearer ${getApiKey()}`,
+      'Content-Type': 'application/json'
     };
-    
+
     const payload = {
-      "fields": {
-        "⚠️ Duplicates Found": true
+      fields: {
+        '⚠️ Duplicates Found': true
       }
     };
 
@@ -186,43 +132,17 @@ async function flagDuplicateInAirtable(recordId: string): Promise<boolean> {
 // Update existing lead with new data
 async function updateExistingLead(recordId: string, email?: string, phone?: string, jobTitle?: string): Promise<boolean> {
   try {
-
-    const airtableBaseId = COMMAND_CENTER_BASE_ID;
-
-    const airtableBaseId = BASE_ID;
-    const airtableTableId = SCRAPED_LEADS_TABLE_ID;
-    const airtableToken = getApiKey();
-
-
-    const airtableBaseId = COMMAND_CENTER_BASE_ID;
-
-
-    const airtableToken = process.env.AIRTABLE_API_KEY as string;
-
     const url = recordUrl(COMMAND_CENTER_BASE_ID, SCRAPED_LEADS_TABLE_ID, recordId);
-
-    const airtableBaseId = "appRt8V3tH4g5Z51f";
-
-    const airtableTableId = "tblPRZ4nHbtj9opU";
-
-    const airtableToken = process.env.AIRTABLE_API_KEY || "";
-
-    const airtableToken = process.env.AIRTABLE_API_KEY as string;
-
-
-
-    const url = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableId}/${recordId}`;
-
     const headers = {
-      "Authorization": `Bearer ${airtableToken}`,
-      "Content-Type": "application/json"
+      Authorization: `Bearer ${getApiKey()}`,
+      'Content-Type': 'application/json'
     };
-    
+
     const fields: any = {};
-    if (email) fields["📧 Email"] = email;
-    if (phone) fields["📱 Phone"] = phone;
-    if (jobTitle) fields["🔍 Job Title"] = jobTitle;
-    
+    if (email) fields['📧 Email'] = email;
+    if (phone) fields['📱 Phone'] = phone;
+    if (jobTitle) fields['🔍 Job Title'] = jobTitle;
+
     const payload = { fields };
 
     const response = await axios.patch(url, payload, { headers });
@@ -242,11 +162,11 @@ async function notifyDuplicateSlack(fullName: string, domain: string): Promise<v
       console.log('Slack webhook URL not configured, skipping duplicate alert');
       return;
     }
-    
+
     const message = {
-      "text": `⚠️ *Duplicate Lead Flagged* — ${fullName} @ ${domain} already exists in Airtable.`
+      text: `⚠️ *Duplicate Lead Flagged* — ${fullName} @ ${domain} already exists in Airtable.`
     };
-    
+
     await axios.post(slackUrl, message);
     console.log('Duplicate notification sent to Slack');
   } catch (error: any) {
@@ -257,37 +177,25 @@ async function notifyDuplicateSlack(fullName: string, domain: string): Promise<v
 // Push to Airtable Scraped Leads table
 async function pushToAirtableLeads(leadData: LeadData): Promise<boolean> {
   try {
-
-
-
-    const airtableBaseId = BASE_ID;
-    const airtableTableId = SCRAPED_LEADS_TABLE_ID; // 📥 Scraped Leads · Universal
-
-    const airtableBaseId = COMMAND_CENTER_BASE_ID;
-    const airtableTableId = "tblPRZ4nHbtj9opU"; // 📥 Scraped Leads · Universal
-
-    const airtableUrl = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableId}`;
-
     const airtableUrl = tableUrl(COMMAND_CENTER_BASE_ID, SCRAPED_LEADS_TABLE_ID);
-
     const headers = {
-      "Authorization": `Bearer ${getApiKey()}`,
-      "Content-Type": "application/json"
+      Authorization: `Bearer ${getApiKey()}`,
+      'Content-Type': 'application/json'
     };
-    
+
     const payload = {
-      "fields": {
-        "📅 Timestamp": new Date().toISOString() + "Z",
-        "🧑 Name": `${leadData.first_name} ${leadData.last_name}`,
-        "📧 Email": leadData.email || "",
-        "📱 Phone": leadData.phone || "",
-        "🏢 Company": leadData.company,
-        "🌐 Website": leadData.domain,
-        "🔁 Synced to HubSpot?": false,
-        "🏷 Source Tool": leadData.source
+      fields: {
+        '📅 Timestamp': new Date().toISOString() + 'Z',
+        '🧑 Name': `${leadData.first_name} ${leadData.last_name}`,
+        '📧 Email': leadData.email || '',
+        '📱 Phone': leadData.phone || '',
+        '🏢 Company': leadData.company,
+        '🌐 Website': leadData.domain,
+        '🔁 Synced to HubSpot?': false,
+        '🏷 Source Tool': leadData.source
       }
     };
-    
+
     const response = await axios.post(airtableUrl, payload, { headers });
     console.log('Lead pushed to Airtable:', leadData.first_name, leadData.last_name);
     return true;
@@ -305,20 +213,24 @@ async function syncToHubSpot(leadData: LeadData): Promise<boolean> {
       return false;
     }
 
-    const hubspotUrl = process.env.HUBSPOT_WEBHOOK_URL || "https://hook.us2.make.com/hubspot-sync";
-    
-    const response = await axios.post(hubspotUrl, {
-      firstName: leadData.first_name,
-      lastName: leadData.last_name,
-      email: leadData.email,
-      phone: leadData.phone,
-      company: leadData.company,
-      source: leadData.source,
-      timestamp: new Date().toISOString()
-    }, {
-      headers: { 'Content-Type': 'application/json' },
-      timeout: 10000
-    });
+    const hubspotUrl = process.env.HUBSPOT_WEBHOOK_URL || 'https://hook.us2.make.com/hubspot-sync';
+
+    const response = await axios.post(
+      hubspotUrl,
+      {
+        firstName: leadData.first_name,
+        lastName: leadData.last_name,
+        email: leadData.email,
+        phone: leadData.phone,
+        company: leadData.company,
+        source: leadData.source,
+        timestamp: new Date().toISOString()
+      },
+      {
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 10000
+      }
+    );
 
     console.log('Lead synced to HubSpot:', leadData.email);
     return true;
@@ -331,14 +243,8 @@ async function syncToHubSpot(leadData: LeadData): Promise<boolean> {
 // Update Airtable sync status
 async function updateSyncStatus(email: string, synced: boolean): Promise<void> {
   try {
-
-    const airtableUrl = `https://api.airtable.com/v0/${BASE_ID}/${SCRAPED_LEADS_TABLE_ID}`;
-
     const airtableUrl = tableUrl(OPS_BASE_ID, 'tblScrapedLeads');
-
-    const headers = {
-      "Authorization": `Bearer ${getApiKey()}`
-    };
+    const headers = { Authorization: `Bearer ${getApiKey()}` };
 
     // Find record by email
     const searchResponse = await axios.get(airtableUrl, {
@@ -351,14 +257,18 @@ async function updateSyncStatus(email: string, synced: boolean): Promise<void> {
 
     if (searchResponse.data.records.length > 0) {
       const recordId = searchResponse.data.records[0].id;
-      
+
       // Update sync status
-      await axios.patch(`${airtableUrl}/${recordId}`, {
-        fields: {
-          "🔁 Synced to HubSpot?": synced
-        }
-      }, { headers });
-      
+      await axios.patch(
+        `${airtableUrl}/${recordId}`,
+        {
+          fields: {
+            '🔁 Synced to HubSpot?': synced
+          }
+        },
+        { headers }
+      );
+
       console.log('Updated sync status for:', email);
     }
   } catch (error: any) {
@@ -374,11 +284,11 @@ async function sendSlackAlert(eventType: string, source: string, status: string,
       console.log('Slack webhook URL not configured, skipping alert');
       return;
     }
-    
+
     const slackPayload = {
-      "text": `📡 *${eventType}* from *${source}*\nStatus: *${status}*\n🧾 ${details}`
+      text: `📡 *${eventType}* from *${source}*\nStatus: *${status}*\n🧾 ${details}`
     };
-    
+
     await axios.post(slackUrl, slackPayload);
     console.log('Slack alert sent:', eventType);
   } catch (error: any) {
@@ -390,19 +300,19 @@ async function sendSlackAlert(eventType: string, source: string, status: string,
 export async function processScrapedLead(leadData: LeadData): Promise<{ success: boolean; message: string }> {
   try {
     console.log('Processing scraped lead:', leadData.first_name, leadData.last_name);
-    
+
     // Step 1: Enrichment via Apollo if missing email/phone
     if (!leadData.email || !leadData.phone) {
       console.log('Missing email or phone, attempting Apollo enrichment...');
-      
+
       const enriched = await enrichWithApollo(leadData.first_name, leadData.last_name, leadData.domain);
-      
+
       if (enriched) {
         leadData.email = enriched.email || leadData.email;
         leadData.phone = enriched.phone || leadData.phone;
-        
+
         console.log('Lead enriched with Apollo data');
-        
+
         // Log enrichment
         await logEventToAirtable(
           'Apollo Enrichment',
@@ -417,21 +327,21 @@ export async function processScrapedLead(leadData: LeadData): Promise<{ success:
     // Step 2: Deduplication check
     const fullName = `${leadData.first_name} ${leadData.last_name}`;
     const existingRecordId = await isDuplicate(leadData.email || '', fullName, leadData.domain);
-    
+
     if (existingRecordId) {
       console.log('Duplicate lead detected, updating existing record:', fullName);
-      
+
       // Flag as duplicate and update with any new data
       await flagDuplicateInAirtable(existingRecordId);
-      
+
       // Update existing record if we have new enriched data
       if (leadData.email || leadData.phone) {
         await updateExistingLead(existingRecordId, leadData.email, leadData.phone);
       }
-      
+
       // Notify Slack about duplicate
       await notifyDuplicateSlack(fullName, leadData.domain);
-      
+
       // Log duplicate handling
       await logEventToAirtable(
         'Duplicate Lead Updated',
@@ -440,7 +350,7 @@ export async function processScrapedLead(leadData: LeadData): Promise<{ success:
         'SUCCESS',
         `Updated existing record with new data. Record ID: ${existingRecordId}`
       );
-      
+
       return { success: true, message: 'Duplicate lead updated with new data' };
     }
 
@@ -454,7 +364,7 @@ export async function processScrapedLead(leadData: LeadData): Promise<{ success:
     let hubspotSuccess = false;
     if (leadData.email) {
       hubspotSuccess = await syncToHubSpot(leadData);
-      
+
       // Update sync status in Airtable
       await updateSyncStatus(leadData.email, hubspotSuccess);
     }
@@ -476,14 +386,13 @@ export async function processScrapedLead(leadData: LeadData): Promise<{ success:
       `${leadData.email || fullName} | ${leadData.phone || 'No phone'}`
     );
 
-    return { 
-      success: true, 
-      message: `Lead processed successfully. HubSpot sync: ${hubspotSuccess ? 'Success' : 'Failed'}` 
+    return {
+      success: true,
+      message: `Lead processed successfully. HubSpot sync: ${hubspotSuccess ? 'Success' : 'Failed'}`
     };
-
   } catch (error: any) {
     console.error('Lead processing pipeline failed:', error.message);
-    
+
     // Log error
     await logEventToAirtable(
       'Lead Processing Error',
@@ -506,7 +415,7 @@ export async function processBatchLeads(leads: LeadData[]): Promise<{ processed:
   for (const lead of leads) {
     const result = await processScrapedLead(lead);
     results.push({ lead: `${lead.first_name} ${lead.last_name}`, ...result });
-    
+
     if (result.success) {
       processed++;
     } else {

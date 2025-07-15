@@ -1,19 +1,15 @@
 // Airtable Integration Test Logger for YoBot Command Center
 
-import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
-const AIRTABLE_BASE_ID = COMMAND_CENTER_BASE_ID; // YoBot Command Center (Live Ops)
-const INTEGRATION_TEST_LOG_TABLE = "Integration Test Log Table";
-
-
-import { COMMAND_CENTER_BASE_ID, TABLE_NAMES } from "@shared/airtableConfig";
-const AIRTABLE_BASE_ID = COMMAND_CENTER_BASE_ID; // YoBot Command Center (Live Ops)
-const INTEGRATION_TEST_LOG_TABLE = TABLE_NAMES.INTEGRATION_TEST_LOG;
-
 import {
   COMMAND_CENTER_BASE_ID,
-  INTEGRATION_TEST_LOG_TABLE,
+  TABLE_NAMES,
   tableUrl,
-} from "../../shared/airtableConfig";
+  getApiKey,
+  getAirtableApiKey
+} from '@shared/airtableConfig';
+
+const AIRTABLE_BASE_ID = COMMAND_CENTER_BASE_ID; // YoBot Command Center (Live Ops)
+const INTEGRATION_TEST_LOG_TABLE = TABLE_NAMES.INTEGRATION_TEST_LOG;
 
 
 
@@ -30,7 +26,8 @@ interface IntegrationTestLog {
 }
 
 export async function logIntegrationTest(testData: IntegrationTestLog): Promise<boolean> {
-  if (!process.env.AIRTABLE_API_KEY) {
+  const apiKey = getAirtableApiKey();
+  if (!apiKey) {
     console.warn('Missing Airtable API key for integration test logging');
     return false;
   }
@@ -41,7 +38,7 @@ export async function logIntegrationTest(testData: IntegrationTestLog): Promise<
     const response = await fetch(tableUrl(COMMAND_CENTER_BASE_ID, INTEGRATION_TEST_LOG_TABLE), {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
