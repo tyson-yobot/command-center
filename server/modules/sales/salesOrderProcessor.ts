@@ -213,11 +213,25 @@ export class SalesOrderProcessor {
   async sendDocuSignSignature(templateId: string, signerEmail: string, signerName: string, companyName: string): Promise<void> {
     try {
       console.log(`📩 Sending DocuSign to ${signerName} <${signerEmail}> using template ${templateId} for ${companyName}`);
-      
-      // TODO: Implement DocuSign API integration when credentials are available
-      // This would use the DocuSign eSignature API to send the template for signature
-      
-      console.log('DocuSign signature request queued');
+
+      const baseUrl = process.env.DOCUSIGN_API_BASE;
+      const token = process.env.DOCUSIGN_ACCESS_TOKEN;
+      if (!baseUrl || !token) {
+        throw new Error('DocuSign API not configured');
+      }
+
+      const payload = {
+        templateId,
+        emailSubject: `Signature Request for ${companyName}`,
+        templateRoles: [{ email: signerEmail, name: signerName, roleName: 'signer' }],
+        status: 'sent'
+      };
+
+      await axios.post(`${baseUrl}/envelopes`, payload, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+      });
+
+      console.log('DocuSign signature request sent');
 
     } catch (error) {
       console.error('DocuSign signature request failed:', error);
@@ -261,10 +275,27 @@ export class SalesOrderProcessor {
     try {
       console.log(`📤 Sending contact to HubSpot: ${formData['Contact Name']} <${formData['Email']}>`);
       
-      // TODO: Implement HubSpot API integration when credentials are available
-      // This would use the HubSpot Contacts API to create or update the contact
-      
-      console.log('HubSpot contact sync queued');
+      const apiKey = process.env.HUBSPOT_API_KEY;
+      if (!apiKey) {
+        throw new Error('HUBSPOT_API_KEY must be set');
+      }
+
+      const contact = {
+        properties: {
+          email: formData['Email'],
+          firstname: formData['Contact Name'].split(' ')[0],
+          lastname: formData['Contact Name'].split(' ').slice(1).join(' '),
+          company: formData['Company Name'],
+          phone: formData['Phone Number'],
+          website: formData.Website || ''
+        }
+      };
+
+      await axios.post('https://api.hubapi.com/crm/v3/objects/contacts', contact, {
+        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' }
+      });
+
+      console.log('HubSpot contact synced');
 
     } catch (error) {
       console.error('HubSpot sync failed:', error);

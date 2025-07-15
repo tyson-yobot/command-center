@@ -1,6 +1,7 @@
 import { db } from "./db";
 import { knowledgeItems, callLogs, universalLeads, type KnowledgeItem, type InsertKnowledgeItem, type CallLog, type InsertCallLog, type UniversalLead, type InsertUniversalLead } from "@shared/schema";
-import { LEAD_ENGINE_BASE_ID, TABLE_NAMES } from "@shared/airtableConfig";
+import axios from 'axios';
+import { LEAD_ENGINE_BASE_ID, TABLE_NAMES, getApiKey, tableUrl } from "@shared/airtableConfig";
 import { eq, desc, and } from "drizzle-orm";
 
 export interface IKnowledgeStorage {
@@ -314,19 +315,33 @@ export class AirtableLeadsStorage implements ILeadsStorage {
 
   async syncFromAirtable(): Promise<{ success: boolean; count: number; message: string }> {
     try {
-      // This would connect to your Airtable API
-      // For now, return success status until API integration is set up
-      return {
-        success: true,
-        count: 0,
-        message: 'Airtable sync ready - API key required for live data'
-      };
+      const url = tableUrl(this.AIRTABLE_BASE_ID, this.LEADS_TABLE);
+      const response = await axios.get(url, {
+        headers: { Authorization: `Bearer ${getApiKey()}` },
+        params: { maxRecords: 100 }
+      });
+
+      let count = 0;
+      for (const record of response.data.records || []) {
+        const fields = record.fields || {};
+        await this.createUniversalLead({
+          source: 'airtable',
+          sourceId: record.id,
+          fullName: fields['🧑‍💼 Name'] || '',
+          firstName: fields['🧑‍💼 Name']?.split(' ')[0] || '',
+          lastName: fields['🧑‍💼 Name']?.split(' ').slice(1).join(' ') || '',
+          email: fields['📧 Email'] || '',
+          phone: fields['☎️ Phone'] || '',
+          company: fields['🏢 Company'] || '',
+          status: fields['📞 Call Status'] || 'New'
+        });
+        count++;
+      }
+
+      return { success: true, count, message: 'Airtable sync completed' };
     } catch (error) {
-      return {
-        success: false,
-        count: 0,
-        message: 'Airtable sync failed - check API configuration'
-      };
+      console.error('Airtable sync failed:', error);
+      return { success: false, count: 0, message: 'Airtable sync failed' };
     }
   }
 

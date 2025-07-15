@@ -327,7 +327,8 @@ export function registerCoreAutomationEndpoints(app: Express) {
   app.post("/api/automation/clear-test-data", async (req, res) => {
     try {
       // Forward to the main wipe endpoint
-      const response = await fetch('http://localhost:5000/api/wipe-test-data', {
+      const baseUrl = process.env.COMMAND_CENTER_URL || 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/wipe-test-data`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

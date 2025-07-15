@@ -52,7 +52,9 @@ export default function SystemControls() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
-  const [adminPassword, setAdminPassword] = useState("YoBot2025!"); // Default password
+  const [adminPassword, setAdminPassword] = useState(
+    import.meta.env.VITE_ADMIN_PASSWORD || ""
+  );
   const [showPasswordSetup, setShowPasswordSetup] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -704,9 +706,6 @@ export default function SystemControls() {
               )}
             </div>
             
-            <div className="text-center pt-4">
-              <p className="text-white/60 text-xs">Default: YoBot2025!</p>
-            </div>
           </CardContent>
         </Card>
       </div>

@@ -29,7 +29,8 @@ export async function runCompleteSystemTest(): Promise<any> {
   // Test 1: QA Review System
   testResults.testsRun++;
   try {
-    const qaResponse = await axios.post('http://localhost:5000/api/qa/review', {
+    const baseUrl = process.env.COMMAND_CENTER_URL || 'http://localhost:5000';
+    const qaResponse = await axios.post(`${baseUrl}/api/qa/review`, {
       call_id: `SYS-TEST-${Date.now()}`,
       agent_name: "Tyson Lerfald",
       phone_number: "+1-555-SYSTEM-TEST",

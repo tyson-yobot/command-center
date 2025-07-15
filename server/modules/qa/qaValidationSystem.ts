@@ -121,7 +121,8 @@ class QAValidationSystem {
 
     try {
       // Execute test against endpoint
-      const response = await fetch(`http://localhost:5000${spec.endpoint}`, {
+      const baseUrl = process.env.COMMAND_CENTER_URL || 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}${spec.endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

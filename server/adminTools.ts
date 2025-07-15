@@ -17,8 +17,8 @@ let adminActionLog: AdminAction[] = [];
 // Admin authentication check
 const authenticateAdmin = (req: any, res: any, next: any) => {
   const adminPassword = req.headers['x-admin-password'];
-  const expectedPassword = process.env.ADMIN_PASSWORD || 'YoBot2025!';
-  if (adminPassword !== expectedPassword) {
+  const expectedPassword = process.env.ADMIN_PASSWORD;
+  if (!expectedPassword || adminPassword !== expectedPassword) {
     return res.status(401).json({ error: 'Admin authentication required' });
   }
   next();
