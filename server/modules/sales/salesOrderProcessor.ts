@@ -21,7 +21,6 @@ const DEFAULT_SENDER_EMAIL = 'noreply@yobot.bot';
 const DEFAULT_TEAM_EMAILS = ['tyson@yobot.bot', 'daniel@yobot.bot'];
 const DEFAULT_DOCUSIGN_TEMPLATE_ID = '646522c7-edd9-485b-bbb4-20ea1cd92ef9';
 
-<<<<<<< HEAD
 // Configuration
 const GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh";
 
@@ -30,7 +29,10 @@ const TABLE_NAME = SCRAPED_LEADS_TABLE_NAME;
 
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
+
+
 // Use the shared Command Center base
+
 const BASE_ID = "appRt8V3tH4g5Z51f";
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY as string;
@@ -44,13 +46,13 @@ const TABLE_NAME = SCRAPED_LEADS_TABLE_NAME;
 
 const BASE_ID = "appRt8V3tH4g5Z51f";
 
-=======
+
 // --- Logger Utility (for better logging) ---
 class Logger {
   static info(message: string, ...args: any[]) {
     console.log(`[INFO] ${message}`, ...args);
   }
->>>>>>> fa919b53 (chore: apply .gitignore cleanup)
+
 
   static warn(message: string, ...args: any[]) {
     console.warn(`[WARN] ${message}`, ...args);
