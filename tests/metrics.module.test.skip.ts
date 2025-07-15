@@ -1,14 +1,15 @@
 import axios from 'axios';
 
-
-process.env.AIRTABLE_API_KEY = 'testkey';
-process.env.AIRTABLE_BASE_ID = 'base123';
-import { fetchMetrics } from '../metrics.module';
-
-
 jest.mock('axios');
 
 describe('fetchMetrics', () => {
+  beforeEach(() => {
+    jest.resetModules();
+    jest.restoreAllMocks();
+    process.env.AIRTABLE_API_KEY = 'testkey';
+    process.env.AIRTABLE_BASE_ID = 'base123';
+  });
+
   afterEach(() => {
     jest.resetModules();
     jest.restoreAllMocks();
@@ -53,16 +54,16 @@ describe('fetchMetrics', () => {
     await fetchMetrics();
     expect(warnSpy).toHaveBeenCalledWith('AIRTABLE_API_KEY is not set');
   });
-});
+  test('returns zeros on error', async () => {
+    (axios.get as jest.Mock).mockRejectedValue(new Error('network error'));
+    const { fetchMetrics } = await import('../metrics.module');
 
-test('fetchMetrics returns zeros on error', async () => {
-  (axios.get as jest.Mock).mockRejectedValue(new Error('network error'));
-
-  const metrics = await fetchMetrics();
-  expect(metrics).toEqual({
-    conversations: 0,
-    messages: 0,
-    leads: 0,
-    revenue: 0,
+    const metrics = await fetchMetrics();
+    expect(metrics).toEqual({
+      conversations: 0,
+      messages: 0,
+      leads: 0,
+      revenue: 0,
+    });
   });
 });
