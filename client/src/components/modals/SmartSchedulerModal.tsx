@@ -55,3 +55,4 @@ export const SmartSchedulerModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default SmartSchedulerModal;

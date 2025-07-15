@@ -55,3 +55,4 @@ export const HubspotModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default HubspotModal;

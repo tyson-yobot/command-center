@@ -55,3 +55,4 @@ export const ContentCreatorModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default ContentCreatorModal;

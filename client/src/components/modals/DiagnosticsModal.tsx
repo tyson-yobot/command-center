@@ -55,3 +55,4 @@ export const DiagnosticsModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default DiagnosticsModal;

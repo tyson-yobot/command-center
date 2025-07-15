@@ -55,3 +55,4 @@ export const CopilotModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default CopilotModal;

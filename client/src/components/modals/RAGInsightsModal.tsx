@@ -55,3 +55,4 @@ export const RAGInsightsModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default RAGInsightsModal;

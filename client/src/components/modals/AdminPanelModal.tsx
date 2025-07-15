@@ -56,3 +56,4 @@ export const AdminPanelModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default AdminPanelModal;

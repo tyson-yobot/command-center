@@ -55,3 +55,4 @@ export const MetricsPanelModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default MetricsPanelModal; 

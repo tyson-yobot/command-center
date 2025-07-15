@@ -55,3 +55,4 @@ export const LeadScraperModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default LeadScraperModal;

@@ -55,3 +55,4 @@ export const LoggerTrackerModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default LoggerTrackerModal;

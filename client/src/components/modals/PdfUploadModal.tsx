@@ -55,3 +55,4 @@ export const PDFUploadModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default PDFUploadModal;

@@ -55,3 +55,6 @@ export const AuditLogModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default AuditLogModal;
+
+// This file is fully automated and connected to the Flask backend for audit log retrieval.
