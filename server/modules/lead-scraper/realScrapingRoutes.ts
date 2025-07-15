@@ -588,7 +588,6 @@ export function registerRealScrapingRoutes(app: Express) {
       }
 
 
-      const response = await fetch(`https://api.airtable.com/v0/${LEAD_ENGINE_BASE_ID}/${encodeURIComponent(TABLE_NAMES.SCRAPED_LEADS)}`, {
 
       const response = await fetch(tableUrl(LEAD_ENGINE_BASE_ID, SCRAPED_LEADS_TABLE), {
 
