@@ -31,7 +31,7 @@ const TABLE_NAME = SCRAPED_LEADS_TABLE_NAME;
 
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
-const BASE_ID = "appRt8V3tH4g5Z5if";
+const BASE_ID = "appRt8V3tH4g5Z51f";
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY as string;
 
