@@ -1,8 +1,5 @@
-# YoBotAssistant
-YoBot® Command Center
-md
-Copy
-Edit
+
+
 # 🧠 YoBot® Command Center
 
 The **YoBot® Command Center** is the central hub for managing automation, analytics, communication, and integration. Fully automated and built for scalability, it includes:
@@ -16,29 +13,35 @@ The **YoBot® Command Center** is the central hub for managing automation, analy
 ## 🚀 Getting Started
 
 ### 1. Clone the Repo
-```bash
+
 git clone https://github.com/tyson-yobot/command-center.git
 cd command-center
-2. Install Dependencies
-bash
-Copy
-Edit
+
+### 2. Install Dependencies
+
 pnpm install
-3. Run Dev Server
-bash
-Copy
-Edit
+
+### 3. Run Dev Server
+
 pnpm dev
-🌐 Environment Setup
+
+### 🌐 Environment Setup
 Create a .env file in the root of the project with the following variables:
 
-env
-Copy
-Edit
+```
 AIRTABLE_API_KEY=your_airtable_api_key
 SLACK_WEBHOOK_URL=your_slack_webhook_url
 OPENAI_API_KEY=your_openai_key
-📐 YoBot® Design System
+```
+
+### 🐍 Python Setup (optional)
+If you’re running Python utilities, install dependencies with:
+
+```bash
+pip install -r requirements.txt
+```
+
+## 📐 YoBot® Design System
 All components, styles, and behaviors must align with the YoBot® Design System for a consistent user experience.
 
 ✅ Global Styling Reference
@@ -108,23 +111,3 @@ StripeBillingCard.tsx	💵 Stripe Billing Tracker
 TicketReviewCard.tsx	🧾 Zendesk Review Scorecard
 TopNavBarCard.tsx	⬆️ Command Center Navbar
 VoicePerformanceCard.tsx	🎤 VoiceBot Call Metrics
-
-🧠 AI Agent System
-For detailed agent workflows and behavior logic, refer to AGENTS.md.
-
-📂 Related Links
-🧠 Design System Wiki
-
-🧱 Deployment Guide (if exists)
-
-📊 Botalytics + SmartSpend™ dashboards
-
-📁 AGENTS.md 
-
-🔧 Build & Notes
-All Airtable Base IDs and Table IDs are hardcoded.
-
-No parameters, no shells — the code must be 100% production-ready.
-
-Backend integration is built using Flask.
-
