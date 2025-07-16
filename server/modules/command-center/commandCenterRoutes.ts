@@ -1,7 +1,5 @@
 import type { Express } from "express";
 
-import { COMMAND_CENTER_BASE_ID } from "../../config/airtableBase";
-
 import { COMMAND_CENTER_BASE_ID } from "@shared/airtableConfig";
 
 
