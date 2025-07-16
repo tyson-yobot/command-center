@@ -1,14 +1,36 @@
 import express from 'express';
 import axios from 'axios';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = express.Router();
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+const AIRTABLE_API_URL = "https://api.airtable.com/v0";
 const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
 const AIRTABLE_TABLE_ID = process.env.AIRTABLE_TABLE_ID;
 
+// Universal fetch route (flexible for dynamic dashboard widgets)
+router.get('/:baseId/:tableName', async (req, res) => {
+  const { baseId, tableName } = req.params;
+  const url = `${AIRTABLE_API_URL}/${baseId}/${tableName}`;
+
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+      },
+    });
+    res.json(response.data);
+  } catch (error: any) {
+    console.error("Error fetching Airtable data:", error.message);
+    res.status(500).json({ error: "Failed to fetch Airtable data" });
+  }
+});
+
 // Base Airtable API URL
-const AIRTABLE_BASE_URL = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`;
+const AIRTABLE_BASE_URL = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`;
 
 // Get all records from Airtable
 router.get('/records', async (req, res) => {
@@ -167,7 +189,6 @@ router.post('/generate-quote', async (req, res) => {
       return res.status(400).json({ error: 'Missing record ID' });
     }
 
-    // First, get the record from Airtable
     const recordResponse = await axios.get(`${AIRTABLE_BASE_URL}/${recordId}`, {
       headers: {
         'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
@@ -178,9 +199,6 @@ router.post('/generate-quote', async (req, res) => {
     const record = recordResponse.data;
     console.log('📄 Processing quote for record:', recordId);
 
-    // Here you can integrate with your existing PDF quote system
-    // This is where the magic happens - connecting Airtable data to your automation
-    
     res.json({
       success: true,
       message: 'Quote generation initiated',
@@ -212,7 +230,6 @@ router.get('/test', async (req, res) => {
       });
     }
 
-    // Test connection with a simple request
     const response = await axios.get(`${AIRTABLE_BASE_URL}?maxRecords=1`, {
       headers: {
         'Authorization': `Bearer ${AIRTABLE_API_KEY}`,

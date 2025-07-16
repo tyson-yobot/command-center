@@ -1,5 +1,27 @@
 import type { Config } from "tailwindcss";
 
+<<<<<<< HEAD
+const config: Config = {
+  darkMode: "class",
+  content: [
+    "./client/index.html",
+    "./client/src/**/*.{js,jsx,ts,tsx}"
+  ],
+  theme: {
+    extend: {
+      colors: {
+        yobot: {
+          primary: '#0d82da',
+          background: '#000000',
+          secondaryText: '#c3c3c3',
+          white: '#ffffff',
+          dangerFrom: '#e53935',
+          dangerTo: '#b71c1c',
+          successFrom: '#43cea2',
+          successTo: '#185a9d',
+          purpleFrom: '#ab47bc',
+          purpleTo: '#8e24aa',
+=======
 export default {
   darkMode: ["class"],
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
@@ -58,6 +80,7 @@ export default {
           "3": "hsl(var(--chart-3))",
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
+>>>>>>> 692751fa02aec1a95d0ca2c3113091d5e0732d44
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -68,6 +91,24 @@ export default {
           "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
+<<<<<<< HEAD
+        }
+      },
+      fontFamily: {
+        inter: ['Inter', 'sans-serif'],
+      },
+      borderRadius: {
+        '2xl': '1rem',
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+=======
         },
       },
       keyframes: {
@@ -86,6 +127,7 @@ export default {
           to: {
             height: "0",
           },
+>>>>>>> 692751fa02aec1a95d0ca2c3113091d5e0732d44
         },
       },
       animation: {
@@ -94,5 +136,15 @@ export default {
       },
     },
   },
+<<<<<<< HEAD
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography")
+  ]
+};
+
+export default config;
+=======
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;
+>>>>>>> 692751fa02aec1a95d0ca2c3113091d5e0732d44

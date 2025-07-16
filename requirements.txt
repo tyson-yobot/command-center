@@ -1,3 +1,18 @@
+<<<<<<< HEAD
+# === YoBot® Command Center – Final Runtime Dependencies ===
+
+Flask==3.1.1               # HTTP endpoints for schema + other modules
+gunicorn==21.2.0           # WSGI server (Render)
+python-dotenv==1.0.1       # Load .env vars
+requests==2.32.3           # Webhooks, Slack, HTTP
+pyairtable==2.3.7          # Airtable API & schema
+
+pyicloud-ipd==0.10.2       # iCloud calendar sync
+pytz==2022.7.1             # Timezone (required for pyicloud-ipd)
+
+loguru==0.7.2              # Structured logging
+=======
 Flask==3.1.1
 requests
 pyicloud_ipd==0.10.2
+>>>>>>> 692751fa02aec1a95d0ca2c3113091d5e0732d44

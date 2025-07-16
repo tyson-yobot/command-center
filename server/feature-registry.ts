@@ -1,0 +1,25 @@
+// server/feature-registry.ts
+
+export const featureRegistry: Record<string, boolean> = {
+  "logger-integrity-tracker": false,
+  "smartspend-dashboard": false,
+  "botalytics-dashboard": false,
+  "slack-alerts-log": false,
+  "missed-call-log": false,
+  "voicebot-performance": false,
+  "pdf-quote-generator": false,
+  "crm-sync-dashboard": false,
+  "quickbooks-sync-panel": false,
+  "stripe-billing-log": false,
+  "lead-qualifier": false,
+  "follow-up-tracker": false,
+  "calendar-sync-view": false,
+  "rag-insight-center": false,
+  "script-tester": false,
+  "bot-personality-pack": false,
+  "sentiment-analytics": false,
+  "rep-scorecard": false,
+  "compliance-checker": false,
+  "ab-test-results": false,
+  "support-ticket-review": false,
+};

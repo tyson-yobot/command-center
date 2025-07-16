@@ -1,0 +1,9 @@
+[alias]
+  st = status
+  co = checkout
+  br = branch
+  cm = commit -m
+  pu = pull origin dev
+  ps = push origin dev
+  stash = stash pop
+  sync = !"git stash push -m '🧠 Auto Stash' && git pull origin dev && git add -u && git commit -m '🔁 Auto Sync' && git push origin dev && git stash pop"

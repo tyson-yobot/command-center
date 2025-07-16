@@ -1,7 +1,13 @@
 import axios from 'axios';
 import { getAirtableApiKey, BASE_ID, METRICS_TABLE_NAME } from './shared/airtableConfig';
 
+<<<<<<< HEAD
 const BASE_URL = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(METRICS_TABLE_NAME)}`;
+=======
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
+const BASE_ID = "appRt8V3tH4g5Z51f";
+const TABLE_NAME = "Command Center - Metrics Tracker Table";
+>>>>>>> dev
 
 export interface Metrics {
   conversations: number;
