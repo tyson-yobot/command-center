@@ -88,6 +88,7 @@ AIRTABLE_TABLE_NAME=Command Center - Metrics Tracker Table
 ICLOUD_USERNAME=your-icloud-username
 ICLOUD_PASSWORD=your-icloud-password
 DATABASE_URL=postgres-connection-string
+INTERNAL_API_KEY=internal-voicebot-api-key
 ```
 
 Additional variables such as `SLACK_WEBHOOK_URL`, `TWILIO_*`, `ELEVENLABS_API_KEY` and others enable optional integrations. See `.env.example` for the full list.
