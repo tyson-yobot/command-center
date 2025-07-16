@@ -103,6 +103,7 @@ interface FormData {
 export class SalesOrderProcessor {
   private driveService: drive_v3.Drive | null = null;
   private config: SalesOrderProcessorConfig;
+  private emailTransporter: nodemailer.Transporter | null = null;
 
   constructor(config?: Partial<SalesOrderProcessorConfig>) {
     this.config = {
@@ -121,6 +122,20 @@ export class SalesOrderProcessor {
       ...config, // Allow partial overrides
     };
     this.initializeGoogleDrive();
+    this.initializeEmailTransporter();
+  }
+
+  private initializeEmailTransporter() {
+    const { emailAppPassword, senderEmail } = this.config;
+    if (emailAppPassword) {
+      this.emailTransporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: senderEmail,
+          pass: emailAppPassword,
+        },
+      });
+    }
   }
 
   /**
@@ -248,13 +263,10 @@ export class SalesOrderProcessor {
         throw new Error('EMAIL_APP_PASSWORD must be set in environment variables or provided in config for sending emails.');
       }
 
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: senderEmail,
-          pass: emailAppPassword
-        }
-      });
+      if (!this.emailTransporter) {
+        this.initializeEmailTransporter();
+      }
+      const transporter = this.emailTransporter!;
 
       const mailOptions = {
         from: senderEmail,
