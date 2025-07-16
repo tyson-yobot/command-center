@@ -16,48 +16,6 @@ configure these variables in your deployment environment:
 
 YoBotAssistant is the backend command center that powers YoBot's automation and metrics tracking. It exposes a small Express API along with modules for scraping, voice generation, sales automation and more. Optional Python scripts handle iCloud calendar syncing.
 
-## Running the Express Server
-
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Copy `.env.example` to `.env` and configure the following variables:
-   ```bash
-   AIRTABLE_API_KEY=your-airtable-api-key
-   AIRTABLE_BASE_ID=your-airtable-base-id
-   AIRTABLE_TABLE_NAME=Command Center · Metrics Tracker
-   ICLOUD_USERNAME=your-icloud-username
-   ICLOUD_PASSWORD=your-icloud-password
-   DATABASE_URL=postgres-connection-string
-   PORT=3000 # optional
-   ```
-3. Start the server:
-   ```bash
-   npm run dev
-   ```
-   The API listens on `http://localhost:3000` by default.
-
-## Modules
-
-Server modules live under [`server/modules`](server/modules) and include:
-
-- **airtable** – Airtable integrations and lead management
-- **automation** – automation batch scripts
-- **auth** – authentication helpers
-- **command-center** – metrics and live data providers
-- **control-center** – configuration helpers
-- **lead-scraper** – scraping pipelines for lead generation
-- **pdf** – PDF generation utilities
-- **qa** – QA tracking and validation
-- **rag** – RAG engine helpers
-- **sales** – sales order processing
-- **scraper** – generic scraping routes
-- **voice** – voice generation and callbacks
-- **webhooks** – centralized webhook processing
-
-Refer to the code in each module for detailed usage. UI guidelines are documented in [`YOBOT_BRAND_GUIDE.md`](YOBOT_BRAND_GUIDE.md).
-
 ## Prerequisites
 
 - Node.js 18+ (20 recommended)
@@ -91,6 +49,25 @@ Refer to the code in each module for detailed usage. UI guidelines are documente
    The client runs on `http://localhost:5173`.
 6. (Optional) install Python requirements and run `app.py` to sync iCloud calendars.
 
+## Modules
+
+Server modules live under [`server/modules`](server/modules) and include:
+
+- **airtable** – Airtable integrations and lead management
+- **automation** – automation batch scripts
+- **auth** – authentication helpers
+- **command-center** – metrics and live data providers
+- **control-center** – configuration helpers
+- **lead-scraper** – scraping pipelines for lead generation
+- **pdf** – PDF generation utilities
+- **qa** – QA tracking and validation
+- **rag** – RAG engine helpers
+- **sales** – sales order processing
+- **scraper** – generic scraping routes
+- **voice** – voice generation and callbacks
+- **webhooks** – centralized webhook processing
+
+Refer to the code in each module for detailed usage. UI guidelines are documented in [`YOBOT_BRAND_GUIDE.md`](YOBOT_BRAND_GUIDE.md).
 ## Environment Variables
 
 At minimum provide the following variables:
