@@ -1,122 +1,121 @@
-// Comprehensive Airtable Configuration for YoBot System
-export const AIRTABLE_BASES = {
-  // YoBot Command Center (Live Ops)
-  COMMAND_CENTER: {
-    baseId: 'appCoAtCZdARb4AM2',
-    tables: {
-      METRICS_TRACKER: 'Command Center - Metrics Tracker Table',
-      INTEGRATION_QA_TRACKER: 'Integration QA Tracker Table', 
-      INTEGRATION_TEST_LOG: 'Integration Test Log Table',
-      COMPLETED_INTEGRATION_QA: 'Completed Integration QA Table',
-      CLIENT_INSTANCES: 'Client Instances Table',
-      LEADS_INTAKE: 'Leads - Intake Table',
-      INDUSTRY_TEMPLATES: 'Industry Templates Table',
-      CLIENT_INTAKE: 'Client Intake Table'
-    }
-  },
+import Airtable from 'airtable';
 
-  // YoBot Ops & Alerts Log
-  OPS_ALERTS: {
-    baseId: 'appCoAtCZdARb4A4F',
-    tables: {
-      SMARTSPEND_SLACK_LOGS: 'SmartSpend - Slack Logs Table',
-      ERROR_FALLBACK_LOG: 'Error + Fallback Log Table',
-      EVENT_SYNC_LOG: 'Event Sync Log Table',
-      SUPPORT_TICKET_LOG: 'Support Ticket Log Table'
-    }
-  },
+// Configure Airtable
+const airtable = new Airtable({
+  apiKey: process.env.AIRTABLE_API_KEY
+});
 
-  // YoBot Client CRM
-  CLIENT_CRM: {
-    baseId: 'appMbVQJ0n3nWR11N',
-    tables: {
-      CLIENT_BOOKINGS: 'Client Bookings Table',
-      TEAM_MEMBERS: 'Team Members Table',
-      DEAL_MILESTONES: 'Deal Milestones Table',
-      QUOTE_GENERATOR_LOGS: 'Quote Generator Logs Table',
-      CRM_CONTACTS: 'CRM Contacts Table',
-      REP_ASSIGNMENT_TRACKER: 'Rep Assignment Tracker Table',
-      INVOICE_TRACKING: 'Invoice Tracking Table',
-      SUPPORT_TICKET_SUMMARY: 'Support Ticket Summary Table'
-    }
-  },
-
-  // YoBot Sales & Automation
-  SALES_AUTOMATION: {
-    baseId: 'appe05t1B1tn1Kn5',
-    tables: {
-      SALES_ORDERS: 'Sales Orders Table',
-      BOT_PACKAGES: 'Bot Packages Table',
-      ADDON_MODULES: 'Add-On Modules Table',
-      QA_CALL_REVIEW: 'QA Call Review Table',
-      CALL_RECORDING_TRACKER: 'Call Recording Tracker Table',
-      NLP_KEYWORD_TRACKER: 'NLP Keyword Tracker Table',
-      CALL_SENTIMENT_LOG: 'Call Sentiment Log Table',
-      ESCALATION_TRACKER: 'Escalation Tracker Table',
-      CLIENT_TOUCHPOINT_LOG: 'Client Touchpoint Log Table',
-      MISSED_CALL_LOG: 'Missed Call Log Table',
-      AB_TEST_LOG: 'A/B Test Log Table',
-      SLACK_ALERTS_LOG: 'Slack Alerts Log Table',
-      INTEGRATION_SYNC_TRACKER: 'Integration Sync Tracker Table',
-      PERSONALITY_PACK_TRACKER: 'Personality Pack Tracker Table',
-      VOICEBOT_PERFORMANCE_DASHBOARD: 'Voicebot Performance Dashboard Log Table',
-      FALLBACK_LOG: 'Fallback Log Table',
-      BOT_HEALTH_MONITOR: 'Bot Health Monitor Table',
-      REVENUE_FORECAST_LOG: 'Revenue Forecast Log Table',
-      CLIENT_PULSE_TRACKER: 'Client Pulse Tracker Table',
-      OPS_METRICS_LOG: 'Ops Metrics Log Table',
-      CLIENT_TIER_VIEW: 'Client Tier View Table',
-      COMMAND_CENTER_WIRING_TRACKER: 'Command Center Wiring Tracker Table',
-      CONTRACT_STATUS_TRACKER: 'Contract Status Tracker Table',
-      CRM_VOICE_AUDIT_LOG: 'CRM + Voice Audit Log Table',
-      SUGGESTIONS_PUSH_LOG: 'Suggestions Push Log Table',
-      MANUAL_REVIEW_QUEUE: 'Manual Review Queue Table',
-      FOLLOWUP_SCHEDULER_LOG: 'Follow-Up Scheduler Log Table',
-      SUPPORT_METRICS_ROLLUP: 'Support Metrics Rollup Table',
-      SUPPORT_SETTINGS: 'Support Settings Table',
-      INTERNAL_CONFIG: 'Internal Config Table',
-      STRIPE_PRICE_TRACKER: 'Stripe Price Tracker (Live) Table',
-      STRIPE_PRODUCTS: 'Stripe Products Table',
-      COMPLIANCE_CHECKLIST_LOG: 'Compliance Checklist Log Table',
-      AIRTABLE_SCHEMA_DOCUMENTATION: 'Airtable Schema Documentation Table',
-      TONE_RESPONSE_VARIANT_LIBRARY: 'Tone Response Variant Library Table'
-    }
-  },
-
-  // YoBot ROI Calculator
-  ROI_CALCULATOR: {
-    baseId: 'appbFDTqB2WtRNV1H',
-    tables: {
-      CLIENT_ROI_RESULTS: 'Client ROI Results Table',
-      BOTALYTICS_ROI: 'Botalytics - ROI'
-    }
-  },
-
-  // YoBot SmartSpend Tracker
-  SMARTSPEND_TRACKER: {
-    baseId: 'appGtcRZUd0JqnkQS',
-    tables: {
-      SMARTSPEND_MASTER: 'SmartSpend Master Table',
-      BUDGET_ROI_TRACKER: 'SmartSpend - Budget & ROI Tracker Table',
-      INTAKE_SUBMISSIONS: 'SmartSpend Intake Submissions Table',
-      IMPORTED_TABLE: 'Imported Table',
-      DASHBOARD_INTAKE_VISUAL: 'Dashboard Intake Visual Table'
-    }
-  }
-};
-
-// Helper function to get Airtable URL
-export function getAirtableUrl(baseKey: string, tableKey: string): string {
-  const bases = AIRTABLE_BASES as any;
-  const base = bases[baseKey];
-  if (!base) throw new Error(`Base ${baseKey} not found`);
-  
-  const tableName = base.tables[tableKey];
-  if (!tableName) throw new Error(`Table ${tableKey} not found in base ${baseKey}`);
-  
-  return `https://api.airtable.com/v0/${base.baseId}/${encodeURIComponent(tableName)}`;
+// ---------------- Type definitions ----------------
+export interface AirtableRecord<T = Record<string, any>> {
+  id: string;
+  fields: T;
+  createdTime?: string;
 }
 
+<<<<<<< HEAD
+export interface ApiResponse<T = any> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  timestamp: string;
+}
+
+// ---------------- Core Airtable functions ----------------
+export async function createRecord(
+  baseId: string,
+  tableName: string,
+  fields: Record<string, any>
+): Promise<AirtableRecord> {
+  const base = airtable.base(baseId);
+  const record = await base(tableName).create(fields);
+  
+  return {
+    id: record.id,
+    fields: record.fields,
+    createdTime: record.get('createdTime') as string
+  };
+}
+
+export async function getTable(
+  baseId: string,
+  tableName: string,
+  options?: {
+    view?: string;
+    formula?: string;
+    maxRecords?: number;
+  }
+): Promise<AirtableRecord[]> {
+  const base = airtable.base(baseId);
+  const records = await base(tableName).select({
+    view: options?.view,
+    filterByFormula: options?.formula,
+    maxRecords: options?.maxRecords
+  }).all();
+  
+  return records.map(record => ({
+    id: record.id,
+    fields: record.fields,
+    createdTime: record.get('createdTime') as string
+  }));
+}
+
+export async function getRecord(
+  baseId: string,
+  tableName: string,
+  recordId: string
+): Promise<AirtableRecord> {
+  const base = airtable.base(baseId);
+  const record = await base(tableName).find(recordId);
+  
+  return {
+    id: record.id,
+    fields: record.fields,
+    createdTime: record.get('createdTime') as string
+  };
+}
+
+export async function updateRecord(
+  baseId: string,
+  tableName: string,
+  recordId: string,
+  fields: Record<string, any>
+): Promise<AirtableRecord> {
+  const base = airtable.base(baseId);
+  const record = await base(tableName).update(recordId, fields);
+  
+  return {
+    id: record.id,
+    fields: record.fields,
+    createdTime: record.get('createdTime') as string
+  };
+}
+
+export async function deleteRecord(
+  baseId: string,
+  tableName: string,
+  recordId: string
+): Promise<void> {
+  const base = airtable.base(baseId);
+  await base(tableName).destroy(recordId);
+}
+
+export function createApiResponse<T>(
+  success: boolean,
+  data?: T,
+  error?: string
+): ApiResponse<T> {
+  return {
+    success,
+    data,
+    error,
+    timestamp: new Date().toISOString()
+  };
+}
+
+export function logOperation(operation: string, details: any): void {
+  console.log(`[Airtable] ${operation}:`, details);
+}
+=======
 // Helper function to get base ID
 export function getBaseId(baseKey: string): string {
   const bases = AIRTABLE_BASES as any;
@@ -124,3 +123,4 @@ export function getBaseId(baseKey: string): string {
   if (!base) throw new Error(`Base ${baseKey} not found`);
   return base.baseId;
 }
+>>>>>>> origin/codex/add-newline-at-eof-for-specified-files

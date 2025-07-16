@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - '@tailwindcss/oxide'
+  - bufferutil
+  - es5-ext
+  - esbuild
+  - puppeteer
+  - tesseract.js
