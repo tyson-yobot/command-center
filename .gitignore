@@ -15,7 +15,6 @@ yarn-error.log*
 .env.*
 client/src/.env
 
-client/src/.env
 
 !.env.example
 
@@ -56,10 +55,8 @@ client/src/pages/Command-Center.zip
 # Temporary text documents
 client/src/lib/New Text Document.txt
 
-client/src/.env
 
 
-client/src/.env
 .config/
 
 
