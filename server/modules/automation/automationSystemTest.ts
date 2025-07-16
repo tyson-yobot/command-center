@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { executeFollowupAutomation, sendFollowupSMS } from './followupAutomation';
+import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
 import { triggerVoiceCallback, statusMonitor, dailySummaryPush } from './voiceCallbackSystem';
 
 // Comprehensive automation system test
@@ -28,7 +29,7 @@ export async function runCompleteSystemTest(): Promise<any> {
   // Test 1: QA Review System
   testResults.testsRun++;
   try {
-    const qaResponse = await axios.post('http://localhost:5000/api/qa/review', {
+    const qaResponse = await axios.post(`${process.env.COMMAND_CENTER_URL}/api/qa/review`, {
       call_id: `SYS-TEST-${Date.now()}`,
       agent_name: "Tyson Lerfald",
       phone_number: "+1-555-SYSTEM-TEST",
@@ -217,8 +218,8 @@ async function testAirtableConnection(): Promise<any> {
   try {
     const testBases = [
       { name: "QA Call Review Log", url: "https://api.airtable.com/v0/appCoAtCZdARb4AM2/tblQACallReviewLog" },
-      { name: "Follow-Up Tracker", url: "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📞 Follow-Up Reminder Tracker" },
-      { name: "Inbound Call Log", url: "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📥 Inbound Call Log" }
+      { name: "Follow-Up Tracker", url: `https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/📞 Follow-Up Reminder Tracker` },
+      { name: "Inbound Call Log", url: `https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/📥 Inbound Call Log` }
     ];
 
     const results = [];
@@ -227,7 +228,7 @@ async function testAirtableConnection(): Promise<any> {
       try {
         const response = await axios.get(`${base.url}?maxRecords=1`, {
           headers: {
-            "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`
+            "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`
           }
         });
         

@@ -5,6 +5,11 @@
 
 import axios from 'axios';
 
+import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
+
+import { AIRTABLE_BASES } from './airtableConfig';
+
+
 interface LogEntry {
   functionId: number;
   functionName: string;
@@ -21,9 +26,25 @@ class AirtableLogger {
   private baseUrl: string;
 
   constructor() {
-    this.baseId = 'appRt8V3tH4g5Z5if';
+
+    this.baseId = COMMAND_CENTER_BASE_ID;
+
+
+    // Requires AIRTABLE_API_KEY set in the environment
+    this.baseId = AIRTABLE_BASES.COMMAND_CENTER.baseId;
+    this.tableId = AIRTABLE_BASES.COMMAND_CENTER.tables.INTEGRATION_TEST_LOG;
+    this.apiKey = process.env.AIRTABLE_API_KEY || '';
+
+    this.baseId = 'appRt8V3tH4g5Z51f';
+
     this.tableId = 'tbly0fjE2M5uHET9X';
-    this.apiKey = 'paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa';
+    this.apiKey = process.env.AIRTABLE_API_KEY as string;
+
+    if (!this.apiKey) {
+      throw new Error('AIRTABLE_API_KEY not configured for AirtableLogger');
+    }
+
+
     this.baseUrl = `https://api.airtable.com/v0/${this.baseId}/${this.tableId}`;
   }
 

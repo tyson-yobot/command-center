@@ -22,7 +22,7 @@ export async function logSupportTicketToAirtable(ticketId: string, subject: stri
       data,
       {
         headers: {
-          "Authorization": "Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa",
+          "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
           "Content-Type": "application/json"
         }
       }
@@ -37,7 +37,11 @@ export async function logSupportTicketToAirtable(ticketId: string, subject: stri
 // Function 312: Send Admin Slack Alert
 export async function sendAdminSlackAlert(message: string) {
   try {
-    const webhookUrl = process.env.SLACK_WEBHOOK_URL || "https://hooks.slack.com/services/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";
+    const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+    if (!webhookUrl) {
+      console.warn("Slack webhook not configured for admin alerts");
+      return { success: false, error: "Slack webhook not configured" };
+    }
     
     await axios.post(webhookUrl, {
       text: `🚨 Admin Alert:\n${message}`
@@ -129,7 +133,8 @@ export async function logMetricToCommandCenter(metricName: string, value: number
     };
     
     // Note: Replace with actual command center URL
-    const commandCenterUrl = process.env.COMMAND_CENTER_URL || "http://localhost:5000/api/metrics";
+    const commandCenterUrl = process.env.COMMAND_CENTER_URL;
+    if (!commandCenterUrl) throw new Error("COMMAND_CENTER_URL not set");
     
     const response = await axios.post(commandCenterUrl, payload);
     

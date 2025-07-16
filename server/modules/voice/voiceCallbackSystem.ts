@@ -1,7 +1,67 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+
+
+import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, getAirtableApiKey } from '@shared/airtableConfig';
+import { sendFollowupSMS, logFollowupEvent } from '../automation/followupAutomation';
+
+const BASE_ID = COMMAND_CENTER_BASE_ID;
+const FOLLOWUP_TABLE = TABLE_NAMES.FOLLOW_UP_REMINDER;
+const API_KEY = getAirtableApiKey();
+
+// Airtable Field Names
+const FIELD_PHONE_NUMBER = "📞 Number";
+const FIELD_COMPLETED = "✅ Completed";
+const FIELD_FOLLOWUP_DATE = "📅 Follow-Up Date";
+const FIELD_OUTCOME = "📊 Outcome";
+const FIELD_METHOD = "📨 Method";
+const FIELD_NAME = "👤 Name";
+ interface ApiResponse {
+   success: boolean;
+   error?: string;
+   message?: string;
+ }
+ 
+ interface TriggerVoiceCallbackResponse extends ApiResponse {
+   data?: any;
+ }
+ 
+ interface TrackResponseResult extends ApiResponse {
+   // No additional data needed for trackResponse beyond success/message/error
+ }
+ 
+ interface CloseOutFollowupResponse extends ApiResponse {
+   data?: any;
+ }
+ 
+ interface LogFollowupEventResponse extends ApiResponse {
+   data?: any;
+ }
+ 
+ interface RetryFollowupResult extends ApiResponse {
+   totalAttempts: number;
+   results: Array<{
+     attempt: number;
+     success: boolean;
+     messageSid?: string | null;
+     error?: string;
+     timestamp: string;
+   }>;
+ }
+ 
+ interface StatusMonitorResult extends ApiResponse {
+   totalOpen: number;
+   overdue: number;
+   overdueFollowups: any[];
+ }
+ 
+ interface DailySummaryPushResult extends ApiResponse {
+   completed: number;
+   pending: number;
+   date: string;
+ }
 
 // Trigger voice callback using VoiceBot
-export async function triggerVoiceCallback(phoneNumber: string, callId: string): Promise<any> {
+export async function triggerVoiceCallback(phoneNumber: string, callId: string): Promise<TriggerVoiceCallbackResponse> {
   try {
     const url = "https://replit.yobot.bot/trigger-voicebot-callback";
     const data = {
@@ -11,20 +71,25 @@ export async function triggerVoiceCallback(phoneNumber: string, callId: string):
     };
     
     const headers = {
-      "Authorization": "Bearer YOUR_INTERNAL_API_KEY",
+      "Authorization": `Bearer ${process.env.INTERNAL_API_KEY}`,
       "Content-Type": "application/json"
     };
     
     const response = await axios.post(url, data, { headers });
-    return response.data;
-  } catch (error: any) {
-    console.error('Voice callback trigger error:', error.response?.data || error.message);
-    return { success: false, error: error.message };
+    return {
+      success: true,
+      data: response.data
+    };
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    const errorMessage = `Voice callback trigger error: ${axiosError.response?.data?.message || axiosError.message}`;
+    console.error(errorMessage);
+    return { success: false, error: errorMessage };
   }
 }
 
 // Track SMS response and auto-close follow-up loop
-export async function trackResponse(incomingMessage: string, phone: string): Promise<boolean> {
+export async function trackResponse(incomingMessage: string, phone: string): Promise<TrackResponseResult> {
   const keywords = ["yes", "sure", "okay", "let's", "available", "good time", "call me"];
   const hasPositiveResponse = keywords.some(word => 
     incomingMessage.toLowerCase().includes(word)
@@ -34,26 +99,30 @@ export async function trackResponse(incomingMessage: string, phone: string): Pro
     try {
       await closeOutFollowupByPhone(phone);
       await logFollowupEventByPhone(phone, "SMS Reply", incomingMessage);
-      return true;
-    } catch (error: any) {
-      console.error('Response tracking error:', error.message);
+      return { success: true, message: 'Positive response tracked and follow-up closed.' };
+    } catch (error) {
+      const errorMessage = `Response tracking error: ${(error as Error).message}`;
+      console.error(errorMessage);
+      return { success: false, error: errorMessage };
     }
   }
   
-  return false;
+  return { success: false, message: 'No positive response found' };
 }
 
 // Close follow-up by phone number
-export async function closeOutFollowupByPhone(phone: string): Promise<any> {
+export async function closeOutFollowupByPhone(phone: string): Promise<CloseOutFollowupResponse> {
   try {
-    const url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📞 Follow-Up Reminder Tracker";
+
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}`;
+
     const headers = {
-      "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`,
+      "Authorization": `Bearer ${API_KEY}`,
       "Content-Type": "application/json"
     };
     
     // First find the record by phone number
-    const filterUrl = `${url}?filterByFormula={📞 Number}='${phone}'`;
+    const filterUrl = `${url}?filterByFormula={${FIELD_PHONE_NUMBER}}='${phone}'`;
     const findResponse = await axios.get(filterUrl, { headers });
     
     if (findResponse.data.records && findResponse.data.records.length > 0) {
@@ -61,52 +130,64 @@ export async function closeOutFollowupByPhone(phone: string): Promise<any> {
       
       const updateData = {
         fields: {
-          "✅ Completed": true,
-          "📅 Follow-Up Date": new Date().toISOString(),
-          "📊 Outcome": "Customer Responded - Positive"
+          [FIELD_COMPLETED]: true,
+          [FIELD_FOLLOWUP_DATE]: new Date().toISOString(),
+          [FIELD_OUTCOME]: "Customer Responded - Positive"
         }
       };
       
       const updateResponse = await axios.patch(`${url}/${recordId}`, updateData, { headers });
-      return updateResponse.data;
+      return {
+        success: true,
+        data: updateResponse.data
+      };
     }
     
     return { success: false, message: 'No follow-up record found for this phone number' };
-  } catch (error: any) {
-    console.error('Close follow-up error:', error.response?.data || error.message);
-    return { success: false, error: error.message };
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    const errorMessage = `Close follow-up error: ${axiosError.response?.data?.message || axiosError.message}`;
+    console.error(errorMessage);
+    return { success: false, error: errorMessage };
   }
 }
 
 // Log follow-up event by phone number
-export async function logFollowupEventByPhone(phone: string, method: string, outcome: string): Promise<any> {
+export async function logFollowupEventByPhone(phone: string, method: string, outcome: string): Promise<LogFollowupEventResponse> {
   try {
-    const url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📞 Follow-Up Reminder Tracker";
+
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}`;
+
     const headers = {
-      "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`,
+      "Authorization": `Bearer ${API_KEY}`,
       "Content-Type": "application/json"
     };
     
     const data = {
       fields: {
-        "📞 Number": phone,
-        "📅 Follow-Up Date": new Date().toISOString(),
-        "📨 Method": method,
-        "📊 Outcome": outcome,
-        "✅ Completed": method === "SMS Reply"
+        [FIELD_PHONE_NUMBER]: phone,
+        [FIELD_FOLLOWUP_DATE]: new Date().toISOString(),
+        [FIELD_METHOD]: method,
+        [FIELD_OUTCOME]: outcome,
+        [FIELD_COMPLETED]: method === "SMS Reply"
       }
     };
     
     const response = await axios.post(url, data, { headers });
-    return response.data;
-  } catch (error: any) {
-    console.error('Follow-up event logging error:', error.response?.data || error.message);
-    return { success: false, error: error.message };
+    return {
+      success: true,
+      data: response.data
+    };
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    const errorMessage = `Follow-up event logging error: ${axiosError.response?.data?.message || axiosError.message}`;
+    console.error(errorMessage);
+    return { success: false, error: errorMessage };
   }
 }
 
 // Retry follow-up logic with multiple attempts
-export async function retryFollowup(callId: string, phone: string, attempts: number = 2, intervalHrs: number = 24): Promise<any> {
+export async function retryFollowup(callId: string, phone: string, attempts: number = 2, intervalHrs: number = 24): Promise<RetryFollowupResult> {
   const results = [];
   
   for (let i = 0; i < attempts; i++) {
@@ -114,7 +195,6 @@ export async function retryFollowup(callId: string, phone: string, attempts: num
       const message = "Just checking back — is now a good time to talk?";
       
       // Send retry SMS
-      const { sendFollowupSMS, logFollowupEvent } = require('./followupAutomation');
       const messageSid = await sendFollowupSMS(phone, message);
       
       // Log the retry attempt
@@ -132,11 +212,11 @@ export async function retryFollowup(callId: string, phone: string, attempts: num
         console.log(`Retry ${i + 1} completed. Next retry scheduled in ${intervalHrs} hours.`);
       }
       
-    } catch (error: any) {
+    } catch (error) {
       results.push({
         attempt: i + 1,
         success: false,
-        error: error.message,
+        error: (error as Error).message,
         timestamp: new Date().toISOString()
       });
     }
@@ -164,18 +244,21 @@ export async function logAlertToSlack(message: string): Promise<number> {
     
     const response = await axios.post(slackWebhookUrl, payload);
     return response.status;
-  } catch (error: any) {
-    console.error('Slack alert error:', error.response?.data || error.message);
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    console.error('Slack alert error:', axiosError.response?.data || axiosError.message);
     return 500;
   }
 }
 
 // Monitor follow-up status and flag overdue ones
-export async function statusMonitor(): Promise<any> {
+export async function statusMonitor(): Promise<StatusMonitorResult> {
   try {
-    const url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📞 Follow-Up Reminder Tracker?filterByFormula={✅ Completed}=FALSE()";
+
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}?filterByFormula={${FIELD_COMPLETED}}=FALSE()`;
+
     const headers = {
-      "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`
+      "Authorization": `Bearer ${API_KEY}`
     };
     
     const response = await axios.get(url, { headers });
@@ -183,14 +266,14 @@ export async function statusMonitor(): Promise<any> {
     const overdueFollowups = [];
     
     for (const record of openFollowups) {
-      const followupDate = new Date(record.fields["📅 Follow-Up Date"]);
+      const followupDate = new Date(record.fields[FIELD_FOLLOWUP_DATE]);
       const now = new Date();
       const hoursOverdue = (now.getTime() - followupDate.getTime()) / (1000 * 60 * 60);
       
       if (hoursOverdue > 48) { // 48 hours overdue
         overdueFollowups.push(record);
-        const name = record.fields["👤 Name"] || "Unknown";
-        const phone = record.fields["📞 Number"] || "No phone";
+        const name = record.fields[FIELD_NAME] || "Unknown";
+        const phone = record.fields[FIELD_PHONE_NUMBER] || "No phone";
         await logAlertToSlack(`⚠️ Overdue follow-up: ${name} (${phone}) - ${Math.round(hoursOverdue)} hours overdue`);
       }
     }
@@ -201,22 +284,26 @@ export async function statusMonitor(): Promise<any> {
       overdue: overdueFollowups.length,
       overdueFollowups
     };
-  } catch (error: any) {
-    console.error('Status monitor error:', error.response?.data || error.message);
-    return { success: false, error: error.message };
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    const errorMessage = `Status monitor error: ${axiosError.response?.data?.message || axiosError.message}`;
+    console.error(errorMessage);
+    return { success: false, error: errorMessage, totalOpen: 0, overdue: 0, overdueFollowups: [] };
   }
 }
 
 // Daily summary push to Slack
-export async function dailySummaryPush(): Promise<any> {
+export async function dailySummaryPush(): Promise<DailySummaryPushResult> {
   try {
     const today = new Date().toISOString().split('T')[0];
     
-    const completedUrl = `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📞 Follow-Up Reminder Tracker?filterByFormula=AND({✅ Completed}=TRUE(), DATETIME_FORMAT({📅 Follow-Up Date}, 'YYYY-MM-DD')='${today}')`;
-    const pendingUrl = `https://api.airtable.com/v0/appRt8V3tH4g5Z5if/📞 Follow-Up Reminder Tracker?filterByFormula=AND({✅ Completed}=FALSE(), DATETIME_FORMAT({📅 Follow-Up Date}, 'YYYY-MM-DD')='${today}')`;
+
+    const completedUrl = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}?filterByFormula=AND({${FIELD_COMPLETED}}=TRUE(), DATETIME_FORMAT({${FIELD_FOLLOWUP_DATE}}, 'YYYY-MM-DD')='${today}')`;
+    const pendingUrl = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}?filterByFormula=AND({${FIELD_COMPLETED}}=FALSE(), DATETIME_FORMAT({${FIELD_FOLLOWUP_DATE}}, 'YYYY-MM-DD')='${today}')`;
+
     
     const headers = {
-      "Authorization": `Bearer paty41tSgNrAPUQZV.7c0df078d76ad5bb4ad1f6be2adbf7e0dec16fd9073fbd51f7b64745953bddfa`
+      "Authorization": `Bearer ${API_KEY}`
     };
     
     const [completedResponse, pendingResponse] = await Promise.all([
@@ -236,8 +323,10 @@ export async function dailySummaryPush(): Promise<any> {
       pending: pending.length,
       date: today
     };
-  } catch (error: any) {
-    console.error('Daily summary error:', error.response?.data || error.message);
-    return { success: false, error: error.message };
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    const errorMessage = `Daily summary error: ${axiosError.response?.data?.message || axiosError.message}`;
+    console.error(errorMessage);
+    return { success: false, error: errorMessage, completed: 0, pending: 0, date: new Date().toISOString().split('T')[0] };
   }
 }

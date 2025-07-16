@@ -59,7 +59,12 @@ export async function setupVite(app: Express, server: Server) {
         "index.html"
       );
 
+<<<<<<< HEAD
       let template = await fs.promises.readFile(templatePath, "utf-8");
+=======
+      // always reload the index.html file from disk in case it changes
+      let template = await fs.promises.readFile(clientTemplate, "utf-8");
+>>>>>>> origin/codex/add-newline-at-eof-for-specified-files
       template = template.replace(
         'src="/src/main.tsx"',
         `src="/src/main.tsx?v=${nanoid()}"`
