@@ -269,14 +269,9 @@ useEffect(() => {
   }, []);
 
   return (
-    <div>
     <div className="command-center-container">
-      {/* Main container for the command center */}
-    </div>
-      {/* Main container for the command center */}
-    </div>
       <TopNavBar />
-      <AIAgentOverlay />
+      <AIAvatarOverlay />
       <SupportChatWidget />
 
       <h1 className="dashboard-title neon-text">🤖 YoBot® Command Center</h1>
@@ -356,8 +351,9 @@ useEffect(() => {
               key={i}
               label={label}
               airtableField={label}
-              color={neonColors[Math.floor(Math.random() * neonColors.length)]} showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
-              showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
+              color={neonColors[Math.floor(Math.random() * neonColors.length)]}
+              showMeter={true}
+              meterThresholds={{ green: 75, yellow: 50, red: 25 }}
             />
           ))}
         </div>
@@ -432,13 +428,10 @@ useEffect(() => {
       {selectedModal === 'metricsPanel' && <MetricsPanelModal onClose={closeModal} />}
       {selectedModal === 'behaviorTuning' && <BehaviorTuningModal onClose={closeModal} />}
       {selectedModal === 'smartCalendar' && <SmartCalendarCard />}
-      {selectedModal === 'metricsPanel' && <MetricsPanelModal onClose={closeModal} />}
-      {selectedModal === 'behaviorTuning' && <BehaviorTuningModal onClose={closeModal} />}
       {selectedModal === 'slackTest' && <DiagnosticsModal onClose={closeModal} />}
       {selectedModal === 'adminLogin' && <AdminPanelModal onClose={closeModal} />}
       {selectedModal === 'auditLog' && <LoggerTrackerModal onClose={closeModal} />}
 
     </div>
   );
-}
 }
