@@ -14,29 +14,7 @@ configure these variables in your deployment environment:
 
 # YoBotAssistant Command Center
 
-YoBotAssistant is the backend command center that powers YoBot's automation and metrics tracking. It exposes a small Express API along with modules for scraping, voice generation, sales automation and more. Optional Python scripts handle iCloud calendar syncing.
-
-## Running the Express Server
-
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Copy `.env.example` to `.env` and configure the following variables:
-   ```bash
-   AIRTABLE_API_KEY=your-airtable-api-key
-   AIRTABLE_BASE_ID=your-airtable-base-id
-   AIRTABLE_TABLE_NAME=Command Center · Metrics Tracker
-   ICLOUD_USERNAME=your-icloud-username
-   ICLOUD_PASSWORD=your-icloud-password
-   DATABASE_URL=postgres-connection-string
-   PORT=3000 # optional
-   ```
-3. Start the server:
-   ```bash
-   npm run dev
-   ```
-   The API listens on `http://localhost:3000` by default.
+YoBotAssistant powers YoBot's automation and metrics tracking. It exposes a small Express API along with modules for scraping, voice generation, sales automation and more. Optional Python scripts handle iCloud calendar syncing.
 
 ## Modules
 
@@ -66,30 +44,23 @@ Refer to the code in each module for detailed usage. UI guidelines are documente
 
 ## Setup
 
-1. Install Node dependencies in the project root:
+1. Install dependencies:
    ```bash
    npm install
-   # or
-   pnpm install
+   cd client && npm install
    ```
-2. Install client dependencies:
-   ```bash
-   cd client
-   npm install
-   ```
-3. Copy `.env.example` to `.env` and fill in your environment variables.
-4. Start the Express server:
+2. Copy `.env.example` to `.env` and configure the values.
+3. Start the Express server:
    ```bash
    npm run dev
    ```
    The API listens on `PORT` (defaults to `3000`).
-5. Launch the React client:
+4. In another terminal run the React client:
    ```bash
-   cd client
-   npm run dev
+   cd client && npm run dev
    ```
    The client runs on `http://localhost:5173`.
-6. (Optional) install Python requirements and run `app.py` to sync iCloud calendars.
+5. (Optional) install Python requirements and run `app.py` to sync iCloud calendars.
 
 ## Environment Variables
 
