@@ -24,7 +24,8 @@ export default function BottomNav() {
   const [error, setError] = useState("");
   
   const handleAdminAccess = () => {
-    if (password === "yobot2025") {
+    const expectedPassword = import.meta.env.VITE_ADMIN_PASSWORD || "yobot2025";
+    if (password === expectedPassword) {
       setIsDialogOpen(false);
       setPassword("");
       setError("");
