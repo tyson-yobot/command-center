@@ -1,6 +1,10 @@
 import axios from "axios";
 
-import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, getAirtableApiKey } from "./shared/airtableConfig";
+import {
+  COMMAND_CENTER_BASE_ID,
+  TABLE_NAMES,
+  getAirtableApiKey,
+} from "./shared/airtableConfig";
 import { AIRTABLE_BASES } from "./server/modules/airtable/airtableConfig";
 
 const AIRTABLE_API_KEY = getAirtableApiKey();
@@ -39,3 +43,6 @@ export async function fetchMetrics() {
     };
   }
 }
+consolidate-imports-and-declare-constants
+
+
