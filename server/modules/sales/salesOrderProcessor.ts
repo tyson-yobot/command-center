@@ -24,10 +24,10 @@ const DEFAULT_DOCUSIGN_TEMPLATE_ID = '646522c7-edd9-485b-bbb4-20ea1cd92ef9';
 // Configuration
 const GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh";
 
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
+const BASE_ID = "appRt8V3tH4g5Z5if";
 const AIRTABLE_API_KEY = getApiKey();
 const TABLE_NAME = SCRAPED_LEADS_TABLE_NAME;
-
-
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
 
 
@@ -39,8 +39,6 @@ const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY as string;
 
 const BASE_ID = COMMAND_CENTER_BASE_ID;
 const TABLE_NAME = "📥 Scraped Leads (Universal)";
-
-
 const BASE_ID = COMMAND_CENTER_BASE_ID;
 const TABLE_NAME = SCRAPED_LEADS_TABLE_NAME;
 

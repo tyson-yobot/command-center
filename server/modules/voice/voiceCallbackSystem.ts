@@ -117,6 +117,8 @@ export async function closeOutFollowupByPhone(phone: string): Promise<CloseOutFo
     const url = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}`;
 
     const headers = {
+
+      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
       "Authorization": `Bearer ${API_KEY}`,
       "Content-Type": "application/json"
     };
@@ -159,6 +161,8 @@ export async function logFollowupEventByPhone(phone: string, method: string, out
     const url = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}`;
 
     const headers = {
+
+      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
       "Authorization": `Bearer ${API_KEY}`,
       "Content-Type": "application/json"
     };
@@ -258,6 +262,9 @@ export async function statusMonitor(): Promise<StatusMonitorResult> {
     const url = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}?filterByFormula={${FIELD_COMPLETED}}=FALSE()`;
 
     const headers = {
+
+      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`
+
       "Authorization": `Bearer ${API_KEY}`
     };
     
@@ -303,7 +310,11 @@ export async function dailySummaryPush(): Promise<DailySummaryPushResult> {
 
     
     const headers = {
+
+      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`
+
       "Authorization": `Bearer ${API_KEY}`
+
     };
     
     const [completedResponse, pendingResponse] = await Promise.all([

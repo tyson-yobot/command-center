@@ -1,3 +1,17 @@
+
+# YoBotAssistant
+
+## Environment Variables
+
+The application relies on several environment variables. Create a `.env` file or
+configure these variables in your deployment environment:
+
+- `ICLOUD_USERNAME` – iCloud account username
+- `ICLOUD_PASSWORD` – iCloud app-specific password
+- `AIRTABLE_API_KEY` – API key for Airtable access
+- `AIRTABLE_BASE_ID` – Airtable base identifier
+- `AIRTABLE_TABLE_NAME` – default table used for metrics
+
 # YoBotAssistant Command Center
 
 YoBotAssistant is the backend command center that powers YoBot's automation and metrics tracking. It exposes a small Express API along with modules for scraping, voice generation, sales automation and more. Optional Python scripts handle iCloud calendar syncing.

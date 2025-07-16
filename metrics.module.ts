@@ -1,12 +1,13 @@
 import axios from "axios";
-
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
+const BASE_ID = "appRt8V3tH4g5Z51f";
+const TABLE_NAME = "Command Center - Metrics Tracker Table";
 import {
   COMMAND_CENTER_BASE_ID,
   TABLE_NAMES,
   getAirtableApiKey,
 } from "./shared/airtableConfig";
 import { AIRTABLE_BASES } from "./server/modules/airtable/airtableConfig";
-
 const AIRTABLE_API_KEY = getAirtableApiKey();
 const BASE_ID = AIRTABLE_BASES?.COMMAND_CENTER?.baseId || COMMAND_CENTER_BASE_ID;
 const TABLE_NAME = AIRTABLE_BASES?.COMMAND_CENTER?.tables?.METRICS_TRACKER || TABLE_NAMES.METRICS_TRACKER;
