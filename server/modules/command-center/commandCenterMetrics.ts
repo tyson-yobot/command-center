@@ -3,16 +3,7 @@
 
 import axios from 'axios';
 
-<<<<<<< HEAD
-export interface MetricsRecord {
-=======
-import { COMMAND_CENTER_BASE_ID } from "../../config/airtableBase";
-
-import { COMMAND_CENTER_BASE_ID } from "@shared/airtableConfig";
-
-
 interface MetricsRecord {
->>>>>>> origin/codex/add-newline-at-eof-for-specified-files
   '🛠️ Triggered Action': string;
   Status?: string;
   'Triggered By': string;
@@ -214,59 +205,11 @@ class CommandCenterMetrics {
     return await this.makeAirtableRequest('PATCH', this.metricsTableId, data);
   }
 }
-export interface MetricsRecord {
-  ['🛠️ Triggered Action']: string;
-  [' Triggered By']: string;
-  [key: string]: any; // allow any extra Airtable fields
-}
-
-export async function logMetricsAction(record: MetricsRecord): Promise<any> {
-  const timestamp = new Date().toISOString();
-  const data = {
-    records: [
-      {
-        fields: {
-          ...record,
-          Timestamp: timestamp
-        }
-      }
-    ]
-  };
-
-  try {
-    const response = await fetch('https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblMetrics', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-
-    const result = await response.json();
-    return { success: true, result };
-  } catch (error) {
-    console.error('Airtable request failed:', error);
-    return { success: false, error: (error as Error).message };
-  } finally {
-    // Always log locally for immediate tracking
-    const localLog = {
-      action: record['🧠 Triggered Action'],
-      user: record['👤 Triggered By']
-    };
-    console.log('📊 Metrics Event Logged:', localLog);
-  }
-}
-
-
 export const commandCenterMetrics = new CommandCenterMetrics();
 
 // ✅ PRODUCTION-READY ROUTES MODULE — ZERO PARAMETERS, FULL AUTOMATION
 
 import { Express } from 'express';
-import { commandCenterMetrics } from './metrics-core';
-
-export const commandCenterMetrics = new CommandCenterMetrics();
 
 export function registerCommandCenterMetrics(app: Express) {
   // SECTION 1: Quick Action Launchpad
