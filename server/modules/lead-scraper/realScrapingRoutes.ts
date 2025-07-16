@@ -2,14 +2,12 @@ import type { Express } from "express";
 import { logIntegrationTest } from "./airtableIntegrationLogger";
 import { storeLeadsInAirtable, logScrapingCampaign } from "./airtableLeadStorage";
 
-import { LEAD_ENGINE_BASE_ID, TABLE_NAMES } from "@shared/airtableConfig";
-
 import {
   LEAD_ENGINE_BASE_ID,
   SCRAPED_LEADS_TABLE,
   SCRAPED_LEADS_TABLE_NAME,
   tableUrl,
-} from "../../shared/airtableConfig";
+} from "@shared/airtableConfig";
 
 
 // Real API integration for lead scraping with proper test/live mode separation
