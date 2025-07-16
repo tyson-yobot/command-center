@@ -46,8 +46,6 @@
     "server",
     "vite.config.ts"
   ],
-  // Allows referencing other TypeScript projects.
-  "references": [],
   // Enable incremental compilation for faster builds
   "incremental": true
 }
