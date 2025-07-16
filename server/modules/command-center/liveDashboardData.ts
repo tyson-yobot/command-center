@@ -1,6 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 
+import { COMMAND_CENTER_BASE_ID } from "../../config/airtableBase";
+
+import { COMMAND_CENTER_BASE_ID, TABLE_NAMES } from '@shared/airtableConfig';
+
+
 // Live data aggregator - pulls only from actual running systems
 export class LiveDashboardData {
   
@@ -8,7 +13,7 @@ export class LiveDashboardData {
   static async getAutomationMetrics() {
     try {
       // Get metrics from Airtable Integration Test Log Table
-      const airtableResponse = await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbly0fjE2M5uHET9X", {
+      const airtableResponse = await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/tbly0fjE2M5uHET9X`, {
         headers: {
           "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
           "Content-Type": "application/json"

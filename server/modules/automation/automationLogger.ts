@@ -4,6 +4,7 @@
  */
 
 import axios from 'axios';
+import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
 
 const VALID_DASHBOARD_ID = "COMMAND_CENTER";
 
@@ -63,7 +64,7 @@ async function logToAirtable(logData: AutomationLog): Promise<void> {
       return;
     }
 
-    const url = "https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblXyLogAuto";
+    const url = `https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/tblXyLogAuto`;
     const headers = {
       "Authorization": `Bearer ${airtableKey}`,
       "Content-Type": "application/json"

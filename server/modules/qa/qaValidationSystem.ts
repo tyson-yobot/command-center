@@ -1,5 +1,10 @@
 import type { Express } from "express";
 
+import { COMMAND_CENTER_BASE_ID } from "../../config/airtableBase";
+
+import { COMMAND_CENTER_BASE_ID } from "@shared/airtableConfig";
+
+
 interface QATestResult {
   integrationName: string;
   status: 'PASS' | 'FAIL' | 'PENDING';
@@ -116,8 +121,7 @@ class QAValidationSystem {
 
     try {
       // Execute test against endpoint
-      const response = await fetch(`http://localhost:5000${spec.endpoint}`, {
-        method: 'POST',
+      const response = await fetch(`${process.env.COMMAND_CENTER_URL}${spec.endpoint}`, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -178,7 +182,7 @@ class QAValidationSystem {
     if (!process.env.AIRTABLE_API_KEY) return;
     
     try {
-      await fetch("https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tbldPRZ4nHbtj9opU", {
+      await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/tbldPRZ4nHbtj9opU`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,

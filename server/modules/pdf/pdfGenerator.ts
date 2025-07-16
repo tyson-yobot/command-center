@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { google } from 'googleapis';
 
-interface QuoteData {
+export interface QuoteData {
   companyName: string;
   contactName: string;
   email: string;
@@ -127,7 +127,7 @@ export class PDFGenerator {
       // Footer
       doc.fontSize(10).font('Helvetica');
       doc.text('YoBot® - Transforming Business Communication Through AI', 50, doc.page.height - 100, { align: 'center' });
-      doc.text('Contact: sales@yobot.bot | Phone: (555) 123-4567', { align: 'center' });
+      doc.text(`Contact: ${process.env.CONTACT_EMAIL || "sales@yobot.bot"} | Phone: ${process.env.CONTACT_PHONE || "(555) 123-4567"}`, { align: "center" });
 
       doc.end();
 
