@@ -90,11 +90,11 @@ class AutomationTester {
       
       // Test the endpoint with appropriate test data
       const testData = this.generateTestData(func);
-      const response = await axios.post(`http://localhost:5000${func.endpoint}`, testData, {
-        timeout: 30000,
-        validateStatus: (status) => status < 500 // Accept 4xx as valid responses
-      });
+      const response = await axios.post(`${process.env.COMMAND_CENTER_URL}${func.endpoint}`, testData, {
 
+        timeout: 30000,
+        validateStatus: (status) => status < 500
+      });
       // Log successful test
       await airtableLogger.logAutomationTest({
         functionId: func.id,

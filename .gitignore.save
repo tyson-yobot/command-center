@@ -1,4 +1,4 @@
-# Replit & build files
+cccReplit & build files
 .replit
 *.replit
 build/
@@ -13,16 +13,11 @@ yarn-error.log*
 # Environments
 .env
 .env.*
-<<<<<<< HEAD
-!.env.example
-=======
-client/src/.env
 
 client/src/.env
 
 !.env.example
 
->>>>>>> origin/main
 
 # Node modules
 node_modules/

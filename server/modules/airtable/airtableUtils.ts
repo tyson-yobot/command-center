@@ -4,13 +4,14 @@
  */
 
 import axios from 'axios';
+import { COMMAND_CENTER_BASE_ID } from "../config/airtableBase";
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
 const BASE_URL = 'https://api.airtable.com/v0';
 
 // Base IDs from the table inventory
 const BASES = {
-  COMMAND_CENTER: 'appRt8V3tH4g5Z51f',
+  COMMAND_CENTER: COMMAND_CENTER_BASE_ID,
   OPS_ALERTS: 'appCoAtCZdARb4A4F', 
   CLIENT_CRM: 'appMbVQJ0n3nWR11N',
   SALES_AUTOMATION: 'appe05t1B1tn1Kn5',
