@@ -1,6 +1,6 @@
 // ✅ Modal Imports (deduplicated)
 import { LeadScraperModal } from '@/components/modals/LeadScraperModal';
-import { VoiceStudioModal } from '@/components/modals/VoiceStudioModal';
+import VoiceStudioModal from '@/components/modals/VoiceStudioModal';
 import { CalendarModal } from '@/components/modals/CalendarModal';
 import { SmartQuotingModal } from '@/components/modals/SmartQuotingModal';
 import { ContentCreatorModal } from '@/components/modals/ContentCreatorModal';
@@ -19,7 +19,6 @@ import { AirtableSyncModal } from '@/components/modals/AirtableSyncModal';
 import { LoggerTrackerModal } from '@/components/modals/LoggerTrackerModal';
 import { MetricsPanelModal } from '@/components/modals/MetricsPanelModal';
 import { BehaviorTuningModal } from '@/components/modals/BehaviorTuningModal';
-
 import { RAGModal } from '@/components/modals/RAGModal';
 import { RevenueChartsModal } from '@/components/modals/RevenueChartsModal';
 import { SlackMonitorModal } from '@/components/modals/SlackMonitorModal';
@@ -270,7 +269,12 @@ useEffect(() => {
   }, []);
 
   return (
-    <div className="command-center-wrapper">
+    <div>
+    <div className="command-center-container">
+      {/* Main container for the command center */}
+    </div>
+      {/* Main container for the command center */}
+    </div>
       <TopNavBar />
       <AIAgentOverlay />
       <SupportChatWidget />
@@ -398,8 +402,7 @@ useEffect(() => {
         color="#0d82da"
         showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
       />
-    </div>
-  </div>
+    </div>  </div>
     
 
       {/* Modals */}

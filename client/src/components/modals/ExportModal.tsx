@@ -55,3 +55,4 @@ export const ExportModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default ExportModal;

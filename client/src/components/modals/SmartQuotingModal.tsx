@@ -55,3 +55,4 @@ export const SmartQuotingModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default SmartQuotingModal;

@@ -18,6 +18,7 @@ export default defineConfig({
     outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,
   },
+<<<<<<< HEAD
   server: {
     port: 5173,
     strictPort: true,
@@ -26,3 +27,6 @@ export default defineConfig({
     },
   },
 });
+=======
+})
+>>>>>>> origin/codex/add-newline-at-eof-for-specified-files

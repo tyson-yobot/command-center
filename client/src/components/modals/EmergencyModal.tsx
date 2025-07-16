@@ -55,3 +55,4 @@ export const EmergencyModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default EmergencyModal;

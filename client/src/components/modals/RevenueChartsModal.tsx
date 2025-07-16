@@ -55,3 +55,4 @@ export const RevenueChartsModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default RevenueChartsModal;

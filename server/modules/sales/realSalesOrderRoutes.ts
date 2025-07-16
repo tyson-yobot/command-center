@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import { SALES_ORDERS_TABLE, tableUrl } from "../../shared/airtableConfig";
 
 // Real sales order processing with Airtable and payment integration
 export function registerRealSalesOrderRoutes(app: Express) {
@@ -54,7 +55,7 @@ export function registerRealSalesOrderRoutes(app: Express) {
             }]
           };
 
-          const airtableResponse = await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Sales Orders`, {
+          const airtableResponse = await fetch(tableUrl(process.env.AIRTABLE_BASE_ID as string, SALES_ORDERS_TABLE), {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
@@ -249,11 +250,14 @@ export function registerRealSalesOrderRoutes(app: Express) {
         });
       }
 
-      const airtableResponse = await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Sales Orders/${orderId}`, {
-        headers: {
-          'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`
+      const airtableResponse = await fetch(
+        `${tableUrl(process.env.AIRTABLE_BASE_ID as string, SALES_ORDERS_TABLE)}/${orderId}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`
+          }
         }
-      });
+      );
 
       if (airtableResponse.ok) {
         const orderData = await airtableResponse.json();
@@ -288,11 +292,14 @@ export function registerRealSalesOrderRoutes(app: Express) {
         });
       }
 
-      const airtableResponse = await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Sales Orders?maxRecords=50&sort[0][field]=Order Date&sort[0][direction]=desc`, {
-        headers: {
-          'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`
+      const airtableResponse = await fetch(
+        `${tableUrl(process.env.AIRTABLE_BASE_ID as string, SALES_ORDERS_TABLE)}?maxRecords=50&sort[0][field]=Order Date&sort[0][direction]=desc`,
+        {
+          headers: {
+            'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`
+          }
         }
-      });
+      );
 
       if (airtableResponse.ok) {
         const ordersData = await airtableResponse.json();

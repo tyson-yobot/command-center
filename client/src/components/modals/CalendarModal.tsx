@@ -55,3 +55,4 @@ export const CalendarModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default CalendarModal;

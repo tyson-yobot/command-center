@@ -55,3 +55,4 @@ export const BehaviorTuningModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default BehaviorTuningModal;

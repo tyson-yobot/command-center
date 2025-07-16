@@ -1,9 +1,9 @@
 import type { Request, Response } from "express";
+import { COMMAND_CENTER_BASE_ID } from "../../config/airtableBase";
 
-const AIRTABLE_API_KEY = process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN || process.env.AIRTABLE_VALID_TOKEN || process.env.AIRTABLE_API_KEY;
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
 const INTEGRATION_TEST_BASE = "appCoAtCZdARb4AM2";
 const INTEGRATION_TEST_TABLE = "🧪 Integration Test Log 2";
-const COMMAND_CENTER_BASE = "appRt8V3tH4g5Z51f";
 
 // Get test metrics - disconnected from Integration Test Log per user request
 export async function getTestMetrics(req: Request, res: Response) {
@@ -24,7 +24,7 @@ export async function getCommandCenterMetrics(req: Request, res: Response) {
 
   try {
     // Fetch real data from Command Center base
-    const baseUrl = `https://api.airtable.com/v0/${COMMAND_CENTER_BASE}`;
+    const baseUrl = `https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}`;
     const headers = {
       'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
       'Content-Type': 'application/json'

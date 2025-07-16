@@ -55,3 +55,4 @@ export const CallQueueModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default CallQueueModal;

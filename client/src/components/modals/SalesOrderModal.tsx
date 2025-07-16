@@ -55,3 +55,4 @@ export const SalesOrderModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default SalesOrderModal; 

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/dialog';
 import { Card, CardContent } from '@/components/card';
 import { Button } from '@/components/button';
+import e from 'express';
 
 interface ModalProps {
   isOpen: boolean;
@@ -55,3 +56,4 @@ export const AdminSettingsModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default AdminSettingsModal;

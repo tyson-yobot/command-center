@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import Airtable from 'airtable';
+import QuickActionCard from './QuickActionCard'; // must be a default export
 
-const QuickActionsCard = () => {
+const QuickActionsCard: React.FC = () => {
   const [scheduledActions, setScheduledActions] = useState(0);
   const [executedActions, setExecutedActions] = useState(0);
   const [failedActions, setFailedActions] = useState(0);
@@ -12,7 +13,14 @@ const QuickActionsCard = () => {
   const [completionRate, setCompletionRate] = useState(0);
 
   useEffect(() => {
-    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base('appRt8V3tH4g5Z5if');
+    const apiKey = process.env.AIRTABLE_API_KEY;
+    const baseId = process.env.AIRTABLE_BASE_ID;
+
+    if (!apiKey || !baseId) {
+      throw new Error('Airtable API Key and Base ID must be defined in environment variables.');
+    }
+
+    const base = new Airtable({ apiKey }).base(baseId);
     base('tblXPB3V1Ky3o3EiT').select({}).eachPage((records, fetchNextPage) => {
       let scheduled = 0;
       let executed = 0;
@@ -39,6 +47,7 @@ const QuickActionsCard = () => {
       setFailedActions(failed);
       setAvgExecTime(timeCount > 0 ? execTimeTotal / timeCount : 0);
       setCompletionRate((executed / (executed + failed)) * 100 || 0);
+
       fetchNextPage();
     });
   }, []);
@@ -71,17 +80,16 @@ const QuickActionsCard = () => {
           <p className="text-xl font-semibold text-[#ffff66]">{completionRate.toFixed(1)}%</p>
           <Progress value={completionRate} className="h-2 mt-1 bg-yobot-primary/20" />
         </div>
+
+        {/* ✅ Auto-render 4 action cards, not hardcoded */}
+        <div className="grid grid-cols-2 gap-4 pt-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <QuickActionCard key={index} />
+          ))}
+        </div>
       </CardContent>
     </Card>
   );
 };
 
 export default QuickActionsCard;
-
-
-// QuickBooksSyncCard.tsx
-// (already included and confirmed as correct in previous update)
-
-
-// PersonalityPackCard.tsx
-// (already included and confirmed as correct in previous update)

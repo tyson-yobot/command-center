@@ -55,3 +55,4 @@ export const AirtableSyncModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default AirtableSyncModal;

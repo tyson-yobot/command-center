@@ -47,7 +47,7 @@ async function runFullApiCheck(): Promise<number[]> {
   const endpoints = ["/api/uptime", "/api/system-health", "/api/test-lead-ingestion"];
   const results = await Promise.all(endpoints.map(async (url) => {
     try {
-      const response = await fetch(`http://localhost:5000${url}`);
+      const response = await fetch(`${process.env.COMMAND_CENTER_URL}${url}`);
       return response.status;
     } catch (error) {
       return 500;

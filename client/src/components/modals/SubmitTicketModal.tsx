@@ -55,3 +55,4 @@ export const SubmitTicketModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default SubmitTicketModal;

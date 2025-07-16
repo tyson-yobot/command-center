@@ -1,0 +1,23 @@
+[
+  {
+    "status": "ready",
+    "caption": "🚀 Your AI sales team is here. YoBot® scrapes, qualifies, scores, and calls leads — just like a human. 🔥 50% off until July 31st. Click here to claim your offer.",
+    "image_url": "assets/yobot-promo-1.png",
+    "platforms": ["facebook", "instagram", "linkedin"],
+    "schedule": "2025-07-04T17:00:00Z"
+  },
+  {
+    "status": "ready",
+    "caption": "📞 Outbound calls that talk like a human. Scores leads in real-time. Builds your funnel while you sleep. 50% off YoBot® until July 31st. Click here to activate.",
+    "image_url": "assets/yobot-promo-2.png",
+    "platforms": ["facebook", "instagram", "linkedin"],
+    "schedule": "2025-07-04T21:00:00Z"
+  },
+  {
+    "caption": "⚡️ YoBot finds, calls, qualifies, and scores your leads — all before you sip your coffee. 50% off until July 31st. Click here.",
+    "image_url": "ads/yobot-ad-6.30.mp4",  
+    "platforms": ["facebook", "instagram", "linkedin"],
+    "schedule": "2025-07-04T10:00:00",
+    "status": "ready"
+  }
+]

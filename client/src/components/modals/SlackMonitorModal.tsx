@@ -55,3 +55,4 @@ export const SlackMonitorModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default SlackMonitorModal; 

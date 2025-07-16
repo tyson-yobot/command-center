@@ -55,3 +55,4 @@ export const RAGModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
+export default RAGModal;  

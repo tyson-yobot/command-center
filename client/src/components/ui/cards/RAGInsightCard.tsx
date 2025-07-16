@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent } from '@/components/ui/card';
 
-const RAGInsightsCard = () => {
+const RAGInsightsCard: React.FC = () => {
   const [metrics, setMetrics] = useState({
     docsEmbedded: 0,
     vectorImports: 0,
@@ -13,31 +13,41 @@ const RAGInsightsCard = () => {
   });
 
   useEffect(() => {
-    axios({
-      method: 'GET',
-      url: 'https://api.airtable.com/v0/appClientConfig/tblCLICONF',
-      headers: {
-        Authorization: 'Bearer ' + AIRTABLE_API_KEY,
-      },
-    }).then((res) => {
-      const records = res.data.records;
+    const fetchMetrics = async () => {
+      try {
+   
 
-      let docsEmbedded = 0;
-      let vectorImports = 0;
-      let ragHits = 0;
-      let aiSuggestions = 0;
-      let knowledgeQueries = 0;
+const response = await axios.get<{ records: any[] }>(
+  'https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblhux5RjOYMaQ3R1',
+  {
+    headers: {
+      Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`,
+    },
+  }
+);
+        const records = response.data.records;
 
-      records.forEach((/** @type {{ fields: Record<string, any> }} */ record) => {
-        docsEmbedded += parseInt(record.fields['📄 Docs Embedded'] || '0', 10);
-        vectorImports += parseInt(record.fields['📥 Vector Imports'] || '0', 10);
-        ragHits += parseInt(record.fields['🤖 RAG Hits'] || '0', 10);
-        aiSuggestions += parseInt(record.fields['🧠 AI Suggestions Activated'] || '0', 10);
-        knowledgeQueries += parseInt(record.fields['🕵️‍♂️ Knowledge Queries'] || '0', 10);
-      });
+        let docsEmbedded = 0;
+        let vectorImports = 0;
+        let ragHits = 0;
+        let aiSuggestions = 0;
+        let knowledgeQueries = 0;
 
-      setMetrics({ docsEmbedded, vectorImports, ragHits, aiSuggestions, knowledgeQueries });
-    });
+        records.forEach((record: Record<string, any>) => {
+          docsEmbedded += parseInt(record.fields['📄 Docs Embedded'] || '0', 10);
+          vectorImports += parseInt(record.fields['📥 Vector Imports'] || '0', 10);
+          ragHits += parseInt(record.fields['🤖 RAG Hits'] || '0', 10);
+          aiSuggestions += parseInt(record.fields['🧠 AI Suggestions Activated'] || '0', 10);
+          knowledgeQueries += parseInt(record.fields['🕵️‍♂️ Knowledge Queries'] || '0', 10);
+        });
+
+        setMetrics({ docsEmbedded, vectorImports, ragHits, aiSuggestions, knowledgeQueries });
+      } catch (error: any) {
+        console.error('[ERROR] Fetching RAG Airtable metrics failed:', error);
+      }
+    };
+
+    fetchMetrics();
   }, []);
 
   return (

@@ -3,7 +3,16 @@
 
 import axios from 'axios';
 
+<<<<<<< HEAD
 export interface MetricsRecord {
+=======
+import { COMMAND_CENTER_BASE_ID } from "../../config/airtableBase";
+
+import { COMMAND_CENTER_BASE_ID } from "@shared/airtableConfig";
+
+
+interface MetricsRecord {
+>>>>>>> origin/codex/add-newline-at-eof-for-specified-files
   '🛠️ Triggered Action': string;
   Status?: string;
   'Triggered By': string;
@@ -84,16 +93,16 @@ interface IntegrationTestRecord {
 }
 
 class CommandCenterMetrics {
-  private baseId = 'appRt8V3tH4g5Z51f';
+  private baseId = COMMAND_CENTER_BASE_ID;
   private metricsTableId = 'tbl7K5RthCtD69BE1'; // Command Center - Metrics Tracker Table
   private integrationTestTableId = 'tblIntegrationTest'; // Integration Test Log Table
   private apiKey: string;
   private localBackupLog: any[] = [];
 
   constructor() {
-    this.apiKey = process.env.AIRTABLE_API_KEY || '';
+    this.apiKey = process.env.AIRTABLE_API_KEY as string;
     if (!this.apiKey) {
-      console.warn('AIRTABLE_API_KEY not configured for Command Center Metrics');
+      throw new Error('AIRTABLE_API_KEY not configured for Command Center Metrics');
     }
   }
 
@@ -715,7 +724,7 @@ export function registerCommandCenterMetrics(app: Express) {
         return res.status(400).json({ success: false, error: 'No API key configured' });
       }
 
-      const response = await fetch(`https://api.airtable.com/v0/appRt8V3tH4g5Z51f/tbl7K5RthCtD69BE1?maxRecords=1`, {
+      const response = await fetch(`https://api.airtable.com/v0/${COMMAND_CENTER_BASE_ID}/tbl7K5RthCtD69BE1?maxRecords=1`, {
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json'

@@ -12,6 +12,7 @@ export interface AirtableRecord<T = Record<string, any>> {
   createdTime?: string;
 }
 
+<<<<<<< HEAD
 export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
@@ -114,3 +115,12 @@ export function createApiResponse<T>(
 export function logOperation(operation: string, details: any): void {
   console.log(`[Airtable] ${operation}:`, details);
 }
+=======
+// Helper function to get base ID
+export function getBaseId(baseKey: string): string {
+  const bases = AIRTABLE_BASES as any;
+  const base = bases[baseKey];
+  if (!base) throw new Error(`Base ${baseKey} not found`);
+  return base.baseId;
+}
+>>>>>>> origin/codex/add-newline-at-eof-for-specified-files
