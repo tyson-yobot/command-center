@@ -1,12 +1,10 @@
 
-# YoBotAssistant
+# YoBotAssistant Command Center
+
+YoBotAssistant is the backend command center that powers YoBot's automation and metrics tracking. It exposes a small Express API along with modules for scraping, voice generation, sales automation and more. Optional Python scripts handle iCloud calendar syncing.
 
 ## Environment Variables
 
-<<<<<<< HEAD
-The server expects an `AIRTABLE_API_KEY` environment variable to authorize API calls.
-Copy `.env.example` to `.env` and fill in your key.
-=======
 The application relies on several environment variables. Create a `.env` file or
 configure these variables in your deployment environment:
 
@@ -15,10 +13,6 @@ configure these variables in your deployment environment:
 - `AIRTABLE_API_KEY` – API key for Airtable access
 - `AIRTABLE_BASE_ID` – Airtable base identifier
 - `AIRTABLE_TABLE_NAME` – default table used for metrics
-
-# YoBotAssistant Command Center
-
-YoBotAssistant is the backend command center that powers YoBot's automation and metrics tracking. It exposes a small Express API along with modules for scraping, voice generation, sales automation and more. Optional Python scripts handle iCloud calendar syncing.
 
 ## Running the Express Server
 

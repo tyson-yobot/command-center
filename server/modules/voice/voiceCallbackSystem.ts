@@ -113,17 +113,10 @@ export async function trackResponse(incomingMessage: string, phone: string): Pro
 // Close follow-up by phone number
 export async function closeOutFollowupByPhone(phone: string): Promise<CloseOutFollowupResponse> {
   try {
-
     const url = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}`;
-
+    
     const headers = {
-<<<<<<< HEAD
-      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
-=======
-
-      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
       "Authorization": `Bearer ${API_KEY}`,
->>>>>>> origin/main
       "Content-Type": "application/json"
     };
     
@@ -161,17 +154,10 @@ export async function closeOutFollowupByPhone(phone: string): Promise<CloseOutFo
 // Log follow-up event by phone number
 export async function logFollowupEventByPhone(phone: string, method: string, outcome: string): Promise<LogFollowupEventResponse> {
   try {
-
     const url = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}`;
-
+    
     const headers = {
-<<<<<<< HEAD
-      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
-=======
-
-      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`,
       "Authorization": `Bearer ${API_KEY}`,
->>>>>>> origin/main
       "Content-Type": "application/json"
     };
     
@@ -266,18 +252,10 @@ export async function logAlertToSlack(message: string): Promise<number> {
 // Monitor follow-up status and flag overdue ones
 export async function statusMonitor(): Promise<StatusMonitorResult> {
   try {
-
     const url = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}?filterByFormula={${FIELD_COMPLETED}}=FALSE()`;
-
+    
     const headers = {
-<<<<<<< HEAD
-      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`
-=======
-
-      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`
-
       "Authorization": `Bearer ${API_KEY}`
->>>>>>> origin/main
     };
     
     const response = await axios.get(url, { headers });
@@ -316,21 +294,11 @@ export async function dailySummaryPush(): Promise<DailySummaryPushResult> {
   try {
     const today = new Date().toISOString().split('T')[0];
     
-
     const completedUrl = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}?filterByFormula=AND({${FIELD_COMPLETED}}=TRUE(), DATETIME_FORMAT({${FIELD_FOLLOWUP_DATE}}, 'YYYY-MM-DD')='${today}')`;
     const pendingUrl = `https://api.airtable.com/v0/${BASE_ID}/${FOLLOWUP_TABLE}?filterByFormula=AND({${FIELD_COMPLETED}}=FALSE(), DATETIME_FORMAT({${FIELD_FOLLOWUP_DATE}}, 'YYYY-MM-DD')='${today}')`;
-
     
     const headers = {
-<<<<<<< HEAD
-      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`
-=======
-
-      "Authorization": `Bearer ${process.env.AIRTABLE_API_KEY}`
-
       "Authorization": `Bearer ${API_KEY}`
-
->>>>>>> origin/main
     };
     
     const [completedResponse, pendingResponse] = await Promise.all([

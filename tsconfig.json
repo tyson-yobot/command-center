@@ -16,6 +16,8 @@
     "allowImportingTsExtensions": true,
     // Enables importing JSON files as modules.
     "resolveJsonModule": true,
+    // Allows default imports from modules with no default export
+    "allowSyntheticDefaultImports": true,
     // Ensures that each file can be safely isolated into a separate module.
     "isolatedModules": true,
     // Prevents emitting JavaScript files. Useful for type-checking only projects.

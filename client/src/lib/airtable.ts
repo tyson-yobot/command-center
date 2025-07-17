@@ -1,12 +1,7 @@
-
 // /lib/airtable.ts
 import axios from 'axios';
-<<<<<<< HEAD
 
-const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY as string;
-=======
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
->>>>>>> origin/main
 const BASE_ID = "appRt8V3tH4g5Z51f";
 const TABLE_NAME = "Command Center - Metrics Tracker Table";
 import { COMMAND_CENTER_BASE_ID, TABLE_NAMES, getAirtableApiKey } from '@shared/airtableConfig';
