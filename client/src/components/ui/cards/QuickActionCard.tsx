@@ -5,6 +5,12 @@ import { Progress } from '@/components/ui/progress';
 import Airtable from 'airtable';
 import QuickActionCard from './QuickActionCard'; // must be a default export
 
+interface QuickActionCardProps {
+  title: string;
+  onClick: () => void;
+}
+
+
 const QuickActionsCard: React.FC = () => {
   const [scheduledActions, setScheduledActions] = useState(0);
   const [executedActions, setExecutedActions] = useState(0);

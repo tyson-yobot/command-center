@@ -13,6 +13,7 @@ yarn-error.log*
 # Environments
 .env
 .env.*
+client/src/.env
 
 client/src/.env
 

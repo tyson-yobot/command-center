@@ -1,7 +1,25 @@
+// Lead Qualifier – Final Full Automation Build
+
 import React, { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import Airtable from 'airtable';
+
+const SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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';
+
+const postToSlack = async (message: string): Promise<void> => {
+  try {
+    await fetch(SLACK_WEBHOOK_URL, {
+      method: 'POST',
+      body: JSON.stringify({ text: message }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  } catch (error) {
+    console.error('❗ Slack webhook failed:', error);
+  }
+};
 
 const LeadQualifierCard = () => {
   const [leads, setLeads] = useState(0);
@@ -11,38 +29,48 @@ const LeadQualifierCard = () => {
   const [engagementRate, setEngagementRate] = useState(0);
 
   useEffect(() => {
-    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base('appRt8V3tH4g5Z5if');
+    const base = new Airtable({ apiKey: 'keyyobotsecureapi2025' }).base('appRt8V3tH4g5Z5if');
 
     base('tbl26BpRKPehZfEsl')
       .select({})
-      .eachPage((records, fetchNextPage) => {
-        let totalLeads = 0;
-        let qualifiedCount = 0;
-        let disqualifiedCount = 0;
-        let scoreTotal = 0;
-        let engagedCount = 0;
+      .eachPage(
+        async (records, fetchNextPage) => {
+          let totalLeads = 0;
+          let qualifiedCount = 0;
+          let disqualifiedCount = 0;
+          let scoreTotal = 0;
+          let engagedCount = 0;
 
-        records.forEach(record => {
-          const status = record.fields['✅ Qualification Status'] || '';
-          const scoreRaw = record.fields['📊 Qualification Score'] || '0';
-          const score = typeof scoreRaw === 'string' ? parseFloat(scoreRaw) : Number(scoreRaw);
-          const engaged = record.fields['📞 Engaged'] === true;
+          records.forEach(record => {
+            const status = record.fields['✅ Qualification Status'] || '';
+            const scoreRaw = record.fields['📊 Qualification Score'] || '0';
+            const score = typeof scoreRaw === 'string' ? parseFloat(scoreRaw) : Number(scoreRaw);
+            const engaged = record.fields['📞 Engaged'] === true;
 
-          totalLeads++;
-          if (status === 'Qualified') qualifiedCount++;
-          if (status === 'Disqualified') disqualifiedCount++;
-          if (!isNaN(score)) scoreTotal += score;
-          if (engaged) engagedCount++;
-        });
+            totalLeads++;
+            if (status === 'Qualified') qualifiedCount++;
+            if (status === 'Disqualified') disqualifiedCount++;
+            if (!isNaN(score)) scoreTotal += score;
+            if (engaged) engagedCount++;
+          });
 
-        setLeads(totalLeads);
-        setQualified(qualifiedCount);
-        setDisqualified(disqualifiedCount);
-        setAvgScore(totalLeads > 0 ? Math.round(scoreTotal / totalLeads) : 0);
-        setEngagementRate(totalLeads > 0 ? Math.round((engagedCount / totalLeads) * 100) : 0);
+          setLeads(totalLeads);
+          setQualified(qualifiedCount);
+          setDisqualified(disqualifiedCount);
+          setAvgScore(totalLeads > 0 ? Math.round(scoreTotal / totalLeads) : 0);
+          setEngagementRate(totalLeads > 0 ? Math.round((engagedCount / totalLeads) * 100) : 0);
 
-        fetchNextPage();
-      });
+          await postToSlack(`📊 Lead data pulled: ${qualifiedCount} qualified, ${disqualifiedCount} disqualified, ${avgScore} avg score, ${engagementRate}% engagement.`);
+
+          fetchNextPage();
+        },
+        (err) => {
+          if (err) {
+            console.error('Lead qualification error:', err);
+            postToSlack(`❗ Failed to load lead qualification data: ${err.message}`);
+          }
+        }
+      );
   }, []);
 
   return (

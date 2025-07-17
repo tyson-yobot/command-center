@@ -21,36 +21,36 @@ const DEFAULT_SENDER_EMAIL = 'noreply@yobot.bot';
 const DEFAULT_TEAM_EMAILS = ['tyson@yobot.bot', 'daniel@yobot.bot'];
 const DEFAULT_DOCUSIGN_TEMPLATE_ID = '646522c7-edd9-485b-bbb4-20ea1cd92ef9';
 
-<<<<<<< HEAD
 // Configuration
 const GOOGLE_FOLDER_ID = "1-D1Do5bWsHWX1R7YexNEBLsgpBsV7WRh";
 
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
+const BASE_ID = "appRt8V3tH4g5Z5if";
 const AIRTABLE_API_KEY = getApiKey();
 const TABLE_NAME = SCRAPED_LEADS_TABLE_NAME;
-
-
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || "";
+
+
 // Use the shared Command Center base
+
 const BASE_ID = "appRt8V3tH4g5Z51f";
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY as string;
 
 const BASE_ID = COMMAND_CENTER_BASE_ID;
 const TABLE_NAME = "📥 Scraped Leads (Universal)";
-
-
 const BASE_ID = COMMAND_CENTER_BASE_ID;
 const TABLE_NAME = SCRAPED_LEADS_TABLE_NAME;
 
 const BASE_ID = "appRt8V3tH4g5Z51f";
 
-=======
+
 // --- Logger Utility (for better logging) ---
 class Logger {
   static info(message: string, ...args: any[]) {
     console.log(`[INFO] ${message}`, ...args);
   }
->>>>>>> fa919b53 (chore: apply .gitignore cleanup)
+
 
   static warn(message: string, ...args: any[]) {
     console.warn(`[WARN] ${message}`, ...args);
@@ -103,6 +103,7 @@ interface FormData {
 export class SalesOrderProcessor {
   private driveService: drive_v3.Drive | null = null;
   private config: SalesOrderProcessorConfig;
+  private emailTransporter: nodemailer.Transporter | null = null;
 
   constructor(config?: Partial<SalesOrderProcessorConfig>) {
     this.config = {
@@ -121,6 +122,20 @@ export class SalesOrderProcessor {
       ...config, // Allow partial overrides
     };
     this.initializeGoogleDrive();
+    this.initializeEmailTransporter();
+  }
+
+  private initializeEmailTransporter() {
+    const { emailAppPassword, senderEmail } = this.config;
+    if (emailAppPassword) {
+      this.emailTransporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: senderEmail,
+          pass: emailAppPassword,
+        },
+      });
+    }
   }
 
   /**
@@ -248,13 +263,10 @@ export class SalesOrderProcessor {
         throw new Error('EMAIL_APP_PASSWORD must be set in environment variables or provided in config for sending emails.');
       }
 
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: senderEmail,
-          pass: emailAppPassword
-        }
-      });
+      if (!this.emailTransporter) {
+        this.initializeEmailTransporter();
+      }
+      const transporter = this.emailTransporter!;
 
       const mailOptions = {
         from: senderEmail,

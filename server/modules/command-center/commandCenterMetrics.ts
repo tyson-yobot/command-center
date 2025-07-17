@@ -4,10 +4,13 @@
 import axios from 'axios';
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 export interface MetricsRecord {
 =======
 import { COMMAND_CENTER_BASE_ID } from "../../config/airtableBase";
 
+=======
+>>>>>>> 12679a91a620ffe00e7347d97d5ac80b703fdd08
 import { COMMAND_CENTER_BASE_ID } from "@shared/airtableConfig";
 
 
