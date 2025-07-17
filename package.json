@@ -2,43 +2,26 @@
   "name": "rest-express",
   "version": "1.0.0",
   "type": "module",
-"scripts": {
-  "dev": "node ./server/index.mjs",
-  "test": "jest"
-},
-
   "scripts": {
-
-    "dev": "nodemon --loader ts-node/esm server/server.ts",
+    "dev": "nodemon",
     "start": "node --loader ts-node/esm server/server.ts",
     "dev:client": "vite",
     "build:client": "vite build",
     "preview:client": "vite preview",
-    "dev:all": "concurrently \"npm run dev\" \"npm run dev:client\""
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:client\"",
+    "test": "jest"
   },
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node"
   },
-
-  "devDependencies": {
-    "@replit/vite-plugin-cartographer": "^0.2.7",
-    "@types/express": "^5.0.3",
-    "@types/jest": "^30.0.0",
-    "@types/node": "^24.0.3",
-    "cross-env": "^7.0.3",
-    "jest": "^30.0.4",
-    "ts-jest": "^29.4.0",
-    "tsx": "^3.12.7"
+  "engines": {
+    "node": ">=18.0.0 <21"
   },
   "dependencies": {
     "@googleapis/drive": "^14.1.0",
-    "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
     "@types/nodemailer": "^6.4.17",
     "axios": "^1.10.0",
-    "express": "^4.18.2",
-    "googleapis": "^152.0.0",
-    "nodemailer": "^7.0.5"
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
@@ -48,15 +31,19 @@
     "drizzle-zod": "^0.8.2",
     "express": "^4.21.2",
     "formidable": "^3.5.4",
+    "googleapis": "^152.0.0",
     "helmet": "^8.1.0",
     "lucide-react": "^0.525.0",
     "mammoth": "^1.9.1",
     "morgan": "^1.10.0",
     "multer": "^2.0.1",
+    "nodemailer": "^7.0.5",
     "pdf-parse": "^1.1.1",
     "pdfkit": "^0.17.1",
     "puppeteer": "^24.10.0",
+    "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
+    "react-dom": "^18.3.1",
     "react-hook-form": "^7.55.0",
     "react-hot-toast": "^2.5.2",
     "react-icons": "^5.4.0",
@@ -78,27 +65,23 @@
     "zod": "^3.24.2",
     "zod-validation-error": "^3.4.0"
   },
-  "optionalDependencies": {
-    "bufferutil": "^4.0.8"
-    "dev": "node ./server/index.mjs",
-    "test": "jest"
-  },
-  "dependencies": {
-    "googleapis": "^152.0.0",
-    "nodemailer": "^7.0.5",
-    "express": "^4.18.2",
-    "axios": "^1.10.0"
-  },
   "devDependencies": {
     "@replit/vite-plugin-cartographer": "^0.2.7",
     "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
-    "@types/node": "^20.4.2",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^24.0.3",
+    "concurrently": "^8.2.0",
     "cross-env": "^7.0.3",
     "jest": "^30.0.4",
+    "nodemon": "^3.1.10",
     "ts-jest": "^29.4.0",
-    "tsx": "^3.12.7"
-
+    "ts-node": "^10.9.2",
+    "tsx": "^3.12.7",
+    "typescript": "^5.8.3"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.8"
   }
 }
