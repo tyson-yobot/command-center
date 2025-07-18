@@ -39,3 +39,22 @@ const LiveTransferModal = ({ isOpen, onClose }) => {
         />
         <div className="flex justify-between">
           <button
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleTransfer}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+          >
+            Transfer Call
+          </button>
+        </div>
+        {status && <p className="mt-4 text-center">{status}</p>}
+      </div>
+    </div>
+  );
+};
+
+export default LiveTransferModal;

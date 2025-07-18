@@ -4,7 +4,7 @@ import VoiceStudioModal from '@/components/modals/VoiceStudioModal';
 import { CalendarModal } from '@/components/modals/CalendarModal';
 import { SmartQuotingModal } from '@/components/modals/SmartQuotingModal';
 import { ContentCreatorModal } from '@/components/modals/ContentCreatorModal';
-import { SubmitTicketModal } from '@/components/modals/SubmitTicketModal';
+import SubmitTicketModal from '@/components/modals/SubmitTicketModal';
 import { ExportModal } from '@/components/modals/ExportModal';
 import { HubspotModal } from '@/components/modals/HubspotModal';
 import { AdminPanelModal } from '@/components/modals/AdminPanelModal';
