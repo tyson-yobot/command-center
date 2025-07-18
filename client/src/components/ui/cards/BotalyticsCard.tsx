@@ -11,74 +11,35 @@ const BotalyticsCard = () => {
   const [totalDeals, setTotalDeals] = useState(0);
 
   useEffect(() => {
-    // Use mock data for development - in production, fetch from backend API
     const fetchData = async () => {
       try {
-        // This should call your backend API instead of Airtable directly
-        // const response = await fetch('/api/airtable/analytics-stats');
-        // const data = await response.json();
+        const response = await fetch('/api/airtable/analytics-stats');
+        const data = await response.json();
         
-        // Mock data for now
-        setTotalRevenue(125000);
-        setBotEfficiency(87.5);
-        setAvgTimePerDeal(2.3);
-        setConversionRate(34.8);
-        setTotalDeals(142);
+        if (data.success) {
+          setTotalRevenue(data.metrics.totalRevenue || 0);
+          setBotEfficiency(data.metrics.botEfficiency || 0);
+          setAvgTimePerDeal(data.metrics.avgTimePerDeal || 0);
+          setConversionRate(data.metrics.conversionRate || 0);
+          setTotalDeals(data.metrics.totalDeals || 0);
+        } else {
+          setTotalRevenue(0);
+          setBotEfficiency(0);
+          setAvgTimePerDeal(0);
+          setConversionRate(0);
+          setTotalDeals(0);
+        }
       } catch (error) {
         console.error('Error fetching analytics data:', error);
-        // Fallback to mock data
-        setTotalRevenue(125000);
-        setBotEfficiency(87.5);
-        setAvgTimePerDeal(2.3);
-        setConversionRate(34.8);
-        setTotalDeals(142);
+        setTotalRevenue(0);
+        setBotEfficiency(0);
+        setAvgTimePerDeal(0);
+        setConversionRate(0);
+        setTotalDeals(0);
       }
     };
 
     fetchData();
-    return;
-
-    // Commented out the original Airtable code
-    /* const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base('appRt8V3tH4g5Z5if');
-
-    base('tblhxK9sI3MMkTLk2')
-      .select({})
-      .eachPage((records, fetchNextPage) => {
-        let totalBotRevenue = 0;
-        let totalManualRevenue = 0;
-        let totalTimeSaved = 0;
-        let totalBotDeals = 0;
-        let totalLeads = 0;
-        let dealCount = 0;
-
-        records.forEach(record => {
-          const botRev = parseFloat(String(record.fields['💰 Revenue (Bot)'] || 0));
-          const manualRev = parseFloat(String(record.fields['🧾 Revenue (Manual)'] || 0));
-          const time = parseFloat(String(record.fields['⏱️ Time Saved (hrs)'] || 0));
-          const deals = parseFloat(String(record.fields['🤖 Deals Closed (Bot)'] || 0));
-          const leads = parseFloat(String(record.fields['🟡 Leads Captured'] || 0));
-
-          totalBotRevenue += isNaN(botRev) ? 0 : botRev;
-          totalManualRevenue += isNaN(manualRev) ? 0 : manualRev;
-          totalTimeSaved += isNaN(time) ? 0 : time;
-          totalBotDeals += isNaN(deals) ? 0 : deals;
-          totalLeads += isNaN(leads) ? 0 : leads;
-          if (!isNaN(deals) && deals > 0) dealCount++;
-        });
-
-        const total = totalBotRevenue;
-        const efficiency = totalManualRevenue > 0 ? ((totalBotRevenue - totalManualRevenue) / totalManualRevenue) * 100 : 0;
-        const avgTime = totalBotDeals > 0 ? totalTimeSaved / totalBotDeals : 0;
-        const closeRate = totalLeads > 0 ? (totalBotDeals / totalLeads) * 100 : 0;
-
-        setTotalRevenue(total);
-        setBotEfficiency(efficiency);
-        setAvgTimePerDeal(avgTime);
-        setConversionRate(closeRate);
-        setTotalDeals(totalBotDeals);
-
-        fetchNextPage();
-      }); */
   }, []);
 
   return (

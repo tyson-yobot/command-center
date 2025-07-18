@@ -436,9 +436,9 @@ export default function CommandCenter() {
 
   // Test statistics for Live Integration Test Results
   const testStats = {
-    totalTests: currentSystemMode === 'test' ? (automationPerformance?.data?.totalTests || 74) : (automationPerformance?.data?.totalTests || null),
-    passedTests: currentSystemMode === 'test' ? (automationPerformance?.data?.passedTests || 71) : (automationPerformance?.data?.passedTests || null),
-    successRate: currentSystemMode === 'test' ? (automationPerformance?.data?.successRate || 95.9) : (automationPerformance?.data?.successRate || null)
+    totalTests: automationPerformance?.data?.totalTests || null,
+    passedTests: automationPerformance?.data?.passedTests || null,
+    successRate: automationPerformance?.data?.successRate || null
   };
 
   // Fetch current system mode on load (removed automatic polling to prevent toggle override)
@@ -1945,77 +1945,6 @@ export default function CommandCenter() {
     fileInput.click();
   };
 
-  const handleClearTestData = async () => {
-    if (confirm('This will permanently delete ALL test data, QA rows, and sample client data. Continue?')) {
-      try {
-        setVoiceStatus('Purging all test data...');
-        const response = await fetch('/api/testmode-clear', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ scenario: 'testmode-clear' })
-        });
-        
-        if (response.ok) {
-          setVoiceStatus('Test data cleared - full purge completed');
-          setToast({ title: "Test Data Cleared", description: "All test logs, QA rows, and sample data removed" });
-        } else {
-          setVoiceStatus('Test data clear failed');
-        }
-      } catch (error) {
-        setVoiceStatus('Clear test data error');
-      }
-    }
-  };
-
-  const handlePurgeKnowledgeTestData = async () => {
-    if (currentSystemMode !== 'live') {
-      toast({
-        id: Date.now().toString(),
-        title: 'Live Mode Required',
-        description: 'Knowledge purge only available in live mode',
-        variant: 'destructive'
-      });
-      return;
-    }
-
-    if (confirm('This will permanently remove all test/sample content from the knowledge base. Continue?')) {
-      try {
-        setVoiceStatus('Purging test knowledge content...');
-        const response = await fetch('/api/knowledge/purge-test-data', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        });
-        
-        if (response.ok) {
-          const result = await response.json();
-          setVoiceStatus(`Knowledge purge completed - removed ${result.removed} items`);
-          toast({
-            id: Date.now().toString(),
-            title: "Knowledge Purged",
-            description: `Removed ${result.removed} test items from knowledge base`
-          });
-          // Refresh knowledge stats
-          window.location.reload();
-        } else {
-          setVoiceStatus('Knowledge purge failed');
-          toast({
-            id: Date.now().toString(),
-            title: 'Purge Failed',
-            description: 'Unable to purge knowledge base',
-            variant: 'destructive'
-          });
-        }
-      } catch (error) {
-        setVoiceStatus('Knowledge purge error');
-        toast({
-          id: Date.now().toString(),
-          title: 'Error',
-          description: 'Network error during purge operation',
-          variant: 'destructive'
-        });
-      }
-    }
-  };
 
   const generateVoice = async () => {
     if (!voiceGenerationText.trim()) {
@@ -5473,14 +5402,6 @@ export default function CommandCenter() {
                     Clear Knowledge
                   </Button>
                   <Button 
-                    onClick={handlePurgeKnowledgeTestData}
-                    className="bg-orange-600 hover:bg-orange-700 text-white"
-                    disabled={currentSystemMode !== 'live'}
-                  >
-                    <AlertTriangle className="w-4 h-4 mr-2" />
-                    Purge Test Data
-                  </Button>
-                  <Button 
                     onClick={handleViewKnowledge}
                     className="bg-amber-600 hover:bg-amber-700 text-white"
                   >
@@ -6054,7 +5975,7 @@ export default function CommandCenter() {
                   <Button 
                     onClick={handleSimulateTestCall}
                     className="bg-gradient-to-br from-[#6a11cb] to-[#2575fc] shadow-[0_0_10px_#7e4cff]/40 hover:from-[#7f1fff] hover:to-[#2c8fff] text-white text-sm px-4 py-3 border border-purple-400"
-                    title="Triggers a mock call event in the system"
+                    title="Triggers a test call event in the system"
                   >
                     <Phone className="w-5 h-5 mr-2" />
                     Simulate Test Call

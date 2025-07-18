@@ -79,17 +79,8 @@ const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
 
     const fetchStyles = async () => {
       try {
-        // TODO: Route this through backend API instead of direct Airtable calls
-        // const res = await axios.get('/api/airtable/voice-styles');
-        // const styles = res.data.styles;
-        
-        // Mock data for now to prevent 401 errors
-        const styles = [
-          { label: 'Professional', value: 'professional' },
-          { label: 'Casual', value: 'casual' },
-          { label: 'Enthusiastic', value: 'enthusiastic' },
-          { label: 'Calm', value: 'calm' }
-        ];
+        const res = await axios.get('/api/airtable/voice-styles');
+        const styles = res.data.styles;
         setStyleList(styles);
         if (styles.length > 0) setStyleOption(styles[0].value);
       } catch {

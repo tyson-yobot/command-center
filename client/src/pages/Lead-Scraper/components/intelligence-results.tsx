@@ -64,31 +64,22 @@ export default function IntelligenceResults({
     );
   }
 
-  // Mock data for development - replace with actual API call
   const [airtableLeads, setAirtableLeads] = useState<Lead[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (leads.length === 0) {
       setIsLoading(true);
-      // Simulate API call
-      setTimeout(() => {
-        setAirtableLeads([
-          {
-            id: 1,
-            firstName: "John",
-            lastName: "Doe",
-            email: "john@example.com",
-            phone: "+1234567890",
-            company: "Tech Corp",
-            jobTitle: "CEO",
-            location: "San Francisco, CA",
-            source: "Apollo",
-            createdAt: new Date().toISOString()
-          }
-        ]);
-        setIsLoading(false);
-      }, 1000);
+      fetch('/api/leads/recent')
+        .then(res => res.json())
+        .then(data => {
+          setAirtableLeads(data.leads || []);
+          setIsLoading(false);
+        })
+        .catch(() => {
+          setAirtableLeads([]);
+          setIsLoading(false);
+        });
     }
   }, [leads.length]);
 

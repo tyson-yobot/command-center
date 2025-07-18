@@ -20,70 +20,41 @@ const SmartspendCard = () => {
   });
 
   useEffect(() => {
-    // Use mock data for development - in production, fetch from backend API
     const fetchData = async () => {
       try {
-        // This should call your backend API instead of Airtable directly
-        // const response = await fetch('/api/airtable/smart-spend-stats');
-        // const data = await response.json();
+        const response = await fetch('/api/airtable/smart-spend-stats');
+        const data = await response.json();
         
-        // Mock data for now
-        setMetrics({
-          totalSavings: 45678.90,
-          avgMonthlySavings: 3420.75,
-          automationWins: 23,
-          flaggedWaste: 7,
-          recurringReviewItems: 12
-        });
+        if (data.success) {
+          setMetrics({
+            totalSavings: data.metrics.totalSavings || 0,
+            avgMonthlySavings: data.metrics.avgMonthlySavings || 0,
+            automationWins: data.metrics.automationWins || 0,
+            flaggedWaste: data.metrics.flaggedWaste || 0,
+            recurringReviewItems: data.metrics.recurringReviewItems || 0
+          });
+        } else {
+          setMetrics({
+            totalSavings: 0,
+            avgMonthlySavings: 0,
+            automationWins: 0,
+            flaggedWaste: 0,
+            recurringReviewItems: 0
+          });
+        }
       } catch (error) {
         console.error('Error fetching spend data:', error);
-        // Fallback to mock data
         setMetrics({
-          totalSavings: 45678.90,
-          avgMonthlySavings: 3420.75,
-          automationWins: 23,
-          flaggedWaste: 7,
-          recurringReviewItems: 12
+          totalSavings: 0,
+          avgMonthlySavings: 0,
+          automationWins: 0,
+          flaggedWaste: 0,
+          recurringReviewItems: 0
         });
       }
     };
 
     fetchData();
-    return;
-
-    // Commented out the original Airtable code
-    /* axios({
-      method: 'GET',
-      url: AIRTABLE_API_URL,
-      headers: {
-        Authorization: AIRTABLE_API_KEY,
-      },
-    }).then((response: any) => {
-      const records: any[] = response.data.records;
-
-      let totalSavings = 0;
-      let monthlySum = 0;
-      let automationWins = 0;
-      let flaggedWaste = 0;
-      let recurringReviewItems = 0;
-
-      for (const r of records) {
-        totalSavings += parseFloat(r.fields['💰 Total Saved ($)'] || '0');
-        monthlySum += parseFloat(r.fields['📆 Monthly Savings ($)'] || '0');
-        automationWins += r.fields['✅ Automation Success'] === true ? 1 : 0;
-        flaggedWaste += r.fields['🚨 Flagged as Waste'] === true ? 1 : 0;
-        recurringReviewItems += r.fields['🔁 Recurring Review?'] === 'Yes' ? 1 : 0;
-      }
-
-      const total = records.length || 1;
-      setMetrics({
-        totalSavings,
-        avgMonthlySavings: +(monthlySum / total).toFixed(2),
-        automationWins,
-        flaggedWaste,
-        recurringReviewItems,
-      });
-    }); */
   }, []);
 
   return (

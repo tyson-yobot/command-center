@@ -25,18 +25,25 @@ const KPIAnalyticsCard: React.FC<KPIAnalyticsCardProps> = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate data fetching - in production this would call Airtable API
     const fetchData = async () => {
       try {
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 500));
+        if (!airtableField) {
+          setLoading(false);
+          return;
+        }
         
-        // Generate mock data based on the label
-        const mockValue = Math.floor(Math.random() * 100);
-        setValue(mockValue);
+        const response = await fetch(`/api/airtable/kpi/${encodeURIComponent(airtableField)}`);
+        const data = await response.json();
+        
+        if (data.success) {
+          setValue(data.value || 0);
+        } else {
+          setValue(0);
+        }
         setLoading(false);
       } catch (error) {
         console.error('Error fetching KPI data:', error);
+        setValue(0);
         setLoading(false);
       }
     };
