@@ -38,7 +38,7 @@ export function registerCoreAutomationEndpoints(app: Express) {
         recordCreated: true,
         retryAttempted: false,
         moduleType: "Core Automation",
-        scenarioLink: "https://replit.dev/scenario/calendar-sync"
+        scenarioLink: "https://api.yobot.bot/scenario/calendar-sync"
       });
 
       res.json({
@@ -57,7 +57,7 @@ export function registerCoreAutomationEndpoints(app: Express) {
         recordCreated: false,
         retryAttempted: true,
         moduleType: "Core Automation",
-        scenarioLink: "https://replit.dev/scenario/calendar-sync"
+        scenarioLink: "https://api.yobot.bot/scenario/calendar-sync"
       });
 
       res.status(500).json({
@@ -102,7 +102,7 @@ export function registerCoreAutomationEndpoints(app: Express) {
         recordCreated: true,
         retryAttempted: false,
         moduleType: "Core Automation",
-        scenarioLink: "https://replit.dev/scenario/zendesk-log"
+        scenarioLink: "https://api.yobot.bot/scenario/zendesk-log"
       });
 
       res.json({
@@ -121,7 +121,7 @@ export function registerCoreAutomationEndpoints(app: Express) {
         recordCreated: false,
         retryAttempted: true,
         moduleType: "Core Automation",
-        scenarioLink: "https://replit.dev/scenario/zendesk-log"
+        scenarioLink: "https://api.yobot.bot/scenario/zendesk-log"
       });
 
       res.status(500).json({
@@ -166,7 +166,7 @@ export function registerCoreAutomationEndpoints(app: Express) {
         recordCreated: true,
         retryAttempted: false,
         moduleType: "Core Automation",
-        scenarioLink: "https://replit.dev/scenario/follow-up-caller"
+        scenarioLink: "https://api.yobot.bot/scenario/follow-up-caller"
       });
 
       res.json({
@@ -185,7 +185,7 @@ export function registerCoreAutomationEndpoints(app: Express) {
         recordCreated: false,
         retryAttempted: true,
         moduleType: "Core Automation",
-        scenarioLink: "https://replit.dev/scenario/follow-up-caller"
+        scenarioLink: "https://api.yobot.bot/scenario/follow-up-caller"
       });
 
       res.status(500).json({
@@ -230,7 +230,7 @@ export function registerCoreAutomationEndpoints(app: Express) {
         recordCreated: true,
         retryAttempted: false,
         moduleType: "Command UI",
-        scenarioLink: "https://replit.dev/scenario/command-sales-order"
+        scenarioLink: "https://api.yobot.bot/scenario/command-sales-order"
       });
 
       res.json({
@@ -249,7 +249,7 @@ export function registerCoreAutomationEndpoints(app: Express) {
         recordCreated: false,
         retryAttempted: true,
         moduleType: "Command UI",
-        scenarioLink: "https://replit.dev/scenario/command-sales-order"
+        scenarioLink: "https://api.yobot.bot/scenario/command-sales-order"
       });
 
       res.status(500).json({
@@ -293,7 +293,7 @@ export function registerCoreAutomationEndpoints(app: Express) {
         recordCreated: true,
         retryAttempted: false,
         moduleType: "Core Automation",
-        scenarioLink: "https://replit.dev/scenario/sms-send"
+        scenarioLink: "https://api.yobot.bot/scenario/sms-send"
       });
 
       res.json({
@@ -312,7 +312,7 @@ export function registerCoreAutomationEndpoints(app: Express) {
         recordCreated: false,
         retryAttempted: true,
         moduleType: "Core Automation",
-        scenarioLink: "https://replit.dev/scenario/sms-send"
+        scenarioLink: "https://api.yobot.bot/scenario/sms-send"
       });
 
       res.status(500).json({
@@ -382,7 +382,7 @@ export function registerCoreAutomationEndpoints(app: Express) {
         recordCreated: true,
         retryAttempted: false,
         moduleType: "System",
-        scenarioLink: "https://replit.dev/scenario/system-alert"
+        scenarioLink: "https://api.yobot.bot/scenario/system-alert"
       });
 
       res.json({
@@ -401,7 +401,7 @@ export function registerCoreAutomationEndpoints(app: Express) {
         recordCreated: false,
         retryAttempted: true,
         moduleType: "System",
-        scenarioLink: "https://replit.dev/scenario/system-alert"
+        scenarioLink: "https://api.yobot.bot/scenario/system-alert"
       });
 
       res.status(500).json({
