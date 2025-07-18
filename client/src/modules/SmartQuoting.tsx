@@ -103,4 +103,14 @@ export const SmartQuotingCard: FC = () => {
           services.map((svc: Service) => (
             <label key={svc.id} className="yobot-service-row">
               <span className="yobot-service-label">
-                <Checkbox checked={Boolean(selected[svc.id])} onCheckedChange={(v: boolean) => setSelected((prev) => ({ ...prev, [svc.id]: v ? 1 : 0 })
+                <Checkbox checked={Boolean(selected[svc.id])} onCheckedChange={(v: boolean) => setSelected((prev) => ({ ...prev, [svc.id]: v ? 1 : 0 }))} />
+                {svc.serviceName}
+              </span>
+            </label>
+          ))
+        )}
+        <button className="yobot-button" onClick={handleSubmit}>Generate Quote</button>
+      </CardContent>
+    </Card>
+  );
+};

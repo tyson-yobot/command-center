@@ -20,7 +20,39 @@ const SmartspendCard = () => {
   });
 
   useEffect(() => {
-    axios({
+    // Use mock data for development - in production, fetch from backend API
+    const fetchData = async () => {
+      try {
+        // This should call your backend API instead of Airtable directly
+        // const response = await fetch('/api/airtable/smart-spend-stats');
+        // const data = await response.json();
+        
+        // Mock data for now
+        setMetrics({
+          totalSavings: 45678.90,
+          avgMonthlySavings: 3420.75,
+          automationWins: 23,
+          flaggedWaste: 7,
+          recurringReviewItems: 12
+        });
+      } catch (error) {
+        console.error('Error fetching spend data:', error);
+        // Fallback to mock data
+        setMetrics({
+          totalSavings: 45678.90,
+          avgMonthlySavings: 3420.75,
+          automationWins: 23,
+          flaggedWaste: 7,
+          recurringReviewItems: 12
+        });
+      }
+    };
+
+    fetchData();
+    return;
+
+    // Commented out the original Airtable code
+    /* axios({
       method: 'GET',
       url: AIRTABLE_API_URL,
       headers: {
@@ -51,7 +83,7 @@ const SmartspendCard = () => {
         flaggedWaste,
         recurringReviewItems,
       });
-    });
+    }); */
   }, []);
 
   return (

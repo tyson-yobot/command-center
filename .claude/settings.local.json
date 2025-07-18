@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "Bash(npx vite:*)",
+      "Bash(npm install:*)",
+      "Bash(find:*)",
+      "Bash(curl:*)",
+      "Bash(ss:*)",
+      "Bash(ls:*)",
+      "Bash(cd:*)",
+      "Bash(kill:*)",
+      "Bash(pkill:*)",
+      "Bash(python3:*)",
+      "Bash(npx serve:*)",
+      "Bash(wget:*)",
+      "Bash(npx http-server:*)",
+      "Bash(cp:*)",
+      "Bash(node:*)"
+    ],
+    "deny": []
+  }
+}

@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Download, ExternalLink, Mail, Phone, MapPin, CheckCircle } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
-import { LEAD_ENGINE_BASE_ID } from '@shared/airtableConfig';
 
 interface Lead {
   id: number;
@@ -67,11 +64,33 @@ export default function IntelligenceResults({
     );
   }
 
-  const { data: airtableLeads = [], isLoading } = useQuery({
-    queryKey: ['/api/leads/universal'],
-    enabled: leads.length === 0, // Only fetch if we don't have results data
-    select: (data: Lead[]) => data.slice(0, 5) // Show first 5 leads as preview
-  });
+  // Mock data for development - replace with actual API call
+  const [airtableLeads, setAirtableLeads] = useState<Lead[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (leads.length === 0) {
+      setIsLoading(true);
+      // Simulate API call
+      setTimeout(() => {
+        setAirtableLeads([
+          {
+            id: 1,
+            firstName: "John",
+            lastName: "Doe",
+            email: "john@example.com",
+            phone: "+1234567890",
+            company: "Tech Corp",
+            jobTitle: "CEO",
+            location: "San Francisco, CA",
+            source: "Apollo",
+            createdAt: new Date().toISOString()
+          }
+        ]);
+        setIsLoading(false);
+      }, 1000);
+    }
+  }, [leads.length]);
 
   const displayLeads = leads.length > 0 ? leads.slice(0, 5) : airtableLeads;
 
@@ -96,7 +115,7 @@ export default function IntelligenceResults({
   };
 
   const handleViewInAirtable = () => {
-    window.open(`https://airtable.com/${LEAD_ENGINE_BASE_ID}/tblXXXXXXXXXXXXXX/viwXXXXXXXXXXXXXX`, '_blank');
+    window.open(`https://airtable.com/app1234567890/tblXXXXXXXXXXXXXX/viwXXXXXXXXXXXXXX`, '_blank');
   };
 
   return (

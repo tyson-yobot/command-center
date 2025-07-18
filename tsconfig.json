@@ -31,6 +31,8 @@
     "noUnusedParameters": false,
     // Enables checking for fallthrough cases in switch statements.
     "noFallthroughCasesInSwitch": true,
+    // Allows synthetic default imports for better CommonJS compatibility
+    "allowSyntheticDefaultImports": true,
     // Sets the base directory for module resolution.
     "baseUrl": ".",
     // Configures custom module name mappings.

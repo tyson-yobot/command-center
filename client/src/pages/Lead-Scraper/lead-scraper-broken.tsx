@@ -346,6 +346,7 @@ const LeadScraper: React.FC = () => {
     return (
       <IntelligenceResults 
         onBack={() => setCurrentView('overview')}
+        onBackToOverview={() => setCurrentView('overview')}
         source={lastScrapedSource}
         totalScraped={lastScrapedCount}
       />

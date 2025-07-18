@@ -8,34 +8,35 @@ import { SubmitTicketModal } from '@/components/modals/SubmitTicketModal';
 import { ExportModal } from '@/components/modals/ExportModal';
 import { HubspotModal } from '@/components/modals/HubspotModal';
 import { AdminPanelModal } from '@/components/modals/AdminPanelModal';
-import { AdminLoginModal } from '@/components/modals/AdminLoginModal';
+import AdminLoginModal from '@/components/modals/AdminLoginModal';
 import { DiagnosticsModal } from '@/components/modals/DiagnosticsModal';
 import { EmergencyModal } from '@/components/modals/EmergencyModal';
 import { SalesOrderModal } from '@/components/modals/SalesOrderModal';
 import { CopilotModal } from '@/components/modals/CopilotModal';
-import { PdfUploadModal } from '@/components/modals/PdfUploadModal';
+import { PDFUploadModal } from '@/components/modals/PdfUploadModal';
 import { CallQueueModal } from '@/components/modals/CallQueueModal';
 import { AirtableSyncModal } from '@/components/modals/AirtableSyncModal';
 import { LoggerTrackerModal } from '@/components/modals/LoggerTrackerModal';
 import { MetricsPanelModal } from '@/components/modals/MetricsPanelModal';
 import { BehaviorTuningModal } from '@/components/modals/BehaviorTuningModal';
-import { RAGModal } from '@/components/modals/RAGModal';
+import { RAGModal } from '@/components/modals/RagModal';
+import { RAGInsightsModal } from '@/components/modals/RAGInsightsModal';
 import { RevenueChartsModal } from '@/components/modals/RevenueChartsModal';
 import { SlackMonitorModal } from '@/components/modals/SlackMonitorModal';
 import { AdminSettingsModal } from '@/components/modals/AdminSettingsModal';
 import { SmartSchedulerModal } from '@/components/modals/SmartSchedulerModal';
+import { AuditLogModal } from '@/components/modals/AuditLogModal';
 
 // ✅ UI Components
 import QuickActionCard from '@/components/ui/cards/QuickActionCard';
 import KPIAnalyticsCard from '@/components/ui/cards/KPIAnalyticsCard';
 import SmartSpendCard from '@/components/ui/cards/SmartSpendCard';
 import BotalyticsCard from '@/components/ui/cards/BotalyticsCard';
-import SmartCalendarCard from '@/components/ui/cards/SmartCalendarCard';
 import AIAvatarOverlay from '@/components/ui/cards/AIAvatarOverlayCard';
-import SupportChatWidget from '@/components/ui/cards/SupportChatWidget';
-import TopNavBar from '@/components/ui/cards/TopNavBar';
+import SupportChatWidget from '@/components/widgets/SupportChatWidget';
+import TopNavBar from '@/components/nav/TopNavBar';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '@/styles/CommandCenter.css';
 import '@/styles/NeonTheme.css';
 import '@/styles/StyledComponents.css';
@@ -68,9 +69,7 @@ import {
   postToMailchimp,
   openMailchimpPage,
   openHubSpotPage,
-  triggerSocialPoster,
-  fetchSmartSpendStats,
-  fetchBotalyticsStats
+  triggerSocialPoster
 } from '@/utils/function_library';
 
 
@@ -129,6 +128,9 @@ export default function CommandCenter() {
   const [selectedModal, setSelectedModal] = useState<string | null>(null);
   const [showAdvancedTools, setShowAdvancedTools] = useState(false);
   const [liveMode, setLiveMode] = useState(true);
+  
+  // Debug: log the selected modal
+  console.log('Current selectedModal:', selectedModal);
 
   const userEmail = liveMode ? 'tyson@yobot.bot' : 'daniel@yobot.bot';
   const leadId = liveMode ? 'recD9aF6vqpUOCnA4' : 'recDbWmthkHtNZkld';
@@ -201,92 +203,71 @@ export default function CommandCenter() {
 
   // ✅ Modal triggers (UI only — no backend logic)
   case 'adminSettings':
-    await openModal('adminSettings', '🔧 Admin Settings');
     break;
   case 'airtableSync':
-    await openModal('airtableSync', '📤 Airtable Sync Log');
     break;
   case 'behaviorTuning':
-    await openModal('behaviorTuning', '🎯 Bot Behavior Tuning');
     break;
   case 'callQueue':
-    await openModal('callQueue', '📞 Live Call Queue');
     break;
   case 'copilot':
-    await openModal('copilot', '🧠 Copilot Assistant');
     break;
   case 'loggerTracker':
-    await openModal('loggerTracker', '🧾 Logger Tracker');
     break;
   case 'metricsPanel':
-    await openModal('metricsPanel', '📍 Metrics Panel');
     break;
   case 'ragInsights':
-    await openModal('ragInsights', '🔎 RAG Article Insights');
     break;
   case 'revenueCharts':
-    await openModal('revenueCharts', '📈 Live Revenue Charts');
     break;
   case 'slackMonitor':
-    await openModal('slackMonitor', '💬 Slack Monitor');
-    break;
-  case 'voiceStudio':
-    await openVoiceStudio();
-    await createVoiceStudioRecord(userEmail, mode);
     break;
   case 'smartScheduler':
-    await openModal('smartScheduler', '📆 Smart Scheduler');
     break;
   case 'auditLog':
-    await openModal('auditLog', '🧾 Audit Log');
     break;
   case 'slackTest':
-    await openModal('slackTest', '📣 Slack Test Ping');
     break;
   case 'adminLogin':
-    await openModal('adminLogin', '🔐 Admin Login');
     break;
 
+  }
 }
 
    const closeModal = () => setSelectedModal(null);
-const [smartSpendStats, setSmartSpendStats] = useState(null);
-const [botalyticsStats, setBotalyticsStats] = useState(null);
-
-useEffect(() => {
-  const loadStats = async () => {
-    const smartStats = await fetchSmartSpendStats();
-    const botaStats = await fetchBotalyticsStats();
-    setSmartSpendStats(smartStats);
-    setBotalyticsStats(botaStats);
-  };
-
-  loadStats();
-}, []);
 
   useEffect(() => {
     document.title = 'YoBot® Command Center';
+    // Force close any modals on load
+    setSelectedModal(null);
   }, []);
 
   return (
-    <div>
     <div className="command-center-container">
-      {/* Main container for the command center */}
-    </div>
-      {/* Main container for the command center */}
-    </div>
-      <TopNavBar />
-      <AIAgentOverlay />
-      <SupportChatWidget />
-
-      <h1 className="dashboard-title neon-text">🤖 YoBot® Command Center</h1>
-
-      <div className="mode-toggle">
-        <label>
-          <input type="checkbox" checked={liveMode} onChange={() => setLiveMode(!liveMode)} />
-          {liveMode ? 'LIVE MODE' : 'TEST MODE'}
-        </label>
+      {/* Fixed position components */}
+      <div className="fixed top-0 left-0 right-0 z-10 bg-black/90 backdrop-blur-sm border-b border-[#0d82da]/30">
+        <TopNavBar />
       </div>
+      
+      {/* Floating components */}
+      <div className="fixed top-20 right-4 z-20 floating-avatar">
+        <AIAvatarOverlay />
+      </div>
+      
+      <div className="fixed bottom-4 right-4 z-30 floating-chat">
+        <SupportChatWidget />
+      </div>
+
+      {/* Main content with proper top margin */}
+      <div className="pt-16">
+        <h1 className="dashboard-title neon-text">🤖 YoBot® Command Center</h1>
+
+        <div className="mode-toggle">
+          <label>
+            <input type="checkbox" checked={liveMode} onChange={() => setLiveMode(!liveMode)} />
+            {liveMode ? 'LIVE MODE' : 'TEST MODE'}
+          </label>
+        </div>
 
       <div className="quick-action-launchpad">
         <QuickActionCard label="📞 Pipeline Calls" onClick={() => {}} />
@@ -328,23 +309,15 @@ useEffect(() => {
       )}
 
       <div className="module-stack">
-        <div className="module-section">
-          <CalendarModal onClose={closeModal} />
-        </div>
-        <div className="module-section">
-          <VoiceStudioModal onClose={closeModal} />
-        </div>
-        <div className="module-section">
-          <RagModal onClose={closeModal} />
-        </div>
+        {/* Hidden by default - only show when explicitly opened */}
       </div>
 
       <div className="analytics-dashboard-wrapper">
   <h2 className="analytics-heading">Analytics Dashboard</h2>
   <div className="analytics-dashboard">
     <div className="analytics-row">
-      <SmartSpendCard stats={smartSpendStats} specialStyle="platinum" />
-      <BotalyticsCard stats={botalyticsStats} specialStyle="gold" />
+      <SmartSpendCard />
+      <BotalyticsCard />
     </div>
 
     {kpiGroups.map((group, idx) => (
@@ -356,8 +329,9 @@ useEffect(() => {
               key={i}
               label={label}
               airtableField={label}
-              color={neonColors[Math.floor(Math.random() * neonColors.length)]} showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
-              showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
+              color={neonColors[Math.floor(Math.random() * neonColors.length)]}
+              showMeter={true}
+              meterThresholds={{ green: 75, yellow: 50, red: 25 }}
             />
           ))}
         </div>
@@ -406,39 +380,37 @@ useEffect(() => {
     
 
       {/* Modals */}
-      {selectedModal === 'leadScraper' && <LeadScraperModal onClose={closeModal} />}
+      {selectedModal === 'leadScraper' && <LeadScraperModal isOpen={true} onClose={closeModal} />}
       {selectedModal === 'voiceStudio' && <VoiceStudioModal onClose={closeModal} />}
-      {selectedModal === 'calendar' && <CalendarModal onClose={closeModal} />}
-      {selectedModal === 'quoting' && <SmartQuotingModal onClose={closeModal} />}
-      {selectedModal === 'contentCreator' && <ContentCreatorModal onClose={closeModal} />}
-      {selectedModal === 'ticket' && <SubmitTicketModal onClose={closeModal} />}
-      {selectedModal === 'hubspot' && <HubspotModal onClose={closeModal} />}
-      {selectedModal === 'export' && <ExportModal onClose={closeModal} />}
-      {selectedModal === 'admin' && <AdminPanelModal onClose={closeModal} />}
-      {selectedModal === 'pdf' && <PdfUploadModal onClose={closeModal} />}
-      {selectedModal === 'rag' && <RagModal onClose={closeModal} />}
-      {selectedModal === 'diagnostics' && <DiagnosticsModal onClose={closeModal} />}
-      {selectedModal === 'emergency' && <EmergencyModal onClose={closeModal} />}
-      {selectedModal === 'salesOrder' && <SalesOrderModal onClose={closeModal} />}
-      {selectedModal === 'scheduler' && <SmartSchedulerModal onClose={closeModal} />}
-      {selectedModal === 'copilot' && <CopilotModal onClose={closeModal} />}
-      {selectedModal === 'callQueue' && <CallQueueModal onClose={closeModal} />}
-      {selectedModal === 'airtableSync' && <AirtableSyncModal onClose={closeModal} />}
-      {selectedModal === 'loggerTracker' && <LoggerTrackerModal onClose={closeModal} />}
-      {selectedModal === 'ragInsights' && <RAGInsightsModal onClose={closeModal} />}
-      {selectedModal === 'revenueCharts' && <RevenueChartsModal onClose={closeModal} />}
-      {selectedModal === 'slackMonitor' && <SlackMonitorModal onClose={closeModal} />}
-      {selectedModal === 'adminSettings' && <AdminSettingsModal onClose={closeModal} />}
-      {selectedModal === 'metricsPanel' && <MetricsPanelModal onClose={closeModal} />}
-      {selectedModal === 'behaviorTuning' && <BehaviorTuningModal onClose={closeModal} />}
-      {selectedModal === 'smartCalendar' && <SmartCalendarCard />}
-      {selectedModal === 'metricsPanel' && <MetricsPanelModal onClose={closeModal} />}
-      {selectedModal === 'behaviorTuning' && <BehaviorTuningModal onClose={closeModal} />}
-      {selectedModal === 'slackTest' && <DiagnosticsModal onClose={closeModal} />}
-      {selectedModal === 'adminLogin' && <AdminPanelModal onClose={closeModal} />}
-      {selectedModal === 'auditLog' && <LoggerTrackerModal onClose={closeModal} />}
-
+      {selectedModal === 'calendar' && <CalendarModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'quoting' && <SmartQuotingModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'contentCreator' && <ContentCreatorModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'ticket' && <SubmitTicketModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'hubspot' && <HubspotModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'export' && <ExportModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'admin' && <AdminPanelModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'pdf' && <PDFUploadModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'rag' && <RAGModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'diagnostics' && <DiagnosticsModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'emergency' && <EmergencyModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'salesOrder' && <SalesOrderModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'scheduler' && <SmartSchedulerModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'copilot' && <CopilotModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'callQueue' && <CallQueueModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'airtableSync' && <AirtableSyncModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'loggerTracker' && <LoggerTrackerModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'ragInsights' && <RAGInsightsModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'revenueCharts' && <RevenueChartsModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'slackMonitor' && <SlackMonitorModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'adminSettings' && <AdminSettingsModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'metricsPanel' && <MetricsPanelModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'behaviorTuning' && <BehaviorTuningModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'smartCalendar' && <CalendarModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'slackTest' && <DiagnosticsModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'adminLogin' && <AdminLoginModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'auditLog' && <AuditLogModal isOpen={true} onClose={closeModal} />}
+      
+      </div>
     </div>
   );
-}
 }

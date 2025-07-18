@@ -13,6 +13,9 @@ interface ModalProps {
 
 export const RAGModal = ({ isOpen, onClose }: ModalProps) => {
   const [loading, setLoading] = useState(false);
+  
+  // Debug: log the modal state
+  console.log('RAGModal isOpen:', isOpen);
 
   const handleRunRAG = async () => {
     setLoading(true);
@@ -37,16 +40,25 @@ export const RAGModal = ({ isOpen, onClose }: ModalProps) => {
     }
   };
 
+  // Don't render if not open
+  if (!isOpen) return null;
+  
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[500px]">
+      <DialogContent className="max-w-[500px] bg-slate-900 text-white border-2 border-[#0d82da]">
         <DialogHeader>
-          <DialogTitle>📂 Refresh RAG Index</DialogTitle>
+          <DialogTitle className="text-[#66ccff]">📂 Refresh RAG Index</DialogTitle>
         </DialogHeader>
-        <Card>
+        <Card className="bg-slate-800 border-slate-700">
           <CardContent className="space-y-4 p-4">
-            <p className="text-sm text-gray-300">Rebuilds the RAG index using all available uploaded PDFs and markdown files to ensure latest knowledge coverage.</p>
-            <Button onClick={handleRunRAG} disabled={loading} className="w-full">
+            <p className="text-sm text-gray-300">
+              Rebuilds the RAG index using all available uploaded PDFs and markdown files to ensure latest knowledge coverage.
+            </p>
+            <Button 
+              onClick={handleRunRAG} 
+              disabled={loading} 
+              className="w-full bg-[#0d82da] hover:bg-[#66ccff] text-white"
+            >
               {loading ? 'Indexing...' : 'Run RAG Indexer'}
             </Button>
           </CardContent>
