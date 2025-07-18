@@ -12,10 +12,8 @@ const QuickActionCard: React.FC<QuickActionCardProps> = ({ label, onClick }) => 
       className="bg-gradient-to-br from-slate-800 via-slate-900 to-black border-2 border-[#0d82da] rounded-xl p-4 text-white shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer hover:border-[#66ccff] hover:scale-105 group relative overflow-hidden"
       onClick={onClick}
     >
-      {/* Background glow effect */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#0d82da] to-[#66ccff] opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-xl" />
       
-      {/* Subtle animated border */}
       <div className="absolute inset-0 rounded-xl border-2 border-transparent bg-gradient-to-r from-[#0d82da] to-[#66ccff] opacity-0 group-hover:opacity-50 transition-opacity duration-300" style={{
         background: 'linear-gradient(90deg, transparent, rgba(13, 130, 218, 0.3), transparent)',
         animation: 'borderGlow 2s ease-in-out infinite'

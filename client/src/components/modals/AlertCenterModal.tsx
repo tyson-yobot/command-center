@@ -1,0 +1,1 @@
+export default function AlertCenterModal() { return null; }

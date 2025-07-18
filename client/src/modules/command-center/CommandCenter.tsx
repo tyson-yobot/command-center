@@ -72,9 +72,6 @@ import {
   triggerSocialPoster
 } from '@/utils/function_library';
 
-
-
-
 const neonColors = ['#FFFF33', '#39FF14', '#FF6EC7', '#DA70D6', '#FFA500'];
 
 const kpiGroups = [
@@ -129,7 +126,6 @@ export default function CommandCenter() {
   const [showAdvancedTools, setShowAdvancedTools] = useState(false);
   const [liveMode, setLiveMode] = useState(true);
   
-  // Debug: log the selected modal
   console.log('Current selectedModal:', selectedModal);
 
   const userEmail = liveMode ? 'tyson@yobot.bot' : 'daniel@yobot.bot';
@@ -200,8 +196,6 @@ export default function CommandCenter() {
   case 'socialPoster':
     await triggerSocialPoster(userEmail);
     break;
-
-  // ✅ Modal triggers (UI only — no backend logic)
   case 'adminSettings':
     break;
   case 'airtableSync':
@@ -230,7 +224,6 @@ export default function CommandCenter() {
     break;
   case 'adminLogin':
     break;
-
   }
 }
 
@@ -238,18 +231,15 @@ export default function CommandCenter() {
 
   useEffect(() => {
     document.title = 'YoBot® Command Center';
-    // Force close any modals on load
     setSelectedModal(null);
   }, []);
 
   return (
     <div className="command-center-container">
-      {/* Fixed position components */}
       <div className="fixed top-0 left-0 right-0 z-10 bg-black/90 backdrop-blur-sm border-b border-[#0d82da]/30">
         <TopNavBar />
       </div>
       
-      {/* Floating components */}
       <div className="fixed top-20 right-4 z-20 floating-avatar">
         <AIAvatarOverlay />
       </div>
@@ -258,7 +248,6 @@ export default function CommandCenter() {
         <SupportChatWidget />
       </div>
 
-      {/* Main content with proper top margin */}
       <div className="pt-16">
         <h1 className="dashboard-title neon-text">🤖 YoBot® Command Center</h1>
 
@@ -280,8 +269,6 @@ export default function CommandCenter() {
         <QuickActionCard label="🤖 Smart Quoting" onClick={() => openModal('quoting', '🤖 Smart Quoting')} />
         <QuickActionCard label="📊 Generate Report" onClick={() => openModal('export', '📊 Generate Report')} />
         <QuickActionCard label={showAdvancedTools ? '🧰 Hide Tools' : '🧰 Advanced Tools'} onClick={() => setShowAdvancedTools(!showAdvancedTools)} />
-        
-
       </div>
 
       {showAdvancedTools && (
@@ -309,7 +296,6 @@ export default function CommandCenter() {
       )}
 
       <div className="module-stack">
-        {/* Hidden by default - only show when explicitly opened */}
       </div>
 
       <div className="analytics-dashboard-wrapper">
@@ -340,9 +326,6 @@ export default function CommandCenter() {
   </div>
 </div>
 
-
-
-  {/* 🚀 Predictive Analytics Section */}
   <div className="kpi-group">
     <h3 className="kpi-title neon-text">📈 Predictive Analytics</h3>
     <div className="kpi-row">
@@ -378,8 +361,6 @@ export default function CommandCenter() {
       />
     </div>  </div>
     
-
-      {/* Modals */}
       {selectedModal === 'leadScraper' && <LeadScraperModal isOpen={true} onClose={closeModal} />}
       {selectedModal === 'voiceStudio' && <VoiceStudioModal onClose={closeModal} />}
       {selectedModal === 'calendar' && <CalendarModal isOpen={true} onClose={closeModal} />}

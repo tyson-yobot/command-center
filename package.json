@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "nodemon --loader ts-node/esm server/server.ts",
     "start": "node --loader ts-node/esm server/server.ts",
     "dev:client": "vite",
     "build:client": "vite build",
@@ -82,6 +82,8 @@
     "@types/jest": "^30.0.0",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.0.3",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
     "autoprefixer": "^10.4.21",
     "concurrently": "^8.2.0",

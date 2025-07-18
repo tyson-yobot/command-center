@@ -1,41 +1,23 @@
 {
   "compilerOptions": {
-    // Specifies the ECMAScript target version.
     "target": "ES2020",
-    // Enables the use of class fields with the 'define' syntax.
     "useDefineForClassFields": true,
-    // Specifies the library files to include in the compilation.
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    // Specifies the module code generation style.
     "module": "ESNext",
-    // Skips type checking of declaration files.
     "skipLibCheck": true,
-    // Specifies the module resolution strategy.
     "moduleResolution": "node",
-    // Allows importing files with .ts or .tsx extensions.
     "allowImportingTsExtensions": true,
-    // Enables importing JSON files as modules.
     "resolveJsonModule": true,
-    // Ensures that each file can be safely isolated into a separate module.
     "isolatedModules": true,
-    // Prevents emitting JavaScript files. Useful for type-checking only projects.
     "noEmit": true,
-    // Specifies the JSX transform to use.
     "jsx": "react-jsx",
-    // Enables all strict type-checking options.
-    // Enable all strict type-checking options for better code quality and maintainability.
     "strict": true,
-    // Disables the 'noUnusedLocals' rule.
     "noUnusedLocals": false,
-    // Disables the 'noUnusedParameters' rule.
     "noUnusedParameters": false,
-    // Enables checking for fallthrough cases in switch statements.
     "noFallthroughCasesInSwitch": true,
-    // Allows synthetic default imports for better CommonJS compatibility
     "allowSyntheticDefaultImports": true,
-    // Sets the base directory for module resolution.
+    "esModuleInterop": true,
     "baseUrl": ".",
-    // Configures custom module name mappings.
     "paths": {
       "@/*": ["./client/src/*"],
       "@shared/*": ["./shared/*"],
@@ -48,6 +30,5 @@
     "server",
     "vite.config.ts"
   ],
-  // Enable incremental compilation for faster builds
   "incremental": true
 }
