@@ -1,5 +1,5 @@
 // src/ui/cards/SmartCalendarCard.tsx
-// YoBot® Command Center – Smart Calendar (FullCalendar) – Production-Ready
+// YoBot® Command Center – Smart Calendar – Production-Ready
 // -----------------------------------------------------------------------------
 // • Zero optional parameters – all constants locked.
 // • Uses design-system utility classes (.yobot-card, .btn-blue, charcoal bg,
@@ -11,23 +11,8 @@
 // • Drag-and-drop updates Airtable via /api/calendar/update.
 // -----------------------------------------------------------------------------
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import listPlugin from "@fullcalendar/list";
-import interactionPlugin from "@fullcalendar/interaction";
-import {
-  EventClickArg,
-  EventSourceInput,
-  EventDropArg,
-  DatesSetArg,
-} from "@fullcalendar/core";
-
-import "@fullcalendar/common/main.css";
-import "@fullcalendar/daygrid/main.css";
-import "@fullcalendar/timegrid/main.css";
-import "@fullcalendar/list/main.css";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // ──────────────────────────────────────────────────────────────────────────────
 // 🔐  Locked constants – no optional params
@@ -36,7 +21,7 @@ const CALENDAR_ENDPOINT = "/api/calendar/events"; // Flask route
 const UPDATE_ENDPOINT = "/api/calendar/update";
 const AUTO_REFRESH_MS = 60_000; // 60 s
 
-// Owner categories (must match Airtable “Owner” field exactly)
+// Owner categories (must match Airtable "Owner" field exactly)
 const OWNER_TYSON = "Tyson";
 const OWNER_DAN = "Dan";
 
@@ -55,6 +40,12 @@ interface CalendarEvent {
   source: string; // Owner in Airtable (Tyson / Dan / Bot / …)
 }
 
+interface ProcessedEvent extends CalendarEvent {
+  start: Date;
+  end: Date;
+  color: string;
+}
+
 const SmartCalendarCard: React.FC = () => {
   // ─── Filters (persisted) ────────────────────────────────────────────────────
   const [showTyson, setShowTyson] = useState(() => getPersist("tyson", true));
@@ -62,7 +53,8 @@ const SmartCalendarCard: React.FC = () => {
   const [showClient, setShowClient] = useState(() => getPersist("client", true));
   const [showBot, setShowBot] = useState(() => getPersist("bot", true));
 
-  const calendarRef = useRef<FullCalendar | null>(null);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [viewMode, setViewMode] = useState<'month' | 'week' | 'day'>('week');
 
   // ─── Helpers ───────────────────────────────────────────────────────────────
   function getPersist(key: string, fallback: boolean) {
@@ -97,7 +89,7 @@ const SmartCalendarCard: React.FC = () => {
   };
 
   // ─── Pull events ───────────────────────────────────────────────────────────
-  const [events, setEvents] = useState<EventSourceInput>([]);
+  const [events, setEvents] = useState<ProcessedEvent[]>([]);
 
   const fetchEvents = useCallback(async () => {
     try {
@@ -105,13 +97,10 @@ const SmartCalendarCard: React.FC = () => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json: CalendarEvent[] = await res.json();
       const mapped = json.map(evt => ({
-        id: evt.id,
-        title: evt.title,
-        start: evt.start_time,
-        end: evt.end_time,
-        extendedProps: { source: evt.source },
-        backgroundColor: pickColor(evt.source),
-        borderColor: pickColor(evt.source),
+        ...evt,
+        start: new Date(evt.start_time),
+        end: new Date(evt.end_time),
+        color: pickColor(evt.source),
       }));
       setEvents(mapped);
     } catch (err) {
@@ -135,8 +124,8 @@ const SmartCalendarCard: React.FC = () => {
 
   // ─── Filtered view ─────────────────────────────────────────────────────────
   const filteredEvents = useMemo(() => {
-    return (events as any[]).filter(evt => {
-      const src = (evt.extendedProps?.source || "").toString();
+    return events.filter(evt => {
+      const src = evt.source || "";
       if (src === OWNER_TYSON && !showTyson) return false;
       if (src === OWNER_DAN && !showDan) return false;
       if (/bot/i.test(src) && !showBot) return false;
@@ -145,26 +134,134 @@ const SmartCalendarCard: React.FC = () => {
     });
   }, [events, showTyson, showDan, showClient, showBot]);
 
-  // ─── Handlers ──────────────────────────────────────────────────────────────
-  const onDateSelect = (selectInfo: any) => selectInfo.view.calendar.unselect();
-
-  const onEventDrop = async (arg: EventDropArg) => {
-    const id = arg.event.id;
-    const start = arg.event.start?.toISOString();
-    const end = arg.event.end?.toISOString();
-    if (!id || !start || !end) return;
-
-    try {
-      const res = await fetch(UPDATE_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, start_time: start, end_time: end }),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      console.info("✅ Event updated in Airtable:", id);
-    } catch (err) {
-      console.error("❌ Failed to update calendar event:", err);
+  // ─── Date navigation ───────────────────────────────────────────────────────
+  const navigateDate = (direction: 'prev' | 'next') => {
+    const newDate = new Date(currentDate);
+    switch (viewMode) {
+      case 'month':
+        newDate.setMonth(newDate.getMonth() + (direction === 'next' ? 1 : -1));
+        break;
+      case 'week':
+        newDate.setDate(newDate.getDate() + (direction === 'next' ? 7 : -7));
+        break;
+      case 'day':
+        newDate.setDate(newDate.getDate() + (direction === 'next' ? 1 : -1));
+        break;
     }
+    setCurrentDate(newDate);
+  };
+
+  const goToToday = () => {
+    setCurrentDate(new Date());
+  };
+
+  // ─── Calendar rendering helpers ────────────────────────────────────────────
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'short', 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      hour12: false 
+    });
+  };
+
+  const getEventsForDate = (date: Date) => {
+    const dateStr = date.toDateString();
+    return filteredEvents.filter(event => 
+      event.start.toDateString() === dateStr || 
+      event.end.toDateString() === dateStr ||
+      (event.start < date && event.end > date)
+    );
+  };
+
+  // ─── Simple Calendar Grid ──────────────────────────────────────────────────
+  const renderCalendarView = () => {
+    if (viewMode === 'month') {
+      // Simple month view - just show current month with event count
+      const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+      const days = [];
+      
+      for (let day = 1; day <= monthEnd.getDate(); day++) {
+        const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+        const dayEvents = getEventsForDate(date);
+        days.push(
+          <div key={day} className="border border-gray-300 p-2 min-h-[80px]">
+            <div className="font-semibold text-sm">{day}</div>
+            {dayEvents.slice(0, 3).map((event, idx) => (
+              <div
+                key={idx}
+                className="text-xs p-1 mb-1 rounded"
+                style={{ backgroundColor: event.color, color: 'white' }}
+              >
+                {event.title}
+              </div>
+            ))}
+            {dayEvents.length > 3 && (
+              <div className="text-xs text-gray-500">+{dayEvents.length - 3} more</div>
+            )}
+          </div>
+        );
+      }
+
+      return (
+        <div className="grid grid-cols-7 gap-1 auto-rows-fr">
+          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+            <div key={day} className="font-semibold text-center p-2 bg-gray-100">{day}</div>
+          ))}
+          {days}
+        </div>
+      );
+    }
+
+    // Week/Day view - simple list
+    const startDate = viewMode === 'week' 
+      ? new Date(currentDate.getTime() - currentDate.getDay() * 24 * 60 * 60 * 1000)
+      : currentDate;
+    
+    const days = viewMode === 'week' ? 7 : 1;
+    const viewEvents = [];
+    
+    for (let i = 0; i < days; i++) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
+      const dayEvents = getEventsForDate(date);
+      
+      viewEvents.push(
+        <div key={i} className="border-b border-gray-200 p-4">
+          <h3 className="font-semibold text-lg mb-2">{formatDate(date)}</h3>
+          {dayEvents.length === 0 ? (
+            <p className="text-gray-500">No events</p>
+          ) : (
+            <div className="space-y-2">
+              {dayEvents.map((event, idx) => (
+                <div
+                  key={idx}
+                  className="p-3 rounded-lg text-white"
+                  style={{ backgroundColor: event.color }}
+                >
+                  <div className="font-semibold">{event.title}</div>
+                  <div className="text-sm opacity-90">
+                    {formatTime(event.start)} - {formatTime(event.end)}
+                  </div>
+                  <div className="text-xs opacity-75">Source: {event.source}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    return <div className="space-y-0">{viewEvents}</div>;
   };
 
   // ─── Render ────────────────────────────────────────────────────────────────
@@ -182,27 +279,52 @@ const SmartCalendarCard: React.FC = () => {
         </div>
       </header>
 
+      {/* Navigation */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <button className="btn-blue" onClick={() => navigateDate('prev')}>
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <button className="btn-blue" onClick={goToToday}>Today</button>
+          <button className="btn-blue" onClick={() => navigateDate('next')}>
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+        
+        <h3 className="text-xl font-bold">
+          {currentDate.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long',
+            ...(viewMode === 'day' && { day: 'numeric' })
+          })}
+        </h3>
+
+        <div className="flex items-center gap-1">
+          <button 
+            className={`btn-blue ${viewMode === 'month' ? 'opacity-100' : 'opacity-60'}`}
+            onClick={() => setViewMode('month')}
+          >
+            Month
+          </button>
+          <button 
+            className={`btn-blue ${viewMode === 'week' ? 'opacity-100' : 'opacity-60'}`}
+            onClick={() => setViewMode('week')}
+          >
+            Week
+          </button>
+          <button 
+            className={`btn-blue ${viewMode === 'day' ? 'opacity-100' : 'opacity-60'}`}
+            onClick={() => setViewMode('day')}
+          >
+            Day
+          </button>
+        </div>
+      </div>
+
       {/* Calendar */}
-      <FullCalendar
-        ref={calendarRef as any}
-        plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
-        initialView="timeGridWeek"
-        headerToolbar={{ left: "prev,next today", center: "title", right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek" }}
-        height="auto"
-        selectable={false}
-        selectMirror={false}
-        select={onDateSelect}
-        events={filteredEvents}
-        eventTimeFormat={{ hour: "numeric", minute: "2-digit", hour12: false }}
-        eventClick={(info: EventClickArg) => info.jsEvent.stopPropagation()}
-        eventDrop={onEventDrop}
-        nowIndicator
-        slotMinTime="06:00:00"
-        slotMaxTime="20:00:00"
-        dayMaxEvents={3}
-        stickyHeaderDates
-        datesSet={(arg: DatesSetArg) => console.debug("Range changed", arg.startStr, arg.endStr)}
-      />
+      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+        {renderCalendarView()}
+      </div>
     </section>
   );
 };

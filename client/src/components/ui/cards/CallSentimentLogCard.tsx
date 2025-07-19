@@ -24,7 +24,8 @@ const CallSentimentLogCard = () => {
         }
       } catch (err) {
         console.error('Call sentiment fetch error:', err);
-        await postToSlack(`❗ Failed to fetch call sentiment: ${err.message}`);
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        await postToSlack(`❗ Failed to fetch call sentiment: ${errorMessage}`);
       } finally {
         setLoading(false);
       }

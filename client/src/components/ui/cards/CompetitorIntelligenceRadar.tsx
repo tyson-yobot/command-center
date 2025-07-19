@@ -24,7 +24,8 @@ const CompetitorRadarCard = () => {
         }
       } catch (err) {
         console.error('Competitor radar error:', err);
-        await postToSlack(`❗ Competitor radar fetch failed: ${err.message}`);
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        await postToSlack(`❗ Competitor radar fetch failed: ${errorMessage}`);
       } finally {
         setLoading(false);
       }

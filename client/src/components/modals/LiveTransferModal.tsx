@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 
-const LiveTransferModal = ({ isOpen, onClose }) => {
+interface LiveTransferModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const LiveTransferModal: React.FC<LiveTransferModalProps> = ({ isOpen, onClose }) => {
   const [targetNumber, setTargetNumber] = useState('');
   const [status, setStatus] = useState('');
 
@@ -17,10 +22,11 @@ const LiveTransferModal = ({ isOpen, onClose }) => {
       setStatus('✅ Transfer initiated');
     } catch (err) {
       setStatus('❌ Transfer failed');
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       await fetch('https://hooks.slack.com/services/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', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: `🚨 Live Transfer Error: ${err.message}` }),
+        body: JSON.stringify({ text: `🚨 Live Transfer Error: ${errorMessage}` }),
       });
     }
   };

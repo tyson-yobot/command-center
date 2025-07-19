@@ -23,7 +23,7 @@ const AIChatAgentPanel = () => {
     recognition.interimResults = false;
     recognition.continuous = false;
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[0][0].transcript;
       setInput(transcript);
       handleSubmit(transcript);

@@ -18,7 +18,8 @@ const SmartQuotingCard = () => {
         setLastUpdated(data['🕒 Last Updated'] || 'N/A');
       } catch (err) {
         console.error('Smart quote fetch error:', err);
-        await postToSlack(`❗ Smart Quoting fetch failed: ${err.message}`);
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        await postToSlack(`❗ Smart Quoting fetch failed: ${errorMessage}`);
       } finally {
         setLoading(false);
       }

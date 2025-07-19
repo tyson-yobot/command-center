@@ -1,10 +1,24 @@
 import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
 import { PanelLeft } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
+
+// Simple Slot replacement
+interface SlotProps extends React.HTMLAttributes<HTMLElement> {
+  children?: React.ReactNode
+}
+
+const Slot = React.forwardRef<any, SlotProps>(
+  ({ children, ...props }, ref) => {
+    if (React.isValidElement(children)) {
+      return React.cloneElement(children, { ...props })
+    }
+    return <div {...props} ref={ref}>{children}</div>
+  }
+)
+Slot.displayName = "Slot"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"

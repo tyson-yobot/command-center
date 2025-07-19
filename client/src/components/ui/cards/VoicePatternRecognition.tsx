@@ -2,7 +2,23 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { postToSlack } from '@/utils/slack';
+
+// Slack Util Function
+const SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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';
+
+const postToSlack = async (message: string): Promise<void> => {
+  try {
+    await fetch(SLACK_WEBHOOK_URL, {
+      method: 'POST',
+      body: JSON.stringify({ text: message }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  } catch (error) {
+    console.error('❗ Slack webhook failed:', error);
+  }
+};
 
 const VoicePatternCard = () => {
   const [emotionDetected, setEmotionDetected] = useState('');
@@ -25,7 +41,8 @@ const VoicePatternCard = () => {
         }
       } catch (err) {
         console.error('Voice pattern fetch error:', err);
-        await postToSlack(`❗ Voice pattern analysis failed: ${err.message}`);
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        await postToSlack(`❗ Voice pattern analysis failed: ${errorMessage}`);
       } finally {
         setLoading(false);
       }
@@ -74,21 +91,3 @@ const VoicePatternCard = () => {
 };
 
 export default VoicePatternCard;
-
-
-// Slack Util Function – Already defined below
-const SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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';
-
-export const postToSlack = async (message: string): Promise<void> => {
-  try {
-    await fetch(SLACK_WEBHOOK_URL, {
-      method: 'POST',
-      body: JSON.stringify({ text: message }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-  } catch (error) {
-    console.error('❗ Slack webhook failed:', error);
-  }
-};

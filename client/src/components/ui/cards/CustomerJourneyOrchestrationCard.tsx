@@ -25,7 +25,8 @@ const CustomerJourneyCard = () => {
         }
       } catch (err) {
         console.error('Customer journey fetch error:', err);
-        await postToSlack(`❗ Customer journey data fetch failed: ${err.message}`);
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        await postToSlack(`❗ Customer journey data fetch failed: ${errorMessage}`);
       } finally {
         setLoading(false);
       }

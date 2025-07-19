@@ -25,7 +25,8 @@ const ConversationalInsightsCard = () => {
         }
       } catch (err) {
         console.error('Conversation insight error:', err);
-        await postToSlack(`❗ Failed to load conversation insights: ${err.message}`);
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        await postToSlack(`❗ Failed to load conversation insights: ${errorMessage}`);
       } finally {
         setLoading(false);
       }

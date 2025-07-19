@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { 
-  Search, Users, Building, MapPin, Loader2, 
-  CheckCircle, AlertCircle, ArrowLeft, Download,
+  Search, Users, Building, Loader2, 
+  CheckCircle, AlertCircle, ArrowLeft,
   Linkedin, Globe, Database, RefreshCw, Rocket,
   Star, Target, BarChart3
 } from 'lucide-react';
@@ -45,6 +44,7 @@ interface ScrapeResult {
   error?: string;
 }
 
+
 const LeadScraper: React.FC = () => {
   const { toast } = useToast();
   
@@ -52,13 +52,13 @@ const LeadScraper: React.FC = () => {
   const [currentView, setCurrentView] = useState('overview'); // 'overview', 'scraper', or 'results'
   const [activeTab, setActiveTab] = useState('apollo');
   const [isLoading, setIsLoading] = useState(false);
+
   const [results, setResults] = useState<ScrapeResult | null>(null);
-  const [showResults, setShowResults] = useState(false);
   const [totalLeadsFound, setTotalLeadsFound] = useState(0);
   const [lastScrapeTime, setLastScrapeTime] = useState<string>('');
-  const [leadsData, setLeadsData] = useState<any[]>([]);
-  const [leadsStats, setLeadsStats] = useState<any>(null);
-  const [syncLoading, setSyncLoading] = useState(false);
+  // const [leadsData, setLeadsData] = useState<any[]>([]);
+  // const [leadsStats, setLeadsStats] = useState<any>(null);
+  // const [syncLoading, setSyncLoading] = useState(false);
   const [lastScrapedCount, setLastScrapedCount] = useState(0);
   const [lastScrapedSource, setLastScrapedSource] = useState('');
 
@@ -72,52 +72,51 @@ const LeadScraper: React.FC = () => {
 
       if (leadsResponse.ok) {
         const leadsResult = await leadsResponse.json();
-        setLeadsData(leadsResult.data || []);
         setTotalLeadsFound(leadsResult.data?.length || 0);
       }
 
-      if (statsResponse.ok) {
-        const statsResult = await statsResponse.json();
-        setLeadsStats(statsResult.data || null);
-      }
+      // if (statsResponse.ok) {
+      //   const statsResult = await statsResponse.json();
+      //   setLeadsStats(statsResult.data || null);
+      // }
     } catch (error) {
       console.error('Failed to load leads data:', error);
     }
   };
 
   // Sync leads from Airtable
-  const syncFromAirtable = async () => {
-    setSyncLoading(true);
-    try {
-      const response = await fetch('/api/leads/sync-airtable', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
+  // const syncFromAirtable = async () => {
+  //   setSyncLoading(true);
+  //   try {
+  //     const response = await fetch('/api/leads/sync-airtable', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' }
+  //     });
 
-      const result = await response.json();
-      if (result.success) {
-        await loadLeadsData();
-        toast({
-          title: "Airtable Sync Complete",
-          description: `Synced ${result.count} leads from your Airtable`
-        });
-      } else {
-        toast({
-          title: "Sync Failed",
-          description: result.message || "Airtable API key required",
-          variant: "destructive"
-        });
-      }
-    } catch (error: any) {
-      toast({
-        title: "Sync Error",
-        description: "Failed to connect to Airtable",
-        variant: "destructive"
-      });
-    } finally {
-      setSyncLoading(false);
-    }
-  };
+  //     const result = await response.json();
+  //     if (result.success) {
+  //       await loadLeadsData();
+  //       toast({
+  //         title: "Airtable Sync Complete",
+  //         description: `Synced ${result.count} leads from your Airtable`
+  //       });
+  //     } else {
+  //       toast({
+  //         title: "Sync Failed",
+  //         description: result.message || "Airtable API key required",
+  //         variant: "destructive"
+  //       });
+  //     }
+  //   } catch (error: any) {
+  //     toast({
+  //       title: "Sync Error",
+  //       description: "Failed to connect to Airtable",
+  //       variant: "destructive"
+  //     });
+  //   } finally {
+  //     setSyncLoading(false);
+  //   }
+  // };
 
   // Load data on component mount
   useEffect(() => {
@@ -224,8 +223,9 @@ const LeadScraper: React.FC = () => {
     }
   };
 
+
   // Enterprise Lead Intelligence Platform Overview
-  const renderOverview = () => <EnterpriseLeadPlatform />;
+  const renderOverview = () => <EnterpriseLeadPlatform onNavigate={setCurrentView} />;
 
   // Scraper Interface
   const renderScraper = () => (
@@ -315,13 +315,8 @@ const LeadScraper: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Results Display */}
-        {showResults && results && (
-          <ScraperResultsDisplay 
-            results={results} 
-            onClose={() => setShowResults(false)} 
-          />
-        )}
+
+        {/* Results Display is handled by the results view */}
 
         {/* Loading State */}
         {isLoading && (
@@ -341,11 +336,13 @@ const LeadScraper: React.FC = () => {
     </div>
   );
 
+
   // Handle view routing
   if (currentView === 'results') {
     return (
       <IntelligenceResults 
-        onBack={() => setCurrentView('overview')}
+        results={results || undefined}
+        onBack={() => setCurrentView('scraper')}
         onBackToOverview={() => setCurrentView('overview')}
         source={lastScrapedSource}
         totalScraped={lastScrapedCount}

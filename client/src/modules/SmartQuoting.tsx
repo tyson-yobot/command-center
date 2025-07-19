@@ -24,11 +24,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, DollarSign, FileText } from "lucide-react";
 import { useState, useEffect, ChangeEvent, FC } from "react";
 
-const API = (() => {
-  const base = import.meta.env.VITE_API_URL;
-  if (!base) throw new Error("VITE_API_URL is not defined");
-  return (path: string) => `${base}${path}`;
-})();
+const API = (path: string) => path;
 
 type Service = {
   id: string;
@@ -83,7 +79,19 @@ export const SmartQuotingCard: FC = () => {
 
   const total = services.reduce((sum: number, svc: Service) => sum + (selected[svc.id] ?? 0) * svc.unitPrice, 0);
 
-  if (salesOrderId) return <PDFQuoteGeneratorCard recordId={salesOrderId} />;
+  if (salesOrderId) return (
+    <Card className="yobot-card">
+      <CardHeader>
+        <CardTitle className="yobot-card-title">
+          <FileText size={18} /> PDF Quote Generated
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>Sales Order ID: {salesOrderId}</p>
+        <Button onClick={() => setSalesOrderId(null)}>Create Another Quote</Button>
+      </CardContent>
+    </Card>
+  );
 
   return (
     <Card className="yobot-card">
@@ -104,12 +112,12 @@ export const SmartQuotingCard: FC = () => {
             <label key={svc.id} className="yobot-service-row">
               <span className="yobot-service-label">
                 <Checkbox checked={Boolean(selected[svc.id])} onCheckedChange={(v: boolean) => setSelected((prev) => ({ ...prev, [svc.id]: v ? 1 : 0 }))} />
-                {svc.serviceName}
+                {svc.name}
               </span>
             </label>
           ))
         )}
-        <button className="yobot-button" onClick={handleSubmit}>Generate Quote</button>
+        <button className="yobot-button" onClick={() => createQuote.mutate()}>Generate Quote</button>
       </CardContent>
     </Card>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '@/styles/CommandCenter.css';
 import LeadScraperModal from '@/components/modals/LeadScraperModal';
 import VoiceStudioModal from '@/components/modals/VoiceStudioModal';
@@ -13,11 +13,10 @@ import RagModal from '@/components/modals/RagModal';
 import DiagnosticsModal from '@/components/modals/DiagnosticsModal';
 import EmergencyModal from '@/components/modals/EmergencyModal';
 import PdfUploadModal from '@/components/modals/PdfUploadModal';
-import QuickActionCard from '@/components/cards/QuickActionCard';
-import KPIAnalyticsCard from '@/components/cards/KPIAnalyticsCard';
-import SmartSpendCard from '@/components/cards/SmartSpendCard';
-import BotalyticsCard from '@/components/cards/BotalyticsCard';
-import axios from 'axios';
+import QuickActionCard from '@/components/ui/cards/QuickActionCard';
+import KPIAnalyticsCard from '@/components/ui/cards/KPIAnalyticsCard';
+import SmartSpendCard from '@/components/ui/cards/SmartSpendCard';
+import BotalyticsCard from '@/components/ui/cards/BotalyticsCard';
 import {
   fetchLeadsFromApollo,
   openVoiceStudio,
@@ -35,7 +34,6 @@ import {
   syncContactsToCRM,
   pushExportToDrive,
   logEvent,
-  sendSlackAlert,
   toggleFeature
 } from '@/utils/function_library';
 
@@ -52,7 +50,7 @@ export default function CommandCenter() {
 
   const openModal = async (modalName: string, label: string) => {
     setSelectedModal(modalName);
-    await sendSlackAlert(`${label} launched from Command Center [${mode}]`);
+    console.log(`${label} launched from Command Center [${mode}]`);
     await logEvent({ module: label, trigger: 'Command Center', mode });
 
     switch (modalName) {
@@ -204,19 +202,19 @@ export default function CommandCenter() {
         ))}
       </div>
 
-      {selectedModal === 'leadScraper' && <LeadScraperModal onClose={closeModal} />}
+      {selectedModal === 'leadScraper' && <LeadScraperModal isOpen={true} onClose={closeModal} />}
       {selectedModal === 'voiceStudio' && <VoiceStudioModal onClose={closeModal} />}
-      {selectedModal === 'calendar' && <CalendarModal onClose={closeModal} />}
-      {selectedModal === 'quoting' && <SmartQuotingModal onClose={closeModal} />}
-      {selectedModal === 'contentCreator' && <ContentCreatorModal onClose={closeModal} />}
-      {selectedModal === 'ticket' && <SubmitTicketModal onClose={closeModal} />}
-      {selectedModal === 'hubspot' && <HubspotModal onClose={closeModal} />}
-      {selectedModal === 'export' && <ExportModal onClose={closeModal} />}
-      {selectedModal === 'admin' && <AdminPanelModal onClose={closeModal} />}
-      {selectedModal === 'pdf' && <PdfUploadModal onClose={closeModal} />}
-      {selectedModal === 'rag' && <RagModal onClose={closeModal} />}
-      {selectedModal === 'diagnostics' && <DiagnosticsModal onClose={closeModal} />}
-      {selectedModal === 'emergency' && <EmergencyModal onClose={closeModal} />}
+      {selectedModal === 'calendar' && <CalendarModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'quoting' && <SmartQuotingModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'contentCreator' && <ContentCreatorModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'ticket' && <SubmitTicketModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'hubspot' && <HubspotModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'export' && <ExportModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'admin' && <AdminPanelModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'pdf' && <PdfUploadModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'rag' && <RagModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'diagnostics' && <DiagnosticsModal isOpen={true} onClose={closeModal} />}
+      {selectedModal === 'emergency' && <EmergencyModal isOpen={true} onClose={closeModal} />}
     </div>
   );
 }

@@ -25,7 +25,7 @@ const QuickActionCard: React.FC<QuickActionCardProps> = ({ label, onClick }) => 
         </p>
       </CardContent>
       
-      <style jsx>{`
+      <style>{`
         @keyframes borderGlow {
           0%, 100% { opacity: 0.3; }
           50% { opacity: 0.8; }

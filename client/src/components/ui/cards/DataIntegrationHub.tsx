@@ -1,6 +1,6 @@
 // Data Integration Hub Card – Full Implementation
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const DataIntegrationHubCard = () => {
@@ -24,7 +24,8 @@ const DataIntegrationHubCard = () => {
         }
       } catch (err) {
         console.error('Integration hub fetch error:', err);
-        await postToSlack(`❗ Failed to fetch integration data: ${err.message}`);
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        await postToSlack(`❗ Failed to fetch integration data: ${errorMessage}`);
       } finally {
         setLoading(false);
       }

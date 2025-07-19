@@ -1,18 +1,29 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 interface ApolloScraperPanelProps {
-  onScrape?: (data: any) => void;
+  onLaunch: (filters: any) => Promise<void>;
+  isLoading: boolean;
 }
 
-const ApolloScraperPanel: React.FC<ApolloScraperPanelProps> = ({ onScrape }) => {
+const ApolloScraperPanel: React.FC<ApolloScraperPanelProps> = ({ onLaunch, isLoading }) => {
   return (
-    <Card>
+    <Card className="border-0 shadow-none bg-transparent">
       <CardHeader>
-        <CardTitle>Apollo Scraper</CardTitle>
+        <CardTitle className="text-white">Apollo Professional Scraper</CardTitle>
       </CardHeader>
-      <CardContent>
-        <p className="text-gray-600">Apollo scraper panel - Coming soon</p>
+      <CardContent className="space-y-4">
+        <p className="text-sm text-white/70">          Target professionals on Apollo.io by title, company, location, and more to get verified emails and phone numbers.
+        </p>
+        <Button
+          onClick={() => onLaunch({ sourceType: 'apollo' })}
+          disabled={isLoading}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold"
+        >
+          {isLoading ? 'Scraping...' : 'Launch Apollo Scraper'}
+        </Button>
       </CardContent>
     </Card>
   );

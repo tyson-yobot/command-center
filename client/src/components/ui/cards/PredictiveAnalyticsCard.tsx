@@ -27,7 +27,8 @@ const PredictiveAnalyticsCard = () => {
         }
       } catch (err) {
         console.error('Forecast error:', err);
-        await postToSlack(`❗ Failed to load forecast data: ${err.message}`);
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        await postToSlack(`❗ Failed to load forecast data: ${errorMessage}`);
       } finally {
         setLoading(false);
       }
