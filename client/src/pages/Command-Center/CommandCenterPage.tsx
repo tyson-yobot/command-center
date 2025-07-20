@@ -286,11 +286,13 @@ export default function CommandCenter() {
             <QuickActionCard label="📤 Airtable Sync Log" onClick={() => openModal('airtableSync', '📤 Airtable Sync Log')} />
             <QuickActionCard label="🧾 Logger Tracker" onClick={() => openModal('loggerTracker', '🧾 Logger Tracker')} />
             <QuickActionCard label="📍 Metrics Panel" onClick={() => openModal('metricsPanel', '📍 Metrics Panel')} />
-            <QuickActionCard label="🎯 Bot Behavior Tuning" onClick={() => openModal('behaviorTuning', '🎯 Bot Behavior Tuning')} />          <QuickActionCard label="🗣️ Voice Studio" onClick={() => openModal('voiceStudio', '🗣️ Voice Studio')} />
+            <QuickActionCard label="🎯 Bot Behavior Tuning" onClick={() => openModal('behaviorTuning', '🎯 Bot Behavior Tuning')} />          
+            <QuickActionCard label="🗣️ Voice Studio" onClick={() => openModal('voiceStudio', '🗣️ Voice Studio')} />
             <QuickActionCard label="🔎 RAG Article Insights" onClick={() => openModal('ragInsights', '🔎 RAG Article Insights')} />
             <QuickActionCard label="📈 Live Revenue Charts" onClick={() => openModal('revenueCharts', '📈 Live Revenue Charts')} />
             <QuickActionCard label="💬 Slack Monitor" onClick={() => openModal('slackMonitor', '💬 Slack Monitor')} />
-            <QuickActionCard label="🔧 Admin Settings" onClick={() => openModal('adminSettings', '🔧 Admin Settings')} />
+            <QuickActionCard label="🛠️ Admin Control Panel" onClick={() => openModal('adminPanel', '🛠️ Admin Control Panel')} />
+
           </div>
         )}
 
@@ -389,7 +391,7 @@ export default function CommandCenter() {
         {selectedModal === 'behaviorTuning' && <BehaviorTuningModal isOpen={true} onClose={closeModal} />}
         {selectedModal === 'smartCalendar' && <CalendarModal isOpen={true} onClose={closeModal} />}
         {selectedModal === 'slackTest' && <DiagnosticsModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'adminLogin' && <AdminLoginModal isOpen={true} onClose={closeModal} />}
+        {selectedModal === 'adminPanel' && <AdminPanelModal isOpen={true} onClose={closeModal} />}
         {selectedModal === 'auditLog' && <AuditLogModal isOpen={true} onClose={closeModal} />}
         
       </div>

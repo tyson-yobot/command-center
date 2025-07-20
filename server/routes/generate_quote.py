@@ -25,7 +25,7 @@ from flask import Blueprint, request, jsonify
 from tenacity import retry, stop_after_attempt, wait_fixed, retry_if_exception_type
 
 # ── Helper imports (no stubs) ───────────────────────────────────────
-from function_library_full_cleaned import (
+from server.function_library_full_cleaned import (
     # Airtable helpers
     airtable_create_record,
     airtable_get_record,

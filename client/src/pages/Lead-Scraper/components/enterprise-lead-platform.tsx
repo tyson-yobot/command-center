@@ -1,5 +1,5 @@
-
-import React from 'react';import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Rocket } from 'lucide-react';
 
@@ -33,4 +33,6 @@ const EnterpriseLeadPlatform: React.FC<EnterpriseLeadPlatformProps> = ({ onNavig
       </Card>
     </div>
   );
-};export default EnterpriseLeadPlatform;
+};
+
+export default EnterpriseLeadPlatform;
