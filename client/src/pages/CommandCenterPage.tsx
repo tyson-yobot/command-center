@@ -1,12 +1,9 @@
-// Core Modal Imports
-import { CustomerProfileModal } from '@/components/modals/CustomerProfileModal';
-import { PipelineStatusModal } from '@/components/modals/PipelineStatusModal';
-import { VersionControlModal } from '@/components/modals/VersionControlModal';
-import { FormConfiguratorModal } from '@/components/modals/FormConfiguratorModal';
-import { MetricsPanelModal } from '@/components/modals/MetricsPanelModal';
-import { AuditLogModal } from '@/components/modals/AuditLogModal';
+import { useEffect, useState } from 'react';
+import '@/styles/CommandCenter.css';
+import '@/styles/NeonTheme.css';
+import '@/styles/StyledComponents.css';
 
-// Additional Modal Imports
+// ✅ Modal Imports
 import { LeadScraperModal } from '@/components/modals/LeadScraperModal';
 import VoiceStudioModal from '@/components/modals/VoiceStudioModal';
 import { CalendarModal } from '@/components/modals/CalendarModal';
@@ -25,6 +22,7 @@ import { PDFUploadModal } from '@/components/modals/PdfUploadModal';
 import { CallQueueModal } from '@/components/modals/CallQueueModal';
 import { AirtableSyncModal } from '@/components/modals/AirtableSyncModal';
 import { LoggerTrackerModal } from '@/components/modals/LoggerTrackerModal';
+import { MetricsPanelModal } from '@/components/modals/MetricsPanelModal';
 import { BehaviorTuningModal } from '@/components/modals/BehaviorTuningModal';
 import { RAGModal } from '@/components/modals/RagModal';
 import { RAGInsightsModal } from '@/components/modals/RAGInsightsModal';
@@ -32,8 +30,10 @@ import { RevenueChartsModal } from '@/components/modals/RevenueChartsModal';
 import { SlackMonitorModal } from '@/components/modals/SlackMonitorModal';
 import { AdminSettingsModal } from '@/components/modals/AdminSettingsModal';
 import { SmartSchedulerModal } from '@/components/modals/SmartSchedulerModal';
+import { AuditLogModal } from '@/components/modals/AuditLogModal';
+import { PipelineDashboardModal } from '@/components/modals/PipelineDashboardModal';
 
-// UI Components
+// ✅ UI Components
 import QuickActionCard from '@/components/ui/cards/QuickActionCard';
 import KPIAnalyticsCard from '@/components/ui/cards/KPIAnalyticsCard';
 import SmartSpendCard from '@/components/ui/cards/SmartSpendCard';
@@ -41,11 +41,6 @@ import BotalyticsCard from '@/components/ui/cards/BotalyticsCard';
 import AIAvatarOverlay from '@/components/ui/cards/AIAvatarOverlayCard';
 import SupportChatWidget from '@/components/widgets/SupportChatWidget';
 import TopNavBar from '@/components/nav/TopNavBar';
-
-import { useEffect, useState } from 'react';
-import '@/styles/CommandCenter.css';
-import '@/styles/NeonTheme.css';
-import '@/styles/StyledComponents.css';
 
 import {
   fetchLeadsFromApollo,
@@ -75,12 +70,7 @@ import {
   postToMailchimp,
   openMailchimpPage,
   openHubSpotPage,
-  triggerSocialPoster,
-  fetchCustomerProfiles,
-  fetchPipelineStatus,
-  fetchVersionData,
-  fetchMetrics,
-  fetchAuditLogs
+  triggerSocialPoster
 } from '@/utils/function_library';
 
 const neonColors = ['#FFFF33', '#39FF14', '#FF6EC7', '#DA70D6', '#FFA500'];
@@ -109,6 +99,26 @@ const kpiGroups = [
   {
     title: '📊 Core KPIs',
     kpis: ['💰 Cost Per Lead', '🚀 ROI', '🎯 Close Rate', '📈 Learning Rate']
+  },
+  {
+    title: '📡 Smart Metrics',
+    kpis: ['🧠 SmartSpend™', '📊 Botalytics™', '📞 Calls Completed', '😄 Sentiment Score']
+  },
+  {
+    title: '📈 Sales Ops',
+    kpis: ['🔁 Trial Conversion Rate', '💬 AI Suggestions Used', '📦 Top Package', '📤 Email CTR']
+  },
+  {
+    title: '🧲 Funnel & Automation',
+    kpis: ['🧲 Lead Source ROI', '⏳ First Response Time', '🕹️ Automation Success', '🕵️‍♂️ Flagged Logs']
+  },
+  {
+    title: '📋 Task & Revenue',
+    kpis: ['🎯 Tasks Completed', '⏱️ Open Tasks', '🧾 Quotes Generated', '💳 Payments Collected']
+  },
+  {
+    title: '📉 Retention',
+    kpis: ['📉 Churn Risk']
   }
 ];
 
@@ -117,6 +127,8 @@ export default function CommandCenter() {
   const [showAdvancedTools, setShowAdvancedTools] = useState(false);
   const [liveMode, setLiveMode] = useState(true);
   
+  console.log('Current selectedModal:', selectedModal);
+
   const userEmail = liveMode ? 'tyson@yobot.bot' : 'daniel@yobot.bot';
   const leadId = liveMode ? 'recD9aF6vqpUOCnA4' : 'recDbWmthkHtNZkld';
   const mode = liveMode ? 'LIVE' : 'TEST';
@@ -126,26 +138,6 @@ export default function CommandCenter() {
     await logEvent({ module: label, trigger: 'Command Center', mode });
 
     switch (modalName) {
-      // Core modules
-      case 'customerProfile':
-        await fetchCustomerProfiles();
-        break;
-      case 'pipelineStatus':
-        await fetchPipelineStatus();
-        break;
-      case 'versionControl':
-        await fetchVersionData();
-        break;
-      case 'formConfigurator':
-        break;
-      case 'metricsPanel':
-        await fetchMetrics();
-        break;
-      case 'auditLog':
-        await fetchAuditLogs();
-        break;
-      
-      // Additional modules
       case 'leadScraper':
         await fetchLeadsFromApollo(userEmail);
         break;
@@ -217,6 +209,8 @@ export default function CommandCenter() {
         break;
       case 'loggerTracker':
         break;
+      case 'metricsPanel':
+        break;
       case 'ragInsights':
         break;
       case 'revenueCharts':
@@ -224,6 +218,14 @@ export default function CommandCenter() {
       case 'slackMonitor':
         break;
       case 'smartScheduler':
+        break;
+      case 'auditLog':
+        break;
+      case 'slackTest':
+        break;
+      case 'adminLogin':
+        break;
+      case 'pipelineDashboard':
         break;
     }
   }
@@ -259,35 +261,17 @@ export default function CommandCenter() {
           </label>
         </div>
 
-        {/* Core Modules Section */}
-        <div className="section-header">
-          <h2 className="section-title">🔧 Core Modules</h2>
-        </div>
-        <div className="quick-action-grid">
-          <QuickActionCard label="👤 Customer Profiles" onClick={() => openModal('customerProfile', '👤 Customer Profiles')} />
-          <QuickActionCard label="📊 Pipeline Status" onClick={() => openModal('pipelineStatus', '📊 Pipeline Status')} />
-          <QuickActionCard label="🔄 Version Control" onClick={() => openModal('versionControl', '🔄 Version Control')} />
-          <QuickActionCard label="📝 Form Configurator" onClick={() => openModal('formConfigurator', '📝 Form Configurator')} />
-          <QuickActionCard label="📈 Metrics Panel" onClick={() => openModal('metricsPanel', '📈 Metrics Panel')} />
-          <QuickActionCard label="🔍 Audit Logs" onClick={() => openModal('auditLog', '🔍 Audit Logs')} />
-        </div>
-
-        {/* Operations Tools Section */}
-        <div className="section-header">
-          <h2 className="section-title">🛠️ Operations Tools</h2>
-        </div>
-        <div className="quick-action-grid">
+        <div className="quick-actions-grid">
+          <QuickActionCard label="📞 Start Pipeline" onClick={() => openModal('pipelineDashboard', '📞 Start Pipeline')} />
+          <QuickActionCard label="💬 Manual Call" onClick={() => {}} />
           <QuickActionCard label="🔍 Lead Scraper" onClick={() => openModal('leadScraper', '🔍 Lead Scraper')} />
           <QuickActionCard label="🧾 Sales Order" onClick={() => openModal('salesOrder', '🧾 Sales Order')} />
           <QuickActionCard label="🎨 Content Creator" onClick={() => openModal('contentCreator', '🎨 Content Creator')} />
-          <QuickActionCard label="📆 SmartCalendar" onClick={() => openModal('calendar', '📆 SmartCalendar')} />
-          <QuickActionCard label="🎫 Submit Ticket" onClick={() => openModal('ticket', '🎫 Submit Ticket')} />
+          <QuickActionCard label="📆 SmartCalendar" onClick={() => openModal('calendar', '📆 SmartCalendar')} />        <QuickActionCard label="🎫 Submit Ticket" onClick={() => openModal('ticket', '🎫 Submit Ticket')} />
           <QuickActionCard label="🤖 Smart Quoting" onClick={() => openModal('quoting', '🤖 Smart Quoting')} />
           <QuickActionCard label="📊 Generate Report" onClick={() => openModal('export', '📊 Generate Report')} />
           <QuickActionCard label={showAdvancedTools ? '🧰 Hide Tools' : '🧰 Advanced Tools'} onClick={() => setShowAdvancedTools(!showAdvancedTools)} />
-        </div>
-
-        {showAdvancedTools && (
+        </div>      {showAdvancedTools && (
           <div className="advanced-tools-drawer">
             <QuickActionCard label="📎 PDF Upload" onClick={() => openModal('pdf', '📎 PDF Upload')} />
             <QuickActionCard label="📚 Knowledge" onClick={() => openModal('rag', '📚 Knowledge')} />
@@ -297,49 +281,87 @@ export default function CommandCenter() {
             <QuickActionCard label="📬 Mailchimp" onClick={() => openModal('mailchimp', '📬 Mailchimp')} />
             <QuickActionCard label="🔗 HubSpot" onClick={() => openModal('hubspot', '🔗 HubSpot')} />
             <QuickActionCard label="📣 Social Poster" onClick={() => openModal('socialPoster', '📣 Social Poster')} />
+            <QuickActionCard label="🧠 Copilot Assistant" onClick={() => openModal('copilot', '🧠 Copilot Assistant')} />
+            <QuickActionCard label="📞 Live Call Queue" onClick={() => openModal('callQueue', '📞 Live Call Queue')} />
+            <QuickActionCard label="📤 Airtable Sync Log" onClick={() => openModal('airtableSync', '📤 Airtable Sync Log')} />
+            <QuickActionCard label="🧾 Logger Tracker" onClick={() => openModal('loggerTracker', '🧾 Logger Tracker')} />
+            <QuickActionCard label="📍 Metrics Panel" onClick={() => openModal('metricsPanel', '📍 Metrics Panel')} />
+            <QuickActionCard label="🎯 Bot Behavior Tuning" onClick={() => openModal('behaviorTuning', '🎯 Bot Behavior Tuning')} />          <QuickActionCard label="🗣️ Voice Studio" onClick={() => openModal('voiceStudio', '🗣️ Voice Studio')} />
+            <QuickActionCard label="🔎 RAG Article Insights" onClick={() => openModal('ragInsights', '🔎 RAG Article Insights')} />
+            <QuickActionCard label="📈 Live Revenue Charts" onClick={() => openModal('revenueCharts', '📈 Live Revenue Charts')} />
+            <QuickActionCard label="💬 Slack Monitor" onClick={() => openModal('slackMonitor', '💬 Slack Monitor')} />
+            <QuickActionCard label="🔧 Admin Settings" onClick={() => openModal('adminSettings', '🔧 Admin Settings')} />
           </div>
         )}
 
-        {/* Real-Time Metrics Dashboard */}
-        <div className="section-header">
-          <h2 className="section-title">📊 Real-Time Metrics</h2>
+        <div className="module-stack">
         </div>
+
         <div className="analytics-dashboard-wrapper">
+          <h2 className="analytics-heading">Analytics Dashboard</h2>
           <div className="analytics-dashboard">
-            <div className="analytics-row">
+              <div className="analytics-row">
               <SmartSpendCard />
               <BotalyticsCard />
-            </div>
+              </div>
 
-            {kpiGroups.map((group, idx) => (
+              {kpiGroups.map((group, idx) => (
               <div key={idx} className="kpi-group">
-                <h3 className="kpi-title neon-text">{group.title}</h3>
-                <div className="kpi-row">
+                  <h3 className="kpi-title neon-text">{group.title}</h3>
+                  <div className="kpi-row">
                   {group.kpis.map((label, i) => (
-                    <KPIAnalyticsCard
-                      key={i}
-                      label={label}
+                      <KPIAnalyticsCard
+                      key={i}                    label={label}
                       airtableField={label}
                       color={neonColors[Math.floor(Math.random() * neonColors.length)]}
                       showMeter={true}
                       meterThresholds={{ green: 75, yellow: 50, red: 25 }}
-                    />
+                      />
                   ))}
-                </div>
+                  </div>
               </div>
-            ))}
+              ))}
           </div>
-        </div>
+          </div>
 
-        {/* Core Module Modals */}
-        {selectedModal === 'customerProfile' && <CustomerProfileModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'pipelineStatus' && <PipelineStatusModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'versionControl' && <VersionControlModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'formConfigurator' && <FormConfiguratorModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'metricsPanel' && <MetricsPanelModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'auditLog' && <AuditLogModal isOpen={true} onClose={closeModal} />}
-        
-        {/* Additional Modals */}
+          <div className="kpi-group">
+              <h3 className="kpi-title neon-text">📈 Predictive Analytics</h3>
+              <div className="kpi-row">
+              <KPIAnalyticsCard
+                  label="📅 Revenue Forecast"
+                  airtableField="📅 Revenue Forecast"
+                  color="#FF6EC7"
+                  showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
+              />
+              <KPIAnalyticsCard
+                  label="📉 Projected Churn"
+                  airtableField="📉 Projected Churn"
+                  color="#DA70D6"
+                  showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
+              />
+              <KPIAnalyticsCard
+                  label="📈 Growth Trajectory"
+                  airtableField="📈 Growth Trajectory"
+                  color="#39FF14"
+                  showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
+              />
+              <KPIAnalyticsCard
+                  label="🧠 Behavior Forecast"
+                  airtableField="🧠 Behavior Forecast"
+                  color="#FFFF33"
+                  showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
+              />
+              <KPIAnalyticsCard
+                  label="🧲 AI Deal Prediction"
+                  airtableField="🧲 AI Deal Prediction"
+                  color="#0d82da"
+                  showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
+              />
+              </div>
+          </div>
+      
+        {/* ✅ INTEGRATION: Render all modals, including the new one */}
+        {selectedModal === 'pipelineDashboard' && <PipelineDashboardModal isOpen={true} onClose={closeModal} />}
         {selectedModal === 'leadScraper' && <LeadScraperModal isOpen={true} onClose={closeModal} />}
         {selectedModal === 'voiceStudio' && <VoiceStudioModal onClose={closeModal} />}
         {selectedModal === 'calendar' && <CalendarModal isOpen={true} onClose={closeModal} />}
@@ -359,12 +381,17 @@ export default function CommandCenter() {
         {selectedModal === 'callQueue' && <CallQueueModal isOpen={true} onClose={closeModal} />}
         {selectedModal === 'airtableSync' && <AirtableSyncModal isOpen={true} onClose={closeModal} />}
         {selectedModal === 'loggerTracker' && <LoggerTrackerModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'behaviorTuning' && <BehaviorTuningModal isOpen={true} onClose={closeModal} />}
         {selectedModal === 'ragInsights' && <RAGInsightsModal isOpen={true} onClose={closeModal} />}
         {selectedModal === 'revenueCharts' && <RevenueChartsModal isOpen={true} onClose={closeModal} />}
         {selectedModal === 'slackMonitor' && <SlackMonitorModal isOpen={true} onClose={closeModal} />}
         {selectedModal === 'adminSettings' && <AdminSettingsModal isOpen={true} onClose={closeModal} />}
+        {selectedModal === 'metricsPanel' && <MetricsPanelModal isOpen={true} onClose={closeModal} />}
+        {selectedModal === 'behaviorTuning' && <BehaviorTuningModal isOpen={true} onClose={closeModal} />}
+        {selectedModal === 'smartCalendar' && <CalendarModal isOpen={true} onClose={closeModal} />}
+        {selectedModal === 'slackTest' && <DiagnosticsModal isOpen={true} onClose={closeModal} />}
         {selectedModal === 'adminLogin' && <AdminLoginModal isOpen={true} onClose={closeModal} />}
+        {selectedModal === 'auditLog' && <AuditLogModal isOpen={true} onClose={closeModal} />}
+        
       </div>
     </div>
   );
