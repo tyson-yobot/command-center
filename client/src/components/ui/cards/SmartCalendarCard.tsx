@@ -11,14 +11,18 @@
 // • Drag-and-drop updates Airtable via /api/calendar/update.
 // -----------------------------------------------------------------------------
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { logEvent } from "@utils/eventLogger";
+import { CalendarService } from "@/services/CalendarService";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { useToast } from "@/hooks/useToast";
 
 // ──────────────────────────────────────────────────────────────────────────────
 // 🔐  Locked constants – no optional params
 // -----------------------------------------------------------------------------
-const CALENDAR_ENDPOINT = "/api/calendar/events"; // Flask route
-const UPDATE_ENDPOINT = "/api/calendar/update";
+// API endpoints
+const calendarService = new CalendarService();
 const AUTO_REFRESH_MS = 60_000; // 60 s
 
 // Owner categories (must match Airtable "Owner" field exactly)
@@ -46,7 +50,7 @@ interface ProcessedEvent extends CalendarEvent {
   color: string;
 }
 
-const SmartCalendarCard: React.FC = () => {
+const SmartCalendarCard = () => {
   // ─── Filters (persisted) ────────────────────────────────────────────────────
   const [showTyson, setShowTyson] = useState(() => getPersist("tyson", true));
   const [showDan, setShowDan] = useState(() => getPersist("dan", true));
@@ -91,11 +95,11 @@ const SmartCalendarCard: React.FC = () => {
   // ─── Pull events ───────────────────────────────────────────────────────────
   const [events, setEvents] = useState<ProcessedEvent[]>([]);
 
+  const { showToast } = useToast();
+
   const fetchEvents = useCallback(async () => {
     try {
-      const res = await fetch(CALENDAR_ENDPOINT);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const json: CalendarEvent[] = await res.json();
+      const json = await calendarService.getEvents();
       const mapped = json.map(evt => ({
         ...evt,
         start: new Date(evt.start_time),
@@ -103,10 +107,13 @@ const SmartCalendarCard: React.FC = () => {
         color: pickColor(evt.source),
       }));
       setEvents(mapped);
+      logEvent('calendar', 'refresh', 'success');
     } catch (err) {
       console.error("Calendar fetch failed", err);
+      showToast('Error loading calendar events', 'error');
+      logEvent('calendar', 'refresh', 'error');
     }
-  }, []);
+  }, [showToast]);
 
   useEffect(() => {
     fetchEvents();
@@ -194,7 +201,7 @@ const SmartCalendarCard: React.FC = () => {
         const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
         const dayEvents = getEventsForDate(date);
         days.push(
-          <div key={day} className="border border-gray-300 p-2 min-h-[80px]">
+          <div key={day} className="border border-[#333333] p-2 min-h-[80px] text-white">
             <div className="font-semibold text-sm">{day}</div>
             {dayEvents.slice(0, 3).map((event, idx) => (
               <div
@@ -206,7 +213,7 @@ const SmartCalendarCard: React.FC = () => {
               </div>
             ))}
             {dayEvents.length > 3 && (
-              <div className="text-xs text-gray-500">+{dayEvents.length - 3} more</div>
+              <div className="text-xs text-[#c3c3c3]">+{dayEvents.length - 3} more</div>
             )}
           </div>
         );
@@ -215,7 +222,7 @@ const SmartCalendarCard: React.FC = () => {
       return (
         <div className="grid grid-cols-7 gap-1 auto-rows-fr">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="font-semibold text-center p-2 bg-gray-100">{day}</div>
+            <div key={day} className="font-semibold text-center p-2 bg-[#2a2a2a] text-white">{day}</div>
           ))}
           {days}
         </div>
@@ -236,10 +243,10 @@ const SmartCalendarCard: React.FC = () => {
       const dayEvents = getEventsForDate(date);
       
       viewEvents.push(
-        <div key={i} className="border-b border-gray-200 p-4">
+        <div key={i} className="border-b border-[#333333] p-4 text-white">
           <h3 className="font-semibold text-lg mb-2">{formatDate(date)}</h3>
           {dayEvents.length === 0 ? (
-            <p className="text-gray-500">No events</p>
+            <p className="text-[#c3c3c3]">No events</p>
           ) : (
             <div className="space-y-2">
               {dayEvents.map((event, idx) => (
@@ -261,7 +268,7 @@ const SmartCalendarCard: React.FC = () => {
       );
     }
 
-    return <div className="space-y-0">{viewEvents}</div>;
+    return <div className="space-y-0 text-white">{viewEvents}</div>;
   };
 
   // ─── Render ────────────────────────────────────────────────────────────────
@@ -269,9 +276,9 @@ const SmartCalendarCard: React.FC = () => {
     <section className="yobot-card flex flex-col gap-4">
       {/* Header */}
       <header className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-primary">📅 Smart Calendar</h2>
+        <h2 className="text-lg font-semibold text-white">📅 Smart Calendar</h2>
         <div className="flex items-center gap-2">
-          <button className="btn-blue" onClick={fetchEvents}>🔄 Refresh</button>
+          <button className="btn-blue" onClick={fetchEvents} aria-label="Refresh calendar">🔄 Refresh</button>
           <button className={`btn-blue ${showTyson ? "opacity-100" : "opacity-40"}`} onClick={() => toggle("tyson")}>Tyson</button>
           <button className={`btn-blue ${showDan ? "opacity-100" : "opacity-40"}`} onClick={() => toggle("dan")}>Dan</button>
           <button className={`btn-blue ${showClient ? "opacity-100" : "opacity-40"}`} onClick={() => toggle("client")}>Clients</button>
@@ -291,7 +298,7 @@ const SmartCalendarCard: React.FC = () => {
           </button>
         </div>
         
-        <h3 className="text-xl font-bold">
+        <h3 className="text-xl font-bold text-white">
           {currentDate.toLocaleDateString('en-US', { 
             year: 'numeric', 
             month: 'long',
@@ -322,7 +329,7 @@ const SmartCalendarCard: React.FC = () => {
       </div>
 
       {/* Calendar */}
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div className="bg-[#1a1a1a] border-4 border-[#0d82da] rounded-lg overflow-hidden shadow-2xl">
         {renderCalendarView()}
       </div>
     </section>

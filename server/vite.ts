@@ -7,7 +7,35 @@ import fs from "fs";
 import path from "path";
 import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
-import viteConfig from "../vite.config";
+// Import vite config
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+// Define vite config inline to avoid import issues
+const viteConfig = {
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "../client/src"),
+      "@components": path.resolve(__dirname, "../client/src/components"),
+      "@server": path.resolve(__dirname, "../server"),
+      "@assets": path.resolve(__dirname, "../client/public/assets"),
+    },
+  },
+  root: path.resolve(__dirname, "../client"),
+  build: {
+    outDir: path.resolve(__dirname, "../dist/public"),
+    emptyOutDir: true,
+  },
+  server: {
+    host: "0.0.0.0",
+    port: 5173,
+    strictPort: true,
+    fs: {
+      allow: ["."],
+    },
+  },
+};
 import { nanoid } from "nanoid";
 
 const viteLogger = createLogger();
@@ -53,18 +81,15 @@ export async function setupVite(app: Express, server: Server) {
 
     try {
       const templatePath = path.resolve(
-        import.meta.dirname,
+        __dirname,
         "..",
         "client",
         "index.html"
       );
 
-<<<<<<< HEAD
-      let template = await fs.promises.readFile(templatePath, "utf-8");
-=======
+    
       // always reload the index.html file from disk in case it changes
-      let template = await fs.promises.readFile(clientTemplate, "utf-8");
->>>>>>> origin/codex/add-newline-at-eof-for-specified-files
+      let template = await fs.promises.readFile(templatePath, "utf-8");
       template = template.replace(
         'src="/src/main.tsx"',
         `src="/src/main.tsx?v=${nanoid()}"`
@@ -80,7 +105,7 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(import.meta.dirname, "public");
+  const distPath = path.resolve(__dirname, "public");
 
   if (!fs.existsSync(distPath)) {
     throw new Error(
