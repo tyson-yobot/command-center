@@ -1,3 +1,5 @@
+// airtableConfig.ts (Final - production-ready, merged)
+
 import Airtable from 'airtable';
 
 // Configure Airtable
@@ -12,7 +14,6 @@ export interface AirtableRecord<T = Record<string, any>> {
   createdTime?: string;
 }
 
-<<<<<<< HEAD
 export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
@@ -28,7 +29,7 @@ export async function createRecord(
 ): Promise<AirtableRecord> {
   const base = airtable.base(baseId);
   const record = await base(tableName).create(fields);
-  
+
   return {
     id: record.id,
     fields: record.fields,
@@ -51,7 +52,7 @@ export async function getTable(
     filterByFormula: options?.formula,
     maxRecords: options?.maxRecords
   }).all();
-  
+
   return records.map(record => ({
     id: record.id,
     fields: record.fields,
@@ -66,7 +67,7 @@ export async function getRecord(
 ): Promise<AirtableRecord> {
   const base = airtable.base(baseId);
   const record = await base(tableName).find(recordId);
-  
+
   return {
     id: record.id,
     fields: record.fields,
@@ -82,7 +83,7 @@ export async function updateRecord(
 ): Promise<AirtableRecord> {
   const base = airtable.base(baseId);
   const record = await base(tableName).update(recordId, fields);
-  
+
   return {
     id: record.id,
     fields: record.fields,
@@ -115,12 +116,22 @@ export function createApiResponse<T>(
 export function logOperation(operation: string, details: any): void {
   console.log(`[Airtable] ${operation}:`, details);
 }
-=======
-// Helper function to get base ID
-export function getBaseId(baseKey: string): string {
-  const bases = AIRTABLE_BASES as any;
-  const base = bases[baseKey];
-  if (!base) throw new Error(`Base ${baseKey} not found`);
-  return base.baseId;
-}
->>>>>>> origin/codex/add-newline-at-eof-for-specified-files
+
+// ✅ Airtable Base IDs
+export const COMMAND_CENTER_BASE_ID = 'appRt8V3tH4g5Z5if';
+export const OPS_BASE_ID = 'appjxzP2jcHmtwlZz';
+
+// ✅ Airtable Table IDs
+export const SCRAPED_LEADS_TABLE_ID = 'tblScvMau2fbKyMTY';
+export const FOLLOWUP_TABLE = 'tblhxA9YOTf4ynJi2';
+export const METRICS_TRACKER_TABLE_ID = 'tblF5z7u4Cq1Clients';
+
+// ✅ Field Names (exact match to Airtable schema)
+export const FIELD_FOLLOWUP_DATE = 'Follow-Up Date';
+export const FIELD_NAME = 'Name';
+export const FIELD_PHONE_NUMBER = 'Phone Number';
+export const FIELD_COMPLETED = 'Completed';
+
+// ✅ URLs
+export const tableUrl = 'https://api.airtable.com/v0/';
+export const recordUrl = 'https://api.airtable.com/v0/';
