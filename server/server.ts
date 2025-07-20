@@ -22,6 +22,7 @@ let airtableRouter: any;
 let loggerWebhookRouter: any;
 let featureRegistry: any;
 let runFunction: any;
+let pipelineDashboardRoutes: any;
 
 try {
   airtableRouter = (await import("./modules/airtable/airtableRouter")).default;
@@ -53,6 +54,14 @@ try {
 } catch (error) {
   console.warn("⚠️ Could not load runFunction:", error);
   runFunction = async () => {};
+}
+
+try {
+  pipelineDashboardRoutes = (await import("./modules/command-center/pipelineDashboardRoutes")).registerPipelineDashboardRoutes;
+  console.log("Pipeline dashboard routes imported successfully");
+} catch (error) {
+  console.warn("⚠️ Could not load pipelineDashboardRoutes:", error);
+  pipelineDashboardRoutes = () => {};
 }
 
 console.log("All imports successful, creating advanced server...");
@@ -112,6 +121,10 @@ async function main() {
 
     app.use("/api/airtable", airtableRouter);
     app.use("/api/logger", loggerWebhookRouter);
+    
+    // Register pipeline dashboard routes
+    pipelineDashboardRoutes(app);
+    
     app.use("/api/slack", (req: Request, res: Response, next: NextFunction) => {
       if (slackEventsAdapter) {
         return slackEventsAdapter.expressMiddleware()(req as any, res as any, next);
