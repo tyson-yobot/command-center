@@ -8,7 +8,7 @@
 // =============================================================================
 
 import express, { Request, Response } from "express";
-import { runPythonFunction } from "../../utils/functionRunner";
+import { runFunction } from "../../../backend/utils/airtable/function_runner.js";
 import { logInfo, logError } from "../../../client/src/hooks/utils/logger";
 
 
@@ -34,7 +34,7 @@ function ids(req: Request) {
 router.get("/:baseId/:tableName", async (req: Request, res: Response) => {
   try {
     const { baseId, tableName } = ids(req);
-    const result = await runPythonFunction("fetch_records", {
+    const result = await runFunction("fetch_records", {
       base_id: baseId,
       table_name: tableName,
     });
@@ -52,7 +52,7 @@ router.post("/:baseId/:tableName", async (req: Request, res: Response) => {
   try {
     const { baseId, tableName } = ids(req);
     const fields = req.body;
-    const result = await runPythonFunction("create_record", {
+    const result = await runFunction("create_record", {
       base_id: baseId,
       table_name: tableName,
       fields,
@@ -71,7 +71,7 @@ router.patch("/:baseId/:tableName/:recordId", async (req: Request, res: Response
   try {
     const { baseId, tableName, recordId } = req.params;
     const fields = req.body;
-    const result = await runPythonFunction("update_record", {
+    const result = await runFunction("update_record", {
       base_id: baseId,
       table_name: tableName,
       record_id: recordId,
@@ -90,7 +90,7 @@ router.patch("/:baseId/:tableName/:recordId", async (req: Request, res: Response
 router.delete("/:baseId/:tableName/:recordId", async (req: Request, res: Response) => {
   try {
     const { baseId, tableName, recordId } = req.params;
-    const result = await runPythonFunction("delete_record", {
+    const result = await runFunction("delete_record", {
       base_id: baseId,
       table_name: tableName,
       record_id: recordId,
@@ -107,7 +107,7 @@ router.delete("/:baseId/:tableName/:recordId", async (req: Request, res: Respons
 //------------------------------------------------------------------
 router.post("/generate/quote", async (req: Request, res: Response) => {
   try {
-    const result = await runPythonFunction("generate_quote_pdf", req.body);
+    const result = await runFunction("generate_quote_pdf", req.body);
     res.json({ success: true, data: result });
   } catch (err: any) {
     logError("airtable", `Quote → ${err.message}`);
@@ -120,7 +120,7 @@ router.post("/generate/quote", async (req: Request, res: Response) => {
 //------------------------------------------------------------------
 router.post("/log", async (req: Request, res: Response) => {
   try {
-    const result = await runPythonFunction("external_logger", req.body);
+    const result = await runFunction("external_logger", req.body);
     res.json({ success: true, data: result });
   } catch (err: any) {
     logError("airtable", `Log → ${err.message}`);
