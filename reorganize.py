@@ -112,7 +112,7 @@ def create_directory_structure():
                 create_dirs(dir_path, sub_dirs)
     
     create_dirs(ROOT_DIR, NEW_STRUCTURE)
-    print("✅ Created new directory structure")
+    print("Created new directory structure")
 
 def move_files():
     """Move files to their new locations."""
@@ -122,15 +122,21 @@ def move_files():
         
         # Skip if source doesn't exist
         if not src_path.exists():
-            print(f"⚠️ Source file not found: {src}")
+            print(f"Warning: Source file not found: {src}")
             continue
         
         # Create parent directory if it doesn't exist
         dst_path.parent.mkdir(parents=True, exist_ok=True)
         
         # Copy the file
-        shutil.copy2(src_path, dst_path)
-        print(f"📄 Copied {src} to {dst}")
+        try:
+            shutil.copy2(src_path, dst_path)
+            print(f"Copied {src} to {dst}")
+        except PermissionError:
+            print(f"Permission error: Could not copy {src} - file may be in use")
+        except Exception as e:
+            print(f"Error copying {src}: {str(e)}")
+            continue
 
 def move_assets():
     """Move assets to the assets directory."""
@@ -140,34 +146,36 @@ def move_assets():
         images_dir = ROOT_DIR / "assets" / "images"
         images_dir.mkdir(exist_ok=True, parents=True)
         
+        # Helper function to copy files with error handling
+        def copy_file(file, dest_dir, file_type):
+            dst_path = dest_dir / file.name
+            try:
+                shutil.copy2(file, dst_path)
+                print(f"Moved {file.name} to {file_type}/")
+            except PermissionError:
+                print(f"Permission error: Could not copy {file.name} - file may be in use")
+            except Exception as e:
+                print(f"Error copying {file.name}: {str(e)}")
+        
+        # Copy image files
         for file in assets_dir.glob("*.png"):
-            dst_path = images_dir / file.name
-            shutil.copy2(file, dst_path)
-            print(f"🖼️ Moved {file.name} to assets/images/")
+            copy_file(file, images_dir, "assets/images")
         
         for file in assets_dir.glob("*.jpg"):
-            dst_path = images_dir / file.name
-            shutil.copy2(file, dst_path)
-            print(f"🖼️ Moved {file.name} to assets/images/")
+            copy_file(file, images_dir, "assets/images")
             
         for file in assets_dir.glob("*.jpeg"):
-            dst_path = images_dir / file.name
-            shutil.copy2(file, dst_path)
-            print(f"🖼️ Moved {file.name} to assets/images/")
+            copy_file(file, images_dir, "assets/images")
         
         # Move text files to assets/docs
         docs_dir = ROOT_DIR / "assets" / "docs"
         docs_dir.mkdir(exist_ok=True, parents=True)
         
         for file in assets_dir.glob("*.txt"):
-            dst_path = docs_dir / file.name
-            shutil.copy2(file, dst_path)
-            print(f"📄 Moved {file.name} to assets/docs/")
+            copy_file(file, docs_dir, "assets/docs")
             
         for file in assets_dir.glob("*.csv"):
-            dst_path = docs_dir / file.name
-            shutil.copy2(file, dst_path)
-            print(f"📄 Moved {file.name} to assets/docs/")
+            copy_file(file, docs_dir, "assets/docs")
 
 def update_imports():
     """Update import statements in Python files."""
@@ -175,39 +183,49 @@ def update_imports():
     python_files = list(ROOT_DIR.glob("server/**/*.py"))
     
     for file_path in python_files:
-        with open(file_path, "r", encoding="utf-8") as f:
-            content = f.read()
-        
-        # Update relative imports
-        content = re.sub(
-            r"from server\.function_library",
-            "from server.utils.function_library",
-            content
-        )
-        content = re.sub(
-            r"from server\.function_library_full_cleaned",
-            "from server.utils.function_library_full",
-            content
-        )
-        content = re.sub(
-            r"from server\.auth",
-            "from server.core.auth",
-            content
-        )
-        content = re.sub(
-            r"from modules\.sales_order",
-            "from server.modules.sales.sales_order",
-            content
-        )
-        
-        with open(file_path, "w", encoding="utf-8") as f:
-            f.write(content)
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            
+            # Update relative imports
+            content = re.sub(
+                r"from server\.function_library",
+                "from server.utils.function_library",
+                content
+            )
+            content = re.sub(
+                r"from server\.function_library_full_cleaned",
+                "from server.utils.function_library_full",
+                content
+            )
+            content = re.sub(
+                r"from server\.auth",
+                "from server.core.auth",
+                content
+            )
+            content = re.sub(
+                r"from modules\.sales_order",
+                "from server.modules.sales.sales_order",
+                content
+            )
+            
+            try:
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(content)
+                print(f"Updated imports in {file_path.relative_to(ROOT_DIR)}")
+            except PermissionError:
+                print(f"Permission error: Could not update {file_path.relative_to(ROOT_DIR)} - file may be in use")
+            except Exception as e:
+                print(f"Error updating {file_path.relative_to(ROOT_DIR)}: {str(e)}")
+        except Exception as e:
+            print(f"Error processing {file_path.relative_to(ROOT_DIR)}: {str(e)}")
+            continue
     
-    print("🔄 Updated import statements")
+    print("Updated import statements")
 
 def main():
     """Main function to run the reorganization."""
-    print("🚀 Starting YoBot Command Center reorganization...")
+    print("Starting YoBot Command Center reorganization...")
     
     # Create the new directory structure
     create_directory_structure()
@@ -221,7 +239,7 @@ def main():
     # Update import statements
     update_imports()
     
-    print("\n✅ Reorganization complete!")
+    print("\nReorganization complete!")
     print("\nNOTE: This script has copied files to their new locations but has not deleted any files.")
     print("Please review the changes and manually delete files once you've verified everything works.")
 

@@ -3,12 +3,6 @@ import axios from 'axios';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent } from '@/components/ui/card';
 
-// ✅ HARD-CODED Airtable Base ID + Table ID
-// Base ID: appRt8V3tH4g5Z5if
-// Table ID: tblXGb2iLJfGdK2UJ (💰 SmartSpend™ Log)
-
-const AIRTABLE_API_URL = 'https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblXGb2iLJfGdK2UJ';
-const AIRTABLE_API_KEY = 'Bearer AIRTABLE_API_KEY';
 
 const SmartspendCard = () => {
   const [metrics, setMetrics] = useState({

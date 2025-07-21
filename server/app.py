@@ -5,6 +5,10 @@ import os
 import logging
 from flask import Flask, jsonify
 from flask_cors import CORS
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(
@@ -49,11 +53,11 @@ def create_app():
     os.makedirs(os.path.join(os.path.dirname(__file__), 'logs'), exist_ok=True)
     
     # Initialize authentication
-    from auth import init_auth
+    from core.auth import init_auth
     init_auth(app)
     
     # Register blueprints
-    from routes.generate_quote import bp as quote_bp
+    from api.quotes.generate_quote import bp as quote_bp
     app.register_blueprint(quote_bp)
     
     # Health check endpoint

@@ -105,7 +105,7 @@ export async function pushExportToDrive(mode: string) {
 }
 
 // System and Admin Functions
-export async function logEvent(eventData: { module: string; trigger: string; mode: string }) {
+export async function logEvent(eventData: { module: string; trigger: string }) {
   return apiCall('/system/log-event', eventData);
 }
 

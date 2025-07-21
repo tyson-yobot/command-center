@@ -29,7 +29,7 @@ from flask import Blueprint, request, jsonify
 from tenacity import retry, stop_after_attempt, wait_fixed, retry_if_exception_type
 
 # ── Helper imports (no stubs) ───────────────────────────────────────
-from server.utils.function_library_full_cleaned import (
+from utils.function_library_full import (
     # Airtable helpers
     airtable_create_record,
     airtable_get_record,
@@ -51,12 +51,12 @@ from server.utils.function_library_full_cleaned import (
     send_slack_alert,
 )
 
-from server.modules.sales.sales_order import (
+from modules.sales.sales_order import (
     # Optional: extra helpers Tyson already implemented
     create_client_folder,  # ensures "1 - Clients / Company / …"
 )
 
-from server.core.auth import require_auth, require_permission
+from core.auth import require_auth, require_permission
 
 # ── ENV CONFIG ─────────────────────────────────────────────────────
 # Use os.environ.get() for all environment variables to avoid KeyError

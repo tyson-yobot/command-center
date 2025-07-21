@@ -12,13 +12,13 @@ if (!baseId) {
 }
 export const BASE_ID = baseId;
 
-export const COMMAND_CENTER_BASE_ID = 'appRt8V3tH4g5Z51f';
-export const LEAD_ENGINE_BASE_ID = 'appb2F3D77tC4DWla';
-export const OPS_BASE_ID = 'appCoAtCZdARb4AM2';
+export const COMMAND_CENTER_BASE_ID = process.env.COMMAND_CENTER_BASE_ID || '';
+export const LEAD_ENGINE_BASE_ID = process.env.LEAD_ENGINE_BASE_ID || '';
+export const OPS_BASE_ID = process.env.OPS_BASE_ID || '';
 
 export const METRICS_TABLE_NAME = '📊 Command Center · Metrics Tracker';
 export const SCRAPED_LEADS_TABLE_NAME = '📥 Scraped Leads (Universal)';
-export const SCRAPED_LEADS_TABLE_ID = 'tblPRZ4nHbtj9opU';
+export const SCRAPED_LEADS_TABLE_ID = process.env.SCRAPED_LEADS_TABLE_ID || '';
 export const INTEGRATION_TEST_LOG_TABLE = '🧪 Integration Test Log';
 export const SALES_ORDERS_TABLE = '🧾 Sales Orders';
 

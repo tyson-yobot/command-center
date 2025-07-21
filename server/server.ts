@@ -20,6 +20,7 @@ console.log("Slack Events API imported successfully");
 
 import path from "path";
 import { fileURLToPath } from "url";
+import { registerRoutes } from "./routes";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -129,6 +130,9 @@ async function main() {
     app.use("/api/airtable", airtableRouter);
     app.use("/api/logger", loggerWebhookRouter);
     pipelineDashboardRoutes(app);
+    
+    // Register main API routes
+    registerRoutes(app);
 
     app.use("/api/slack", (req: Request, res: Response, next: NextFunction) => {
       if (slackEventsAdapter) {

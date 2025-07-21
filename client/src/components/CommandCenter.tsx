@@ -48,39 +48,20 @@ import '@/styles/NeonTheme.css';
 import '@/styles/StyledComponents.css';
 
 import {
-  fetchLeadsFromApollo,
   openVoiceStudio,
-  getUpcomingCalendarEvents,
-  generateQuotePDF,
   runContentCreation,
   submitSupportTicket,
   syncHubSpotContacts,
   exportAllData,
-  syncCalendarToAirtable,
-  createVoiceStudioRecord,
-  submitQuoteToAirtable,
-  submitContentPost,
-  submitTicketToAirtable,
   syncContactsToCRM,
-  pushExportToDrive,
   logEvent,
   toggleFeature,
-  submitPdfUploadToAirtable,
   submitRagQueryToAirtable,
   syncRagArticles,
   runSystemDiagnostics,
   triggerEmergencyProtocol,
-  submitSalesOrderToQBO,
-  syncQuickBooksInvoices,
-  postToMailchimp,
   openMailchimpPage,
-  openHubSpotPage,
-  triggerSocialPoster,
-  fetchCustomerProfiles,
-  fetchPipelineStatus,
-  fetchVersionData,
-  fetchMetrics,
-  fetchAuditLogs
+  openHubSpotPage
 } from '@/utils/function_library';
 
 const neonColors = ['#FFFF33', '#39FF14', '#FF6EC7', '#DA70D6', '#FFA500'];
@@ -115,59 +96,41 @@ const kpiGroups = [
 export default function CommandCenter() {
   const [selectedModal, setSelectedModal] = useState<string | null>(null);
   const [showAdvancedTools, setShowAdvancedTools] = useState(false);
-  const [liveMode, setLiveMode] = useState(true);
-  
-  const userEmail = liveMode ? 'tyson@yobot.bot' : 'daniel@yobot.bot';
-  const leadId = liveMode ? 'recD9aF6vqpUOCnA4' : 'recDbWmthkHtNZkld';
-  const mode = liveMode ? 'LIVE' : 'TEST';
 
   const openModal = async (modalName: string, label: string) => {
     setSelectedModal(modalName);
-    await logEvent({ module: label, trigger: 'Command Center', mode });
+    await logEvent({ module: label, trigger: 'Command Center' });
 
     switch (modalName) {
       // Core modules
       case 'customerProfile':
-        await fetchCustomerProfiles();
         break;
       case 'pipelineStatus':
-        await fetchPipelineStatus();
         break;
       case 'versionControl':
-        await fetchVersionData();
         break;
       case 'formConfigurator':
         break;
       case 'metricsPanel':
-        await fetchMetrics();
         break;
       case 'auditLog':
-        await fetchAuditLogs();
         break;
       
       // Additional modules
       case 'leadScraper':
-        await fetchLeadsFromApollo(userEmail);
         break;
       case 'voiceStudio':
         await openVoiceStudio();
-        await createVoiceStudioRecord(userEmail, mode);
         break;
       case 'calendar':
-        await getUpcomingCalendarEvents(userEmail);
-        await syncCalendarToAirtable(userEmail, mode);
         break;
       case 'quoting':
-        await generateQuotePDF(leadId);
-        await submitQuoteToAirtable(leadId, mode);
         break;
       case 'contentCreator':
         await runContentCreation();
-        await submitContentPost(userEmail, mode);
         break;
       case 'ticket':
-        await submitSupportTicket({ email: userEmail, message: `Submitted from ${mode} Command Center` });
-        await submitTicketToAirtable(userEmail, mode);
+        await submitSupportTicket({ email: 'support@yobot.bot', message: 'Submitted from Command Center' });
         break;
       case 'hubspot':
         await syncHubSpotContacts();
@@ -175,18 +138,15 @@ export default function CommandCenter() {
         await openHubSpotPage();
         break;
       case 'mailchimp':
-        await postToMailchimp(userEmail);
         await openMailchimpPage();
         break;
       case 'export':
         await exportAllData();
-        await pushExportToDrive(mode);
         break;
       case 'admin':
         await toggleFeature('maintenance_mode', true);
         break;
       case 'pdf':
-        await submitPdfUploadToAirtable(userEmail, mode);
         break;
       case 'rag':
         await submitRagQueryToAirtable();
@@ -199,11 +159,8 @@ export default function CommandCenter() {
         await triggerEmergencyProtocol();
         break;
       case 'salesOrder':
-        await submitSalesOrderToQBO(userEmail, mode);
-        await syncQuickBooksInvoices(userEmail);
         break;
       case 'socialPoster':
-        await triggerSocialPoster(userEmail);
         break;
       case 'adminSettings':
         break;
@@ -252,12 +209,6 @@ export default function CommandCenter() {
       <div className="pt-16">
         <h1 className="dashboard-title neon-text">🤖 YoBot® Command Center</h1>
 
-        <div className="mode-toggle">
-          <label>
-            <input type="checkbox" checked={liveMode} onChange={() => setLiveMode(!liveMode)} />
-            {liveMode ? 'LIVE MODE' : 'TEST MODE'}
-          </label>
-        </div>
 
         {/* Core Modules Section */}
         <div className="section-header">
