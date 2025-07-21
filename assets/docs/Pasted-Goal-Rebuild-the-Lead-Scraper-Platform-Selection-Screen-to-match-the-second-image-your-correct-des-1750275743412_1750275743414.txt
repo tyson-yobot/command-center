@@ -1,0 +1,115 @@
+Goal:
+Rebuild the Lead Scraper Platform Selection Screen to match the second image (your correct design), NOT the first.
+
+🛠️ DO THIS — EXACTLY
+🔹 Location:
+File: pages/Lead-Scraper/lead-scraper.tsx
+
+1️⃣ HEADER
+🔹 Icon:
+Use YoBot emoji or bot icon above title (like the 2nd screenshot).
+
+Centered, moderate size.
+
+🔹 Title:
+plaintext
+Copy
+Edit
+Enterprise Lead Intelligence Platform
+Font: text-4xl font-bold
+
+Gradient: from-white to-purple-400 or subtle text-transparent bg-clip-text
+
+🔹 Subtitle:
+plaintext
+Copy
+Edit
+Advanced multi-platform lead generation with enterprise-grade targeting and real-time intelligence.
+Font: text-lg text-blue-100 text-center mb-8
+
+Constrain max width to ~70ch
+
+2️⃣ GRID LAYOUT (2 ROWS)
+🟦 Top Row (3 columns):
+Apollo.io
+
+Apify
+
+PhantomBuster
+
+🟦 Bottom Row (3 columns):
+Real-Time Processing
+
+Enterprise Security
+
+Advanced Analytics
+
+Use:
+
+tsx
+Copy
+Edit
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mt-6">
+3️⃣ CARD STYLING (Top + Bottom)
+Use this base Tailwind block:
+tsx
+Copy
+Edit
+<div className="rounded-2xl bg-gradient-to-br from-[#111827] to-[#1F2937] p-6 shadow-lg transition-all hover:scale-105 hover:shadow-xl">
+Inside Each Card:
+Icon at top (w-10 h-10, centered)
+
+Title: text-xl font-semibold text-white mb-2
+
+Description: text-sm text-blue-200 mb-3
+
+Feature Badges (each one):
+
+tsx
+Copy
+Edit
+<span className="text-xs bg-blue-900 text-blue-200 px-3 py-1 rounded-full mr-2 mb-1 inline-block">
+  ✔ Verified Emails
+</span>
+Each badge color matches the platform:
+
+Platform	Badge Color
+Apollo.io	bg-blue-900
+Apify	bg-green-900
+PhantomBuster	bg-purple-900
+System Features	bg-slate-800
+
+4️⃣ BACKGROUND + LAYOUT WRAPPER
+Outer wrapper:
+tsx
+Copy
+Edit
+<div className="min-h-screen bg-gradient-to-b from-[#0F172A] via-[#1E293B] to-[#1E3A8A] py-12 px-4 text-white">
+Add a max-w-7xl mx-auto wrapper inside to center the grid and title content.
+
+5️⃣ MOBILE RESPONSIVENESS
+Cards should collapse to:
+
+1 column on mobile
+
+2 columns on tablet
+
+3 columns on desktop
+
+Use:
+
+tsx
+Copy
+Edit
+grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+✅ What NOT to Do:
+❌ Do NOT use solid blocks with no shadow/gradient (like in the first screenshot).
+
+❌ Do NOT use flat backgrounds with sharp corners.
+
+❌ Do NOT center-align everything vertically in a box — use card layout with hover animation.
+
+❌ Do NOT drop the emoji badges or soft glow. The original was styled for visual depth.
+
+✅ Approval Screenshot Required:
+"Once this is rebuilt, send Tyson a screenshot that looks identical to the second screenshot (dark glow card layout with platform icons and gradient header)."

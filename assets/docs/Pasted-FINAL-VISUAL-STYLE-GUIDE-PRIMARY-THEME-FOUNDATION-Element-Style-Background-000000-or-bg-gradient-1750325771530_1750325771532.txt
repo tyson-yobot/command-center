@@ -1,0 +1,84 @@
+FINAL VISUAL STYLE GUIDE
+🎯 PRIMARY THEME FOUNDATION
+Element	Style
+Background	#000000 or bg-gradient-to-b from-black via-[#0b0b0b] to-[#141414]
+Border (All Cards)	border-2 border-[#0d82da] shadow-[0_0_8px_#0d82da]
+Card Corners	rounded-xl (consistent radius)
+Card Backgrounds	bg-[#0a0a0a]/80 backdrop-blur-md
+Stat Card Glow	ring-1 ring-[#0d82da]/30 animate-pulse
+
+⚡ BUTTONS (Consistent, Powerful)
+🔹 Primary Action Button
+html
+Copy
+Edit
+bg-gradient-to-br from-[#0d82da] to-[#085ca2] text-white
+hover:from-[#1391f5] hover:to-[#0a70c2]
+shadow-[0_0_10px_#0d82da]
+🔻 Danger / Red Button
+html
+Copy
+Edit
+bg-gradient-to-br from-[#e53935] to-[#b71c1c]
+shadow-[0_0_10px_#ff4d4d]/60 text-white
+🟣 Tool Buttons (e.g. Voice Studio)
+html
+Copy
+Edit
+bg-gradient-to-br from-[#6a11cb] to-[#2575fc]
+text-white shadow-[0_0_10px_#6a11cb]/50
+💠 SILVER GRADIENT ACCENTS (Used Sparingly)
+➕ Where to Use:
+Divider bars under card headers
+
+Card titles and labels
+
+Subtle container outlines or top borders
+
+Progress bars or chart backgrounds
+
+💎 Example Style:
+css
+Copy
+Edit
+bg-gradient-to-r from-[#ffffff] via-[#c3c3c3] to-[#666666]
+text-transparent bg-clip-text
+Use this for text headers or value labels inside stat cards.
+
+🧱 CARD STRUCTURE (Every Stat Card)
+html
+Copy
+Edit
+<div class="rounded-xl border-2 border-[#0d82da] p-4 bg-black/80 shadow-[0_0_8px_#0d82da] text-white">
+  <h4 class="text-sm text-[#c3c3c3] uppercase tracking-wide">Conversion Rate</h4>
+  <div class="text-2xl font-bold">24%</div>
+  <div class="text-sm text-green-400">+5.2%</div>
+</div>
+🧠 PANEL ORDER & STYLING (Based on Your Current Build)
+🔝 Top Row
+Panel	Notes
+📊 Quick Action Launchpad	Use silver gradient label bar, blue button grid
+🗃 Voice Engine + Command Center	Stick with green for status but re-theme borders with #0d82da
+📤 Document Manager & RAG	Combine into 1 Silver-Trimmed Info Panel
+
+📈 Analytics Zones
+All analytics/stat cards need to be in:
+
+grid-cols-3
+
+Neon bordered
+
+Background black with faint blue glow
+
+Use dividers with silver gradient (horizontal w-full h-[1px] bars) to separate each cluster like:
+
+📊 Bot Performance
+
+📈 ROI / Spend
+
+🧠 Smart AI Stats
+
+❤️ Client Health
+
+🛠 System Ops
+

@@ -1,0 +1,113 @@
+ 1. Styling Tips for Manual Call Screen
+The Manual Call Start modal is clean, but a few refinements will elevate the professionalism and usability:
+
+🔹 Layout & Contrast
+Background Transparency: Add slight blur (backdrop-filter: blur(10px)) and reduce opacity to ~95%. It'll make the modal float better above your vibrant Command Center backdrop.
+
+Field Borders: Use a subtle border (1px solid rgba(255,255,255,0.1)) with rounded corners (border-radius: 6px) for each input to make them pop and look more modern.
+
+Padding: Add consistent internal padding inside each input block — right now the spacing looks tight.
+
+🔹 Typography
+Label font weight: Increase font-weight of labels slightly (font-weight: 500–600) so they don’t blend into the field background.
+
+Field font size: Slightly increase font size of input text for readability (16px ideal).
+
+🔹 Visual Hierarchy
+Section grouping: Group related fields visually:
+
+📞 Contact Info: Phone, Name, Email, Company.
+
+🗣️ Call Details: Type, Voice Profile, Priority, Script.
+
+📝 Notes: Additional Notes.
+
+Add faint dividers or vertical spacing between these groups.
+
+🔹 Call to Action (CTA)
+"Create Call" Button:
+
+Make it bolder with slight drop shadow.
+
+Optional: Animate on hover for feedback (e.g., slight scale up).
+
+🧠 2. Naming Convention for Popup Screens
+The "Manual Call Start" window and similar ones (like Lead Scraper, Submit Ticket, etc.) are best described as:
+
+✅ Modal Workflows or Overlay Panels
+Other viable naming options depending on usage:
+
+Quick Action Modals (good match for your "Quick Action Launchpad")
+
+Pop-Up Forms
+
+Task Panels (if used in process chains)
+
+Action Screens (clean generic label for non-forms)
+
+Suggested standard:
+
+Modal Naming Format = “Action · Module”
+Example: Manual Call · Voice Ops, Lead Scraper · Contact Pipeline, etc.
+
+🧪 3. Command Center Feedback (What to Fix, Add, Remove)
+🟢 What’s Working Great:
+Strong color-coding by category (Green = Ops, Orange = Analytics, Purple = Comms).
+
+Clear “System Mode” status indicators.
+
+Dashboard View toggles are smart for ops visibility.
+
+Section names like “Voice Engine,” “Audit & Integrity,” and “SmartSpend™” are clean.
+
+⚠️ Suggested Fixes & Enhancements
+1. Add Hover Tooltips for Each Block
+Each block (e.g., “Submit Ticket”, “Lead Scraper”) needs a tooltip or quick hover help that explains:
+
+“Submit Ticket → Opens an internal issue form to escalate or log a support task to tech team.”
+
+2. Combine Redundant Call to Action Buttons
+You have "Start Pipeline" twice — once in “Quick Action Launchpad” and again in “Voice Engine + Command Center.”
+✅ Recommendation: Keep one in the top section, and make the second one a status-only indicator or remove it.
+
+3. Status Panels: Too Many Zeros = Dead Feel
+Client Pulse / Ops Stats / AI Assistant Insights are all zeros.
+
+Add placeholders or mock/test values until full data is flowing.
+
+Example: “AI Accuracy: (Coming soon - training in progress)” instead of hard zero.
+
+4. RAG Panel – Separate UI for Search vs Programming
+Split this into tabs:
+
+Tab 1: Search Knowledge
+
+Tab 2: Voice Program Commands
+
+Tab 3: Upload Sources
+It feels crowded vertically. A tabbed interface will reduce scroll fatigue.
+
+5. Missing Branding Anchors
+You need:
+
+Mini logo favicon pinned in the Command Center title bar.
+
+Company name (YoBot® Inc.) and user greeting (e.g. “👋 Welcome, Tyson”) in top-right.
+
+📌 Next Step
+Do This Now:
+
+Add a new style class for modal-panel that:
+
+Adds blur, rounded corners, padding
+
+Divides sections into blocks
+
+Rename internal modal templates like:
+
+ManualCallModal
+
+LeadScraperModal
+
+TicketSubmissionModal
+So you can reuse base components in React/V
