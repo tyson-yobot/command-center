@@ -24,15 +24,18 @@
     "@types/formidable": "^3.4.5",
     "@types/helmet": "^0.0.48",
     "@types/node": "^20.9.1",
-    "@types/node-fetch": "^3.0.12",
+    "@types/node-fetch": "^3.0.3",
     "@types/react": "^18.3.23",
     "@types/uuid": "^10.0.0",
-    "@vitejs/plugin-react": "^4.6.0",
+    "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.21",
     "cross-env": "^7.0.3",
     "nodemon": "^3.1.0",
     "postcss": "^8.4.35",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "tailwindcss": "^3.4.3",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "vite": "^7.0.5"
   }
 }

@@ -20,14 +20,14 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "client/src"),          // UI source alias
-      "@server": path.resolve(__dirname, "server"),        // Backend utilities
-      "@shared": path.resolve(__dirname, "shared"),        // Shared libs / DTOs
-      "@assets": path.resolve(__dirname, "client/src/assets")
+      "@": path.resolve(__dirname, "src"),                 // UI source alias
+      "@server": path.resolve(__dirname, "../server"),     // Backend utilities
+      "@shared": path.resolve(__dirname, "../shared"),     // Shared libs / DTOs
+      "@assets": path.resolve(__dirname, "src/assets")
     }
   },
 
-  root: path.resolve(__dirname, "client"),                  // index.html lives here
+  root: path.resolve(__dirname),                           // index.html lives here
 
   server: {
     port: 5176,

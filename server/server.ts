@@ -18,6 +18,12 @@ console.log("Morgan imported successfully");
 import { createEventAdapter } from "@slack/events-api";
 console.log("Slack Events API imported successfully");
 
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 let airtableRouter: any;
 let loggerWebhookRouter: any;
 let featureRegistry: any;
@@ -72,7 +78,7 @@ async function main() {
 
     const slackSigningSecret = process.env.SLACK_SIGNING_SECRET;
     let slackEventsAdapter: any = null;
-    
+
     if (slackSigningSecret) {
       console.log("🔗 Initializing Slack Events Adapter...");
       slackEventsAdapter = createEventAdapter(slackSigningSecret);
@@ -90,13 +96,14 @@ async function main() {
     }
 
     const app = express();
-    const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
+    const PORT = process.env.PORT ? Number(process.env.PORT) : 3001;
 
     app.use(helmet());
     app.use(cors());
     app.use(express.json({ limit: "2mb" }));
     app.use(morgan("tiny"));
 
+    // API Routes
     app.get("/", (req: Request, res: Response) => {
       res.json({ message: "Advanced server is working!" });
     });
@@ -121,10 +128,8 @@ async function main() {
 
     app.use("/api/airtable", airtableRouter);
     app.use("/api/logger", loggerWebhookRouter);
-    
-    // Register pipeline dashboard routes
     pipelineDashboardRoutes(app);
-    
+
     app.use("/api/slack", (req: Request, res: Response, next: NextFunction) => {
       if (slackEventsAdapter) {
         return slackEventsAdapter.expressMiddleware()(req as any, res as any, next);
@@ -133,6 +138,16 @@ async function main() {
       }
     });
 
+    // 🔥 Serve Vite frontend (client/dist)
+    const distPath = path.join(__dirname, "../client/dist");
+    app.use(express.static(distPath));
+
+    // SPA fallback
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(distPath, "index.html"));
+    });
+
+    // 404 handler (for APIs)
     app.use((req: Request, res: Response) => {
       res.status(404).json({
         error: "Endpoint not found",
@@ -140,6 +155,7 @@ async function main() {
       });
     });
 
+    // Global error handler
     app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
       console.error("❌ Uncaught server error:", err);
       res.status(500).json({ error: err.message });
@@ -152,9 +168,10 @@ async function main() {
       console.log(`   GET  /                    - Main route`);
       console.log(`   GET  /healthz             - Health check`);
       console.log(`   GET  /api/feature-status  - Feature status`);
-      console.log(`   POST /api/airtable        - Airtable operations`);
+      console.log(`   POST /api/behavior-tuning - Bot behavior update`);
       console.log(`   POST /api/logger          - Webhook logging`);
       console.log(`   POST /api/slack           - Slack events`);
+      console.log(`   SPA  /*                   - React frontend`);
     });
   } catch (error) {
     console.error("❌ Server startup error:", error);
@@ -165,4 +182,7 @@ async function main() {
 main().catch((error) => {
   console.error("❌ Unhandled error in main:", error);
   process.exit(1);
+
+  // open(`http://localhost:${PORT}`); // Removed 'await' as it's not valid here
 });
+;
