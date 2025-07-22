@@ -11,8 +11,10 @@
 // • Drag-and-drop updates Airtable via /api/calendar/update.
 // -----------------------------------------------------------------------------
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import * as React from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
+import type { CalendarApi } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
@@ -62,7 +64,7 @@ const SmartCalendarCard: React.FC = () => {
   const [showClient, setShowClient] = useState(() => getPersist("client", true));
   const [showBot, setShowBot] = useState(() => getPersist("bot", true));
 
-  const calendarRef = useRef<FullCalendar | null>(null);
+  const calendarRef = useRef<FullCalendar>(null);
 
   // ─── Helpers ───────────────────────────────────────────────────────────────
   function getPersist(key: string, fallback: boolean) {
@@ -183,6 +185,7 @@ const SmartCalendarCard: React.FC = () => {
       </header>
 
       {/* Calendar */}
+      {/* @ts-ignore */}
       <FullCalendar
         ref={calendarRef as any}
         plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
