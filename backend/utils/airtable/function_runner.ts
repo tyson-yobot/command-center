@@ -2,7 +2,7 @@
 // server/utils/functionRunner.ts — PRODUCTION VERSION
 // Runs hooks like Slack alerts or async processing after Airtable changes
 // =========================================================================
-import { logInfo, logError } from "./logger.js";
+import { logInfo, logError } from "../logger.js";
 import { sendSlackAlert } from "./slackAlert";
 /**
  * Executes post-processing hooks based on trigger name.
