@@ -1,5 +1,20 @@
 import { COMMAND_CENTER_BASE_ID, TABLE_NAMES } from '@shared/airtableConfig';
 
+// Interface for Airtable record structure
+interface AirtableRecord {
+  createdTime?: string;
+  fields: {
+    [key: string]: any;
+    '🔧 Integration Name'?: string;
+  };
+}
+
+// Interface for function test objects
+interface FunctionTest {
+  functionName: string;
+  success: boolean;
+  record: AirtableRecord;
+}
 
 // Live data aggregator - pulls only from actual running systems
 export class LiveDashboardData {
@@ -26,7 +41,7 @@ export class LiveDashboardData {
         
         // Parse integration test records to get real automation function status
         const today = new Date().toISOString().split('T')[0];
-        const todaysRecords = records.filter(record => {
+        const todaysRecords = records.filter((record: AirtableRecord) => {
           const createdTime = record.createdTime || '';
           return createdTime.startsWith(today);
         });
@@ -42,23 +57,30 @@ export class LiveDashboardData {
         ];
 
         // Extract function names and statuses from the integration name field - only count actual functions
-        const functionTests = records.map(record => {
+        const functionTests = records.map((record: AirtableRecord) => {
           const integrationName = record.fields['🔧 Integration Name'] || '';
           const success = integrationName.includes('✅');
           const functionName = integrationName.split(' - ')[0];
           return { functionName, success, record };
-        }).filter(test => actualFunctions.includes(test.functionName));
+        }).filter((test: FunctionTest) => actualFunctions.includes(test.functionName));
 
         // Get unique functions and their latest status
-        const uniqueFunctions: any = {};
-        functionTests.forEach(test => {
-          if (!uniqueFunctions[test.functionName] || test.record.createdTime > uniqueFunctions[test.functionName].createdTime) {
+        const uniqueFunctions: { [key: string]: FunctionTest } = {};
+        functionTests.forEach((test: FunctionTest) => {
+          if (
+            !uniqueFunctions[test.functionName] ||
+            (
+              test.record.createdTime &&
+              uniqueFunctions[test.functionName]?.record?.createdTime &&
+              test.record.createdTime > uniqueFunctions[test.functionName].record.createdTime!
+            )
+          ) {
             uniqueFunctions[test.functionName] = test;
           }
         });
 
         const totalFunctions = Object.keys(uniqueFunctions).length;
-        const passedFunctions = Object.values(uniqueFunctions).filter((f: any) => f.success).length;
+        const passedFunctions = Object.values(uniqueFunctions).filter((f: FunctionTest) => f.success).length;
         const failedFunctions = totalFunctions - passedFunctions;
         const successRate = totalFunctions > 0 ? ((passedFunctions / totalFunctions) * 100).toFixed(1) : '0';
 
@@ -69,13 +91,13 @@ export class LiveDashboardData {
           successRate: `${successRate}%`,
           averageExecutionTime: null,
           topPerformers: Object.values(uniqueFunctions)
-            .filter((f: any) => f.success)
+            .filter((f: FunctionTest) => f.success)
             .slice(0, 5)
-            .map((f: any) => f.functionName),
+            .map((f: FunctionTest) => f.functionName),
           recentErrors: Object.values(uniqueFunctions)
-            .filter((f: any) => !f.success)
+            .filter((f: FunctionTest) => !f.success)
             .slice(0, 3)
-            .map((f: any) => ({ name: f.functionName, errorCount: 1, category: 'Automation' })),
+            .map((f: FunctionTest) => ({ name: f.functionName, errorCount: 1, category: 'Automation' })),
           healthChecks: {
             airtable: "healthy",
             slack: "healthy", 
@@ -86,7 +108,9 @@ export class LiveDashboardData {
       }
     } catch (error) {
       console.error('Error reading automation data from Airtable:', error);
-      console.error('Stack trace:', error.stack);
+      if (error instanceof Error) {
+        console.error('Stack trace:', error.stack);
+      }
     }
     
     // Fallback to default values if Airtable unavailable
