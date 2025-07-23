@@ -10,3 +10,8 @@ pyicloud-ipd==0.10.2       # iCloud calendar sync
 pytz==2022.7.1             # Timezone (required for pyicloud-ipd)
 
 loguru==0.7.2              # Structured logging
+
+reportlab
+docusign-esign
+google-api-python-client
+google-auth
