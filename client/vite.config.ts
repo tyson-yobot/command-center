@@ -40,7 +40,7 @@ export default defineConfig({
     proxy: {
       // Proxy API calls to Express backend during dev
       "/api": {
-        target: `http://localhost:${process.env.PORT ?? 3000}`,
+        target: "http://localhost:3001",
         changeOrigin: true,
         secure: false
       }

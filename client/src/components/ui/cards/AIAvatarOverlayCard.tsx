@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import Airtable from 'airtable';
 
 const AIAvatarOverlayCard = () => {
   const [avatarsGenerated, setAvatarsGenerated] = useState(0);
@@ -11,74 +10,38 @@ const AIAvatarOverlayCard = () => {
   const [uniqueUsers, setUniqueUsers] = useState(0);
 
   useEffect(() => {
-    // Use mock data for development - in production, fetch from backend API
     const fetchData = async () => {
       try {
-        // This should call your backend API instead of Airtable directly
-        // const response = await fetch('/api/airtable/avatar-stats');
-        // const data = await response.json();
+        const response = await fetch('/api/airtable/avatar-stats');
+        const data = await response.json();
         
-        // Mock data for now
-        setAvatarsGenerated(1247);
-        setSuccessfulOverlays(1156);
-        setFailedAttempts(91);
-        setAvgRenderTime(4.2);
-        setUniqueUsers(127);
+        if (data.success && data.metrics) {
+          setAvatarsGenerated(data.metrics.avatarsGenerated);
+          setSuccessfulOverlays(data.metrics.successfulOverlays);
+          setFailedAttempts(data.metrics.failedAttempts);
+          setAvgRenderTime(data.metrics.avgRenderTime);
+          setUniqueUsers(data.metrics.uniqueUsers);
+        } else {
+          console.warn('Avatar stats API returned no data:', data.message);
+          // Keep values at 0 if no data
+          setAvatarsGenerated(0);
+          setSuccessfulOverlays(0);
+          setFailedAttempts(0);
+          setAvgRenderTime(0);
+          setUniqueUsers(0);
+        }
       } catch (error) {
         console.error('Error fetching avatar data:', error);
-        // Fallback to mock data
-        setAvatarsGenerated(1247);
-        setSuccessfulOverlays(1156);
-        setFailedAttempts(91);
-        setAvgRenderTime(4.2);
-        setUniqueUsers(127);
+        // Fallback to 0 values on error
+        setAvatarsGenerated(0);
+        setSuccessfulOverlays(0);
+        setFailedAttempts(0);
+        setAvgRenderTime(0);
+        setUniqueUsers(0);
       }
     };
 
     fetchData();
-    return;
-
-    // Commented out the original Airtable code
-    /* const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base('appRt8V3tH4g5Z5if');
-
-    base('tblAVATARCARD991')
-      .select({})
-      .eachPage((records, fetchNextPage) => {
-        let total = 0;
-        let success = 0;
-        let fail = 0;
-        let timeSum = 0;
-        let timeCount = 0;
-        const userSet = new Set();
-
-        for (let i = 0; i < records.length; i++) {
-          const record = records[i];
-          total += 1;
-          if (record.fields['✅ Overlay Success']) success += 1;
-          if (record.fields['❌ Overlay Failed']) fail += 1;
-
-          const rawRender = record.fields['⏱️ Render Time (s)'];
-          const render =
-            typeof rawRender === 'string' || typeof rawRender === 'number'
-              ? parseFloat(String(rawRender))
-              : NaN;
-          if (!isNaN(render)) {
-            timeSum += render;
-            timeCount += 1;
-          }
-
-          const user = record.fields['👤 User ID'];
-          if (typeof user === 'string' && user.trim() !== '') userSet.add(user);
-        }
-
-        setAvatarsGenerated(total);
-        setSuccessfulOverlays(success);
-        setFailedAttempts(fail);
-        setAvgRenderTime(timeSum / (timeCount || 1));
-        setUniqueUsers(userSet.size);
-
-        fetchNextPage();
-      }); */
   }, []);
 
   return (

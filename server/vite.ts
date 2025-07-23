@@ -1,19 +1,11 @@
 import express, { Request, Response, Express } from "express";
-
-
-
-
 import fs from "fs";
 import path from "path";
 import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
-// Import vite config
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
 
 // Define vite config inline to avoid import issues
 const viteConfig = {
-  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "../client/src"),
@@ -52,9 +44,15 @@ export function log(message: string, source = "vite") {
 
 export async function setupVite(app: Express, server: Server) {
   const vite = await createViteServer({
-    ...viteConfig,
     configFile: false,
     appType: "custom",
+    mode: "development",
+    base: "/",
+    publicDir: path.resolve(__dirname, "../client/public"),
+    cacheDir: path.resolve(__dirname, "../node_modules/.vite"),
+    resolve: viteConfig.resolve,
+    root: viteConfig.root,
+    build: viteConfig.build,
     server: {
       middlewareMode: true,
       hmr: {

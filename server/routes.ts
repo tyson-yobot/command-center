@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import airtableRouter from "./modules/airtable/airtableRouter.js";
 
 const logger = {
   info: console.log,
@@ -8,6 +9,9 @@ const logger = {
 let systemMode = 'live';
 
 export function registerRoutes(app: Express): void {
+  
+  // Airtable routes
+  app.use('/api/airtable', airtableRouter);
   
   // System mode endpoints
   app.get('/api/system-mode', (req, res) => {
@@ -128,6 +132,31 @@ export function registerRoutes(app: Express): void {
     res.json({ success: true, data: [] });
   });
 
+  // System log event endpoint (for CommandCenter logging)
+  app.post('/api/system/log-event', (req, res) => {
+    const { module, trigger } = req.body;
+    logger.info(`System event logged - Module: ${module}, Trigger: ${trigger}`);
+    res.json({ 
+      success: true, 
+      message: 'Event logged successfully',
+      timestamp: new Date().toISOString()
+    });
+  });
+
+  // Content creation endpoint
+  app.post('/api/content/create', (req, res) => {
+    logger.info('Content creation triggered');
+    res.json({
+      success: true,
+      message: 'Content creation process initiated',
+      timestamp: new Date().toISOString(),
+      data: {
+        contentId: `content_${Date.now()}`,
+        status: 'processing'
+      }
+    });
+  });
+
   // Pipeline endpoints (simplified)
   app.post('/api/pipeline/start', (req, res) => {
     res.json({
@@ -149,4 +178,3 @@ export function registerRoutes(app: Express): void {
 
   logger.info("✅ Command Center routes registered successfully");
 }
-

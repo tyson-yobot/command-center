@@ -1,5 +1,5 @@
 // client/src/App.tsx
-import CommandCenter from "@/pages/Command-Center/command-center";
+import CommandCenter from "@/components/CommandCenter";
 
 export default function App() {
   return <CommandCenter />;

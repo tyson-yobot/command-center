@@ -38,7 +38,7 @@ import QuickActionCard from '@/components/ui/cards/QuickActionCard';
 import KPIAnalyticsCard from '@/components/ui/cards/KPIAnalyticsCard';
 import SmartSpendCard from '@/components/ui/cards/SmartSpendCard';
 import BotalyticsCard from '@/components/ui/cards/BotalyticsCard';
-import AIAvatarOverlay from '@/components/ui/cards/AIAvatarOverlayCard';
+import AIAvatarOverlayCard from '@/components/ui/cards/AIAvatarOverlayCard';
 import SupportChatWidget from '@/components/widgets/SupportChatWidget';
 import TopNavBar from '@/components/nav/TopNavBar';
 
@@ -199,7 +199,7 @@ export default function CommandCenter() {
       </div>
       
       <div className="fixed top-20 right-4 z-20 floating-avatar">
-        <AIAvatarOverlay />
+        <AIAvatarOverlayCard />
       </div>
       
       <div className="fixed bottom-4 right-4 z-30 floating-chat">
