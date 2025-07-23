@@ -1,6 +1,8 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
+import tsconfigPaths from 'vite-tsconfig-paths';
+import { PluginOption } from 'vite';
+
 import path from "path";
 import dotenv from "dotenv";
 
@@ -14,9 +16,10 @@ dotenv.config();
  */
 export default defineConfig({
   plugins: [
-    react(),
-    tsconfigPaths(),
-  ],
+  react(),
+  tsconfigPaths() as PluginOption,
+],
+
 
   resolve: {
     alias: {

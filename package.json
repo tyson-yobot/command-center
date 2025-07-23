@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "tsx server/server.ts",
-    "dev:server": "tsx server/server.ts",
+    "dev:server": "nodemon --watch server --ext mts --exec \"ts-node-esm server/server.mts\"",
     "dev:client": "cd client && npm run dev",
     "build": "cd client && vite build",
     "build:client": "cd client && vite build",
