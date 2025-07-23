@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-
-:root {
+@theme {
+  /* Original theme tokens */
   --background: 0 0% 3.9%;
   --foreground: 0 0% 98%;
   --card: 0 0% 3.9%;
@@ -18,11 +18,23 @@
   --muted-foreground: 0 0% 63.9%;
   --accent: 0 0% 14.9%;
   --accent-foreground: 0 0% 98%;
-  --destructive: 0 84.2% 60.2%;  --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 14
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 14%;
+
+  /* Custom “cc-” tokens */
+  --cc-bg: #000000;
+  --cc-text: #ffffff;
+  --cc-primary: #0d82da;
+  --cc-secondary: #c3c3c3;
+  --cc-card: #1a1a1a;
+  --cc-border: #333333;
+  --cc-accent: #0d82da;
+  --cc-hover: #0b6ab5;
 }
 
 @layer base {
+  /* Use your tokens in base-layer styles */
   * {
     border-color: hsl(var(--border));
   }
@@ -49,34 +61,20 @@ html, body {
   scroll-behavior: smooth;
 }
 
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
-
 ::-webkit-scrollbar-track {
   background: #1a1a1a;
 }
-
 ::-webkit-scrollbar-thumb {
   background: #0d82da;
   border-radius: 4px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: #0b6ab5;
-}
-
-/* Custom Properties */
-:root {
-  --cc-bg: #000000;
-  --cc-text: #ffffff;
-  --cc-primary: #0d82da;
-  --cc-secondary: #c3c3c3;
-  --cc-card: #1a1a1a;
-  --cc-border: #333333;
-  --cc-accent: #0d82da;
-  --cc-hover: #0b6ab5;
 }
 
 /* Global Styles */
@@ -87,7 +85,6 @@ html, body {
   box-shadow: 0 4px 20px rgba(13, 130, 218, 0.1);
   transition: all 0.3s ease;
 }
-
 .yobot-card:hover {
   border-color: #0d82da;
   box-shadow: 0 8px 32px rgba(13, 130, 218, 0.2);
@@ -105,7 +102,6 @@ html, body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-
 .yobot-button:hover {
   background: linear-gradient(135deg, #0b6ab5 0%, #094c8a 100%);
   transform: translateY(-2px);
@@ -123,13 +119,11 @@ html, body {
   width: 100%;
   margin-bottom: 12px;
 }
-
 .yobot-input:focus {
   border-color: #0d82da;
   box-shadow: 0 0 0 2px rgba(13, 130, 218, 0.1);
   outline: none;
 }
-
 .yobot-input::placeholder {
   color: #c3c3c3;
 }
@@ -138,11 +132,9 @@ html, body {
 .yobot-text-primary {
   color: #ffffff;
 }
-
 .yobot-text-secondary {
   color: #c3c3c3;
 }
-
 .yobot-text-accent {
   color: #0d82da;
 }
@@ -152,23 +144,20 @@ html, body {
   display: grid;
   gap: 24px;
 }
-
 .yobot-flex {
   display: flex;
   gap: 16px;
 }
-
 .yobot-center {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Animation Classes */
+/* Animations */
 .yobot-fade-in {
   animation: fadeIn 0.5s ease-in-out;
 }
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -183,7 +172,6 @@ html, body {
 .yobot-pulse {
   animation: pulse 2s infinite;
 }
-
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
@@ -212,12 +200,10 @@ html, body {
     transform: translateX(100%);
   }
 }
-
 .shimmer-effect {
   position: relative;
   overflow: hidden;
 }
-
 .shimmer-effect::after {
   content: '';
   position: absolute;
@@ -235,12 +221,10 @@ html, body {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  
   .yobot-button {
     padding: 10px 20px;
     font-size: 14px;
   }
-  
   .yobot-input {
     padding: 10px 14px;
     font-size: 14px;

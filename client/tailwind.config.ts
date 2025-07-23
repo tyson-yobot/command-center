@@ -1,24 +1,21 @@
-import type { Config } from "tailwindcss";
-
-const config: Config = {
-  darkMode: "class",
-  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
+export default {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-        '2xl': '1rem',
+        "2xl": "1rem",
       },
       colors: {
         // YoBot Brand Colors
         yobot: {
           blue: "#0d82da",
-          "blue-hover": "#0b6ab5", 
+          "blue-hover": "#0b6ab5",
           black: "#000000",
           white: "#ffffff",
-          gray: "#c3c3c3"
+          gray: "#c3c3c3",
         },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -72,7 +69,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        inter: ['Inter', 'sans-serif'],
+        inter: ["Inter", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {
@@ -92,8 +89,6 @@ const config: Config = {
   },
   plugins: [
     require("tailwindcss-animate"),
-    require("@tailwindcss/typography")
-  ]
+    require("@tailwindcss/typography"),
+  ],
 };
-
-export default config;

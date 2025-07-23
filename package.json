@@ -3,14 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "tsx server/server.ts",
-    "dev:server": "nodemon --watch server --ext mts --exec \"ts-node-esm server/server.mts\"",
+    "dev:server": "nodemon --watch server --ext ts,json --exec \"tsx server/server.ts\"",
     "dev:client": "cd client && npm run dev",
+    "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
+    "start": "tsx server/server.ts",
     "build": "cd client && vite build",
-    "build:client": "cd client && vite build",
-    "preview:client": "vite preview",
-    "dev": "cd client && npm run dev",
-    "dev:all": "npm run dev",
     "test": "jest",
     "prepare": "husky install",
     "check": "tsx scripts/dev-check.ts",
@@ -31,6 +28,7 @@
     "autoprefixer": "^10.4.21",
     "concurrently": "^9.2.0",
     "cross-env": "^7.0.3",
+    "husky": "^8.0.0",
     "jest": "^30.0.4",
     "nodemon": "^3.1.10",
     "postcss": "^8.5.6",
@@ -43,7 +41,6 @@
     "vite": "^7.0.5"
   },
   "dependencies": {
-    "@esbuild/linux-x64": "^0.25.8",
     "@fullcalendar/core": "^6.1.18",
     "@fullcalendar/daygrid": "^6.1.18",
     "@fullcalendar/interaction": "^6.1.18",
