@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { User } from '@/shared/schema';
+import { User } from '../shared/schema';
 
 // Role hierarchy for access control
 export const ROLES = {
@@ -90,13 +90,17 @@ export function hasPermission(user: User, permission: string): boolean {
 
 // Check if user is YoBot internal team member
 export function isYoBotTeam(user: User): boolean {
-  return [ROLES.ADMIN, ROLES.DEV, ROLES.SUPPORT].includes(user.role as UserRole);
+  const yobotRoles: UserRole[] = [ROLES.ADMIN, ROLES.DEV, ROLES.SUPPORT];
+  return yobotRoles.includes(user.role as UserRole);
 }
+
 
 // Check if user is client-side user
 export function isClientUser(user: User): boolean {
-  return [ROLES.OWNER, ROLES.MANAGER, ROLES.AGENT, ROLES.EDITOR].includes(user.role as UserRole);
+  const clientRoles: UserRole[] = [ROLES.OWNER, ROLES.MANAGER, ROLES.AGENT, ROLES.EDITOR];
+  return clientRoles.includes(user.role as UserRole);
 }
+
 
 // Middleware to require authentication
 export function requireAuth(req: AuthRequest, res: Response, next: NextFunction) {
