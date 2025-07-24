@@ -74,9 +74,7 @@ export function useAirtableData<T = Record<string, any>>(
         if (sort) params.append("sort", JSON.stringify(sort));
         if (fields) params.append("fields", JSON.stringify(fields));
 
-        const response = await axios.get(`/api/airtable/${feature}?${params.toString()}`, {
-          signal,
-        });
+        const response = await axios.get(`/api/airtable/${feature}?${params.toString()}`);
 
         const validatedResponse = apiResponseSchema.parse(response.data);
         
@@ -101,7 +99,7 @@ export function useAirtableData<T = Record<string, any>>(
     gcTime: 10 * 60 * 1000, // 10 minutes
     retry: (failureCount, error) => {
       // Don't retry on 4xx errors (client errors)
-      if (axios.isAxiosError(error) && error.response?.status && error.response.status >= 400 && error.response.status < 500) {
+      if ((error as any)?.response?.status && (error as any).response.status >= 400 && (error as any).response.status < 500) {
         return false;
       }
       return failureCount < 3;
@@ -118,9 +116,7 @@ export function useAirtableRecord<T = Record<string, any>>(
   return useQuery({
     queryKey: ["airtable", feature, "record", recordId],
     queryFn: async ({ signal }): Promise<AirtableRecord<T>> => {
-      const response = await axios.get(`/api/airtable/${feature}/${recordId}`, { 
-        signal 
-      });
+      const response = await axios.get(`/api/airtable/${feature}/${recordId}`);
       
       const validatedResponse = apiResponseSchema.parse(response.data);
       

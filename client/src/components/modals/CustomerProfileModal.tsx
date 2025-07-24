@@ -54,15 +54,15 @@ export const CustomerProfileModal = ({ isOpen, onClose }: CustomerProfileModalPr
     customer.industry.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const renderStatusBadge = (status: string) => {
-    const statusClasses = {
+  const renderStatusBadge = (status: 'Pending' | 'Configured' | 'Live') => {
+    const statusClasses: Record<'Pending' | 'Configured' | 'Live', string> = {
       'Pending': 'bg-yellow-500',
       'Configured': 'bg-blue-500',
       'Live': 'bg-green-500'
     };
     
     return (
-      <span className={`status-badge ${statusClasses[status] || 'bg-gray-500'}`}>
+      <span className={`status-badge ${statusClasses[status]}`}>
         {status}
       </span>
     );

@@ -104,7 +104,7 @@ export const FormConfiguratorModal = ({ isOpen, onClose }: FormConfiguratorModal
       setTemplates(data);
       
       // Update selected template
-      const updated = data.find(t => t.id === selectedTemplate.id);
+      const updated = data.find((t: FormTemplate) => t.id === selectedTemplate.id);
       if (updated) {
         setSelectedTemplate(updated);
       }

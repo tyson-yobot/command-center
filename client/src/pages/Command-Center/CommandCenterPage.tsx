@@ -135,7 +135,7 @@ export default function CommandCenter() {
 
   const openModal = async (modalName: string, label: string) => {
     setSelectedModal(modalName);
-    await logEvent({ module: label, trigger: 'Command Center', mode });
+    await logEvent({ module: label, trigger: 'Command Center' });
 
     switch (modalName) {
       case 'leadScraper':

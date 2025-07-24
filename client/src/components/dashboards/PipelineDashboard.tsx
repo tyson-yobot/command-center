@@ -44,7 +44,19 @@ export const PipelineDashboard = ({ activeTab }: PipelineDashboardProps) => {
     successRate: 0,
     recentCalls: []
   });
-  const [analyticsData, setAnalyticsData] = useState({
+  interface ValueDistribution {
+    segments?: { [key: string]: any };
+    totalValue?: number;
+    [key: string]: any;
+  }
+
+  interface AnalyticsData {
+    conversionRates: { [key: string]: any };
+    valueDistribution: ValueDistribution;
+    metrics: { [key: string]: any };
+  }
+
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData>({
     conversionRates: {},
     valueDistribution: {},
     metrics: {}
