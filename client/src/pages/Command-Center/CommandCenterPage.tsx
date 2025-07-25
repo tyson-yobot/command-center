@@ -39,6 +39,7 @@ export default function CommandCenter() {
 
   const buttonClass = "bg-white/20 text-white hover:bg-white/40 backdrop-blur border border-white/30 rounded-xl shadow-lg px-4 py-2";
 
+<<<<<<< HEAD
   const launchButtons = [
     <Button key="pipeline" onClick={() => setOpenModal("pipeline")} className={buttonClass}>📡 Pipeline Calls</Button>,
     <Button key="mailchimp" onClick={() => window.open("https://mailchimp.com", "_blank")} className={buttonClass}>📬 Mailchimp</Button>,
@@ -53,6 +54,11 @@ export default function CommandCenter() {
     <Button key="queue" onClick={() => setOpenModal("queue")} className={buttonClass}>📞 Live Call Queue</Button>,
     <Button key="liveTransfer" onClick={() => setOpenModal("liveTransfer")} className={buttonClass}>📲 Live Transfer</Button>
   ];
+=======
+  const openModal = async (modalName: string, label: string) => {
+    setSelectedModal(modalName);
+    await logEvent({ module: label, trigger: 'Command Center' });
+>>>>>>> 6ceca54e23ef93c85c6cc94b0ba290772fdbfea3
 
   const advancedButtons = [
     <Button key="calendar" onClick={() => setOpenModal("calendar")} className={buttonClass}>📅 Calendar Booking</Button>,

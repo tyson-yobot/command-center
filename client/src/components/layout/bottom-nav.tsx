@@ -124,7 +124,15 @@ export default function BottomNav() {
           }
 
           return (
-            <Link key={item.path || `nav-${index}`} href={item.path!}>
+            <a
+              key={item.path || `nav-${index}`}
+              href={item.path!}
+              onClick={(e) => {
+                e.preventDefault();
+                setLocation(item.path!);
+              }}
+              className="block"
+            >
               <button 
                 className={`relative flex flex-col items-center justify-center py-3 px-2 text-xs font-semibold transition-all duration-200 transform active:scale-95 active:bg-slate-800 hover:shadow-md ${
                   isActive 
@@ -148,7 +156,7 @@ export default function BottomNav() {
                   </>
                 )}
               </button>
-            </Link>
+            </a>
           );
         })}
       </div>

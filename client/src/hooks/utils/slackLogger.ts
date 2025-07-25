@@ -4,7 +4,7 @@
  * • Hardened with error handling + rate-limit notice
  */
 
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 const { SLACK_WEBHOOK_URL } = process.env;
 
@@ -23,8 +23,8 @@ export async function postSlackAlert(text: string): Promise<void> {
     );
     // eslint-disable-next-line no-console
     console.log('✅ Slack alert sent');
-  } catch (err) {
-    const ae = err as AxiosError;
+  } catch (err: any) {
+    const ae = err;
     if (ae.response?.status === 429) {
       console.warn('⚠️ Slack rate-limited; alert skipped');
       return;

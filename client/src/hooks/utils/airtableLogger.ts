@@ -7,7 +7,7 @@
  * • Throws on unrecoverable errors
  */
 
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 const { AIRTABLE_API_KEY, AIRTABLE_BASE_ID, AIRTABLE_LOG_TABLE } = process.env;
 
@@ -52,9 +52,9 @@ export async function logToAirtable(
       }
     );
 
-    return { id: data.records?.[0]?.id };
+    return { id: (data as any).records?.[0]?.id };
   } catch (err) {
-    const ae = err as AxiosError;
+    const ae = err as any;
     // Retry once on 5xx / timeout
     if (attempt === 1 && (ae.code === 'ECONNABORTED' || (ae.response?.status || 500) >= 500)) {
       return logToAirtable(fields, 2);

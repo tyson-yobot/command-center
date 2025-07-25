@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,68 +6,50 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Download, ExternalLink, Mail, Phone, MapPin, CheckCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { LEAD_ENGINE_BASE_ID } from '@shared/airtableConfig';
+=======
+/**
+ * Airtable logger — production-ready
+ * • Uses env constants only (no hard-coded IDs)
+ * • Sanitises & validates data
+ * • Deduplicates on “🧾 Dedupe Key”
+ * • Retries once on transient failures
+ * • Throws on unrecoverable errors
+ */
+>>>>>>> 6ceca54e23ef93c85c6cc94b0ba290772fdbfea3
 
-interface Lead {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  company: string;
-  jobTitle: string;
-  location: string;
-  source: string;
-  createdAt: string;
+import axios from 'axios';
+
+const { AIRTABLE_API_KEY, AIRTABLE_BASE_ID, AIRTABLE_LOG_TABLE } = process.env;
+
+if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID || !AIRTABLE_LOG_TABLE) {
+  throw new Error(
+    '❌ Missing Airtable env vars (AIRTABLE_API_KEY, AIRTABLE_BASE_ID, AIRTABLE_LOG_TABLE)'
+  );
 }
 
-interface IntelligenceResultsProps {
-  onBack: () => void;
-  onBackToOverview: () => void;
-  results?: any;
-  leadsData?: any[];
-  source?: string;
-  totalScraped?: number;
+const airtableURL = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(
+  AIRTABLE_LOG_TABLE
+)}`;
+
+interface AirtableResponse {
+  id: string;
 }
 
-export default function IntelligenceResults({ 
-  onBack, 
-  onBackToOverview, 
-  results, 
-  leadsData = [],
-  source = "APOLLO", 
-  totalScraped 
-}: IntelligenceResultsProps) {
-  const [exportLoading, setExportLoading] = useState(false);
+export async function logToAirtable(
+  fields: Record<string, unknown>,
+  attempt = 1
+): Promise<AirtableResponse> {
+  // 1 — remove undefined / null
+  const cleaned = Object.fromEntries(
+    Object.entries(fields).filter(([, v]) => v !== undefined && v !== null)
+  );
 
-  // Use real leads data - either from recent results or from Airtable
-  const leads = results?.leads || leadsData || [];
-  const actualTotal = totalScraped || results?.leadCount || results?.count || leads.length;
-  const isProduction = process.env.NODE_ENV === 'production';
-
-  // In production, don't show anything if no real data
-  if (isProduction && leads.length === 0) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
-        <div className="max-w-4xl mx-auto pt-20">
-          <div className="text-center space-y-6">
-            <h1 className="text-3xl font-bold text-white">No Leads Available</h1>
-            <p className="text-slate-300">
-              Scraper may have failed or no matching leads found. Try running a scraper again.
-            </p>
-            <div className="flex gap-4 justify-center">
-              <Button onClick={onBack} className="bg-blue-600 hover:bg-blue-700 text-white">
-                Run New Scraper
-              </Button>
-              <Button onClick={onBackToOverview} variant="outline" className="border-white/20 text-white">
-                Back to Overview
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+  // 2 — basic validation
+  if (!cleaned['🧾 Dedupe Key']) {
+    throw new Error('Missing 🧾 Dedupe Key for deduplication');
   }
 
+<<<<<<< HEAD
   const { data: airtableLeads = [], isLoading } = useQuery({
     queryKey: ['/api/leads/universal'],
     enabled: leads.length === 0, // Only fetch if we don't have results data
@@ -246,3 +229,32 @@ export default function IntelligenceResults({
     </div>
   );
 }
+=======
+  try {
+    const { data } = await axios.post(
+      airtableURL,
+      { records: [{ fields: cleaned }] },
+      {
+        headers: {
+          Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        timeout: 7_000,
+      }
+    );
+
+    return { id: (data as any).records?.[0]?.id };
+  } catch (err: any) {
+    const ae = err;
+    // Retry once on 5xx / timeout
+    if (attempt === 1 && (ae.code === 'ECONNABORTED' || (ae.response?.status || 500) >= 500)) {
+      return logToAirtable(fields, 2);
+    }
+    throw new Error(
+      `Airtable logging failed [${ae.response?.status || 'no-status'}]: ${
+        ae.response?.data || ae.message
+      }`
+    );
+  }
+}
+>>>>>>> 6ceca54e23ef93c85c6cc94b0ba290772fdbfea3

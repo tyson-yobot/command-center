@@ -27,6 +27,7 @@ interface ImportMetaEnv {
   readonly VITE_AIRTABLE_KEY: string;
   readonly VITE_AIRTABLE_VOICE_TABLE: string;
   readonly VITE_AIRTABLE_STYLE_TABLE: string;
+  // add other custom env variables here if needed
 }
 
 interface VoiceStudioModalProps {
@@ -45,11 +46,7 @@ interface UploadVoiceResponse {
   wordCount: number;
 }
 
-declare global {
-  interface ImportMeta {
-    env: ImportMetaEnv;
-  }
-}
+// No need to redeclare ImportMeta interface; Vite already provides env property.
 
 const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
   const [recording, setRecording] = useState(false);
@@ -79,6 +76,7 @@ const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
 
     const fetchStyles = async () => {
       try {
+<<<<<<< HEAD
         const res = await axios.get<any>(
           `${AIRTABLE_API_URL}/${import.meta.env.VITE_AIRTABLE_STYLE_TABLE}`,
           {
@@ -91,6 +89,10 @@ const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
           label: r.fields['🎚️ Style Label'],
           value: r.fields['🔑 Style Value'],
         }));
+=======
+        const res = await axios.get('/api/airtable/voice-styles');
+        const { styles } = res.data as { styles: { label: string; value: string }[] };
+>>>>>>> 6ceca54e23ef93c85c6cc94b0ba290772fdbfea3
         setStyleList(styles);
         if (styles.length > 0) setStyleOption(styles[0].value);
       } catch {
