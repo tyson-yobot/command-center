@@ -33,8 +33,8 @@ export default defineConfig({
   root: path.resolve(__dirname),                           // index.html lives here
 
   server: {
-    port: 5176,
-    strictPort: true,                                       // Fail if 5176 taken (CI consistency)
+    port: 5177,
+    strictPort: false,                                      // Allow fallback ports
     hmr: {
       protocol: "ws",
       host: "localhost",
