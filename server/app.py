@@ -59,6 +59,9 @@ def create_app():
     # Register blueprints
     from api.quotes.generate_quote import bp as quote_bp
     app.register_blueprint(quote_bp)
+    # Register support ticket blueprint
+    from api.support.zendesk_ticket_router import bp as zendesk_bp
+    app.register_blueprint(zendesk_bp)
     
     # Health check endpoint
     @app.route('/health')
