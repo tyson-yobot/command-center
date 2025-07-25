@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent } from '@/components/ui/card';
 
+// ✅ HARD-CODED Airtable Base ID + Table ID
+// Base ID: appRt8V3tH4g5Z5if
+// Table ID: tblXGb2iLJfGdK2UJ (💰 SmartSpend™ Log)
+
+const AIRTABLE_API_URL = 'https://api.airtable.com/v0/appRt8V3tH4g5Z5if/tblXGb2iLJfGdK2UJ';
+const AIRTABLE_API_KEY = 'Bearer AIRTABLE_API_KEY';
 
 const SmartspendCard = () => {
   const [metrics, setMetrics] = useState({
@@ -10,44 +17,52 @@ const SmartspendCard = () => {
     automationWins: 0,
     flaggedWaste: 0,
     recurringReviewItems: 0,
+    mostRecentEntry: '',
+    totalVendorsTracked: 0,
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/airtable/smart-spend-stats');
-        const data = await response.json();
-        
-        if (data.success) {
-          setMetrics({
-            totalSavings: data.metrics.totalSavings || 0,
-            avgMonthlySavings: data.metrics.avgMonthlySavings || 0,
-            automationWins: data.metrics.automationWins || 0,
-            flaggedWaste: data.metrics.flaggedWaste || 0,
-            recurringReviewItems: data.metrics.recurringReviewItems || 0
-          });
-        } else {
-          setMetrics({
-            totalSavings: 0,
-            avgMonthlySavings: 0,
-            automationWins: 0,
-            flaggedWaste: 0,
-            recurringReviewItems: 0
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching spend data:', error);
-        setMetrics({
-          totalSavings: 0,
-          avgMonthlySavings: 0,
-          automationWins: 0,
-          flaggedWaste: 0,
-          recurringReviewItems: 0
-        });
-      }
-    };
+    axios({
+      method: 'GET',
+      url: AIRTABLE_API_URL,
+      headers: {
+        Authorization: AIRTABLE_API_KEY,
+      },
+    }).then((response: any) => {
+      const records: any[] = response.data.records;
 
-    fetchData();
+      let totalSavings = 0;
+      let monthlySum = 0;
+      let automationWins = 0;
+      let flaggedWaste = 0;
+      let recurringReviewItems = 0;
+      let vendors = new Set();
+      let latestDate = '';
+
+      for (const r of records) {
+        totalSavings += parseFloat(r.fields['💰 Total Saved ($)'] || '0');
+        monthlySum += parseFloat(r.fields['📆 Monthly Savings ($)'] || '0');
+        automationWins += r.fields['✅ Automation Success'] === true ? 1 : 0;
+        flaggedWaste += r.fields['🚨 Flagged as Waste'] === true ? 1 : 0;
+        recurringReviewItems += r.fields['🔁 Recurring Review?'] === 'Yes' ? 1 : 0;
+        if (r.fields['🏢 Vendor Name']) vendors.add(r.fields['🏢 Vendor Name']);
+        if (r.fields['📅 Date Logged']) {
+          const entryDate = new Date(r.fields['📅 Date Logged']);
+          if (!latestDate || entryDate > new Date(latestDate)) latestDate = entryDate.toISOString().split('T')[0];
+        }
+      }
+
+      const total = records.length || 1;
+      setMetrics({
+        totalSavings,
+        avgMonthlySavings: +(monthlySum / total).toFixed(2),
+        automationWins,
+        flaggedWaste,
+        recurringReviewItems,
+        mostRecentEntry: latestDate,
+        totalVendorsTracked: vendors.size,
+      });
+    });
   }, []);
 
   return (
@@ -75,6 +90,12 @@ const SmartspendCard = () => {
           <div>
             <p className="text-sm">🔁 Recurring Reviews: <span className="text-[#9933ff] font-bold text-lg">{metrics.recurringReviewItems}</span></p>
             <Progress value={Math.min(metrics.recurringReviewItems, 100)} className="mt-1" />
+          </div>
+          <div>
+            <p className="text-sm">🏢 Vendors Tracked: <span className="text-[#99ccff] font-bold text-lg">{metrics.totalVendorsTracked}</span></p>
+          </div>
+          <div>
+            <p className="text-sm">🕓 Last Entry Date: <span className="text-[#cccccc] font-bold text-md">{metrics.mostRecentEntry || 'N/A'}</span></p>
           </div>
         </div>
       </CardContent>

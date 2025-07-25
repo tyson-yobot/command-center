@@ -1,31 +1,35 @@
+// ✅ apify-scraper-panel.tsx
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+const ApifyScraperPanel = () => {
+  const [apiKey, setApiKey] = useState("");
 
-interface ApifyScraperPanelProps {
-  onLaunch: (filters: any) => Promise<void>;
-  isLoading: boolean;
-}
+  const handleSave = async () => {
+    await fetch("/api/store/apify-key", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: apiKey })
+    });
+    location.reload();
+  };
 
-const ApifyScraperPanel: React.FC<ApifyScraperPanelProps> = ({ onLaunch, isLoading }) => {
   return (
-    <Card className="border-0 shadow-none bg-transparent">
-      <CardHeader>
-        <CardTitle className="text-white">Apify Business Scraper</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-sm text-white/70">
-          Launch the Apify actor to scrape business listings from various online sources like Google Maps.
-        </p>
-        <Button
-          onClick={() => onLaunch({ sourceType: 'apify' })}
-          disabled={isLoading}
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold"
-        >
-          {isLoading ? 'Scraping...' : 'Launch Apify Scraper'}
-        </Button>
-      </CardContent>    </Card>
+    <Card className="bg-gradient-to-br from-silver to-[#0d82da] border-2 border-[#0d82da] rounded-2xl shadow-xl mb-6">
+      <CardContent className="p-6 text-white">
+        <h2 className="text-xl font-bold mb-2">Apify Scraper Credentials</h2>
+        <p className="text-sm mb-4 text-[#c3c3c3]">Enter your Apify API token to connect.</p>
+        <input
+          type="text"
+          value={apiKey}
+          onChange={(e) => setApiKey(e.target.value)}
+          className="w-full p-2 rounded bg-[#1e1e1e] border border-[#0d82da] text-white placeholder:text-[#888] mb-4"
+          placeholder="Apify API Token"
+        />
+        <Button onClick={handleSave} className="bg-[#0d82da] hover:brightness-125 text-white w-full">Save & Return</Button>
+      </CardContent>
+    </Card>
   );
 };
 

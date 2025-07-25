@@ -1,0 +1,117 @@
+/* Calendar styles */
+.fc {
+  --fc-border-color: #333333;
+  --fc-daygrid-event-dot-width: 8px;
+  --fc-event-text-color: #ffffff;
+  --fc-page-bg-color: #1a1a1a;
+  --fc-neutral-bg-color: #2a2a2a;
+  --fc-neutral-text-color: #ffffff;
+  --fc-today-bg-color: rgba(13, 130, 218, 0.15);
+  --fc-highlight-color: rgba(13, 130, 218, 0.3);
+  --fc-non-business-color: rgba(0, 0, 0, 0.2);
+  --fc-now-indicator-color: #0d82da;
+}
+
+.fc .fc-button {
+  background-color: #0d82da;
+  border-color: #0d82da;
+  color: white;
+}
+
+.fc .fc-button:hover {
+  background-color: #0a6cb8;
+  border-color: #0a6cb8;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  background-color: #085a9a;
+  border-color: #085a9a;
+}
+
+.fc-theme-standard .fc-scrollgrid,
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border-color: #333333;
+}
+
+.fc-col-header-cell {
+  background-color: #2a2a2a;
+}
+
+.fc-daygrid-day-number,
+.fc-col-header-cell-cushion {
+  color: #ffffff;
+}
+
+.fc-daygrid-day.fc-day-today {
+  background-color: rgba(13, 130, 218, 0.15);
+}
+
+.fc-timegrid-now-indicator-line {
+  border-color: #0d82da;
+}
+
+.fc-timegrid-now-indicator-arrow {
+  border-color: #0d82da;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+
+.fc-list-day-cushion {
+  background-color: #2a2a2a;
+}
+
+.fc-list-event:hover td {
+  background-color: #333333;
+}
+
+.fc-list-empty {
+  background-color: #1a1a1a;
+  color: #c3c3c3;
+}
+
+.fc-event {
+  animation: fadeInUp 0.3s ease-in-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Highlight current live event */
+.fc-event.event-now {
+  box-shadow: 0 0 8px 2px #00ffccaa;
+  border: 2px solid #00ffcc;
+}
+
+.fc-event {
+  animation: fadeInUp 0.3s ease-in-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-in-out;
+}
+

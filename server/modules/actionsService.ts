@@ -9,6 +9,8 @@
 import axios from "axios";
 import { logInfo, logError } from "../utils/logger";
 
+
+
 const SLACK_WEBHOOK_URL = "https://hooks.slack.com/services/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";
 
 async function sendSlackAlert(message: string) {

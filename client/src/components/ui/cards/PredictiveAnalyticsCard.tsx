@@ -1,80 +1,95 @@
-// Predictive Analytics Card Full Implementation
+import { useEffect, useState } from 'react';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
-// ✅ Imports
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { postToSlack } from '@/utils/slack';
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const PredictiveAnalyticsCard = () => {
-  const [forecastScore, setForecastScore] = useState(0);
-  const [opportunityRate, setOpportunityRate] = useState(0);
-  const [projectedMRR, setProjectedMRR] = useState(0);
+const SLACK_WEBHOOK = 'https://hooks.slack.com/services/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';
+
+interface ForecastResponse {
+  labels: string[];
+  data: number[];
+}
+
+export default function PredictiveAnalyticsCard() {
+  const [forecast, setForecast] = useState<ForecastResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchForecast = async () => {
-      try {
-        const res = await axios.get('/api/airtable/forecast');
-        const data = res.data;
-
-        setForecastScore(data['📈 Forecast Score'] || 0);
-        setOpportunityRate(data['🔥 Lead Opportunity %'] || 0);
-        setProjectedMRR(data['💰 Projected MRR'] || 0);
-
-        // Slack alert logic
-        if (data['🔥 Lead Opportunity %'] > 70) {
-          await postToSlack(`🔥 High opportunity rate detected: ${data['🔥 Lead Opportunity %']}%`);
-        }
-      } catch (err) {
-        console.error('Forecast error:', err);
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        await postToSlack(`❗ Failed to load forecast data: ${errorMessage}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchForecast();
+    fetch('/api/predictive-forecast')
+      .then(async (res) => {
+        if (!res.ok) throw new Error(`Status: ${res.status}`);
+        const result = await res.json();
+        setForecast(result);
+      })
+      .catch((err: unknown) => {
+        const message = err instanceof Error ? err.message : 'Unknown error';
+        console.error('Predictive Analytics fetch error:', message);
+        setError(message);
+        // Slack fallback
+        fetch(SLACK_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: `🔴 Predictive Analytics fetch failed: ${message}`,
+          }),
+        });
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  const runForecast = async () => {
-    try {
-      await axios.post('/api/airtable/run-forecast');
-      await postToSlack('📊 Forecast manually triggered via Command Center.');
-    } catch (error) {
-      console.error('Trigger forecast error:', error);
-    }
+  if (loading) return <div className="p-4 text-white">Loading forecast...</div>;
+  if (error) return <div className="p-4 text-red-400">Error: {error}</div>;
+  if (!forecast) return null;
+
+  const chartData = {
+    labels: forecast.labels,
+    datasets: [
+      {
+        label: 'Revenue Forecast ($)',
+        data: forecast.data,
+        fill: true,
+        borderColor: '#0d82da',
+        backgroundColor: 'rgba(13,130,218,0.3)',
+        tension: 0.4,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: '📉 Predictive Revenue Forecast',
+        color: 'white',
+        font: {
+          size: 18,
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: 'white',
+        },
+      },
+      y: {
+        ticks: {
+          color: 'white',
+        },
+      },
+    },
   };
 
   return (
-    <div className="yobot-card border-[4px] border-blue-500 bg-[#0d0d0d] text-white rounded-2xl p-6 shadow-lg">
-      <h3 className="text-xl font-bold mb-4">📈 Predictive Analytics</h3>
-
-      {loading ? (
-        <div className="text-gray-400">Loading predictions...</div>
-      ) : (
-        <>
-          <div className="space-y-2">
-            <div className="text-lime-400 text-md font-semibold">
-              Forecast Score: <span className="text-white">{forecastScore}/100</span>
-            </div>
-            <div className="text-pink-400 text-md font-semibold">
-              Opportunity Rate: <span className="text-white">{opportunityRate}%</span>
-            </div>
-            <div className="text-yellow-300 text-md font-semibold">
-              Projected MRR: <span className="text-white">${projectedMRR}</span>
-            </div>
-          </div>
-          <button
-            onClick={runForecast}
-            className="btn-blue mt-4 px-4 py-2 rounded-lg hover:shadow-xl hover:scale-105 transition"
-          >
-            🔄 Run Forecast
-          </button>
-        </>
-      )}
+    <div className="p-6 rounded-2xl shadow-xl bg-gradient-to-br from-[#2c2c2c] to-[#1a1a1a] border-4 border-blue-500">
+      <h2 className="text-xl font-bold mb-4 text-white">🧠 Predictive Analytics</h2>
+      <Line data={chartData} options={options} />
     </div>
   );
-};
-
-export default PredictiveAnalyticsCard;
+}

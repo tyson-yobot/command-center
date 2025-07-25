@@ -1,58 +1,70 @@
-// ✅ FINAL PRODUCTION FILE — LeadScraperModal.tsx
-// 🔒 100% Automation | No placeholders | Fully wired to Flask backend
+// ✅ LeadScraperModal.tsx — YoBot® Command Center | FULL AUTOMATION | No Parameters | No Props | No Stubs
 
-import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/dialog';
-import { Card, CardContent } from '@/components/card';
-import { Button } from '@/components/button';
+import React, { useEffect, useState } from "react"
+import axios from "axios"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { CheckCircle, AlertTriangle, Loader2 } from "lucide-react"
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+const LeadScraperModal = () => {
+  const [open, setOpen] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [count, setCount] = useState(0)
 
-export const LeadScraperModal = ({ isOpen, onClose }: ModalProps) => {
-  const [loading, setLoading] = useState(false);
-
-  const handleScrapeLeads = async () => {
-    setLoading(true);
+  const triggerLeadScraper = async () => {
+    setStatus('loading')
     try {
-      const response = await fetch('/api/run-lead-scraper', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ include_email: true, include_phone: true })
-      });
-
-      const data = await response.json();
-      if (data.status === 'success') {
-        console.log('🔍 Lead scraping complete:', data.result);
+      const res = await axios.post('/lead-scraper/run')
+      if (res.data?.status === 'success') {
+        setCount(res.data.inserted || 0)
+        setStatus('success')
       } else {
-        console.error('❌ Lead scraping failed:', data.message);
+        setStatus('error')
       }
-    } catch (error) {
-      console.error('🚨 Server error:', error);
-    } finally {
-      setLoading(false);
-      onClose();
+    } catch {
+      setStatus('error')
     }
-  };
+  }
+
+  useEffect(() => {
+    if (status !== 'idle') {
+      const timeout = setTimeout(() => setStatus('idle'), 6000)
+      return () => clearTimeout(timeout)
+    }
+  }, [status])
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>🔍 Run Lead Scraper</DialogTitle>
-        </DialogHeader>
-        <Card>
-          <CardContent className="space-y-4 p-4">
-            <p className="text-sm text-gray-300">Launches the YoBot lead scraping engine using Apollo, PhantomBuster, and Apify profiles with required contact fields.</p>
-            <Button onClick={handleScrapeLeads} disabled={loading} className="w-full">
-              {loading ? 'Scraping...' : 'Start Lead Scraper'}
+    <>
+      <Button onClick={() => setOpen(true)} className="bg-[#0d82da] hover:bg-blue-600 text-white">
+        🔍 Run Lead Scraper
+      </Button>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="bg-gradient-to-br from-zinc-900 to-black border-2 border-blue-500 text-white rounded-2xl shadow-xl w-full max-w-md p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold">🔍 Lead Scraper</h2>
+            <Button onClick={triggerLeadScraper} disabled={status === 'loading'} className="bg-[#0d82da] hover:bg-blue-600">
+              {status === 'loading' ? (
+                <span className="flex items-center"><Loader2 className="h-4 w-4 animate-spin mr-2" /> Running...</span>
+              ) : 'Run Now'}
             </Button>
-          </CardContent>
-        </Card>
-      </DialogContent>
-    </Dialog>
-  );
-};
-export default LeadScraperModal;
+          </div>
+
+          {status === 'success' && (
+            <div className="text-green-400 flex items-center">
+              <CheckCircle className="h-5 w-5 mr-2" /> {count} leads successfully pushed to Airtable.
+            </div>
+          )}
+
+          {status === 'error' && (
+            <div className="text-red-500 flex items-center">
+              <AlertTriangle className="h-5 w-5 mr-2" /> Scraper failed. Check Slack log.
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}
+
+export default LeadScraperModal

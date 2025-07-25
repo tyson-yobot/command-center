@@ -1,29 +1,33 @@
+// ✅ apollo-scraper-panel.tsx
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+const ApolloScraperPanel = () => {
+  const [apiKey, setApiKey] = useState("");
 
-interface ApolloScraperPanelProps {
-  onLaunch: (filters: any) => Promise<void>;
-  isLoading: boolean;
-}
+  const handleSave = async () => {
+    await fetch("/api/store/apollo-key", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: apiKey })
+    });
+    location.reload();
+  };
 
-const ApolloScraperPanel: React.FC<ApolloScraperPanelProps> = ({ onLaunch, isLoading }) => {
   return (
-    <Card className="border-0 shadow-none bg-transparent">
-      <CardHeader>
-        <CardTitle className="text-white">Apollo Professional Scraper</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-sm text-white/70">          Target professionals on Apollo.io by title, company, location, and more to get verified emails and phone numbers.
-        </p>
-        <Button
-          onClick={() => onLaunch({ sourceType: 'apollo' })}
-          disabled={isLoading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold"
-        >
-          {isLoading ? 'Scraping...' : 'Launch Apollo Scraper'}
-        </Button>
+    <Card className="bg-gradient-to-br from-[#0d82da] to-silver border-2 border-[#0d82da] rounded-2xl shadow-xl mb-6">
+      <CardContent className="p-6 text-white">
+        <h2 className="text-xl font-bold mb-2">Apollo Scraper Credentials</h2>
+        <p className="text-sm mb-4 text-[#c3c3c3]">Store your Apollo API key to enable lead scraping.</p>
+        <input
+          type="text"
+          value={apiKey}
+          onChange={(e) => setApiKey(e.target.value)}
+          className="w-full p-2 rounded bg-[#1e1e1e] border border-[#0d82da] text-white placeholder:text-[#888] mb-4"
+          placeholder="Apollo API Key"
+        />
+        <Button onClick={handleSave} className="bg-[#0d82da] hover:brightness-125 text-white w-full">Save & Return</Button>
       </CardContent>
     </Card>
   );

@@ -3,16 +3,16 @@
 
 import { useState } from 'react';
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/dialog';
-import { Card, CardContent } from '@/components/card';
-import { Button } from '@/components/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const AdminPanelModal = ({ isOpen, onClose }: ModalProps) => {
+const AdminPanelModal = ({ isOpen, onClose }: ModalProps) => {
   const [loading, setLoading] = useState(false);
 
   const handleUpdateBot = async () => {
@@ -56,4 +56,4 @@ export const AdminPanelModal = ({ isOpen, onClose }: ModalProps) => {
     </Dialog>
   );
 };
-export default AdminPanelModal;
+export { AdminPanelModal };

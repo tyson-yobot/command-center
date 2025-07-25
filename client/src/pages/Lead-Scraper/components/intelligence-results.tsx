@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Download, ExternalLink, Mail, Phone, MapPin, CheckCircle } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { LEAD_ENGINE_BASE_ID } from '@shared/airtableConfig';
 
 interface Lead {
   id: number;
@@ -64,24 +67,11 @@ export default function IntelligenceResults({
     );
   }
 
-  const [airtableLeads, setAirtableLeads] = useState<Lead[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (leads.length === 0) {
-      setIsLoading(true);
-      fetch('/api/leads/recent')
-        .then(res => res.json())
-        .then(data => {
-          setAirtableLeads(data.leads || []);
-          setIsLoading(false);
-        })
-        .catch(() => {
-          setAirtableLeads([]);
-          setIsLoading(false);
-        });
-    }
-  }, [leads.length]);
+  const { data: airtableLeads = [], isLoading } = useQuery({
+    queryKey: ['/api/leads/universal'],
+    enabled: leads.length === 0, // Only fetch if we don't have results data
+    select: (data: Lead[]) => data.slice(0, 5) // Show first 5 leads as preview
+  });
 
   const displayLeads = leads.length > 0 ? leads.slice(0, 5) : airtableLeads;
 
@@ -106,7 +96,7 @@ export default function IntelligenceResults({
   };
 
   const handleViewInAirtable = () => {
-    window.open(`https://airtable.com/app1234567890/tblXXXXXXXXXXXXXX/viwXXXXXXXXXXXXXX`, '_blank');
+    window.open(`https://airtable.com/${LEAD_ENGINE_BASE_ID}/tblXXXXXXXXXXXXXX/viwXXXXXXXXXXXXXX`, '_blank');
   };
 
   return (

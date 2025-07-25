@@ -1,16 +1,14 @@
 // client/src/main.tsx
+import React from "react";
 import ReactDOM from "react-dom/client";
 import { StrictMode } from "react";
-import App from "./App";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import CommandCenter from "./modules/command-center/CommandCenter";
+import "./index.css"; // or "./global.css" if you're using that instead
 
-const queryClient = new QueryClient();
 const root = document.getElementById("root") as HTMLElement;
 
 ReactDOM.createRoot(root).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
+    <CommandCenter />
   </StrictMode>
 );

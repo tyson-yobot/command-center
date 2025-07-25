@@ -1,30 +1,35 @@
+// ✅ phantombuster-scraper-panel.tsx
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+const PhantomBusterScraperPanel = () => {
+  const [apiKey, setApiKey] = useState("");
 
-interface PhantomBusterScraperPanelProps {
-  onLaunch: (filters: any) => Promise<void>;
-  isLoading: boolean;
-}
+  const handleSave = async () => {
+    await fetch("/api/store/phantombuster-key", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: apiKey })
+    });
+    location.reload();
+  };
 
-const PhantomBusterScraperPanel: React.FC<PhantomBusterScraperPanelProps> = ({ onLaunch, isLoading }) => {  return (
-    <Card className="border-0 shadow-none bg-transparent">
-      <CardHeader>
-        <CardTitle className="text-white">PhantomBuster Social Scraper</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-sm text-white/70">
-          Automate social media scraping from platforms like LinkedIn to extract profiles and company information.
-        </p>
-        <Button
-          onClick={() => onLaunch({ sourceType: 'phantombuster' })}
-          disabled={isLoading}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold"
-        >
-          {isLoading ? 'Scraping...' : 'Launch PhantomBuster Scraper'}
-        </Button>
-      </CardContent>    </Card>
+  return (
+    <Card className="bg-gradient-to-br from-[#222] to-[#0d82da] border-2 border-[#0d82da] rounded-2xl shadow-xl mb-6">
+      <CardContent className="p-6 text-white">
+        <h2 className="text-xl font-bold mb-2">PhantomBuster Scraper Credentials</h2>
+        <p className="text-sm mb-4 text-[#c3c3c3]">Paste your PhantomBuster API key to enable scraping.</p>
+        <input
+          type="text"
+          value={apiKey}
+          onChange={(e) => setApiKey(e.target.value)}
+          className="w-full p-2 rounded bg-[#1e1e1e] border border-[#0d82da] text-white placeholder:text-[#888] mb-4"
+          placeholder="PhantomBuster API Key"
+        />
+        <Button onClick={handleSave} className="bg-[#0d82da] hover:brightness-125 text-white w-full">Save & Return</Button>
+      </CardContent>
+    </Card>
   );
 };
 

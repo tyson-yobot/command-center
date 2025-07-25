@@ -79,8 +79,18 @@ const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
 
     const fetchStyles = async () => {
       try {
-        const res = await axios.get('/api/airtable/voice-styles');
-        const styles = res.data.styles;
+        const res = await axios.get<any>(
+          `${AIRTABLE_API_URL}/${import.meta.env.VITE_AIRTABLE_STYLE_TABLE}`,
+          {
+            headers: {
+              Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_KEY}`,
+            },
+          }
+        );
+        const styles = res.data.records.map((r: any) => ({
+          label: r.fields['🎚️ Style Label'],
+          value: r.fields['🔑 Style Value'],
+        }));
         setStyleList(styles);
         if (styles.length > 0) setStyleOption(styles[0].value);
       } catch {
@@ -129,13 +139,30 @@ const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
     setConfidence(confidence);
     setWordCount(wordCount);
 
-    // TODO: Route this through backend API instead of direct Airtable calls
-    // await axios.post('/api/airtable/voice-logs', {
-    //   transcript, label, timestamp, wordCount, confidence, voiceOption, styleOption
-    // });
-    
-    // Temporarily disabled to prevent 401 errors
-    console.log('Voice data logged:', { transcript, label, timestamp, wordCount, confidence, voiceOption, styleOption });
+    await axios.post(
+      `${AIRTABLE_API_URL}/${import.meta.env.VITE_AIRTABLE_VOICE_TABLE}`,
+      {
+        records: [
+          {
+            fields: {
+              '📝 Transcript': transcript,
+              '🏷️ Label': label,
+              '📆 Timestamp': timestamp,
+              '🔢 Word Count': wordCount,
+              '🎯 Confidence': confidence,
+              '🎙️ Voice': voiceOption,
+              '🎚️ Style': styleOption,
+            },
+          },
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     toast.success('✅ Uploaded + Logged');
   };
 
@@ -156,15 +183,26 @@ const VoiceStudioModal: React.FC<VoiceStudioModalProps> = ({ onClose }) => {
   };
 
   const savePreset = async () => {
-    // TODO: Route this through backend API instead of direct Airtable calls
-    // await axios.post('/api/airtable/voice-presets', {
-    //   voice: voiceOption,
-    //   style: styleOption,
-    //   presetName: 'Default Preset'
-    // });
-    
-    // Temporarily disabled to prevent 401 errors
-    console.log('Preset saved:', { voiceOption, styleOption, presetName: 'Default Preset' });
+    await axios.post(
+      `${AIRTABLE_API_URL}/${import.meta.env.VITE_AIRTABLE_VOICE_TABLE}`,
+      {
+        records: [
+          {
+            fields: {
+              '🎙️ Voice': voiceOption,
+              '🎚️ Style': styleOption,
+              'Preset Name': 'Default Preset',
+            },
+          },
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     toast.success('🎛️ Preset saved');
   };
 

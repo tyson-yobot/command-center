@@ -1,399 +1,159 @@
-import { useEffect, useState } from 'react';
-import '@/styles/CommandCenter.css';
-import '@/styles/NeonTheme.css';
-import '@/styles/StyledComponents.css';
+// CommandCenter.tsx
+// Final Production UI - YoBot® Command Center
 
-// ✅ Modal Imports
-import { LeadScraperModal } from '@/components/modals/LeadScraperModal';
-import VoiceStudioModal from '@/components/modals/VoiceStudioModal';
-import { CalendarModal } from '@/components/modals/CalendarModal';
-import { SmartQuotingModal } from '@/components/modals/SmartQuotingModal';
-import { ContentCreatorModal } from '@/components/modals/ContentCreatorModal';
-import SubmitTicketModal from '@/components/modals/SubmitTicketModal';
-import { ExportModal } from '@/components/modals/ExportModal';
-import { HubspotModal } from '@/components/modals/HubspotModal';
-import { AdminPanelModal } from '@/components/modals/AdminPanelModal';
-import AdminLoginModal from '@/components/modals/AdminLoginModal';
-import { DiagnosticsModal } from '@/components/modals/DiagnosticsModal';
-import { EmergencyModal } from '@/components/modals/EmergencyModal';
-import { SalesOrderModal } from '@/components/modals/SalesOrderModal';
-import { CopilotModal } from '@/components/modals/CopilotModal';
-import { PDFUploadModal } from '@/components/modals/PdfUploadModal';
-import { CallQueueModal } from '@/components/modals/CallQueueModal';
-import { AirtableSyncModal } from '@/components/modals/AirtableSyncModal';
-import { LoggerTrackerModal } from '@/components/modals/LoggerTrackerModal';
-import { MetricsPanelModal } from '@/components/modals/MetricsPanelModal';
-import { BehaviorTuningModal } from '@/components/modals/BehaviorTuningModal';
-import { RAGModal } from '@/components/modals/RagModal';
-import { RAGInsightsModal } from '@/components/modals/RAGInsightsModal';
-import { RevenueChartsModal } from '@/components/modals/RevenueChartsModal';
-import { SlackMonitorModal } from '@/components/modals/SlackMonitorModal';
-import { AdminSettingsModal } from '@/components/modals/AdminSettingsModal';
-import { SmartSchedulerModal } from '@/components/modals/SmartSchedulerModal';
-import { AuditLogModal } from '@/components/modals/AuditLogModal';
-import { PipelineDashboardModal } from '@/components/modals/PipelineDashboardModal';
+import { useState } from "react";
 
-// ✅ UI Components
-import QuickActionCard from '@/components/ui/cards/QuickActionCard';
-import KPIAnalyticsCard from '@/components/ui/cards/KPIAnalyticsCard';
-import SmartSpendCard from '@/components/ui/cards/SmartSpendCard';
-import BotalyticsCard from '@/components/ui/cards/BotalyticsCard';
-import AIAvatarOverlay from '@/components/ui/cards/AIAvatarOverlayCard';
-import SupportChatWidget from '@/components/widgets/SupportChatWidget';
-import TopNavBar from '@/components/nav/TopNavBar';
+import { Card, CardContent } from "@/components/ui/card";
+import { Button }            from "@/components/ui/button";
 
-import {
-  fetchLeadsFromApollo,
-  openVoiceStudio,
-  getUpcomingCalendarEvents,
-  generateQuotePDF,
-  runContentCreation,
-  submitSupportTicket,
-  syncHubSpotContacts,
-  exportAllData,
-  syncCalendarToAirtable,
-  createVoiceStudioRecord,
-  submitQuoteToAirtable,
-  submitContentPost,
-  submitTicketToAirtable,
-  syncContactsToCRM,
-  pushExportToDrive,
-  logEvent,
-  toggleFeature,
-  submitPdfUploadToAirtable,
-  submitRagQueryToAirtable,
-  syncRagArticles,
-  runSystemDiagnostics,
-  triggerEmergencyProtocol,
-  submitSalesOrderToQBO,
-  syncQuickBooksInvoices,
-  postToMailchimp,
-  openMailchimpPage,
-  openHubSpotPage,
-  triggerSocialPoster
-} from '@/utils/function_library';
+import yobotLogo             from "@/assets/Engage Smarter Logo Transparent.png";
 
-const neonColors = ['#FFFF33', '#39FF14', '#FF6EC7', '#DA70D6', '#FFA500'];
+import AIAvatarOverlayCard   from "@/components/cards/AIAvatarOverlayCard";
+import SmartCalendarCard     from "@/components/cards/SmartCalendarCard";
+import VoiceStudioCard       from "@/components/cards/VoiceStudioCard";
+import RAGKnowledgeCard      from "@/components/cards/RAGKnowledgeCard";
+import CallsCompletedCard    from "@/components/cards/CallsCompletedCard";
+import MissedCallLogCard     from "@/components/cards/MissedCallLogCard";
+import CallSentimentLogCard  from "@/components/cards/CallSentimentLogCard";
+import VoicePerformanceCard  from "@/components/cards/VoicePerformanceCard";
+import MonthlyRevenueCard    from "@/components/cards/MonthlyRevenueCard";
+import SmartSpendCard        from "@/components/cards/SmartSpendCard";
+import PredictiveAnalyticsCard from "@/components/cards/PredictiveAnalyticsCard";
+import CRMHealthCheckCard    from "@/components/cards/CRMHealthCheckCard";
+import BotalyticsCard        from "@/components/cards/BotalyticsCard";
 
-const kpiGroups = [
-  {
-    title: '📟 Bot Operations',
-    kpis: ['🎙️ Avg. Call Duration', '🔁 Retry Rate', '❌ Call Failures', '🧠 NLP Accuracy', '🤖 Bot Uptime']
-  },
-  {
-    title: '⚙️ Automation Health',
-    kpis: ['⚠️ Error Rate', '🔁 Scenario Repeats', '🔍 Logs Reviewed', '📦 Modules Triggered', '⏱️ Avg. Flow Runtime']
-  },
-  {
-    title: '🧰 Support Performance',
-    kpis: ['🕒 Avg. Resolution Time', '🎫 Tickets Received', '✅ Tickets Closed', '💬 Client NPS', '👀 Escalations']
-  },
-  {
-    title: '🔐 Security & Compliance',
-    kpis: ['🔐 Data Integrity Score', '🧾 Compliance Tasks Done', '🔍 Logger Tamper Rate', '🚨 Last Breach Flag', '✅ Checklist Pass %']
-  },
-  {
-    title: '📦 Client Lifecycle',
-    kpis: ['📥 New Clients This Month', '🧾 Completed Onboardings', '🗓️ Avg. Days to Launch', '🔄 Renewals Closed', '📉 Inactive Accounts']
-  },
-  {
-    title: '📊 Core KPIs',
-    kpis: ['💰 Cost Per Lead', '🚀 ROI', '🎯 Close Rate', '📈 Learning Rate']
-  },
-  {
-    title: '📡 Smart Metrics',
-    kpis: ['🧠 SmartSpend™', '📊 Botalytics™', '📞 Calls Completed', '😄 Sentiment Score']
-  },
-  {
-    title: '📈 Sales Ops',
-    kpis: ['🔁 Trial Conversion Rate', '💬 AI Suggestions Used', '📦 Top Package', '📤 Email CTR']
-  },
-  {
-    title: '🧲 Funnel & Automation',
-    kpis: ['🧲 Lead Source ROI', '⏳ First Response Time', '🕹️ Automation Success', '🕵️‍♂️ Flagged Logs']
-  },
-  {
-    title: '📋 Task & Revenue',
-    kpis: ['🎯 Tasks Completed', '⏱️ Open Tasks', '🧾 Quotes Generated', '💳 Payments Collected']
-  },
-  {
-    title: '📉 Retention',
-    kpis: ['📉 Churn Risk']
-  }
-];
+import PipelineCallsModal    from "@/components/modals/PipelineCallsModal";
+import ManualDialerModal     from "@/components/modals/ManualDialerModal";
+import SubmitTicketModal     from "@/components/modals/SubmitTicketModal";
+import ContentCreatorModal   from "@/components/modals/ContentCreatorModal";
+import SalesOrderModal       from "@/components/modals/SalesOrderModal";
+import SmartQuotingModal     from "@/components/modals/SmartQuotingModal";
+import SmartSchedulerModal   from "@/components/modals/SmartSchedulerModal";
+import SlackMonitorModal     from "@/components/modals/SlackMonitorModal";
+
+import GenerateSocialContent from "@/backend/generate_social_content";
 
 export default function CommandCenter() {
-  const [selectedModal, setSelectedModal] = useState<string | null>(null);
-  const [showAdvancedTools, setShowAdvancedTools] = useState(false);
-  const [liveMode, setLiveMode] = useState(true);
-  
-  console.log('Current selectedModal:', selectedModal);
+  const [openModal, setOpenModal] = useState<string>("");
+  const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
 
-  const userEmail = liveMode ? 'tyson@yobot.bot' : 'daniel@yobot.bot';
-  const leadId = liveMode ? 'recD9aF6vqpUOCnA4' : 'recDbWmthkHtNZkld';
-  const mode = liveMode ? 'LIVE' : 'TEST';
+  const buttonClass = "bg-white/20 text-white hover:bg-white/40 backdrop-blur border border-white/30 rounded-xl shadow-lg px-4 py-2";
 
-  const openModal = async (modalName: string, label: string) => {
-    setSelectedModal(modalName);
-    await logEvent({ module: label, trigger: 'Command Center', mode });
+  const launchButtons = [
+    <Button key="pipeline" onClick={() => setOpenModal("pipeline")} className={buttonClass}>📡 Pipeline Calls</Button>,
+    <Button key="mailchimp" onClick={() => window.open("https://mailchimp.com", "_blank")} className={buttonClass}>📬 Mailchimp</Button>,
+    <Button key="hubspot" onClick={() => window.open("https://hubspot.com", "_blank")} className={buttonClass}>🧩 HubSpot</Button>,
+    <Button key="aiAgent" onClick={() => setOpenModal("aiAgent")} className={buttonClass}>🤖 AI Support Agent</Button>,
+    <Button key="manualCall" onClick={() => setOpenModal("manualCall")} className={buttonClass}>📞 Manual Call</Button>,
+    <Button key="reportGen" onClick={() => setOpenModal("reportGen")} className={buttonClass}>📄 Generate Report</Button>,
+    <Button key="salesOrder" onClick={() => setOpenModal("salesOrder")} className={buttonClass}>💼 Sales Order</Button>,
+    <Button key="contentCreator" onClick={() => setOpenModal("contentCreator")} className={buttonClass}>📈 Content Creator</Button>,
+    <Button key="submitTicket" onClick={() => setOpenModal("submitTicket")} className={buttonClass}>🎟 Submit Ticket</Button>,
+    <Button key="leads" onClick={() => setOpenModal("leads")} className={buttonClass}>🌟 Lead Scraper</Button>,
+    <Button key="queue" onClick={() => setOpenModal("queue")} className={buttonClass}>📞 Live Call Queue</Button>,
+    <Button key="liveTransfer" onClick={() => setOpenModal("liveTransfer")} className={buttonClass}>📲 Live Transfer</Button>
+  ];
 
-    switch (modalName) {
-      case 'leadScraper':
-        await fetchLeadsFromApollo(userEmail);
-        break;
-      case 'voiceStudio':
-        await openVoiceStudio();
-        await createVoiceStudioRecord(userEmail, mode);
-        break;
-      case 'calendar':
-        await getUpcomingCalendarEvents(userEmail);
-        await syncCalendarToAirtable(userEmail, mode);
-        break;
-      case 'quoting':
-        await generateQuotePDF(leadId);
-        await submitQuoteToAirtable(leadId, mode);
-        break;
-      case 'contentCreator':
-        await runContentCreation();
-        await submitContentPost(userEmail, mode);
-        break;
-      case 'ticket':
-        await submitSupportTicket({ email: userEmail, message: `Submitted from ${mode} Command Center` });
-        await submitTicketToAirtable(userEmail, mode);
-        break;
-      case 'hubspot':
-        await syncHubSpotContacts();
-        await syncContactsToCRM();
-        await openHubSpotPage();
-        break;
-      case 'mailchimp':
-        await postToMailchimp(userEmail);
-        await openMailchimpPage();
-        break;
-      case 'export':
-        await exportAllData();
-        await pushExportToDrive(mode);
-        break;
-      case 'admin':
-        await toggleFeature('maintenance_mode', true);
-        break;
-      case 'pdf':
-        await submitPdfUploadToAirtable(userEmail, mode);
-        break;
-      case 'rag':
-        await submitRagQueryToAirtable();
-        await syncRagArticles();
-        break;
-      case 'diagnostics':
-        await runSystemDiagnostics();
-        break;
-      case 'emergency':
-        await triggerEmergencyProtocol();
-        break;
-      case 'salesOrder':
-        await submitSalesOrderToQBO(userEmail, mode);
-        await syncQuickBooksInvoices(userEmail);
-        break;
-      case 'socialPoster':
-        await triggerSocialPoster(userEmail);
-        break;
-      case 'adminSettings':
-        break;
-      case 'airtableSync':
-        break;
-      case 'behaviorTuning':
-        break;
-      case 'callQueue':
-        break;
-      case 'copilot':
-        break;
-      case 'loggerTracker':
-        break;
-      case 'metricsPanel':
-        break;
-      case 'ragInsights':
-        break;
-      case 'revenueCharts':
-        break;
-      case 'slackMonitor':
-        break;
-      case 'smartScheduler':
-        break;
-      case 'auditLog':
-        break;
-      case 'slackTest':
-        break;
-      case 'adminLogin':
-        break;
-      case 'pipelineDashboard':
-        break;
-    }
-  }
+  const advancedButtons = [
+    <Button key="calendar" onClick={() => setOpenModal("calendar")} className={buttonClass}>📅 Calendar Booking</Button>,
+    <Button key="quoting" onClick={() => setOpenModal("quoting")} className={buttonClass}>📄 Quote Generator</Button>,
+    <Button key="abTest" onClick={() => setOpenModal("abTest")} className={buttonClass}>🧪 A/B Testing Engine</Button>,
+    <Button key="slackAlerts" onClick={() => setOpenModal("slackAlerts")} className={buttonClass}>💬 Slack Alerts</Button>,
+    <Button key="persona" onClick={() => setOpenModal("persona")} className={buttonClass}>🎭 Persona Designer</Button>,
+    <Button key="generator" onClick={() => setOpenModal("generator")} className={buttonClass}>🧬 Content Generator</Button>,
+    <Button key="analyzer" onClick={() => setOpenModal("analyzer")} className={buttonClass}>🧠 Conversation Analyzer</Button>,
+    <Button key="admin" onClick={() => setOpenModal("admin")} className={buttonClass}>🔒 Admin Control</Button>,
+    <Button key="radar" onClick={() => setOpenModal("radar")} className={buttonClass}>📡 Competitor Tracker</Button>,
+    <Button key="integration" onClick={() => setOpenModal("integration")} className={buttonClass}>🔌 Data Integrations</Button>,
+    <Button key="journey" onClick={() => setOpenModal("journey")} className={buttonClass}>🧭 Journey Automation</Button>,
+    <Button key="whiteLabel" onClick={() => setOpenModal("whiteLabel")} className={buttonClass}>🏷️ White Label Manager</Button>,
+    <Button key="sync" onClick={() => setOpenModal("sync")} className={buttonClass}>📶 Airtable Sync</Button>,
+    <Button key="booster" onClick={() => setOpenModal("booster")} className={buttonClass}>🤖 ChatGPT Booster</Button>,
+    <Button key="smartspend" onClick={() => setOpenModal("smartspend")} className={buttonClass}>💰 SmartSpend™</Button>,
+    <Button key="botalytics" onClick={() => setOpenModal("botalytics")} className={buttonClass}>📊 Botalytics™</Button>,
+    <Button key="quickbooks" onClick={() => setOpenModal("quickbooks")} className={buttonClass}>🧾 QuickBooks Sync</Button>,
+    <Button key="sentiment" onClick={() => setOpenModal("sentiment")} className={buttonClass}>🎤 Sentiment Logger</Button>
+  ];
 
-  const closeModal = () => setSelectedModal(null);
-
-  useEffect(() => {
-    document.title = 'YoBot® Command Center';
-    setSelectedModal(null);
-  }, []);
+  const modalComponents: Record<string, JSX.Element> = {
+    pipeline: <PipelineCallsModal isOpen={openModal === "pipeline"} onClose={() => setOpenModal("")} tableId="tblYcNm6ywiAP1RzW" baseId="appRt8V3tH4g5Z5if" />,
+    contentCreator: <ContentCreatorModal isOpen={openModal === "contentCreator"} onClose={() => setOpenModal("")} />,
+    submitTicket: <SubmitTicketModal isOpen={openModal === "submitTicket"} onClose={() => setOpenModal("")} />,
+    manualCall: <ManualDialerModal isOpen={openModal === "manualCall"} onClose={() => setOpenModal("")} />,
+    quoting: <SmartQuotingModal isOpen={openModal === "quoting"} onClose={() => setOpenModal("")} />,
+    smartScheduler: <SmartSchedulerModal isOpen={openModal === "smartScheduler"} onClose={() => setOpenModal("")} />,
+    slackAlerts: <SlackMonitorModal isOpen={openModal === "slackAlerts"} onClose={() => setOpenModal("")} />,
+    salesOrder: <SalesOrderModal isOpen={openModal === "salesOrder"} onClose={() => setOpenModal("")} />
+  };
 
   return (
-    <div className="command-center-container">
-      <div className="fixed top-0 left-0 right-0 z-10 bg-black/90 backdrop-blur-sm border-b border-[#0d82da]/30">
-        <TopNavBar />
-      </div>
-      
-      <div className="fixed top-20 right-4 z-20 floating-avatar">
-        <AIAvatarOverlay />
-      </div>
-      
-      <div className="fixed bottom-4 right-4 z-30 floating-chat">
-        <SupportChatWidget />
-      </div>
-
-      <div className="pt-16">
-        <h1 className="dashboard-title neon-text">🤖 YoBot® Command Center</h1>
-
-        <div className="mode-toggle">
-          <label>
-            <input type="checkbox" checked={liveMode} onChange={() => setLiveMode(!liveMode)} />
-            {liveMode ? 'LIVE MODE' : 'TEST MODE'}
-          </label>
+    <div className="bg-black text-white min-h-screen p-4">
+      <div className="flex items-center justify-between bg-gradient-to-r from-white to-gray-300 rounded-xl p-3 mb-6">
+        <div className="flex items-center gap-4">
+          <img src={yobotLogo} alt="YoBot Logo" className="h-12" />
+          <div className="text-black text-xl font-bold">YoBot® Command Center</div>
         </div>
+        <div className="text-black text-sm italic">Engage Smarter, Not Harder</div>
+      </div>
 
-        <div className="quick-actions-grid">
-          <QuickActionCard label="📞 Start Pipeline" onClick={() => openModal('pipelineDashboard', '📞 Start Pipeline')} />
-          <QuickActionCard label="💬 Manual Call" onClick={() => {}} />
-          <QuickActionCard label="🔍 Lead Scraper" onClick={() => openModal('leadScraper', '🔍 Lead Scraper')} />
-          <QuickActionCard label="🧾 Sales Order" onClick={() => openModal('salesOrder', '🧾 Sales Order')} />
-          <QuickActionCard label="🎨 Content Creator" onClick={() => openModal('contentCreator', '🎨 Content Creator')} />
-          <QuickActionCard label="📆 SmartCalendar" onClick={() => openModal('calendar', '📆 SmartCalendar')} />        <QuickActionCard label="🎫 Submit Ticket" onClick={() => openModal('ticket', '🎫 Submit Ticket')} />
-          <QuickActionCard label="🤖 Smart Quoting" onClick={() => openModal('quoting', '🤖 Smart Quoting')} />
-          <QuickActionCard label="📊 Generate Report" onClick={() => openModal('export', '📊 Generate Report')} />
-          <QuickActionCard label={showAdvancedTools ? '🧰 Hide Tools' : '🧰 Advanced Tools'} onClick={() => setShowAdvancedTools(!showAdvancedTools)} />
-        </div>      {showAdvancedTools && (
-          <div className="advanced-tools-drawer">
-            <QuickActionCard label="📎 PDF Upload" onClick={() => openModal('pdf', '📎 PDF Upload')} />
-            <QuickActionCard label="📚 Knowledge" onClick={() => openModal('rag', '📚 Knowledge')} />
-            <QuickActionCard label="❤️‍🔥 Diagnostics" onClick={() => openModal('diagnostics', '❤️‍🔥 Diagnostics')} />
-            <QuickActionCard label="🚨 Emergency" onClick={() => openModal('emergency', '🚨 Emergency')} />
-            <QuickActionCard label="🎙️ Voice Studio" onClick={() => openModal('voiceStudio', '🎙️ Voice Studio')} />
-            <QuickActionCard label="📬 Mailchimp" onClick={() => openModal('mailchimp', '📬 Mailchimp')} />
-            <QuickActionCard label="🔗 HubSpot" onClick={() => openModal('hubspot', '🔗 HubSpot')} />
-            <QuickActionCard label="📣 Social Poster" onClick={() => openModal('socialPoster', '📣 Social Poster')} />
-            <QuickActionCard label="🧠 Copilot Assistant" onClick={() => openModal('copilot', '🧠 Copilot Assistant')} />
-            <QuickActionCard label="📞 Live Call Queue" onClick={() => openModal('callQueue', '📞 Live Call Queue')} />
-            <QuickActionCard label="📤 Airtable Sync Log" onClick={() => openModal('airtableSync', '📤 Airtable Sync Log')} />
-            <QuickActionCard label="🧾 Logger Tracker" onClick={() => openModal('loggerTracker', '🧾 Logger Tracker')} />
-            <QuickActionCard label="📍 Metrics Panel" onClick={() => openModal('metricsPanel', '📍 Metrics Panel')} />
-            <QuickActionCard label="🎯 Bot Behavior Tuning" onClick={() => openModal('behaviorTuning', '🎯 Bot Behavior Tuning')} />          
-            <QuickActionCard label="🗣️ Voice Studio" onClick={() => openModal('voiceStudio', '🗣️ Voice Studio')} />
-            <QuickActionCard label="🔎 RAG Article Insights" onClick={() => openModal('ragInsights', '🔎 RAG Article Insights')} />
-            <QuickActionCard label="📈 Live Revenue Charts" onClick={() => openModal('revenueCharts', '📈 Live Revenue Charts')} />
-            <QuickActionCard label="💬 Slack Monitor" onClick={() => openModal('slackMonitor', '💬 Slack Monitor')} />
-            <QuickActionCard label="🛠️ Admin Control Panel" onClick={() => openModal('adminPanel', '🛠️ Admin Control Panel')} />
-
-          </div>
-        )}
-
-        <div className="module-stack">
-        </div>
-
-        <div className="analytics-dashboard-wrapper">
-          <h2 className="analytics-heading">Analytics Dashboard</h2>
-          <div className="analytics-dashboard">
-              <div className="analytics-row">
-              <SmartSpendCard />
-              <BotalyticsCard />
-              </div>
-
-              {kpiGroups.map((group, idx) => (
-              <div key={idx} className="kpi-group">
-                  <h3 className="kpi-title neon-text">{group.title}</h3>
-                  <div className="kpi-row">
-                  {group.kpis.map((label, i) => (
-                      <KPIAnalyticsCard
-                      key={i}                    label={label}
-                      airtableField={label}
-                      color={neonColors[Math.floor(Math.random() * neonColors.length)]}
-                      showMeter={true}
-                      meterThresholds={{ green: 75, yellow: 50, red: 25 }}
-                      />
-                  ))}
-                  </div>
-              </div>
-              ))}
-          </div>
+      <Card className="bg-gradient-to-br from-gray-200 to-gray-400 border-4 border-blue-500 rounded-2xl shadow-xl mb-4">
+        <CardContent className="p-4">
+          <h2 className="text-xl font-bold text-center text-black mb-2 border-b-4 border-blue-500 pb-1">
+            🚀 YoBot® Quick Action Launchpad
+          </h2>
+          <div className="grid grid-cols-4 gap-3">
+            {launchButtons}
           </div>
 
-          <div className="kpi-group">
-              <h3 className="kpi-title neon-text">📈 Predictive Analytics</h3>
-              <div className="kpi-row">
-              <KPIAnalyticsCard
-                  label="📅 Revenue Forecast"
-                  airtableField="📅 Revenue Forecast"
-                  color="#FF6EC7"
-                  showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
-              />
-              <KPIAnalyticsCard
-                  label="📉 Projected Churn"
-                  airtableField="📉 Projected Churn"
-                  color="#DA70D6"
-                  showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
-              />
-              <KPIAnalyticsCard
-                  label="📈 Growth Trajectory"
-                  airtableField="📈 Growth Trajectory"
-                  color="#39FF14"
-                  showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
-              />
-              <KPIAnalyticsCard
-                  label="🧠 Behavior Forecast"
-                  airtableField="🧠 Behavior Forecast"
-                  color="#FFFF33"
-                  showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
-              />
-              <KPIAnalyticsCard
-                  label="🧲 AI Deal Prediction"
-                  airtableField="🧲 AI Deal Prediction"
-                  color="#0d82da"
-                  showMeter={true} meterThresholds={{ green: 75, yellow: 50, red: 25 }}
-              />
-              </div>
+          <div className="text-center mt-4">
+            <Button
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              className="text-white border border-white/40 bg-black/20 hover:bg-black/40 rounded-full px-6 py-2"
+            >
+              {showAdvanced ? "🔽 Hide Advanced Tools" : "🔼 Show Advanced Tools"}
+            </Button>
           </div>
-      
-        {/* ✅ INTEGRATION: Render all modals, including the new one */}
-        {selectedModal === 'pipelineDashboard' && <PipelineDashboardModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'leadScraper' && <LeadScraperModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'voiceStudio' && <VoiceStudioModal onClose={closeModal} />}
-        {selectedModal === 'calendar' && <CalendarModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'quoting' && <SmartQuotingModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'contentCreator' && <ContentCreatorModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'ticket' && <SubmitTicketModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'hubspot' && <HubspotModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'export' && <ExportModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'admin' && <AdminPanelModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'pdf' && <PDFUploadModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'rag' && <RAGModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'diagnostics' && <DiagnosticsModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'emergency' && <EmergencyModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'salesOrder' && <SalesOrderModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'scheduler' && <SmartSchedulerModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'copilot' && <CopilotModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'callQueue' && <CallQueueModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'airtableSync' && <AirtableSyncModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'loggerTracker' && <LoggerTrackerModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'ragInsights' && <RAGInsightsModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'revenueCharts' && <RevenueChartsModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'slackMonitor' && <SlackMonitorModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'adminSettings' && <AdminSettingsModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'metricsPanel' && <MetricsPanelModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'behaviorTuning' && <BehaviorTuningModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'smartCalendar' && <CalendarModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'slackTest' && <DiagnosticsModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'adminPanel' && <AdminPanelModal isOpen={true} onClose={closeModal} />}
-        {selectedModal === 'auditLog' && <AuditLogModal isOpen={true} onClose={closeModal} />}
-        
+
+          {showAdvanced && (
+            <div className="mt-6 grid grid-cols-4 gap-3 border-t border-white/20 pt-4">
+              {advancedButtons}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {openModal && modalComponents[openModal]}
+
+      <div id="smart-calendar" className="mb-6">
+        <SmartCalendarCard />
+      </div>
+
+      <div id="voice-studio" className="mb-6">
+        <VoiceStudioCard />
+      </div>
+
+      <div id="rag-knowledge" className="mb-6">
+        <RAGKnowledgeCard />
+      </div>
+
+      <h2 className="text-center text-xl font-bold text-white mt-10 mb-4 border-b-2 border-blue-600 pb-1">
+        📊 Analytics Dashboard
+      </h2>
+
+      <div className="grid grid-cols-4 gap-4 mb-20">
+        <CallsCompletedCard />
+        <MissedCallLogCard />
+        <CallSentimentLogCard />
+        <VoicePerformanceCard />
+        <MonthlyRevenueCard />
+        <SmartSpendCard />
+        <PredictiveAnalyticsCard />
+        <CRMHealthCheckCard />
+        <BotalyticsCard />
+      </div>
+
+      <div id="ai-support-agent" className="fixed bottom-6 right-6 z-50">
+        <AIAvatarOverlayCard />
       </div>
     </div>
   );

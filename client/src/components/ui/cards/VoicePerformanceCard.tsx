@@ -1,55 +1,8 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import { AlertCircle } from 'lucide-react';
-
-// Simple ProgressBar component
-const ProgressBar = ({ id, value, max, label }: { id: string; value: number; max: number; label: string }) => (
-  <div className="w-full">
-    <div className="flex justify-between text-sm mb-1">
-      <span>{label}</span>
-      <span>{value}/{max}</span>
-    </div>
-    <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-      <div 
-        className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" 
-        style={{ width: `${Math.min((value / max) * 100, 100)}%` }}
-      ></div>
-    </div>
-  </div>
-);
-
-// Simple CircleMeter component
-const CircleMeter = ({ id, percent, label }: { id: string; percent: number; label: string }) => (
-  <div className="flex items-center gap-3">
-    <div className="relative w-16 h-16">
-      <svg className="w-16 h-16 transform -rotate-90" viewBox="0 0 36 36">
-        <path
-          className="text-gray-300"
-          d="M18 2.0845
-            a 15.9155 15.9155 0 0 1 0 31.831
-            a 15.9155 15.9155 0 0 1 0 -31.831"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        />
-        <path
-          className="text-blue-600"
-          d="M18 2.0845
-            a 15.9155 15.9155 0 0 1 0 31.831
-            a 15.9155 15.9155 0 0 1 0 -31.831"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeDasharray={`${percent}, 100`}
-        />
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-xs font-semibold">{percent}%</span>
-      </div>
-    </div>
-    <span className="text-sm">{label}</span>
-  </div>
-);
+import { ProgressBar } from '@/components/ui/ProgressBar';
+import { CircleMeter } from '@/components/ui/CircleMeter';
+import { AlertCircle } from 'phosphor-react';
 
 export default function VoicePerformanceCard() {
   useEffect(() => {

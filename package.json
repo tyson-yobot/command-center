@@ -38,7 +38,8 @@
     "ts-unused-exports": "^11.0.1",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
-    "vite": "^7.0.5"
+    "vite": "^7.0.5",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.18",
@@ -64,6 +65,7 @@
     "drizzle-zod": "^0.8.2",
     "express": "^4.21.2",
     "formidable": "^3.5.4",
+    "framer-motion": "^12.23.7",
     "googleapis": "^152.0.0",
     "helmet": "^8.1.0",
     "lucide-react": "^0.525.0",
@@ -94,7 +96,6 @@
     "twilio": "^5.7.0",
     "uuid": "^11.1.0",
     "vaul": "^1.1.2",
-    "vite-tsconfig-paths": "^5.1.4",
     "wouter": "^3.3.5",
     "ws": "^8.18.2",
     "zod": "^3.24.2",

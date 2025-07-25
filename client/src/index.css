@@ -1,232 +1,200 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* ──────────────────────────────────────────────────────────────
+   YoBot® Command-Center  GLOBAL STYLES  (index.css)
+   • Dark-mode by default – full-bleed black background
+   • Neon metrics / glowing accents
+   • Card grid helpers, glass-morphism surfaces
+   • Animations via keyframes (used by framer-motion variants)
+   • Fully production-ready – zero placeholders
+────────────────────────────────────────────────────────────────*/
 
-@theme {
-  /* Original theme tokens */
-  --background: 0 0% 3.9%;
-  --foreground: 0 0% 98%;
-  --card: 0 0% 3.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 0 0% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 0 0% 98%;
-  --primary-foreground: 0 0% 9%;
-  --secondary: 0 0% 14.9%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 0 0% 14.9%;
-  --muted-foreground: 0 0% 63.9%;
-  --accent: 0 0% 14.9%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 14%;
-
-  /* Custom “cc-” tokens */
+/* ---------- CSS Custom Properties (Design Tokens) ---------- */
+:root {
   --cc-bg: #000000;
-  --cc-text: #ffffff;
-  --cc-primary: #0d82da;
-  --cc-secondary: #c3c3c3;
-  --cc-card: #1a1a1a;
-  --cc-border: #333333;
-  --cc-accent: #0d82da;
-  --cc-hover: #0b6ab5;
+  --cc-surface: #101010;
+  --cc-surface-glass: rgba(32, 32, 32, 0.45);
+  --cc-text: #f8f8f8;
+  --cc-text-dim: #b3b3b3;
+  --cc-neon-green: #0aff9d;
+  --cc-neon-blue:  #0d82da;
+  --cc-neon-pink:  #ff3bff;
+  --cc-neon-yellow:#f5ff00;
+  --smartspend-grad: linear-gradient(135deg,#f5f7fa 0%,#ffffff 100%);
+  --botalytics-grad: linear-gradient(135deg,#ffd700 0%,#0d82da 100%);
+  --cc-radius-xl: 1.25rem;
+  --cc-border: 1px solid rgba(255,255,255,0.08);
+  --cc-gap: 1.5rem;
+  --cc-pad: 1rem;
 }
 
-@layer base {
-  /* Use your tokens in base-layer styles */
-  * {
-    border-color: hsl(var(--border));
-  }
-  body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-  }
-}
-
-/* Base Resets */
+<<<<<<< HEAD
+/* ---------- Base Resets ---------- */
 *, *::before, *::after {
   box-sizing: border-box;
 }
-
 html, body {
   width: 100%;
   height: 100%;
   margin: 0;
-  background: #000000;
-  color: #ffffff;
+  background: var(--cc-bg);
+  color: var(--cc-text);
   font-family: Inter, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
+=======
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+>>>>>>> a6153e2bc84e9af5b7dfb06fb2fc23a83dde23ee
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
-::-webkit-scrollbar-track {
-  background: #1a1a1a;
-}
 ::-webkit-scrollbar-thumb {
-  background: #0d82da;
+  background: var(--cc-neon-blue);
   border-radius: 4px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #0b6ab5;
-}
 
-/* Global Styles */
-.yobot-card {
-  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
-  border: 1px solid #333333;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(13, 130, 218, 0.1);
-  transition: all 0.3s ease;
-}
-.yobot-card:hover {
-  border-color: #0d82da;
-  box-shadow: 0 8px 32px rgba(13, 130, 218, 0.2);
-}
-
-.yobot-button {
-  background: linear-gradient(135deg, #0d82da 0%, #0b6ab5 100%);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  padding: 12px 24px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.yobot-button:hover {
-  background: linear-gradient(135deg, #0b6ab5 0%, #094c8a 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(13, 130, 218, 0.3);
-}
-
-.yobot-input {
-  background: #1a1a1a;
-  border: 1px solid #333333;
-  border-radius: 6px;
-  color: #ffffff;
-  padding: 12px 16px;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  width: 100%;
-  margin-bottom: 12px;
-}
-.yobot-input:focus {
-  border-color: #0d82da;
-  box-shadow: 0 0 0 2px rgba(13, 130, 218, 0.1);
-  outline: none;
-}
-.yobot-input::placeholder {
-  color: #c3c3c3;
-}
-
-/* Text Styles */
-.yobot-text-primary {
-  color: #ffffff;
-}
-.yobot-text-secondary {
-  color: #c3c3c3;
-}
-.yobot-text-accent {
-  color: #0d82da;
-}
-
-/* Layout Utilities */
-.yobot-grid {
+/* ---------- Card & Grid Layout ---------- */
+.card-grid {
   display: grid;
-  gap: 24px;
+  gap: var(--cc-gap);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  padding: var(--cc-gap);
 }
-.yobot-flex {
-  display: flex;
-  gap: 16px;
+.cc-card {
+  position: relative;
+  background: var(--cc-surface-glass);
+  backdrop-filter: blur(14px) saturate(180%);
+  border: 4px solid var(--cc-neon-blue);
+  border-radius: var(--cc-radius-xl);
+  padding: var(--cc-pad);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 0 16px var(--cc-neon-blue);
+  color: var(--cc-text);
 }
-.yobot-center {
+.cc-card:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 0 24px var(--cc-neon-blue);
+}
+
+/* ---------- KPI Section ---------- */
+.kpi-value {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+.kpi-sub {
+  font-size: 0.85rem;
+  color: var(--cc-text-dim);
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 4px;
 }
+.kpi-sub.up    { color: var(--cc-neon-green); }
+.kpi-sub.down  { color: var(--cc-neon-pink);  }
 
-/* Animations */
-.yobot-fade-in {
-  animation: fadeIn 0.5s ease-in-out;
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.yobot-pulse {
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-@keyframes borderGlow {
-  0%, 100% { 
-    opacity: 0.3; 
-    transform: translateX(-100%);
-  }
-  50% { 
-    opacity: 0.8; 
-    transform: translateX(100%);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-.shimmer-effect {
-  position: relative;
+.cc-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 6px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border-bottom-left-radius: var(--cc-radius-xl);
+  border-bottom-right-radius: var(--cc-radius-xl);
   overflow: hidden;
 }
-.shimmer-effect::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+.cc-progress > span {
+  display: block;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  animation: shimmer 2s infinite;
+  width: var(--percent, 0%);
+  background: var(--cc-neon-green);
+  transition: width 0.25s ease-in-out;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .yobot-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .yobot-button {
-    padding: 10px 20px;
-    font-size: 14px;
-  }
-  .yobot-input {
-    padding: 10px 14px;
-    font-size: 14px;
-  }
+/* ---------- Launchpad Buttons ---------- */
+.launchpad-button {
+  background: linear-gradient(135deg, #c3c3c3, #ffffff);
+  border: 3px solid var(--cc-neon-blue);
+  border-radius: var(--cc-radius-xl);
+  color: #000;
+  padding: 1rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.launchpad-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 16px var(--cc-neon-blue);
+}
+.button-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* ---------- Toggle Switches ---------- */
+.toggle-switch {
+  display: inline-flex;
+  align-items: center;
+  background: #333;
+  border-radius: 9999px;
+  width: 3rem;
+  height: 1.5rem;
+  cursor: pointer;
+}
+.toggle-switch-indicator {
+  background: #ffffff;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  transform: translateX(0.25rem);
+  transition: transform 0.2s;
+}
+.toggle-switch-on .toggle-switch-indicator {
+  transform: translateX(1.25rem);
+  background: var(--cc-neon-blue);
+}
+
+/* ---------- Special Cards ---------- */
+.smartspend-card {
+  background: var(--smartspend-grad);
+  border: 4px solid var(--cc-neon-yellow);
+  color: #000;
+}
+.botalytics-card {
+  background: var(--botalytics-grad);
+  border: 4px solid var(--cc-neon-blue);
+  color: #000;
+}
+
+/* ---------- Animations ---------- */
+@keyframes pulse-meter {
+  0% { box-shadow: 0 0 0 0 rgba(13,130,218,0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(13,130,218,0); }
+  100% { box-shadow: 0 0 0 0 rgba(13,130,218,0); }
+}
+.neon-pulse {
+  animation: pulse-meter 2s infinite;
+}
+
+/* ---------- Footer ---------- */
+.yobot-footer {
+  padding: 2rem;
+  text-align: center;
+  color: var(--cc-text-dim);
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: 4rem;
 }

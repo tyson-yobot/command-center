@@ -23,10 +23,12 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src"),                 // UI source alias
-      "@server": path.resolve(__dirname, "../server"),     // Backend utilities
-      "@shared": path.resolve(__dirname, "../shared"),     // Shared libs / DTOs
-      "@assets": path.resolve(__dirname, "src/assets")
+      "@": path.resolve(__dirname, "src"),                       // point @ to client/src
+      "@components": path.resolve(__dirname, "src/components"), // Components folder under src
+      "@assets": path.resolve(__dirname, "src/assets"),         // Assets folder under src
+      "@backend": path.resolve(__dirname, "src/backend"),       // Backend utils under src
+      "@server": path.resolve(__dirname, "../server"),          // Express backend
+      "@shared": path.resolve(__dirname, "../shared")           // Shared libs / DTOs
     }
   },
 

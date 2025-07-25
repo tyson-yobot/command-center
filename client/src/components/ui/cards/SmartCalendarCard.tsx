@@ -1,337 +1,336 @@
-// src/ui/cards/SmartCalendarCard.tsx
-// YoBot® Command Center – Smart Calendar – Production-Ready
-// -----------------------------------------------------------------------------
-// • Zero optional parameters – all constants locked.
-// • Uses design-system utility classes (.yobot-card, .btn-blue, charcoal bg,
-//   electric-blue borders) – NO ad-hoc Tailwind.
-// • Live data source:     GET /api/calendar/events (Flask backend).
-// • Auto-refresh every 60 s + manual 🔄 button (Slack-logged in backend).
-// • Category toggles: Tyson / Dan / Client / Bot – persisted in localStorage.
-// • Color mapping: electric-blue, silver, neon-green, violet.
-// • Drag-and-drop updates Airtable via /api/calendar/update.
-// -----------------------------------------------------------------------------
+import React, { useEffect, useRef, useState, type ChangeEvent } from "react";
+import FullCalendar from "@fullcalendar/react";
+import interactionPlugin, { type DateSelectArg, type EventClickArg as FCEventClickArg, type EventDropArg } from "@fullcalendar/interaction";
+// @ts-ignore: no type declarations for '@fullcalendar/rrule'
+import rrulePlugin from "@fullcalendar/rrule";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import listPlugin from "@fullcalendar/list";
+// @ts-ignore: no type declarations for 'react-modal'
+import Modal from "react-modal";
+import axios from "axios";
+import dayjs from "dayjs";
+import "../../../styles/calendar.css";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { logEvent } from "@utils/eventLogger";
-import { CalendarService } from "@/services/CalendarService";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { useToast } from "@/hooks/useToast";
+const BASE_ID = "appRt8V3tH4g5Z5if";
+const TABLE_ID = "tblhxA9YOTf4ynJi2";
+const CALENDAR_ENDPOINT = `/api/airtable/${BASE_ID}/${TABLE_ID}/list`;
+const CREATE_ENDPOINT = `/api/airtable/${BASE_ID}/${TABLE_ID}/create`;
+const UPDATE_ENDPOINT = `/api/airtable/${BASE_ID}/${TABLE_ID}/update`;
+const DELETE_ENDPOINT = `/api/airtable/${BASE_ID}/${TABLE_ID}/delete`;
+const UPLOAD_ENDPOINT = `/api/calendar/upload`;
+const SUGGEST_ENDPOINT = `/api/calendar/suggest`;
+const EXPORT_ENDPOINT = `/api/calendar/export`;
+const SYNC_GOOGLE_ENDPOINT = `/api/calendar/sync/google`;
+const AUTO_REFRESH_MS = 60_000;
+const OWNER_OPTIONS = ["Tyson", "Dan", "Client", "Bot"];
+const ADMIN_ROLE = "Admin";
 
-// ──────────────────────────────────────────────────────────────────────────────
-// 🔐  Locked constants – no optional params
-// -----------------------------------------------------------------------------
-// API endpoints
-const calendarService = new CalendarService();
-const AUTO_REFRESH_MS = 60_000; // 60 s
-
-// Owner categories (must match Airtable "Owner" field exactly)
-const OWNER_TYSON = "Tyson";
-const OWNER_DAN = "Dan";
-
-// Color palette matches YoBot® brand spec (#0d82da electric blue, silver, neon)
-const COLOR_ELECTRIC_BLUE = "#0d82da"; // Tyson
-const COLOR_SILVER = "#c3c3c3";       // Dan
-const COLOR_NEON_GREEN = "#22c55e";    // Client events
-const COLOR_VIOLET = "#8b5cf6";        // Bot events
-
-// -----------------------------------------------------------------------------
-interface CalendarEvent {
-  id?: string;
+type CalendarEvent = {
+  id: string;
   title: string;
-  start_time: string; // ISO from backend
-  end_time: string;
-  source: string; // Owner in Airtable (Tyson / Dan / Bot / …)
-}
+  start: string | Date;
+  end: string | Date;
+  extendedProps?: {
+    owner?: string;
+  };
+};
 
-interface ProcessedEvent extends CalendarEvent {
-  start: Date;
-  end: Date;
-  color: string;
-}
+type EventClickArg = {
+  event: CalendarEvent;
+};
+
+type DateSelectArg = {
+  startStr: string;
+  endStr: string;
+};
+
+type EventDropArg = {
+  event: {
+    id: string;
+    start: Date;
+    end: Date;
+  };
+};
+
+type FileEvent = React.ChangeEvent<HTMLInputElement>;
 
 const SmartCalendarCard = () => {
-  // ─── Filters (persisted) ────────────────────────────────────────────────────
-  const [showTyson, setShowTyson] = useState(() => getPersist("tyson", true));
-  const [showDan, setShowDan] = useState(() => getPersist("dan", true));
-  const [showClient, setShowClient] = useState(() => getPersist("client", true));
-  const [showBot, setShowBot] = useState(() => getPersist("bot", true));
+  const calendarRef = useRef<FullCalendar>(null);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const [newEvent, setNewEvent] = useState({ title: "", owner: OWNER_OPTIONS[0], start: "", end: "" });
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [conflictWarning, setConflictWarning] = useState("");
+  const [isRecurring, setIsRecurring] = useState(false);
+  const [userRole, setUserRole] = useState("");
+  const [minTime, setMinTime] = useState("");
+  const [maxTime, setMaxTime] = useState("");
+  const [secondsLeft, setSecondsLeft] = useState(AUTO_REFRESH_MS / 1000);
 
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [viewMode, setViewMode] = useState<'month' | 'week' | 'day'>('week');
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSecondsLeft((prev) => (prev <= 1 ? AUTO_REFRESH_MS / 1000 : prev - 1));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
-  // ─── Helpers ───────────────────────────────────────────────────────────────
-  function getPersist(key: string, fallback: boolean) {
-    try {
-      const raw = localStorage.getItem(`yobot-cal-filter-${key}`);
-      return raw === null ? fallback : raw === "true";
-    } catch {
-      return fallback;
-    }
-  }
-  function setPersist(key: string, val: boolean) {
-    try {
-      localStorage.setItem(`yobot-cal-filter-${key}`, String(val));
-    } catch {/* quota */}
-  }
-
-  const toggle = (who: "tyson" | "dan" | "client" | "bot") => {
-    switch (who) {
-      case "tyson":
-        setShowTyson(v => { setPersist("tyson", !v); return !v; });
-        break;
-      case "dan":
-        setShowDan(v => { setPersist("dan", !v); return !v; });
-        break;
-      case "client":
-        setShowClient(v => { setPersist("client", !v); return !v; });
-        break;
-      case "bot":
-        setShowBot(v => { setPersist("bot", !v); return !v; });
-        break;
-    }
+  const fetchEvents = async () => {
+    const res = await axios.get(CALENDAR_ENDPOINT);
+    setEvents(res.data);
   };
 
-  // ─── Pull events ───────────────────────────────────────────────────────────
-  const [events, setEvents] = useState<ProcessedEvent[]>([]);
+  const createEvent = async () => {
+    if (!newEvent.title || !newEvent.owner || !newEvent.start || !newEvent.end) return;
 
-  const { showToast } = useToast();
+    const conflict = events.find(
+      (evt) =>
+        dayjs(evt.start).isBefore(newEvent.end) &&
+        dayjs(evt.end).isAfter(newEvent.start) &&
+        evt.extendedProps?.owner === newEvent.owner
+    );
 
-  const fetchEvents = useCallback(async () => {
-    try {
-      const json = await calendarService.getEvents();
-      const mapped = json.map(evt => ({
-        ...evt,
-        start: new Date(evt.start_time),
-        end: new Date(evt.end_time),
-        color: pickColor(evt.source),
-      }));
-      setEvents(mapped);
-      logEvent('calendar', 'refresh', 'success');
-    } catch (err) {
-      console.error("Calendar fetch failed", err);
-      showToast('Error loading calendar events', 'error');
-      logEvent('calendar', 'refresh', 'error');
+    if (conflict) {
+      setConflictWarning("⛔ Conflict detected with another event");
+      return;
     }
-  }, [showToast]);
+
+    const payload = {
+      title: newEvent.title,
+      start: newEvent.start,
+      end: newEvent.end,
+      extendedProps: { owner: newEvent.owner },
+      rrule: isRecurring ? {
+        freq: "weekly",
+        interval: 1,
+        byweekday: ["mo"],
+        dtstart: newEvent.start,
+      } : null,
+    };
+
+    const res = await axios.post(CREATE_ENDPOINT, payload);
+    setEvents((prev) => [...prev, res.data]);
+    setModalIsOpen(false);
+    setNewEvent({ title: "", owner: OWNER_OPTIONS[0], start: "", end: "" });
+    setConflictWarning("");
+  };
+
+  const handleDateSelect = (info: DateSelectArg) => {
+    setNewEvent((prev) => ({ ...prev, start: info.startStr, end: info.endStr }));
+    setModalIsOpen(true);
+  };
+
+  const handleEventClick = (info: EventClickArg) => {
+    setSelectedEvent(info.event);
+    setEditModalIsOpen(true);
+  };
+
+  const updateEvent = async () => {
+    const payload = {
+      id: selectedEvent.id,
+      title: selectedEvent.title,
+      start: selectedEvent.start,
+      end: selectedEvent.end
+    };
+    await axios.post(UPDATE_ENDPOINT, payload);
+    setEditModalIsOpen(false);
+    fetchEvents();
+  };
+
+  const deleteEvent = async () => {
+    await axios.post(DELETE_ENDPOINT, { id: selectedEvent.id });
+    setEditModalIsOpen(false);
+    fetchEvents();
+  };
+
+  const onEventDrop = async (info: EventDropArg) => {
+    const event = info.event;
+    const payload = {
+      id: event.id,
+      start: event.start.toISOString(),
+      end: event.end.toISOString()
+    };
+    await axios.post(UPDATE_ENDPOINT, payload);
+  };
+
+  const handleFileUpload = async () => {
+    if (!uploadFile) return;
+    const formData = new FormData();
+    formData.append("file", uploadFile);
+    await axios.post(UPLOAD_ENDPOINT, formData);
+    setUploadFile(null);
+    alert("📎 File attached");
+  };
+
+  const suggestTime = async () => {
+    const res = await axios.get(SUGGEST_ENDPOINT);
+    alert(`🧠 Suggested: ${res.data.start} to ${res.data.end}`);
+  };
+
+  const autoSchedule = async () => {
+    try {
+      const res = await axios.get(SUGGEST_ENDPOINT);
+      const { start, end } = res.data;
+
+      const payload = {
+        title: "📅 Auto-Scheduled by AI",
+        start,
+        end,
+        extendedProps: { owner: "Bot" }
+      };
+
+      const createRes = await axios.post(CREATE_ENDPOINT, payload);
+    setEvents((prev) => [...prev, createRes.data]);
+    alert(`✅ Auto-scheduled: ${start} to ${end}`);
+  } catch (err) {
+    console.error("❌ Auto-schedule failed", err);
+    alert("❌ AI failed to find a good time.");
+  }
+};
+
+
+  const exportCalendar = async () => {
+    const res = await axios.get(EXPORT_ENDPOINT, { responseType: "blob" });
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "calendar.csv");
+    document.body.appendChild(link);
+    link.click();
+  };
+
+  const syncGoogleCalendar = async () => {
+    const res = await axios.post(SYNC_GOOGLE_ENDPOINT);
+    alert(res.data.message || "✅ Google Calendar sync complete");
+  };
 
   useEffect(() => {
     fetchEvents();
-    const id = window.setInterval(fetchEvents, AUTO_REFRESH_MS);
-    return () => window.clearInterval(id);
-  }, [fetchEvents]);
+  }, []);
 
-  // ─── Event color logic ─────────────────────────────────────────────────────
-  function pickColor(source: string) {
-    if (source === OWNER_TYSON) return COLOR_ELECTRIC_BLUE;
-    if (source === OWNER_DAN) return COLOR_SILVER;
-    if (/bot/i.test(source)) return COLOR_VIOLET;
-    return COLOR_NEON_GREEN;
-  }
-
-  // ─── Filtered view ─────────────────────────────────────────────────────────
-  const filteredEvents = useMemo(() => {
-    return events.filter(evt => {
-      const src = evt.source || "";
-      if (src === OWNER_TYSON && !showTyson) return false;
-      if (src === OWNER_DAN && !showDan) return false;
-      if (/bot/i.test(src) && !showBot) return false;
-      if (![OWNER_TYSON, OWNER_DAN].includes(src) && !/bot/i.test(src) && !showClient) return false;
-      return true;
-    });
-  }, [events, showTyson, showDan, showClient, showBot]);
-
-  // ─── Date navigation ───────────────────────────────────────────────────────
-  const navigateDate = (direction: 'prev' | 'next') => {
-    const newDate = new Date(currentDate);
-    switch (viewMode) {
-      case 'month':
-        newDate.setMonth(newDate.getMonth() + (direction === 'next' ? 1 : -1));
-        break;
-      case 'week':
-        newDate.setDate(newDate.getDate() + (direction === 'next' ? 7 : -7));
-        break;
-      case 'day':
-        newDate.setDate(newDate.getDate() + (direction === 'next' ? 1 : -1));
-        break;
-    }
-    setCurrentDate(newDate);
-  };
-
-  const goToToday = () => {
-    setCurrentDate(new Date());
-  };
-
-  // ─── Calendar rendering helpers ────────────────────────────────────────────
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', { 
-      weekday: 'short', 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
-    });
-  };
-
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit', 
-      hour12: false 
-    });
-  };
-
-  const getEventsForDate = (date: Date) => {
-    const dateStr = date.toDateString();
-    return filteredEvents.filter(event => 
-      event.start.toDateString() === dateStr || 
-      event.end.toDateString() === dateStr ||
-      (event.start < date && event.end > date)
-    );
-  };
-
-  // ─── Simple Calendar Grid ──────────────────────────────────────────────────
-  const renderCalendarView = () => {
-    if (viewMode === 'month') {
-      // Simple month view - just show current month with event count
-      const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-      const days = [];
-      
-      for (let day = 1; day <= monthEnd.getDate(); day++) {
-        const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-        const dayEvents = getEventsForDate(date);
-        days.push(
-          <div key={day} className="border border-[#333333] p-2 min-h-[80px] text-white">
-            <div className="font-semibold text-sm">{day}</div>
-            {dayEvents.slice(0, 3).map((event, idx) => (
-              <div
-                key={idx}
-                className="text-xs p-1 mb-1 rounded"
-                style={{ backgroundColor: event.color, color: 'white' }}
-              >
-                {event.title}
-              </div>
-            ))}
-            {dayEvents.length > 3 && (
-              <div className="text-xs text-[#c3c3c3]">+{dayEvents.length - 3} more</div>
-            )}
-          </div>
-        );
-      }
-
-      return (
-        <div className="grid grid-cols-7 gap-1 auto-rows-fr">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="font-semibold text-center p-2 bg-[#2a2a2a] text-white">{day}</div>
-          ))}
-          {days}
-        </div>
-      );
-    }
-
-    // Week/Day view - simple list
-    const startDate = viewMode === 'week' 
-      ? new Date(currentDate.getTime() - currentDate.getDay() * 24 * 60 * 60 * 1000)
-      : currentDate;
-    
-    const days = viewMode === 'week' ? 7 : 1;
-    const viewEvents = [];
-    
-    for (let i = 0; i < days; i++) {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + i);
-      const dayEvents = getEventsForDate(date);
-      
-      viewEvents.push(
-        <div key={i} className="border-b border-[#333333] p-4 text-white">
-          <h3 className="font-semibold text-lg mb-2">{formatDate(date)}</h3>
-          {dayEvents.length === 0 ? (
-            <p className="text-[#c3c3c3]">No events</p>
-          ) : (
-            <div className="space-y-2">
-              {dayEvents.map((event, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 rounded-lg text-white"
-                  style={{ backgroundColor: event.color }}
-                >
-                  <div className="font-semibold">{event.title}</div>
-                  <div className="text-sm opacity-90">
-                    {formatTime(event.start)} - {formatTime(event.end)}
-                  </div>
-                  <div className="text-xs opacity-75">Source: {event.source}</div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    return <div className="space-y-0 text-white">{viewEvents}</div>;
-  };
-
-  // ─── Render ────────────────────────────────────────────────────────────────
   return (
-    <section className="yobot-card flex flex-col gap-4">
-      {/* Header */}
-      <header className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-white">📅 Smart Calendar</h2>
-        <div className="flex items-center gap-2">
-          <button className="btn-blue" onClick={fetchEvents} aria-label="Refresh calendar">🔄 Refresh</button>
-          <button className={`btn-blue ${showTyson ? "opacity-100" : "opacity-40"}`} onClick={() => toggle("tyson")}>Tyson</button>
-          <button className={`btn-blue ${showDan ? "opacity-100" : "opacity-40"}`} onClick={() => toggle("dan")}>Dan</button>
-          <button className={`btn-blue ${showClient ? "opacity-100" : "opacity-40"}`} onClick={() => toggle("client")}>Clients</button>
-          <button className={`btn-blue ${showBot ? "opacity-100" : "opacity-40"}`} onClick={() => toggle("bot")}>Bot</button>
-        </div>
-      </header>
-
-      {/* Navigation */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <button className="btn-blue" onClick={() => navigateDate('prev')}>
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <button className="btn-blue" onClick={goToToday}>Today</button>
-          <button className="btn-blue" onClick={() => navigateDate('next')}>
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-        
-        <h3 className="text-xl font-bold text-white">
-          {currentDate.toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'long',
-            ...(viewMode === 'day' && { day: 'numeric' })
-          })}
-        </h3>
-
-        <div className="flex items-center gap-1">
-          <button 
-            className={`btn-blue ${viewMode === 'month' ? 'opacity-100' : 'opacity-60'}`}
-            onClick={() => setViewMode('month')}
-          >
-            Month
-          </button>
-          <button 
-            className={`btn-blue ${viewMode === 'week' ? 'opacity-100' : 'opacity-60'}`}
-            onClick={() => setViewMode('week')}
-          >
-            Week
-          </button>
-          <button 
-            className={`btn-blue ${viewMode === 'day' ? 'opacity-100' : 'opacity-60'}`}
-            onClick={() => setViewMode('day')}
-          >
-            Day
-          </button>
-        </div>
+    <section className="yobot-card">
+      <div className="flex flex-wrap gap-2 mb-4">
+        <button className="btn-blue" onClick={suggestTime}>🧠 Suggest Time</button>
+        <button className="btn-blue" onClick={() => navigator.clipboard.writeText(window.location.href)}>🔗 Share Calendar</button>
+        <button className="btn-blue" onClick={exportCalendar}>📤 Export</button>
+        <button className="btn-blue" onClick={syncGoogleCalendar}>🌐 Sync with Google Calendar</button>
+        <button className="btn-blue" onClick={autoSchedule}>🤖 Auto-Schedule</button>
       </div>
 
-      {/* Calendar */}
-      <div className="bg-[#1a1a1a] border-4 border-[#0d82da] rounded-lg overflow-hidden shadow-2xl">
-        {renderCalendarView()}
+      <p className="text-xs text-gray-400 mt-[-10px] mb-2 ml-1">
+  🔄 Refreshing in {secondsLeft}s
+</p>
+
+      <FullCalendar
+        ref={calendarRef}
+        plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, rrulePlugin]}
+        initialView="timeGridWeek"
+        headerToolbar={{ left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek' }}
+        height="auto"
+        selectable={true}
+        selectMirror={false}
+        select={handleDateSelect}
+        events={events.filter(evt => userRole === ADMIN_ROLE || evt.extendedProps?.owner === userRole)}
+        eventClick={handleEventClick}
+        eventDrop={onEventDrop}
+        eventContent={(arg) => {
+  const owner = arg.event.extendedProps?.owner;
+  const color = {
+    "Tyson": "#0ff",     // Neon cyan
+    "Dan": "#f0f",       // Neon magenta
+    "Client": "#ff0",    // Neon yellow
+    "Bot": "#0f0"        // Neon green
+  }[owner] || "#fff";
+
+  return (
+    <div style={{ color }}>
+      {arg.event.title}
+    </div>
+  );
+}}
+
+        nowIndicator
+        slotMinTime={minTime}
+        slotMaxTime={maxTime}
+        dayMaxEvents={3}
+        stickyHeaderDates
+      />
+
+      <div className="mt-4">
+        <label className="text-sm font-semibold text-white block mb-1">📎 Attach File to Event</label>
+        <input
+          type="file"
+          onChange={(e: FileEvent) => setUploadFile(e.target.files?.[0])}
+          className="text-white bg-slate-800 rounded p-2 w-full"
+        />
+        <button onClick={handleFileUpload} className="btn-blue mt-2">Upload</button>
       </div>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        contentLabel="Add Event"
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <h2 className="text-xl mb-4">📅 Create New Event</h2>
+        <input
+          type="text"
+          placeholder="Title"
+          value={newEvent.title}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({ ...newEvent, title: e.target.value })}
+          className="input"
+        />
+        <select
+          value={newEvent.owner}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewEvent({ ...newEvent, owner: e.target.value })}
+          className="input mt-2"
+        >
+          {OWNER_OPTIONS.map((opt) => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+        <div className="text-sm mt-2">Start: {newEvent.start}</div>
+        <div className="text-sm mb-2">End: {newEvent.end}</div>
+        <label className="block mt-2">
+          <input
+            type="checkbox"
+            checked={isRecurring}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIsRecurring(e.target.checked)}
+          />
+          <span className="ml-2">🔁 Repeat Weekly</span>
+        </label>
+        {conflictWarning && <div className="text-red-500 mb-2">{conflictWarning}</div>}
+        <button className="btn-blue mt-2" onClick={createEvent}>✅ Save Event</button>
+        <button className="btn-blue mt-2 ml-2" onClick={() => setModalIsOpen(false)}>❌ Cancel</button>
+      </Modal>
+
+      <Modal
+        isOpen={editModalIsOpen}
+        onRequestClose={() => setEditModalIsOpen(false)}
+        contentLabel="Edit Event"
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <h2 className="text-xl mb-4">✏️ Edit Event</h2>
+        {selectedEvent && (
+          <>
+            <input
+              type="text"
+              value={selectedEvent.title}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => selectedEvent && setSelectedEvent({ ...selectedEvent, title: e.target.value })}
+              className="input"
+            />
+            <div className="text-sm mt-2">Start: {dayjs(selectedEvent.start).format("YYYY-MM-DD HH:mm")}</div>
+            <div className="text-sm mb-2">End: {dayjs(selectedEvent.end).format("YYYY-MM-DD HH:mm")}</div>
+            <button className="btn-blue mt-2" onClick={updateEvent}>✅ Update Event</button>
+            <button className="btn-blue mt-2 ml-2" onClick={deleteEvent}>🗑️ Delete Event</button>
+          </>
+        )}
+      </Modal>
     </section>
   );
 };

@@ -5,8 +5,8 @@ import Airtable from 'airtable';
  * You must expose these as VITE_… in your .env file.
  */
 const globalBase = new Airtable({
-  apiKey: import.meta.env.VITE_AIRTABLE_KEY
-}).base('appRt8V3tH4g5Z51f');
+  apiKey: import.meta.env.VITE_AIRTABLE_API_KEY
+}).base(import.meta.env.VITE_AIRTABLE_BASE_ID);
 
 /**
  * Fetch **all** rows from a single table in the default base.
@@ -42,7 +42,7 @@ export const fetchRecords = async (tableName: string) => {
  */
 export const fetchRecords2 = async (baseId: string, tableId: string) => {
   const tmpBase = new Airtable({
-    apiKey: import.meta.env.VITE_AIRTABLE_KEY
+    apiKey: import.meta.env.VITE_AIRTABLE_API_KEY
   }).base(baseId);
 
   const records = await tmpBase(tableId).select().all();
